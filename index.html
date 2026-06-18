@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>TAMAM · Previews</title>
+<style>
+  :root{ --black:#0d0f14; --card:#1c2554; --yellow:#f5c842; --white:#eef1f8; --muted:#8b93b8; --border:#2a3580; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Segoe UI','Noto Sans',system-ui,sans-serif;
+    background:radial-gradient(ellipse at top,#1a1f3a,var(--black) 70%);
+    color:var(--white); min-height:100vh; padding:28px 18px;
+  }
+  .wrap{max-width:680px;margin:0 auto}
+  .logo{font-size:30px;font-weight:800;letter-spacing:1px;display:flex;align-items:center;gap:10px}
+  .logo .tag{font-size:11px;background:var(--yellow);color:#1a1206;padding:3px 9px;border-radius:20px;font-weight:800}
+  .sub{color:var(--muted);margin-top:10px;font-size:14px;line-height:1.6}
+  .list{margin-top:26px;display:flex;flex-direction:column;gap:12px}
+  .item{
+    display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--white);
+    background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;
+    transition:transform .12s,border-color .12s;
+  }
+  .item:active{transform:scale(.98)}
+  .item .ico{font-size:26px}
+  .item .t{font-weight:700;font-size:16px}
+  .item .d{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .item .arrow{margin-left:auto;color:var(--yellow);font-size:20px}
+  .empty{
+    margin-top:26px;background:var(--card);border:1px dashed var(--border);border-radius:14px;
+    padding:26px;text-align:center;color:var(--muted);font-size:14px;line-height:1.7;
+  }
+  .foot{margin-top:30px;font-size:11.5px;color:var(--muted);text-align:center;line-height:1.7;border-top:1px solid var(--border);padding-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo">🏪 TAMAM <span class="tag">PREVIEWS</span></div>
+  <p class="sub">Εδώ εμφανίζονται τα σχέδια οθονών (previews) του συστήματος, ώστε να τα ανοίγεις και από το κινητό σου. Μόνο εικόνες/mockups — κανένα πραγματικό οικονομικό στοιχείο.</p>
+
+  <!-- Η λίστα γεμίζει καθώς προσθέτουμε previews. Πρότυπο γραμμής:
+  <a class="item" href="onoma-arxeiou.html">
+    <span class="ico">📊</span>
+    <span><span class="t">Τίτλος</span><span class="d">Σύντομη περιγραφή</span></span>
+    <span class="arrow">›</span>
+  </a>
+  -->
+  <div class="list" id="list"></div>
+
+  <div class="empty" id="empty">
+    Δεν υπάρχει ακόμα κανένα preview εδώ.<br>
+    Μόλις φτιάξουμε το επόμενο, θα εμφανιστεί αυτόματα σ' αυτή τη σελίδα — με link που ανοίγει στο κινητό.
+  </div>
+
+  <div class="foot">TAMAM Grill House · ιδιωτικό εργαλείο · μη ευρετηριάσιμο</div>
+</div>
+</body>
+</html>
