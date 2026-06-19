@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAMAM — 5 Προτάσεις Form Προμηθευτή</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --accent: #f97316;
+    --accent-dark: #ea6b0a;
+    --accent-light: #fff7ed;
+    --bg: #f1f5f9;
+    --card: #ffffff;
+    --border: #e2e8f0;
+    --text: #1e293b;
+    --muted: #64748b;
+    --radius: 12px;
+    --shadow: 0 2px 12px rgba(0,0,0,.08);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,.14);
+  }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* ── PAGE HEADER ── */
+  .page-hero {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    color: white; padding: 48px 40px 36px; text-align: center;
+  }
+  .page-hero h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+  .page-hero p  { font-size: 15px; opacity: .75; max-width: 520px; margin: 0 auto; }
+  .badge-count { display:inline-block; background:var(--accent); color:white; font-size:12px; font-weight:700; padding:2px 10px; border-radius:20px; margin-left:8px; vertical-align:middle; }
+
+  /* ── NAV TABS ── */
+  .tabs-bar {
+    display: flex; gap: 0; background: white; border-bottom: 2px solid var(--border);
+    overflow-x: auto; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,.06);
+  }
+  .tab {
+    flex: 1; min-width: 160px; padding: 14px 10px 12px; text-align: center;
+    cursor: pointer; font-size: 13px; font-weight: 600; color: var(--muted);
+    border-bottom: 3px solid transparent; transition: all .2s; white-space: nowrap;
+    border-bottom-width: 3px; margin-bottom: -2px; user-select: none;
+  }
+  .tab:hover { color: var(--text); background: #f8fafc; }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); background: white; }
+  .tab-num { display:inline-block; width:22px; height:22px; border-radius:50%; background:var(--border); color:var(--muted); font-size:11px; font-weight:700; line-height:22px; text-align:center; margin-right:6px; }
+  .tab.active .tab-num { background:var(--accent); color:white; }
+
+  /* ── SECTION PANELS ── */
+  .panel { display: none; padding: 40px; max-width: 1100px; margin: 0 auto; }
+  .panel.active { display: block; }
+
+  .proposal-header { margin-bottom: 28px; }
+  .proposal-title { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .proposal-desc { font-size: 14px; color: var(--muted); max-width: 600px; line-height: 1.6; }
+  .pros-cons { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px; max-width:600px; }
+  .pros, .cons { padding:12px 16px; border-radius:8px; font-size:13px; line-height:1.7; }
+  .pros { background:#f0fdf4; border:1px solid #bbf7d0; }
+  .cons { background:#fff7ed; border:1px solid #fed7aa; }
+  .pros strong { color:#15803d; }
+  .cons strong { color:#c2410c; }
+
+  .demo-frame {
+    background: #e8eef5; border-radius: 14px; padding: 24px; margin-top: 24px;
+    border: 2px solid var(--border);
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 24px, rgba(0,0,0,.025) 24px, rgba(0,0,0,.025) 25px),
+                      repeating-linear-gradient(90deg, transparent, transparent 24px, rgba(0,0,0,.025) 24px, rgba(0,0,0,.025) 25px);
+  }
+  .demo-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.8px; color:var(--muted); margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+  .demo-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+  /* ── FORM ELEMENTS (shared) ── */
+  .f-label { font-size:12px; font-weight:600; color:var(--muted); margin-bottom:5px; display:block; }
+  .f-input {
+    width:100%; padding:9px 12px; border:1.5px solid var(--border); border-radius:8px;
+    font-size:13.5px; color:var(--text); background:white; outline:none; transition:border .15s;
+    font-family:inherit;
+  }
+  .f-input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(249,115,22,.12); }
+  .f-row { display:grid; gap:12px; margin-bottom:14px; }
+  .f-row.cols2 { grid-template-columns:1fr 1fr; }
+  .f-row.cols3 { grid-template-columns:1fr 1fr 1fr; }
+  .f-field { display:flex; flex-direction:column; }
+  .f-section { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.6px; color:var(--muted); padding-bottom:8px; border-bottom:1px solid var(--border); margin:16px 0 12px; }
+  textarea.f-input { resize:none; height:72px; }
+
+  .btn-primary {
+    background:var(--accent); color:white; border:none; padding:10px 22px; border-radius:8px;
+    font-size:14px; font-weight:600; cursor:pointer; transition:background .15s;
+  }
+  .btn-primary:hover { background:var(--accent-dark); }
+  .btn-secondary {
+    background:white; color:var(--muted); border:1.5px solid var(--border); padding:9px 20px;
+    border-radius:8px; font-size:14px; font-weight:500; cursor:pointer; transition:all .15s;
+  }
+  .btn-secondary:hover { border-color:var(--accent); color:var(--accent); }
+  .btn-danger {
+    background:#fee2e2; color:#dc2626; border:none; padding:9px 16px;
+    border-radius:8px; font-size:13px; font-weight:500; cursor:pointer;
+  }
+
+  /* day-checkbox */
+  .day-pill {
+    display:inline-flex; align-items:center; gap:6px; padding:7px 13px;
+    border:1.5px solid var(--border); border-radius:20px; cursor:pointer;
+    font-size:12.5px; font-weight:500; background:white; transition:all .15s; user-select:none;
+  }
+  .day-pill.on { border-color:var(--accent); background:#fff7ed; color:#c2410c; }
+  .day-pill input { display:none; }
+
+  /* ═══════════════════════════════════════════════
+     PROPOSAL 1 — MODAL
+  ═══════════════════════════════════════════════ */
+  .mock-list {
+    background:white; border-radius:10px; overflow:hidden; border:1px solid var(--border);
+  }
+  .mock-toolbar {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:12px 16px; border-bottom:1px solid var(--border); background:#fafafa;
+  }
+  .mock-table { width:100%; border-collapse:collapse; font-size:13px; }
+  .mock-table th { padding:9px 14px; text-align:left; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--muted); border-bottom:1px solid var(--border); }
+  .mock-table td { padding:10px 14px; border-bottom:1px solid #f1f5f9; }
+  .mock-table tr:last-child td { border-bottom:none; }
+  .mock-table tr:hover td { background:#fafafa; }
+  .action-link { font-size:12px; color:var(--accent); font-weight:600; cursor:pointer; text-decoration:none; margin-right:8px; }
+
+  .modal-backdrop {
+    position:fixed; inset:0; background:rgba(15,23,42,.55); backdrop-filter:blur(3px);
+    display:flex; align-items:center; justify-content:center; z-index:1000;
+    opacity:0; pointer-events:none; transition:opacity .2s;
+  }
+  .modal-backdrop.open { opacity:1; pointer-events:all; }
+  .modal {
+    background:white; border-radius:16px; width:560px; max-width:95vw; max-height:90vh;
+    overflow-y:auto; box-shadow:var(--shadow-lg); transform:scale(.96) translateY(12px);
+    transition:transform .2s;
+  }
+  .modal-backdrop.open .modal { transform:scale(1) translateY(0); }
+  .modal-head {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:20px 24px 16px; border-bottom:1px solid var(--border); position:sticky; top:0; background:white; border-radius:16px 16px 0 0;
+  }
+  .modal-head h2 { font-size:18px; font-weight:700; }
+  .modal-close { width:32px; height:32px; border-radius:50%; border:none; background:#f1f5f9; cursor:pointer; font-size:18px; line-height:32px; text-align:center; color:var(--muted); }
+  .modal-body { padding:20px 24px 24px; }
+  .modal-foot { padding:0 24px 20px; display:flex; gap:8px; justify-content:flex-end; }
+
+  /* ═══════════════════════════════════════════════
+     PROPOSAL 2 — DRAWER
+  ═══════════════════════════════════════════════ */
+  .drawer-demo-wrap { position:relative; border-radius:10px; overflow:hidden; background:white; border:1px solid var(--border); }
+  .drawer-overlay { position:absolute; inset:0; background:rgba(15,23,42,.35); backdrop-filter:blur(2px); opacity:0; pointer-events:none; transition:opacity .25s; }
+  .drawer-overlay.open { opacity:1; pointer-events:all; }
+  .drawer {
+    position:absolute; top:0; right:0; bottom:0; width:420px; background:white;
+    box-shadow:-4px 0 24px rgba(0,0,0,.15); transform:translateX(100%); transition:transform .25s;
+    display:flex; flex-direction:column;
+  }
+  .drawer-overlay.open .drawer { transform:translateX(0); }
+  .drawer-head {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:16px 20px; border-bottom:1px solid var(--border); background:#fafafa;
+  }
+  .drawer-head h3 { font-size:16px; font-weight:700; }
+  .drawer-body { padding:16px 20px; overflow-y:auto; flex:1; }
+  .drawer-foot { padding:12px 20px; border-top:1px solid var(--border); display:flex; gap:8px; justify-content:flex-end; background:white; }
+
+  /* ═══════════════════════════════════════════════
+     PROPOSAL 3 — WIZARD
+  ═══════════════════════════════════════════════ */
+  .wizard-wrap { background:white; border-radius:12px; border:1px solid var(--border); overflow:hidden; }
+  .wizard-progress {
+    display:flex; background:#fafafa; border-bottom:1px solid var(--border);
+  }
+  .wizard-step-tab {
+    flex:1; padding:14px 12px; text-align:center; font-size:12.5px; font-weight:600;
+    color:var(--muted); border-bottom:3px solid transparent; cursor:pointer;
+    transition:all .15s; display:flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .wizard-step-tab .step-num { width:24px; height:24px; border-radius:50%; background:var(--border); color:var(--muted); font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; transition:all .15s; }
+  .wizard-step-tab.done .step-num { background:#22c55e; color:white; }
+  .wizard-step-tab.active .step-num { background:var(--accent); color:white; }
+  .wizard-step-tab.active { color:var(--accent); border-bottom-color:var(--accent); background:white; }
+  .wizard-step-tab.done { color:#15803d; border-bottom-color:#22c55e; }
+  .wizard-body { padding:24px; }
+  .wizard-foot { padding:0 24px 20px; display:flex; justify-content:space-between; align-items:center; }
+  .wizard-pane { display:none; }
+  .wizard-pane.active { display:block; }
+  .step-hint { font-size:12px; color:var(--muted); margin-bottom:18px; }
+
+  /* ═══════════════════════════════════════════════
+     PROPOSAL 4 — SPLIT FULL PAGE
+  ═══════════════════════════════════════════════ */
+  .split-layout { display:grid; grid-template-columns:1fr 320px; gap:20px; }
+  .split-form-card { background:white; border-radius:12px; border:1px solid var(--border); padding:24px; }
+  .split-summary-card { background:white; border-radius:12px; border:1px solid var(--border); padding:20px; position:sticky; top:80px; height:fit-content; }
+  .summary-title { font-size:13px; font-weight:700; margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid var(--border); }
+  .summary-row { display:flex; justify-content:space-between; align-items:center; padding:7px 0; border-bottom:1px solid #f8fafc; font-size:13px; }
+  .summary-key { color:var(--muted); }
+  .summary-val { font-weight:600; }
+  .summary-logo { width:56px; height:56px; border-radius:12px; background:linear-gradient(135deg,var(--accent),var(--accent-dark)); display:flex; align-items:center; justify-content:center; color:white; font-size:22px; font-weight:800; margin:0 auto 14px; }
+  .summary-name { text-align:center; font-weight:700; font-size:15px; margin-bottom:4px; }
+  .summary-type { text-align:center; font-size:12px; color:var(--muted); margin-bottom:16px; }
+  .split-section { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.6px; color:var(--muted); padding:12px 0 10px; border-bottom:2px solid #f1f5f9; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+  .split-section::before { content:''; width:3px; height:14px; background:var(--accent); border-radius:2px; }
+
+  /* ═══════════════════════════════════════════════
+     PROPOSAL 5 — INLINE EXPAND
+  ═══════════════════════════════════════════════ */
+  .inline-table { width:100%; border-collapse:collapse; font-size:13px; }
+  .inline-table th { padding:9px 14px; text-align:left; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--muted); border-bottom:2px solid var(--border); }
+  .inline-table td { padding:11px 14px; border-bottom:1px solid #f1f5f9; vertical-align:middle; }
+  .inline-table .expand-row td { padding:0; background:#fffbf7; border-bottom:2px solid var(--accent); border-top:1px solid #fed7aa; }
+  .inline-edit-panel { padding:20px 20px 16px; }
+  .inline-edit-panel .panel-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+  .inline-edit-panel .panel-head h4 { font-size:14px; font-weight:700; color:var(--accent); }
+  .expand-btn { background:transparent; border:1.5px solid var(--border); border-radius:6px; padding:5px 10px; font-size:12px; color:var(--muted); cursor:pointer; transition:all .15s; }
+  .expand-btn:hover, .expand-btn.open { background:var(--accent-light); border-color:var(--accent); color:var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <h1>5 Προτάσεις: Form Προσθήκης & Επεξεργασίας Προμηθευτή <span class="badge-count">5</span></h1>
+  <p>Επίλεξε τον τρόπο που προτιμάς να ανοίγει η φόρμα — από popup μέχρι βήμα-βήμα οδηγό</p>
+</div>
+
+<!-- TABS -->
+<div class="tabs-bar">
+  <div class="tab active" onclick="showTab(0)"><span class="tab-num">1</span>Popup Modal</div>
+  <div class="tab" onclick="showTab(1)"><span class="tab-num">2</span>Πλαϊνό Συρτάρι</div>
+  <div class="tab" onclick="showTab(2)"><span class="tab-num">3</span>Βήμα-Βήμα</div>
+  <div class="tab" onclick="showTab(3)"><span class="tab-num">4</span>Σελίδα 2 Στηλών</div>
+  <div class="tab" onclick="showTab(4)"><span class="tab-num">5</span>Ανοίγει μέσα στη Λίστα</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     PANEL 1 — MODAL
+════════════════════════════════════════════════════ -->
+<div class="panel active" id="panel-0">
+  <div class="proposal-header">
+    <div class="proposal-title">Πρόταση 1 — Popup Modal (Αναδυόμενο παράθυρο)</div>
+    <div class="proposal-desc">Κλικ στο «Επεξεργασία» ανοίγει ένα κεντρικό popup πάνω από τη λίστα. Η λίστα παραμένει ορατή (θολωμένη) στο background.</div>
+    <div class="pros-cons">
+      <div class="pros"><strong>✅ Πλεονεκτήματα</strong><br>Γρήγορο · δεν χάνεις τη θέση σου στη λίστα · κλασικό UX που όλοι γνωρίζουν</div>
+      <div class="cons"><strong>⚠️ Μειονεκτήματα</strong><br>Σε μικρές οθόνες χρειάζεται scroll μέσα στο popup · δεν έχει URL (δεν μπορείς να στείλεις link)</div>
+    </div>
+  </div>
+
+  <div class="demo-frame">
+    <div class="demo-label">Δοκίμασε: κλίκ στο «Επεξεργασία» ή «+ Νέος Προμηθευτής»</div>
+    <div class="mock-list">
+      <div class="mock-toolbar">
+        <span style="font-size:13px; font-weight:700;">Προμηθευτές</span>
+        <button class="btn-primary" style="font-size:12.5px; padding:7px 14px;" onclick="openModal1('new')">+ Νέος Προμηθευτής</button>
+      </div>
+      <table class="mock-table">
+        <thead><tr><th>Επωνυμία</th><th>Τύπος</th><th>Τηλέφωνο</th><th>Πιστωτική</th><th></th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:600;">Παπάς Χρήστος</td><td><span style="background:#f1f5f9;padding:2px 8px;border-radius:20px;font-size:11.5px;">Κρεοπωλείο</span></td><td class="mono">6944 123456</td><td>30 μέρες</td><td><a class="action-link" onclick="openModal1('Παπάς Χρήστος')">Επεξεργασία</a></td></tr>
+          <tr><td style="font-weight:600;">ΑΦΟΙ Κιβρόγλου</td><td><span style="background:#f1f5f9;padding:2px 8px;border-radius:20px;font-size:11.5px;">Τρόφιμα & Ξηρά</span></td><td class="mono">2462 025100</td><td>Μετρητά</td><td><a class="action-link" onclick="openModal1('ΑΦΟΙ Κιβρόγλου')">Επεξεργασία</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- MODAL 1 -->
+  <div class="modal-backdrop" id="modal1">
+    <div class="modal">
+      <div class="modal-head">
+        <h2 id="modal1-title">Επεξεργασία Προμηθευτή</h2>
+        <button class="modal-close" onclick="closeModal1()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="f-section">Βασικά Στοιχεία</div>
+        <div class="f-row"><div class="f-field"><label class="f-label">Επωνυμία *</label><input class="f-input" id="m1-name" value="Παπάς Χρήστος"></div></div>
+        <div class="f-row cols2">
+          <div class="f-field"><label class="f-label">Τύπος / Κατηγορία</label><input class="f-input" value="Κρεοπωλείο"></div>
+          <div class="f-field"><label class="f-label">ΑΦΜ</label><input class="f-input" value="123456789"></div>
+        </div>
+        <div class="f-section">Επικοινωνία</div>
+        <div class="f-row cols2">
+          <div class="f-field"><label class="f-label">Τηλέφωνο</label><input class="f-input" value="6944 123456"></div>
+          <div class="f-field"><label class="f-label">Email</label><input class="f-input" value="papas@example.gr"></div>
+        </div>
+        <div class="f-section">Οικονομικά & Εφοδιασμός</div>
+        <div class="f-row cols2">
+          <div class="f-field"><label class="f-label">Τρόπος Πληρωμής</label><input class="f-input" value="Μετρητά"></div>
+          <div class="f-field"><label class="f-label">Πιστωτική Περίοδος (μέρες)</label><input class="f-input" type="number" value="30"></div>
+        </div>
+        <div class="f-section">Ημέρες Παράδοσης</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <label class="day-pill on"><input type="checkbox" checked>Δευτέρα</label>
+          <label class="day-pill"><input type="checkbox">Τρίτη</label>
+          <label class="day-pill on"><input type="checkbox" checked>Τετάρτη</label>
+          <label class="day-pill"><input type="checkbox">Πέμπτη</label>
+          <label class="day-pill on"><input type="checkbox" checked>Παρασκευή</label>
+          <label class="day-pill"><input type="checkbox">Σάββατο</label>
+        </div>
+        <div class="f-section">Σημειώσεις</div>
+        <div class="f-row"><div class="f-field"><textarea class="f-input">Παράδοση πάντα πρωί 8–10πμ. Πληρωμή στο τέλος μήνα.</textarea></div></div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-danger" onclick="closeModal1()">Διαγραφή</button>
+        <div style="flex:1"></div>
+        <button class="btn-secondary" onclick="closeModal1()">Άκυρο</button>
+        <button class="btn-primary" onclick="closeModal1()">Αποθήκευση</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     PANEL 2 — DRAWER
+════════════════════════════════════════════════════ -->
+<div class="panel" id="panel-1">
+  <div class="proposal-header">
+    <div class="proposal-title">Πρόταση 2 — Πλαϊνό Συρτάρι (Side Drawer)</div>
+    <div class="proposal-desc">Κλικ στο «Επεξεργασία» σύρει ένα πλαϊνό panel από τα δεξιά. Η λίστα φαίνεται δίπλα (θολωμένη). Ιδανικό για γρήγορη επεξεργασία χωρίς να φύγεις από τη σελίδα.</div>
+    <div class="pros-cons">
+      <div class="pros"><strong>✅ Πλεονεκτήματα</strong><br>Βλέπεις τη λίστα δίπλα · smooth animation · δεν χρειάζεται scroll για μικρές αλλαγές · σύγχρονο UX</div>
+      <div class="cons"><strong>⚠️ Μειονεκτήματα</strong><br>Σε μικρή οθόνη καλύπτει όλη την οθόνη · η φόρμα είναι λίγο στενή</div>
+    </div>
+  </div>
+
+  <div class="demo-frame" style="overflow:hidden; min-height:460px; position:relative;">
+    <div class="demo-label">Δοκίμασε: κλίκ στο «Επεξεργασία»</div>
+    <div class="drawer-demo-wrap" style="min-height:400px;">
+      <div style="padding:12px 16px; border-bottom:1px solid var(--border); background:#fafafa; display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:13px; font-weight:700;">Προμηθευτές</span>
+        <button class="btn-primary" style="font-size:12.5px; padding:7px 14px;" onclick="openDrawer()">+ Νέος Προμηθευτής</button>
+      </div>
+      <table class="mock-table">
+        <thead><tr><th>Επωνυμία</th><th>Τύπος</th><th>Τηλέφωνο</th><th></th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:600;">Παπάς Χρήστος</td><td><span style="background:#f1f5f9;padding:2px 8px;border-radius:20px;font-size:11.5px;">Κρεοπωλείο</span></td><td class="mono">6944 123456</td><td><a class="action-link" onclick="openDrawer()">Επεξεργασία</a></td></tr>
+          <tr><td style="font-weight:600;">ΑΦΟΙ Κιβρόγλου</td><td><span style="background:#f1f5f9;padding:2px 8px;border-radius:20px;font-size:11.5px;">Τρόφιμα & Ξηρά</span></td><td class="mono">2462 025100</td><td><a class="action-link" onclick="openDrawer()">Επεξεργασία</a></td></tr>
+          <tr><td style="font-weight:600;">Αλατζάς ΑΕ</td><td><span style="background:#f1f5f9;padding:2px 8px;border-radius:20px;font-size:11.5px;">Ποτά</span></td><td class="mono">2431 022000</td><td><a class="action-link" onclick="openDrawer()">Επεξεργασία</a></td></tr>
+        </tbody>
+      </table>
+      <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()">
+        <div class="drawer" onclick="event.stopPropagation()">
+          <div class="drawer-head">
+            <h3>✏️ Παπάς Χρήστος</h3>
+            <button class="modal-close" onclick="closeDrawer()">✕</button>
+          </div>
+          <div class="drawer-body">
+            <div class="f-section">Βασικά Στοιχεία</div>
+            <div class="f-row"><div class="f-field"><label class="f-label">Επωνυμία *</label><input class="f-input" value="Παπάς Χρήστος"></div></div>
+            <div class="f-row"><div class="f-field"><label class="f-label">Τύπος</label><input class="f-input" value="Κρεοπωλείο"></div></div>
+            <div class="f-section">Επικοινωνία</div>
+            <div class="f-row"><div class="f-field"><label class="f-label">Τηλέφωνο</label><input class="f-input" value="6944 123456"></div></div>
+            <div class="f-row"><div class="f-field"><label class="f-label">Email</label><input class="f-input" value="papas@example.gr"></div></div>
+            <div class="f-section">Οικονομικά</div>
+            <div class="f-row"><div class="f-field"><label class="f-label">Τρόπος Πληρωμής</label><input class="f-input" value="Μετρητά"></div></div>
+            <div class="f-row"><div class="f-field"><label class="f-label">Πιστωτική (μέρες)</label><input class="f-input" type="number" value="30"></div></div>
+            <div class="f-section">Ημέρες Παράδοσης</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <label class="day-pill on"><input type="checkbox" checked>Δευτ</label>
+              <label class="day-pill"><input type="checkbox">Τρίτ</label>
+              <label class="day-pill on"><input type="checkbox" checked>Τετ</label>
+              <label class="day-pill"><input type="checkbox">Πέμπ</label>
+              <label class="day-pill on"><input type="checkbox" checked>Παρ</label>
+              <label class="day-pill"><input type="checkbox">Σάβ</label>
+            </div>
+            <div class="f-section">Σημειώσεις</div>
+            <div class="f-row"><textarea class="f-input">Παράδοση πρωί 8–10πμ.</textarea></div>
+          </div>
+          <div class="drawer-foot">
+            <button class="btn-secondary" onclick="closeDrawer()">Άκυρο</button>
+            <button class="btn-primary" onclick="closeDrawer()">Αποθήκευση</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     PANEL 3 — WIZARD
+════════════════════════════════════════════════════ -->
+<div class="panel" id="panel-2">
+  <div class="proposal-header">
+    <div class="proposal-title">Πρόταση 3 — Βήμα-Βήμα Οδηγός (Wizard)</div>
+    <div class="proposal-desc">Η φόρμα χωρίζεται σε 3 βήματα: Βασικά → Επικοινωνία & Οικονομικά → Εφοδιασμός & Σημειώσεις. Πλοήγηση με κουμπιά «Επόμενο / Πίσω».</div>
+    <div class="pros-cons">
+      <div class="pros"><strong>✅ Πλεονεκτήματα</strong><br>Λιγότερο «βουλωμένο» · κάθε βήμα είναι εύκολο · ιδανικό για νέους προμηθευτές · δεν τρομάζει ο χρήστης</div>
+      <div class="cons"><strong>⚠️ Μειονεκτήματα</strong><br>Για επεξεργασία ήδη υπαρχόντων χρειάζεται 3 κλικ αντί 1 · πιο αργό για μικρές αλλαγές</div>
+    </div>
+  </div>
+
+  <div class="demo-frame">
+    <div class="demo-label">Δοκίμασε: πλοηγήσου με τα κουμπιά «Επόμενο» & «Πίσω»</div>
+    <div class="wizard-wrap">
+      <div class="wizard-progress">
+        <div class="wizard-step-tab done" id="wt0">
+          <span class="step-num">✓</span> Βασικά
+        </div>
+        <div class="wizard-step-tab active" id="wt1">
+          <span class="step-num">2</span> Επικοινωνία
+        </div>
+        <div class="wizard-step-tab" id="wt2">
+          <span class="step-num">3</span> Εφοδιασμός
+        </div>
+      </div>
+      <div class="wizard-body">
+
+        <!-- STEP 1 -->
+        <div class="wizard-pane" id="wp0">
+          <div class="step-hint">Βήμα 1 από 3 — Ποιος είναι ο προμηθευτής;</div>
+          <div class="f-row"><div class="f-field"><label class="f-label">Επωνυμία *</label><input class="f-input" value="Νέος Προμηθευτής" autofocus></div></div>
+          <div class="f-row cols2">
+            <div class="f-field"><label class="f-label">Τύπος / Κατηγορία</label><input class="f-input" placeholder="π.χ. Κρεοπωλείο"></div>
+            <div class="f-field"><label class="f-label">ΑΦΜ</label><input class="f-input" placeholder="π.χ. 123456789"></div>
+          </div>
+          <div class="f-row"><div class="f-field"><label class="f-label">Διεύθυνση</label><input class="f-input" placeholder="π.χ. Αγοράς 12, Γρεβενά"></div></div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="wizard-pane active" id="wp1">
+          <div class="step-hint">Βήμα 2 από 3 — Πώς επικοινωνούμε & πώς πληρώνουμε;</div>
+          <div class="f-row cols2">
+            <div class="f-field"><label class="f-label">Τηλέφωνο</label><input class="f-input" value="6944 123456"></div>
+            <div class="f-field"><label class="f-label">Email</label><input class="f-input" value="papas@example.gr"></div>
+          </div>
+          <div class="f-row cols2">
+            <div class="f-field"><label class="f-label">Τρόπος Πληρωμής</label><input class="f-input" value="Μετρητά"></div>
+            <div class="f-field"><label class="f-label">Πιστωτική (μέρες)</label><input class="f-input" type="number" value="0"></div>
+          </div>
+          <div class="f-row"><div class="f-field"><label class="f-label">IBAN</label><input class="f-input" placeholder="GR16 0110 1250 ..."></div></div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="wizard-pane" id="wp2">
+          <div class="step-hint">Βήμα 3 από 3 — Πότε παραδίδει και τυχόν σημειώσεις;</div>
+          <div class="f-row cols2">
+            <div class="f-field"><label class="f-label">Χρόνος Παράδοσης (μέρες)</label><input class="f-input" type="number" value="1"></div>
+            <div class="f-field"><label class="f-label">Ελάχιστη Παραγγελία</label><input class="f-input" placeholder="π.χ. 50€"></div>
+          </div>
+          <div class="f-field" style="margin-bottom:14px;">
+            <label class="f-label">Ημέρες Παράδοσης</label>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
+              <label class="day-pill on"><input type="checkbox" checked>Δευτέρα</label>
+              <label class="day-pill"><input type="checkbox">Τρίτη</label>
+              <label class="day-pill on"><input type="checkbox" checked>Τετάρτη</label>
+              <label class="day-pill"><input type="checkbox">Πέμπτη</label>
+              <label class="day-pill on"><input type="checkbox" checked>Παρασκευή</label>
+              <label class="day-pill"><input type="checkbox">Σάββατο</label>
+            </div>
+          </div>
+          <div class="f-row"><div class="f-field"><label class="f-label">Σημειώσεις</label><textarea class="f-input">Παράδοση πρωί 8–10πμ.</textarea></div></div>
+        </div>
+
+      </div>
+      <div class="wizard-foot">
+        <button class="btn-secondary" id="wiz-prev" onclick="wizPrev()" style="visibility:hidden;">← Πίσω</button>
+        <div style="font-size:12px; color:var(--muted);" id="wiz-counter">Βήμα 2 από 3</div>
+        <button class="btn-primary" id="wiz-next" onclick="wizNext()">Επόμενο →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     PANEL 4 — SPLIT PAGE
+════════════════════════════════════════════════════ -->
+<div class="panel" id="panel-3">
+  <div class="proposal-header">
+    <div class="proposal-title">Πρόταση 4 — Σελίδα Πλήρης με 2 Στήλες (Split Layout)</div>
+    <div class="proposal-desc">Ξεχωριστή σελίδα (όπως τώρα) αλλά με 2 στήλες: αριστερά η φόρμα, δεξιά ένα «καρτελάκι» που ενημερώνεται live καθώς πληκτρολογείς.</div>
+    <div class="pros-cons">
+      <div class="pros"><strong>✅ Πλεονεκτήματα</strong><br>Όλα ορατά ταυτόχρονα · χωρίς scroll · δείχνει preview του τελικού αποτελέσματος · πιο ελεγχόμενο</div>
+      <div class="cons"><strong>⚠️ Μειονεκτήματα</strong><br>Χάνεις τη λίστα · χρειάζεσαι πλατιά οθόνη (laptop ok, κινητό δύσκολο)</div>
+    </div>
+  </div>
+
+  <div class="demo-frame">
+    <div class="demo-label">Δοκίμασε: γράψε στο πεδίο «Επωνυμία» — το preview δεξιά αλλάζει live</div>
+    <div class="split-layout">
+      <div class="split-form-card">
+        <div style="font-size:16px; font-weight:700; margin-bottom:18px; display:flex; align-items:center; gap:10px;">
+          <span style="background:var(--accent-light); color:var(--accent); width:32px; height:32px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; font-size:16px;">✏️</span>
+          Επεξεργασία Προμηθευτή
+        </div>
+        <div class="split-section">Βασικά Στοιχεία</div>
+        <div class="f-row"><div class="f-field"><label class="f-label">Επωνυμία *</label><input class="f-input" id="split-name" value="Παπάς Χρήστος" oninput="updateSummary()"></div></div>
+        <div class="f-row cols2">
+          <div class="f-field"><label class="f-label">Τύπος</label><input class="f-input" id="split-type" value="Κρεοπωλείο" oninput="updateSummary()"></div>
+          <div class="f-field"><label class="f-label">ΑΦΜ</label><input class="f-input" value="123456789"></div>
+        </div>
+        <div class="split-section">Επικοινωνία</div>
+        <div class="f-row cols2">
+          <div class="f-field"><label class="f-label">Τηλέφωνο</label><input class="f-input" id="split-phone" value="6944 123456" oninput="updateSummary()"></div>
+          <div class="f-field"><label class="f-label">Email</label><input class="f-input" value="papas@example.gr"></div>
+        </div>
+        <div class="split-section">Οικονομικά</div>
+        <div class="f-row cols2">
+          <div class="f-field"><label class="f-label">Τρόπος Πληρωμής</label><input class="f-input" id="split-pay" value="Μετρητά" oninput="updateSummary()"></div>
+          <div class="f-field"><label class="f-label">Πιστωτική (μέρες)</label><input class="f-input" id="split-credit" type="number" value="30" oninput="updateSummary()"></div>
+        </div>
+        <div class="split-section">Ημέρες Παράδοσης</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <label class="day-pill on"><input type="checkbox" checked>Δευτέρα</label>
+          <label class="day-pill"><input type="checkbox">Τρίτη</label>
+          <label class="day-pill on"><input type="checkbox" checked>Τετάρτη</label>
+          <label class="day-pill"><input type="checkbox">Πέμπτη</label>
+          <label class="day-pill on"><input type="checkbox" checked>Παρασκευή</label>
+          <label class="day-pill"><input type="checkbox">Σάββατο</label>
+        </div>
+        <div style="display:flex; gap:10px; margin-top:22px;">
+          <button class="btn-secondary">Άκυρο</button>
+          <button class="btn-primary">Αποθήκευση</button>
+          <div style="flex:1"></div>
+          <button class="btn-danger">Διαγραφή</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="split-summary-card">
+          <div class="summary-logo" id="split-logo">Π</div>
+          <div class="summary-name" id="sum-name">Παπάς Χρήστος</div>
+          <div class="summary-type" id="sum-type">Κρεοπωλείο</div>
+          <div style="background:#f0fdf4; border-radius:8px; padding:10px 14px; font-size:12.5px; color:#15803d; font-weight:500; margin-bottom:16px; text-align:center;">✅ Ενεργός προμηθευτής</div>
+          <div class="summary-title">Στοιχεία Κάρτας</div>
+          <div class="summary-row"><span class="summary-key">Τηλέφωνο</span><span class="summary-val" id="sum-phone">6944 123456</span></div>
+          <div class="summary-row"><span class="summary-key">Πληρωμή</span><span class="summary-val" id="sum-pay">Μετρητά</span></div>
+          <div class="summary-row"><span class="summary-key">Πιστωτική</span><span class="summary-val" id="sum-credit">30 μέρες</span></div>
+          <div class="summary-row"><span class="summary-key">Παραδόσεις</span><span class="summary-val">Δευτ · Τετ · Παρ</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     PANEL 5 — INLINE
+════════════════════════════════════════════════════ -->
+<div class="panel" id="panel-4">
+  <div class="proposal-header">
+    <div class="proposal-title">Πρόταση 5 — Ανοίγει Μέσα στη Λίστα (Inline Expand)</div>
+    <div class="proposal-desc">Κλικ στο «Επεξεργασία» ανοίγει μια φόρμα ακριβώς κάτω από τη γραμμή, μέσα στον πίνακα. Η λίστα παραμένει ορατή πάνω & κάτω.</div>
+    <div class="pros-cons">
+      <div class="pros"><strong>✅ Πλεονεκτήματα</strong><br>Βλέπεις τη λίστα παντού · δεν φεύγεις από τη σελίδα · πολύ γρήγορο για μικρές αλλαγές</div>
+      <div class="cons"><strong>⚠️ Μειονεκτήματα</strong><br>Πιο «πολυσύχναστο» οπτικά · σε πολλές σειρές μπορεί να μπερδεύει</div>
+    </div>
+  </div>
+
+  <div class="demo-frame">
+    <div class="demo-label">Δοκίμασε: κλίκ στο «Επεξεργασία» στον πίνακα</div>
+    <div class="mock-list">
+      <div class="mock-toolbar">
+        <span style="font-size:13px; font-weight:700;">Προμηθευτές</span>
+        <button class="btn-primary" style="font-size:12.5px; padding:7px 14px;">+ Νέος Προμηθευτής</button>
+      </div>
+      <table class="inline-table" id="inline-tbl">
+        <thead><tr><th>Επωνυμία</th><th>Τύπος</th><th>Τηλέφωνο</th><th>Πιστωτική</th><th></th></tr></thead>
+        <tbody>
+          <tr id="irow-0">
+            <td style="font-weight:600;">Παπάς Χρήστος</td>
+            <td><span style="background:#f1f5f9;padding:2px 8px;border-radius:20px;font-size:11.5px;">Κρεοπωλείο</span></td>
+            <td class="mono">6944 123456</td>
+            <td>30 μέρες</td>
+            <td><button class="expand-btn" id="ebtn-0" onclick="toggleInline(0)">✏️ Επεξεργασία</button></td>
+          </tr>
+          <tr class="expand-row" id="iexp-0" style="display:none;">
+            <td colspan="5">
+              <div class="inline-edit-panel">
+                <div class="panel-head">
+                  <h4>✏️ Παπάς Χρήστος — Επεξεργασία</h4>
+                  <button class="modal-close" onclick="toggleInline(0)">✕</button>
+                </div>
+                <div class="f-row cols3">
+                  <div class="f-field"><label class="f-label">Επωνυμία *</label><input class="f-input" value="Παπάς Χρήστος"></div>
+                  <div class="f-field"><label class="f-label">Τηλέφωνο</label><input class="f-input" value="6944 123456"></div>
+                  <div class="f-field"><label class="f-label">Τρόπος Πληρωμής</label><input class="f-input" value="Μετρητά"></div>
+                </div>
+                <div class="f-row cols3">
+                  <div class="f-field"><label class="f-label">Τύπος</label><input class="f-input" value="Κρεοπωλείο"></div>
+                  <div class="f-field"><label class="f-label">Email</label><input class="f-input" value="papas@example.gr"></div>
+                  <div class="f-field"><label class="f-label">Πιστωτική (μέρες)</label><input class="f-input" type="number" value="30"></div>
+                </div>
+                <div style="margin-bottom:12px;">
+                  <label class="f-label" style="margin-bottom:6px;">Ημέρες Παράδοσης</label>
+                  <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                    <label class="day-pill on"><input type="checkbox" checked>Δευτ</label>
+                    <label class="day-pill"><input type="checkbox">Τρίτ</label>
+                    <label class="day-pill on"><input type="checkbox" checked>Τετ</label>
+                    <label class="day-pill"><input type="checkbox">Πέμπ</label>
+                    <label class="day-pill on"><input type="checkbox" checked>Παρ</label>
+                    <label class="day-pill"><input type="checkbox">Σάβ</label>
+                  </div>
+                </div>
+                <div style="display:flex;gap:8px;">
+                  <button class="btn-primary" onclick="toggleInline(0)">Αποθήκευση</button>
+                  <button class="btn-secondary" onclick="toggleInline(0)">Άκυρο</button>
+                  <div style="flex:1"></div>
+                  <button class="btn-danger" onclick="toggleInline(0)">Διαγραφή</button>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr id="irow-1">
+            <td style="font-weight:600;">ΑΦΟΙ Κιβρόγλου</td>
+            <td><span style="background:#f1f5f9;padding:2px 8px;border-radius:20px;font-size:11.5px;">Τρόφιμα & Ξηρά</span></td>
+            <td class="mono">2462 025100</td>
+            <td>Μετρητά</td>
+            <td><button class="expand-btn" id="ebtn-1" onclick="toggleInline(1)">✏️ Επεξεργασία</button></td>
+          </tr>
+          <tr class="expand-row" id="iexp-1" style="display:none;">
+            <td colspan="5">
+              <div class="inline-edit-panel">
+                <div class="panel-head">
+                  <h4>✏️ ΑΦΟΙ Κιβρόγλου — Επεξεργασία</h4>
+                  <button class="modal-close" onclick="toggleInline(1)">✕</button>
+                </div>
+                <div class="f-row cols3">
+                  <div class="f-field"><label class="f-label">Επωνυμία *</label><input class="f-input" value="ΑΦΟΙ Κιβρόγλου"></div>
+                  <div class="f-field"><label class="f-label">Τηλέφωνο</label><input class="f-input" value="2462 025100"></div>
+                  <div class="f-field"><label class="f-label">Τρόπος Πληρωμής</label><input class="f-input" value="Μετρητά"></div>
+                </div>
+                <div style="display:flex;gap:8px;margin-top:6px;">
+                  <button class="btn-primary" onclick="toggleInline(1)">Αποθήκευση</button>
+                  <button class="btn-secondary" onclick="toggleInline(1)">Άκυρο</button>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr id="irow-2">
+            <td style="font-weight:600;">Αλατζάς ΑΕ</td>
+            <td><span style="background:#f1f5f9;padding:2px 8px;border-radius:20px;font-size:11.5px;">Ποτά</span></td>
+            <td class="mono">2431 022000</td>
+            <td>15 μέρες</td>
+            <td><button class="expand-btn" id="ebtn-2" onclick="toggleInline(2)">✏️ Επεξεργασία</button></td>
+          </tr>
+          <tr class="expand-row" id="iexp-2" style="display:none;">
+            <td colspan="5">
+              <div class="inline-edit-panel">
+                <div class="panel-head">
+                  <h4>✏️ Αλατζάς ΑΕ — Επεξεργασία</h4>
+                  <button class="modal-close" onclick="toggleInline(2)">✕</button>
+                </div>
+                <div class="f-row cols3">
+                  <div class="f-field"><label class="f-label">Επωνυμία *</label><input class="f-input" value="Αλατζάς ΑΕ"></div>
+                  <div class="f-field"><label class="f-label">Τηλέφωνο</label><input class="f-input" value="2431 022000"></div>
+                  <div class="f-field"><label class="f-label">Πιστωτική (μέρες)</label><input class="f-input" type="number" value="15"></div>
+                </div>
+                <div style="display:flex;gap:8px;margin-top:6px;">
+                  <button class="btn-primary" onclick="toggleInline(2)">Αποθήκευση</button>
+                  <button class="btn-secondary" onclick="toggleInline(2)">Άκυρο</button>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- SUMMARY FOOTER -->
+<div style="background:white; border-top:2px solid var(--border); padding:32px 40px; max-width:1100px; margin:40px auto 0;">
+  <div style="font-size:15px; font-weight:700; margin-bottom:16px;">📊 Σύγκριση Γρήγορα</div>
+  <div style="overflow-x:auto;">
+  <table style="width:100%; border-collapse:collapse; font-size:13px;">
+    <thead>
+      <tr style="background:#f8fafc;">
+        <th style="padding:10px 14px; text-align:left; border:1px solid var(--border);">Πρόταση</th>
+        <th style="padding:10px 14px; text-align:center; border:1px solid var(--border);">Ταχύτητα</th>
+        <th style="padding:10px 14px; text-align:center; border:1px solid var(--border);">Κινητό</th>
+        <th style="padding:10px 14px; text-align:center; border:1px solid var(--border);">Ιδανικό για</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding:9px 14px; border:1px solid var(--border);"><strong>1. Popup Modal</strong></td><td style="padding:9px 14px; border:1px solid var(--border); text-align:center;">⚡⚡⚡</td><td style="padding:9px 14px; border:1px solid var(--border); text-align:center;">✅ OK</td><td style="padding:9px 14px; border:1px solid var(--border);">Γρήγορη επεξεργασία · κλασικό UX</td></tr>
+      <tr><td style="padding:9px 14px; border:1px solid var(--border);"><strong>2. Πλαϊνό Συρτάρι</strong></td><td style="padding:9px 14px; border:1px solid var(--border); text-align:center;">⚡⚡⚡</td><td style="padding:9px 14px; border:1px solid var(--border); text-align:center;">⚠️ Στενό</td><td style="padding:9px 14px; border:1px solid var(--border);">Laptop · βλέπεις λίστα ταυτόχρονα</td></tr>
+      <tr><td style="padding:9px 14px; border:1px solid var(--border);"><strong>3. Βήμα-Βήμα</strong></td><td style="padding:9px 14px; border:1px solid var(--border); text-align:center;">⚡</td><td style="padding:9px 14px; border:1px solid var(--border); text-align:center;">✅ Εξαιρετικό</td><td style="padding:9px 14px; border:1px solid var(--border);">Νέος προμηθευτής · πρώτη χρήση</td></tr>
+      <tr><td style="padding:9px 14px; border:1px solid var(--border);"><strong>4. Σελίδα 2 Στηλών</strong></td><td style="padding:9px 14px; border:1px solid var(--border); text-align:center;">⚡⚡</td><td style="padding:9px 14px; border:1px solid var(--border); text-align:center;">❌ Μόνο laptop</td><td style="padding:9px 14px; border:1px solid var(--border);">Πλήρης επεξεργασία · έλεγχος</td></tr>
+      <tr style="background:#fff7ed;"><td style="padding:9px 14px; border:1px solid var(--border);"><strong>5. Inline στη Λίστα</strong></td><td style="padding:9px 14px; border:1px solid var(--border); text-align:center;">⚡⚡⚡</td><td style="padding:9px 14px; border:1px solid var(--border); text-align:center;">✅ OK</td><td style="padding:9px 14px; border:1px solid var(--border);">Γρήγορη αλλαγή ενός πεδίου</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<script>
+  // ── TABS ──
+  function showTab(i) {
+    document.querySelectorAll('.tab').forEach((t,j) => t.classList.toggle('active', i===j));
+    document.querySelectorAll('.panel').forEach((p,j) => p.classList.toggle('active', i===j));
+  }
+
+  // ── MODAL 1 ──
+  function openModal1(name) {
+    document.getElementById('modal1-title').textContent = name === 'new' ? 'Νέος Προμηθευτής' : 'Επεξεργασία: ' + name;
+    if(name!=='new') document.getElementById('m1-name').value = name;
+    document.getElementById('modal1').classList.add('open');
+  }
+  function closeModal1() { document.getElementById('modal1').classList.remove('open'); }
+
+  // ── DRAWER ──
+  function openDrawer() { document.getElementById('drawer-overlay').classList.add('open'); }
+  function closeDrawer() { document.getElementById('drawer-overlay').classList.remove('open'); }
+
+  // ── WIZARD ──
+  let wizStep = 1;
+  function wizGo(step) {
+    wizStep = step;
+    document.querySelectorAll('.wizard-pane').forEach((p,i)=>p.classList.toggle('active', i===step));
+    document.querySelectorAll('.wizard-step-tab').forEach((t,i)=>{
+      t.classList.remove('active','done');
+      if(i===step) t.classList.add('active');
+      else if(i<step) { t.classList.add('done'); t.querySelector('.step-num').textContent='✓'; }
+      else t.querySelector('.step-num').textContent=i+1;
+    });
+    document.getElementById('wiz-prev').style.visibility = step===0?'hidden':'visible';
+    document.getElementById('wiz-next').textContent = step===2?'Αποθήκευση ✓':'Επόμενο →';
+    document.getElementById('wiz-counter').textContent = 'Βήμα '+(step+1)+' από 3';
+  }
+  function wizNext() { if(wizStep<2) wizGo(wizStep+1); else { alert('✅ Αποθηκεύτηκε!'); wizGo(0); } }
+  function wizPrev() { if(wizStep>0) wizGo(wizStep-1); }
+
+  // ── SPLIT SUMMARY ──
+  function updateSummary() {
+    const n = document.getElementById('split-name').value || '—';
+    document.getElementById('sum-name').textContent = n;
+    document.getElementById('split-logo').textContent = n[0] || '?';
+    document.getElementById('sum-type').textContent = document.getElementById('split-type').value || '—';
+    document.getElementById('sum-phone').textContent = document.getElementById('split-phone').value || '—';
+    document.getElementById('sum-pay').textContent = document.getElementById('split-pay').value || '—';
+    const c = document.getElementById('split-credit').value;
+    document.getElementById('sum-credit').textContent = c && c>0 ? c+' μέρες' : 'Μετρητά';
+  }
+
+  // ── INLINE ──
+  let openInline = null;
+  function toggleInline(i) {
+    if(openInline !== null && openInline !== i) {
+      document.getElementById('iexp-'+openInline).style.display='none';
+      document.getElementById('ebtn-'+openInline).classList.remove('open');
+      openInline = null;
+    }
+    const exp = document.getElementById('iexp-'+i);
+    const btn = document.getElementById('ebtn-'+i);
+    const isOpen = exp.style.display !== 'none';
+    exp.style.display = isOpen ? 'none' : 'table-row';
+    btn.classList.toggle('open', !isOpen);
+    openInline = isOpen ? null : i;
+  }
+
+  // Day pill toggle
+  document.querySelectorAll('.day-pill').forEach(pill => {
+    pill.addEventListener('click', () => pill.classList.toggle('on'));
+  });
+</script>
+</body>
+</html>
