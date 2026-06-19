@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAMAM — Form Προμηθευτή: 5 Σχέδια</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent: #f97316;
+  --accent-dark: #ea6b0a;
+  --accent-light: #fff7ed;
+  --bg: #f1f5f9;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --text: #1e293b;
+  --muted: #64748b;
+  --radius: 12px;
+  --shadow: 0 2px 12px rgba(0,0,0,.08);
+}
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0d0f14; color: #eef1f8; min-height: 100vh; }
+
+/* ── HERO ── */
+.hero { background: linear-gradient(135deg,#1a1f3a,#0d0f14); padding: 40px 32px 28px; text-align:center; border-bottom: 1px solid #2a3580; }
+.hero h1 { font-size:26px; font-weight:800; margin-bottom:8px; }
+.hero p  { font-size:14px; color:#8b93b8; max-width:500px; margin:0 auto; }
+
+/* ── TABS ── */
+.tabs-bar { display:flex; background:#13172e; border-bottom:2px solid #2a3580; overflow-x:auto; position:sticky; top:0; z-index:100; }
+.tab { flex:1; min-width:140px; padding:14px 10px 12px; text-align:center; cursor:pointer; font-size:13px; font-weight:600; color:#8b93b8; border-bottom:3px solid transparent; margin-bottom:-2px; transition:all .2s; white-space:nowrap; user-select:none; }
+.tab:hover { color:#eef1f8; }
+.tab.active { color:#f97316; border-bottom-color:#f97316; background:#0d0f14; }
+.tab-num { display:inline-block; width:20px; height:20px; border-radius:50%; background:#2a3580; color:#8b93b8; font-size:10px; font-weight:700; line-height:20px; text-align:center; margin-right:5px; }
+.tab.active .tab-num { background:#f97316; color:white; }
+
+/* ── PANELS ── */
+.panel { display:none; padding:32px; }
+.panel.active { display:block; }
+
+/* ── SHARED FORM ELEMENTS ── */
+input, textarea, select {
+  width:100%; padding:10px 13px; border:1.5px solid var(--border); border-radius:8px;
+  font-size:13.5px; color:var(--text); background:white; outline:none; transition:border .15s;
+  font-family:inherit;
+}
+input:focus, textarea:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(249,115,22,.12); }
+label { font-size:12px; font-weight:600; color:var(--muted); margin-bottom:5px; display:block; }
+textarea { resize:none; height:80px; }
+.f2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.f3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; }
+.field { display:flex; flex-direction:column; margin-bottom:14px; }
+.field:last-child { margin-bottom:0; }
+
+.day-pill { display:inline-flex; align-items:center; gap:6px; padding:7px 14px; border:1.5px solid var(--border); border-radius:20px; cursor:pointer; font-size:13px; font-weight:500; background:white; color:var(--muted); transition:all .15s; user-select:none; }
+.day-pill.on { border-color:var(--accent); background:#fff7ed; color:#c2410c; font-weight:600; }
+
+.btn-save { background:var(--accent); color:white; border:none; padding:11px 26px; border-radius:9px; font-size:14px; font-weight:700; cursor:pointer; transition:background .15s; }
+.btn-save:hover { background:var(--accent-dark); }
+.btn-cancel { background:white; color:var(--muted); border:1.5px solid var(--border); padding:10px 22px; border-radius:9px; font-size:14px; font-weight:500; cursor:pointer; text-decoration:none; display:inline-block; }
+
+/* ════════════════════════════════════════════
+   DESIGN 1 — SINGLE CLEAN CARD
+════════════════════════════════════════════ */
+.d1-wrap { max-width:720px; margin:0 auto; }
+.d1-header { margin-bottom:24px; }
+.d1-header h2 { font-size:22px; font-weight:800; color:var(--text); }
+.d1-header p  { font-size:13.5px; color:var(--muted); margin-top:4px; }
+.d1-card { background:white; border-radius:14px; border:1px solid var(--border); box-shadow:var(--shadow); overflow:hidden; }
+.d1-section { padding:22px 26px 18px; border-bottom:1px solid #f1f5f9; }
+.d1-section:last-child { border-bottom:none; }
+.d1-section-title { font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.7px; color:var(--accent); margin-bottom:16px; }
+.d1-actions { padding:18px 26px; background:#fafafa; display:flex; gap:10px; align-items:center; }
+
+/* ════════════════════════════════════════════
+   DESIGN 2 — ICON SECTIONS WITH SIDEBAR PROGRESS
+════════════════════════════════════════════ */
+.d2-wrap { max-width:820px; margin:0 auto; display:grid; grid-template-columns:200px 1fr; gap:20px; }
+.d2-sidebar { background:white; border-radius:14px; border:1px solid var(--border); padding:18px; height:fit-content; position:sticky; top:80px; }
+.d2-sidebar-title { font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.6px; color:var(--muted); margin-bottom:14px; }
+.d2-nav-item { display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:8px; margin-bottom:4px; cursor:pointer; font-size:13px; font-weight:500; color:var(--muted); transition:all .15s; }
+.d2-nav-item.active { background:#fff7ed; color:var(--accent); font-weight:700; }
+.d2-nav-item .d2-ico { width:28px; height:28px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:14px; background:var(--bg); }
+.d2-nav-item.active .d2-ico { background:var(--accent); }
+.d2-nav-item.done .d2-ico::after { content:'✓'; font-size:13px; color:#22c55e; }
+.d2-main { display:flex; flex-direction:column; gap:16px; }
+.d2-card { background:white; border-radius:14px; border:1px solid var(--border); box-shadow:var(--shadow); }
+.d2-card-head { display:flex; align-items:center; gap:12px; padding:16px 20px 14px; border-bottom:1px solid #f8fafc; }
+.d2-card-icon { width:36px; height:36px; border-radius:9px; background:var(--accent-light); display:flex; align-items:center; justify-content:center; font-size:18px; }
+.d2-card-title { font-size:14px; font-weight:700; color:var(--text); }
+.d2-card-body { padding:18px 20px; }
+.d2-actions { background:white; border-radius:14px; border:1px solid var(--border); padding:16px 20px; display:flex; gap:10px; }
+
+/* ════════════════════════════════════════════
+   DESIGN 3 — TABBED SECTIONS (horizontal)
+════════════════════════════════════════════ */
+.d3-wrap { max-width:700px; margin:0 auto; }
+.d3-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+.d3-title { font-size:20px; font-weight:800; color:var(--text); }
+.d3-tabs { display:flex; background:white; border:1px solid var(--border); border-radius:12px; padding:4px; margin-bottom:20px; }
+.d3-tab { flex:1; padding:9px 8px; text-align:center; font-size:12.5px; font-weight:600; color:var(--muted); border-radius:8px; cursor:pointer; transition:all .15s; user-select:none; }
+.d3-tab.active { background:var(--accent); color:white; }
+.d3-pane { display:none; }
+.d3-pane.active { display:block; }
+.d3-card { background:white; border-radius:14px; border:1px solid var(--border); padding:22px 24px; box-shadow:var(--shadow); }
+.d3-nav { display:flex; justify-content:space-between; margin-top:18px; padding-top:18px; border-top:1px solid var(--border); }
+
+/* ════════════════════════════════════════════
+   DESIGN 4 — TWO-COLUMN FULL WIDTH
+════════════════════════════════════════════ */
+.d4-wrap { max-width:900px; margin:0 auto; }
+.d4-header { margin-bottom:22px; display:flex; align-items:center; gap:14px; }
+.d4-header-icon { width:44px; height:44px; border-radius:11px; background:var(--accent); display:flex; align-items:center; justify-content:center; color:white; font-size:20px; }
+.d4-header h2 { font-size:20px; font-weight:800; color:var(--text); }
+.d4-header p  { font-size:13px; color:var(--muted); }
+.d4-card { background:white; border-radius:14px; border:1px solid var(--border); box-shadow:var(--shadow); padding:26px; }
+.d4-divider { display:grid; grid-template-columns:1fr 1fr; gap:28px; }
+.d4-col { }
+.d4-section { font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.6px; color:var(--muted); border-bottom:2px solid var(--bg); padding-bottom:8px; margin-bottom:14px; margin-top:22px; display:flex; align-items:center; gap:6px; }
+.d4-section:first-child { margin-top:0; }
+.d4-section::before { content:''; width:3px; height:13px; background:var(--accent); border-radius:2px; }
+.d4-actions { display:flex; gap:10px; margin-top:24px; padding-top:22px; border-top:1px solid var(--border); }
+
+/* ════════════════════════════════════════════
+   DESIGN 5 — MINIMAL FLOATING LABELS
+════════════════════════════════════════════ */
+.d5-wrap { max-width:680px; margin:0 auto; }
+.d5-topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:28px; }
+.d5-title { font-size:20px; font-weight:800; color:var(--text); }
+.d5-breadcrumb { font-size:12px; color:var(--muted); margin-top:3px; }
+.d5-group { position:relative; margin-bottom:20px; }
+.d5-input {
+  width:100%; padding:20px 14px 8px; border:none; border-bottom:2px solid var(--border);
+  border-radius:0; font-size:14px; color:var(--text); background:white; outline:none;
+  transition:border .2s; font-family:inherit;
+}
+.d5-input:focus { border-bottom-color:var(--accent); }
+.d5-label {
+  position:absolute; top:14px; left:14px; font-size:13px; color:var(--muted); font-weight:500;
+  transition:all .15s; pointer-events:none;
+}
+.d5-input:focus + .d5-label,
+.d5-input.has-val + .d5-label {
+  top:6px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--accent);
+}
+.d5-input:focus { box-shadow:none; }
+.d5-section { display:flex; align-items:center; gap:10px; margin:24px 0 16px; }
+.d5-section-line { flex:1; height:1px; background:var(--border); }
+.d5-section-text { font-size:11.5px; font-weight:700; color:var(--muted); white-space:nowrap; }
+.d5-card { background:white; border-radius:14px; border:1px solid var(--border); padding:24px 26px; box-shadow:var(--shadow); }
+.d5-actions { display:flex; gap:10px; margin-top:26px; padding-top:22px; border-top:1px solid var(--border); align-items:center; }
+.d5-f2 { display:grid; grid-template-columns:1fr 1fr; gap:0 20px; }
+
+/* Common BG wrapper for panels */
+.form-bg { background:var(--bg); border-radius:14px; padding:28px; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>✏️ Form Προμηθευτή — 5 Σχέδια</h1>
+  <p>5 διαφορετικές οπτικές σχεδιάσεις για τη φόρμα επεξεργασίας / δημιουργίας προμηθευτή</p>
+</div>
+
+<!-- TABS -->
+<div class="tabs-bar">
+  <div class="tab active" onclick="showTab(0)"><span class="tab-num">1</span>Καθαρή Κάρτα</div>
+  <div class="tab" onclick="showTab(1)"><span class="tab-num">2</span>Εικονίδια & Sidebar</div>
+  <div class="tab" onclick="showTab(2)"><span class="tab-num">3</span>Καρτέλες-Ενότητες</div>
+  <div class="tab" onclick="showTab(3)"><span class="tab-num">4</span>Δύο Στήλες</div>
+  <div class="tab" onclick="showTab(4)"><span class="tab-num">5</span>Minimal Γραμμές</div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PANEL 1 — CLEAN SINGLE CARD
+═══════════════════════════════════════════ -->
+<div class="panel active" id="panel-0">
+<div class="form-bg">
+<div class="d1-wrap">
+  <div class="d1-header">
+    <h2>Επεξεργασία Προμηθευτή</h2>
+    <p>Τροποποίηση στοιχείων προμηθευτή</p>
+  </div>
+  <div class="d1-card">
+
+    <div class="d1-section">
+      <div class="d1-section-title">Βασικά Στοιχεία</div>
+      <div class="field"><label>Επωνυμία *</label><input value="Παπάς Χρήστος"></div>
+      <div class="f2">
+        <div class="field"><label>Τύπος / Κατηγορία</label><input value="Κρεοπωλείο"></div>
+        <div class="field"><label>ΑΦΜ</label><input value="123456789"></div>
+      </div>
+    </div>
+
+    <div class="d1-section">
+      <div class="d1-section-title">Επικοινωνία</div>
+      <div class="f2">
+        <div class="field"><label>Τηλέφωνο</label><input value="6944 123456"></div>
+        <div class="field"><label>Email</label><input value="papas@example.gr"></div>
+      </div>
+      <div class="f2">
+        <div class="field"><label>Ιστοσελίδα</label><input placeholder="www.supplier.gr"></div>
+        <div class="field"><label>Διεύθυνση</label><input value="Γρεβενά 51100"></div>
+      </div>
+    </div>
+
+    <div class="d1-section">
+      <div class="d1-section-title">Οικονομικά</div>
+      <div class="field"><label>IBAN</label><input placeholder="GR16 0110 1250 …"></div>
+      <div class="f2">
+        <div class="field"><label>Τρόπος Πληρωμής</label><input value="Μετρητά"></div>
+        <div class="field"><label>Πιστωτική Περίοδος (μέρες)</label><input type="number" value="30"></div>
+      </div>
+    </div>
+
+    <div class="d1-section">
+      <div class="d1-section-title">Εφοδιασμός</div>
+      <div class="f2">
+        <div class="field"><label>Χρόνος Παράδοσης (μέρες)</label><input type="number" value="1"></div>
+        <div class="field"><label>Ελάχιστη Παραγγελία</label><input placeholder="π.χ. 50 €"></div>
+      </div>
+    </div>
+
+    <div class="d1-section">
+      <div class="d1-section-title">Ημέρες Παράδοσης</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <label class="day-pill on">Δευτέρα</label>
+        <label class="day-pill">Τρίτη</label>
+        <label class="day-pill on">Τετάρτη</label>
+        <label class="day-pill">Πέμπτη</label>
+        <label class="day-pill on">Παρασκευή</label>
+        <label class="day-pill">Σάββατο</label>
+      </div>
+    </div>
+
+    <div class="d1-section">
+      <div class="d1-section-title">Σημειώσεις</div>
+      <div class="field"><textarea>Παράδοση πάντα πρωί 8–10πμ.</textarea></div>
+    </div>
+
+    <div class="d1-actions">
+      <button class="btn-save">Αποθήκευση</button>
+      <a class="btn-cancel" href="#">Άκυρο</a>
+      <div style="flex:1"></div>
+      <button style="background:#fee2e2;color:#dc2626;border:none;padding:10px 18px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;">Διαγραφή</button>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PANEL 2 — ICON CARDS + SIDEBAR
+═══════════════════════════════════════════ -->
+<div class="panel" id="panel-1">
+<div class="form-bg">
+<div class="d2-wrap">
+
+  <!-- SIDEBAR NAV -->
+  <div class="d2-sidebar">
+    <div class="d2-sidebar-title">Ενότητες</div>
+    <div class="d2-nav-item active"><span class="d2-ico">👤</span> Βασικά</div>
+    <div class="d2-nav-item"><span class="d2-ico">📞</span> Επικοινωνία</div>
+    <div class="d2-nav-item"><span class="d2-ico">💰</span> Οικονομικά</div>
+    <div class="d2-nav-item"><span class="d2-ico">🚚</span> Εφοδιασμός</div>
+    <div class="d2-nav-item"><span class="d2-ico">📅</span> Ημέρες</div>
+    <div class="d2-nav-item"><span class="d2-ico">📝</span> Σημειώσεις</div>
+    <div style="border-top:1px solid var(--border); margin-top:16px; padding-top:14px;">
+      <button class="btn-save" style="width:100%; margin-bottom:8px;">Αποθήκευση</button>
+      <button class="btn-cancel" style="width:100%; text-align:center;">Άκυρο</button>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="d2-main">
+
+    <div class="d2-card">
+      <div class="d2-card-head">
+        <div class="d2-card-icon">👤</div>
+        <div><div class="d2-card-title">Βασικά Στοιχεία</div></div>
+      </div>
+      <div class="d2-card-body">
+        <div class="field"><label>Επωνυμία *</label><input value="Παπάς Χρήστος"></div>
+        <div class="f2">
+          <div class="field"><label>Τύπος / Κατηγορία</label><input value="Κρεοπωλείο"></div>
+          <div class="field"><label>ΑΦΜ</label><input value="123456789"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d2-card">
+      <div class="d2-card-head">
+        <div class="d2-card-icon">📞</div>
+        <div><div class="d2-card-title">Επικοινωνία</div></div>
+      </div>
+      <div class="d2-card-body">
+        <div class="f2">
+          <div class="field"><label>Τηλέφωνο</label><input value="6944 123456"></div>
+          <div class="field"><label>Email</label><input value="papas@example.gr"></div>
+        </div>
+        <div class="f2">
+          <div class="field"><label>Ιστοσελίδα</label><input placeholder="www.supplier.gr"></div>
+          <div class="field"><label>Διεύθυνση</label><input value="Γρεβενά 51100"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d2-card">
+      <div class="d2-card-head">
+        <div class="d2-card-icon">💰</div>
+        <div><div class="d2-card-title">Οικονομικά</div></div>
+      </div>
+      <div class="d2-card-body">
+        <div class="field"><label>IBAN</label><input placeholder="GR16 0110 1250 …"></div>
+        <div class="f2">
+          <div class="field"><label>Τρόπος Πληρωμής</label><input value="Μετρητά"></div>
+          <div class="field"><label>Πιστωτική (μέρες)</label><input type="number" value="30"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d2-card">
+      <div class="d2-card-head">
+        <div class="d2-card-icon">🚚</div>
+        <div><div class="d2-card-title">Εφοδιασμός & Ημέρες Παράδοσης</div></div>
+      </div>
+      <div class="d2-card-body">
+        <div class="f2" style="margin-bottom:16px;">
+          <div class="field"><label>Χρόνος Παράδοσης (μέρες)</label><input type="number" value="1"></div>
+          <div class="field"><label>Ελάχιστη Παραγγελία</label><input placeholder="π.χ. 50 €"></div>
+        </div>
+        <label style="margin-bottom:8px;">Ημέρες Παράδοσης</label>
+        <div style="display:flex;gap:7px;flex-wrap:wrap;">
+          <label class="day-pill on">Δευτέρα</label>
+          <label class="day-pill">Τρίτη</label>
+          <label class="day-pill on">Τετάρτη</label>
+          <label class="day-pill">Πέμπτη</label>
+          <label class="day-pill on">Παρασκευή</label>
+          <label class="day-pill">Σάββατο</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="d2-card">
+      <div class="d2-card-head">
+        <div class="d2-card-icon">📝</div>
+        <div><div class="d2-card-title">Σημειώσεις</div></div>
+      </div>
+      <div class="d2-card-body">
+        <textarea>Παράδοση πάντα πρωί 8–10πμ.</textarea>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PANEL 3 — TABBED SECTIONS
+═══════════════════════════════════════════ -->
+<div class="panel" id="panel-2">
+<div class="form-bg">
+<div class="d3-wrap">
+
+  <div class="d3-header">
+    <div>
+      <div class="d3-title">✏️ Παπάς Χρήστος</div>
+      <div style="font-size:13px; color:var(--muted); margin-top:3px;">Επεξεργασία στοιχείων</div>
+    </div>
+    <div style="display:flex; gap:8px;">
+      <button class="btn-save">Αποθήκευση</button>
+      <a class="btn-cancel" href="#">Άκυρο</a>
+    </div>
+  </div>
+
+  <div class="d3-tabs">
+    <div class="d3-tab active" onclick="d3Tab(0)">👤 Βασικά</div>
+    <div class="d3-tab" onclick="d3Tab(1)">📞 Επικοινωνία</div>
+    <div class="d3-tab" onclick="d3Tab(2)">💰 Οικονομικά</div>
+    <div class="d3-tab" onclick="d3Tab(3)">🚚 Παράδοση</div>
+  </div>
+
+  <!-- Pane 1 -->
+  <div class="d3-pane active d3-card" id="d3p0">
+    <div class="field"><label>Επωνυμία *</label><input value="Παπάς Χρήστος"></div>
+    <div class="f2">
+      <div class="field"><label>Τύπος / Κατηγορία</label><input value="Κρεοπωλείο"></div>
+      <div class="field"><label>ΑΦΜ</label><input value="123456789"></div>
+    </div>
+    <div class="field"><label>Σημειώσεις</label><textarea>Παράδοση πάντα πρωί 8–10πμ.</textarea></div>
+    <div class="d3-nav">
+      <span></span>
+      <button class="btn-save" onclick="d3Tab(1)">Επόμενο: Επικοινωνία →</button>
+    </div>
+  </div>
+
+  <!-- Pane 2 -->
+  <div class="d3-pane d3-card" id="d3p1">
+    <div class="f2">
+      <div class="field"><label>Τηλέφωνο</label><input value="6944 123456"></div>
+      <div class="field"><label>Email</label><input value="papas@example.gr"></div>
+    </div>
+    <div class="f2">
+      <div class="field"><label>Ιστοσελίδα</label><input placeholder="www.supplier.gr"></div>
+      <div class="field"><label>Διεύθυνση</label><input value="Γρεβενά 51100"></div>
+    </div>
+    <div class="d3-nav">
+      <button class="btn-cancel" onclick="d3Tab(0)">← Βασικά</button>
+      <button class="btn-save" onclick="d3Tab(2)">Επόμενο: Οικονομικά →</button>
+    </div>
+  </div>
+
+  <!-- Pane 3 -->
+  <div class="d3-pane d3-card" id="d3p2">
+    <div class="field"><label>IBAN</label><input placeholder="GR16 0110 1250 …"></div>
+    <div class="f2">
+      <div class="field"><label>Τρόπος Πληρωμής</label><input value="Μετρητά"></div>
+      <div class="field"><label>Πιστωτική Περίοδος (μέρες)</label><input type="number" value="30"></div>
+    </div>
+    <div class="d3-nav">
+      <button class="btn-cancel" onclick="d3Tab(1)">← Επικοινωνία</button>
+      <button class="btn-save" onclick="d3Tab(3)">Επόμενο: Παράδοση →</button>
+    </div>
+  </div>
+
+  <!-- Pane 4 -->
+  <div class="d3-pane d3-card" id="d3p3">
+    <div class="f2" style="margin-bottom:16px;">
+      <div class="field"><label>Χρόνος Παράδοσης (μέρες)</label><input type="number" value="1"></div>
+      <div class="field"><label>Ελάχιστη Παραγγελία</label><input placeholder="π.χ. 50 €"></div>
+    </div>
+    <label style="margin-bottom:8px;">Ημέρες Παράδοσης</label>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
+      <label class="day-pill on">Δευτέρα</label>
+      <label class="day-pill">Τρίτη</label>
+      <label class="day-pill on">Τετάρτη</label>
+      <label class="day-pill">Πέμπτη</label>
+      <label class="day-pill on">Παρασκευή</label>
+      <label class="day-pill">Σάββατο</label>
+    </div>
+    <div class="d3-nav">
+      <button class="btn-cancel" onclick="d3Tab(2)">← Οικονομικά</button>
+      <button class="btn-save">✅ Αποθήκευση</button>
+    </div>
+  </div>
+
+</div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PANEL 4 — TWO COLUMNS
+═══════════════════════════════════════════ -->
+<div class="panel" id="panel-3">
+<div class="form-bg">
+<div class="d4-wrap">
+
+  <div class="d4-header">
+    <div class="d4-header-icon">✏️</div>
+    <div>
+      <h2>Επεξεργασία Προμηθευτή</h2>
+      <p>Τροποποίηση στοιχείων — Παπάς Χρήστος</p>
+    </div>
+  </div>
+
+  <div class="d4-card">
+    <div class="d4-divider">
+
+      <!-- Αριστερή Στήλη -->
+      <div class="d4-col">
+        <div class="d4-section">Βασικά Στοιχεία</div>
+        <div class="field"><label>Επωνυμία *</label><input value="Παπάς Χρήστος"></div>
+        <div class="field"><label>Τύπος / Κατηγορία</label><input value="Κρεοπωλείο"></div>
+        <div class="field"><label>ΑΦΜ</label><input value="123456789"></div>
+
+        <div class="d4-section">Επικοινωνία</div>
+        <div class="field"><label>Τηλέφωνο</label><input value="6944 123456"></div>
+        <div class="field"><label>Email</label><input value="papas@example.gr"></div>
+        <div class="field"><label>Ιστοσελίδα</label><input placeholder="www.supplier.gr"></div>
+        <div class="field"><label>Διεύθυνση</label><input value="Γρεβενά 51100"></div>
+      </div>
+
+      <!-- Δεξιά Στήλη -->
+      <div class="d4-col">
+        <div class="d4-section">Οικονομικά</div>
+        <div class="field"><label>IBAN</label><input placeholder="GR16 0110 1250 …"></div>
+        <div class="field"><label>Τρόπος Πληρωμής</label><input value="Μετρητά"></div>
+        <div class="field"><label>Πιστωτική Περίοδος (μέρες)</label><input type="number" value="30"></div>
+
+        <div class="d4-section">Εφοδιασμός</div>
+        <div class="field"><label>Χρόνος Παράδοσης (μέρες)</label><input type="number" value="1"></div>
+        <div class="field"><label>Ελάχιστη Παραγγελία</label><input placeholder="π.χ. 50 €"></div>
+
+        <div class="d4-section">Ημέρες Παράδοσης</div>
+        <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px;">
+          <label class="day-pill on">Δευτ</label>
+          <label class="day-pill">Τρίτ</label>
+          <label class="day-pill on">Τετ</label>
+          <label class="day-pill">Πέμπ</label>
+          <label class="day-pill on">Παρ</label>
+          <label class="day-pill">Σάβ</label>
+        </div>
+
+        <div class="d4-section">Σημειώσεις</div>
+        <div class="field"><textarea style="height:65px;">Παράδοση πρωί 8–10πμ.</textarea></div>
+      </div>
+
+    </div>
+
+    <div class="d4-actions">
+      <button class="btn-save">Αποθήκευση</button>
+      <a class="btn-cancel" href="#">Άκυρο</a>
+      <div style="flex:1"></div>
+      <button style="background:#fee2e2;color:#dc2626;border:none;padding:10px 18px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;">Διαγραφή</button>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PANEL 5 — MINIMAL FLOATING LABELS
+═══════════════════════════════════════════ -->
+<div class="panel" id="panel-4">
+<div class="form-bg">
+<div class="d5-wrap">
+
+  <div class="d5-topbar">
+    <div>
+      <div class="d5-title">Παπάς Χρήστος</div>
+      <div class="d5-breadcrumb">Προμηθευτές / Επεξεργασία</div>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn-save">Αποθήκευση</button>
+      <a class="btn-cancel" href="#">Άκυρο</a>
+    </div>
+  </div>
+
+  <div class="d5-card">
+
+    <div class="d5-section">
+      <span class="d5-section-text">Βασικά Στοιχεία</span>
+      <div class="d5-section-line"></div>
+    </div>
+    <div class="d5-group">
+      <input class="d5-input has-val" value="Παπάς Χρήστος">
+      <label class="d5-label">Επωνυμία *</label>
+    </div>
+    <div class="d5-f2">
+      <div class="d5-group">
+        <input class="d5-input has-val" value="Κρεοπωλείο">
+        <label class="d5-label">Τύπος / Κατηγορία</label>
+      </div>
+      <div class="d5-group">
+        <input class="d5-input has-val" value="123456789">
+        <label class="d5-label">ΑΦΜ</label>
+      </div>
+    </div>
+
+    <div class="d5-section">
+      <span class="d5-section-text">Επικοινωνία</span>
+      <div class="d5-section-line"></div>
+    </div>
+    <div class="d5-f2">
+      <div class="d5-group">
+        <input class="d5-input has-val" value="6944 123456">
+        <label class="d5-label">Τηλέφωνο</label>
+      </div>
+      <div class="d5-group">
+        <input class="d5-input has-val" value="papas@example.gr">
+        <label class="d5-label">Email</label>
+      </div>
+    </div>
+    <div class="d5-f2">
+      <div class="d5-group">
+        <input class="d5-input" placeholder="">
+        <label class="d5-label">Ιστοσελίδα</label>
+      </div>
+      <div class="d5-group">
+        <input class="d5-input has-val" value="Γρεβενά 51100">
+        <label class="d5-label">Διεύθυνση</label>
+      </div>
+    </div>
+
+    <div class="d5-section">
+      <span class="d5-section-text">Οικονομικά</span>
+      <div class="d5-section-line"></div>
+    </div>
+    <div class="d5-group">
+      <input class="d5-input" placeholder="">
+      <label class="d5-label">IBAN</label>
+    </div>
+    <div class="d5-f2">
+      <div class="d5-group">
+        <input class="d5-input has-val" value="Μετρητά">
+        <label class="d5-label">Τρόπος Πληρωμής</label>
+      </div>
+      <div class="d5-group">
+        <input class="d5-input has-val" type="number" value="30">
+        <label class="d5-label">Πιστωτική Περίοδος (μέρες)</label>
+      </div>
+    </div>
+
+    <div class="d5-section">
+      <span class="d5-section-text">Εφοδιασμός & Παράδοση</span>
+      <div class="d5-section-line"></div>
+    </div>
+    <div class="d5-f2">
+      <div class="d5-group">
+        <input class="d5-input has-val" type="number" value="1">
+        <label class="d5-label">Χρόνος Παράδοσης (μέρες)</label>
+      </div>
+      <div class="d5-group">
+        <input class="d5-input" placeholder="">
+        <label class="d5-label">Ελάχιστη Παραγγελία</label>
+      </div>
+    </div>
+    <div style="margin-bottom:20px;">
+      <label style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--muted); display:block; margin-bottom:10px;">Ημέρες Παράδοσης</label>
+      <div style="display:flex;gap:7px;flex-wrap:wrap;">
+        <label class="day-pill on">Δευτέρα</label>
+        <label class="day-pill">Τρίτη</label>
+        <label class="day-pill on">Τετάρτη</label>
+        <label class="day-pill">Πέμπτη</label>
+        <label class="day-pill on">Παρασκευή</label>
+        <label class="day-pill">Σάββατο</label>
+      </div>
+    </div>
+
+    <div class="d5-section">
+      <span class="d5-section-text">Σημειώσεις</span>
+      <div class="d5-section-line"></div>
+    </div>
+    <div class="d5-group">
+      <textarea class="d5-input has-val" style="padding-top:20px; padding-bottom:8px; height:90px;">Παράδοση πάντα πρωί 8–10πμ.</textarea>
+      <label class="d5-label" style="top:6px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--accent);">Σημειώσεις</label>
+    </div>
+
+    <div class="d5-actions">
+      <button class="btn-save">Αποθήκευση</button>
+      <a class="btn-cancel" href="#">Άκυρο</a>
+      <div style="flex:1"></div>
+      <button style="background:#fee2e2;color:#dc2626;border:none;padding:10px 18px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;">Διαγραφή</button>
+    </div>
+
+  </div>
+</div>
+</div>
+</div>
+
+<script>
+  // TABS
+  function showTab(i) {
+    document.querySelectorAll('.tab').forEach((t,j) => t.classList.toggle('active', i===j));
+    document.querySelectorAll('.panel').forEach((p,j) => p.classList.toggle('active', i===j));
+  }
+
+  // D3 inner tabs
+  function d3Tab(i) {
+    document.querySelectorAll('.d3-tab').forEach((t,j)=>t.classList.toggle('active', i===j));
+    document.querySelectorAll('.d3-pane').forEach((p,j)=>p.classList.toggle('active', i===j));
+  }
+
+  // Day pill toggle
+  document.querySelectorAll('.day-pill').forEach(pill => {
+    pill.addEventListener('click', () => pill.classList.toggle('on'));
+  });
+
+  // D5 floating label — focus behavior
+  document.querySelectorAll('.d5-input').forEach(inp => {
+    inp.addEventListener('focus', () => inp.nextElementSibling && inp.nextElementSibling.classList.add('float'));
+    inp.addEventListener('blur', () => {
+      if (!inp.value) inp.nextElementSibling && inp.nextElementSibling.classList.remove('float');
+    });
+  });
+</script>
+</body>
+</html>
