@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAMAM Back-Office — Preview Σκελετού</title>
+<style>
+:root{
+  --sidebar-bg:#1e2d3d;
+  --sidebar-text:#94a3b8;
+  --accent:#f59e0b;
+  --accent-dark:#d97706;
+  --content-bg:#f1f5f9;
+  --white:#fff;
+  --text:#1e293b;
+  --muted:#64748b;
+  --border:#e2e8f0;
+  --success:#10b981;
+  --radius:10px;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:14px;color:var(--text);background:var(--content-bg);min-height:100vh}
+
+/* ── VIEW SYSTEM ── */
+.view{display:none}
+.view.active{display:flex}
+
+/* ── LOGIN ── */
+#v-login{align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#1a2535 0%,#2d3f54 100%)}
+.login-card{background:var(--white);border-radius:16px;padding:44px 40px 40px;width:100%;max-width:360px;box-shadow:0 24px 64px rgba(0,0,0,.35)}
+.login-logo{font-size:30px;font-weight:800;color:var(--text);text-align:center;margin-bottom:4px;letter-spacing:-.5px}
+.login-subtitle{text-align:center;font-size:12px;color:var(--muted);margin-bottom:34px;text-transform:uppercase;letter-spacing:.6px}
+.form-label{display:block;font-size:13px;font-weight:500;color:var(--text);margin-bottom:7px}
+.form-input{width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;color:var(--text);outline:none;transition:border-color .15s}
+.form-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(245,158,11,.15)}
+.btn-primary{display:block;width:100%;padding:11px;background:var(--accent);color:var(--white);border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;margin-top:20px;transition:background .15s}
+.btn-primary:hover{background:var(--accent-dark)}
+.hint{margin-top:12px;text-align:center;font-size:12px;color:var(--muted)}
+
+/* ── APP SHELL (sidebar + content) ── */
+#v-app{flex-direction:row;min-height:100vh;width:100%}
+
+.sidebar{width:220px;background:var(--sidebar-bg);height:100vh;position:sticky;top:0;flex-shrink:0;display:flex;flex-direction:column;overflow-y:auto}
+.sidebar-header{padding:22px 16px 18px;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0}
+.sidebar-logo{font-size:18px;font-weight:700;color:var(--white);letter-spacing:-.3px}
+.sidebar-sub{font-size:11px;color:var(--sidebar-text);margin-top:2px;text-transform:uppercase;letter-spacing:.6px}
+nav{padding:8px 0;flex:1}
+.nav-sep{height:1px;background:rgba(255,255,255,.06);margin:6px 12px}
+.nav-link{display:flex;align-items:center;gap:10px;padding:9px 16px;color:var(--sidebar-text);text-decoration:none;font-size:13.5px;border-left:3px solid transparent;cursor:pointer;transition:background .12s,color .12s,border-color .12s}
+.nav-link:hover{color:var(--white);background:rgba(255,255,255,.05)}
+.nav-link.active{color:var(--white);border-left-color:var(--accent);background:rgba(245,158,11,.1)}
+.nav-icon{font-size:15px;width:18px;text-align:center;flex-shrink:0}
+
+.main-content{flex:1;display:flex;flex-direction:column;min-height:100vh}
+.topbar{position:sticky;top:0;z-index:100;height:54px;background:var(--white);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow)}
+.topbar-title{font-size:15px;font-weight:600;color:var(--text)}
+.topbar-right{display:flex;align-items:center;gap:18px}
+.status-badge{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--success);font-weight:500}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--success)}
+.btn-logout{background:none;border:none;font-size:13px;color:var(--muted);cursor:pointer;padding:4px 8px;border-radius:6px}
+.btn-logout:hover{color:var(--text);background:var(--content-bg)}
+.page-content{padding:28px 24px;flex:1}
+
+/* ── PAGE SECTIONS ── */
+.page-section{display:none}
+.page-section.active{display:block}
+
+.page-header{margin-bottom:24px}
+.page-title{font-size:22px;font-weight:700;color:var(--text);line-height:1.2}
+.page-subtitle{font-size:13px;color:var(--muted);margin-top:5px}
+
+/* ── STATS ── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px;margin-bottom:28px}
+.stat-card{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);padding:18px 20px;box-shadow:var(--shadow)}
+.stat-label{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:10px}
+.stat-value{font-size:26px;font-weight:700;color:#cbd5e1;line-height:1}
+
+/* ── SECTIONS GRID ── */
+.section-heading{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:14px}
+.sections-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.section-card{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);padding:16px 18px;display:flex;align-items:center;gap:14px;cursor:pointer;box-shadow:var(--shadow);transition:border-color .15s,box-shadow .15s,transform .15s}
+.section-card:hover{border-color:var(--accent);box-shadow:0 4px 14px rgba(245,158,11,.18);transform:translateY(-1px)}
+.section-icon{font-size:26px;line-height:1;flex-shrink:0}
+.section-title{font-size:13.5px;font-weight:600;color:var(--text)}
+.section-status{font-size:11.5px;color:var(--muted);margin-top:3px}
+
+/* ── PLACEHOLDER ── */
+.card{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);padding:24px;box-shadow:var(--shadow)}
+.coming-soon{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:64px 40px;text-align:center}
+.coming-soon-icon{font-size:52px;margin-bottom:18px;line-height:1}
+.coming-soon-title{font-size:18px;font-weight:700;color:var(--text);margin-bottom:10px}
+.coming-soon-text{font-size:13.5px;color:var(--muted)}
+
+/* ── PREVIEW BANNER ── */
+.preview-banner{position:fixed;bottom:0;left:0;right:0;background:#1e2d3d;color:#94a3b8;font-size:11.5px;text-align:center;padding:7px;z-index:9999;letter-spacing:.3px}
+.preview-banner span{color:var(--accent);font-weight:600}
+
+@media(max-width:640px){
+  .sidebar{width:200px}
+  .page-content{padding:18px 14px}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .sections-grid{grid-template-columns:1fr}
+  .login-card{padding:32px 24px}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ LOGIN VIEW ═══════════════ -->
+<div id="v-login" class="view active">
+  <div class="login-card">
+    <div class="login-logo">🍖 TAMAM</div>
+    <div class="login-subtitle">Back-Office Management</div>
+    <div>
+      <label class="form-label">Κωδικός πρόσβασης</label>
+      <input type="password" class="form-input" id="pw-input" placeholder="••••••••" value="tamam2024">
+    </div>
+    <button class="btn-primary" onclick="doLogin()">Είσοδος</button>
+    <div class="hint">Preview — πάτα Είσοδος με οποιονδήποτε κωδικό</div>
+  </div>
+</div>
+
+<!-- ═══════════════ APP VIEW ═══════════════ -->
+<div id="v-app" class="view">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">🍖 TAMAM</div>
+      <div class="sidebar-sub">Back-Office</div>
+    </div>
+    <nav>
+      <div class="nav-link active" id="nl-dashboard" onclick="showPage('dashboard')">
+        <span class="nav-icon">🏠</span><span>Dashboard</span>
+      </div>
+      <div class="nav-sep"></div>
+      <div class="nav-link" id="nl-suppliers"   onclick="showPage('suppliers')">  <span class="nav-icon">🚚</span><span>Προμηθευτές</span></div>
+      <div class="nav-link" id="nl-materials"   onclick="showPage('materials')">  <span class="nav-icon">📦</span><span>Πρώτες Ύλες</span></div>
+      <div class="nav-link" id="nl-recipes"     onclick="showPage('recipes')">    <span class="nav-icon">🧾</span><span>Συνταγές</span></div>
+      <div class="nav-link" id="nl-expenses"    onclick="showPage('expenses')">   <span class="nav-icon">💰</span><span>Έξοδα & Κέρδος</span></div>
+      <div class="nav-link" id="nl-pricing"     onclick="showPage('pricing')">    <span class="nav-icon">💲</span><span>Τιμές & Μενού</span></div>
+      <div class="nav-link" id="nl-ocr"         onclick="showPage('ocr')">        <span class="nav-icon">📸</span><span>OCR Τιμολογίων</span></div>
+      <div class="nav-link" id="nl-forecast"    onclick="showPage('forecast')">   <span class="nav-icon">🔮</span><span>Πρόβλεψη</span></div>
+      <div class="nav-link" id="nl-labor"       onclick="showPage('labor')">      <span class="nav-icon">👤</span><span>Εργατικό Κόστος</span></div>
+      <div class="nav-link" id="nl-reports"     onclick="showPage('reports')">    <span class="nav-icon">📊</span><span>Αναφορές</span></div>
+      <div class="nav-link" id="nl-compliance"  onclick="showPage('compliance')"> <span class="nav-icon">🛡️</span><span>Συμμόρφωση</span></div>
+      <div class="nav-link" id="nl-security"    onclick="showPage('security')">   <span class="nav-icon">🔐</span><span>Ασφάλεια</span></div>
+      <div class="nav-link" id="nl-backups"     onclick="showPage('backups')">    <span class="nav-icon">💾</span><span>Αντίγραφα</span></div>
+    </nav>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+    <header class="topbar">
+      <span class="topbar-title" id="topbar-title">Dashboard</span>
+      <div class="topbar-right">
+        <div class="status-badge"><span class="status-dot"></span><span>Ενεργό</span></div>
+        <button class="btn-logout" onclick="doLogout()">Έξοδος</button>
+      </div>
+    </header>
+
+    <main class="page-content">
+
+      <!-- DASHBOARD -->
+      <div class="page-section active" id="p-dashboard">
+        <div class="page-header">
+          <div class="page-title">Καλώς ήρθες 👋</div>
+          <div class="page-subtitle">TAMAM Grill House — Γρεβενά</div>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-label">Τζίρος σήμερα</div><div class="stat-value">—</div></div>
+          <div class="stat-card"><div class="stat-label">Κέρδος τρέχοντος μήνα</div><div class="stat-value">—</div></div>
+          <div class="stat-card"><div class="stat-label">Ανεξόφλητα τιμολόγια</div><div class="stat-value">—</div></div>
+          <div class="stat-card"><div class="stat-label">Ειδοποιήσεις</div><div class="stat-value">—</div></div>
+        </div>
+        <div class="section-heading">Ενότητες</div>
+        <div class="sections-grid">
+          <div class="section-card" onclick="showPage('suppliers')">  <span class="section-icon">🚚</span><div><div class="section-title">Προμηθευτές</div>    <div class="section-status">Υπό κατασκευή</div></div></div>
+          <div class="section-card" onclick="showPage('materials')">  <span class="section-icon">📦</span><div><div class="section-title">Πρώτες Ύλες</div>    <div class="section-status">Υπό κατασκευή</div></div></div>
+          <div class="section-card" onclick="showPage('recipes')">    <span class="section-icon">🧾</span><div><div class="section-title">Συνταγές</div>        <div class="section-status">Υπό κατασκευή</div></div></div>
+          <div class="section-card" onclick="showPage('expenses')">   <span class="section-icon">💰</span><div><div class="section-title">Έξοδα & Κέρδος</div><div class="section-status">Υπό κατασκευή</div></div></div>
+          <div class="section-card" onclick="showPage('pricing')">    <span class="section-icon">💲</span><div><div class="section-title">Τιμές & Μενού</div>  <div class="section-status">Υπό κατασκευή</div></div></div>
+          <div class="section-card" onclick="showPage('ocr')">        <span class="section-icon">📸</span><div><div class="section-title">OCR Τιμολογίων</div><div class="section-status">Υπό κατασκευή</div></div></div>
+          <div class="section-card" onclick="showPage('forecast')">   <span class="section-icon">🔮</span><div><div class="section-title">Πρόβλεψη</div>       <div class="section-status">Υπό κατασκευή</div></div></div>
+          <div class="section-card" onclick="showPage('labor')">      <span class="section-icon">👤</span><div><div class="section-title">Εργατικό Κόστος</div><div class="section-status">Υπό κατασκευή</div></div></div>
+          <div class="section-card" onclick="showPage('reports')">    <span class="section-icon">📊</span><div><div class="section-title">Αναφορές</div>        <div class="section-status">Υπό κατασκευή</div></div></div>
+          <div class="section-card" onclick="showPage('compliance')"> <span class="section-icon">🛡️</span><div><div class="section-title">Συμμόρφωση</div>     <div class="section-status">Υπό κατασκευή</div></div></div>
+          <div class="section-card" onclick="showPage('security')">   <span class="section-icon">🔐</span><div><div class="section-title">Ασφάλεια</div>        <div class="section-status">Υπό κατασκευή</div></div></div>
+          <div class="section-card" onclick="showPage('backups')">    <span class="section-icon">💾</span><div><div class="section-title">Αντίγραφα</div>       <div class="section-status">Υπό κατασκευή</div></div></div>
+        </div>
+      </div>
+
+      <!-- PLACEHOLDERS (one per section) -->
+      <div class="page-section" id="p-suppliers">  <div class="card"><div class="coming-soon"><div class="coming-soon-icon">🚚</div><div class="coming-soon-title">Προμηθευτές</div>    <div class="coming-soon-text">Αυτή η ενότητα βρίσκεται υπό κατασκευή.</div></div></div></div>
+      <div class="page-section" id="p-materials">  <div class="card"><div class="coming-soon"><div class="coming-soon-icon">📦</div><div class="coming-soon-title">Πρώτες Ύλες</div>    <div class="coming-soon-text">Αυτή η ενότητα βρίσκεται υπό κατασκευή.</div></div></div></div>
+      <div class="page-section" id="p-recipes">    <div class="card"><div class="coming-soon"><div class="coming-soon-icon">🧾</div><div class="coming-soon-title">Συνταγές</div>        <div class="coming-soon-text">Αυτή η ενότητα βρίσκεται υπό κατασκευή.</div></div></div></div>
+      <div class="page-section" id="p-expenses">   <div class="card"><div class="coming-soon"><div class="coming-soon-icon">💰</div><div class="coming-soon-title">Έξοδα & Κέρδος</div><div class="coming-soon-text">Αυτή η ενότητα βρίσκεται υπό κατασκευή.</div></div></div></div>
+      <div class="page-section" id="p-pricing">    <div class="card"><div class="coming-soon"><div class="coming-soon-icon">💲</div><div class="coming-soon-title">Τιμές & Μενού</div>  <div class="coming-soon-text">Αυτή η ενότητα βρίσκεται υπό κατασκευή.</div></div></div></div>
+      <div class="page-section" id="p-ocr">        <div class="card"><div class="coming-soon"><div class="coming-soon-icon">📸</div><div class="coming-soon-title">OCR Τιμολογίων</div><div class="coming-soon-text">Αυτή η ενότητα βρίσκεται υπό κατασκευή.</div></div></div></div>
+      <div class="page-section" id="p-forecast">   <div class="card"><div class="coming-soon"><div class="coming-soon-icon">🔮</div><div class="coming-soon-title">Πρόβλεψη</div>       <div class="coming-soon-text">Αυτή η ενότητα βρίσκεται υπό κατασκευή.</div></div></div></div>
+      <div class="page-section" id="p-labor">      <div class="card"><div class="coming-soon"><div class="coming-soon-icon">👤</div><div class="coming-soon-title">Εργατικό Κόστος</div><div class="coming-soon-text">Αυτή η ενότητα βρίσκεται υπό κατασκευή.</div></div></div></div>
+      <div class="page-section" id="p-reports">    <div class="card"><div class="coming-soon"><div class="coming-soon-icon">📊</div><div class="coming-soon-title">Αναφορές</div>        <div class="coming-soon-text">Αυτή η ενότητα βρίσκεται υπό κατασκευή.</div></div></div></div>
+      <div class="page-section" id="p-compliance"> <div class="card"><div class="coming-soon"><div class="coming-soon-icon">🛡️</div><div class="coming-soon-title">Συμμόρφωση</div>     <div class="coming-soon-text">Αυτή η ενότητα βρίσκεται υπό κατασκευή.</div></div></div></div>
+      <div class="page-section" id="p-security">   <div class="card"><div class="coming-soon"><div class="coming-soon-icon">🔐</div><div class="coming-soon-title">Ασφάλεια</div>        <div class="coming-soon-text">Αυτή η ενότητα βρίσκεται υπό κατασκευή.</div></div></div></div>
+      <div class="page-section" id="p-backups">    <div class="card"><div class="coming-soon"><div class="coming-soon-icon">💾</div><div class="coming-soon-title">Αντίγραφα</div>       <div class="coming-soon-text">Αυτή η ενότητα βρίσκεται υπό κατασκευή.</div></div></div></div>
+
+    </main>
+  </div>
+</div>
+
+<!-- PREVIEW BANNER -->
+<div class="preview-banner">
+  <span>PREVIEW ΜΟΝΟ</span> — Αυτό είναι ο σκελετός της εφαρμογής. Τρέχει τοπικά στον υπολογιστή σου στο http://localhost:8000
+</div>
+
+<script>
+const TITLES = {
+  dashboard:'Dashboard', suppliers:'Προμηθευτές', materials:'Πρώτες Ύλες',
+  recipes:'Συνταγές', expenses:'Έξοδα & Κέρδος', pricing:'Τιμές & Μενού',
+  ocr:'OCR Τιμολογίων', forecast:'Πρόβλεψη', labor:'Εργατικό Κόστος',
+  reports:'Αναφορές', compliance:'Συμμόρφωση', security:'Ασφάλεια', backups:'Αντίγραφα'
+};
+
+function doLogin(){
+  document.getElementById('v-login').classList.remove('active');
+  document.getElementById('v-app').classList.add('active');
+}
+
+function doLogout(){
+  document.getElementById('v-app').classList.remove('active');
+  document.getElementById('v-login').classList.add('active');
+}
+
+function showPage(key){
+  document.querySelectorAll('.page-section').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(el=>el.classList.remove('active'));
+  document.getElementById('p-'+key).classList.add('active');
+  document.getElementById('nl-'+key).classList.add('active');
+  document.getElementById('topbar-title').textContent = TITLES[key]||key;
+  window.scrollTo(0,0);
+}
+
+document.getElementById('pw-input').addEventListener('keydown',e=>{if(e.key==='Enter') doLogin()});
+</script>
+</body>
+</html>
