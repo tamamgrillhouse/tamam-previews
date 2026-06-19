@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAMAM — 5 Προτάσεις Σελίδας Προμηθευτών</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0b0e17; color: #e2e8f0; min-height: 100vh; }
+
+/* ── TAB NAV ─────────────────────────────────────────────────── */
+.tab-nav {
+  position: sticky; top: 0; z-index: 100;
+  background: #0b0e17; border-bottom: 1px solid #1e2235;
+  padding: 0 20px;
+  display: flex; gap: 4px; align-items: flex-end;
+}
+.tab-nav-label {
+  font-size: 11px; color: #4a5568; padding: 14px 0 10px;
+  margin-right: 12px; letter-spacing: .05em; text-transform: uppercase; white-space: nowrap;
+}
+.tab-btn {
+  background: none; border: none; cursor: pointer;
+  padding: 12px 16px 11px; font-size: 13px; font-weight: 500;
+  color: #6b7280; border-bottom: 2px solid transparent; transition: all .15s;
+  white-space: nowrap;
+}
+.tab-btn:hover { color: #e2e8f0; }
+.tab-btn.active { color: #f97316; border-bottom-color: #f97316; font-weight: 600; }
+
+/* ── PANELS ──────────────────────────────────────────────────── */
+.panel { display: none; padding: 28px 24px; max-width: 1100px; margin: 0 auto; }
+.panel.active { display: block; }
+
+/* ── SHARED ELEMENTS ─────────────────────────────────────────── */
+.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.page-title { font-size: 22px; font-weight: 700; color: #f1f5f9; }
+.page-subtitle { font-size: 13px; color: #64748b; margin-top: 2px; }
+.btn-primary { background: #f97316; color: #fff; border: none; padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.btn-primary:hover { background: #ea6c0a; }
+.btn-secondary { background: #1e2538; color: #94a3b8; border: 1px solid #2a3045; padding: 7px 14px; border-radius: 7px; font-size: 12.5px; cursor: pointer; }
+.search-box { background: #1a1e2e; border: 1px solid #2a3045; border-radius: 8px; padding: 9px 14px; font-size: 13.5px; color: #e2e8f0; width: 260px; outline: none; }
+.search-box::placeholder { color: #4a5568; }
+.badge { display: inline-block; padding: 3px 9px; border-radius: 20px; font-size: 11.5px; font-weight: 500; }
+.badge-meat { background: #3d1515; color: #f87171; }
+.badge-grocery { background: #2d1f0e; color: #fb923c; }
+.badge-veg { background: #0f2d1a; color: #4ade80; }
+.badge-bread { background: #2d2810; color: #facc15; }
+.badge-drinks { background: #1e1535; color: #a78bfa; }
+.tag-cash { background: #0d2418; color: #34d399; border: 1px solid #1a4532; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+.tag-credit { background: #1c1a2e; color: #818cf8; border: 1px solid #2d2b4e; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+.muted { color: #64748b; }
+
+/* ── DESIGN LABEL ─────────────────────────────────────────────── */
+.design-label {
+  background: #1a1e2e; border: 1px solid #2a3045; border-radius: 8px;
+  padding: 14px 18px; margin-bottom: 24px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.design-label strong { color: #f97316; font-size: 15px; }
+.design-label p { font-size: 12.5px; color: #64748b; margin-top: 3px; }
+.design-label .badge-num { background: #f97316; color: #fff; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+
+/* ════════════════════════════════════════════════════════════════
+   DESIGN 1 — SMART CARDS
+════════════════════════════════════════════════════════════════ */
+.d1-kpi-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
+.d1-kpi { background: #131725; border: 1px solid #1e2438; border-radius: 10px; padding: 16px; }
+.d1-kpi-label { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: .04em; }
+.d1-kpi-val { font-size: 26px; font-weight: 700; color: #f1f5f9; margin: 6px 0 2px; }
+.d1-kpi-sub { font-size: 11.5px; color: #475569; }
+
+.d1-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; gap: 12px; }
+.d1-filter-pills { display: flex; gap: 6px; }
+.d1-pill { background: #1a1e2e; border: 1px solid #2a3045; color: #94a3b8; padding: 5px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; }
+.d1-pill.active { background: #f97316; border-color: #f97316; color: #fff; font-weight: 600; }
+
+.d1-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+.d1-card {
+  background: #131725; border: 1px solid #1e2438; border-radius: 12px;
+  overflow: hidden; transition: border-color .15s, transform .15s;
+  cursor: pointer;
+}
+.d1-card:hover { border-color: #f9731640; transform: translateY(-2px); }
+.d1-card-accent { height: 3px; }
+.d1-card-body { padding: 16px; }
+.d1-card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.d1-avatar { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+.d1-card-name { font-size: 14.5px; font-weight: 700; color: #f1f5f9; line-height: 1.2; }
+.d1-card-type { margin-top: 3px; }
+.d1-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+.d1-stat { background: #0f1320; border-radius: 7px; padding: 8px 10px; }
+.d1-stat-icon { font-size: 13px; margin-bottom: 2px; }
+.d1-stat-val { font-size: 13px; font-weight: 600; color: #e2e8f0; }
+.d1-stat-lab { font-size: 10.5px; color: #4a5568; margin-top: 1px; }
+.d1-card-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid #1e2438; }
+.d1-last-order { font-size: 11.5px; color: #64748b; }
+.d1-last-order span { color: #94a3b8; font-weight: 500; }
+.d1-actions { display: flex; gap: 6px; }
+.d1-action { background: #1e2538; border: none; color: #94a3b8; padding: 5px 10px; border-radius: 6px; font-size: 11.5px; cursor: pointer; }
+.d1-action:hover { background: #f97316; color: #fff; }
+
+/* ════════════════════════════════════════════════════════════════
+   DESIGN 2 — QUICK ACTION STRIPS
+════════════════════════════════════════════════════════════════ */
+.d2-header-bar {
+  background: linear-gradient(135deg, #1a1e2e 0%, #0f1320 100%);
+  border: 1px solid #2a3045; border-radius: 12px; padding: 20px;
+  margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;
+}
+.d2-header-stats { display: flex; gap: 28px; }
+.d2-hstat { text-align: center; }
+.d2-hstat-val { font-size: 22px; font-weight: 800; color: #f97316; }
+.d2-hstat-lab { font-size: 11px; color: #64748b; margin-top: 2px; }
+.d2-search-wrap { display: flex; gap: 8px; }
+
+.d2-list { display: flex; flex-direction: column; gap: 8px; }
+.d2-strip {
+  background: #131725; border: 1px solid #1e2438; border-radius: 10px;
+  padding: 0; overflow: hidden; display: flex; transition: border-color .15s;
+}
+.d2-strip:hover { border-color: #f97316; }
+.d2-strip-bar { width: 4px; flex-shrink: 0; }
+.d2-strip-body { flex: 1; padding: 14px 16px; display: flex; align-items: center; gap: 16px; }
+.d2-strip-avatar { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; flex-shrink: 0; }
+.d2-strip-info { flex: 1; min-width: 0; }
+.d2-strip-name { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+.d2-strip-meta { display: flex; align-items: center; gap: 10px; margin-top: 4px; flex-wrap: wrap; }
+.d2-strip-meta span { font-size: 12px; color: #64748b; }
+.d2-strip-meta .sep { color: #2a3045; }
+.d2-strip-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.d2-last { text-align: right; }
+.d2-last-date { font-size: 13px; font-weight: 600; color: #94a3b8; }
+.d2-last-lab { font-size: 10.5px; color: #4a5568; margin-top: 1px; }
+.d2-quick { display: flex; gap: 6px; }
+.d2-qbtn { background: #1e2538; border: none; color: #94a3b8; padding: 7px 12px; border-radius: 7px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap; }
+.d2-qbtn:hover { background: #f97316; color: #fff; }
+.d2-qbtn.call { background: #0d2418; color: #34d399; }
+.d2-qbtn.call:hover { background: #34d399; color: #fff; }
+
+/* ════════════════════════════════════════════════════════════════
+   DESIGN 3 — ENRICHED TABLE
+════════════════════════════════════════════════════════════════ */
+.d3-kpi-row { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 4px; }
+.d3-kpi {
+  background: #131725; border: 1px solid #1e2438; border-radius: 10px;
+  padding: 14px 18px; flex-shrink: 0; display: flex; align-items: center; gap: 12px;
+}
+.d3-kpi-icon { font-size: 22px; }
+.d3-kpi-val { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+.d3-kpi-lab { font-size: 11px; color: #64748b; margin-top: 1px; }
+
+.d3-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; gap: 12px; }
+.d3-cat-filters { display: flex; gap: 6px; }
+.d3-cf { background: none; border: 1px solid #2a3045; color: #64748b; padding: 5px 11px; border-radius: 6px; font-size: 11.5px; cursor: pointer; }
+.d3-cf.active { border-color: #f97316; color: #f97316; background: #2d1605; }
+
+.d3-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+.d3-table thead tr th {
+  padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .05em; color: #4a5568;
+  background: #0f1320; border-bottom: 1px solid #1e2438;
+}
+.d3-table thead tr th:first-child { border-radius: 8px 0 0 0; }
+.d3-table thead tr th:last-child { border-radius: 0 8px 0 0; }
+.d3-table tbody tr { transition: background .1s; cursor: pointer; }
+.d3-table tbody tr:hover td { background: #131c2e; }
+.d3-table tbody tr td {
+  padding: 13px 14px; font-size: 13.5px;
+  border-bottom: 1px solid #131725; background: #0f1320;
+}
+.d3-table tbody tr:last-child td { border-bottom: none; }
+.d3-table tbody tr:last-child td:first-child { border-radius: 0 0 0 8px; }
+.d3-table tbody tr:last-child td:last-child { border-radius: 0 0 8px 0; }
+
+.d3-supplier-cell { display: flex; align-items: center; gap: 10px; }
+.d3-mini-avatar { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 11px; flex-shrink: 0; }
+.d3-sup-name { font-weight: 600; color: #f1f5f9; font-size: 13.5px; }
+.d3-sup-sub { font-size: 11px; color: #4a5568; margin-top: 1px; }
+
+.d3-phone-link { color: #60a5fa; text-decoration: none; font-size: 13px; font-family: monospace; }
+.d3-phone-link:hover { color: #93c5fd; text-decoration: underline; }
+
+.d3-credit-bar { display: flex; align-items: center; gap: 8px; }
+.d3-credit-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+.d3-days-ago { font-size: 12px; }
+.d3-days-ago.fresh { color: #34d399; }
+.d3-days-ago.ok { color: #94a3b8; }
+.d3-days-ago.old { color: #f59e0b; }
+
+.d3-row-actions { display: flex; gap: 4px; opacity: 0; transition: opacity .15s; }
+.d3-table tbody tr:hover .d3-row-actions { opacity: 1; }
+.d3-ra { background: #1e2538; border: none; color: #94a3b8; padding: 4px 9px; border-radius: 5px; font-size: 11.5px; cursor: pointer; }
+.d3-ra:hover { background: #f97316; color: #fff; }
+
+/* ════════════════════════════════════════════════════════════════
+   DESIGN 4 — GROUPED BY CATEGORY
+════════════════════════════════════════════════════════════════ */
+.d4-summary { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+.d4-sum-chip {
+  background: #131725; border: 1px solid #1e2438; border-radius: 8px;
+  padding: 8px 14px; display: flex; align-items: center; gap: 8px;
+}
+.d4-sum-dot { width: 10px; height: 10px; border-radius: 50%; }
+.d4-sum-label { font-size: 12.5px; color: #94a3b8; }
+.d4-sum-count { font-size: 12.5px; font-weight: 700; color: #f1f5f9; }
+
+.d4-group { margin-bottom: 20px; }
+.d4-group-header {
+  display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+  background: #0f1320; border: 1px solid #1e2438; border-radius: 10px 10px 0 0;
+  cursor: pointer; user-select: none;
+}
+.d4-group-icon { font-size: 16px; }
+.d4-group-title { font-size: 13.5px; font-weight: 700; color: #e2e8f0; flex: 1; }
+.d4-group-count { background: #1e2538; color: #94a3b8; padding: 2px 8px; border-radius: 10px; font-size: 11.5px; }
+.d4-group-total { font-size: 12px; color: #4a5568; }
+
+.d4-group-body {
+  border: 1px solid #1e2438; border-top: none;
+  border-radius: 0 0 10px 10px; overflow: hidden;
+}
+.d4-row {
+  display: flex; align-items: center; gap: 14px; padding: 13px 16px;
+  background: #131725; border-bottom: 1px solid #1a1e2e; transition: background .1s;
+  cursor: pointer;
+}
+.d4-row:last-child { border-bottom: none; }
+.d4-row:hover { background: #161c2e; }
+.d4-row-avatar { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; flex-shrink: 0; }
+.d4-row-info { flex: 1; min-width: 0; }
+.d4-row-name { font-size: 13.5px; font-weight: 600; color: #f1f5f9; }
+.d4-row-meta { font-size: 11.5px; color: #64748b; margin-top: 2px; }
+.d4-row-right { display: flex; align-items: center; gap: 10px; }
+.d4-row-last { font-size: 12px; color: #64748b; text-align: right; }
+.d4-row-last strong { display: block; color: #94a3b8; font-size: 13px; }
+.d4-row-btn { background: #1e2538; border: none; color: #94a3b8; padding: 6px 11px; border-radius: 6px; font-size: 12px; cursor: pointer; }
+.d4-row-btn:hover { background: #f97316; color: #fff; }
+
+/* ════════════════════════════════════════════════════════════════
+   DESIGN 5 — STATUS DASHBOARD (Alert-first)
+════════════════════════════════════════════════════════════════ */
+.d5-top { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 20px; }
+.d5-alerts { background: #131725; border: 1px solid #1e2438; border-radius: 12px; padding: 18px; }
+.d5-alerts-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #64748b; margin-bottom: 12px; }
+.d5-alert-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #1a1e2e; }
+.d5-alert-row:last-child { border-bottom: none; }
+.d5-alert-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.d5-alert-dot.warn { background: #f59e0b; box-shadow: 0 0 6px #f59e0b80; }
+.d5-alert-dot.ok { background: #34d399; }
+.d5-alert-dot.info { background: #60a5fa; }
+.d5-alert-text { flex: 1; font-size: 12.5px; color: #94a3b8; }
+.d5-alert-text strong { color: #e2e8f0; }
+.d5-alert-action { font-size: 11px; color: #f97316; cursor: pointer; background: none; border: none; font-weight: 600; }
+
+.d5-mini-kpis { display: flex; flex-direction: column; gap: 8px; }
+.d5-mk { background: #131725; border: 1px solid #1e2438; border-radius: 10px; padding: 14px 16px; flex: 1; }
+.d5-mk-val { font-size: 24px; font-weight: 800; color: #f97316; }
+.d5-mk-lab { font-size: 11.5px; color: #64748b; margin-top: 2px; }
+
+.d5-list { display: flex; flex-direction: column; gap: 6px; }
+.d5-row {
+  background: #131725; border: 1px solid #1e2438; border-radius: 10px;
+  padding: 14px 16px; display: flex; align-items: center; gap: 14px;
+  transition: border-color .15s;
+}
+.d5-row:hover { border-color: #2a3045; }
+
+.d5-status-col { display: flex; flex-direction: column; gap: 4px; align-items: center; width: 14px; flex-shrink: 0; }
+.d5-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+.d5-avatar { width: 38px; height: 38px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; flex-shrink: 0; }
+.d5-info { flex: 1; min-width: 0; }
+.d5-name { font-size: 14px; font-weight: 700; color: #f1f5f9; }
+.d5-meta { display: flex; gap: 10px; margin-top: 5px; flex-wrap: wrap; }
+.d5-chip { background: #0f1320; border: 1px solid #1e2438; color: #64748b; padding: 2px 8px; border-radius: 5px; font-size: 11px; }
+.d5-chip.good { border-color: #1a4532; color: #34d399; background: #0d2418; }
+.d5-chip.warn { border-color: #422d0c; color: #f59e0b; background: #1c1305; }
+
+.d5-score { text-align: center; width: 56px; flex-shrink: 0; }
+.d5-score-ring { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; margin: 0 auto; border: 3px solid; }
+.d5-score-ring.a { border-color: #34d399; color: #34d399; }
+.d5-score-ring.b { border-color: #60a5fa; color: #60a5fa; }
+.d5-score-ring.c { border-color: #f59e0b; color: #f59e0b; }
+.d5-score-lab { font-size: 10px; color: #4a5568; margin-top: 3px; }
+
+.d5-actions { display: flex; flex-direction: column; gap: 4px; }
+.d5-act { background: #1e2538; border: none; color: #94a3b8; padding: 5px 10px; border-radius: 6px; font-size: 11.5px; cursor: pointer; white-space: nowrap; }
+.d5-act:hover { background: #f97316; color: #fff; }
+.d5-act.primary { background: #f97316; color: #fff; }
+
+.d5-legend { display: flex; gap: 16px; margin-bottom: 12px; }
+.d5-leg { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #4a5568; }
+.d5-leg-dot { width: 7px; height: 7px; border-radius: 50%; }
+</style>
+</head>
+<body>
+
+<!-- ── TAB NAVIGATION ──────────────────────────────────────────────── -->
+<div class="tab-nav">
+  <span class="tab-nav-label">5 Προτάσεις:</span>
+  <button class="tab-btn active" onclick="showTab(1)">1 · Έξυπνες Κάρτες</button>
+  <button class="tab-btn" onclick="showTab(2)">2 · Γρήγορη Δράση</button>
+  <button class="tab-btn" onclick="showTab(3)">3 · Εμπλουτισμένος Πίνακας</button>
+  <button class="tab-btn" onclick="showTab(4)">4 · Ανά Κατηγορία</button>
+  <button class="tab-btn" onclick="showTab(5)">5 · Πίνακας Κατάστασης</button>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     DESIGN 1 — ΈΞΥΠΝΕΣ ΚΑΡΤΕΣ
+══════════════════════════════════════════════════════════════════ -->
+<div id="panel1" class="panel active">
+
+  <div class="design-label">
+    <div>
+      <strong>Πρόταση 1 — Έξυπνες Κάρτες</strong>
+      <p>Grid με κάρτες. Κάθε προμηθευτής έχει τη δική του κάρτα με χρωματικό δείκτη κατηγορίας, βασικά στοιχεία επικοινωνίας και γρήγορες ενέργειες. Ιδανικό όταν οι προμηθευτές είναι ≤20.</p>
+    </div>
+    <div class="badge-num">1</div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="d1-kpi-row">
+    <div class="d1-kpi">
+      <div class="d1-kpi-label">Προμηθευτές</div>
+      <div class="d1-kpi-val">5</div>
+      <div class="d1-kpi-sub">καταχωρημένοι</div>
+    </div>
+    <div class="d1-kpi">
+      <div class="d1-kpi-label">Αγορές Μήνα</div>
+      <div class="d1-kpi-val" style="color:#f97316">3.200€</div>
+      <div class="d1-kpi-sub">Ιούνιος 2026</div>
+    </div>
+    <div class="d1-kpi">
+      <div class="d1-kpi-label">Αγορές Εβδομάδας</div>
+      <div class="d1-kpi-val" style="color:#f97316">890€</div>
+      <div class="d1-kpi-sub">τελ. 7 μέρες</div>
+    </div>
+    <div class="d1-kpi">
+      <div class="d1-kpi-label">Τελ. Παράδοση</div>
+      <div class="d1-kpi-val" style="font-size:18px; margin-top:6px">19/06</div>
+      <div class="d1-kpi-sub">Αρτοποιείο Νίκας</div>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="d1-toolbar">
+    <div style="display:flex; gap:10px; align-items:center;">
+      <input class="search-box" placeholder="🔍  Αναζήτηση προμηθευτή…" style="width:220px">
+      <div class="d1-filter-pills">
+        <div class="d1-pill active">Όλοι</div>
+        <div class="d1-pill">🥩 Κρέας</div>
+        <div class="d1-pill">🛒 Τρόφιμα</div>
+        <div class="d1-pill">🥬 Λαχ/κά</div>
+        <div class="d1-pill">🍞 Αρτοπ.</div>
+        <div class="d1-pill">🍺 Ποτά</div>
+      </div>
+    </div>
+    <button class="btn-primary">+ Νέος Προμηθευτής</button>
+  </div>
+
+  <!-- Cards -->
+  <div class="d1-grid">
+
+    <!-- Card 1 -->
+    <div class="d1-card">
+      <div class="d1-card-accent" style="background:#ef4444"></div>
+      <div class="d1-card-body">
+        <div class="d1-card-top">
+          <div class="d1-avatar" style="background:#3d1515; color:#f87171">ΠΧ</div>
+          <div>
+            <div class="d1-card-name">Παπάς Χρήστος</div>
+            <div class="d1-card-type"><span class="badge badge-meat">🥩 Κρεοπωλείο</span></div>
+          </div>
+        </div>
+        <div class="d1-stats">
+          <div class="d1-stat">
+            <div class="d1-stat-icon">📞</div>
+            <div class="d1-stat-val" style="color:#60a5fa; font-size:12px">6971-234567</div>
+            <div class="d1-stat-lab">Τηλέφωνο</div>
+          </div>
+          <div class="d1-stat">
+            <div class="d1-stat-icon">💰</div>
+            <div class="d1-stat-val"><span class="tag-cash">Μετρητά</span></div>
+            <div class="d1-stat-lab">Πληρωμή</div>
+          </div>
+          <div class="d1-stat">
+            <div class="d1-stat-icon">⏱️</div>
+            <div class="d1-stat-val">1 μέρα</div>
+            <div class="d1-stat-lab">Lead time</div>
+          </div>
+          <div class="d1-stat">
+            <div class="d1-stat-icon">📦</div>
+            <div class="d1-stat-val" style="color:#f97316">1.240€</div>
+            <div class="d1-stat-lab">Τρέχων μήνας</div>
+          </div>
+        </div>
+        <div class="d1-card-footer">
+          <div class="d1-last-order">Τελ. αγορά: <span>σήμερα</span></div>
+          <div class="d1-actions">
+            <button class="d1-action">📋 Καρτέλα</button>
+            <button class="d1-action">✏️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="d1-card">
+      <div class="d1-card-accent" style="background:#f97316"></div>
+      <div class="d1-card-body">
+        <div class="d1-card-top">
+          <div class="d1-avatar" style="background:#2d1f0e; color:#fb923c">ΑΚ</div>
+          <div>
+            <div class="d1-card-name">ΑΦΟΙ Κιβρόγλου</div>
+            <div class="d1-card-type"><span class="badge badge-grocery">🛒 Παντοπωλείο</span></div>
+          </div>
+        </div>
+        <div class="d1-stats">
+          <div class="d1-stat">
+            <div class="d1-stat-icon">📞</div>
+            <div class="d1-stat-val" style="color:#60a5fa; font-size:12px">2461-022456</div>
+            <div class="d1-stat-lab">Τηλέφωνο</div>
+          </div>
+          <div class="d1-stat">
+            <div class="d1-stat-icon">💰</div>
+            <div class="d1-stat-val"><span class="tag-credit">30 μέρες</span></div>
+            <div class="d1-stat-lab">Πίστωση</div>
+          </div>
+          <div class="d1-stat">
+            <div class="d1-stat-icon">⏱️</div>
+            <div class="d1-stat-val">2 μέρες</div>
+            <div class="d1-stat-lab">Lead time</div>
+          </div>
+          <div class="d1-stat">
+            <div class="d1-stat-icon">📦</div>
+            <div class="d1-stat-val" style="color:#f97316">890€</div>
+            <div class="d1-stat-lab">Τρέχων μήνας</div>
+          </div>
+        </div>
+        <div class="d1-card-footer">
+          <div class="d1-last-order">Τελ. αγορά: <span>4 μέρες πριν</span></div>
+          <div class="d1-actions">
+            <button class="d1-action">📋 Καρτέλα</button>
+            <button class="d1-action">✏️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="d1-card">
+      <div class="d1-card-accent" style="background:#22c55e"></div>
+      <div class="d1-card-body">
+        <div class="d1-card-top">
+          <div class="d1-avatar" style="background:#0f2d1a; color:#4ade80">ΦΑ</div>
+          <div>
+            <div class="d1-card-name">Φρέσκο Αγρόκτημα</div>
+            <div class="d1-card-type"><span class="badge badge-veg">🥬 Λαχανικά</span></div>
+          </div>
+        </div>
+        <div class="d1-stats">
+          <div class="d1-stat">
+            <div class="d1-stat-icon">📞</div>
+            <div class="d1-stat-val" style="color:#60a5fa; font-size:12px">6945-678901</div>
+            <div class="d1-stat-lab">Τηλέφωνο</div>
+          </div>
+          <div class="d1-stat">
+            <div class="d1-stat-icon">💰</div>
+            <div class="d1-stat-val"><span class="tag-cash">Μετρητά</span></div>
+            <div class="d1-stat-lab">Πληρωμή</div>
+          </div>
+          <div class="d1-stat">
+            <div class="d1-stat-icon">⏱️</div>
+            <div class="d1-stat-val">1 μέρα</div>
+            <div class="d1-stat-lab">Lead time</div>
+          </div>
+          <div class="d1-stat">
+            <div class="d1-stat-icon">📦</div>
+            <div class="d1-stat-val" style="color:#f97316">340€</div>
+            <div class="d1-stat-lab">Τρέχων μήνας</div>
+          </div>
+        </div>
+        <div class="d1-card-footer">
+          <div class="d1-last-order">Τελ. αγορά: <span>χθες</span></div>
+          <div class="d1-actions">
+            <button class="d1-action">📋 Καρτέλα</button>
+            <button class="d1-action">✏️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="d1-card">
+      <div class="d1-card-accent" style="background:#eab308"></div>
+      <div class="d1-card-body">
+        <div class="d1-card-top">
+          <div class="d1-avatar" style="background:#2d2810; color:#facc15">ΑΝ</div>
+          <div>
+            <div class="d1-card-name">Αρτοποιείο Νίκας</div>
+            <div class="d1-card-type"><span class="badge badge-bread">🍞 Αρτοποιείο</span></div>
+          </div>
+        </div>
+        <div class="d1-stats">
+          <div class="d1-stat">
+            <div class="d1-stat-icon">📞</div>
+            <div class="d1-stat-val" style="color:#60a5fa; font-size:12px">2461-033321</div>
+            <div class="d1-stat-lab">Τηλέφωνο</div>
+          </div>
+          <div class="d1-stat">
+            <div class="d1-stat-icon">💰</div>
+            <div class="d1-stat-val"><span class="tag-credit">15 μέρες</span></div>
+            <div class="d1-stat-lab">Πίστωση</div>
+          </div>
+          <div class="d1-stat">
+            <div class="d1-stat-icon">⏱️</div>
+            <div class="d1-stat-val">1 μέρα</div>
+            <div class="d1-stat-lab">Lead time</div>
+          </div>
+          <div class="d1-stat">
+            <div class="d1-stat-icon">📦</div>
+            <div class="d1-stat-val" style="color:#f97316">210€</div>
+            <div class="d1-stat-lab">Τρέχων μήνας</div>
+          </div>
+        </div>
+        <div class="d1-card-footer">
+          <div class="d1-last-order">Τελ. αγορά: <span>σήμερα</span></div>
+          <div class="d1-actions">
+            <button class="d1-action">📋 Καρτέλα</button>
+            <button class="d1-action">✏️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="d1-card">
+      <div class="d1-card-accent" style="background:#8b5cf6"></div>
+      <div class="d1-card-body">
+        <div class="d1-card-top">
+          <div class="d1-avatar" style="background:#1e1535; color:#a78bfa">ΔΑ</div>
+          <div>
+            <div class="d1-card-name">Διαμαντής ΑΒΕΕ</div>
+            <div class="d1-card-type"><span class="badge badge-drinks">🍺 Ποτά</span></div>
+          </div>
+        </div>
+        <div class="d1-stats">
+          <div class="d1-stat">
+            <div class="d1-stat-icon">📞</div>
+            <div class="d1-stat-val" style="color:#60a5fa; font-size:12px">2310-444555</div>
+            <div class="d1-stat-lab">Τηλέφωνο</div>
+          </div>
+          <div class="d1-stat">
+            <div class="d1-stat-icon">💰</div>
+            <div class="d1-stat-val"><span class="tag-credit">30 μέρες</span></div>
+            <div class="d1-stat-lab">Πίστωση</div>
+          </div>
+          <div class="d1-stat">
+            <div class="d1-stat-icon">⏱️</div>
+            <div class="d1-stat-val">3 μέρες</div>
+            <div class="d1-stat-lab">Lead time</div>
+          </div>
+          <div class="d1-stat">
+            <div class="d1-stat-icon">📦</div>
+            <div class="d1-stat-val" style="color:#f97316">520€</div>
+            <div class="d1-stat-lab">Τρέχων μήνας</div>
+          </div>
+        </div>
+        <div class="d1-card-footer">
+          <div class="d1-last-order">Τελ. αγορά: <span>9 μέρες πριν</span></div>
+          <div class="d1-actions">
+            <button class="d1-action">📋 Καρτέλα</button>
+            <button class="d1-action">✏️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /d1-grid -->
+</div><!-- /panel1 -->
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     DESIGN 2 — ΓΡΗΓΟΡΗ ΔΡΑΣΗ
+══════════════════════════════════════════════════════════════════ -->
+<div id="panel2" class="panel">
+
+  <div class="design-label">
+    <div>
+      <strong>Πρόταση 2 — Γρήγορη Δράση</strong>
+      <p>Οριζόντιες "λωρίδες" με έμφαση στις ενέργειες. Ένα κλικ για κλήση, ένα κλικ για νέο τιμολόγιο. Σχεδιασμένο για καθημερινή χρήση — βλέπεις τι χρειάζεσαι και δρας αμέσως.</p>
+    </div>
+    <div class="badge-num">2</div>
+  </div>
+
+  <!-- Header Bar -->
+  <div class="d2-header-bar">
+    <div>
+      <div style="font-size:20px; font-weight:800; color:#f1f5f9; margin-bottom:4px">Προμηθευτές</div>
+      <div style="font-size:12.5px; color:#64748b">5 καταχωρημένοι · Τελ. αγορά σήμερα</div>
+    </div>
+    <div class="d2-header-stats">
+      <div class="d2-hstat">
+        <div class="d2-hstat-val">3.200€</div>
+        <div class="d2-hstat-lab">Αγορές μήνα</div>
+      </div>
+      <div class="d2-hstat">
+        <div class="d2-hstat-val">890€</div>
+        <div class="d2-hstat-lab">Εβδομάδας</div>
+      </div>
+      <div class="d2-hstat">
+        <div class="d2-hstat-val">2</div>
+        <div class="d2-hstat-lab">Με πίστωση</div>
+      </div>
+    </div>
+    <div class="d2-search-wrap">
+      <input class="search-box" placeholder="🔍  Αναζήτηση…" style="width:200px">
+      <button class="btn-primary">+ Νέος</button>
+    </div>
+  </div>
+
+  <!-- List -->
+  <div class="d2-list">
+
+    <div class="d2-strip">
+      <div class="d2-strip-bar" style="background:#ef4444"></div>
+      <div class="d2-strip-body">
+        <div class="d2-strip-avatar" style="background:#3d1515; color:#f87171">ΠΧ</div>
+        <div class="d2-strip-info">
+          <div class="d2-strip-name">Παπάς Χρήστος</div>
+          <div class="d2-strip-meta">
+            <span><span class="badge badge-meat">🥩 Κρεοπωλείο</span></span>
+            <span class="sep">·</span>
+            <span class="tag-cash">Μετρητά</span>
+            <span class="sep">·</span>
+            <span>Lead: 1 μέρα</span>
+            <span class="sep">·</span>
+            <span style="color:#f97316">1.240€ μήνα</span>
+          </div>
+        </div>
+        <div class="d2-strip-right">
+          <div class="d2-last">
+            <div class="d2-last-date">Σήμερα</div>
+            <div class="d2-last-lab">Τελ. αγορά</div>
+          </div>
+          <div class="d2-quick">
+            <button class="d2-qbtn call">📞 Κλήση</button>
+            <button class="d2-qbtn">+ Τιμολόγιο</button>
+            <button class="d2-qbtn">📋 Καρτέλα</button>
+            <button class="d2-qbtn">✏️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d2-strip">
+      <div class="d2-strip-bar" style="background:#f97316"></div>
+      <div class="d2-strip-body">
+        <div class="d2-strip-avatar" style="background:#2d1f0e; color:#fb923c">ΑΚ</div>
+        <div class="d2-strip-info">
+          <div class="d2-strip-name">ΑΦΟΙ Κιβρόγλου</div>
+          <div class="d2-strip-meta">
+            <span><span class="badge badge-grocery">🛒 Παντοπωλείο</span></span>
+            <span class="sep">·</span>
+            <span class="tag-credit">30 μέρες</span>
+            <span class="sep">·</span>
+            <span>Lead: 2 μέρες</span>
+            <span class="sep">·</span>
+            <span style="color:#f97316">890€ μήνα</span>
+          </div>
+        </div>
+        <div class="d2-strip-right">
+          <div class="d2-last">
+            <div class="d2-last-date">15/06</div>
+            <div class="d2-last-lab">4 μέρες πριν</div>
+          </div>
+          <div class="d2-quick">
+            <button class="d2-qbtn call">📞 Κλήση</button>
+            <button class="d2-qbtn">+ Τιμολόγιο</button>
+            <button class="d2-qbtn">📋 Καρτέλα</button>
+            <button class="d2-qbtn">✏️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d2-strip">
+      <div class="d2-strip-bar" style="background:#22c55e"></div>
+      <div class="d2-strip-body">
+        <div class="d2-strip-avatar" style="background:#0f2d1a; color:#4ade80">ΦΑ</div>
+        <div class="d2-strip-info">
+          <div class="d2-strip-name">Φρέσκο Αγρόκτημα</div>
+          <div class="d2-strip-meta">
+            <span><span class="badge badge-veg">🥬 Λαχανικά</span></span>
+            <span class="sep">·</span>
+            <span class="tag-cash">Μετρητά</span>
+            <span class="sep">·</span>
+            <span>Lead: 1 μέρα</span>
+            <span class="sep">·</span>
+            <span style="color:#f97316">340€ μήνα</span>
+          </div>
+        </div>
+        <div class="d2-strip-right">
+          <div class="d2-last">
+            <div class="d2-last-date">Χθες</div>
+            <div class="d2-last-lab">18/06</div>
+          </div>
+          <div class="d2-quick">
+            <button class="d2-qbtn call">📞 Κλήση</button>
+            <button class="d2-qbtn">+ Τιμολόγιο</button>
+            <button class="d2-qbtn">📋 Καρτέλα</button>
+            <button class="d2-qbtn">✏️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d2-strip">
+      <div class="d2-strip-bar" style="background:#eab308"></div>
+      <div class="d2-strip-body">
+        <div class="d2-strip-avatar" style="background:#2d2810; color:#facc15">ΑΝ</div>
+        <div class="d2-strip-info">
+          <div class="d2-strip-name">Αρτοποιείο Νίκας</div>
+          <div class="d2-strip-meta">
+            <span><span class="badge badge-bread">🍞 Αρτοποιείο</span></span>
+            <span class="sep">·</span>
+            <span class="tag-credit">15 μέρες</span>
+            <span class="sep">·</span>
+            <span>Lead: 1 μέρα</span>
+            <span class="sep">·</span>
+            <span style="color:#f97316">210€ μήνα</span>
+          </div>
+        </div>
+        <div class="d2-strip-right">
+          <div class="d2-last">
+            <div class="d2-last-date">Σήμερα</div>
+            <div class="d2-last-lab">19/06</div>
+          </div>
+          <div class="d2-quick">
+            <button class="d2-qbtn call">📞 Κλήση</button>
+            <button class="d2-qbtn">+ Τιμολόγιο</button>
+            <button class="d2-qbtn">📋 Καρτέλα</button>
+            <button class="d2-qbtn">✏️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d2-strip">
+      <div class="d2-strip-bar" style="background:#8b5cf6"></div>
+      <div class="d2-strip-body">
+        <div class="d2-strip-avatar" style="background:#1e1535; color:#a78bfa">ΔΑ</div>
+        <div class="d2-strip-info">
+          <div class="d2-strip-name">Διαμαντής ΑΒΕΕ</div>
+          <div class="d2-strip-meta">
+            <span><span class="badge badge-drinks">🍺 Ποτά</span></span>
+            <span class="sep">·</span>
+            <span class="tag-credit">30 μέρες</span>
+            <span class="sep">·</span>
+            <span>Lead: 3 μέρες</span>
+            <span class="sep">·</span>
+            <span style="color:#f97316">520€ μήνα</span>
+          </div>
+        </div>
+        <div class="d2-strip-right">
+          <div class="d2-last">
+            <div class="d2-last-date">10/06</div>
+            <div class="d2-last-lab">9 μέρες πριν</div>
+          </div>
+          <div class="d2-quick">
+            <button class="d2-qbtn call">📞 Κλήση</button>
+            <button class="d2-qbtn">+ Τιμολόγιο</button>
+            <button class="d2-qbtn">📋 Καρτέλα</button>
+            <button class="d2-qbtn">✏️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /panel2 -->
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     DESIGN 3 — ΕΜΠΛΟΥΤΙΣΜΕΝΟΣ ΠΙΝΑΚΑΣ
+══════════════════════════════════════════════════════════════════ -->
+<div id="panel3" class="panel">
+
+  <div class="design-label">
+    <div>
+      <strong>Πρόταση 3 — Εμπλουτισμένος Πίνακας</strong>
+      <p>Κλασικός πίνακας αλλά με οπτικά badges πληρωμής, clickable τηλέφωνα, σχετικές ημερομηνίες ("4 μέρες πριν") και φίλτρα κατηγορίας. Ιδανικό αν σου αρέσει ο πίνακας αλλά θέλεις περισσότερα στοιχεία.</p>
+    </div>
+    <div class="badge-num">3</div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="d3-kpi-row">
+    <div class="d3-kpi">
+      <div class="d3-kpi-icon">🏪</div>
+      <div>
+        <div class="d3-kpi-val">5</div>
+        <div class="d3-kpi-lab">Προμηθευτές</div>
+      </div>
+    </div>
+    <div class="d3-kpi">
+      <div class="d3-kpi-icon">💶</div>
+      <div>
+        <div class="d3-kpi-val" style="color:#f97316">3.200€</div>
+        <div class="d3-kpi-lab">Αγορές Ιουνίου</div>
+      </div>
+    </div>
+    <div class="d3-kpi">
+      <div class="d3-kpi-icon">📦</div>
+      <div>
+        <div class="d3-kpi-val">890€</div>
+        <div class="d3-kpi-lab">Εβδομάδας</div>
+      </div>
+    </div>
+    <div class="d3-kpi">
+      <div class="d3-kpi-icon">💳</div>
+      <div>
+        <div class="d3-kpi-val">2</div>
+        <div class="d3-kpi-lab">Πίστωση 30 μέρες</div>
+      </div>
+    </div>
+    <div class="d3-kpi">
+      <div class="d3-kpi-icon">✅</div>
+      <div>
+        <div class="d3-kpi-val" style="color:#34d399">2</div>
+        <div class="d3-kpi-lab">Αγορά σήμερα</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="d3-toolbar">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <input class="search-box" placeholder="🔍  Αναζήτηση…" style="width:210px">
+      <div class="d3-cat-filters">
+        <button class="d3-cf active">Όλοι</button>
+        <button class="d3-cf">🥩 Κρέας</button>
+        <button class="d3-cf">🛒 Τρόφιμα</button>
+        <button class="d3-cf">🥬 Λαχ/κά</button>
+        <button class="d3-cf">🍞 Αρτοπ.</button>
+        <button class="d3-cf">🍺 Ποτά</button>
+      </div>
+    </div>
+    <button class="btn-primary">+ Νέος Προμηθευτής</button>
+  </div>
+
+  <!-- Table -->
+  <table class="d3-table">
+    <thead>
+      <tr>
+        <th>Επωνυμία</th>
+        <th>Τηλέφωνο</th>
+        <th>Πληρωμή</th>
+        <th>Lead</th>
+        <th>Τελ. Αγορά</th>
+        <th>Μήνας</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <div class="d3-supplier-cell">
+            <div class="d3-mini-avatar" style="background:#3d1515; color:#f87171">ΠΧ</div>
+            <div>
+              <div class="d3-sup-name">Παπάς Χρήστος</div>
+              <div class="d3-sup-sub"><span class="badge badge-meat">🥩 Κρεοπωλείο</span></div>
+            </div>
+          </div>
+        </td>
+        <td><a class="d3-phone-link" href="tel:6971234567">📞 6971-234567</a></td>
+        <td><span class="tag-cash">✓ Μετρητά</span></td>
+        <td><span class="muted">1 μέρα</span></td>
+        <td><span class="d3-days-ago fresh">● Σήμερα</span></td>
+        <td style="color:#f97316; font-weight:600">1.240€</td>
+        <td>
+          <div class="d3-row-actions">
+            <button class="d3-ra">📋 Καρτέλα</button>
+            <button class="d3-ra">✏️ Επεξ.</button>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div class="d3-supplier-cell">
+            <div class="d3-mini-avatar" style="background:#2d1f0e; color:#fb923c">ΑΚ</div>
+            <div>
+              <div class="d3-sup-name">ΑΦΟΙ Κιβρόγλου</div>
+              <div class="d3-sup-sub"><span class="badge badge-grocery">🛒 Παντοπωλείο</span></div>
+            </div>
+          </div>
+        </td>
+        <td><a class="d3-phone-link" href="tel:2461022456">📞 2461-022456</a></td>
+        <td><span class="tag-credit">⏳ 30 μέρες</span></td>
+        <td><span class="muted">2 μέρες</span></td>
+        <td><span class="d3-days-ago ok">● 4 μέρες πριν</span></td>
+        <td style="color:#f97316; font-weight:600">890€</td>
+        <td>
+          <div class="d3-row-actions">
+            <button class="d3-ra">📋 Καρτέλα</button>
+            <button class="d3-ra">✏️ Επεξ.</button>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div class="d3-supplier-cell">
+            <div class="d3-mini-avatar" style="background:#0f2d1a; color:#4ade80">ΦΑ</div>
+            <div>
+              <div class="d3-sup-name">Φρέσκο Αγρόκτημα</div>
+              <div class="d3-sup-sub"><span class="badge badge-veg">🥬 Λαχανικά</span></div>
+            </div>
+          </div>
+        </td>
+        <td><a class="d3-phone-link" href="tel:6945678901">📞 6945-678901</a></td>
+        <td><span class="tag-cash">✓ Μετρητά</span></td>
+        <td><span class="muted">1 μέρα</span></td>
+        <td><span class="d3-days-ago fresh">● Χθες</span></td>
+        <td style="color:#f97316; font-weight:600">340€</td>
+        <td>
+          <div class="d3-row-actions">
+            <button class="d3-ra">📋 Καρτέλα</button>
+            <button class="d3-ra">✏️ Επεξ.</button>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div class="d3-supplier-cell">
+            <div class="d3-mini-avatar" style="background:#2d2810; color:#facc15">ΑΝ</div>
+            <div>
+              <div class="d3-sup-name">Αρτοποιείο Νίκας</div>
+              <div class="d3-sup-sub"><span class="badge badge-bread">🍞 Αρτοποιείο</span></div>
+            </div>
+          </div>
+        </td>
+        <td><a class="d3-phone-link" href="tel:2461033321">📞 2461-033321</a></td>
+        <td><span class="tag-credit">⏳ 15 μέρες</span></td>
+        <td><span class="muted">1 μέρα</span></td>
+        <td><span class="d3-days-ago fresh">● Σήμερα</span></td>
+        <td style="color:#f97316; font-weight:600">210€</td>
+        <td>
+          <div class="d3-row-actions">
+            <button class="d3-ra">📋 Καρτέλα</button>
+            <button class="d3-ra">✏️ Επεξ.</button>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div class="d3-supplier-cell">
+            <div class="d3-mini-avatar" style="background:#1e1535; color:#a78bfa">ΔΑ</div>
+            <div>
+              <div class="d3-sup-name">Διαμαντής ΑΒΕΕ</div>
+              <div class="d3-sup-sub"><span class="badge badge-drinks">🍺 Ποτά</span></div>
+            </div>
+          </div>
+        </td>
+        <td><a class="d3-phone-link" href="tel:2310444555">📞 2310-444555</a></td>
+        <td><span class="tag-credit">⏳ 30 μέρες</span></td>
+        <td><span class="muted">3 μέρες</span></td>
+        <td><span class="d3-days-ago old">● 9 μέρες πριν</span></td>
+        <td style="color:#f97316; font-weight:600">520€</td>
+        <td>
+          <div class="d3-row-actions">
+            <button class="d3-ra">📋 Καρτέλα</button>
+            <button class="d3-ra">✏️ Επεξ.</button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div><!-- /panel3 -->
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     DESIGN 4 — ΑΝΑ ΚΑΤΗΓΟΡΙΑ
+══════════════════════════════════════════════════════════════════ -->
+<div id="panel4" class="panel">
+
+  <div class="design-label">
+    <div>
+      <strong>Πρόταση 4 — Ομαδοποίηση ανά Κατηγορία</strong>
+      <p>Οι προμηθευτές χωρίζονται σε ομάδες (Κρέας, Τρόφιμα, Λαχανικά…). Βλέπεις ένα τμήμα κάθε φορά. Ιδανικό για να σχεδιάζεις παραγγελίες κατηγορία-κατηγορία.</p>
+    </div>
+    <div class="badge-num">4</div>
+  </div>
+
+  <!-- Header -->
+  <div class="page-header" style="margin-bottom:16px">
+    <div>
+      <div class="page-title">Προμηθευτές</div>
+      <div class="page-subtitle">5 καταχωρημένοι · 5 κατηγορίες</div>
+    </div>
+    <div style="display:flex; gap:8px">
+      <input class="search-box" placeholder="🔍  Αναζήτηση…" style="width:200px">
+      <button class="btn-primary">+ Νέος</button>
+    </div>
+  </div>
+
+  <!-- Summary chips -->
+  <div class="d4-summary">
+    <div class="d4-sum-chip">
+      <div class="d4-sum-dot" style="background:#ef4444"></div>
+      <span class="d4-sum-label">🥩 Κρέας</span>
+      <span class="d4-sum-count">1</span>
+    </div>
+    <div class="d4-sum-chip">
+      <div class="d4-sum-dot" style="background:#f97316"></div>
+      <span class="d4-sum-label">🛒 Τρόφιμα</span>
+      <span class="d4-sum-count">1</span>
+    </div>
+    <div class="d4-sum-chip">
+      <div class="d4-sum-dot" style="background:#22c55e"></div>
+      <span class="d4-sum-label">🥬 Λαχανικά</span>
+      <span class="d4-sum-count">1</span>
+    </div>
+    <div class="d4-sum-chip">
+      <div class="d4-sum-dot" style="background:#eab308"></div>
+      <span class="d4-sum-label">🍞 Αρτοποιείο</span>
+      <span class="d4-sum-count">1</span>
+    </div>
+    <div class="d4-sum-chip">
+      <div class="d4-sum-dot" style="background:#8b5cf6"></div>
+      <span class="d4-sum-label">🍺 Ποτά</span>
+      <span class="d4-sum-count">1</span>
+    </div>
+    <div class="d4-sum-chip" style="margin-left:auto; background:#0f1320">
+      <span class="d4-sum-label">Σύνολο αγορών μήνα:</span>
+      <span class="d4-sum-count" style="color:#f97316">3.200€</span>
+    </div>
+  </div>
+
+  <!-- Group 1: Κρέας -->
+  <div class="d4-group">
+    <div class="d4-group-header">
+      <span class="d4-group-icon">🥩</span>
+      <span class="d4-group-title">Κρεοπωλείο</span>
+      <span class="d4-group-count">1 προμηθευτής</span>
+      <span class="d4-group-total">1.240€ / μήνα</span>
+      <span style="color:#4a5568; font-size:14px; margin-left:6px">▼</span>
+    </div>
+    <div class="d4-group-body">
+      <div class="d4-row">
+        <div class="d4-row-avatar" style="background:#3d1515; color:#f87171">ΠΧ</div>
+        <div class="d4-row-info">
+          <div class="d4-row-name">Παπάς Χρήστος</div>
+          <div class="d4-row-meta">📞 6971-234567 · Μετρητά · Lead: 1 μέρα</div>
+        </div>
+        <div class="d4-row-right">
+          <div class="d4-row-last"><strong>Σήμερα</strong>Τελ. αγορά</div>
+          <button class="d4-row-btn">📞</button>
+          <button class="d4-row-btn">+ Τιμολόγιο</button>
+          <button class="d4-row-btn">📋</button>
+          <button class="d4-row-btn">✏️</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Group 2: Τρόφιμα -->
+  <div class="d4-group">
+    <div class="d4-group-header">
+      <span class="d4-group-icon">🛒</span>
+      <span class="d4-group-title">Παντοπωλείο / Τρόφιμα</span>
+      <span class="d4-group-count">1 προμηθευτής</span>
+      <span class="d4-group-total">890€ / μήνα</span>
+      <span style="color:#4a5568; font-size:14px; margin-left:6px">▼</span>
+    </div>
+    <div class="d4-group-body">
+      <div class="d4-row">
+        <div class="d4-row-avatar" style="background:#2d1f0e; color:#fb923c">ΑΚ</div>
+        <div class="d4-row-info">
+          <div class="d4-row-name">ΑΦΟΙ Κιβρόγλου</div>
+          <div class="d4-row-meta">📞 2461-022456 · Πίστωση 30 μέρες · Lead: 2 μέρες</div>
+        </div>
+        <div class="d4-row-right">
+          <div class="d4-row-last"><strong>15/06</strong>4 μέρες πριν</div>
+          <button class="d4-row-btn">📞</button>
+          <button class="d4-row-btn">+ Τιμολόγιο</button>
+          <button class="d4-row-btn">📋</button>
+          <button class="d4-row-btn">✏️</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Group 3: Λαχανικά -->
+  <div class="d4-group">
+    <div class="d4-group-header">
+      <span class="d4-group-icon">🥬</span>
+      <span class="d4-group-title">Λαχανικά / Φρούτα</span>
+      <span class="d4-group-count">1 προμηθευτής</span>
+      <span class="d4-group-total">340€ / μήνα</span>
+      <span style="color:#4a5568; font-size:14px; margin-left:6px">▼</span>
+    </div>
+    <div class="d4-group-body">
+      <div class="d4-row">
+        <div class="d4-row-avatar" style="background:#0f2d1a; color:#4ade80">ΦΑ</div>
+        <div class="d4-row-info">
+          <div class="d4-row-name">Φρέσκο Αγρόκτημα</div>
+          <div class="d4-row-meta">📞 6945-678901 · Μετρητά · Lead: 1 μέρα</div>
+        </div>
+        <div class="d4-row-right">
+          <div class="d4-row-last"><strong>Χθες</strong>18/06</div>
+          <button class="d4-row-btn">📞</button>
+          <button class="d4-row-btn">+ Τιμολόγιο</button>
+          <button class="d4-row-btn">📋</button>
+          <button class="d4-row-btn">✏️</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Group 4: Αρτοποιείο -->
+  <div class="d4-group">
+    <div class="d4-group-header">
+      <span class="d4-group-icon">🍞</span>
+      <span class="d4-group-title">Αρτοποιείο</span>
+      <span class="d4-group-count">1 προμηθευτής</span>
+      <span class="d4-group-total">210€ / μήνα</span>
+      <span style="color:#4a5568; font-size:14px; margin-left:6px">▼</span>
+    </div>
+    <div class="d4-group-body">
+      <div class="d4-row">
+        <div class="d4-row-avatar" style="background:#2d2810; color:#facc15">ΑΝ</div>
+        <div class="d4-row-info">
+          <div class="d4-row-name">Αρτοποιείο Νίκας</div>
+          <div class="d4-row-meta">📞 2461-033321 · Πίστωση 15 μέρες · Lead: 1 μέρα</div>
+        </div>
+        <div class="d4-row-right">
+          <div class="d4-row-last"><strong>Σήμερα</strong>19/06</div>
+          <button class="d4-row-btn">📞</button>
+          <button class="d4-row-btn">+ Τιμολόγιο</button>
+          <button class="d4-row-btn">📋</button>
+          <button class="d4-row-btn">✏️</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Group 5: Ποτά -->
+  <div class="d4-group">
+    <div class="d4-group-header">
+      <span class="d4-group-icon">🍺</span>
+      <span class="d4-group-title">Ποτά / Αναψυκτικά</span>
+      <span class="d4-group-count">1 προμηθευτής</span>
+      <span class="d4-group-total">520€ / μήνα</span>
+      <span style="color:#4a5568; font-size:14px; margin-left:6px">▼</span>
+    </div>
+    <div class="d4-group-body">
+      <div class="d4-row">
+        <div class="d4-row-avatar" style="background:#1e1535; color:#a78bfa">ΔΑ</div>
+        <div class="d4-row-info">
+          <div class="d4-row-name">Διαμαντής ΑΒΕΕ</div>
+          <div class="d4-row-meta">📞 2310-444555 · Πίστωση 30 μέρες · Lead: 3 μέρες</div>
+        </div>
+        <div class="d4-row-right">
+          <div class="d4-row-last"><strong>10/06</strong>9 μέρες πριν</div>
+          <button class="d4-row-btn">📞</button>
+          <button class="d4-row-btn">+ Τιμολόγιο</button>
+          <button class="d4-row-btn">📋</button>
+          <button class="d4-row-btn">✏️</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /panel4 -->
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     DESIGN 5 — ΠΙΝΑΚΑΣ ΚΑΤΑΣΤΑΣΗΣ
+══════════════════════════════════════════════════════════════════ -->
+<div id="panel5" class="panel">
+
+  <div class="design-label">
+    <div>
+      <strong>Πρόταση 5 — Πίνακας Κατάστασης</strong>
+      <p>Έξυπνος "war-room": alerts στην κορυφή (ποιος χρειάζεται παραγγελία, ποιος πλησιάζει σε πίστωση), score αξιολόγησης ανά προμηθευτή και χρωματικοί δείκτες κατάστασης. Για τον ιδιοκτήτη που θέλει να ξέρει αμέσως τι να κάνει.</p>
+    </div>
+    <div class="badge-num">5</div>
+  </div>
+
+  <!-- Top section: alerts + mini kpis -->
+  <div class="d5-top">
+    <div class="d5-alerts">
+      <div class="d5-alerts-title">⚡ Τι χρειάζεται προσοχή</div>
+      <div class="d5-alert-row">
+        <div class="d5-alert-dot warn"></div>
+        <div class="d5-alert-text">
+          <strong>Διαμαντής ΑΒΕΕ</strong> — 9 μέρες από την τελευταία παραγγελία. Ήρθε η ώρα;
+        </div>
+        <button class="d5-alert-action">+ Τιμολόγιο</button>
+      </div>
+      <div class="d5-alert-row">
+        <div class="d5-alert-dot info"></div>
+        <div class="d5-alert-text">
+          <strong>ΑΦΟΙ Κιβρόγλου</strong> — Πίστωση 30 μέρες. Τελ. αγορά 15/06. Λήγει στις 15/07.
+        </div>
+        <button class="d5-alert-action">Καρτέλα</button>
+      </div>
+      <div class="d5-alert-row">
+        <div class="d5-alert-dot ok"></div>
+        <div class="d5-alert-text">
+          <strong>Παπάς Χρήστος</strong> + <strong>Αρτοποιείο Νίκας</strong> — Αγορά σήμερα. Όλα εντάξει.
+        </div>
+        <button class="d5-alert-action">✓</button>
+      </div>
+    </div>
+
+    <div class="d5-mini-kpis">
+      <div class="d5-mk">
+        <div class="d5-mk-val">3.200€</div>
+        <div class="d5-mk-lab">Αγορές Ιουνίου</div>
+      </div>
+      <div class="d5-mk">
+        <div class="d5-mk-val" style="color:#34d399">2</div>
+        <div class="d5-mk-lab">Αγορά σήμερα</div>
+      </div>
+      <div class="d5-mk">
+        <div class="d5-mk-val" style="color:#818cf8">3</div>
+        <div class="d5-mk-lab">Με πίστωση</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="d5-legend" style="margin-bottom:12px">
+    <div class="d5-leg"><div class="d5-leg-dot" style="background:#34d399"></div>Αγορά σήμερα/χθες</div>
+    <div class="d5-leg"><div class="d5-leg-dot" style="background:#60a5fa"></div>Φυσιολογικά (≤7 μέρες)</div>
+    <div class="d5-leg"><div class="d5-leg-dot" style="background:#f59e0b"></div>Χρειάζεται παραγγελία (&gt;7 μέρες)</div>
+    <span style="margin-left:auto; font-size:11px; color:#4a5568">Score = σταθερότητα συνεργασίας</span>
+  </div>
+
+  <!-- Supplier list -->
+  <div class="d5-list">
+
+    <!-- Παπάς -->
+    <div class="d5-row">
+      <div class="d5-status-col">
+        <div class="d5-dot" style="background:#34d399; box-shadow:0 0 5px #34d39980"></div>
+      </div>
+      <div class="d5-avatar" style="background:#3d1515; color:#f87171">ΠΧ</div>
+      <div class="d5-info">
+        <div class="d5-name">Παπάς Χρήστος</div>
+        <div class="d5-meta">
+          <span class="badge badge-meat">🥩 Κρεοπωλείο</span>
+          <span class="d5-chip good">✓ Μετρητά</span>
+          <span class="d5-chip">Lead 1 μέρα</span>
+          <span class="d5-chip">📞 6971-234567</span>
+          <span class="d5-chip good">1.240€ / μήνα</span>
+        </div>
+      </div>
+      <div class="d5-score">
+        <div class="d5-score-ring a">A</div>
+        <div class="d5-score-lab">Score</div>
+      </div>
+      <div class="d5-actions">
+        <button class="d5-act primary">+ Τιμολόγιο</button>
+        <button class="d5-act">📋 Καρτέλα</button>
+      </div>
+    </div>
+
+    <!-- Κιβρόγλου -->
+    <div class="d5-row">
+      <div class="d5-status-col">
+        <div class="d5-dot" style="background:#60a5fa; box-shadow:0 0 5px #60a5fa80"></div>
+      </div>
+      <div class="d5-avatar" style="background:#2d1f0e; color:#fb923c">ΑΚ</div>
+      <div class="d5-info">
+        <div class="d5-name">ΑΦΟΙ Κιβρόγλου</div>
+        <div class="d5-meta">
+          <span class="badge badge-grocery">🛒 Παντοπωλείο</span>
+          <span class="d5-chip warn">⏳ 30 μέρες</span>
+          <span class="d5-chip">Lead 2 μέρες</span>
+          <span class="d5-chip">📞 2461-022456</span>
+          <span class="d5-chip">890€ / μήνα</span>
+        </div>
+      </div>
+      <div class="d5-score">
+        <div class="d5-score-ring a">A</div>
+        <div class="d5-score-lab">Score</div>
+      </div>
+      <div class="d5-actions">
+        <button class="d5-act primary">+ Τιμολόγιο</button>
+        <button class="d5-act">📋 Καρτέλα</button>
+      </div>
+    </div>
+
+    <!-- Αγρόκτημα -->
+    <div class="d5-row">
+      <div class="d5-status-col">
+        <div class="d5-dot" style="background:#34d399; box-shadow:0 0 5px #34d39980"></div>
+      </div>
+      <div class="d5-avatar" style="background:#0f2d1a; color:#4ade80">ΦΑ</div>
+      <div class="d5-info">
+        <div class="d5-name">Φρέσκο Αγρόκτημα</div>
+        <div class="d5-meta">
+          <span class="badge badge-veg">🥬 Λαχανικά</span>
+          <span class="d5-chip good">✓ Μετρητά</span>
+          <span class="d5-chip">Lead 1 μέρα</span>
+          <span class="d5-chip">📞 6945-678901</span>
+          <span class="d5-chip">340€ / μήνα</span>
+        </div>
+      </div>
+      <div class="d5-score">
+        <div class="d5-score-ring b">B</div>
+        <div class="d5-score-lab">Score</div>
+      </div>
+      <div class="d5-actions">
+        <button class="d5-act primary">+ Τιμολόγιο</button>
+        <button class="d5-act">📋 Καρτέλα</button>
+      </div>
+    </div>
+
+    <!-- Νίκας -->
+    <div class="d5-row">
+      <div class="d5-status-col">
+        <div class="d5-dot" style="background:#34d399; box-shadow:0 0 5px #34d39980"></div>
+      </div>
+      <div class="d5-avatar" style="background:#2d2810; color:#facc15">ΑΝ</div>
+      <div class="d5-info">
+        <div class="d5-name">Αρτοποιείο Νίκας</div>
+        <div class="d5-meta">
+          <span class="badge badge-bread">🍞 Αρτοποιείο</span>
+          <span class="d5-chip warn">⏳ 15 μέρες</span>
+          <span class="d5-chip">Lead 1 μέρα</span>
+          <span class="d5-chip">📞 2461-033321</span>
+          <span class="d5-chip">210€ / μήνα</span>
+        </div>
+      </div>
+      <div class="d5-score">
+        <div class="d5-score-ring a">A</div>
+        <div class="d5-score-lab">Score</div>
+      </div>
+      <div class="d5-actions">
+        <button class="d5-act primary">+ Τιμολόγιο</button>
+        <button class="d5-act">📋 Καρτέλα</button>
+      </div>
+    </div>
+
+    <!-- Διαμαντής -->
+    <div class="d5-row" style="border-color:#f59e0b40">
+      <div class="d5-status-col">
+        <div class="d5-dot" style="background:#f59e0b; box-shadow:0 0 6px #f59e0b"></div>
+      </div>
+      <div class="d5-avatar" style="background:#1e1535; color:#a78bfa">ΔΑ</div>
+      <div class="d5-info">
+        <div class="d5-name">Διαμαντής ΑΒΕΕ</div>
+        <div class="d5-meta">
+          <span class="badge badge-drinks">🍺 Ποτά</span>
+          <span class="d5-chip warn">⏳ 30 μέρες</span>
+          <span class="d5-chip">Lead 3 μέρες</span>
+          <span class="d5-chip">📞 2310-444555</span>
+          <span class="d5-chip warn">⚠️ 9 μέρες πριν</span>
+        </div>
+      </div>
+      <div class="d5-score">
+        <div class="d5-score-ring c">C</div>
+        <div class="d5-score-lab">Score</div>
+      </div>
+      <div class="d5-actions">
+        <button class="d5-act primary">+ Τιμολόγιο</button>
+        <button class="d5-act">📋 Καρτέλα</button>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /panel5 -->
+
+
+<script>
+function showTab(n) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel' + n).classList.add('active');
+  document.querySelectorAll('.tab-btn')[n - 1].classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
+
+</body>
+</html>
