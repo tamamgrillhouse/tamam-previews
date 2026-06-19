@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Προμηθευτές — 5 Ιδέες</title>
+<style>
+  :root {
+    --orange: #f5a623;
+    --orange-dark: #d4891a;
+    --bg: #f0f2f5;
+    --white: #fff;
+    --text: #1a1a2e;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --green: #10b981;
+    --red: #ef4444;
+    --blue: #3b82f6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #1a1a2e; color: var(--text); }
+
+  /* NAV */
+  .page-nav {
+    display: flex; gap: 8px; padding: 20px 24px 0;
+    overflow-x: auto; white-space: nowrap;
+  }
+  .page-nav button {
+    padding: 10px 20px; border-radius: 30px; border: 2px solid transparent;
+    background: rgba(255,255,255,0.1); color: #fff; cursor: pointer;
+    font-size: 13px; font-weight: 600; transition: all .2s;
+  }
+  .page-nav button.active, .page-nav button:hover {
+    background: var(--orange); color: #fff; border-color: var(--orange);
+  }
+  .page-nav button span { font-size: 11px; opacity: .8; display: block; }
+
+  /* SECTIONS */
+  .idea { display: none; padding: 20px; }
+  .idea.active { display: block; }
+
+  .idea-label {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 16px;
+  }
+  .idea-label .badge {
+    background: var(--orange); color: #fff;
+    padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 700;
+  }
+  .idea-label h2 { color: #fff; font-size: 18px; }
+  .idea-label p { color: rgba(255,255,255,.6); font-size: 13px; margin-left: auto; }
+
+  /* ===== SHARED HEADER ===== */
+  .app-shell {
+    background: var(--bg); border-radius: 16px; overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,.4);
+  }
+  .app-topbar {
+    background: #fff; padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+  .app-topbar h1 { font-size: 20px; font-weight: 700; color: var(--text); }
+  .btn-primary {
+    background: var(--orange); color: #fff; border: none;
+    padding: 9px 18px; border-radius: 8px; font-size: 13px;
+    font-weight: 600; cursor: pointer;
+  }
+
+  /* ===== IDEA 1 — CARD GRID ===== */
+  .kpi-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; padding: 16px; }
+  .kpi-card {
+    background: #fff; border-radius: 12px; padding: 16px;
+    border-left: 4px solid var(--orange);
+  }
+  .kpi-card .num { font-size: 28px; font-weight: 800; color: var(--orange); }
+  .kpi-card .lbl { font-size: 11px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: .5px; }
+  .kpi-card .sub { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+  .cards-search {
+    padding: 0 16px 12px;
+    display: flex; gap: 10px;
+  }
+  .cards-search input {
+    flex: 1; padding: 9px 14px; border-radius: 8px;
+    border: 1px solid var(--border); font-size: 13px;
+  }
+
+  .supplier-cards {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 12px;
+    padding: 0 16px 16px;
+  }
+  .s-card {
+    background: #fff; border-radius: 12px; padding: 16px;
+    display: flex; flex-direction: column; gap: 10px;
+    transition: box-shadow .2s; cursor: pointer;
+    border: 2px solid transparent;
+  }
+  .s-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.12); border-color: var(--orange); }
+  .s-card-top { display: flex; align-items: center; gap: 12px; }
+  .s-avatar {
+    width: 44px; height: 44px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 800; color: #fff; flex-shrink: 0;
+  }
+  .s-card-name { font-size: 14px; font-weight: 700; color: var(--text); }
+  .s-card-cat { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .s-card-stats { display: flex; gap: 8px; }
+  .s-stat {
+    flex: 1; background: var(--bg); border-radius: 8px;
+    padding: 8px 10px; text-align: center;
+  }
+  .s-stat .v { font-size: 14px; font-weight: 700; color: var(--text); }
+  .s-stat .l { font-size: 10px; color: var(--muted); text-transform: uppercase; }
+  .s-card-actions { display: flex; gap: 6px; }
+  .s-card-actions button {
+    flex: 1; padding: 7px; border-radius: 7px; border: 1px solid var(--border);
+    font-size: 11px; font-weight: 600; cursor: pointer; background: #fff;
+    color: var(--text);
+  }
+  .s-card-actions button.primary { background: var(--orange); color: #fff; border-color: var(--orange); }
+  .badge-tag {
+    display: inline-block; padding: 2px 8px; border-radius: 10px;
+    font-size: 10px; font-weight: 600;
+  }
+
+  /* ===== IDEA 2 — SPLIT PANE ===== */
+  .split-layout { display: flex; height: 520px; }
+  .split-list {
+    width: 340px; flex-shrink: 0; border-right: 1px solid var(--border);
+    overflow-y: auto; background: #fff;
+  }
+  .split-list-header { padding: 12px; border-bottom: 1px solid var(--border); }
+  .split-list-header input {
+    width: 100%; padding: 8px 12px; border-radius: 8px;
+    border: 1px solid var(--border); font-size: 13px;
+  }
+  .split-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px; border-bottom: 1px solid var(--border);
+    cursor: pointer; transition: background .15s;
+  }
+  .split-row:hover, .split-row.selected { background: #fff8ee; border-right: 3px solid var(--orange); }
+  .split-row .sa { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: #fff; flex-shrink: 0; }
+  .split-row .sn { font-size: 13px; font-weight: 600; color: var(--text); }
+  .split-row .sc { font-size: 11px; color: var(--muted); }
+  .split-row .sl { margin-left: auto; font-size: 11px; color: var(--muted); text-align: right; }
+  .split-detail {
+    flex: 1; background: var(--bg); overflow-y: auto;
+    display: flex; flex-direction: column;
+  }
+  .split-detail-hero {
+    background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 100%);
+    padding: 24px; color: #fff; display: flex; align-items: center; gap: 16px;
+  }
+  .split-detail-hero .big-av {
+    width: 64px; height: 64px; border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; font-weight: 900; color: #fff;
+  }
+  .split-detail-hero h2 { font-size: 20px; font-weight: 800; }
+  .split-detail-hero p { font-size: 13px; opacity: .7; margin-top: 3px; }
+  .detail-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; padding: 16px; }
+  .detail-stat { background: #fff; border-radius: 10px; padding: 14px; text-align: center; }
+  .detail-stat .dv { font-size: 20px; font-weight: 800; color: var(--orange); }
+  .detail-stat .dl { font-size: 11px; color: var(--muted); text-transform: uppercase; margin-top: 2px; }
+  .detail-info { background: #fff; margin: 0 16px; border-radius: 10px; padding: 14px; }
+  .detail-info-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .detail-info-row:last-child { border-bottom: none; }
+  .detail-info-row .k { color: var(--muted); }
+  .detail-info-row .v { font-weight: 600; }
+  .detail-actions { display: flex; gap: 8px; padding: 16px; }
+  .detail-actions button { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-size: 13px; font-weight: 600; cursor: pointer; background: #fff; }
+  .detail-actions button.primary { background: var(--orange); color: #fff; border-color: var(--orange); }
+
+  /* ===== IDEA 3 — KANBAN ===== */
+  .kanban-bar { padding: 12px 16px; display: flex; gap: 10px; background: #fff; border-bottom: 1px solid var(--border); }
+  .kanban-bar input { flex: 1; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); font-size: 13px; }
+  .kanban-board { display: flex; gap: 10px; padding: 12px; overflow-x: auto; min-height: 420px; }
+  .k-col { min-width: 200px; background: #fff; border-radius: 12px; overflow: hidden; flex-shrink: 0; }
+  .k-col-header { padding: 12px 14px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+  .k-item { margin: 0 8px 8px; background: var(--bg); border-radius: 8px; padding: 12px; cursor: pointer; }
+  .k-item:hover { background: #fff8ee; }
+  .k-item-name { font-size: 13px; font-weight: 700; color: var(--text); }
+  .k-item-tel { font-size: 11px; color: var(--muted); margin-top: 3px; }
+  .k-item-footer { display: flex; justify-content: space-between; margin-top: 8px; font-size: 11px; color: var(--muted); }
+  .k-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  /* ===== IDEA 4 — COMPACT DENSE ===== */
+  .dense-toolbar {
+    display: flex; gap: 8px; padding: 12px 16px;
+    background: #fff; border-bottom: 1px solid var(--border); align-items: center;
+  }
+  .dense-toolbar input { flex: 1; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); font-size: 13px; }
+  .dense-toolbar select { padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); font-size: 13px; }
+  .dense-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .dense-table th { background: #f8f9fa; padding: 9px 14px; text-align: left; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; border-bottom: 2px solid var(--border); }
+  .dense-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  .dense-table tr:hover td { background: #fff8ee; }
+  .dense-table tr.hot td { border-left: 3px solid var(--green); }
+  .dense-table tr.cold td { border-left: 3px solid var(--muted); }
+  .dense-table tr.warn td { border-left: 3px solid #f59e0b; }
+  .heat-bar { height: 6px; border-radius: 3px; background: var(--border); position: relative; width: 80px; }
+  .heat-fill { height: 100%; border-radius: 3px; position: absolute; top: 0; left: 0; }
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 700; }
+  .pill-green { background: #d1fae5; color: #065f46; }
+  .pill-yellow { background: #fef3c7; color: #92400e; }
+  .pill-gray { background: #f3f4f6; color: var(--muted); }
+  .act-link { color: var(--orange); font-weight: 600; cursor: pointer; margin-right: 8px; }
+
+  /* ===== IDEA 5 — TIMELINE FEED ===== */
+  .feed-layout { display: flex; height: 500px; }
+  .feed-sidebar { width: 220px; background: #1a1a2e; overflow-y: auto; }
+  .feed-sidebar-title { padding: 14px; color: rgba(255,255,255,.5); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+  .feed-s-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; cursor: pointer; transition: background .15s; }
+  .feed-s-item:hover, .feed-s-item.active { background: rgba(255,255,255,.1); }
+  .feed-s-item .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .feed-s-item .sname { font-size: 13px; color: #fff; font-weight: 600; }
+  .feed-s-item .scat { font-size: 10px; color: rgba(255,255,255,.5); }
+  .feed-s-item .badge-num { margin-left: auto; background: var(--orange); color: #fff; border-radius: 10px; padding: 1px 7px; font-size: 10px; font-weight: 700; }
+
+  .feed-main { flex: 1; overflow-y: auto; background: var(--bg); }
+  .feed-header { background: #fff; padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+  .feed-header .fa { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; color: #fff; }
+  .feed-header h2 { font-size: 18px; font-weight: 800; }
+  .feed-header p { font-size: 12px; color: var(--muted); }
+  .feed-header .fh-actions { margin-left: auto; display: flex; gap: 8px; }
+  .feed-header .fh-actions button { padding: 8px 14px; border-radius: 8px; border: 1px solid var(--border); font-size: 12px; font-weight: 600; cursor: pointer; background: #fff; }
+  .feed-header .fh-actions button.p { background: var(--orange); color: #fff; border-color: var(--orange); }
+
+  .feed-kpis { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; padding: 14px; }
+  .feed-kpi { background: #fff; border-radius: 10px; padding: 12px 14px; }
+  .feed-kpi .fkv { font-size: 22px; font-weight: 800; color: var(--orange); }
+  .feed-kpi .fkl { font-size: 11px; color: var(--muted); text-transform: uppercase; }
+
+  .timeline { padding: 0 14px 14px; }
+  .timeline-title { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; }
+  .tl-item { display: flex; gap: 12px; margin-bottom: 14px; }
+  .tl-line { display: flex; flex-direction: column; align-items: center; }
+  .tl-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--orange); flex-shrink: 0; }
+  .tl-vline { width: 2px; flex: 1; background: var(--border); margin-top: 3px; }
+  .tl-content { background: #fff; border-radius: 10px; padding: 12px 14px; flex: 1; }
+  .tl-content .tl-head { display: flex; justify-content: space-between; align-items: center; }
+  .tl-content .tl-action { font-size: 13px; font-weight: 700; color: var(--text); }
+  .tl-content .tl-date { font-size: 11px; color: var(--muted); }
+  .tl-content .tl-desc { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  /* ===== COLORS ===== */
+  .c1 { background: #f5a623; }
+  .c2 { background: #10b981; }
+  .c3 { background: #3b82f6; }
+  .c4 { background: #8b5cf6; }
+  .c5 { background: #ef4444; }
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="page-nav">
+  <button class="active" onclick="show(0)">💳 Ιδέα 1<span>Κάρτες Grid</span></button>
+  <button onclick="show(1)">↔️ Ιδέα 2<span>Split Pane</span></button>
+  <button onclick="show(2)">📋 Ιδέα 3<span>Kanban Κατηγορίες</span></button>
+  <button onclick="show(3)">📊 Ιδέα 4<span>Dense Table</span></button>
+  <button onclick="show(4)">📰 Ιδέα 5<span>Timeline Feed</span></button>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     ΙΔΕΑ 1 — CARD GRID
+══════════════════════════════════════════════ -->
+<div class="idea active" id="i0">
+  <div class="idea-label">
+    <span class="badge">Ιδέα 1</span>
+    <h2>Κάρτες Grid</h2>
+    <p>Κάθε προμηθευτής = μια κάρτα με avatar, στατιστικά & γρήγορες ενέργειες</p>
+  </div>
+  <div class="app-shell">
+    <div class="app-topbar">
+      <h1>Προμηθευτές</h1>
+      <button class="btn-primary">+ Νέος Προμηθευτής</button>
+    </div>
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="num">5</div><div class="lbl">Ενεργοί Προμηθευτές</div><div class="sub">καταχωρημένοι</div></div>
+      <div class="kpi-card"><div class="num">€ 4.820</div><div class="lbl">Αγορές Μήνα</div><div class="sub">Ιούνιος 2026</div></div>
+      <div class="kpi-card"><div class="num">€ 1.140</div><div class="lbl">Αγορές Εβδομάδας</div><div class="sub">τελευταίες 7 μέρες</div></div>
+      <div class="kpi-card"><div class="num">Σήμερα</div><div class="lbl">Τελευταία Παράδοση</div><div class="sub">Παπάς Χρήστος · 09:30</div></div>
+    </div>
+    <div class="cards-search">
+      <input placeholder="🔍  Αναζήτηση προμηθευτή...">
+      <button class="btn-primary">Φίλτρα</button>
+    </div>
+    <div class="supplier-cards">
+      <!-- Card 1 -->
+      <div class="s-card">
+        <div class="s-card-top">
+          <div class="s-avatar c1">ΠΧ</div>
+          <div>
+            <div class="s-card-name">Παπάς Χρήστος</div>
+            <div class="s-card-cat">🥩 Κρεοπωλείο</div>
+          </div>
+          <span class="badge-tag" style="margin-left:auto;background:#d1fae5;color:#065f46">Ενεργός</span>
+        </div>
+        <div class="s-card-stats">
+          <div class="s-stat"><div class="v">€2.400</div><div class="l">Μήνας</div></div>
+          <div class="s-stat"><div class="v">Δευτ.</div><div class="l">Παράδοση</div></div>
+          <div class="s-stat"><div class="v">Σήμερα</div><div class="l">Τελευτ.</div></div>
+        </div>
+        <div class="s-card-actions">
+          <button class="primary">Καρτέλα</button>
+          <button>Επεξ/σία</button>
+          <button>📞</button>
+        </div>
+      </div>
+      <!-- Card 2 -->
+      <div class="s-card">
+        <div class="s-card-top">
+          <div class="s-avatar c2">ΑΚ</div>
+          <div>
+            <div class="s-card-name">ΑΦΟΙ Κιβρόγλου</div>
+            <div class="s-card-cat">🛒 Τρόφιμα</div>
+          </div>
+          <span class="badge-tag" style="margin-left:auto;background:#d1fae5;color:#065f46">Ενεργός</span>
+        </div>
+        <div class="s-card-stats">
+          <div class="s-stat"><div class="v">€1.650</div><div class="l">Μήνας</div></div>
+          <div class="s-stat"><div class="v">Τρίτ.</div><div class="l">Παράδοση</div></div>
+          <div class="s-stat"><div class="v">Χθες</div><div class="l">Τελευτ.</div></div>
+        </div>
+        <div class="s-card-actions">
+          <button class="primary">Καρτέλα</button>
+          <button>Επεξ/σία</button>
+          <button>📞</button>
+        </div>
+      </div>
+      <!-- Card 3 -->
+      <div class="s-card">
+        <div class="s-card-top">
+          <div class="s-avatar c3">ΓΑ</div>
+          <div>
+            <div class="s-card-name">Γεωργίου ΑΕ</div>
+            <div class="s-card-cat">🐟 Αλιεία</div>
+          </div>
+          <span class="badge-tag" style="margin-left:auto;background:#fef3c7;color:#92400e">Εκκρεμεί</span>
+        </div>
+        <div class="s-card-stats">
+          <div class="s-stat"><div class="v">€580</div><div class="l">Μήνας</div></div>
+          <div class="s-stat"><div class="v">Παρ.</div><div class="l">Παράδοση</div></div>
+          <div class="s-stat"><div class="v">12/06</div><div class="l">Τελευτ.</div></div>
+        </div>
+        <div class="s-card-actions">
+          <button class="primary">Καρτέλα</button>
+          <button>Επεξ/σία</button>
+          <button>📞</button>
+        </div>
+      </div>
+      <!-- Card 4 -->
+      <div class="s-card">
+        <div class="s-card-top">
+          <div class="s-avatar c4">ΝΣ</div>
+          <div>
+            <div class="s-card-name">Νικολάου & Σια</div>
+            <div class="s-card-cat">🥦 Λαχανικά</div>
+          </div>
+          <span class="badge-tag" style="margin-left:auto;background:#d1fae5;color:#065f46">Ενεργός</span>
+        </div>
+        <div class="s-card-stats">
+          <div class="s-stat"><div class="v">€720</div><div class="l">Μήνας</div></div>
+          <div class="s-stat"><div class="v">Δευτ/Παρ</div><div class="l">Παράδοση</div></div>
+          <div class="s-stat"><div class="v">17/06</div><div class="l">Τελευτ.</div></div>
+        </div>
+        <div class="s-card-actions">
+          <button class="primary">Καρτέλα</button>
+          <button>Επεξ/σία</button>
+          <button>📞</button>
+        </div>
+      </div>
+      <!-- Card 5 -->
+      <div class="s-card">
+        <div class="s-card-top">
+          <div class="s-avatar c5">ΑΒ</div>
+          <div>
+            <div class="s-card-name">ΑΒ Βασιλόπουλος</div>
+            <div class="s-card-cat">📦 Γενικά Τρόφιμα</div>
+          </div>
+          <span class="badge-tag" style="margin-left:auto;background:#d1fae5;color:#065f46">Ενεργός</span>
+        </div>
+        <div class="s-card-stats">
+          <div class="s-stat"><div class="v">€370</div><div class="l">Μήνας</div></div>
+          <div class="s-stat"><div class="v">Τετ.</div><div class="l">Παράδοση</div></div>
+          <div class="s-stat"><div class="v">10/06</div><div class="l">Τελευτ.</div></div>
+        </div>
+        <div class="s-card-actions">
+          <button class="primary">Καρτέλα</button>
+          <button>Επεξ/σία</button>
+          <button>📞</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     ΙΔΕΑ 2 — SPLIT PANE
+══════════════════════════════════════════════ -->
+<div class="idea" id="i1">
+  <div class="idea-label">
+    <span class="badge">Ιδέα 2</span>
+    <h2>Split Pane — Λίστα + Mini-Καρτέλα</h2>
+    <p>Κλικ στον προμηθευτή → ανοίγει η λεπτομέρεια δεξιά, χωρίς νέα σελίδα</p>
+  </div>
+  <div class="app-shell">
+    <div class="app-topbar">
+      <h1>Προμηθευτές <span style="font-size:14px;color:var(--muted);font-weight:400">(5 ενεργοί)</span></h1>
+      <button class="btn-primary">+ Νέος</button>
+    </div>
+    <div class="split-layout">
+      <div class="split-list">
+        <div class="split-list-header">
+          <input placeholder="🔍  Αναζήτηση...">
+        </div>
+        <div class="split-row selected">
+          <div class="sa c1">ΠΧ</div>
+          <div><div class="sn">Παπάς Χρήστος</div><div class="sc">🥩 Κρεοπωλείο</div></div>
+          <div class="sl">€2.400<br><span style="font-size:10px">μήνας</span></div>
+        </div>
+        <div class="split-row">
+          <div class="sa c2">ΑΚ</div>
+          <div><div class="sn">ΑΦΟΙ Καβρόγλου</div><div class="sc">🛒 Τρόφιμα</div></div>
+          <div class="sl">€1.650<br><span style="font-size:10px">μήνας</span></div>
+        </div>
+        <div class="split-row">
+          <div class="sa c3">ΓΑ</div>
+          <div><div class="sn">Γεωργίου ΑΕ</div><div class="sc">🐟 Αλιεία</div></div>
+          <div class="sl">€580<br><span style="font-size:10px">μήνας</span></div>
+        </div>
+        <div class="split-row">
+          <div class="sa c4">ΝΣ</div>
+          <div><div class="sn">Νικολάου & Σια</div><div class="sc">🥦 Λαχανικά</div></div>
+          <div class="sl">€720<br><span style="font-size:10px">μήνας</span></div>
+        </div>
+        <div class="split-row">
+          <div class="sa c5">ΑΒ</div>
+          <div><div class="sn">ΑΒ Βασιλόπουλος</div><div class="sc">📦 Γενικά</div></div>
+          <div class="sl">€370<br><span style="font-size:10px">μήνας</span></div>
+        </div>
+      </div>
+      <div class="split-detail">
+        <div class="split-detail-hero">
+          <div class="big-av c1">ΠΧ</div>
+          <div>
+            <h2>Παπάς Χρήστος</h2>
+            <p>🥩 Κρεοπωλείο · Γρεβενά · ΑΦΜ 123456789</p>
+          </div>
+          <span class="badge-tag" style="margin-left:auto;background:#d1fae5;color:#065f46;font-size:12px">Ενεργός</span>
+        </div>
+        <div class="detail-stats">
+          <div class="detail-stat"><div class="dv">€ 2.400</div><div class="dl">Μήνας</div></div>
+          <div class="detail-stat"><div class="dv">€ 14.800</div><div class="dl">Έτος</div></div>
+          <div class="detail-stat"><div class="dv">Σήμερα</div><div class="dl">Τελ. Παράδοση</div></div>
+        </div>
+        <div class="detail-info">
+          <div class="detail-info-row"><span class="k">Τηλέφωνο</span><span class="v">2462 012345</span></div>
+          <div class="detail-info-row"><span class="k">Email</span><span class="v">papas@example.gr</span></div>
+          <div class="detail-info-row"><span class="k">Ημέρες Παράδοσης</span><span class="v">Δευτέρα, Τετάρτη</span></div>
+          <div class="detail-info-row"><span class="k">Τρόπος Πληρωμής</span><span class="v">Μετρητά</span></div>
+          <div class="detail-info-row"><span class="k">Πιστωτικές Ημέρες</span><span class="v">30 ημέρες</span></div>
+        </div>
+        <div class="detail-actions">
+          <button class="primary">Καρτέλα →</button>
+          <button>Επεξεργασία</button>
+          <button>📞 Κλήση</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     ΙΔΕΑ 3 — KANBAN
+══════════════════════════════════════════════ -->
+<div class="idea" id="i2">
+  <div class="idea-label">
+    <span class="badge">Ιδέα 3</span>
+    <h2>Kanban ανά Κατηγορία</h2>
+    <p>Κάθε στήλη = μια κατηγορία προμηθευτή (Κρεοπωλείο, Τρόφιμα…)</p>
+  </div>
+  <div class="app-shell">
+    <div class="app-topbar">
+      <h1>Προμηθευτές</h1>
+      <button class="btn-primary">+ Νέος</button>
+    </div>
+    <div class="kanban-bar">
+      <input placeholder="🔍  Αναζήτηση...">
+      <button class="btn-primary">+ Κατηγορία</button>
+    </div>
+    <div class="kanban-board">
+      <!-- Col 1 -->
+      <div class="k-col">
+        <div class="k-col-header" style="background:#fff3cd;color:#856404"><span class="k-dot" style="background:#f59e0b;margin-right:6px"></span>🥩 Κρεοπωλείο (2)</div>
+        <div class="k-item">
+          <div class="k-item-name">Παπάς Χρήστος</div>
+          <div class="k-item-tel">2462 012345</div>
+          <div class="k-item-footer"><span>€2.400/μήνα</span><span>Δευτ·Τετ</span></div>
+        </div>
+        <div class="k-item">
+          <div class="k-item-name">Ζήκας ΕΠΕ</div>
+          <div class="k-item-tel">2462 034567</div>
+          <div class="k-item-footer"><span>€800/μήνα</span><span>Παρ</span></div>
+        </div>
+      </div>
+      <!-- Col 2 -->
+      <div class="k-col">
+        <div class="k-col-header" style="background:#d1fae5;color:#065f46"><span class="k-dot" style="background:#10b981;margin-right:6px"></span>🛒 Τρόφιμα (1)</div>
+        <div class="k-item">
+          <div class="k-item-name">ΑΦΟΙ Κιβρόγλου</div>
+          <div class="k-item-tel">2462 022345</div>
+          <div class="k-item-footer"><span>€1.650/μήνα</span><span>Τρίτ</span></div>
+        </div>
+      </div>
+      <!-- Col 3 -->
+      <div class="k-col">
+        <div class="k-col-header" style="background:#dbeafe;color:#1e40af"><span class="k-dot" style="background:#3b82f6;margin-right:6px"></span>🐟 Αλιεία (1)</div>
+        <div class="k-item">
+          <div class="k-item-name">Γεωργίου ΑΕ</div>
+          <div class="k-item-tel">2310 123456</div>
+          <div class="k-item-footer"><span>€580/μήνα</span><span>Παρ</span></div>
+        </div>
+      </div>
+      <!-- Col 4 -->
+      <div class="k-col">
+        <div class="k-col-header" style="background:#ede9fe;color:#5b21b6"><span class="k-dot" style="background:#8b5cf6;margin-right:6px"></span>🥦 Λαχανικά (1)</div>
+        <div class="k-item">
+          <div class="k-item-name">Νικολάου & Σια</div>
+          <div class="k-item-tel">2462 044567</div>
+          <div class="k-item-footer"><span>€720/μήνα</span><span>Δευτ·Παρ</span></div>
+        </div>
+      </div>
+      <!-- Col 5 -->
+      <div class="k-col">
+        <div class="k-col-header" style="background:#fee2e2;color:#991b1b"><span class="k-dot" style="background:#ef4444;margin-right:6px"></span>📦 Διάφορα (1)</div>
+        <div class="k-item">
+          <div class="k-item-name">ΑΒ Βασιλόπουλος</div>
+          <div class="k-item-tel">2462 055678</div>
+          <div class="k-item-footer"><span>€370/μήνα</span><span>Τετ</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     ΙΔΕΑ 4 — COMPACT DENSE TABLE
+══════════════════════════════════════════════ -->
+<div class="idea" id="i3">
+  <div class="idea-label">
+    <span class="badge">Ιδέα 4</span>
+    <h2>Dense Table με Θερμόμετρο Αγορών</h2>
+    <p>Παχύ τραπέζι με πολλά δεδομένα, color-coded κατά συχνότητα αγορών</p>
+  </div>
+  <div class="app-shell">
+    <div class="app-topbar">
+      <h1>Προμηθευτές</h1>
+      <button class="btn-primary">+ Νέος Προμηθευτής</button>
+    </div>
+    <div class="dense-toolbar">
+      <input placeholder="🔍  Αναζήτηση...">
+      <select><option>Όλες οι κατηγορίες</option><option>Κρεοπωλείο</option><option>Τρόφιμα</option></select>
+      <select><option>Ταξινόμηση: Αγορές ↓</option><option>Επωνυμία ↑</option></select>
+    </div>
+    <table class="dense-table" style="background:#fff">
+      <thead>
+        <tr>
+          <th>Επωνυμία</th>
+          <th>Κατηγορία</th>
+          <th>Τηλέφωνο</th>
+          <th>Παραδόσεις</th>
+          <th>Αγορές Μήνα</th>
+          <th>Αγορές Εβδ.</th>
+          <th>Δραστηριότητα</th>
+          <th>Κατάσταση</th>
+          <th>Ενέργειες</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="hot">
+          <td><strong>Παπάς Χρήστος</strong></td>
+          <td>🥩 Κρεοπωλείο</td>
+          <td>2462 012345</td>
+          <td>Δευτ · Τετ</td>
+          <td><strong>€ 2.400</strong></td>
+          <td>€ 600</td>
+          <td>
+            <div class="heat-bar">
+              <div class="heat-fill" style="width:90%;background:#10b981"></div>
+            </div>
+          </td>
+          <td><span class="pill pill-green">Ενεργός</span></td>
+          <td><span class="act-link">Καρτέλα</span><span class="act-link">Επεξ/σία</span></td>
+        </tr>
+        <tr class="hot">
+          <td><strong>ΑΦΟΙ Κιβρόγλου</strong></td>
+          <td>🛒 Τρόφιμα</td>
+          <td>2462 022345</td>
+          <td>Τρίτη</td>
+          <td><strong>€ 1.650</strong></td>
+          <td>€ 420</td>
+          <td>
+            <div class="heat-bar">
+              <div class="heat-fill" style="width:70%;background:#10b981"></div>
+            </div>
+          </td>
+          <td><span class="pill pill-green">Ενεργός</span></td>
+          <td><span class="act-link">Καρτέλα</span><span class="act-link">Επεξ/σία</span></td>
+        </tr>
+        <tr class="warn">
+          <td><strong>Νικολάου & Σια</strong></td>
+          <td>🥦 Λαχανικά</td>
+          <td>2462 044567</td>
+          <td>Δευτ · Παρ</td>
+          <td><strong>€ 720</strong></td>
+          <td>€ 180</td>
+          <td>
+            <div class="heat-bar">
+              <div class="heat-fill" style="width:45%;background:#f59e0b"></div>
+            </div>
+          </td>
+          <td><span class="pill pill-yellow">Εκκρεμεί</span></td>
+          <td><span class="act-link">Καρτέλα</span><span class="act-link">Επεξ/σία</span></td>
+        </tr>
+        <tr class="warn">
+          <td><strong>Γεωργίου ΑΕ</strong></td>
+          <td>🐟 Αλιεία</td>
+          <td>2310 123456</td>
+          <td>Παρασκευή</td>
+          <td><strong>€ 580</strong></td>
+          <td>€ 0</td>
+          <td>
+            <div class="heat-bar">
+              <div class="heat-fill" style="width:30%;background:#f59e0b"></div>
+            </div>
+          </td>
+          <td><span class="pill pill-yellow">Εκκρεμεί</span></td>
+          <td><span class="act-link">Καρτέλα</span><span class="act-link">Επεξ/σία</span></td>
+        </tr>
+        <tr class="cold">
+          <td><strong>ΑΒ Βασιλόπουλος</strong></td>
+          <td>📦 Διάφορα</td>
+          <td>2462 055678</td>
+          <td>Τετάρτη</td>
+          <td><strong>€ 370</strong></td>
+          <td>€ 0</td>
+          <td>
+            <div class="heat-bar">
+              <div class="heat-fill" style="width:15%;background:#9ca3af"></div>
+            </div>
+          </td>
+          <td><span class="pill pill-gray">Αδρανής</span></td>
+          <td><span class="act-link">Καρτέλα</span><span class="act-link">Επεξ/σία</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="padding:12px 16px;font-size:12px;color:var(--muted);background:#fff;border-top:1px solid var(--border)">
+      <span style="margin-right:16px"><span class="k-dot" style="background:#10b981"></span> Πράσινο = αγοράζει συχνά</span>
+      <span style="margin-right:16px"><span class="k-dot" style="background:#f59e0b"></span> Κίτρινο = μέτρια συχνότητα</span>
+      <span><span class="k-dot" style="background:#9ca3af"></span> Γκρι = σπάνια / ανενεργός</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     ΙΔΕΑ 5 — TIMELINE FEED
+══════════════════════════════════════════════ -->
+<div class="idea" id="i4">
+  <div class="idea-label">
+    <span class="badge">Ιδέα 5</span>
+    <h2>Timeline Feed με Sidebar</h2>
+    <p>Αριστερά: λίστα προμηθευτών ως sidebar · Δεξιά: χρονολόγιο κινήσεων για τον επιλεγμένο</p>
+  </div>
+  <div class="app-shell">
+    <div class="app-topbar">
+      <h1>Προμηθευτές</h1>
+      <button class="btn-primary">+ Νέος</button>
+    </div>
+    <div class="feed-layout">
+      <div class="feed-sidebar">
+        <div class="feed-sidebar-title">5 Ενεργοί</div>
+        <div class="feed-s-item active">
+          <span class="dot" style="background:#f5a623"></span>
+          <div><div class="sname">Παπάς Χρήστος</div><div class="scat">Κρεοπωλείο</div></div>
+          <span class="badge-num">3</span>
+        </div>
+        <div class="feed-s-item">
+          <span class="dot" style="background:#10b981"></span>
+          <div><div class="sname">ΑΦΟΙ Κιβρόγλου</div><div class="scat">Τρόφιμα</div></div>
+          <span class="badge-num">1</span>
+        </div>
+        <div class="feed-s-item">
+          <span class="dot" style="background:#3b82f6"></span>
+          <div><div class="sname">Γεωργίου ΑΕ</div><div class="scat">Αλιεία</div></div>
+        </div>
+        <div class="feed-s-item">
+          <span class="dot" style="background:#8b5cf6"></span>
+          <div><div class="sname">Νικολάου & Σια</div><div class="scat">Λαχανικά</div></div>
+        </div>
+        <div class="feed-s-item">
+          <span class="dot" style="background:#ef4444"></span>
+          <div><div class="sname">ΑΒ Βασιλόπουλος</div><div class="scat">Διάφορα</div></div>
+        </div>
+      </div>
+      <div class="feed-main">
+        <div class="feed-header">
+          <div class="fa c1">ΠΧ</div>
+          <div>
+            <h2>Παπάς Χρήστος</h2>
+            <p>🥩 Κρεοπωλείο · 2462 012345 · Παραδόσεις: Δευτ · Τετ</p>
+          </div>
+          <div class="fh-actions">
+            <button class="p">Καρτέλα</button>
+            <button>Επεξεργασία</button>
+          </div>
+        </div>
+        <div class="feed-kpis">
+          <div class="feed-kpi"><div class="fkv">€ 2.400</div><div class="fkl">Αγορές Μήνα</div></div>
+          <div class="feed-kpi"><div class="fkv">€ 14.800</div><div class="fkl">Αγορές Έτους</div></div>
+          <div class="feed-kpi"><div class="fkv">Σήμερα</div><div class="fkl">Τελευταία Παράδοση</div></div>
+        </div>
+        <div class="timeline">
+          <div class="timeline-title">Ιστορικό Κινήσεων</div>
+          <div class="tl-item">
+            <div class="tl-line"><div class="tl-dot"></div><div class="tl-vline"></div></div>
+            <div class="tl-content">
+              <div class="tl-head"><span class="tl-action">📦 Παράδοση #INV-0423</span><span class="tl-date">Σήμερα 09:30</span></div>
+              <div class="tl-desc">Μοσχάρι 12kg · Χοιρινό 8kg · Κοτόπουλο 15kg · Σύνολο: € 680</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-line"><div class="tl-dot" style="background:var(--blue)"></div><div class="tl-vline"></div></div>
+            <div class="tl-content">
+              <div class="tl-head"><span class="tl-action">💳 Πληρωμή #PAY-112</span><span class="tl-date">17/06/2026</span></div>
+              <div class="tl-desc">Μετρητά · € 1.200 · Εξόφληση τιμολογίου #INV-0401</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-line"><div class="tl-dot" style="background:var(--green)"></div><div class="tl-vline"></div></div>
+            <div class="tl-content">
+              <div class="tl-head"><span class="tl-action">📦 Παράδοση #INV-0401</span><span class="tl-date">16/06/2026</span></div>
+              <div class="tl-desc">Αρνί 6kg · Μοσχάρι 10kg · Σύνολο: € 520</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function show(n) {
+  document.querySelectorAll('.idea').forEach((el,i) => el.classList.toggle('active', i===n));
+  document.querySelectorAll('.page-nav button').forEach((btn,i) => btn.classList.toggle('active', i===n));
+}
+</script>
+</body>
+</html>
