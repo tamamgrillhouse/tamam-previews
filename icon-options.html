@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAMAM — Επιλογή εικονιδίων</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#e8edf2;min-height:100vh;padding:28px 16px}
+h1{font-size:20px;font-weight:800;color:#1e293b;text-align:center;margin-bottom:6px}
+.subtitle{font-size:13px;color:#64748b;text-align:center;margin-bottom:28px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:900px;margin:0 auto}
+@media(max-width:700px){.grid{grid-template-columns:1fr;gap:24px}}
+
+/* ── SIDEBAR CARD ── */
+.card{border-radius:16px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.18)}
+.card-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#64748b;text-align:center;margin-bottom:10px}
+.sidebar{background:#1e2d3d;width:100%;padding:0}
+.s-header{padding:18px 16px 14px;border-bottom:1px solid rgba(255,255,255,.08)}
+.s-logo{font-size:16px;font-weight:700;color:#fff;letter-spacing:-.3px}
+.s-sub{font-size:10px;color:#94a3b8;margin-top:1px;text-transform:uppercase;letter-spacing:.6px}
+.s-nav{padding:6px 0}
+.s-sep{height:1px;background:rgba(255,255,255,.07);margin:4px 10px}
+
+/* Option A — Outline SVG */
+.a-link{display:flex;align-items:center;gap:10px;padding:8px 14px;color:#94a3b8;font-size:13px;border-left:3px solid transparent}
+.a-link.active{color:#fff;border-left-color:#f59e0b;background:rgba(245,158,11,.1)}
+.a-link svg{flex-shrink:0;opacity:.7}
+.a-link.active svg{opacity:1}
+
+/* Option B — Filled solid SVG */
+.b-link{display:flex;align-items:center;gap:10px;padding:8px 14px;color:#94a3b8;font-size:13px;border-radius:0}
+.b-link.active{color:#fff;background:rgba(245,158,11,.15)}
+.b-link .b-ico{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.07);flex-shrink:0}
+.b-link.active .b-ico{background:rgba(245,158,11,.25)}
+.b-link svg{flex-shrink:0}
+
+/* Option C — Colored dot + outline */
+.c-link{display:flex;align-items:center;gap:10px;padding:8px 14px;color:#94a3b8;font-size:13px;border-left:3px solid transparent}
+.c-link.active{color:#fff;border-left-color:#f59e0b;background:rgba(245,158,11,.1)}
+.c-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;background:#475569}
+.c-link.active .c-dot{background:#f59e0b}
+
+/* ── SELECT BUTTON ── */
+.pick-btn{display:block;width:100%;margin-top:10px;padding:10px;background:#f59e0b;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;text-align:center;letter-spacing:.2px;transition:background .15s}
+.pick-btn:hover{background:#d97706}
+.pick-btn.selected{background:#10b981}
+</style>
+</head>
+<body>
+
+<h1>Επιλογή εικονιδίων sidebar</h1>
+<p class="subtitle">Κοίταξε και τις 3 επιλογές και πες μου ποια σου αρέσει.</p>
+
+<div class="grid">
+
+  <!-- ═══ OPTION A: Clean Outline SVG ═══ -->
+  <div>
+    <div class="card-label">A — Καθαρές γραμμές</div>
+    <div class="card">
+      <div class="sidebar">
+        <div class="s-header">
+          <div class="s-logo">🍖 TAMAM</div>
+          <div class="s-sub">Back-Office</div>
+        </div>
+        <div class="s-nav">
+
+          <div class="a-link active">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span>Dashboard</span>
+          </div>
+          <div class="s-sep"></div>
+
+          <div class="a-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            <span>Προμηθευτές</span>
+          </div>
+          <div class="a-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+            <span>Πρώτες Ύλες</span>
+          </div>
+          <div class="a-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="11" y2="16"/></svg>
+            <span>Συνταγές</span>
+          </div>
+          <div class="a-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            <span>Έξοδα & Κέρδος</span>
+          </div>
+          <div class="a-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+            <span>Τιμές & Μενού</span>
+          </div>
+          <div class="a-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <span>OCR Τιμολογίων</span>
+          </div>
+          <div class="a-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            <span>Πρόβλεψη</span>
+          </div>
+          <div class="a-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <span>Εργατικό Κόστος</span>
+          </div>
+          <div class="a-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            <span>Αναφορές</span>
+          </div>
+          <div class="a-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span>Συμμόρφωση</span>
+          </div>
+          <div class="a-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span>Ασφάλεια</span>
+          </div>
+          <div class="a-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+            <span>Αντίγραφα</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="pick-btn" onclick="pick('A',this)">Θέλω αυτό →</button>
+  </div>
+
+  <!-- ═══ OPTION B: Filled SVG in rounded box ═══ -->
+  <div>
+    <div class="card-label">B — Solid με κουτάκι</div>
+    <div class="card">
+      <div class="sidebar">
+        <div class="s-header">
+          <div class="s-logo">🍖 TAMAM</div>
+          <div class="s-sub">Back-Office</div>
+        </div>
+        <div class="s-nav">
+
+          <div class="b-link active">
+            <div class="b-ico">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="color:#f59e0b"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            </div>
+            <span>Dashboard</span>
+          </div>
+          <div class="s-sep"></div>
+
+          <div class="b-link">
+            <div class="b-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="color:#94a3b8"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zm-.5 1.5 1.96 2.5H17V9.5h2.5zM6 18c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm13 0c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/></svg></div>
+            <span>Προμηθευτές</span>
+          </div>
+          <div class="b-link">
+            <div class="b-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="color:#94a3b8"><path d="M20.54 5.23l-1.39-1.68C18.88 3.21 18.47 3 18 3H6c-.47 0-.88.21-1.16.55L3.46 5.23C3.17 5.57 3 6.02 3 6.5V19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6.5c0-.48-.17-.93-.46-1.27zM12 17.5L6.5 12H10v-2h4v2h3.5L12 17.5zM5.12 5l.81-1h12l.94 1H5.12z"/></svg></div>
+            <span>Πρώτες Ύλες</span>
+          </div>
+          <div class="b-link">
+            <div class="b-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="color:#94a3b8"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg></div>
+            <span>Συνταγές</span>
+          </div>
+          <div class="b-link">
+            <div class="b-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="color:#94a3b8"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div>
+            <span>Έξοδα & Κέρδος</span>
+          </div>
+          <div class="b-link">
+            <div class="b-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="color:#94a3b8"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg></div>
+            <span>Τιμές & Μενού</span>
+          </div>
+          <div class="b-link">
+            <div class="b-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="color:#94a3b8"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg></div>
+            <span>OCR Τιμολογίων</span>
+          </div>
+          <div class="b-link">
+            <div class="b-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="color:#94a3b8"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg></div>
+            <span>Πρόβλεψη</span>
+          </div>
+          <div class="b-link">
+            <div class="b-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="color:#94a3b8"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
+            <span>Εργατικό Κόστος</span>
+          </div>
+          <div class="b-link">
+            <div class="b-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="color:#94a3b8"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg></div>
+            <span>Αναφορές</span>
+          </div>
+          <div class="b-link">
+            <div class="b-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="color:#94a3b8"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 4l5 2.18V11c0 3.5-2.33 6.79-5 7.93-2.67-1.14-5-4.43-5-7.93V7.18L12 5z"/></svg></div>
+            <span>Συμμόρφωση</span>
+          </div>
+          <div class="b-link">
+            <div class="b-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="color:#94a3b8"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg></div>
+            <span>Ασφάλεια</span>
+          </div>
+          <div class="b-link">
+            <div class="b-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="color:#94a3b8"><path d="M20 6h-2.18c.07-.44.18-.88.18-1.36C18 2.54 15.84.38 13.14.09 11.66-.07 10.24.38 9.12 1.28c-.36.28-.69.6-1 .95-.31-.35-.64-.67-1-.95C5.99.38 4.56-.07 3.09.09.38.38-1.78 2.54-1.78 4.64c0 .48.11.92.18 1.36H-2c-.55 0-1 .45-1 1v14c0 .55.45 1 1 1h22c.55 0 1-.45 1-1V7c0-.55-.45-1-1-1zm-9 13H5v-9h6v9zm8 0h-6v-9h6v9zM4.09 6c-.06-.36-.09-.7-.09-1 0-.93.39-1.78 1.02-2.39C5.63 2.01 6.28 1.7 7 1.7h.06c.64.01 1.26.27 1.72.73L10 3.66 11.22 2.43c.46-.46 1.08-.72 1.72-.73H13c.72 0 1.37.31 1.99.91C15.61 3.22 16 4.07 16 5c0 .3-.03.64-.09 1H4.09z"/></svg></div>
+            <span>Αντίγραφα</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="pick-btn" onclick="pick('B',this)">Θέλω αυτό →</button>
+  </div>
+
+  <!-- ═══ OPTION C: Dot only (ultra minimal) ═══ -->
+  <div>
+    <div class="card-label">C — Τελεία μόνο (minimal)</div>
+    <div class="card">
+      <div class="sidebar">
+        <div class="s-header">
+          <div class="s-logo">🍖 TAMAM</div>
+          <div class="s-sub">Back-Office</div>
+        </div>
+        <div class="s-nav">
+          <div class="c-link active"><span class="c-dot"></span><span>Dashboard</span></div>
+          <div class="s-sep"></div>
+          <div class="c-link"><span class="c-dot"></span><span>Προμηθευτές</span></div>
+          <div class="c-link"><span class="c-dot"></span><span>Πρώτες Ύλες</span></div>
+          <div class="c-link"><span class="c-dot"></span><span>Συνταγές</span></div>
+          <div class="c-link"><span class="c-dot"></span><span>Έξοδα & Κέρδος</span></div>
+          <div class="c-link"><span class="c-dot"></span><span>Τιμές & Μενού</span></div>
+          <div class="c-link"><span class="c-dot"></span><span>OCR Τιμολογίων</span></div>
+          <div class="c-link"><span class="c-dot"></span><span>Πρόβλεψη</span></div>
+          <div class="c-link"><span class="c-dot"></span><span>Εργατικό Κόστος</span></div>
+          <div class="c-link"><span class="c-dot"></span><span>Αναφορές</span></div>
+          <div class="c-link"><span class="c-dot"></span><span>Συμμόρφωση</span></div>
+          <div class="c-link"><span class="c-dot"></span><span>Ασφάλεια</span></div>
+          <div class="c-link"><span class="c-dot"></span><span>Αντίγραφα</span></div>
+        </div>
+      </div>
+    </div>
+    <button class="pick-btn" onclick="pick('C',this)">Θέλω αυτό →</button>
+  </div>
+
+</div>
+
+<div id="result" style="display:none;text-align:center;margin-top:24px;font-size:15px;font-weight:700;color:#10b981;padding:16px;background:#f0fdf4;border-radius:12px;max-width:900px;margin-left:auto;margin-right:auto"></div>
+
+<script>
+function pick(opt, btn){
+  document.querySelectorAll('.pick-btn').forEach(b=>{ b.textContent='Θέλω αυτό →'; b.style.background='#f59e0b' });
+  btn.textContent='✓ Επιλέχτηκε!';
+  btn.style.background='#10b981';
+  const labels={A:'A — Καθαρές γραμμές (outline SVG)',B:'B — Solid με κουτάκι',C:'C — Τελεία μόνο (minimal)'};
+  const r=document.getElementById('result');
+  r.style.display='block';
+  r.textContent='✅ Επέλεξες: '+labels[opt]+' — Πες το στο Claude Code και το αλλάζουμε αμέσως!';
+}
+</script>
+</body>
+</html>
