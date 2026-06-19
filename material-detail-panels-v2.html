@@ -215,6 +215,51 @@ input:focus,select:focus{border-color:var(--accent)}
     <strong>Α — Tabs + Sidebar:</strong> Αριστερά κολλητή πλαϊνή μπάρα με στατιστικά & συνδεδεμένοι προμηθευτές. Δεξιά: tabs για κάθε ενέργεια. Βλέπεις πάντα τα στοιχεία ενώ γεμίζεις φόρμα.
     <div class="tag-grid"><span class="tag green">✓ Δύο πράγματα ταυτόχρονα</span><span class="tag green">✓ Tabs = εύκολη πλοήγηση</span><span class="tag orange">↓ Θέλει φαρδύ οθόνη</span></div>
   </div>
+  <!-- sub-switcher για Επεξεργασία -->
+  <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+    <span style="font-size:12px;font-weight:700;color:var(--muted)">✏️ Επεξεργασία — δες και τις 2 παραλλαγές:</span>
+    <button class="sw-btn active" style="font-size:12px;padding:5px 12px" onclick="aEditMode('inline',this)">Inline Tab (μέσα στη σελίδα)</button>
+    <button class="sw-btn" style="font-size:12px;padding:5px 12px" onclick="aEditMode('separate',this)">Ξεχωριστή Σελίδα</button>
+    <span style="font-size:11px;color:var(--muted);margin-left:4px" id="a-edit-hint">→ Ο tab «✏️ Επεξεργασία» είναι στη μπάρα δεξιά</span>
+  </div>
+  <!-- mockup ξεχωριστής σελίδας -->
+  <div id="a-separate-page" style="display:none;margin-bottom:16px">
+    <div style="background:#e0e7ff;border:2px dashed #6366f1;border-radius:12px;padding:4px 12px 4px;margin-bottom:8px;font-size:11px;color:#4338ca;font-weight:700">🖥️ Αυτό είναι mock της ξεχωριστής σελίδας /materials/5/edit — ξεχωριστή διεύθυνση URL, «Πίσω» επιστρέφει στην καρτέλα</div>
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border)">
+        <div style="width:36px;height:36px;border-radius:9px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900">Κ</div>
+        <div>
+          <div style="font-size:16px;font-weight:800">Επεξεργασία: Κοτόπουλο Φιλέτο</div>
+          <div style="font-size:11px;color:var(--muted)">Αλλαγές αποθηκεύονται μόνο μετά το «Αποθήκευση»</div>
+        </div>
+        <a style="margin-left:auto;text-decoration:none" class="btn btn-s btn-sm">← Πίσω στην Καρτέλα</a>
+      </div>
+      <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Βασικά Στοιχεία</div>
+      <div class="frow frow-2" style="margin-bottom:10px">
+        <div><label class="fl">Όνομα *</label><input type="text" value="Κοτόπουλο Φιλέτο"></div>
+        <div><label class="fl">Κατηγορία</label><select><option>Κρέατα</option><option>Λαχανικά</option><option>Γαλακτοκομικά</option></select></div>
+      </div>
+      <div class="frow frow-3" style="margin-bottom:10px">
+        <div><label class="fl">Μονάδα Μέτρησης *</label><input type="text" value="kg"></div>
+        <div><label class="fl">Ελάχ. Απόθεμα (kg)</label><input type="number" value="3"></div>
+        <div><label class="fl">Μέγ. Απόθεμα (kg)</label><input type="number" value="6"></div>
+      </div>
+      <div class="frow frow-2" style="margin-bottom:10px">
+        <div><label class="fl">Χώρος Αποθήκευσης</label><select><option>Ψυγείο</option><option>Αποθήκη</option><option>Καταψύκτης</option><option>Ράφι</option></select></div>
+        <div><label class="fl">ΦΠΑ</label><select><option>13%</option><option>24%</option><option>6%</option></select></div>
+      </div>
+      <div class="frow frow-1" style="margin-bottom:10px"><div><label class="fl">Σημειώσεις</label><input type="text" placeholder="π.χ. ψύχεται στους 4°C"></div></div>
+      <div style="display:flex;gap:6px;align-items:center;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--border)">
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox"> Είναι Έτοιμο Προϊόν</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox"> Ενεργό</label>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-p">💾 Αποθήκευση Αλλαγών</button>
+        <button class="btn btn-s">← Ακύρωση (πίσω)</button>
+        <button class="btn btn-d" style="margin-left:auto">🗑 Αρχειοθέτηση Υλικού</button>
+      </div>
+    </div>
+  </div>
   <div class="a-layout">
     <!-- SIDEBAR -->
     <div class="a-sidebar">
@@ -279,6 +324,7 @@ input:focus,select:focus{border-color:var(--accent)}
       <div class="card">
         <div class="tab-bar">
           <button class="tab-btn act" onclick="aTab('a-tab-info',this)">📋 Πληροφορίες</button>
+          <button class="tab-btn" id="a-edit-tab" onclick="aTab('a-tab-edit',this)">✏️ Επεξεργασία</button>
           <button class="tab-btn" onclick="aTab('a-tab-purchase',this)">📦 Παραλαβή</button>
           <button class="tab-btn" onclick="aTab('a-tab-loss',this)">📉 Ζημιά</button>
           <button class="tab-btn" onclick="aTab('a-tab-adj',this)">⚙️ Διόρθωση</button>
@@ -300,6 +346,27 @@ input:focus,select:focus{border-color:var(--accent)}
           <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border)">
             <label class="fl">Σημειώσεις</label>
             <div style="color:var(--muted);font-size:13px">—</div>
+          </div>
+        </div>
+
+        <!-- TAB: EDIT (inline) -->
+        <div id="a-tab-edit" class="tab-panel">
+          <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Βασικά Στοιχεία</div>
+          <div class="frow frow-2"><div><label class="fl">Όνομα *</label><input type="text" value="Κοτόπουλο Φιλέτο"></div><div><label class="fl">Κατηγορία</label><select><option>Κρέατα</option><option>Λαχανικά</option><option>Γαλακτοκομικά</option></select></div></div>
+          <div class="frow frow-3"><div><label class="fl">Μονάδα Μέτρησης *</label><input type="text" value="kg"></div><div><label class="fl">Ελάχ. Απόθεμα (kg)</label><input type="number" value="3"></div><div><label class="fl">Μέγ. Απόθεμα (kg)</label><input type="number" value="6"></div></div>
+          <div class="frow frow-2"><div><label class="fl">Χώρος Αποθήκευσης</label><select><option>Ψυγείο</option><option>Αποθήκη</option><option>Καταψύκτης</option><option>Ράφι</option></select></div><div><label class="fl">ΦΠΑ</label><select><option>13%</option><option>24%</option><option>6%</option></select></div></div>
+          <div class="frow frow-1"><div><label class="fl">Σημειώσεις</label><input type="text" placeholder="π.χ. ψύχεται στους 4°C"></div></div>
+          <div style="display:flex;gap:10px;align-items:center;margin-bottom:14px">
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox"> Είναι Έτοιμο Προϊόν</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" checked> Ενεργό</label>
+          </div>
+          <div style="display:flex;gap:8px;padding-top:10px;border-top:1px solid var(--border)">
+            <button class="btn btn-p">💾 Αποθήκευση Αλλαγών</button>
+            <button onclick="aTab('a-tab-info', document.querySelector(\'#panel-a .tab-btn\'))" class="btn btn-s">Ακύρωση</button>
+            <button class="btn btn-d" style="margin-left:auto">🗑 Αρχειοθέτηση</button>
+          </div>
+          <div style="margin-top:10px;background:#fff7ed;border:1px solid #fed7aa;border-radius:7px;padding:8px 12px;font-size:11px;color:#92400e">
+            💡 Σε αυτή την παραλλαγή η επεξεργασία γίνεται <strong>μέσα στη σελίδα</strong> — το sidebar με το απόθεμα & τους προμηθευτές παραμένει ορατό αριστερά.
           </div>
         </div>
 
@@ -793,6 +860,25 @@ function showPanel(id,btn){
   document.querySelectorAll('.sw-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('panel-'+id).classList.add('active');
   btn.classList.add('active');
+}
+
+// ── Α: edit mode sub-switcher ──
+function aEditMode(mode, btn) {
+  document.querySelectorAll('#panel-a .sw-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const sep = document.getElementById('a-separate-page');
+  const tab = document.getElementById('a-edit-tab');
+  const layout = document.querySelector('#panel-a .a-layout');
+  const hint = document.getElementById('a-edit-hint');
+  if (mode === 'separate') {
+    sep.style.display = 'block';
+    layout.style.display = 'none';
+    hint.textContent = '→ Δες πιο κάτω το mock της ξεχωριστής σελίδας';
+  } else {
+    sep.style.display = 'none';
+    layout.style.display = 'grid';
+    hint.textContent = '→ Ο tab «✏️ Επεξεργασία» είναι στη μπάρα δεξιά';
+  }
 }
 
 // ── Α ──
