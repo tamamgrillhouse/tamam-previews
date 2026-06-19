@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Καρτέλα Υλικού — 5 Προτάσεις</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f1f5f9;color:#1e293b;font-size:14px}
+:root{--accent:#f97316;--accent2:#ea580c;--green:#16a34a;--red:#dc2626;--blue:#0369a1;--yellow:#d97706;--border:#e2e8f0;--muted:#64748b;--white:#fff;--radius:10px;--shadow:0 2px 8px rgba(0,0,0,.08)}
+
+/* ── SWITCHER ── */
+.switcher{background:#1e293b;padding:14px 20px;display:flex;gap:8px;align-items:center;position:sticky;top:0;z-index:100;flex-wrap:wrap}
+.switcher-label{color:#94a3b8;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-right:4px}
+.sw-btn{padding:7px 14px;border-radius:8px;border:1.5px solid #475569;background:transparent;color:#94a3b8;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.sw-btn:hover{border-color:#f97316;color:#f97316}
+.sw-btn.active{background:#f97316;border-color:#f97316;color:#fff}
+.sw-badge{display:inline-block;background:#334155;border-radius:5px;padding:2px 6px;font-size:10px;color:#94a3b8;margin-left:4px}
+.sw-btn.active .sw-badge{background:#ea580c;color:#fff}
+.panel{display:none;padding:20px;max-width:1100px;margin:0 auto}
+.panel.active{display:block}
+
+/* ── SHARED COMPONENTS ── */
+.badge{display:inline-flex;align-items:center;gap:4px;border-radius:7px;padding:3px 9px;font-size:11px;font-weight:700}
+.badge-cat{background:#f1f5f9;border:1px solid var(--border);color:var(--muted)}
+.badge-unit{background:#fff7ed;border:1px solid #fed7aa;color:#c2410c}
+.badge-loc{background:#f0f9ff;border:1px solid #bae6fd;color:var(--blue)}
+.badge-ok{background:#f0fdf4;border:1px solid #86efac;color:#166534}
+.badge-warn{background:#fffbeb;border:1px solid #fcd34d;color:var(--yellow)}
+.badge-low{background:#fef2f2;border:1px solid #fca5a5;color:var(--red)}
+.btn{padding:9px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .15s;display:inline-flex;align-items:center;gap:6px;min-height:40px}
+.btn-p{background:var(--accent);color:#fff}.btn-p:hover{background:var(--accent2)}
+.btn-s{background:#fff;border:1.5px solid var(--border);color:#374151}.btn-s:hover{border-color:var(--accent);color:var(--accent)}
+.btn-d{background:#fff;border:1.5px solid #fca5a5;color:var(--red)}.btn-d:hover{background:#fef2f2}
+.btn-sm{padding:5px 10px;font-size:11px;min-height:30px}
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px}
+.card-title{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;display:flex;align-items:center;gap:7px}
+label.fl{display:block;font-size:11px;font-weight:600;color:var(--muted);margin-bottom:4px}
+input[type=text],input[type=number],input[type=date],select,textarea{width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;background:#fff;outline:none;font-family:inherit}
+input:focus,select:focus{border-color:var(--accent)}
+.frow{display:grid;gap:10px;margin-bottom:10px}
+.frow-2{grid-template-columns:1fr 1fr}
+.frow-3{grid-template-columns:1fr 1fr 1fr}
+.frow-1{grid-template-columns:1fr}
+.hint{font-size:11px;color:var(--muted);margin-top:3px}
+.mov-in{color:#166534;font-weight:700}
+.mov-out{color:var(--red);font-weight:700}
+.mov-adj{color:var(--blue);font-weight:700}
+
+/* stock gauge */
+.gauge-wrap{position:relative;width:90px;height:90px}
+.gauge-wrap svg{transform:rotate(-90deg)}
+.gauge-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:19px;font-weight:800;line-height:1;color:#16a34a}
+.gauge-unit{font-size:10px;font-weight:600;color:var(--muted)}
+
+/* ════════════════════════════════
+   ΠΡΟΤΑΣΗ Α — TABS + SIDEBAR
+   ════════════════════════════════ */
+.a-layout{display:grid;grid-template-columns:260px 1fr;gap:16px;align-items:start}
+.a-sidebar{position:sticky;top:70px}
+.a-stat{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
+.a-stat:last-child{border-bottom:none}
+.a-stat-label{font-size:11px;color:var(--muted);font-weight:600}
+.a-stat-val{font-size:13px;font-weight:700}
+.tab-bar{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:16px}
+.tab-btn{padding:9px 16px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s}
+.tab-btn:hover{color:var(--accent)}
+.tab-btn.act{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-panel{display:none}.tab-panel.act{display:block}
+.sup-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f8fafc}
+.sup-row:last-child{border-bottom:none}
+
+/* ════════════════════════════════
+   ΠΡΟΤΑΣΗ Β — HERO STOCK + CARDS
+   ════════════════════════════════ */
+.b-hero{background:linear-gradient(135deg,#1e293b 0%,#0f172a 100%);border-radius:14px;padding:24px;margin-bottom:16px;color:#fff;display:flex;align-items:center;gap:24px;position:relative;overflow:hidden}
+.b-hero::before{content:'';position:absolute;right:-30px;top:-30px;width:160px;height:160px;background:rgba(249,115,22,.15);border-radius:50%}
+.b-hero-left{flex:1}
+.b-hero-name{font-size:22px;font-weight:800;margin-bottom:6px}
+.b-hero-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.b-hero-badge{background:rgba(255,255,255,.12);border-radius:6px;padding:3px 8px;font-size:11px;font-weight:600}
+.b-context{background:rgba(255,255,255,.08);border-radius:8px;padding:10px 14px;font-size:12px;color:#cbd5e1;border-left:3px solid var(--accent)}
+.b-context-row{display:flex;gap:16px;flex-wrap:wrap}
+.b-ctx-item{display:flex;align-items:center;gap:5px}
+.b-ctx-icon{font-size:14px}
+.b-hero-right{text-align:center;flex-shrink:0}
+.b-stock-big{font-size:52px;font-weight:900;line-height:1;color:#4ade80}
+.b-stock-unit{font-size:14px;color:#94a3b8;margin-top:2px}
+.b-stock-status{margin-top:6px}
+.b-action-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.b-acard{background:#fff;border:2px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:all .2s;text-align:left}
+.b-acard:hover,.b-acard.open{border-color:var(--accent);box-shadow:0 0 0 3px rgba(249,115,22,.12)}
+.b-acard-icon{font-size:24px;margin-bottom:8px}
+.b-acard-title{font-size:13px;font-weight:700;margin-bottom:3px}
+.b-acard-desc{font-size:11px;color:var(--muted)}
+.b-form-area{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px;display:none}
+.b-form-area.open{display:block}
+.b-trend{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:2px 7px;border-radius:5px}
+.trend-up{background:#fef2f2;color:var(--red)}
+.trend-dn{background:#f0fdf4;color:#166534}
+
+/* ════════════════════════════════
+   ΠΡΟΤΑΣΗ Γ — FLOATING ACTION BAR
+   ════════════════════════════════ */
+.c-header{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:12px;display:flex;align-items:center;gap:16px}
+.c-avatar{width:46px;height:46px;border-radius:11px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;flex-shrink:0}
+.c-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+.c-stat{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center}
+.c-stat-val{font-size:22px;font-weight:800;margin-bottom:3px}
+.c-stat-label{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase}
+.c-timeline{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 20px}
+.c-tl-item{display:flex;gap:14px;padding:10px 0;border-bottom:1px solid #f8fafc;position:relative}
+.c-tl-item:last-child{border-bottom:none}
+.c-tl-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;margin-top:2px}
+.dot-in{background:#dcfce7;color:#166534}
+.dot-out{background:#fef2f2;color:var(--red)}
+.dot-adj{background:#dbeafe;color:var(--blue)}
+.c-tl-main{flex:1}
+.c-tl-type{font-size:12px;font-weight:700}
+.c-tl-meta{font-size:11px;color:var(--muted)}
+.c-tl-qty{font-weight:800;font-size:14px}
+.c-fab{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);display:flex;gap:8px;background:#1e293b;padding:10px 14px;border-radius:50px;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.c-fab-btn{padding:8px 16px;border-radius:30px;border:none;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px}
+.c-fab-btn:hover{transform:translateY(-1px)}
+.c-sheet{display:none;position:fixed;bottom:0;left:0;right:0;background:#fff;border-radius:20px 20px 0 0;padding:20px;box-shadow:0 -8px 32px rgba(0,0,0,.15);z-index:200;max-height:70vh;overflow-y:auto}
+.c-sheet.open{display:block}
+.c-sheet-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px}
+.c-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:199}
+.c-overlay.open{display:block}
+
+/* ════════════════════════════════
+   ΠΡΟΤΑΣΗ Δ — WIZARD ACTIONS
+   ════════════════════════════════ */
+.d-header{display:flex;align-items:center;gap:16px;background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:12px}
+.d-stock-bar{background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px 20px;margin-bottom:12px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.d-progress{flex:1;height:10px;background:#f1f5f9;border-radius:5px;overflow:hidden;min-width:120px}
+.d-progress-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,#4ade80,#16a34a)}
+.d-selector{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.d-sel-btn{background:#fff;border:2px solid var(--border);border-radius:12px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .2s}
+.d-sel-btn:hover{border-color:#cbd5e1}
+.d-sel-btn.sel{border-color:var(--accent);background:#fff7ed}
+.d-sel-icon{font-size:22px;margin-bottom:6px}
+.d-sel-label{font-size:12px;font-weight:700;margin-bottom:3px}
+.d-sel-desc{font-size:10px;color:var(--muted)}
+.d-wizard{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px}
+.d-steps{display:flex;gap:0;margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:14px}
+.d-step{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--muted);flex:1}
+.d-step-num{width:24px;height:24px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
+.d-step.cur .d-step-num{background:var(--accent);color:#fff}
+.d-step.cur{color:var(--accent)}
+.d-step.done .d-step-num{background:#16a34a;color:#fff}
+.d-step.done{color:#16a34a}
+.d-step-sep{flex:1;height:1px;background:var(--border);margin:0 8px}
+.d-smart-hint{background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:10px 14px;font-size:12px;color:#92400e;margin-bottom:12px;display:flex;gap:8px}
+.d-total-row{background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.d-total-label{font-size:12px;color:#166534;font-weight:600}
+.d-total-val{font-size:16px;font-weight:800;color:#16a34a}
+
+/* ════════════════════════════════
+   ΠΡΟΤΑΣΗ Ε — COMPACT POWER-USER
+   ════════════════════════════════ */
+.e-topbar{background:#fff;border-bottom:2px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:12px;margin-bottom:12px;border-radius:12px 12px 0 0;border:1px solid var(--border)}
+.e-name{font-size:16px;font-weight:800;flex:1}
+.e-quick{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.e-qcard{background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:12px}
+.e-qcard-head{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.e-qcard-action{font-size:11px;color:var(--accent);font-weight:700;cursor:pointer}
+.e-quick-input{display:flex;gap:6px;align-items:center}
+.e-quick-input input{flex:1;padding:7px 9px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-weight:700}
+.e-table{width:100%;border-collapse:collapse}
+.e-table th{background:#f8fafc;padding:7px 10px;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;border-bottom:2px solid var(--border);text-align:left}
+.e-table td{padding:7px 10px;border-bottom:1px solid #f1f5f9;font-size:12px;vertical-align:middle}
+.e-table tr:hover td{background:#fafafa}
+.e-pill{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700}
+.pill-in{background:#dcfce7;color:#166534}
+.pill-out{background:#fef2f2;color:var(--red)}
+.pill-adj{background:#dbeafe;color:var(--blue)}
+.e-inline-form{background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:8px;display:none}
+.e-inline-form.open{display:block}
+.e-inline-row{display:flex;gap:8px;align-items:flex-end}
+.e-inline-row .field{flex:1}
+.e-kpi{background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:12px;display:flex;gap:16px;flex-wrap:wrap}
+.e-kpi-item{display:flex;align-items:center;gap:8px}
+.e-kpi-icon{font-size:18px}
+.e-kpi-info{line-height:1.3}
+.e-kpi-val{font-size:14px;font-weight:800}
+.e-kpi-lbl{font-size:10px;color:var(--muted);font-weight:600}
+
+/* proposal description */
+.prop-desc{background:#fff;border-left:4px solid var(--accent);padding:12px 16px;border-radius:0 8px 8px 0;margin-bottom:20px;font-size:12px;color:var(--muted)}
+.prop-desc strong{color:#1e293b}
+.tag-grid{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.tag{background:#f1f5f9;border-radius:5px;padding:2px 8px;font-size:11px;color:var(--muted);font-weight:600}
+.tag.green{background:#dcfce7;color:#166534}
+.tag.orange{background:#fff7ed;color:#c2410c}
+</style>
+</head>
+<body>
+
+<!-- SWITCHER -->
+<div class="switcher">
+  <span class="switcher-label">Πρόταση</span>
+  <button class="sw-btn active" onclick="showPanel('a',this)">Α — Tabs + Sidebar <span class="sw-badge">Οργανωμένο</span></button>
+  <button class="sw-btn" onclick="showPanel('b',this)">Β — Hero Stock <span class="sw-badge">Οπτικό</span></button>
+  <button class="sw-btn" onclick="showPanel('c',this)">Γ — Floating Bar <span class="sw-badge">Ιστορικό-πρώτα</span></button>
+  <button class="sw-btn" onclick="showPanel('d',this)">Δ — Wizard <span class="sw-badge">Έξυπνο</span></button>
+  <button class="sw-btn" onclick="showPanel('e',this)">Ε — Compact <span class="sw-badge">Power-user</span></button>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ΠΡΟΤΑΣΗ Α — TABS + SIDEBAR
+     ═══════════════════════════════════════════ -->
+<div id="panel-a" class="panel active">
+  <div class="prop-desc">
+    <strong>Α — Tabs + Sidebar:</strong> Αριστερά κολλητή πλαϊνή μπάρα με στατιστικά & συνδεδεμένοι προμηθευτές. Δεξιά: tabs για κάθε ενέργεια. Βλέπεις πάντα τα στοιχεία ενώ γεμίζεις φόρμα.
+    <div class="tag-grid"><span class="tag green">✓ Δύο πράγματα ταυτόχρονα</span><span class="tag green">✓ Tabs = εύκολη πλοήγηση</span><span class="tag orange">↓ Θέλει φαρδύ οθόνη</span></div>
+  </div>
+  <div class="a-layout">
+    <!-- SIDEBAR -->
+    <div class="a-sidebar">
+      <div class="card" style="margin-bottom:12px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+          <div style="width:46px;height:46px;border-radius:11px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900">Κ</div>
+          <div>
+            <div style="font-size:15px;font-weight:800">Κοτόπουλο Φιλέτο</div>
+            <div style="display:flex;gap:5px;margin-top:4px;flex-wrap:wrap">
+              <span class="badge badge-cat">Κρέατα</span>
+              <span class="badge badge-unit">kg</span>
+              <span class="badge badge-loc">📍 Ψυγείο</span>
+            </div>
+          </div>
+        </div>
+        <!-- stock gauge -->
+        <div style="text-align:center;padding:10px 0 14px">
+          <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Τρέχον Απόθεμα</div>
+          <div style="font-size:42px;font-weight:900;color:#16a34a;line-height:1">4.5</div>
+          <div style="font-size:14px;color:var(--muted);font-weight:600">kg</div>
+          <span class="badge badge-ok" style="margin-top:8px">🟢 OK</span>
+          <div style="background:#f1f5f9;border-radius:8px;height:8px;margin-top:12px;overflow:hidden">
+            <div style="width:75%;height:100%;background:linear-gradient(90deg,#4ade80,#16a34a);border-radius:8px"></div>
+          </div>
+          <div style="font-size:10px;color:var(--muted);margin-top:4px">Ελάχ. 3 kg · Μέγ. 6 kg</div>
+        </div>
+        <div class="a-stat"><span class="a-stat-label">Τελ. Παραλαβή</span><span class="a-stat-val">18-06-2026</span></div>
+        <div class="a-stat"><span class="a-stat-label">Μέση Τιμή</span><span class="a-stat-val">€5.20 / kg</span></div>
+        <div class="a-stat"><span class="a-stat-label">Αξία Αποθέματος</span><span class="a-stat-val" style="color:#16a34a">€23.40</span></div>
+        <div class="a-stat"><span class="a-stat-label">Χρήση / εβδ.</span><span class="a-stat-val">~8.5 kg</span></div>
+        <div class="a-stat"><span class="a-stat-label">Αρκεί για</span><span class="a-stat-val" style="color:var(--yellow)">~3.7 μέρες</span></div>
+        <div style="margin-top:14px;display:flex;gap:6px">
+          <a class="btn btn-s btn-sm" style="flex:1;justify-content:center;text-decoration:none">✏️ Επεξεργασία</a>
+          <button class="btn btn-d btn-sm">🗑</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">📊 Προμηθευτές</div>
+        <div class="sup-row">
+          <div>
+            <div style="font-weight:700;font-size:12px">★ Παπάς Χρήστος <span style="font-size:9px;background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;border-radius:4px;padding:1px 5px">Προτιμώμενος</span></div>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px">Τιμολόγιο: €5.20/kg · Προσφ: €5.00/kg</div>
+          </div>
+          <span style="font-size:13px;font-weight:800;color:#166534">€5.00 ⭐</span>
+        </div>
+        <div class="sup-row">
+          <div>
+            <div style="font-weight:700;font-size:12px">ΑΦΟΙ Κιβρόγλου</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px">Τιμολόγιο: €5.50/kg</div>
+          </div>
+          <span style="font-size:13px;font-weight:700;color:var(--muted)">€5.50</span>
+        </div>
+        <button onclick="aToggle('a-add-sup')" class="btn btn-s btn-sm" style="margin-top:10px;width:100%;justify-content:center">+ Σύνδεση Προμηθευτή</button>
+        <div id="a-add-sup" class="e-inline-form">
+          <div class="frow frow-1"><div><label class="fl">Προμηθευτής *</label><select><option>— Επίλεξε —</option><option>Νέος Α.Ε.</option></select></div></div>
+          <div style="display:flex;gap:6px;margin-top:6px"><button class="btn btn-p btn-sm">✅ Σύνδεση</button><button onclick="aToggle('a-add-sup')" class="btn btn-s btn-sm">Ακύρωση</button></div>
+        </div>
+      </div>
+    </div>
+    <!-- RIGHT PANEL -->
+    <div>
+      <div class="card">
+        <div class="tab-bar">
+          <button class="tab-btn act" onclick="aTab('a-tab-info',this)">📋 Πληροφορίες</button>
+          <button class="tab-btn" onclick="aTab('a-tab-purchase',this)">📦 Παραλαβή</button>
+          <button class="tab-btn" onclick="aTab('a-tab-loss',this)">📉 Ζημιά</button>
+          <button class="tab-btn" onclick="aTab('a-tab-adj',this)">⚙️ Διόρθωση</button>
+          <button class="tab-btn" onclick="aTab('a-tab-hist',this)">📋 Ιστορικό</button>
+        </div>
+
+        <!-- TAB: INFO -->
+        <div id="a-tab-info" class="tab-panel act">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div><label class="fl">Όνομα</label><div style="font-weight:700">Κοτόπουλο Φιλέτο</div></div>
+            <div><label class="fl">Κατηγορία</label><div style="font-weight:700">Κρέατα</div></div>
+            <div><label class="fl">Μονάδα Μέτρησης</label><div style="font-weight:700">kg</div></div>
+            <div><label class="fl">Χώρος Αποθήκευσης</label><div style="font-weight:700">Ψυγείο</div></div>
+            <div><label class="fl">Ελάχιστο Απόθεμα</label><div style="font-weight:700">3 kg</div></div>
+            <div><label class="fl">Μέγιστο Απόθεμα</label><div style="font-weight:700">6 kg</div></div>
+            <div><label class="fl">ΦΠΑ Κατηγορία</label><div style="font-weight:700">13%</div></div>
+            <div><label class="fl">Έτοιμο Προϊόν;</label><div style="font-weight:700">Όχι</div></div>
+          </div>
+          <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border)">
+            <label class="fl">Σημειώσεις</label>
+            <div style="color:var(--muted);font-size:13px">—</div>
+          </div>
+        </div>
+
+        <!-- TAB: PURCHASE -->
+        <div id="a-tab-purchase" class="tab-panel">
+          <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:10px 14px;font-size:12px;color:#166534;margin-bottom:14px">
+            💡 <strong>Τελ. τιμή:</strong> €5.20/kg από Παπάς Χρήστος (18-06-2026). Προτεινόμενη ποσότητα: <strong>1.5 kg</strong> (για να φτάσεις στα 6 kg μέγιστο).
+          </div>
+          <div class="frow frow-3"><div><label class="fl">Ποσότητα (kg) *</label><input type="number" placeholder="1.5"></div><div><label class="fl">Τιμή / kg (€)</label><input type="number" placeholder="5.20"></div><div><label class="fl">Ημερομηνία</label><input type="date" value="2026-06-20"></div></div>
+          <div class="frow frow-2"><div><label class="fl">Προμηθευτής</label><select><option>Παπάς Χρήστος ✓</option><option>ΑΦΟΙ Κιβρόγλου</option></select></div><div><label class="fl">Αρ. Τιμολογίου</label><input type="text" placeholder="προαιρετικό"></div></div>
+          <div class="frow frow-2"><div><label class="fl">Ημ/νία Λήξης</label><input type="date"></div><div><label class="fl">Χώρος</label><select><option>Ψυγείο</option><option>Αποθήκη</option><option>Καταψύκτης</option></select></div></div>
+          <div class="frow frow-1"><div><label class="fl">Σημειώσεις</label><input type="text" placeholder="π.χ. παρτίδα πρωινής παραγωγής"></div></div>
+          <div style="display:flex;gap:8px"><button class="btn btn-p">✅ Καταχώρηση Παραλαβής</button><button class="btn btn-s">Ακύρωση</button></div>
+        </div>
+
+        <!-- TAB: LOSS -->
+        <div id="a-tab-loss" class="tab-panel">
+          <div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:10px 14px;font-size:12px;color:#991b1b;margin-bottom:14px">
+            ⚠️ Η καταγραφή ζημιάς <strong>μειώνει</strong> το απόθεμα και καταγράφεται στο ιστορικό για λόγους HACCP.
+          </div>
+          <div class="frow frow-3"><div><label class="fl">Ποσότητα (kg) *</label><input type="number" placeholder="π.χ. 0.5"></div><div><label class="fl">Αιτία *</label><select><option>Φθορά / Αλλοίωση</option><option>Ληγμένο</option><option>Σπασμένο / Χυμένο</option><option>Κλοπή</option><option>Άλλο</option></select></div><div><label class="fl">Ημερομηνία</label><input type="date" value="2026-06-20"></div></div>
+          <div class="frow frow-1"><div><label class="fl">Περιγραφή / Σημειώσεις</label><input type="text" placeholder="π.χ. βρέθηκε αλλοιωμένο πρωί"></div></div>
+          <div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;padding:10px;font-size:12px;color:#92400e;margin-bottom:12px">📊 Εκτιμώμενη αξία ζημιάς: <strong>€0.00</strong> (θα υπολογιστεί αυτόματα)</div>
+          <div style="display:flex;gap:8px"><button class="btn btn-p">📉 Καταχώρηση Ζημιάς</button><button class="btn btn-s">Ακύρωση</button></div>
+        </div>
+
+        <!-- TAB: ADJUST -->
+        <div id="a-tab-adj" class="tab-panel">
+          <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:10px 14px;font-size:12px;color:#0369a1;margin-bottom:14px">
+            ℹ️ <strong>Χειροκίνητη Διόρθωση</strong> — χρησιμοποιείται μετά από απογραφή. Το σύστημα θα καταγράψει <em>τη διαφορά</em> αυτόματα.
+          </div>
+          <div style="background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;text-align:center">
+            <div style="font-size:11px;color:var(--muted);font-weight:700;margin-bottom:4px">ΤΡΕΧΟΝ ΑΠΟΘΕΜΑ</div>
+            <div style="font-size:36px;font-weight:900;color:#16a34a">4.5 kg</div>
+          </div>
+          <div class="frow frow-2"><div><label class="fl">Νέο Απόθεμα (kg) *</label><input type="number" placeholder="4.5" value="4.5" id="a-newqty" oninput="aCalcDiff()"></div><div><label class="fl">Τύπος Απογραφής</label><select><option>Απογραφή Βραδιού</option><option>Απογραφή Πρωινού</option><option>Έκτακτη Καταμέτρηση</option></select></div></div>
+          <div id="a-diff-hint" style="background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;padding:10px;font-size:12px;color:#92400e;margin-bottom:12px;display:none"></div>
+          <div class="frow frow-1"><div><label class="fl">Αιτιολόγηση</label><input type="text" placeholder="π.χ. Απογραφή Ιουνίου 2026"></div></div>
+          <div style="display:flex;gap:8px"><button class="btn btn-p">✅ Αποθήκευση Διόρθωσης</button><button class="btn btn-s">Ακύρωση</button></div>
+        </div>
+
+        <!-- TAB: HISTORY -->
+        <div id="a-tab-hist" class="tab-panel">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <span style="font-size:12px;color:var(--muted)">Τελευταίες 30 κινήσεις</span>
+            <select style="width:auto;padding:5px 8px;font-size:11px"><option>Όλοι οι τύποι</option><option>Παραλαβές</option><option>Ζημιές</option><option>Διορθώσεις</option></select>
+          </div>
+          <table class="e-table">
+            <thead><tr><th>Ημ/νία</th><th>Τύπος</th><th>Κίνηση</th><th>Τιμή</th><th>Προμηθευτής</th><th>Σημ.</th></tr></thead>
+            <tbody>
+              <tr><td>20-06-2026</td><td><span class="e-pill pill-in">↑ Παραλαβή</span></td><td class="mov-in">+3.0 kg</td><td>€5.20</td><td>Παπάς Χρήστος</td><td style="color:var(--muted)">—</td></tr>
+              <tr><td>18-06-2026</td><td><span class="e-pill pill-out">↓ Ζημιά</span></td><td class="mov-out">−0.3 kg</td><td>—</td><td>—</td><td style="color:var(--muted)">Αλλοίωση</td></tr>
+              <tr><td>15-06-2026</td><td><span class="e-pill pill-in">↑ Παραλαβή</span></td><td class="mov-in">+5.0 kg</td><td>€5.20</td><td>Παπάς Χρήστος</td><td style="color:var(--muted)">Τιμολ. #4821</td></tr>
+              <tr><td>10-06-2026</td><td><span class="e-pill pill-adj">⚙ Διόρθωση</span></td><td class="mov-adj">−0.5 kg</td><td>—</td><td>—</td><td style="color:var(--muted)">Απογραφή Ιουνίου</td></tr>
+              <tr><td>08-06-2026</td><td><span class="e-pill pill-in">↑ Παραλαβή</span></td><td class="mov-in">+4.0 kg</td><td>€5.40</td><td>ΑΦΟΙ Κιβρόγλου</td><td style="color:var(--muted)">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ΠΡΟΤΑΣΗ Β — HERO STOCK + EXPANDABLE CARDS
+     ═══════════════════════════════════════════ -->
+<div id="panel-b" class="panel">
+  <div class="prop-desc">
+    <strong>Β — Hero Stock + Κάρτες Ενεργειών:</strong> Σκούρο banner στην κορυφή με μεγάλο απόθεμα + έξυπνες πλαίσιο-συμβουλές. Από κάτω 3 κάρτες ενεργειών που ανοίγουν inline.
+    <div class="tag-grid"><span class="tag green">✓ Πολύ οπτικό — ξέρεις αμέσως την κατάσταση</span><span class="tag green">✓ Smart context (τελ. τιμή, πότε αγόρασες)</span><span class="tag orange">↓ Λίγο πιο "fancy" — όχι για όλους</span></div>
+  </div>
+
+  <!-- HERO -->
+  <div class="b-hero">
+    <div class="b-hero-left">
+      <div style="font-size:11px;color:#94a3b8;font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">📦 Πρώτη Ύλη</div>
+      <div class="b-hero-name">Κοτόπουλο Φιλέτο</div>
+      <div class="b-hero-meta">
+        <span class="b-hero-badge">Κρέατα</span>
+        <span class="b-hero-badge">kg</span>
+        <span class="b-hero-badge">📍 Ψυγείο</span>
+        <span class="b-hero-badge" style="background:rgba(74,222,128,.2);color:#4ade80">🟢 OK</span>
+      </div>
+      <div class="b-context">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#f97316;margin-bottom:6px">💡 Έξυπνες Πληροφορίες</div>
+        <div class="b-context-row">
+          <div class="b-ctx-item"><span class="b-ctx-icon">📅</span><span>Τελ. παραλαβή: <strong>πριν 2 μέρες</strong></span></div>
+          <div class="b-ctx-item"><span class="b-ctx-icon">💰</span><span>Καλύτερη τιμή: <strong>€5.00/kg</strong> (Παπάς)</span></div>
+          <div class="b-ctx-item"><span class="b-ctx-icon">⏰</span><span>Αρκεί για <strong>~3.7 ημέρες</strong></span></div>
+          <div class="b-ctx-item"><span class="b-ctx-icon">📈</span><span>Τιμή: <span class="b-trend trend-dn">↓ −3.8%</span> vs πέρσι</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="b-hero-right">
+      <div class="b-stock-big">4.5</div>
+      <div class="b-stock-unit">kg αποθέματος</div>
+      <div class="b-stock-status" style="margin-top:6px">
+        <div style="background:rgba(255,255,255,.15);border-radius:6px;height:8px;width:100px;margin:8px auto 0;overflow:hidden">
+          <div style="width:75%;height:100%;background:#4ade80;border-radius:6px"></div>
+        </div>
+        <div style="font-size:10px;color:#94a3b8;margin-top:4px">75% των μέγ. 6 kg</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACTION CARDS -->
+  <div class="b-action-cards">
+    <div class="b-acard" onclick="bToggle('b-purchase',this)">
+      <div class="b-acard-icon">📦</div>
+      <div class="b-acard-title">Παραλαβή</div>
+      <div class="b-acard-desc">Καταχώρηση νέας παραλαβής υλικού από προμηθευτή</div>
+    </div>
+    <div class="b-acard" onclick="bToggle('b-loss',this)">
+      <div class="b-acard-icon">📉</div>
+      <div class="b-acard-title">Ζημιά / Απώλεια</div>
+      <div class="b-acard-desc">Αλλοίωση, λήξη, χύσιμο ή άλλη μείωση αποθέματος</div>
+    </div>
+    <div class="b-acard" onclick="bToggle('b-adj',this)">
+      <div class="b-acard-icon">⚙️</div>
+      <div class="b-acard-title">Χειρ. Διόρθωση</div>
+      <div class="b-acard-desc">Απογραφή — εισάγεις τον πραγματικό αριθμό που μέτρησες</div>
+    </div>
+  </div>
+
+  <!-- FORMS -->
+  <div id="b-purchase" class="b-form-area">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div class="card-title" style="margin:0">📦 Νέα Παραλαβή</div>
+      <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:6px 12px;font-size:11px;color:#166534">💡 Προτεινόμενη ποσ.: <strong>1.5 kg</strong> (για μέγ. 6 kg)</div>
+    </div>
+    <div class="frow frow-3"><div><label class="fl">Ποσότητα (kg) *</label><input type="number" placeholder="1.5"></div><div><label class="fl">Τιμή / kg (€)</label><input type="number" placeholder="5.00" id="b-price" oninput="bCalcTotal()"></div><div><label class="fl">Ημερομηνία</label><input type="date" value="2026-06-20"></div></div>
+    <div class="frow frow-2"><div><label class="fl">Προμηθευτής</label><select><option>★ Παπάς Χρήστος (€5.00)</option><option>ΑΦΟΙ Κιβρόγλου (€5.50)</option></select></div><div><label class="fl">Αρ. Τιμολογίου</label><input type="text" placeholder="π.χ. 4822"></div></div>
+    <div class="frow frow-2"><div><label class="fl">Ημ/νία Λήξης</label><input type="date"></div><div><label class="fl">Χώρος</label><select><option>Ψυγείο</option><option>Αποθήκη</option><option>Καταψύκτης</option></select></div></div>
+    <div class="d-total-row"><span class="d-total-label">Εκτιμώμενο Συνολικό Κόστος</span><span class="d-total-val" id="b-total">—</span></div>
+    <div style="display:flex;gap:8px;margin-top:12px"><button class="btn btn-p">✅ Καταχώρηση</button><button onclick="bClose('b-purchase')" class="btn btn-s">Ακύρωση</button></div>
+  </div>
+
+  <div id="b-loss" class="b-form-area">
+    <div class="card-title" style="margin-bottom:14px">📉 Ζημιά / Απώλεια</div>
+    <div class="frow frow-3"><div><label class="fl">Ποσότητα (kg) *</label><input type="number" placeholder="0.5"></div><div><label class="fl">Αιτία *</label><select><option>Φθορά / Αλλοίωση</option><option>Ληγμένο</option><option>Σπασμένο / Χυμένο</option><option>Κλοπή</option><option>Άλλο</option></select></div><div><label class="fl">Ημερομηνία</label><input type="date" value="2026-06-20"></div></div>
+    <div class="frow frow-1"><div><label class="fl">Σημειώσεις (για HACCP)</label><input type="text" placeholder="π.χ. χρώμα αλλοιωμένο, μυρωδιά"></div></div>
+    <div style="display:flex;gap:8px"><button class="btn btn-p">📉 Καταχώρηση</button><button onclick="bClose('b-loss')" class="btn btn-s">Ακύρωση</button></div>
+  </div>
+
+  <div id="b-adj" class="b-form-area">
+    <div class="card-title" style="margin-bottom:14px">⚙️ Χειροκίνητη Διόρθωση</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px;text-align:center">
+      <div style="background:#f8fafc;border-radius:8px;padding:12px"><div style="font-size:10px;color:var(--muted);font-weight:700">ΤΡΕΧΟΝ</div><div style="font-size:24px;font-weight:800;color:#16a34a">4.5 kg</div></div>
+      <div style="background:#fff7ed;border-radius:8px;padding:12px;display:flex;align-items:center;justify-content:center"><div style="font-size:28px">→</div></div>
+      <div style="background:#f0fdf4;border-radius:8px;padding:12px"><div style="font-size:10px;color:var(--muted);font-weight:700">ΝΕΟ</div><input type="number" id="b-newqty" value="4.5" oninput="bDiff()" style="font-size:22px;font-weight:800;border:none;background:transparent;text-align:center;color:#16a34a;width:100%"></div>
+    </div>
+    <div id="b-diff" style="text-align:center;font-size:13px;color:var(--muted);margin-bottom:12px">Καμία αλλαγή</div>
+    <div class="frow frow-1"><div><label class="fl">Αιτιολόγηση *</label><input type="text" placeholder="π.χ. Απογραφή βραδιού 20-06-2026"></div></div>
+    <div style="display:flex;gap:8px"><button class="btn btn-p">✅ Αποθήκευση</button><button onclick="bClose('b-adj')" class="btn btn-s">Ακύρωση</button></div>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="card" style="margin-top:16px">
+    <div class="card-title" style="cursor:pointer" onclick="bToggleHist()">📋 Ιστορικό Κινήσεων <span id="b-hist-icon" style="margin-left:auto;font-size:14px">▼</span></div>
+    <div id="b-hist">
+      <table class="e-table">
+        <thead><tr><th>Ημ/νία</th><th>Τύπος</th><th>Κίνηση</th><th>Τιμή</th><th>Προμηθευτής</th><th>Σημ.</th></tr></thead>
+        <tbody>
+          <tr><td>20-06-2026</td><td><span class="e-pill pill-in">↑ Παραλαβή</span></td><td class="mov-in">+3.0 kg</td><td>€5.20</td><td>Παπάς Χρήστος</td><td style="color:var(--muted)">—</td></tr>
+          <tr><td>18-06-2026</td><td><span class="e-pill pill-out">↓ Ζημιά</span></td><td class="mov-out">−0.3 kg</td><td>—</td><td>—</td><td style="color:var(--muted)">Αλλοίωση</td></tr>
+          <tr><td>15-06-2026</td><td><span class="e-pill pill-in">↑ Παραλαβή</span></td><td class="mov-in">+5.0 kg</td><td>€5.20</td><td>Παπάς Χρήστος</td><td style="color:var(--muted)">Τιμολ. #4821</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ΠΡΟΤΑΣΗ Γ — FLOATING ACTION BAR
+     ═══════════════════════════════════════════ -->
+<div id="panel-c" class="panel">
+  <div class="prop-desc">
+    <strong>Γ — Ιστορικό-Πρώτα + Floating Bar:</strong> Το ιστορικό είναι ο ήρωας. Βλέπεις αμέσως τι έγινε. Η γρήγορη δράση γίνεται από μια μπάρα κάτω που ανοίγει slide-up φόρμες.
+    <div class="tag-grid"><span class="tag green">✓ Ideal αν κοιτάς συχνά το ιστορικό</span><span class="tag green">✓ Δράση πάντα προσβάσιμη από κάτω</span><span class="tag orange">↓ Λιγότερο info στην πρώτη ματιά</span></div>
+  </div>
+
+  <!-- HEADER -->
+  <div class="c-header">
+    <div class="c-avatar">Κ</div>
+    <div style="flex:1">
+      <div style="font-size:17px;font-weight:800">Κοτόπουλο Φιλέτο</div>
+      <div style="display:flex;gap:6px;margin-top:4px"><span class="badge badge-cat">Κρέατα</span><span class="badge badge-unit">kg</span><span class="badge badge-loc">📍 Ψυγείο</span></div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:30px;font-weight:900;color:#16a34a;line-height:1">4.5 kg</div>
+      <span class="badge badge-ok" style="margin-top:4px">🟢 OK</span>
+    </div>
+  </div>
+
+  <!-- KPI STATS -->
+  <div class="c-stats">
+    <div class="c-stat"><div class="c-stat-val" style="color:#16a34a">€23.40</div><div class="c-stat-label">Αξία Αποθέματος</div></div>
+    <div class="c-stat"><div class="c-stat-val">€5.20</div><div class="c-stat-label">Μέση Τιμή / kg</div></div>
+    <div class="c-stat"><div class="c-stat-val" style="color:var(--yellow)">3.7</div><div class="c-stat-label">Ημέρες Αποθέματος</div></div>
+    <div class="c-stat"><div class="c-stat-val">8.5</div><div class="c-stat-label">Kg / Εβδ. Χρήση</div></div>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="c-timeline" style="margin-bottom:90px">
+    <div class="card-title">📋 Ιστορικό Κινήσεων</div>
+    <div class="c-tl-item">
+      <div class="c-tl-dot dot-in">↑</div>
+      <div class="c-tl-main"><div class="c-tl-type">Παραλαβή</div><div class="c-tl-meta">20-06-2026 · Παπάς Χρήστος · Τιμολ. #4822</div></div>
+      <div class="c-tl-qty mov-in">+3.0 kg</div>
+    </div>
+    <div class="c-tl-item">
+      <div class="c-tl-dot dot-out">↓</div>
+      <div class="c-tl-main"><div class="c-tl-type">Ζημιά — Φθορά / Αλλοίωση</div><div class="c-tl-meta">18-06-2026 · Αξία: €1.56</div></div>
+      <div class="c-tl-qty mov-out">−0.3 kg</div>
+    </div>
+    <div class="c-tl-item">
+      <div class="c-tl-dot dot-in">↑</div>
+      <div class="c-tl-main"><div class="c-tl-type">Παραλαβή</div><div class="c-tl-meta">15-06-2026 · Παπάς Χρήστος · Τιμολ. #4821</div></div>
+      <div class="c-tl-qty mov-in">+5.0 kg</div>
+    </div>
+    <div class="c-tl-item">
+      <div class="c-tl-dot dot-adj">⚙</div>
+      <div class="c-tl-main"><div class="c-tl-type">Χειρ. Διόρθωση — Απογραφή Ιουνίου</div><div class="c-tl-meta">10-06-2026</div></div>
+      <div class="c-tl-qty mov-adj">−0.5 kg</div>
+    </div>
+    <div class="c-tl-item">
+      <div class="c-tl-dot dot-in">↑</div>
+      <div class="c-tl-main"><div class="c-tl-type">Παραλαβή</div><div class="c-tl-meta">08-06-2026 · ΑΦΟΙ Κιβρόγλου</div></div>
+      <div class="c-tl-qty mov-in">+4.0 kg</div>
+    </div>
+  </div>
+
+  <!-- FLOATING BAR -->
+  <div class="c-fab">
+    <button class="c-fab-btn" style="background:#f97316;color:#fff" onclick="cSheet('c-sheet-purchase')">📦 Παραλαβή</button>
+    <button class="c-fab-btn" style="background:#334155;color:#94a3b8" onclick="cSheet('c-sheet-loss')">📉 Ζημιά</button>
+    <button class="c-fab-btn" style="background:#334155;color:#94a3b8" onclick="cSheet('c-sheet-adj')">⚙️ Διόρθωση</button>
+    <button class="c-fab-btn" style="background:#334155;color:#94a3b8" onclick="cSheet('c-sheet-edit')">✏️ Επεξεργασία</button>
+  </div>
+
+  <!-- OVERLAY -->
+  <div class="c-overlay" id="c-overlay" onclick="cCloseAll()"></div>
+
+  <!-- SHEETS -->
+  <div class="c-sheet" id="c-sheet-purchase">
+    <div class="c-sheet-handle"></div>
+    <div class="card-title" style="margin-bottom:14px">📦 Νέα Παραλαβή</div>
+    <div class="frow frow-3"><div><label class="fl">Ποσότητα (kg) *</label><input type="number" placeholder="1.5"></div><div><label class="fl">Τιμή / kg (€)</label><input type="number" placeholder="5.00"></div><div><label class="fl">Ημερομηνία</label><input type="date" value="2026-06-20"></div></div>
+    <div class="frow frow-2"><div><label class="fl">Προμηθευτής</label><select><option>★ Παπάς Χρήστος</option><option>ΑΦΟΙ Κιβρόγλου</option></select></div><div><label class="fl">Αρ. Τιμολογίου</label><input type="text" placeholder="π.χ. 4822"></div></div>
+    <div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-p" style="flex:1;justify-content:center">✅ Καταχώρηση</button><button onclick="cCloseAll()" class="btn btn-s">Ακύρωση</button></div>
+  </div>
+
+  <div class="c-sheet" id="c-sheet-loss">
+    <div class="c-sheet-handle"></div>
+    <div class="card-title" style="margin-bottom:14px">📉 Ζημιά / Απώλεια</div>
+    <div class="frow frow-3"><div><label class="fl">Ποσότητα (kg) *</label><input type="number" placeholder="0.5"></div><div><label class="fl">Αιτία *</label><select><option>Φθορά</option><option>Ληγμένο</option><option>Χύσιμο</option><option>Άλλο</option></select></div><div><label class="fl">Ημερομηνία</label><input type="date" value="2026-06-20"></div></div>
+    <div class="frow frow-1"><div><label class="fl">Σημειώσεις</label><input type="text" placeholder="π.χ. βρέθηκε αλλοιωμένο"></div></div>
+    <div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-p" style="flex:1;justify-content:center">📉 Καταχώρηση</button><button onclick="cCloseAll()" class="btn btn-s">Ακύρωση</button></div>
+  </div>
+
+  <div class="c-sheet" id="c-sheet-adj">
+    <div class="c-sheet-handle"></div>
+    <div class="card-title" style="margin-bottom:14px">⚙️ Διόρθωση Αποθέματος</div>
+    <div class="frow frow-2"><div><label class="fl">Νέο Απόθεμα (kg) *</label><input type="number" value="4.5"></div><div><label class="fl">Αιτιολόγηση</label><input type="text" placeholder="π.χ. Απογραφή βραδιού"></div></div>
+    <div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-p" style="flex:1;justify-content:center">✅ Αποθήκευση</button><button onclick="cCloseAll()" class="btn btn-s">Ακύρωση</button></div>
+  </div>
+
+  <div class="c-sheet" id="c-sheet-edit">
+    <div class="c-sheet-handle"></div>
+    <div class="card-title" style="margin-bottom:14px">✏️ Επεξεργασία Υλικού</div>
+    <div class="frow frow-2"><div><label class="fl">Όνομα *</label><input type="text" value="Κοτόπουλο Φιλέτο"></div><div><label class="fl">Κατηγορία</label><select><option selected>Κρέατα</option></select></div></div>
+    <div class="frow frow-3"><div><label class="fl">Μονάδα</label><input type="text" value="kg"></div><div><label class="fl">Ελάχ. Απόθεμα</label><input type="number" value="3"></div><div><label class="fl">Μέγ. Απόθεμα</label><input type="number" value="6"></div></div>
+    <div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-p" style="flex:1;justify-content:center">💾 Αποθήκευση</button><button onclick="cCloseAll()" class="btn btn-s">Ακύρωση</button></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ΠΡΟΤΑΣΗ Δ — WIZARD ACTIONS
+     ═══════════════════════════════════════════ -->
+<div id="panel-d" class="panel">
+  <div class="prop-desc">
+    <strong>Δ — Wizard Βήμα-Βήμα:</strong> Επιλέγεις τι θέλεις (Παραλαβή / Ζημιά / Διόρθωση / Επεξεργασία), μετά ένας wizard σε οδηγεί βήμα-βήμα. Υπολογίζει αυτόματα κόστη και σου δείχνει έξυπνες προτάσεις.
+    <div class="tag-grid"><span class="tag green">✓ Δεν κάνεις λάθη — guided</span><span class="tag green">✓ Υπολογισμοί live (κόστος, διαφορά)</span><span class="tag orange">↓ Περισσότερα κλικ για έμπειρους</span></div>
+  </div>
+
+  <div class="d-header">
+    <div class="c-avatar" style="width:46px;height:46px">Κ</div>
+    <div style="flex:1"><div style="font-size:17px;font-weight:800">Κοτόπουλο Φιλέτο</div><div style="display:flex;gap:6px;margin-top:4px"><span class="badge badge-cat">Κρέατα</span><span class="badge badge-unit">kg</span><span class="badge badge-loc">📍 Ψυγείο</span></div></div>
+    <div style="text-align:right"><div style="font-size:11px;color:var(--muted);font-weight:700">ΤΡΕΧΟΝ ΑΠΟΘΕΜΑ</div><div style="font-size:28px;font-weight:900;color:#16a34a">4.5 kg</div></div>
+  </div>
+
+  <div class="d-stock-bar">
+    <div style="font-size:12px;font-weight:700;color:var(--muted);white-space:nowrap">Επίπεδο Αποθέματος</div>
+    <div class="d-progress"><div class="d-progress-fill" style="width:75%"></div></div>
+    <span class="badge badge-ok">🟢 75%</span>
+    <div style="font-size:11px;color:var(--muted)">Ελάχ. 3 kg · Μέγ. 6 kg · Αρκεί ~3.7 μέρες</div>
+  </div>
+
+  <!-- ACTION SELECTOR -->
+  <div class="d-selector">
+    <div class="d-sel-btn sel" onclick="dSelect('d-wiz-purchase',this)">
+      <div class="d-sel-icon">📦</div>
+      <div class="d-sel-label">Παραλαβή</div>
+      <div class="d-sel-desc">Νέα αγορά από προμηθευτή</div>
+    </div>
+    <div class="d-sel-btn" onclick="dSelect('d-wiz-loss',this)">
+      <div class="d-sel-icon">📉</div>
+      <div class="d-sel-label">Ζημιά</div>
+      <div class="d-sel-desc">Απώλεια / αλλοίωση</div>
+    </div>
+    <div class="d-sel-btn" onclick="dSelect('d-wiz-adj',this)">
+      <div class="d-sel-icon">⚙️</div>
+      <div class="d-sel-label">Διόρθωση</div>
+      <div class="d-sel-desc">Απογραφή / καταμέτρηση</div>
+    </div>
+    <div class="d-sel-btn" onclick="dSelect('d-wiz-edit',this)">
+      <div class="d-sel-icon">✏️</div>
+      <div class="d-sel-label">Επεξεργασία</div>
+      <div class="d-sel-desc">Αλλαγή στοιχείων υλικού</div>
+    </div>
+  </div>
+
+  <!-- WIZARD: PURCHASE -->
+  <div id="d-wiz-purchase" class="d-wizard">
+    <div class="d-steps">
+      <div class="d-step cur"><div class="d-step-num">1</div> Ποσότητα & Τιμή</div>
+      <div class="d-step-sep"></div>
+      <div class="d-step"><div class="d-step-num">2</div> Προμηθευτής</div>
+      <div class="d-step-sep"></div>
+      <div class="d-step"><div class="d-step-num">3</div> Επιβεβαίωση</div>
+    </div>
+    <div class="d-smart-hint">
+      💡 <div><strong>Σύσταση:</strong> Τελευταία τιμή από <strong>Παπάς Χρήστος: €5.20/kg</strong> (18-06-2026). Η καλύτερη τρέχουσα προσφορά είναι <strong>€5.00/kg</strong>. Αν αγοράσεις <strong>1.5 kg</strong> θα φτάσεις στο μέγιστο (6 kg).</div>
+    </div>
+    <div class="frow frow-3">
+      <div><label class="fl">Ποσότητα (kg) *</label><input type="number" id="d-qty" placeholder="1.5" oninput="dCalc()"></div>
+      <div><label class="fl">Τιμή / kg (€) *</label><input type="number" id="d-pr" placeholder="5.00" oninput="dCalc()"><div class="hint">Τελ. τιμή: €5.20</div></div>
+      <div><label class="fl">Ημερομηνία</label><input type="date" value="2026-06-20"></div>
+    </div>
+    <div class="frow frow-2">
+      <div><label class="fl">Ημ/νία Λήξης</label><input type="date"></div>
+      <div><label class="fl">Χώρος Αποθήκευσης</label><select><option>Ψυγείο</option><option>Αποθήκη</option><option>Καταψύκτης</option></select></div>
+    </div>
+    <div class="d-total-row">
+      <span class="d-total-label">💰 Συνολικό Κόστος Παραλαβής</span>
+      <span class="d-total-val" id="d-total">— (εισάγετε ποσ. × τιμή)</span>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="btn btn-s">← Πίσω</button>
+      <button class="btn btn-p">Επόμενο: Προμηθευτής →</button>
+    </div>
+  </div>
+
+  <div id="d-wiz-loss" class="d-wizard" style="display:none">
+    <div class="d-steps">
+      <div class="d-step cur"><div class="d-step-num">1</div> Ζημιά</div>
+      <div class="d-step-sep"></div>
+      <div class="d-step"><div class="d-step-num">2</div> HACCP Λεπτομέρειες</div>
+    </div>
+    <div class="frow frow-3"><div><label class="fl">Ποσότητα (kg) *</label><input type="number" placeholder="0.5"></div><div><label class="fl">Αιτία *</label><select><option>Φθορά / Αλλοίωση</option><option>Ληγμένο</option><option>Σπασμένο / Χυμένο</option><option>Κλοπή</option><option>Άλλο</option></select></div><div><label class="fl">Ημερομηνία</label><input type="date" value="2026-06-20"></div></div>
+    <div class="frow frow-1"><div><label class="fl">Περιγραφή (HACCP) *</label><input type="text" placeholder="π.χ. βρέθηκε αλλοιωμένο, μεταβολή χρώματος"></div></div>
+    <div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:10px 14px;font-size:12px;color:#991b1b;margin-bottom:12px">⚠️ Αξία Ζημιάς: <strong>~€2.60</strong> (0.5 kg × €5.20)</div>
+    <div style="display:flex;gap:8px"><button class="btn btn-s">← Πίσω</button><button class="btn btn-p">Επόμενο: HACCP →</button></div>
+  </div>
+
+  <div id="d-wiz-adj" class="d-wizard" style="display:none">
+    <div class="d-steps"><div class="d-step cur"><div class="d-step-num">1</div> Μέτρηση</div><div class="d-step-sep"></div><div class="d-step"><div class="d-step-num">2</div> Επιβεβαίωση</div></div>
+    <div class="frow frow-2"><div><label class="fl">Νέο Απόθεμα (kg) *</label><input type="number" value="4.5" id="d-newqty" oninput="dAdjDiff()"><div class="hint">Τρέχον: 4.5 kg</div></div><div><label class="fl">Τύπος Απογραφής</label><select><option>Απογραφή Βραδιού</option><option>Απογραφή Πρωινού</option><option>Έκτακτη</option></select></div></div>
+    <div id="d-adj-diff" style="padding:10px;border-radius:8px;font-size:13px;text-align:center;margin:10px 0;background:#f8fafc;color:var(--muted)">Καμία αλλαγή</div>
+    <div class="frow frow-1"><div><label class="fl">Αιτιολόγηση *</label><input type="text" placeholder="π.χ. Απογραφή βραδιού 20-06-2026"></div></div>
+    <div style="display:flex;gap:8px"><button class="btn btn-s">← Πίσω</button><button class="btn btn-p">Επόμενο →</button></div>
+  </div>
+
+  <div id="d-wiz-edit" class="d-wizard" style="display:none">
+    <div class="frow frow-2"><div><label class="fl">Όνομα *</label><input value="Κοτόπουλο Φιλέτο"></div><div><label class="fl">Κατηγορία</label><select><option>Κρέατα</option></select></div></div>
+    <div class="frow frow-3"><div><label class="fl">Μονάδα</label><input value="kg"></div><div><label class="fl">Ελάχ. Απόθεμα (kg)</label><input type="number" value="3"></div><div><label class="fl">Μέγ. Απόθεμα (kg)</label><input type="number" value="6"></div></div>
+    <div class="frow frow-2"><div><label class="fl">Χώρος Αποθήκευσης</label><select><option>Ψυγείο</option></select></div><div><label class="fl">ΦΠΑ</label><select><option>13%</option><option>24%</option><option>6%</option></select></div></div>
+    <div style="display:flex;gap:8px;margin-top:4px"><button class="btn btn-p">💾 Αποθήκευση Αλλαγών</button><button class="btn btn-s">Ακύρωση</button></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ΠΡΟΤΑΣΗ Ε — COMPACT POWER-USER
+     ═══════════════════════════════════════════ -->
+<div id="panel-e" class="panel">
+  <div class="prop-desc">
+    <strong>Ε — Compact Power-User:</strong> Όλα στην ίδια οθόνη, πολύ πυκνά. Γρήγορη εισαγωγή παραλαβής/ζημιάς inline χωρίς να ανοίγεις φόρμες. Ιδανικό για εμπειρικούς χρήστες που ξέρουν τι κάνουν.
+    <div class="tag-grid"><span class="tag green">✓ Ελάχιστα κλικ για συχνές ενέργειες</span><span class="tag green">✓ Πλούσια πληροφορία σε μικρό χώρο</span><span class="tag orange">↓ Λίγο πιο "τεχνικό" για αρχάριους</span></div>
+  </div>
+
+  <!-- TOP BAR -->
+  <div class="e-topbar">
+    <div class="c-avatar" style="width:38px;height:38px;font-size:16px">Κ</div>
+    <div class="e-name">Κοτόπουλο Φιλέτο</div>
+    <span class="badge badge-cat">Κρέατα</span>
+    <span class="badge badge-unit">kg</span>
+    <span class="badge badge-loc">📍 Ψυγείο</span>
+    <span class="badge badge-ok" style="margin-left:auto">🟢 4.5 kg OK</span>
+    <button class="btn btn-s btn-sm">✏️ Επεξεργασία</button>
+    <button class="btn btn-d btn-sm">🗑</button>
+  </div>
+
+  <!-- KPI BAR -->
+  <div class="e-kpi">
+    <div class="e-kpi-item"><span class="e-kpi-icon">💰</span><div class="e-kpi-info"><div class="e-kpi-val" style="color:#16a34a">€23.40</div><div class="e-kpi-lbl">Αξία Αποθέματος</div></div></div>
+    <div style="width:1px;background:var(--border)"></div>
+    <div class="e-kpi-item"><span class="e-kpi-icon">🏷️</span><div class="e-kpi-info"><div class="e-kpi-val">€5.20/kg</div><div class="e-kpi-lbl">Μέση Τιμή</div></div></div>
+    <div style="width:1px;background:var(--border)"></div>
+    <div class="e-kpi-item"><span class="e-kpi-icon">⭐</span><div class="e-kpi-info"><div class="e-kpi-val" style="color:var(--accent)">€5.00/kg</div><div class="e-kpi-lbl">Καλύτερη Τιμή (Παπάς)</div></div></div>
+    <div style="width:1px;background:var(--border)"></div>
+    <div class="e-kpi-item"><span class="e-kpi-icon">⏰</span><div class="e-kpi-info"><div class="e-kpi-val" style="color:var(--yellow)">~3.7 μέρες</div><div class="e-kpi-lbl">Εκτ. Διάρκεια</div></div></div>
+    <div style="width:1px;background:var(--border)"></div>
+    <div class="e-kpi-item"><span class="e-kpi-icon">📅</span><div class="e-kpi-info"><div class="e-kpi-val">18-06-2026</div><div class="e-kpi-lbl">Τελ. Παραλαβή</div></div></div>
+  </div>
+
+  <!-- QUICK ACTIONS (2 columns) -->
+  <div class="e-quick">
+    <!-- QUICK PURCHASE -->
+    <div class="e-qcard">
+      <div class="e-qcard-head">📦 Γρήγορη Παραλαβή <span class="e-qcard-action" onclick="eToggle('e-purchase')">+ Άνοιξε</span></div>
+      <div id="e-purchase" class="e-inline-form open">
+        <div class="e-inline-row" style="flex-wrap:wrap;gap:8px">
+          <div class="field"><label class="fl">Ποσ. (kg)</label><input type="number" placeholder="1.5" style="font-weight:700"></div>
+          <div class="field"><label class="fl">Τιμή €/kg</label><input type="number" placeholder="5.00"></div>
+          <div class="field" style="flex:2"><label class="fl">Προμηθευτής</label><select><option>★ Παπάς (€5.00)</option><option>ΑΦΟΙ (€5.50)</option></select></div>
+        </div>
+        <div class="e-inline-row" style="margin-top:8px">
+          <div class="field"><label class="fl">Τιμολόγιο</label><input type="text" placeholder="προαιρετικό"></div>
+          <div class="field"><label class="fl">Λήξη</label><input type="date"></div>
+          <div class="field"><label class="fl">Ημ/νία</label><input type="date" value="2026-06-20"></div>
+        </div>
+        <div style="margin-top:8px;display:flex;gap:6px"><button class="btn btn-p btn-sm">✅ Καταχώρηση</button><button onclick="eToggle('e-purchase')" class="btn btn-s btn-sm">✕</button></div>
+      </div>
+    </div>
+
+    <!-- QUICK LOSS + ADJ -->
+    <div class="e-qcard">
+      <div class="e-qcard-head">
+        <span>
+          <span id="e-qa-tab1" style="cursor:pointer;color:var(--accent);border-bottom:2px solid var(--accent);padding-bottom:2px" onclick="eQaTab(1)">📉 Ζημιά</span>
+          &nbsp;
+          <span id="e-qa-tab2" style="cursor:pointer;color:var(--muted)" onclick="eQaTab(2)">⚙️ Διόρθωση</span>
+        </span>
+      </div>
+      <div id="e-qa-1" class="e-inline-form open">
+        <div class="e-inline-row">
+          <div class="field"><label class="fl">Ποσ. (kg)</label><input type="number" placeholder="0.5"></div>
+          <div class="field" style="flex:2"><label class="fl">Αιτία</label><select><option>Φθορά / Αλλοίωση</option><option>Ληγμένο</option><option>Χύσιμο</option><option>Κλοπή</option><option>Άλλο</option></select></div>
+        </div>
+        <div style="margin-top:8px"><label class="fl">Σημειώσεις (HACCP)</label><input type="text" placeholder="περιγραφή"></div>
+        <div style="margin-top:8px"><button class="btn btn-p btn-sm">📉 Καταχώρηση Ζημιάς</button></div>
+      </div>
+      <div id="e-qa-2" class="e-inline-form">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+          <div style="font-size:11px;color:var(--muted)">Τρέχον: <strong>4.5 kg</strong> → Νέο:</div>
+          <input type="number" value="4.5" style="width:80px;font-weight:800" id="e-adj-qty" oninput="eAdjDiff()">
+          <span id="e-adj-diff" style="font-size:12px;color:var(--muted)">καμία αλλαγή</span>
+        </div>
+        <input type="text" placeholder="Αιτιολόγηση (π.χ. Απογραφή βραδιού)" style="margin-bottom:8px">
+        <button class="btn btn-p btn-sm">✅ Αποθήκευση</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HISTORY TABLE -->
+  <div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <div class="card-title" style="margin:0">📋 Ιστορικό Κινήσεων</div>
+      <div style="display:flex;gap:6px">
+        <select style="padding:4px 8px;font-size:11px;width:auto"><option>Όλοι</option><option>Παραλαβές</option><option>Ζημιές</option><option>Διορθώσεις</option></select>
+        <input type="text" placeholder="🔍 Αναζήτηση..." style="padding:4px 8px;font-size:11px;width:130px">
+      </div>
+    </div>
+    <table class="e-table">
+      <thead><tr><th>Ημ/νία</th><th>Τύπος</th><th>Κίνηση</th><th>Τιμή</th><th>Αξία</th><th>Προμηθευτής</th><th>Σημ.</th></tr></thead>
+      <tbody>
+        <tr><td>20-06-2026</td><td><span class="e-pill pill-in">↑ Παραλαβή</span></td><td class="mov-in">+3.0 kg</td><td>€5.20</td><td style="font-weight:700">€15.60</td><td>Παπάς Χρήστος</td><td style="color:var(--muted)">#4822</td></tr>
+        <tr><td>18-06-2026</td><td><span class="e-pill pill-out">↓ Ζημιά</span></td><td class="mov-out">−0.3 kg</td><td>—</td><td style="font-weight:700;color:var(--red)">−€1.56</td><td>—</td><td style="color:var(--muted)">Αλλοίωση</td></tr>
+        <tr><td>15-06-2026</td><td><span class="e-pill pill-in">↑ Παραλαβή</span></td><td class="mov-in">+5.0 kg</td><td>€5.20</td><td style="font-weight:700">€26.00</td><td>Παπάς Χρήστος</td><td style="color:var(--muted)">#4821</td></tr>
+        <tr><td>10-06-2026</td><td><span class="e-pill pill-adj">⚙ Διόρθωση</span></td><td class="mov-adj">−0.5 kg</td><td>—</td><td style="color:var(--muted)">—</td><td>—</td><td style="color:var(--muted)">Απογραφή Ιουνίου</td></tr>
+        <tr><td>08-06-2026</td><td><span class="e-pill pill-in">↑ Παραλαβή</span></td><td class="mov-in">+4.0 kg</td><td>€5.40</td><td style="font-weight:700">€21.60</td><td>ΑΦΟΙ Κιβρόγλου</td><td style="color:var(--muted)">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+// ── PANEL SWITCHER ──
+function showPanel(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sw-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── Α ──
+function aTab(id,btn){
+  document.querySelectorAll('#panel-a .tab-panel').forEach(p=>p.classList.remove('act'));
+  document.querySelectorAll('#panel-a .tab-btn').forEach(b=>b.classList.remove('act'));
+  document.getElementById(id).classList.add('act');
+  btn.classList.add('act');
+}
+function aToggle(id){document.getElementById(id).classList.toggle('open')}
+function aCalcDiff(){
+  const v=parseFloat(document.getElementById('a-newqty').value);
+  const cur=4.5,diff=v-cur;
+  const el=document.getElementById('a-diff-hint');
+  if(isNaN(v)||Math.abs(diff)<0.001){el.style.display='none';return}
+  el.style.display='block';
+  el.innerHTML=diff>0?`✅ Αύξηση <strong>+${diff.toFixed(3)} kg</strong> (από 4.5 → ${v})`:
+    `⚠️ Μείωση <strong>${diff.toFixed(3)} kg</strong> (από 4.5 → ${v}) — θα καταγραφεί ως αρνητική διόρθωση`;
+}
+
+// ── Β ──
+function bToggle(id,card){
+  const isOpen=document.getElementById(id).classList.contains('open');
+  document.querySelectorAll('.b-form-area').forEach(f=>f.classList.remove('open'));
+  document.querySelectorAll('.b-acard').forEach(c=>c.classList.remove('open'));
+  if(!isOpen){document.getElementById(id).classList.add('open');card.classList.add('open')}
+}
+function bClose(id){document.getElementById(id).classList.remove('open');document.querySelectorAll('.b-acard').forEach(c=>c.classList.remove('open'))}
+function bCalcTotal(){
+  const p=parseFloat(document.getElementById('b-price').value)||0;
+  document.getElementById('b-total').textContent=p?'€'+p.toFixed(2)+'/kg × ποσ. = (εισάγετε ποσ.)':'—';
+}
+function bDiff(){
+  const v=parseFloat(document.getElementById('b-newqty').value),cur=4.5,diff=v-cur;
+  const el=document.getElementById('b-diff');
+  if(isNaN(v)||Math.abs(diff)<0.001){el.textContent='Καμία αλλαγή';el.style.color='var(--muted)';return}
+  el.style.color=diff>0?'#16a34a':'var(--red)';
+  el.textContent=diff>0?`+${diff.toFixed(3)} kg αύξηση`:`${diff.toFixed(3)} kg μείωση`;
+}
+function bToggleHist(){
+  const h=document.getElementById('b-hist'),i=document.getElementById('b-hist-icon');
+  const v=h.style.display==='none';h.style.display=v?'':'none';i.textContent=v?'▲':'▼';
+}
+
+// ── Γ ──
+function cSheet(id){
+  document.querySelectorAll('.c-sheet').forEach(s=>s.classList.remove('open'));
+  document.getElementById(id).classList.add('open');
+  document.getElementById('c-overlay').classList.add('open');
+}
+function cCloseAll(){
+  document.querySelectorAll('.c-sheet').forEach(s=>s.classList.remove('open'));
+  document.getElementById('c-overlay').classList.remove('open');
+}
+
+// ── Δ ──
+function dSelect(id,btn){
+  document.querySelectorAll('.d-wizard').forEach(w=>w.style.display='none');
+  document.querySelectorAll('.d-sel-btn').forEach(b=>b.classList.remove('sel'));
+  document.getElementById(id).style.display='block';
+  btn.classList.add('sel');
+}
+function dCalc(){
+  const q=parseFloat(document.getElementById('d-qty').value)||0;
+  const p=parseFloat(document.getElementById('d-pr').value)||0;
+  document.getElementById('d-total').textContent=q&&p?'€'+(q*p).toFixed(2):'— (εισάγετε ποσ. × τιμή)';
+}
+function dAdjDiff(){
+  const v=parseFloat(document.getElementById('d-newqty').value),cur=4.5,diff=v-cur;
+  const el=document.getElementById('d-adj-diff');
+  if(isNaN(v)||Math.abs(diff)<0.001){el.textContent='Καμία αλλαγή';el.style.background='#f8fafc';el.style.color='var(--muted)';return}
+  el.style.background=diff>0?'#f0fdf4':'#fef2f2';
+  el.style.color=diff>0?'#166534':'var(--red)';
+  el.textContent=diff>0?`+${diff.toFixed(3)} kg αύξηση (${cur} → ${v})`:`${diff.toFixed(3)} kg μείωση (${cur} → ${v})`;
+}
+
+// ── Ε ──
+function eToggle(id){document.getElementById(id).classList.toggle('open')}
+function eQaTab(n){
+  document.getElementById('e-qa-1').classList.toggle('open',n===1);
+  document.getElementById('e-qa-2').classList.toggle('open',n===2);
+  document.getElementById('e-qa-tab1').style.color=n===1?'var(--accent)':'var(--muted)';
+  document.getElementById('e-qa-tab1').style.borderBottom=n===1?'2px solid var(--accent)':'none';
+  document.getElementById('e-qa-tab2').style.color=n===2?'var(--accent)':'var(--muted)';
+  document.getElementById('e-qa-tab2').style.borderBottom=n===2?'2px solid var(--accent)':'none';
+}
+function eAdjDiff(){
+  const v=parseFloat(document.getElementById('e-adj-qty').value),cur=4.5,diff=v-cur;
+  const el=document.getElementById('e-adj-diff');
+  if(isNaN(v)||Math.abs(diff)<0.001){el.textContent='καμία αλλαγή';el.style.color='var(--muted)';return}
+  el.style.color=diff>0?'#16a34a':'var(--red)';
+  el.textContent=diff>0?`▲ +${diff.toFixed(3)} kg`:`▼ ${diff.toFixed(3)} kg`;
+}
+</script>
+</body>
+</html>
