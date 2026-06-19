@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Category Manager — 5 Redesigns · TAMAM</title>
+<style>
+/* ── Global ── */
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0d0f14;color:#eef1f8;min-height:100vh}
+
+/* ── Header ── */
+.preview-header{background:linear-gradient(135deg,#1a1f3a,#0d0f14);padding:22px 20px 0;border-bottom:1px solid #2a3580}
+.preview-title{font-size:22px;font-weight:800;color:#fff;display:flex;align-items:center;gap:10px}
+.preview-title .badge{font-size:10px;background:#f5c842;color:#1a1206;padding:3px 9px;border-radius:20px;font-weight:800;letter-spacing:.5px}
+.preview-sub{font-size:13px;color:#8b93b8;margin-top:4px;padding-bottom:16px}
+
+/* ── Tab bar ── */
+.tabs{display:flex;gap:4px;overflow-x:auto;padding:0 20px;margin-top:0;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab-btn{padding:10px 18px;border:none;border-radius:10px 10px 0 0;background:transparent;color:#8b93b8;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .15s;border-bottom:2px solid transparent}
+.tab-btn.active{background:#1c2554;color:#fff;border-bottom-color:#f59e0b}
+.tab-btn:hover:not(.active){background:#1c2554aa;color:#eef1f8}
+
+/* ── Content area ── */
+.design-panel{display:none;padding:0}
+.design-panel.active{display:block}
+
+/* ── App frame simulation ── */
+.app-frame{display:flex;min-height:520px;background:#f1f5f9}
+.sim-sidebar{width:200px;background:#1e2d3d;flex-shrink:0;padding:14px 0;display:flex;flex-direction:column}
+.sim-logo{padding:0 14px 12px;border-bottom:1px solid rgba(255,255,255,.08);font-size:12px;font-weight:800;color:#f59e0b;letter-spacing:.5px}
+.sim-logo span{display:block;font-size:9px;color:#64748b;margin-top:2px;font-weight:400;letter-spacing:.8px;text-transform:uppercase}
+.sim-nav{padding:8px 0}
+.sim-link{display:block;padding:8px 14px;font-size:12px;color:#94a3b8;text-decoration:none;display:flex;align-items:center;gap:7px}
+.sim-link.active{background:rgba(245,158,11,.12);color:#f59e0b;border-left:3px solid #f59e0b;padding-left:11px}
+.sim-content{flex:1;padding:24px;overflow:auto}
+
+/* ── Design label ── */
+.design-label{background:#1c2554;padding:14px 20px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.design-name{font-size:16px;font-weight:800;color:#f5c842}
+.design-desc{font-size:12px;color:#8b93b8;margin-top:2px;line-height:1.5}
+.design-when{font-size:11px;background:#0d0f1480;padding:6px 12px;border-radius:20px;color:#8b93b8;white-space:nowrap;align-self:flex-start;border:1px solid #2a3580}
+
+/* ── TAMAM Design tokens (inside app-frame) ── */
+.t-accent{color:#f59e0b}
+.t-muted{color:#64748b;font-size:12px}
+.t-border{border-color:#e2e8f0}
+
+/* ───────────────────────────────────────────────────────────────────
+   DESIGN 1 — "Chip Builder"
+   ─────────────────────────────────────────────────────────────────── */
+.d1-header{margin-bottom:20px}
+.d1-header h2{font-size:20px;font-weight:800;color:#1e293b}
+.d1-header p{font-size:13px;color:#64748b;margin-top:3px}
+
+.d1-add-box{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.d1-add-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#94a3b8;margin-bottom:10px}
+.d1-add-row{display:flex;gap:8px;align-items:center}
+.d1-input{flex:1;border:1.5px solid #e2e8f0;border-radius:8px;padding:9px 12px;font-size:13px;color:#1e293b;outline:none;transition:border-color .15s}
+.d1-input:focus{border-color:#f59e0b;box-shadow:0 0 0 3px rgba(245,158,11,.12)}
+.d1-input::placeholder{color:#cbd5e1}
+.d1-add-btn{background:#f59e0b;color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .15s}
+.d1-add-btn:hover{background:#d97706}
+
+.d1-chips-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#94a3b8;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.d1-chips-title span{background:#f1f5f9;border-radius:20px;padding:2px 8px;font-size:10px;color:#64748b}
+.d1-chips{display:flex;flex-wrap:wrap;gap:10px}
+
+.d1-chip{display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:40px;font-size:13px;font-weight:600;cursor:default;transition:all .15s;border:1.5px solid transparent;position:relative;user-select:none}
+.d1-chip.has-items{background:#fff7ed;border-color:#fed7aa;color:#9a3412}
+.d1-chip.has-items .d1-count{background:#f97316;color:#fff;font-size:10px;font-weight:800;border-radius:20px;padding:1px 7px;min-width:20px;text-align:center}
+.d1-chip.empty{background:#f8fafc;border-color:#e2e8f0;border-style:dashed;color:#64748b}
+.d1-chip.empty .d1-count{background:#e2e8f0;color:#94a3b8;font-size:10px;font-weight:800;border-radius:20px;padding:1px 7px}
+.d1-chip .d1-del{width:18px;height:18px;border-radius:50%;background:rgba(239,68,68,.12);color:#ef4444;font-size:11px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;font-weight:700;line-height:1;flex-shrink:0}
+.d1-chip .d1-del:hover{background:#ef4444;color:#fff}
+.d1-chip.has-items:hover{background:#fff3e8;border-color:#f97316}
+
+/* Location variant: icons */
+.d1-chip .d1-icon{font-size:15px;flex-shrink:0}
+
+/* ───────────────────────────────────────────────────────────────────
+   DESIGN 2 — "Power Panel"
+   ─────────────────────────────────────────────────────────────────── */
+.d2-layout{display:grid;grid-template-columns:1fr 1.5fr;gap:16px;align-items:start}
+@media(max-width:640px){.d2-layout{grid-template-columns:1fr}}
+
+.d2-card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.d2-card-header{padding:14px 18px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;gap:10px}
+.d2-card-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.d2-card-icon.orange{background:#fff7ed}
+.d2-card-icon.blue{background:#eff6ff}
+.d2-card-title{font-size:13px;font-weight:700;color:#1e293b}
+.d2-card-sub{font-size:11px;color:#94a3b8;margin-top:1px}
+.d2-count-badge{margin-left:auto;background:#f1f5f9;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700;color:#64748b}
+
+.d2-body{padding:16px 18px}
+
+.d2-tip{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px 12px;font-size:11.5px;color:#92400e;line-height:1.6;margin-bottom:14px;display:flex;gap:8px}
+.d2-tip .tip-ico{font-size:14px;flex-shrink:0;margin-top:1px}
+
+.d2-field{margin-bottom:10px}
+.d2-field label{display:block;font-size:11.5px;font-weight:600;color:#374151;margin-bottom:4px}
+.d2-field input{width:100%;border:1.5px solid #e2e8f0;border-radius:8px;padding:8px 11px;font-size:13px;color:#1e293b;outline:none}
+.d2-field input:focus{border-color:#f59e0b}
+.d2-field input::placeholder{color:#cbd5e1}
+.d2-submit{width:100%;background:#f59e0b;color:#fff;border:none;border-radius:8px;padding:10px;font-size:13px;font-weight:700;cursor:pointer}
+
+.d2-list-item{display:flex;align-items:center;padding:11px 18px;gap:12px;border-bottom:1px solid #f8fafc;transition:background .1s;cursor:default}
+.d2-list-item:hover{background:#fafbfc}
+.d2-list-item:last-child{border-bottom:none}
+.d2-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.d2-dot.warm{background:#f59e0b}
+.d2-dot.cool{background:#38bdf8}
+.d2-dot.neutral{background:#94a3b8}
+.d2-dot.empty-dot{background:#e2e8f0;border:1.5px dashed #cbd5e1}
+.d2-item-text{flex:1}
+.d2-item-name{font-size:13px;font-weight:600;color:#1e293b}
+.d2-item-notes{font-size:11px;color:#94a3b8;margin-top:1px}
+.d2-item-count{font-size:11px;background:#f1f5f9;border-radius:20px;padding:2px 9px;font-weight:600;color:#64748b}
+.d2-del-btn{background:none;border:1px solid #fee2e2;border-radius:6px;color:#ef4444;font-size:11px;padding:3px 8px;cursor:pointer;transition:all .15s}
+.d2-del-btn:hover{background:#ef4444;color:#fff}
+.d2-del-btn.locked{visibility:hidden}
+
+/* ───────────────────────────────────────────────────────────────────
+   DESIGN 3 — "Card Grid"
+   ─────────────────────────────────────────────────────────────────── */
+.d3-header-bar{background:linear-gradient(135deg,#1e2d3d,#2d4a6b);border-radius:12px;padding:18px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.d3-header-bar h2{font-size:18px;font-weight:800;color:#fff}
+.d3-header-bar p{font-size:12px;color:#94a3b8;margin-top:3px}
+.d3-header-stat{background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);border-radius:8px;padding:8px 14px;text-align:center;flex-shrink:0}
+.d3-header-stat .num{font-size:22px;font-weight:800;color:#f59e0b;line-height:1}
+.d3-header-stat .lbl{font-size:10px;color:#f59e0b;opacity:.7;margin-top:2px}
+
+.d3-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.d3-card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.05);transition:all .15s;cursor:default;position:relative;overflow:hidden}
+.d3-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.d3-card.warm::before{background:linear-gradient(90deg,#f59e0b,#f97316)}
+.d3-card.cool::before{background:linear-gradient(90deg,#38bdf8,#818cf8)}
+.d3-card.green::before{background:linear-gradient(90deg,#10b981,#34d399)}
+.d3-card.purple::before{background:linear-gradient(90deg,#8b5cf6,#ec4899)}
+.d3-card.gray::before{background:#e2e8f0}
+.d3-card:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(0,0,0,.1)}
+.d3-card .d3-ico{font-size:26px;margin-bottom:10px}
+.d3-card .d3-name{font-size:13px;font-weight:700;color:#1e293b;line-height:1.3}
+.d3-card .d3-notes{font-size:10.5px;color:#94a3b8;margin-top:3px;line-height:1.4}
+.d3-card .d3-footer{display:flex;align-items:center;justify-content:space-between;margin-top:12px}
+.d3-card .d3-count{font-size:11px;font-weight:700;background:#f1f5f9;border-radius:20px;padding:2px 8px;color:#64748b}
+.d3-card .d3-count.has{background:#fff7ed;color:#f97316}
+.d3-del-card{background:none;border:1px solid #fee2e2;border-radius:6px;color:#ef4444;font-size:11px;padding:3px 7px;cursor:pointer;transition:all .15s}
+.d3-del-card:hover{background:#ef4444;color:#fff}
+.d3-del-card.locked{visibility:hidden}
+
+.d3-add-card{background:#fafbfc;border:1.5px dashed #e2e8f0;border-radius:12px;padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;min-height:120px;transition:all .15s;gap:6px}
+.d3-add-card:hover{border-color:#f59e0b;background:#fffbf0}
+.d3-add-card .plus{width:36px;height:36px;border-radius:50%;background:#f59e0b;color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center;font-weight:800;transition:transform .15s}
+.d3-add-card:hover .plus{transform:rotate(90deg)}
+.d3-add-card span{font-size:12px;font-weight:600;color:#94a3b8}
+
+/* Add form (hidden by default, shown below grid) */
+.d3-add-form{background:#fff;border:1.5px solid #f59e0b;border-radius:12px;padding:16px;margin-top:14px;display:flex;gap:10px;align-items:flex-end;box-shadow:0 0 0 4px rgba(245,158,11,.08)}
+.d3-add-form .d3-fi{flex:1}
+.d3-add-form label{font-size:11px;font-weight:700;color:#374151;display:block;margin-bottom:4px}
+.d3-add-form input{width:100%;border:1.5px solid #e2e8f0;border-radius:7px;padding:8px 10px;font-size:13px;color:#1e293b;outline:none}
+.d3-add-form input:focus{border-color:#f59e0b}
+.d3-add-form input::placeholder{color:#cbd5e1}
+.d3-form-btns{display:flex;gap:6px;flex-shrink:0}
+.d3-ok{background:#f59e0b;color:#fff;border:none;border-radius:7px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer}
+.d3-cancel{background:#fff;border:1.5px solid #e2e8f0;color:#64748b;border-radius:7px;padding:8px 12px;font-size:12px;cursor:pointer}
+
+/* ───────────────────────────────────────────────────────────────────
+   DESIGN 4 — "Inline Editable Table"
+   ─────────────────────────────────────────────────────────────────── */
+.d4-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:12px;flex-wrap:wrap}
+.d4-top-left h2{font-size:20px;font-weight:800;color:#1e293b}
+.d4-top-left p{font-size:12.5px;color:#64748b;margin-top:2px}
+.d4-new-btn{display:flex;align-items:center;gap:6px;background:#f59e0b;color:#fff;border:none;border-radius:9px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;transition:background .15s;white-space:nowrap}
+.d4-new-btn:hover{background:#d97706}
+
+.d4-table{background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.d4-table-head{display:grid;grid-template-columns:1fr 1.4fr 90px 80px;gap:0;padding:10px 16px;background:#f8fafc;border-bottom:1px solid #e2e8f0}
+.d4-table-head span{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#94a3b8}
+
+.d4-row{display:grid;grid-template-columns:1fr 1.4fr 90px 80px;gap:0;padding:11px 16px;border-bottom:1px solid #f1f5f9;align-items:center;transition:background .1s;position:relative}
+.d4-row:hover{background:#fafbfc}
+.d4-row:last-child{border-bottom:none}
+.d4-row.new-row{background:#fffbf0;border-bottom:2px solid #f59e0b}
+
+.d4-row .d4-name{font-size:13px;font-weight:600;color:#1e293b;display:flex;align-items:center;gap:7px}
+.d4-row .d4-name .d4-n-icon{font-size:14px}
+.d4-row .d4-notes-text{font-size:12px;color:#94a3b8}
+.d4-row .d4-count-cell{display:flex;align-items:center}
+.d4-count-pill{font-size:11px;font-weight:700;background:#fff7ed;color:#f97316;border-radius:20px;padding:2px 9px}
+.d4-count-pill.zero{background:#f1f5f9;color:#94a3b8}
+.d4-row .d4-actions{display:flex;gap:6px;align-items:center}
+
+.d4-edit-btn{background:none;border:1px solid #e2e8f0;border-radius:6px;color:#64748b;font-size:11px;padding:3px 8px;cursor:pointer}
+.d4-del-row{background:none;border:1px solid #fee2e2;border-radius:6px;color:#ef4444;font-size:11px;padding:3px 8px;cursor:pointer}
+.d4-del-row.locked{visibility:hidden}
+
+/* New row inputs */
+.d4-row-input{width:100%;border:1.5px solid #f59e0b;border-radius:6px;padding:6px 9px;font-size:13px;color:#1e293b;outline:none;background:#fff;box-shadow:0 0 0 3px rgba(245,158,11,.1)}
+.d4-row-input::placeholder{color:#cbd5e1}
+.d4-save-row{background:#f59e0b;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap}
+
+/* ───────────────────────────────────────────────────────────────────
+   DESIGN 5 — "Command Bar" (Minimal)
+   ─────────────────────────────────────────────────────────────────── */
+.d5-wrap{max-width:480px}
+.d5-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:12px}
+.d5-top h2{font-size:24px;font-weight:900;color:#1e293b;letter-spacing:-.5px}
+.d5-top p{font-size:12px;color:#94a3b8;margin-top:4px;line-height:1.5}
+.d5-count-big{text-align:right}
+.d5-count-big .num{font-size:36px;font-weight:900;color:#f59e0b;line-height:1}
+.d5-count-big .lbl{font-size:10px;color:#94a3b8;margin-top:2px}
+
+.d5-searchbar{display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f0;border-radius:10px;padding:10px 14px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.d5-searchbar:focus-within{border-color:#f59e0b;box-shadow:0 0 0 3px rgba(245,158,11,.1)}
+.d5-searchbar .mag{font-size:16px;flex-shrink:0}
+.d5-searchbar input{flex:1;border:none;outline:none;font-size:13.5px;color:#1e293b;background:transparent}
+.d5-searchbar input::placeholder{color:#cbd5e1}
+.d5-add-inline{background:#f59e0b;color:#fff;border:none;border-radius:7px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+
+.d5-list{display:flex;flex-direction:column;gap:0}
+.d5-item{display:flex;align-items:center;padding:14px 4px;border-bottom:1px solid #f1f5f9;gap:14px;transition:all .15s;cursor:default}
+.d5-item:hover{padding-left:8px}
+.d5-item:last-child{border-bottom:none}
+.d5-item-num{width:24px;height:24px;border-radius:6px;background:#f1f5f9;font-size:11px;font-weight:700;color:#94a3b8;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.d5-item:hover .d5-item-num{background:#fff7ed;color:#f59e0b}
+.d5-item-info{flex:1}
+.d5-item-name{font-size:13.5px;font-weight:700;color:#1e293b}
+.d5-item-notes{font-size:11px;color:#94a3b8;margin-top:2px}
+.d5-item-count{font-size:11.5px;font-weight:700;background:#f1f5f9;color:#64748b;border-radius:20px;padding:3px 10px}
+.d5-item-count.has{background:#fff7ed;color:#f97316}
+.d5-item-del{background:none;border:none;cursor:pointer;font-size:14px;opacity:.35;transition:all .15s;padding:4px;border-radius:6px;line-height:1}
+.d5-item-del:hover{opacity:1;background:#fee2e2}
+.d5-item-del.locked{visibility:hidden}
+
+.d5-divider{height:1px;background:linear-gradient(90deg,transparent,#e2e8f0,transparent);margin:10px 0}
+
+.d5-hint{font-size:11.5px;color:#94a3b8;text-align:center;padding:12px;line-height:1.6;background:#f8fafc;border-radius:8px;border:1px dashed #e2e8f0;margin-top:8px}
+.d5-hint strong{color:#f59e0b}
+
+/* ── Back link ── */
+.back-link{display:inline-flex;align-items:center;gap:6px;color:#64748b;font-size:12.5px;text-decoration:none;margin-top:16px;padding:7px 12px;border:1px solid #e2e8f0;border-radius:8px;background:#fff;transition:all .15s}
+.back-link:hover{color:#1e293b;border-color:#cbd5e1}
+
+/* ── Mobile ── */
+@media(max-width:560px){
+  .sim-sidebar{display:none}
+  .d4-table-head,.d4-row{grid-template-columns:1fr 80px 70px}
+  .d4-table-head span:nth-child(2),.d4-row .d4-notes-text{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="preview-header">
+  <div style="max-width:900px;margin:0 auto">
+    <div class="preview-title">⚙️ Category Manager <span class="badge">5 DESIGNS</span></div>
+    <div class="preview-sub">Σελίδες διαχείρισης κατηγοριών/χώρων — Χώροι Αποθήκευσης · Κατηγορίες Υλικών · Κατηγορίες Προμηθευτών</div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showTab(0)">① Chip Builder</button>
+      <button class="tab-btn" onclick="showTab(1)">② Power Panel</button>
+      <button class="tab-btn" onclick="showTab(2)">③ Card Grid</button>
+      <button class="tab-btn" onclick="showTab(3)">④ Inline Table</button>
+      <button class="tab-btn" onclick="showTab(4)">⑤ Command Bar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     DESIGN 1 — CHIP BUILDER
+     ════════════════════════════════════════════════════════════════ -->
+<div class="design-panel active" id="panel-0">
+  <div class="design-label">
+    <div>
+      <div class="design-name">① Chip Builder — Ετικέτες-Τσιπάκια</div>
+      <div class="design-desc">Κάθε κατηγορία = ένα έγχρωμο chip. Προσθήκη με input + Enter. Διαγραφή με × στο chip. Πολύ compact, μοντέρνο, ιδανικό για μικρές λίστες.</div>
+    </div>
+    <div class="design-when">💡 Ιδανικό όταν: απλές ετικέτες, χωρίς περιγραφή</div>
+  </div>
+  <div class="app-frame">
+    <div class="sim-sidebar">
+      <div class="sim-logo">🍖 TAMAM <span>BACK-OFFICE</span></div>
+      <div class="sim-nav">
+        <div class="sim-link">📊 Dashboard</div>
+        <div class="sim-link">🚚 Προμηθευτές</div>
+        <div class="sim-link active">📦 Πρώτες Ύλες</div>
+        <div class="sim-link">🧾 Συνταγές</div>
+        <div class="sim-link">💰 Έξοδα</div>
+      </div>
+    </div>
+    <div class="sim-content">
+      <div class="d1-header">
+        <h2>🏪 Χώροι Αποθήκευσης</h2>
+        <p>Ψυγείο, Κατάψυξη, Αποθήκη κ.λπ. — επεξεργάσιμοι χώροι</p>
+      </div>
+
+      <div class="d1-add-box">
+        <div class="d1-add-title">Προσθήκη Νέου Χώρου</div>
+        <div class="d1-add-row">
+          <input class="d1-input" type="text" placeholder="π.χ. Ψυγείο Ζεστής Κουζίνας">
+          <input class="d1-input" type="text" placeholder="Σημείωση (προαιρετικό)">
+          <button class="d1-add-btn">+ Προσθήκη</button>
+        </div>
+      </div>
+
+      <div class="d1-chips-title">
+        Υπάρχοντες Χώροι <span>5 χώροι</span>
+      </div>
+      <div class="d1-chips">
+        <div class="d1-chip has-items">
+          <span class="d1-icon">🧊</span>
+          <span>Ψυγείο</span>
+          <span class="d1-count">12</span>
+          <button class="d1-del" title="Διαγραφή — αδύνατο (12 υλικά)" disabled style="opacity:.35;cursor:not-allowed">×</button>
+        </div>
+        <div class="d1-chip has-items">
+          <span class="d1-icon">❄️</span>
+          <span>Κατάψυξη</span>
+          <span class="d1-count">8</span>
+          <button class="d1-del" disabled style="opacity:.35;cursor:not-allowed">×</button>
+        </div>
+        <div class="d1-chip has-items">
+          <span class="d1-icon">📦</span>
+          <span>Αποθήκη</span>
+          <span class="d1-count">15</span>
+          <button class="d1-del" disabled style="opacity:.35;cursor:not-allowed">×</button>
+        </div>
+        <div class="d1-chip has-items">
+          <span class="d1-icon">🍺</span>
+          <span>Ψυγείο Ποτών</span>
+          <span class="d1-count">3</span>
+          <button class="d1-del" disabled style="opacity:.35;cursor:not-allowed">×</button>
+        </div>
+        <div class="d1-chip empty">
+          <span class="d1-icon">🌿</span>
+          <span>Υπαίθριος Χώρος</span>
+          <span class="d1-count">0</span>
+          <button class="d1-del">×</button>
+        </div>
+      </div>
+
+      <div style="margin-top:12px;font-size:11px;color:#94a3b8">
+        ℹ️ Χώροι με υλικά δεν μπορούν να διαγραφούν. Αδειάστε τον χώρο πρώτα.
+      </div>
+
+      <a href="#" class="back-link">← Πίσω στις Πρώτες Ύλες</a>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     DESIGN 2 — POWER PANEL
+     ════════════════════════════════════════════════════════════════ -->
+<div class="design-panel" id="panel-1">
+  <div class="design-label">
+    <div>
+      <div class="design-name">② Power Panel — Διπλή Κάρτα</div>
+      <div class="design-desc">Αριστερά: φόρμα προσθήκης με tip. Δεξιά: λίστα με χρωματιστές κουκίδες, όνομα, σημειώσεις, badge πλήθους. Πολύ επαγγελματικό, σαφές.</div>
+    </div>
+    <div class="design-when">💡 Ιδανικό όταν: υπάρχουν σημειώσεις / περιγραφή</div>
+  </div>
+  <div class="app-frame">
+    <div class="sim-sidebar">
+      <div class="sim-logo">🍖 TAMAM <span>BACK-OFFICE</span></div>
+      <div class="sim-nav">
+        <div class="sim-link">📊 Dashboard</div>
+        <div class="sim-link">🚚 Προμηθευτές</div>
+        <div class="sim-link active">📦 Πρώτες Ύλες</div>
+        <div class="sim-link">🧾 Συνταγές</div>
+        <div class="sim-link">💰 Έξοδα</div>
+      </div>
+    </div>
+    <div class="sim-content">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:12px;flex-wrap:wrap">
+        <div>
+          <div style="font-size:20px;font-weight:800;color:#1e293b">Χώροι Αποθήκευσης</div>
+          <div style="font-size:12.5px;color:#64748b;margin-top:2px">Ψυγείο, Κατάψυξη, Αποθήκη κ.λπ. — επεξεργάσιμοι χώροι</div>
+        </div>
+        <a href="#" class="back-link">← Πρώτες Ύλες</a>
+      </div>
+
+      <div class="d2-layout">
+        <!-- Left: form -->
+        <div class="d2-card">
+          <div class="d2-card-header">
+            <div class="d2-card-icon orange">➕</div>
+            <div>
+              <div class="d2-card-title">Νέος Χώρος</div>
+              <div class="d2-card-sub">Συμπλήρωσε και πάτα Προσθήκη</div>
+            </div>
+          </div>
+          <div class="d2-body">
+            <div class="d2-tip"><span class="tip-ico">💡</span>Οι χώροι εμφανίζονται στη λίστα υλικών ως φίλτρο αποθήκευσης κάθε υλικού.</div>
+            <div class="d2-field">
+              <label>Όνομα Χώρου *</label>
+              <input type="text" placeholder="π.χ. Ψυγείο Ζεστής Κουζίνας">
+            </div>
+            <div class="d2-field">
+              <label>Σημειώσεις</label>
+              <input type="text" placeholder="π.χ. Κρέατα, γαλακτοκομικά...">
+            </div>
+            <button class="d2-submit">➕ Προσθήκη</button>
+          </div>
+        </div>
+
+        <!-- Right: list -->
+        <div class="d2-card">
+          <div class="d2-card-header">
+            <div class="d2-card-icon blue">🏪</div>
+            <div>
+              <div class="d2-card-title">Υπάρχοντες Χώροι</div>
+              <div class="d2-card-sub">Χώροι αποθήκευσης του μαγαζιού</div>
+            </div>
+            <div class="d2-count-badge">5 χώροι</div>
+          </div>
+
+          <div class="d2-list-item">
+            <div class="d2-dot warm"></div>
+            <div class="d2-item-text">
+              <div class="d2-item-name">🧊 Ψυγείο</div>
+              <div class="d2-item-notes">Κυρίως ψυγείο — κρέατα, γαλακτοκομικά, σάλτσες</div>
+            </div>
+            <span class="d2-item-count">12 υλικά</span>
+            <button class="d2-del-btn locked">Διαγραφή</button>
+          </div>
+          <div class="d2-list-item">
+            <div class="d2-dot cool"></div>
+            <div class="d2-item-text">
+              <div class="d2-item-name">❄️ Κατάψυξη</div>
+              <div class="d2-item-notes">Κατάψυκτης</div>
+            </div>
+            <span class="d2-item-count">8 υλικά</span>
+            <button class="d2-del-btn locked">Διαγραφή</button>
+          </div>
+          <div class="d2-list-item">
+            <div class="d2-dot neutral"></div>
+            <div class="d2-item-text">
+              <div class="d2-item-name">📦 Αποθήκη</div>
+              <div class="d2-item-notes">Ξηρά αποθήκη — μπαχαρικά, αναλώσιμα, κονσέρβες</div>
+            </div>
+            <span class="d2-item-count">15 υλικά</span>
+            <button class="d2-del-btn locked">Διαγραφή</button>
+          </div>
+          <div class="d2-list-item">
+            <div class="d2-dot warm"></div>
+            <div class="d2-item-text">
+              <div class="d2-item-name">🍺 Ψυγείο Ποτών</div>
+              <div class="d2-item-notes">Ψυγείο αναψυκτικών &amp; μπύρας</div>
+            </div>
+            <span class="d2-item-count">3 υλικά</span>
+            <button class="d2-del-btn locked">Διαγραφή</button>
+          </div>
+          <div class="d2-list-item">
+            <div class="d2-dot empty-dot"></div>
+            <div class="d2-item-text">
+              <div class="d2-item-name">🌿 Υπαίθριος Χώρος</div>
+              <div class="d2-item-notes">Γκαζέρα, υγραέριο κλπ</div>
+            </div>
+            <span class="d2-item-count" style="color:#cbd5e1">0 υλικά</span>
+            <button class="d2-del-btn">Διαγραφή</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     DESIGN 3 — CARD GRID
+     ════════════════════════════════════════════════════════════════ -->
+<div class="design-panel" id="panel-2">
+  <div class="design-label">
+    <div>
+      <div class="design-name">③ Card Grid — Οπτικές Κάρτες</div>
+      <div class="design-desc">Κάθε κατηγορία = κάρτα με έγχρωμη μπάρα, εικονίδιο, μετρητή. Η τελευταία κάρτα = "+" για νέα προσθήκη. Πολύ οπτικό, εξαιρετικό για touch.</div>
+    </div>
+    <div class="design-when">💡 Ιδανικό όταν: λίγα items, θέλουμε visual impact</div>
+  </div>
+  <div class="app-frame">
+    <div class="sim-sidebar">
+      <div class="sim-logo">🍖 TAMAM <span>BACK-OFFICE</span></div>
+      <div class="sim-nav">
+        <div class="sim-link">📊 Dashboard</div>
+        <div class="sim-link">🚚 Προμηθευτές</div>
+        <div class="sim-link active">📦 Πρώτες Ύλες</div>
+        <div class="sim-link">🧾 Συνταγές</div>
+        <div class="sim-link">💰 Έξοδα</div>
+      </div>
+    </div>
+    <div class="sim-content">
+      <div class="d3-header-bar">
+        <div>
+          <h2>Χώροι Αποθήκευσης</h2>
+          <p>Ψυγείο, Κατάψυξη, Αποθήκη κ.λπ. — επεξεργάσιμοι χώροι</p>
+        </div>
+        <div class="d3-header-stat">
+          <div class="num">5</div>
+          <div class="lbl">χώροι</div>
+        </div>
+      </div>
+
+      <div class="d3-grid">
+        <div class="d3-card warm">
+          <div class="d3-ico">🧊</div>
+          <div class="d3-name">Ψυγείο</div>
+          <div class="d3-notes">Κρέατα, γαλακτοκομικά, σάλτσες</div>
+          <div class="d3-footer">
+            <span class="d3-count has">12 υλικά</span>
+            <button class="d3-del-card locked">🗑</button>
+          </div>
+        </div>
+        <div class="d3-card cool">
+          <div class="d3-ico">❄️</div>
+          <div class="d3-name">Κατάψυξη</div>
+          <div class="d3-notes">Κατάψυκτης</div>
+          <div class="d3-footer">
+            <span class="d3-count has">8 υλικά</span>
+            <button class="d3-del-card locked">🗑</button>
+          </div>
+        </div>
+        <div class="d3-card green">
+          <div class="d3-ico">📦</div>
+          <div class="d3-name">Αποθήκη</div>
+          <div class="d3-notes">Μπαχαρικά, αναλώσιμα, κονσέρβες</div>
+          <div class="d3-footer">
+            <span class="d3-count has">15 υλικά</span>
+            <button class="d3-del-card locked">🗑</button>
+          </div>
+        </div>
+        <div class="d3-card purple">
+          <div class="d3-ico">🍺</div>
+          <div class="d3-name">Ψυγείο Ποτών</div>
+          <div class="d3-notes">Αναψυκτικά &amp; μπύρες</div>
+          <div class="d3-footer">
+            <span class="d3-count has">3 υλικά</span>
+            <button class="d3-del-card locked">🗑</button>
+          </div>
+        </div>
+        <div class="d3-card gray">
+          <div class="d3-ico">🌿</div>
+          <div class="d3-name">Υπαίθριος Χώρος</div>
+          <div class="d3-notes">Γκαζέρα, υγραέριο κλπ</div>
+          <div class="d3-footer">
+            <span class="d3-count">0 υλικά</span>
+            <button class="d3-del-card">🗑</button>
+          </div>
+        </div>
+        <div class="d3-add-card" onclick="this.nextElementSibling.style.display='flex'">
+          <div class="plus">+</div>
+          <span>Νέος Χώρος</span>
+        </div>
+      </div>
+
+      <!-- Add form (shown on click) -->
+      <div class="d3-add-form" style="display:none">
+        <div class="d3-fi">
+          <label>Όνομα Χώρου *</label>
+          <input type="text" placeholder="π.χ. Ψυγείο Ζεστής Κουζίνας">
+        </div>
+        <div class="d3-fi">
+          <label>Σημειώσεις</label>
+          <input type="text" placeholder="προαιρετικό…">
+        </div>
+        <div class="d3-form-btns">
+          <button class="d3-ok">✓ Αποθήκευση</button>
+          <button class="d3-cancel">✕</button>
+        </div>
+      </div>
+
+      <a href="#" class="back-link" style="margin-top:18px">← Πίσω στις Πρώτες Ύλες</a>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     DESIGN 4 — INLINE EDITABLE TABLE
+     ════════════════════════════════════════════════════════════════ -->
+<div class="design-panel" id="panel-3">
+  <div class="design-label">
+    <div>
+      <div class="design-name">④ Inline Table — Επεξεργάσιμος Πίνακας</div>
+      <div class="design-desc">Καθαρός πίνακας. Κουμπί "+ Νέος" προσθέτει γραμμή με input κατευθείαν στον πίνακα. Πιο γρήγορο από form, εξαιρετικό για power users.</div>
+    </div>
+    <div class="design-when">💡 Ιδανικό όταν: πολλά items, χρήστης γνωρίζει τι κάνει</div>
+  </div>
+  <div class="app-frame">
+    <div class="sim-sidebar">
+      <div class="sim-logo">🍖 TAMAM <span>BACK-OFFICE</span></div>
+      <div class="sim-nav">
+        <div class="sim-link">📊 Dashboard</div>
+        <div class="sim-link">🚚 Προμηθευτές</div>
+        <div class="sim-link active">📦 Πρώτες Ύλες</div>
+        <div class="sim-link">🧾 Συνταγές</div>
+        <div class="sim-link">💰 Έξοδα</div>
+      </div>
+    </div>
+    <div class="sim-content">
+      <div class="d4-top">
+        <div class="d4-top-left">
+          <h2>Χώροι Αποθήκευσης</h2>
+          <p>Ψυγείο, Κατάψυξη, Αποθήκη κ.λπ. — 5 χώροι</p>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <a href="#" class="back-link" style="margin-top:0">← Πίσω</a>
+          <button class="d4-new-btn">+ Νέος Χώρος</button>
+        </div>
+      </div>
+
+      <div class="d4-table">
+        <div class="d4-table-head">
+          <span>Όνομα Χώρου</span>
+          <span>Σημειώσεις</span>
+          <span>Υλικά</span>
+          <span>Ενέργειες</span>
+        </div>
+
+        <div class="d4-row">
+          <div class="d4-name"><span class="d4-n-icon">🧊</span> Ψυγείο</div>
+          <div class="d4-notes-text">Κυρίως ψυγείο — κρέατα, γαλακτοκομικά</div>
+          <div class="d4-count-cell"><span class="d4-count-pill">12</span></div>
+          <div class="d4-actions">
+            <button class="d4-del-row locked">🗑</button>
+          </div>
+        </div>
+        <div class="d4-row">
+          <div class="d4-name"><span class="d4-n-icon">❄️</span> Κατάψυξη</div>
+          <div class="d4-notes-text">Κατάψυκτης</div>
+          <div class="d4-count-cell"><span class="d4-count-pill">8</span></div>
+          <div class="d4-actions">
+            <button class="d4-del-row locked">🗑</button>
+          </div>
+        </div>
+        <div class="d4-row">
+          <div class="d4-name"><span class="d4-n-icon">📦</span> Αποθήκη</div>
+          <div class="d4-notes-text">Ξηρά — μπαχαρικά, αναλώσιμα, κονσέρβες</div>
+          <div class="d4-count-cell"><span class="d4-count-pill">15</span></div>
+          <div class="d4-actions">
+            <button class="d4-del-row locked">🗑</button>
+          </div>
+        </div>
+        <div class="d4-row">
+          <div class="d4-name"><span class="d4-n-icon">🍺</span> Ψυγείο Ποτών</div>
+          <div class="d4-notes-text">Αναψυκτικά &amp; μπύρες</div>
+          <div class="d4-count-cell"><span class="d4-count-pill">3</span></div>
+          <div class="d4-actions">
+            <button class="d4-del-row locked">🗑</button>
+          </div>
+        </div>
+        <div class="d4-row">
+          <div class="d4-name"><span class="d4-n-icon">🌿</span> Υπαίθριος Χώρος</div>
+          <div class="d4-notes-text">Γκαζέρα, υγραέριο κλπ</div>
+          <div class="d4-count-cell"><span class="d4-count-pill zero">0</span></div>
+          <div class="d4-actions">
+            <button class="d4-del-row">🗑</button>
+          </div>
+        </div>
+
+        <!-- New row (shown when "+ Νέος" clicked) -->
+        <div class="d4-row new-row">
+          <div>
+            <input class="d4-row-input" type="text" placeholder="Όνομα χώρου..." autofocus>
+          </div>
+          <div>
+            <input class="d4-row-input" type="text" placeholder="Σημειώσεις (προαιρετικό)...">
+          </div>
+          <div class="d4-count-cell">
+            <span class="d4-count-pill zero">νέος</span>
+          </div>
+          <div class="d4-actions">
+            <button class="d4-save-row">✓ Αποθήκευση</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     DESIGN 5 — COMMAND BAR (MINIMAL)
+     ════════════════════════════════════════════════════════════════ -->
+<div class="design-panel" id="panel-4">
+  <div class="design-label">
+    <div>
+      <div class="design-name">⑤ Command Bar — Ultra-Minimal</div>
+      <div class="design-desc">Ένα search bar στην κορυφή: πληκτρολόγησε για φίλτρο ή γράψε νέο όνομα και πάτα "+". Λίστα με hover animation. Ο πιο γρήγορος χρόνος αλληλεπίδρασης.</div>
+    </div>
+    <div class="design-when">💡 Ιδανικό όταν: συχνή χρήση, μεγαλύτερη λίστα</div>
+  </div>
+  <div class="app-frame">
+    <div class="sim-sidebar">
+      <div class="sim-logo">🍖 TAMAM <span>BACK-OFFICE</span></div>
+      <div class="sim-nav">
+        <div class="sim-link">📊 Dashboard</div>
+        <div class="sim-link">🚚 Προμηθευτές</div>
+        <div class="sim-link active">📦 Πρώτες Ύλες</div>
+        <div class="sim-link">🧾 Συνταγές</div>
+        <div class="sim-link">💰 Έξοδα</div>
+      </div>
+    </div>
+    <div class="sim-content">
+      <div class="d5-wrap">
+        <div class="d5-top">
+          <div>
+            <h2>Χώροι<br>Αποθήκευσης</h2>
+            <p>Ψυγείο, Κατάψυξη, Αποθήκη κ.λπ.</p>
+          </div>
+          <div class="d5-count-big">
+            <div class="num">5</div>
+            <div class="lbl">χώροι</div>
+          </div>
+        </div>
+
+        <div class="d5-searchbar">
+          <span class="mag">🔍</span>
+          <input type="text" placeholder="Αναζήτηση ή νέος χώρος...">
+          <button class="d5-add-inline">+ Προσθήκη</button>
+        </div>
+
+        <div class="d5-list">
+          <div class="d5-item">
+            <div class="d5-item-num">1</div>
+            <div class="d5-item-info">
+              <div class="d5-item-name">🧊 Ψυγείο</div>
+              <div class="d5-item-notes">Κρέατα, γαλακτοκομικά, σάλτσες</div>
+            </div>
+            <span class="d5-item-count has">12 υλικά</span>
+            <button class="d5-item-del locked" title="Αδύνατη διαγραφή">🗑</button>
+          </div>
+          <div class="d5-item">
+            <div class="d5-item-num">2</div>
+            <div class="d5-item-info">
+              <div class="d5-item-name">❄️ Κατάψυξη</div>
+              <div class="d5-item-notes">Κατάψυκτης</div>
+            </div>
+            <span class="d5-item-count has">8 υλικά</span>
+            <button class="d5-item-del locked">🗑</button>
+          </div>
+          <div class="d5-item">
+            <div class="d5-item-num">3</div>
+            <div class="d5-item-info">
+              <div class="d5-item-name">📦 Αποθήκη</div>
+              <div class="d5-item-notes">Μπαχαρικά, αναλώσιμα, κονσέρβες</div>
+            </div>
+            <span class="d5-item-count has">15 υλικά</span>
+            <button class="d5-item-del locked">🗑</button>
+          </div>
+          <div class="d5-item">
+            <div class="d5-item-num">4</div>
+            <div class="d5-item-info">
+              <div class="d5-item-name">🍺 Ψυγείο Ποτών</div>
+              <div class="d5-item-notes">Αναψυκτικά &amp; μπύρες</div>
+            </div>
+            <span class="d5-item-count has">3 υλικά</span>
+            <button class="d5-item-del locked">🗑</button>
+          </div>
+
+          <div class="d5-divider"></div>
+
+          <div class="d5-item">
+            <div class="d5-item-num" style="background:#f8fafc;color:#cbd5e1">5</div>
+            <div class="d5-item-info">
+              <div class="d5-item-name" style="color:#94a3b8">🌿 Υπαίθριος Χώρος</div>
+              <div class="d5-item-notes">Γκαζέρα, υγραέριο κλπ</div>
+            </div>
+            <span class="d5-item-count" style="color:#cbd5e1">0 υλικά</span>
+            <button class="d5-item-del">🗑</button>
+          </div>
+        </div>
+
+        <div class="d5-hint">
+          💡 Γράψε το όνομα στο πεδίο αναζήτησης και πάτα <strong>+ Προσθήκη</strong> για νέο χώρο.<br>
+          Χώροι με 0 υλικά μπορούν να διαγραφούν.
+        </div>
+
+        <a href="#" class="back-link">← Πίσω στις Πρώτες Ύλες</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Summary table ── -->
+<div style="background:#1c2554;padding:20px;margin-top:0;border-top:1px solid #2a3580">
+  <div style="max-width:900px;margin:0 auto">
+    <div style="font-size:13px;font-weight:800;color:#f5c842;margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px">⚡ Σύγκριση Designs</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px">
+      <div style="background:#0d0f14;border:1px solid #2a3580;border-radius:8px;padding:12px;font-size:12px">
+        <div style="font-weight:700;color:#fff;margin-bottom:4px">① Chip Builder</div>
+        <div style="color:#8b93b8;line-height:1.5">✅ Compact &amp; modern<br>✅ Γρήγορη εικόνα<br>❌ Δύσκολο με σημειώσεις</div>
+      </div>
+      <div style="background:#0d0f14;border:1px solid #2a3580;border-radius:8px;padding:12px;font-size:12px">
+        <div style="font-weight:700;color:#fff;margin-bottom:4px">② Power Panel</div>
+        <div style="color:#8b93b8;line-height:1.5">✅ Επαγγελματικό<br>✅ Σαφής πληροφορία<br>❌ Πιο φαρδύ layout</div>
+      </div>
+      <div style="background:#0d0f14;border:1px solid #2a3580;border-radius:8px;padding:12px;font-size:12px">
+        <div style="font-weight:700;color:#fff;margin-bottom:4px">③ Card Grid</div>
+        <div style="color:#8b93b8;line-height:1.5">✅ Πολύ οπτικό<br>✅ Touch-friendly<br>❌ Χρειάζεται χώρο</div>
+      </div>
+      <div style="background:#0d0f14;border:1px solid #2a3580;border-radius:8px;padding:12px;font-size:12px">
+        <div style="font-weight:700;color:#fff;margin-bottom:4px">④ Inline Table</div>
+        <div style="color:#8b93b8;line-height:1.5">✅ Πιο γρήγορο add<br>✅ Familiar / Excel-like<br>❌ Λιγότερο visual</div>
+      </div>
+      <div style="background:#0d0f14;border:1px solid #2a3580;border-radius:8px;padding:12px;font-size:12px">
+        <div style="font-weight:700;color:#fff;margin-bottom:4px">⑤ Command Bar</div>
+        <div style="color:#8b93b8;line-height:1.5">✅ Ελάχιστο UI<br>✅ Search + Add σε 1<br>❌ Λιγότερο obvious</div>
+      </div>
+    </div>
+    <div style="margin-top:14px;font-size:11px;color:#2a3580;text-align:center">TAMAM Grill House · ιδιωτικό εργαλείο · sample data μόνο</div>
+  </div>
+</div>
+
+<script>
+function showTab(n){
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',i===n));
+  document.querySelectorAll('.design-panel').forEach((p,i)=>p.classList.toggle('active',i===n));
+}
+</script>
+</body>
+</html>
