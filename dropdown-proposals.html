@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAMAM — 10 Προτάσεις Dropdown</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent: #f97316;
+  --accent-dark: #ea6b0a;
+  --accent-light: #fff7ed;
+  --bg: #f1f5f9;
+  --white: #ffffff;
+  --border: #e2e8f0;
+  --text: #1e293b;
+  --muted: #64748b;
+  --radius: 10px;
+  --shadow: 0 2px 10px rgba(0,0,0,.08);
+}
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); }
+
+.hero { background: linear-gradient(135deg, #1e293b, #334155); color:white; padding:36px 40px 28px; }
+.hero h1 { font-size:24px; font-weight:800; margin-bottom:6px; }
+.hero p  { font-size:14px; opacity:.7; }
+
+.grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; padding:28px 32px; max-width:1300px; margin:0 auto; }
+
+.card { background:white; border-radius:14px; border:1px solid var(--border); box-shadow:var(--shadow); overflow:hidden; }
+.card-head { padding:16px 20px 12px; border-bottom:1px solid var(--border); background:#fafafa; display:flex; align-items:baseline; gap:10px; }
+.card-num { width:26px; height:26px; border-radius:50%; background:var(--accent); color:white; font-size:12px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.card-title { font-size:14px; font-weight:700; }
+.card-desc { font-size:12px; color:var(--muted); margin-top:1px; }
+.card-body { padding:20px; }
+
+/* shared label */
+.lbl { font-size:11.5px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:7px; display:block; }
+.lbl2 { font-size:12px; font-weight:600; color:var(--text); margin-bottom:6px; display:block; margin-top:16px; }
+.lbl2:first-child { margin-top:0; }
+.field-wrap { margin-bottom:14px; }
+.field-wrap:last-child { margin-bottom:0; }
+.sep { border:none; border-top:1px dashed var(--border); margin:16px 0; }
+
+/* ────── 1. NATIVE SELECT ────── */
+.select-wrap { position:relative; }
+.sel {
+  width:100%; padding:9px 36px 9px 12px; appearance:none;
+  border:1.5px solid var(--border); border-radius:8px; font-size:13.5px;
+  color:var(--text); background:white; cursor:pointer; outline:none;
+  font-family:inherit; transition:border .15s;
+}
+.sel:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(249,115,22,.12); }
+.sel-arrow { position:absolute; right:11px; top:50%; transform:translateY(-50%); pointer-events:none; color:var(--muted); font-size:12px; }
+
+/* ────── 2. DATALIST IMPROVED ────── */
+.inp-improved {
+  width:100%; padding:9px 36px 9px 12px;
+  border:1.5px solid var(--border); border-radius:8px; font-size:13.5px;
+  color:var(--text); background:white; outline:none; font-family:inherit; transition:border .15s;
+}
+.inp-improved:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(249,115,22,.12); }
+.inp-wrap { position:relative; }
+.inp-icon { position:absolute; right:11px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:13px; pointer-events:none; }
+
+/* ────── 3. PILL PICKER ────── */
+.pills { display:flex; gap:7px; flex-wrap:wrap; }
+.pill {
+  padding:7px 14px; border:1.5px solid var(--border); border-radius:20px;
+  font-size:13px; font-weight:500; cursor:pointer; color:var(--muted);
+  background:white; transition:all .15s; user-select:none;
+}
+.pill:hover { border-color:var(--accent); color:var(--accent); }
+.pill.on { border-color:var(--accent); background:#fff7ed; color:#c2410c; font-weight:600; }
+
+/* ────── 4. BUTTON GROUP ────── */
+.btn-group { display:flex; border:1.5px solid var(--border); border-radius:9px; overflow:hidden; }
+.bg-opt { flex:1; padding:9px 8px; text-align:center; font-size:13px; font-weight:500; color:var(--muted); cursor:pointer; border-right:1px solid var(--border); background:white; transition:all .15s; user-select:none; }
+.bg-opt:last-child { border-right:none; }
+.bg-opt:hover { background:#f8fafc; color:var(--text); }
+.bg-opt.on { background:var(--accent); color:white; font-weight:600; }
+
+/* ────── 5. SEGMENTED CONTROL ────── */
+.segment { display:flex; background:#f1f5f9; border-radius:10px; padding:4px; gap:3px; }
+.seg-opt { flex:1; padding:8px 6px; text-align:center; font-size:13px; font-weight:500; color:var(--muted); cursor:pointer; border-radius:7px; transition:all .15s; user-select:none; }
+.seg-opt:hover { color:var(--text); }
+.seg-opt.on { background:white; color:var(--text); font-weight:700; box-shadow:0 1px 4px rgba(0,0,0,.1); }
+
+/* ────── 6. CARD GRID ────── */
+.card-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:7px; }
+.cg-opt {
+  padding:10px 6px; border:1.5px solid var(--border); border-radius:9px; text-align:center;
+  cursor:pointer; font-size:11px; font-weight:500; color:var(--muted); background:white;
+  transition:all .15s; user-select:none; line-height:1.3;
+}
+.cg-opt .ico { font-size:20px; display:block; margin-bottom:4px; }
+.cg-opt:hover { border-color:var(--accent); color:var(--accent); }
+.cg-opt.on { border-color:var(--accent); background:#fff7ed; color:#c2410c; font-weight:700; }
+
+/* ────── 7. CUSTOM DROPDOWN ────── */
+.cd-wrap { position:relative; }
+.cd-trigger {
+  width:100%; padding:9px 36px 9px 12px; border:1.5px solid var(--border);
+  border-radius:8px; font-size:13.5px; color:var(--text); background:white; cursor:pointer;
+  text-align:left; outline:none; font-family:inherit; transition:border .15s; display:flex; align-items:center; justify-content:space-between;
+}
+.cd-trigger:focus, .cd-trigger.open { border-color:var(--accent); box-shadow:0 0 0 3px rgba(249,115,22,.12); }
+.cd-list {
+  position:absolute; top:calc(100% + 4px); left:0; right:0; background:white;
+  border:1.5px solid var(--accent); border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,.12);
+  z-index:50; overflow:hidden; display:none;
+}
+.cd-list.open { display:block; }
+.cd-item { padding:10px 14px; font-size:13.5px; cursor:pointer; transition:background .1s; display:flex; align-items:center; gap:8px; }
+.cd-item:hover { background:#fff7ed; color:var(--accent); }
+.cd-item.on { background:#fff7ed; color:#c2410c; font-weight:600; }
+.cd-item .cd-dot { width:8px; height:8px; border-radius:50%; background:var(--border); flex-shrink:0; }
+.cd-item.on .cd-dot { background:var(--accent); }
+
+/* ────── 8. SEARCH FILTER ────── */
+.sf-wrap { position:relative; }
+.sf-input {
+  width:100%; padding:9px 12px 9px 34px; border:1.5px solid var(--border);
+  border-radius:8px; font-size:13.5px; color:var(--text); background:white; outline:none;
+  font-family:inherit; transition:border .15s;
+}
+.sf-input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(249,115,22,.12); }
+.sf-icon { position:absolute; left:11px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:14px; }
+.sf-results { margin-top:4px; background:white; border:1.5px solid var(--accent); border-radius:10px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,.1); }
+.sf-res-item { padding:9px 14px; font-size:13.5px; cursor:pointer; }
+.sf-res-item:hover { background:#fff7ed; color:var(--accent); }
+.sf-res-item strong { color:var(--accent); }
+.sf-selected { display:flex; align-items:center; gap:8px; padding:7px 12px; background:#fff7ed; border:1.5px solid var(--accent); border-radius:8px; font-size:13.5px; color:#c2410c; font-weight:600; margin-top:6px; }
+.sf-clear { margin-left:auto; cursor:pointer; color:var(--muted); font-size:16px; line-height:1; }
+
+/* ────── 9. ICON RADIO LIST ────── */
+.radio-list { display:flex; flex-direction:column; gap:6px; }
+.rl-opt {
+  display:flex; align-items:center; gap:11px; padding:10px 14px;
+  border:1.5px solid var(--border); border-radius:9px; cursor:pointer;
+  background:white; transition:all .15s; user-select:none;
+}
+.rl-opt:hover { border-color:var(--accent); }
+.rl-opt.on { border-color:var(--accent); background:#fff7ed; }
+.rl-radio { width:18px; height:18px; border-radius:50%; border:2px solid var(--border); display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all .15s; }
+.rl-opt.on .rl-radio { border-color:var(--accent); background:var(--accent); }
+.rl-opt.on .rl-radio::after { content:''; width:6px; height:6px; border-radius:50%; background:white; }
+.rl-label { font-size:13.5px; font-weight:500; }
+.rl-sub { font-size:11.5px; color:var(--muted); margin-top:1px; }
+.rl-ico { font-size:20px; }
+
+/* ────── 10. BADGE TOGGLE LIST ────── */
+.badge-list { display:flex; flex-direction:column; gap:5px; }
+.bl-opt {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:9px 14px; border-radius:8px; cursor:pointer; font-size:13.5px;
+  color:var(--muted); background:#f8fafc; transition:all .15s; user-select:none;
+  border:1.5px solid transparent;
+}
+.bl-opt:hover { background:#fff7ed; color:var(--accent); border-color:#fed7aa; }
+.bl-opt.on { background:#fff7ed; color:#c2410c; font-weight:600; border-color:var(--accent); }
+.bl-badge { font-size:11px; padding:2px 8px; border-radius:20px; background:var(--border); color:var(--muted); }
+.bl-opt.on .bl-badge { background:var(--accent); color:white; }
+
+/* chosen indicator */
+.chosen { display:inline-block; background:#dcfce7; color:#15803d; font-size:11px; font-weight:700; padding:2px 9px; border-radius:20px; margin-left:8px; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>10 Προτάσεις για τα Dropdowns</h1>
+  <p>Πεδία επιλογής Κατηγορίας & Τρόπου Πληρωμής — αξιολόγησε ποιο στυλ σου ταιριάζει</p>
+</div>
+
+<div class="grid">
+
+  <!-- ══ 1 ══ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-num">1</div>
+      <div>
+        <div class="card-title">Native Select — Στυλιζαρισμένο</div>
+        <div class="card-desc">Κλασικό dropdown του browser, σωστά σχεδιασμένο</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="field-wrap">
+        <label class="lbl2">Τύπος / Κατηγορία</label>
+        <div class="select-wrap">
+          <select class="sel">
+            <option value="">— Επίλεξε κατηγορία —</option>
+            <option selected>Κρεοπωλείο</option>
+            <option>Τρόφιμα & Ξηρά</option>
+            <option>Λαχανικά & Φρούτα</option>
+            <option>Ποτά & Αναψυκτικά</option>
+            <option>Ελαιόλαδο & Λίπη</option>
+            <option>Γαλακτοκομικά</option>
+            <option>Ψάρια & Θαλασσινά</option>
+            <option>Αναλώσιμα</option>
+          </select>
+          <span class="sel-arrow">▼</span>
+        </div>
+      </div>
+      <hr class="sep">
+      <div class="field-wrap">
+        <label class="lbl2">Τρόπος Πληρωμής</label>
+        <div class="select-wrap">
+          <select class="sel">
+            <option value="">— Επίλεξε —</option>
+            <option selected>Μετρητά</option>
+            <option>Τραπεζική Μεταφορά</option>
+            <option>Επιταγή</option>
+          </select>
+          <span class="sel-arrow">▼</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 2 ══ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-num">2</div>
+      <div>
+        <div class="card-title">Datalist Βελτιωμένο</div>
+        <div class="card-desc">Όπως τώρα, αλλά με εικονίδιο & καλύτερο στυλ</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="field-wrap">
+        <label class="lbl2">Τύπος / Κατηγορία</label>
+        <div class="inp-wrap">
+          <input class="inp-improved" list="dl2-type" value="Κρεοπωλείο" placeholder="Πληκτρολόγησε ή επίλεξε…">
+          <span class="inp-icon">🔍</span>
+          <datalist id="dl2-type">
+            <option value="Κρεοπωλείο">
+            <option value="Τρόφιμα & Ξηρά">
+            <option value="Λαχανικά & Φρούτα">
+            <option value="Ποτά & Αναψυκτικά">
+            <option value="Ελαιόλαδο & Λίπη">
+            <option value="Γαλακτοκομικά">
+            <option value="Ψάρια & Θαλασσινά">
+            <option value="Αναλώσιμα">
+          </datalist>
+        </div>
+        <div style="font-size:11.5px; color:var(--muted); margin-top:5px;">💡 Μπορείς να γράψεις δική σου κατηγορία</div>
+      </div>
+      <hr class="sep">
+      <div class="field-wrap">
+        <label class="lbl2">Τρόπος Πληρωμής</label>
+        <div class="inp-wrap">
+          <input class="inp-improved" list="dl2-pay" value="Μετρητά" placeholder="Επίλεξε…">
+          <span class="inp-icon">💳</span>
+          <datalist id="dl2-pay">
+            <option value="Μετρητά">
+            <option value="Τραπεζική Μεταφορά">
+            <option value="Επιταγή">
+          </datalist>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 3 ══ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-num">3</div>
+      <div>
+        <div class="card-title">Pills — Χαπάκια Επιλογής</div>
+        <div class="card-desc">Κλικ για επιλογή, ένα ενεργό τη φορά</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="field-wrap">
+        <label class="lbl2">Τύπος / Κατηγορία</label>
+        <div class="pills" id="pills3-type">
+          <span class="pill on" onclick="pickPill(this,'pills3-type')">🥩 Κρεοπωλείο</span>
+          <span class="pill" onclick="pickPill(this,'pills3-type')">🥫 Τρόφιμα & Ξηρά</span>
+          <span class="pill" onclick="pickPill(this,'pills3-type')">🥬 Λαχανικά</span>
+          <span class="pill" onclick="pickPill(this,'pills3-type')">🍺 Ποτά</span>
+          <span class="pill" onclick="pickPill(this,'pills3-type')">🫒 Ελαιόλαδο</span>
+          <span class="pill" onclick="pickPill(this,'pills3-type')">🧀 Γαλακτ/κά</span>
+          <span class="pill" onclick="pickPill(this,'pills3-type')">🐟 Ψάρια</span>
+          <span class="pill" onclick="pickPill(this,'pills3-type')">📦 Αναλώσιμα</span>
+        </div>
+      </div>
+      <hr class="sep">
+      <div class="field-wrap">
+        <label class="lbl2">Τρόπος Πληρωμής</label>
+        <div class="pills" id="pills3-pay">
+          <span class="pill on" onclick="pickPill(this,'pills3-pay')">💵 Μετρητά</span>
+          <span class="pill" onclick="pickPill(this,'pills3-pay')">🏦 Τραπεζική Μεταφορά</span>
+          <span class="pill" onclick="pickPill(this,'pills3-pay')">📄 Επιταγή</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 4 ══ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-num">4</div>
+      <div>
+        <div class="card-title">Button Group — Κουμπιά Σειράς</div>
+        <div class="card-desc">Οριζόντιες επιλογές σαν tab bar</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="field-wrap">
+        <label class="lbl2">Τρόπος Πληρωμής</label>
+        <div class="btn-group">
+          <div class="bg-opt on" onclick="pickBg(this)">💵 Μετρητά</div>
+          <div class="bg-opt" onclick="pickBg(this)">🏦 Τραπεζική</div>
+          <div class="bg-opt" onclick="pickBg(this)">📄 Επιταγή</div>
+        </div>
+      </div>
+      <hr class="sep">
+      <div class="field-wrap">
+        <label class="lbl2">Τύπος / Κατηγορία</label>
+        <div style="font-size:12px; color:var(--muted); margin-bottom:8px;">Πολλές επιλογές → αλλάζει σε select</div>
+        <div class="select-wrap">
+          <select class="sel">
+            <option selected>Κρεοπωλείο</option>
+            <option>Τρόφιμα & Ξηρά</option>
+            <option>Λαχανικά & Φρούτα</option>
+            <option>Ποτά & Αναψυκτικά</option>
+            <option>Ελαιόλαδο & Λίπη</option>
+            <option>Γαλακτοκομικά</option>
+            <option>Ψάρια & Θαλασσινά</option>
+            <option>Αναλώσιμα</option>
+          </select>
+          <span class="sel-arrow">▼</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 5 ══ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-num">5</div>
+      <div>
+        <div class="card-title">Segmented Control</div>
+        <div class="card-desc">Στυλ iOS — ιδανικό για 2–4 επιλογές</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="field-wrap">
+        <label class="lbl2">Τρόπος Πληρωμής</label>
+        <div class="segment">
+          <div class="seg-opt on" onclick="pickSeg(this)">Μετρητά</div>
+          <div class="seg-opt" onclick="pickSeg(this)">Τραπεζική</div>
+          <div class="seg-opt" onclick="pickSeg(this)">Επιταγή</div>
+        </div>
+      </div>
+      <hr class="sep">
+      <div class="field-wrap">
+        <label class="lbl2">Τύπος / Κατηγορία</label>
+        <div class="segment" style="flex-wrap:wrap; gap:3px;">
+          <div class="seg-opt on" onclick="pickSeg(this)" style="flex:0 0 auto; padding:7px 10px;">Κρεοπωλείο</div>
+          <div class="seg-opt" onclick="pickSeg(this)" style="flex:0 0 auto; padding:7px 10px;">Τρόφιμα</div>
+          <div class="seg-opt" onclick="pickSeg(this)" style="flex:0 0 auto; padding:7px 10px;">Λαχανικά</div>
+          <div class="seg-opt" onclick="pickSeg(this)" style="flex:0 0 auto; padding:7px 10px;">Ποτά</div>
+          <div class="seg-opt" onclick="pickSeg(this)" style="flex:0 0 auto; padding:7px 10px;">Ελαιόλαδο</div>
+          <div class="seg-opt" onclick="pickSeg(this)" style="flex:0 0 auto; padding:7px 10px;">Γαλακτ.</div>
+          <div class="seg-opt" onclick="pickSeg(this)" style="flex:0 0 auto; padding:7px 10px;">Ψάρια</div>
+          <div class="seg-opt" onclick="pickSeg(this)" style="flex:0 0 auto; padding:7px 10px;">Αναλώσιμα</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 6 ══ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-num">6</div>
+      <div>
+        <div class="card-title">Card Grid — Πλακίδια με Εικονίδια</div>
+        <div class="card-desc">Κάθε κατηγορία σαν μικρό κουτί με emoji</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="field-wrap">
+        <label class="lbl2">Τύπος / Κατηγορία</label>
+        <div class="card-grid">
+          <div class="cg-opt on" onclick="pickCg(this)"><span class="ico">🥩</span>Κρεο-<br>πωλείο</div>
+          <div class="cg-opt" onclick="pickCg(this)"><span class="ico">🥫</span>Τρόφιμα<br>& Ξηρά</div>
+          <div class="cg-opt" onclick="pickCg(this)"><span class="ico">🥬</span>Λαχα-<br>νικά</div>
+          <div class="cg-opt" onclick="pickCg(this)"><span class="ico">🍺</span>Ποτά</div>
+          <div class="cg-opt" onclick="pickCg(this)"><span class="ico">🫒</span>Ελαιό-<br>λαδο</div>
+          <div class="cg-opt" onclick="pickCg(this)"><span class="ico">🧀</span>Γαλακτ.</div>
+          <div class="cg-opt" onclick="pickCg(this)"><span class="ico">🐟</span>Ψάρια</div>
+          <div class="cg-opt" onclick="pickCg(this)"><span class="ico">📦</span>Αναλώ-<br>σιμα</div>
+        </div>
+      </div>
+      <hr class="sep">
+      <div class="field-wrap">
+        <label class="lbl2">Τρόπος Πληρωμής</label>
+        <div class="card-grid" style="grid-template-columns:repeat(3,1fr);">
+          <div class="cg-opt on" onclick="pickCg(this)"><span class="ico">💵</span>Μετρητά</div>
+          <div class="cg-opt" onclick="pickCg(this)"><span class="ico">🏦</span>Τραπεζική</div>
+          <div class="cg-opt" onclick="pickCg(this)"><span class="ico">📄</span>Επιταγή</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 7 ══ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-num">7</div>
+      <div>
+        <div class="card-title">Custom Dropdown — Προσαρμοσμένο Μενού</div>
+        <div class="card-desc">Κλικ ανοίγει λίστα με βελτιωμένο στυλ</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="field-wrap">
+        <label class="lbl2">Τύπος / Κατηγορία</label>
+        <div class="cd-wrap">
+          <button type="button" class="cd-trigger" id="cd7-btn" onclick="toggleCd('cd7')">
+            <span id="cd7-val">🥩 Κρεοπωλείο</span>
+            <span>▾</span>
+          </button>
+          <div class="cd-list" id="cd7-list">
+            <div class="cd-item on" onclick="pickCd('cd7','🥩 Κρεοπωλείο')"><span class="cd-dot"></span>🥩 Κρεοπωλείο</div>
+            <div class="cd-item" onclick="pickCd('cd7','🥫 Τρόφιμα & Ξηρά')"><span class="cd-dot"></span>🥫 Τρόφιμα & Ξηρά</div>
+            <div class="cd-item" onclick="pickCd('cd7','🥬 Λαχανικά & Φρούτα')"><span class="cd-dot"></span>🥬 Λαχανικά & Φρούτα</div>
+            <div class="cd-item" onclick="pickCd('cd7','🍺 Ποτά & Αναψυκτικά')"><span class="cd-dot"></span>🍺 Ποτά & Αναψυκτικά</div>
+            <div class="cd-item" onclick="pickCd('cd7','🫒 Ελαιόλαδο & Λίπη')"><span class="cd-dot"></span>🫒 Ελαιόλαδο & Λίπη</div>
+            <div class="cd-item" onclick="pickCd('cd7','🧀 Γαλακτοκομικά')"><span class="cd-dot"></span>🧀 Γαλακτοκομικά</div>
+            <div class="cd-item" onclick="pickCd('cd7','🐟 Ψάρια & Θαλασσινά')"><span class="cd-dot"></span>🐟 Ψάρια & Θαλασσινά</div>
+            <div class="cd-item" onclick="pickCd('cd7','📦 Αναλώσιμα')"><span class="cd-dot"></span>📦 Αναλώσιμα</div>
+          </div>
+        </div>
+      </div>
+      <hr class="sep">
+      <div class="field-wrap">
+        <label class="lbl2">Τρόπος Πληρωμής</label>
+        <div class="cd-wrap">
+          <button type="button" class="cd-trigger" id="cd7b-btn" onclick="toggleCd('cd7b')">
+            <span id="cd7b-val">💵 Μετρητά</span>
+            <span>▾</span>
+          </button>
+          <div class="cd-list" id="cd7b-list">
+            <div class="cd-item on" onclick="pickCd('cd7b','💵 Μετρητά')"><span class="cd-dot"></span>💵 Μετρητά</div>
+            <div class="cd-item" onclick="pickCd('cd7b','🏦 Τραπεζική Μεταφορά')"><span class="cd-dot"></span>🏦 Τραπεζική Μεταφορά</div>
+            <div class="cd-item" onclick="pickCd('cd7b','📄 Επιταγή')"><span class="cd-dot"></span>📄 Επιταγή</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 8 ══ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-num">8</div>
+      <div>
+        <div class="card-title">Search & Select — Αναζήτηση</div>
+        <div class="card-desc">Πληκτρολόγησε για φιλτράρισμα — δείχνει αποτελέσματα</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="field-wrap">
+        <label class="lbl2">Τύπος / Κατηγορία</label>
+        <div class="sf-wrap">
+          <span class="sf-icon">🔍</span>
+          <input class="sf-input" id="sf8" placeholder="Πληκτρολόγησε κατηγορία…" oninput="filterSf8(this.value)" onfocus="showSf8Res()" onblur="hideSf8Res()">
+        </div>
+        <div class="sf-results" id="sf8-res" style="display:none;">
+          <div class="sf-res-item" onmousedown="selectSf8('Κρεοπωλείο')">🥩 <strong>Κρεο</strong>πωλείο</div>
+          <div class="sf-res-item" onmousedown="selectSf8('Τρόφιμα & Ξηρά')">🥫 Τρόφιμα & Ξηρά</div>
+          <div class="sf-res-item" onmousedown="selectSf8('Λαχανικά & Φρούτα')">🥬 Λαχανικά & Φρούτα</div>
+          <div class="sf-res-item" onmousedown="selectSf8('Ποτά & Αναψυκτικά')">🍺 Ποτά & Αναψυκτικά</div>
+          <div class="sf-res-item" onmousedown="selectSf8('Ελαιόλαδο & Λίπη')">🫒 Ελαιόλαδο & Λίπη</div>
+        </div>
+        <div class="sf-selected" id="sf8-sel" style="display:none;">
+          <span id="sf8-selval"></span>
+          <span class="sf-clear" onclick="clearSf8()">✕</span>
+        </div>
+      </div>
+      <hr class="sep">
+      <div class="field-wrap">
+        <label class="lbl2">Τρόπος Πληρωμής</label>
+        <div class="pills" id="pills8-pay">
+          <span class="pill on" onclick="pickPill(this,'pills8-pay')">💵 Μετρητά</span>
+          <span class="pill" onclick="pickPill(this,'pills8-pay')">🏦 Τραπεζική</span>
+          <span class="pill" onclick="pickPill(this,'pills8-pay')">📄 Επιταγή</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 9 ══ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-num">9</div>
+      <div>
+        <div class="card-title">Radio List — Λίστα με Περιγραφή</div>
+        <div class="card-desc">Κάθε επιλογή ως γραμμή με εικονίδιο + υπότιτλο</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="field-wrap">
+        <label class="lbl2">Τρόπος Πληρωμής</label>
+        <div class="radio-list">
+          <div class="rl-opt on" onclick="pickRl(this)">
+            <div class="rl-radio"></div>
+            <span class="rl-ico">💵</span>
+            <div><div class="rl-label">Μετρητά</div><div class="rl-sub">Πληρωμή την ώρα της παράδοσης</div></div>
+          </div>
+          <div class="rl-opt" onclick="pickRl(this)">
+            <div class="rl-radio"></div>
+            <span class="rl-ico">🏦</span>
+            <div><div class="rl-label">Τραπεζική Μεταφορά</div><div class="rl-sub">Εμβασμα στον λογαριασμό</div></div>
+          </div>
+          <div class="rl-opt" onclick="pickRl(this)">
+            <div class="rl-radio"></div>
+            <span class="rl-ico">📄</span>
+            <div><div class="rl-label">Επιταγή</div><div class="rl-sub">Χαρτογραφημένη επιταγή</div></div>
+          </div>
+        </div>
+      </div>
+      <hr class="sep">
+      <div class="field-wrap">
+        <label class="lbl2">Τύπος / Κατηγορία</label>
+        <div class="select-wrap">
+          <select class="sel">
+            <option selected>Κρεοπωλείο</option>
+            <option>Τρόφιμα & Ξηρά</option>
+            <option>Λαχανικά & Φρούτα</option>
+            <option>Ποτά & Αναψυκτικά</option>
+            <option>Ελαιόλαδο & Λίπη</option>
+            <option>Γαλακτοκομικά</option>
+            <option>Ψάρια & Θαλασσινά</option>
+            <option>Αναλώσιμα</option>
+          </select>
+          <span class="sel-arrow">▼</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 10 ══ -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-num">10</div>
+      <div>
+        <div class="card-title">Badge List — Λίστα με Σήματα</div>
+        <div class="card-desc">Γραμμές με badge που αλλάζει χρώμα όταν επιλεγεί</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="field-wrap">
+        <label class="lbl2">Τύπος / Κατηγορία</label>
+        <div class="badge-list">
+          <div class="bl-opt on" onclick="pickBl(this)">🥩 Κρεοπωλείο <span class="bl-badge">✓</span></div>
+          <div class="bl-opt" onclick="pickBl(this)">🥫 Τρόφιμα & Ξηρά <span class="bl-badge">—</span></div>
+          <div class="bl-opt" onclick="pickBl(this)">🥬 Λαχανικά & Φρούτα <span class="bl-badge">—</span></div>
+          <div class="bl-opt" onclick="pickBl(this)">🍺 Ποτά & Αναψυκτικά <span class="bl-badge">—</span></div>
+          <div class="bl-opt" onclick="pickBl(this)">🫒 Ελαιόλαδο & Λίπη <span class="bl-badge">—</span></div>
+          <div class="bl-opt" onclick="pickBl(this)">🧀 Γαλακτοκομικά <span class="bl-badge">—</span></div>
+          <div class="bl-opt" onclick="pickBl(this)">🐟 Ψάρια & Θαλασσινά <span class="bl-badge">—</span></div>
+          <div class="bl-opt" onclick="pickBl(this)">📦 Αναλώσιμα <span class="bl-badge">—</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // pill (single)
+  function pickPill(el, group) {
+    document.querySelectorAll('#'+group+' .pill').forEach(p => p.classList.remove('on'));
+    el.classList.add('on');
+  }
+  // btn-group
+  function pickBg(el) {
+    el.closest('.btn-group').querySelectorAll('.bg-opt').forEach(o => o.classList.remove('on'));
+    el.classList.add('on');
+  }
+  // segment
+  function pickSeg(el) {
+    el.closest('.segment').querySelectorAll('.seg-opt').forEach(o => o.classList.remove('on'));
+    el.classList.add('on');
+  }
+  // card grid
+  function pickCg(el) {
+    el.closest('.card-grid').querySelectorAll('.cg-opt').forEach(o => o.classList.remove('on'));
+    el.classList.add('on');
+  }
+  // custom dropdown
+  function toggleCd(id) {
+    const list = document.getElementById(id+'-list');
+    const btn  = document.getElementById(id+'-btn');
+    list.classList.toggle('open');
+    btn.classList.toggle('open');
+  }
+  function pickCd(id, val) {
+    document.getElementById(id+'-val').textContent = val;
+    document.getElementById(id+'-list').querySelectorAll('.cd-item').forEach(i => i.classList.remove('on'));
+    event.currentTarget.classList.add('on');
+    document.getElementById(id+'-list').classList.remove('open');
+    document.getElementById(id+'-btn').classList.remove('open');
+  }
+  document.addEventListener('click', e => {
+    document.querySelectorAll('.cd-list.open').forEach(l => {
+      if (!l.parentElement.contains(e.target)) { l.classList.remove('open'); l.previousElementSibling.classList.remove('open'); }
+    });
+  });
+  // search filter
+  function showSf8Res() { document.getElementById('sf8-res').style.display='block'; }
+  function hideSf8Res() { setTimeout(()=>document.getElementById('sf8-res').style.display='none', 150); }
+  function selectSf8(val) {
+    document.getElementById('sf8').value='';
+    document.getElementById('sf8-selval').textContent = val;
+    document.getElementById('sf8-sel').style.display='flex';
+    document.getElementById('sf8-res').style.display='none';
+  }
+  function clearSf8() { document.getElementById('sf8-sel').style.display='none'; }
+  // radio list
+  function pickRl(el) {
+    el.closest('.radio-list').querySelectorAll('.rl-opt').forEach(o => o.classList.remove('on'));
+    el.classList.add('on');
+  }
+  // badge list
+  function pickBl(el) {
+    el.closest('.badge-list').querySelectorAll('.bl-opt').forEach(o => {
+      o.classList.remove('on');
+      o.querySelector('.bl-badge').textContent = '—';
+    });
+    el.classList.add('on');
+    el.querySelector('.bl-badge').textContent = '✓';
+  }
+</script>
+</body>
+</html>

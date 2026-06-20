@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>TAMAM — Συνταγές · 5 Προτάσεις UI</title>
+<style>
+:root{
+  --brand:#f97316; --brand-dark:#ea580c; --brand-light:#fff7ed; --brand-border:#fed7aa;
+  --red:#dc2626; --red-bg:#fef2f2; --red-border:#fca5a5;
+  --amber:#d97706; --amber-bg:#fffbeb; --amber-border:#fcd34d;
+  --green:#16a34a; --green-bg:#f0fdf4; --green-border:#86efac;
+  --blue:#2563eb; --blue-bg:#eff6ff; --blue-border:#bfdbfe;
+  --gray:#6b7280; --border:#e5e7eb; --text:#111827; --text2:#374151; --muted:#9ca3af;
+  --card:#fff; --bg:#f3f4f6;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',sans-serif;background:var(--bg);color:var(--text);font-size:14px}
+
+/* ── SWITCHER ── */
+.switcher{position:sticky;top:0;z-index:300;background:#1a1a2e;padding:10px 12px;display:flex;gap:8px;overflow-x:auto;border-bottom:2px solid var(--brand)}
+.sw-btn{flex-shrink:0;padding:7px 14px;border-radius:20px;border:2px solid #444;background:transparent;color:#ccc;font-size:13px;font-weight:600;cursor:pointer;transition:.15s;white-space:nowrap}
+.sw-btn.active{background:var(--brand);border-color:var(--brand);color:#fff}
+.sw-btn:hover:not(.active){border-color:var(--brand);color:var(--brand)}
+.design{display:none;padding:16px 12px 60px;min-height:100vh;max-width:1100px;margin:0 auto}
+.design.active{display:block}
+.dlabel{background:#1a1a2e;color:var(--brand);font-size:11px;font-weight:700;letter-spacing:1px;padding:6px 12px;border-radius:0 0 8px 8px;display:inline-block;margin-bottom:6px}
+.dintro{background:#fff;border:1px solid var(--border);border-left:4px solid var(--brand);border-radius:8px;padding:11px 14px;margin-bottom:16px;font-size:13px;color:var(--text2);line-height:1.6}
+.dintro b{color:var(--text)}
+
+/* ── COMMON ── */
+.badge{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;white-space:nowrap}
+.badge.red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.badge.amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
+.badge.green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.badge.blue{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border)}
+.badge.gray{background:#f3f4f6;color:#4b5563;border:1px solid var(--border)}
+.warn{display:inline-flex;align-items:center;gap:4px;background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);border-radius:6px;padding:2px 7px;font-size:11px;font-weight:700}
+.tag{display:inline-flex;align-items:center;gap:4px;background:#f3f4f6;border:1px solid var(--border);border-radius:6px;padding:2px 7px;font-size:11px;color:var(--text2)}
+.tag.pack{background:#eef2ff;border-color:#c7d2fe;color:#4338ca}
+.tag.sub{background:#f5f3ff;border-color:#ddd6fe;color:#6d28d9}
+.btn{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:#fff;color:var(--text2);min-height:40px}
+.btn-primary{background:var(--brand);color:#fff;border:none}
+.btn-primary:hover{background:var(--brand-dark)}
+.btn-sm{padding:5px 11px;border-radius:6px;border:1px solid var(--border);background:#fff;font-size:12px;cursor:pointer;color:var(--text2);font-weight:600}
+.btn-sm:hover{background:var(--brand);color:#fff;border-color:var(--brand)}
+.btn-danger-sm{padding:4px 9px;border-radius:6px;border:1px solid var(--red-border);background:#fff;color:var(--red);font-size:12px;cursor:pointer;font-weight:700}
+.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.page-head h1{font-size:20px;font-weight:800}
+.page-head .sub{font-size:12.5px;color:var(--muted);margin-top:3px}
+.search-row{display:flex;gap:8px;margin-bottom:12px;align-items:center;flex-wrap:wrap}
+.search-row input{flex:1;min-width:140px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;outline:none}
+.search-row input:focus{border-color:var(--brand)}
+.pills{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.pill{flex-shrink:0;padding:6px 13px;border-radius:16px;border:1.5px solid var(--border);background:#fff;font-size:12px;font-weight:600;cursor:pointer;color:var(--text2)}
+.pill.active{background:var(--brand);border-color:var(--brand);color:#fff}
+
+/* margin ring */
+.ring{--p:60;--c:var(--green);width:54px;height:54px;border-radius:50%;display:grid;place-items:center;
+  background:conic-gradient(var(--c) calc(var(--p)*1%),#eef0f3 0);position:relative;flex-shrink:0}
+.ring::before{content:'';position:absolute;inset:5px;background:#fff;border-radius:50%}
+.ring span{position:relative;font-size:13px;font-weight:800}
+
+/* editor shared */
+.ed-line{display:grid;grid-template-columns:1fr 78px 96px 88px 32px;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid #f1f3f5}
+.ed-line:last-child{border-bottom:none}
+.ed-line input,.ed-line select{padding:7px 8px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;width:100%;outline:none}
+.ed-line input:focus,.ed-line select:focus{border-color:var(--brand)}
+.ed-line .iname{font-weight:600}
+.ed-line .lc{text-align:right;font-weight:700;font-size:13px;color:var(--text)}
+.ed-head{display:grid;grid-template-columns:1fr 78px 96px 88px 32px;gap:8px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);padding-bottom:6px;border-bottom:2px solid var(--border)}
+@media(max-width:640px){
+  .ed-head{display:none}
+  .ed-line{grid-template-columns:1fr 70px 32px;grid-template-areas:"n n n" "q u del" "lc lc lc";gap:6px}
+  .ed-line .iname{grid-area:n}.ed-line .qcell{grid-area:q}.ed-line .ucell{grid-area:u}
+  .ed-line .lc{grid-area:lc;text-align:left;background:#f9fafb;padding:4px 8px;border-radius:6px}
+  .ed-line .delcell{grid-area:del}
+}
+.cost-bar{display:flex;flex-wrap:wrap;gap:14px;align-items:center;background:#0f172a;color:#fff;border-radius:12px;padding:14px 18px;margin-top:14px}
+.cost-bar .cb{display:flex;flex-direction:column}
+.cost-bar .cb .k{font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;color:#94a3b8;font-weight:700}
+.cost-bar .cb .v{font-size:20px;font-weight:800;margin-top:2px}
+.cost-bar .cb .v.green{color:#4ade80}.cost-bar .cb .v.red{color:#f87171}.cost-bar .cb .v.amber{color:#fbbf24}
+.cost-bar .grow{margin-left:auto}
+.section-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin:18px 0 8px;display:flex;align-items:center;gap:8px}
+.card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px}
+.tipbox{background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:8px;padding:9px 12px;font-size:12px;color:#92400e;line-height:1.5;display:flex;gap:7px}
+
+/* DESIGN A split */
+.split{display:grid;grid-template-columns:300px 1fr;gap:16px;align-items:start}
+@media(max-width:840px){.split{grid-template-columns:1fr}}
+.rlist{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;max-height:80vh;overflow-y:auto}
+.rcat{padding:8px 14px;background:#f9fafb;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--gray);border-bottom:1px solid var(--border);position:sticky;top:0}
+.ritem{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid #f1f3f5;cursor:pointer}
+.ritem:hover{background:#fafafa}
+.ritem.active{background:var(--brand-light);border-left:3px solid var(--brand)}
+.ritem .rn{flex:1;font-weight:600;font-size:13px}
+.ritem .rm{font-size:12px;font-weight:800}
+.mg-green{color:var(--green)}.mg-amber{color:var(--amber)}.mg-red{color:var(--red)}
+
+/* DESIGN B cards */
+.cardgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.rcard{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;cursor:pointer;transition:.12s}
+.rcard:hover{border-color:var(--brand);box-shadow:0 4px 14px rgba(0,0,0,.07)}
+.rcard .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.rcard .nm{font-weight:800;font-size:15px;line-height:1.2}
+.rcard .cat{font-size:11px;color:var(--muted);margin-top:2px}
+.rcard .nums{display:flex;gap:12px;margin-top:12px}
+.rcard .nums .n .k{font-size:10px;color:var(--muted);text-transform:uppercase;font-weight:700}
+.rcard .nums .n .val{font-size:15px;font-weight:800}
+
+/* modal */
+.modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:400;display:none;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
+.modal-bg.open{display:flex}
+.modal{background:#fff;border-radius:14px;width:100%;max-width:680px;padding:18px}
+.modal .mhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.modal .mclose{background:none;border:none;font-size:24px;cursor:pointer;color:var(--muted);line-height:1}
+
+/* DESIGN C table */
+.ptable-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px;background:#fff}
+.ptable{width:100%;border-collapse:collapse;min-width:640px}
+.ptable th{background:#f9fafb;padding:10px 12px;text-align:left;font-size:11px;font-weight:800;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;border-bottom:2px solid var(--border);cursor:pointer;white-space:nowrap}
+.ptable th.num,.ptable td.num{text-align:right}
+.ptable td{padding:10px 12px;border-bottom:1px solid #f1f3f5;vertical-align:middle}
+.ptable tr:hover td{background:#fafafa;cursor:pointer}
+.ptable .pn{font-weight:700}
+.ptable .pcat{font-size:11px;color:var(--muted)}
+.bar{height:7px;border-radius:4px;background:#eef0f3;overflow:hidden;min-width:70px}
+.bar i{display:block;height:100%;border-radius:4px}
+
+/* DESIGN D variants */
+.vtabs{display:flex;gap:6px;overflow-x:auto;margin-bottom:14px}
+.vtab{flex-shrink:0;padding:8px 14px;border-radius:9px 9px 0 0;border:1px solid var(--border);border-bottom:none;background:#f9fafb;font-size:13px;font-weight:700;cursor:pointer;color:var(--text2)}
+.vtab.active{background:#fff;color:var(--brand);border-color:var(--brand);border-bottom:2px solid #fff;margin-bottom:-1px}
+.vtab .vp{font-size:11px;font-weight:700;color:var(--muted);margin-left:5px}
+.vbase{background:var(--blue-bg);border:1px solid var(--blue-border);border-radius:8px;padding:9px 12px;font-size:12px;color:#1e40af;margin-bottom:12px;display:flex;gap:7px;line-height:1.5}
+
+/* DESIGN E wizard */
+.steps{display:flex;gap:6px;margin-bottom:18px;overflow-x:auto}
+.step{flex:1;min-width:90px;text-align:center;font-size:11px;font-weight:700;color:var(--muted);padding-bottom:8px;border-bottom:3px solid var(--border)}
+.step.active{color:var(--brand);border-color:var(--brand)}
+.step.done{color:var(--green);border-color:var(--green)}
+.step .sn{display:inline-flex;width:24px;height:24px;border-radius:50%;background:#eef0f3;color:var(--gray);align-items:center;justify-content:center;font-weight:800;margin-bottom:5px}
+.step.active .sn{background:var(--brand);color:#fff}
+.step.done .sn{background:var(--green);color:#fff}
+.chip-pick{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{padding:9px 14px;border:1.5px solid var(--border);border-radius:10px;background:#fff;font-size:13px;font-weight:600;cursor:pointer}
+.chip.sel{background:var(--brand-light);border-color:var(--brand);color:var(--brand-dark)}
+.wnav{display:flex;justify-content:space-between;margin-top:20px}
+
+.extra-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f1f3f5}
+.extra-row:last-child{border-bottom:none}
+.extra-row .en{flex:1;font-weight:600}
+.extra-row .ev{font-size:12px;color:var(--text2);white-space:nowrap}
+</style>
+</head>
+<body>
+
+<div class="switcher">
+  <button class="sw-btn active" onclick="show('A',this)">A · Λίστα + Editor</button>
+  <button class="sw-btn" onclick="show('B',this)">B · Κάρτες + Παράθυρο</button>
+  <button class="sw-btn" onclick="show('C',this)">C · Πίνακας Κερδοφορίας</button>
+  <button class="sw-btn" onclick="show('D',this)">D · Editor με Παραλλαγές</button>
+  <button class="sw-btn" onclick="show('E',this)">E · Βήμα-Βήμα (Wizard)</button>
+</div>
+
+<!-- ══════════ DESIGN A ══════════ -->
+<div class="design active" id="A">
+  <span class="dlabel">ΣΧΕΔΙΟ Α — MASTER / DETAIL</span>
+  <div class="dintro">Αριστερά όλες οι συνταγές ομαδοποιημένες ανά κατηγορία· δεξιά ανοίγει ο <b>editor</b> με ζωντανό κόστος. Ιδανικό όταν φτιάχνεις/διορθώνεις <b>πολλές συνταγές γρήγορα</b> — δεν φεύγεις από τη σελίδα. (Δοκίμασε: άλλαξε γραμμάρια δεξιά → το κόστος αλλάζει αμέσως.)</div>
+  <div class="page-head">
+    <div><h1>🧾 Συνταγές</h1><div class="sub">Δείγμα δεδομένων · 5 παραλλαγές ανά πιάτο</div></div>
+    <button class="btn btn-primary">+ Νέα συνταγή</button>
+  </div>
+  <div class="split">
+    <div class="rlist" id="A-list">
+      <div class="rcat">🥙 Γύρος / Κρέατα</div>
+      <div class="ritem active" onclick="A_pick(this,'Γύρος Χοιρινός — Πίτα')"><span class="rn">Γύρος Χοιρινός — Πίτα</span><span class="rm mg-green">62%</span></div>
+      <div class="ritem" onclick="A_pick(this,'Γύρος Χοιρινός — Μερίδα')"><span class="rn">Γύρος Χοιρινός — Μερίδα</span><span class="rm mg-green">60%</span></div>
+      <div class="ritem" onclick="A_pick(this,'Σουβλάκι Χοιρινό — Πίτα')"><span class="rn">Σουβλάκι Χοιρινό — Πίτα</span><span class="rm mg-amber">48%</span></div>
+      <div class="ritem" onclick="A_pick(this,'Κεμπαπάκι — Πίτα')"><span class="rn">Κεμπαπάκι — Πίτα</span><span class="rm mg-green">71%</span></div>
+      <div class="rcat">🍔 Burgers</div>
+      <div class="ritem" onclick="A_pick(this,'Tamam Burger')"><span class="rn">Tamam Burger</span><span class="rm mg-amber">52%</span></div>
+      <div class="ritem" onclick="A_pick(this,'Cheeseburger')"><span class="rn">Cheeseburger</span><span class="rm mg-green">60%</span></div>
+      <div class="rcat">🥗 Σαλάτες</div>
+      <div class="ritem" onclick="A_pick(this,'Σαλάτα Καίσαρα')"><span class="rn">Σαλάτα Καίσαρα</span><span class="rm mg-green">55%</span></div>
+      <div class="rcat">🌱 Vegan</div>
+      <div class="ritem" onclick="A_pick(this,'Φαλάφελ — Πίτα ⚠')"><span class="rn">Φαλάφελ — Πίτα</span><span class="rm"><span class="warn">!</span></span></div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+        <div><div id="A-title" style="font-size:17px;font-weight:800">Γύρος Χοιρινός — Πίτα</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">🔗 Συνδεδεμένο με POS · τιμή πώλησης <b>3,30 €</b> (ζωντανά)</div></div>
+        <span class="badge green">✓ Πλήρης συνταγή</span>
+      </div>
+
+      <div class="ed-head" style="margin-top:14px"><span>Υλικό</span><span>Ποσότητα</span><span>Μονάδα</span><span>Κόστος</span><span></span></div>
+      <div id="A-lines">
+        <div class="ed-line"><span class="iname">Γύρος χοιρινός <span class="tag" title="Χάνει 40% στο ψήσιμο">−40% ψήσ.</span></span><span class="qcell"><input class="q" value="0.15" data-price="8" data-loss="0.4"></span><span class="ucell"><select class="u"><option>κιλό</option><option>τεμ.</option></select></span><span class="lc">—</span><span class="delcell"><button class="btn-danger-sm">✕</button></span></div>
+        <div class="ed-line"><span class="iname">Πίτα</span><span class="qcell"><input class="q" value="1" data-price="0.11"></span><span class="ucell"><select class="u"><option>τεμ.</option><option>κιλό</option></select></span><span class="lc">—</span><span class="delcell"><button class="btn-danger-sm">✕</button></span></div>
+        <div class="ed-line"><span class="iname">Πατάτες</span><span class="qcell"><input class="q" value="0.10" data-price="1.5"></span><span class="ucell"><select class="u"><option>κιλό</option></select></span><span class="lc">—</span><span class="delcell"><button class="btn-danger-sm">✕</button></span></div>
+        <div class="ed-line"><span class="iname">Τζατζίκι <span class="tag sub" title="Φτιάχνεται στο μαγαζί από γιαούρτι+αγγούρι">υπο-συνταγή</span></span><span class="qcell"><input class="q" value="0.03" data-price="2.4"></span><span class="ucell"><select class="u"><option>κιλό</option></select></span><span class="lc">—</span><span class="delcell"><button class="btn-danger-sm">✕</button></span></div>
+        <div class="ed-line"><span class="iname">Ντομάτα</span><span class="qcell"><input class="q" value="0.05" data-price="2"></span><span class="ucell"><select class="u"><option>κιλό</option></select></span><span class="lc">—</span><span class="delcell"><button class="btn-danger-sm">✕</button></span></div>
+        <div class="ed-line"><span class="iname">Χαρτοσακούλα <span class="tag pack">συσκευασία</span></span><span class="qcell"><input class="q" value="1" data-price="0.014" data-pack="1"></span><span class="ucell"><select class="u"><option>τεμ.</option></select></span><span class="lc">—</span><span class="delcell"><button class="btn-danger-sm">✕</button></span></div>
+      </div>
+      <button class="btn-sm" style="margin-top:10px">+ Προσθήκη υλικού</button>
+
+      <div class="cost-bar" data-editor>
+        <div class="cb"><span class="k">Κόστος φαγητού</span><span class="v food">—</span></div>
+        <div class="cb"><span class="k">Συσκευασία</span><span class="v pack">—</span></div>
+        <div class="cb"><span class="k">Συνολικό κόστος</span><span class="v total">—</span></div>
+        <div class="cb grow"><span class="k">Τιμή πώλησης</span><span class="v" data-price-out>3,30 €</span></div>
+        <div class="cb"><span class="k">Κέρδος</span><span class="v profit">—</span></div>
+        <div class="cb"><span class="k">Περιθώριο</span><span class="v marginpct">—</span></div>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end"><button class="btn">Ακύρωση</button><button class="btn btn-primary">💾 Αποθήκευση</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ DESIGN B ══════════ -->
+<div class="design" id="B">
+  <span class="dlabel">ΣΧΕΔΙΟ Β — ΚΑΡΤΕΣ + ΠΑΡΑΘΥΡΟ</span>
+  <div class="dintro">Κάθε συνταγή = <b>κάρτα</b> με δαχτυλίδι περιθωρίου (πράσινο/πορτοκαλί/κόκκινο με μια ματιά). Πατάς → ανοίγει <b>πλήρες παράθυρο επεξεργασίας</b>. Πιο οπτικό, βολικό στο κινητό.</div>
+  <div class="page-head">
+    <div><h1>🧾 Συνταγές</h1><div class="sub">8 συνταγές · δείγμα</div></div>
+    <button class="btn btn-primary">+ Νέα συνταγή</button>
+  </div>
+  <div class="search-row"><input placeholder="🔍 Αναζήτηση πιάτου..."><div class="pills"><span class="pill active">Όλα</span><span class="pill">🥙 Κρέατα</span><span class="pill">🍔 Burgers</span><span class="pill">🥗 Σαλάτες</span><span class="pill">🌱 Vegan</span></div></div>
+  <div class="cardgrid">
+    <div class="rcard" onclick="openModal('Γύρος Χοιρινός — Πίτα')"><div class="top"><div><div class="nm">Γύρος Χοιρινός</div><div class="cat">Πίτα · 🥙 Κρέατα</div></div><div class="ring" style="--p:62;--c:var(--green)"><span>62%</span></div></div><div class="nums"><div class="n"><div class="k">Κόστος</div><div class="val">1,26€</div></div><div class="n"><div class="k">Τιμή</div><div class="val">3,30€</div></div><div class="n"><div class="k">Κέρδος</div><div class="val mg-green">2,04€</div></div></div></div>
+    <div class="rcard" onclick="openModal('Κεμπαπάκι — Πίτα')"><div class="top"><div><div class="nm">Κεμπαπάκι</div><div class="cat">Πίτα · 🥙 Κρέατα</div></div><div class="ring" style="--p:71;--c:var(--green)"><span>71%</span></div></div><div class="nums"><div class="n"><div class="k">Κόστος</div><div class="val">0,80€</div></div><div class="n"><div class="k">Τιμή</div><div class="val">2,80€</div></div><div class="n"><div class="k">Κέρδος</div><div class="val mg-green">2,00€</div></div></div></div>
+    <div class="rcard" onclick="openModal('Σουβλάκι Χοιρινό — Πίτα')"><div class="top"><div><div class="nm">Σουβλάκι Χοιρινό</div><div class="cat">Πίτα · 🥙 Κρέατα</div></div><div class="ring" style="--p:48;--c:var(--amber)"><span>48%</span></div></div><div class="nums"><div class="n"><div class="k">Κόστος</div><div class="val">1,45€</div></div><div class="n"><div class="k">Τιμή</div><div class="val">2,80€</div></div><div class="n"><div class="k">Κέρδος</div><div class="val mg-amber">1,35€</div></div></div></div>
+    <div class="rcard" onclick="openModal('Tamam Burger')"><div class="top"><div><div class="nm">Tamam Burger</div><div class="cat">🍔 Burgers</div></div><div class="ring" style="--p:52;--c:var(--amber)"><span>52%</span></div></div><div class="nums"><div class="n"><div class="k">Κόστος</div><div class="val">2,64€</div></div><div class="n"><div class="k">Τιμή</div><div class="val">5,50€</div></div><div class="n"><div class="k">Κέρδος</div><div class="val mg-amber">2,86€</div></div></div></div>
+    <div class="rcard" onclick="openModal('Σαλάτα Καίσαρα')"><div class="top"><div><div class="nm">Σαλάτα Καίσαρα</div><div class="cat">🥗 Σαλάτες</div></div><div class="ring" style="--p:55;--c:var(--green)"><span>55%</span></div></div><div class="nums"><div class="n"><div class="k">Κόστος</div><div class="val">2,96€</div></div><div class="n"><div class="k">Τιμή</div><div class="val">6,50€</div></div><div class="n"><div class="k">Κέρδος</div><div class="val mg-green">3,54€</div></div></div></div>
+    <div class="rcard" style="border-color:var(--red-border)" onclick="openModal('Φαλάφελ — Πίτα ⚠')"><div class="top"><div><div class="nm">Φαλάφελ</div><div class="cat">Πίτα · 🌱 Vegan</div></div><div class="ring" style="--p:100;--c:#e5e7eb"><span style="color:var(--red);font-size:18px">!</span></div></div><div class="nums"><div class="n" style="flex:1"><span class="warn">⚠ Λείπει τιμή υλικού «φαλάφελ»</span></div></div></div>
+  </div>
+</div>
+
+<!-- ══════════ DESIGN C ══════════ -->
+<div class="design" id="C">
+  <span class="dlabel">ΣΧΕΔΙΟ Γ — ΠΙΝΑΚΑΣ ΚΕΡΔΟΦΟΡΙΑΣ</span>
+  <div class="dintro">Η «ματιά του διευθυντή»: όλα τα πιάτα σε <b>έναν πίνακα</b>, ταξινομημένα κατά περιθώριο. Βλέπεις αμέσως <b>ποια χάνουν ή κερδίζουν λίγο</b>. Πατάς γραμμή → ανοίγει ο editor. Αυτό υλοποιεί άμεσα την ιδέα 3.2.</div>
+  <div class="page-head"><div><h1>🧾 Συνταγές — Κερδοφορία</h1><div class="sub">Κόκκινο &lt;30% · Πορτοκαλί 30–55% · Πράσινο &gt;55%</div></div><button class="btn btn-primary">+ Νέα συνταγή</button></div>
+  <div class="search-row"><input placeholder="🔍 Αναζήτηση..."><div class="pills"><span class="pill active">Όλα</span><span class="pill" style="color:var(--red)">⚠ Χαμηλό περιθώριο</span><span class="pill" style="color:var(--red)">! Λείπει τιμή</span></div></div>
+  <div class="ptable-wrap">
+    <table class="ptable">
+      <thead><tr><th>Προϊόν</th><th class="num">Κόστος</th><th class="num">Τιμή</th><th class="num">Κέρδος €</th><th>Περιθώριο %</th><th></th></tr></thead>
+      <tbody>
+        <tr><td><div class="pn">Φαλάφελ — Πίτα</div><div class="pcat">🌱 Vegan</div></td><td class="num">—</td><td class="num">2,80€</td><td class="num">—</td><td><span class="warn">⚠ Λείπει τιμή «φαλάφελ»</span></td><td><button class="btn-sm">Άνοιγμα</button></td></tr>
+        <tr><td><div class="pn">Σουβλάκι Χοιρινό — Πίτα</div><div class="pcat">🥙 Κρέατα</div></td><td class="num">1,45€</td><td class="num">2,80€</td><td class="num mg-amber">1,35€</td><td><div style="display:flex;align-items:center;gap:8px"><div class="bar"><i style="width:48%;background:var(--amber)"></i></div><b class="mg-amber">48%</b></div></td><td><button class="btn-sm">Άνοιγμα</button></td></tr>
+        <tr><td><div class="pn">Tamam Burger</div><div class="pcat">🍔 Burgers</div></td><td class="num">2,64€</td><td class="num">5,50€</td><td class="num mg-amber">2,86€</td><td><div style="display:flex;align-items:center;gap:8px"><div class="bar"><i style="width:52%;background:var(--amber)"></i></div><b class="mg-amber">52%</b></div></td><td><button class="btn-sm">Άνοιγμα</button></td></tr>
+        <tr><td><div class="pn">Σαλάτα Καίσαρα</div><div class="pcat">🥗 Σαλάτες</div></td><td class="num">2,96€</td><td class="num">6,50€</td><td class="num mg-green">3,54€</td><td><div style="display:flex;align-items:center;gap:8px"><div class="bar"><i style="width:55%;background:var(--green)"></i></div><b class="mg-green">55%</b></div></td><td><button class="btn-sm">Άνοιγμα</button></td></tr>
+        <tr><td><div class="pn">Γύρος Χοιρινός — Πίτα</div><div class="pcat">🥙 Κρέατα</div></td><td class="num">1,26€</td><td class="num">3,30€</td><td class="num mg-green">2,04€</td><td><div style="display:flex;align-items:center;gap:8px"><div class="bar"><i style="width:62%;background:var(--green)"></i></div><b class="mg-green">62%</b></div></td><td><button class="btn-sm">Άνοιγμα</button></td></tr>
+        <tr><td><div class="pn">Κεμπαπάκι — Πίτα</div><div class="pcat">🥙 Κρέατα</div></td><td class="num">0,80€</td><td class="num">2,80€</td><td class="num mg-green">2,00€</td><td><div style="display:flex;align-items:center;gap:8px"><div class="bar"><i style="width:71%;background:var(--green)"></i></div><b class="mg-green">71%</b></div></td><td><button class="btn-sm">Άνοιγμα</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tipbox" style="margin-top:14px">💡 <span>Όταν αλλάξει η τιμή ενός υλικού από τιμολόγιο (Ενότητα 1/2), <b>όλος ο πίνακας ξαναϋπολογίζεται μόνος του</b>. Έτσι ξέρεις πάντα ποιο πιάτο «έπεσε» κάτω από το όριο.</span></div>
+</div>
+
+<!-- ══════════ DESIGN D ══════════ -->
+<div class="design" id="D">
+  <span class="dlabel">ΣΧΕΔΙΟ Δ — EDITOR ΜΕ ΠΑΡΑΛΛΑΓΕΣ</span>
+  <div class="dintro">Λύνει το «<b>γράφω την ίδια συνταγή 5 φορές</b>». Φτιάχνεις <b>μία βασική συνταγή</b> (Γύρος) και οι παραλλαγές Πίτα/Ψωμάκι/Αραβική/Λάβας/Μερίδα κρατούν τα κοινά υλικά — αλλάζεις μόνο ό,τι διαφέρει (περιτύλιγμα, ποσότητα κρέατος, συσκευασία).</div>
+  <div class="page-head"><div><h1>🥙 Γύρος Χοιρινός</h1><div class="sub">1 βασική συνταγή · 5 παραλλαγές</div></div><button class="btn btn-primary">💾 Αποθήκευση όλων</button></div>
+  <div class="vtabs">
+    <div class="vtab active" onclick="D_tab(this,'Πίτα')">Πίτα <span class="vp">3,30€</span></div>
+    <div class="vtab" onclick="D_tab(this,'Ψωμάκι')">Ψωμάκι <span class="vp">3,30€</span></div>
+    <div class="vtab" onclick="D_tab(this,'Αραβική')">Αραβική <span class="vp">4,50€</span></div>
+    <div class="vtab" onclick="D_tab(this,'Λάβας')">Λάβας <span class="vp">5,50€</span></div>
+    <div class="vtab" onclick="D_tab(this,'Μερίδα')">Μερίδα <span class="vp">8,00€</span></div>
+  </div>
+  <div class="vbase">🔵 <span>Επεξεργάζεσαι την παραλλαγή <b id="D-vname">Πίτα</b>. Τα <b>κοινά υλικά</b> έρχονται από τη βασική συνταγή. Άλλαξε εδώ μόνο ό,τι διαφέρει σε αυτή την παραλλαγή.</span></div>
+  <div class="card">
+    <div class="ed-head"><span>Υλικό</span><span>Ποσότητα</span><span>Μονάδα</span><span>Κόστος</span><span></span></div>
+    <div id="D-lines">
+      <div class="ed-line"><span class="iname">Γύρος χοιρινός <span class="tag">−40% ψήσ.</span> <span class="badge blue">βασικό</span></span><span class="qcell"><input class="q" value="0.15" data-price="8" data-loss="0.4"></span><span class="ucell"><select class="u"><option>κιλό</option></select></span><span class="lc">—</span><span class="delcell"><button class="btn-danger-sm">✕</button></span></div>
+      <div class="ed-line"><span class="iname">Πίτα <span class="badge amber">παραλλαγή</span></span><span class="qcell"><input class="q" value="1" data-price="0.11"></span><span class="ucell"><select class="u"><option>τεμ.</option></select></span><span class="lc">—</span><span class="delcell"><button class="btn-danger-sm">✕</button></span></div>
+      <div class="ed-line"><span class="iname">Πατάτες <span class="badge blue">βασικό</span></span><span class="qcell"><input class="q" value="0.10" data-price="1.5"></span><span class="ucell"><select class="u"><option>κιλό</option></select></span><span class="lc">—</span><span class="delcell"><button class="btn-danger-sm">✕</button></span></div>
+      <div class="ed-line"><span class="iname">Τζατζίκι <span class="tag sub">υπο-συνταγή</span> <span class="badge blue">βασικό</span></span><span class="qcell"><input class="q" value="0.03" data-price="2.4"></span><span class="ucell"><select class="u"><option>κιλό</option></select></span><span class="lc">—</span><span class="delcell"><button class="btn-danger-sm">✕</button></span></div>
+      <div class="ed-line"><span class="iname">Χαρτοσακούλα <span class="tag pack">συσκευασία</span> <span class="badge amber">παραλλαγή</span></span><span class="qcell"><input class="q" value="1" data-price="0.014" data-pack="1"></span><span class="ucell"><select class="u"><option>τεμ.</option></select></span><span class="lc">—</span><span class="delcell"><button class="btn-danger-sm">✕</button></span></div>
+    </div>
+    <button class="btn-sm" style="margin-top:10px">+ Προσθήκη υλικού (μόνο σε αυτή την παραλλαγή)</button>
+    <div class="cost-bar" data-editor>
+      <div class="cb"><span class="k">Κόστος φαγητού</span><span class="v food">—</span></div>
+      <div class="cb"><span class="k">Συσκευασία</span><span class="v pack">—</span></div>
+      <div class="cb"><span class="k">Συνολικό κόστος</span><span class="v total">—</span></div>
+      <div class="cb grow"><span class="k">Τιμή (POS)</span><span class="v" data-price-out>3,30 €</span></div>
+      <div class="cb"><span class="k">Κέρδος</span><span class="v profit">—</span></div>
+      <div class="cb"><span class="k">Περιθώριο</span><span class="v marginpct">—</span></div>
+    </div>
+  </div>
+  <div class="section-title">➕ Extras / Customizations</div>
+  <div class="card">
+    <div class="extra-row"><span class="en">Κασέρι Γρεβενών</span><span class="ev">κόστος 0,10€ → πώληση 0,70€</span><span class="badge green">+0,60€ ✓</span></div>
+    <div class="extra-row"><span class="en">Μπέικον</span><span class="ev">κόστος 0,18€ → πώληση 0,60€</span><span class="badge green">+0,42€ ✓</span></div>
+    <div class="extra-row"><span class="en">Παρμεζάνα</span><span class="ev">κόστος 0,43€ → πώληση 0,70€</span><span class="badge amber">+0,27€</span></div>
+    <div class="extra-row"><span class="en">«χωρίς κρεμμύδι»</span><span class="ev">αφαιρεί ανάλωση κρεμμυδιού</span><span class="badge gray">−ανάλωση</span></div>
+    <button class="btn-sm" style="margin-top:10px">+ Προσθήκη extra</button>
+  </div>
+</div>
+
+<!-- ══════════ DESIGN E ══════════ -->
+<div class="design" id="E">
+  <span class="dlabel">ΣΧΕΔΙΟ Ε — ΒΗΜΑ-ΒΗΜΑ (WIZARD)</span>
+  <div class="dintro">Για όταν φτιάχνεις <b>νέα συνταγή από το μηδέν</b>. Σε οδηγεί βήμα-βήμα ώστε να μην ξεχάσεις τίποτα: προϊόν → κύριο υλικό (με μονάδα & απώλεια) → προσθήκες → συσκευασία → extras → σύνοψη με προειδοποιήσεις.</div>
+  <div class="page-head"><div><h1>🧾 Νέα Συνταγή</h1><div class="sub">Βήμα 2 από 5</div></div></div>
+  <div class="steps">
+    <div class="step done"><div class="sn">✓</div><div>Προϊόν</div></div>
+    <div class="step active"><div class="sn">2</div><div>Κύριο υλικό</div></div>
+    <div class="step"><div class="sn">3</div><div>Προσθήκες</div></div>
+    <div class="step"><div class="sn">4</div><div>Συσκευασία</div></div>
+    <div class="step"><div class="sn">5</div><div>Σύνοψη</div></div>
+  </div>
+  <div class="card">
+    <div style="font-weight:800;font-size:15px;margin-bottom:4px">Ποιο είναι το κύριο υλικό (το κρέας/βάση);</div>
+    <div style="font-size:12.5px;color:var(--muted);margin-bottom:8px">Επιλεγμένο προϊόν: <b>Γύρος Χοιρινός — Πίτα</b></div>
+    <div class="chip-pick">
+      <span class="chip sel">Γύρος χοιρινός</span><span class="chip">Σουβλάκι Χ</span><span class="chip">Κοτόπουλο</span><span class="chip">Μπιφτέκι</span><span class="chip">Κεμπαπάκι</span>
+    </div>
+    <div class="ed-head" style="margin-top:16px"><span>Υλικό</span><span>Ποσότητα</span><span>Μονάδα</span><span>Κόστος</span><span></span></div>
+    <div id="E-lines">
+      <div class="ed-line"><span class="iname">Γύρος χοιρινός</span><span class="qcell"><input class="q" value="0.15" data-price="8" data-loss="0.4"></span><span class="ucell"><select class="u"><option>κιλό</option><option>τεμ.</option></select></span><span class="lc">—</span><span class="delcell"><button class="btn-danger-sm">✕</button></span></div>
+    </div>
+    <div class="tipbox" style="margin-top:14px">🔥 <span><b>Απώλεια ψησίματος:</b> ο γύρος χάνει ~40% όταν ψήνεται. Βάλε τα <b>ωμά</b> γραμμάρια — το σύστημα υπολογίζει μόνο του το πραγματικό κόστος μερίδας.</span>
+    </div>
+    <div style="margin-top:12px;display:flex;align-items:center;gap:10px">
+      <label style="font-size:13px;font-weight:600">Απώλεια ψησίματος:</label>
+      <input value="40" style="width:70px;padding:7px;border:1.5px solid var(--border);border-radius:7px" class="q" data-noop><span style="font-weight:700">%</span>
+    </div>
+    <div class="cost-bar" data-editor style="margin-top:16px">
+      <div class="cb"><span class="k">Κόστος κύριου υλικού</span><span class="v food">—</span></div>
+      <div class="cb grow"></div>
+      <div class="cb"><span class="k">Μένουν 4 βήματα</span><span class="v" style="font-size:14px;color:#94a3b8">προσθήκες, συσκευασία, extras, σύνοψη</span></div>
+    </div>
+  </div>
+  <div class="wnav"><button class="btn">← Πίσω</button><button class="btn btn-primary">Επόμενο →</button></div>
+</div>
+
+<!-- modal for B -->
+<div class="modal-bg" id="modalBg" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="mhead"><div style="font-size:16px;font-weight:800" id="modalTitle">Συνταγή</div><button class="mclose" onclick="closeModal()">×</button></div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:10px">🔗 POS · τιμή 3,30 € (ζωντανά)</div>
+    <div class="ed-head"><span>Υλικό</span><span>Ποσότητα</span><span>Μονάδα</span><span>Κόστος</span><span></span></div>
+    <div id="modal-lines">
+      <div class="ed-line"><span class="iname">Γύρος χοιρινός <span class="tag">−40% ψήσ.</span></span><span class="qcell"><input class="q" value="0.15" data-price="8" data-loss="0.4"></span><span class="ucell"><select class="u"><option>κιλό</option></select></span><span class="lc">—</span><span class="delcell"><button class="btn-danger-sm">✕</button></span></div>
+      <div class="ed-line"><span class="iname">Πίτα</span><span class="qcell"><input class="q" value="1" data-price="0.11"></span><span class="ucell"><select class="u"><option>τεμ.</option></select></span><span class="lc">—</span><span class="delcell"><button class="btn-danger-sm">✕</button></span></div>
+      <div class="ed-line"><span class="iname">Πατάτες</span><span class="qcell"><input class="q" value="0.10" data-price="1.5"></span><span class="ucell"><select class="u"><option>κιλό</option></select></span><span class="lc">—</span><span class="delcell"><button class="btn-danger-sm">✕</button></span></div>
+      <div class="ed-line"><span class="iname">Χαρτοσακούλα <span class="tag pack">συσκευασία</span></span><span class="qcell"><input class="q" value="1" data-price="0.014" data-pack="1"></span><span class="ucell"><select class="u"><option>τεμ.</option></select></span><span class="lc">—</span><span class="delcell"><button class="btn-danger-sm">✕</button></span></div>
+    </div>
+    <button class="btn-sm" style="margin-top:10px">+ Προσθήκη υλικού</button>
+    <div class="cost-bar" data-editor>
+      <div class="cb"><span class="k">Φαγητό</span><span class="v food">—</span></div>
+      <div class="cb"><span class="k">Συσκ.</span><span class="v pack">—</span></div>
+      <div class="cb"><span class="k">Σύνολο</span><span class="v total">—</span></div>
+      <div class="cb grow"><span class="k">Τιμή</span><span class="v" data-price-out>3,30 €</span></div>
+      <div class="cb"><span class="k">Κέρδος</span><span class="v profit">—</span></div>
+      <div class="cb"><span class="k">Περιθ.</span><span class="v marginpct">—</span></div>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end"><button class="btn" onclick="closeModal()">Κλείσιμο</button><button class="btn btn-primary">💾 Αποθήκευση</button></div>
+  </div>
+</div>
+
+<script>
+function show(id,btn){document.querySelectorAll('.design').forEach(d=>d.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.sw-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');recalcAll();}
+function eur(n){return n.toLocaleString('el-GR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €';}
+
+function recalc(editorBar){
+  // find the lines container = previous sibling block holding .ed-line within same parent
+  var scope=editorBar.closest('.card, .modal, .split, #A, #D, #E')||document;
+  // limit: take .ed-line elements that share the nearest #X-lines/#modal-lines before this bar
+  var container=editorBar.previousElementSibling;
+  // walk up to find a sibling that contains .ed-line
+  var lines=[];
+  var p=editorBar.parentElement;
+  p.querySelectorAll('.ed-line').forEach(l=>{ if(l.compareDocumentPosition(editorBar)&Node.DOCUMENT_POSITION_FOLLOWING) lines.push(l); });
+  var food=0,pack=0;
+  lines.forEach(l=>{
+    var inp=l.querySelector('.q[data-price]'); if(!inp) {var lc=l.querySelector('.lc'); return;}
+    var price=parseFloat(inp.dataset.price), qty=parseFloat(inp.value)||0, loss=parseFloat(inp.dataset.loss||0);
+    var eff=qty; if(loss>0) eff=qty/(1-loss); // raw needed to get cooked qty -> cost of raw
+    var c=price*eff;
+    var lc=l.querySelector('.lc'); if(lc) lc.textContent=eur(c);
+    if(inp.dataset.pack) pack+=c; else food+=c;
+  });
+  var total=food+pack;
+  set(editorBar,'.food',eur(food));
+  set(editorBar,'.pack',eur(pack));
+  set(editorBar,'.total',eur(total));
+  var priceEl=editorBar.querySelector('[data-price-out]');
+  if(priceEl){
+    var price=parseFloat(priceEl.textContent.replace('€','').replace(',','.'))||0;
+    var profit=price-total, m=price>0?profit/price*100:0;
+    var pe=editorBar.querySelector('.profit'); if(pe){pe.textContent=eur(profit);pe.className='v profit '+col(m);}
+    var me=editorBar.querySelector('.marginpct'); if(me){me.textContent=Math.round(m)+'%';me.className='v marginpct '+col(m);}
+  }
+}
+function col(m){return m>=55?'green':m>=30?'amber':'red';}
+function set(bar,sel,val){var e=bar.querySelector(sel);if(e)e.textContent=val;}
+function recalcAll(){document.querySelectorAll('.design.active [data-editor], .modal-bg.open [data-editor]').forEach(recalc);}
+
+document.addEventListener('input',e=>{if(e.target.classList.contains('q')){var d=e.target.closest('.design, .modal-bg');if(d)d.querySelectorAll('[data-editor]').forEach(recalc);}});
+
+// Design A
+function A_pick(el,name){document.querySelectorAll('#A-list .ritem').forEach(r=>r.classList.remove('active'));el.classList.add('active');document.getElementById('A-title').textContent=name;}
+// Design D
+function D_tab(el,name){document.querySelectorAll('#D .vtab').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.getElementById('D-vname').textContent=name;}
+// Modal
+function openModal(name){document.getElementById('modalTitle').textContent=name;document.getElementById('modalBg').classList.add('open');setTimeout(recalcAll,10);}
+function closeModal(){document.getElementById('modalBg').classList.remove('open');}
+
+recalcAll();
+</script>
+</body>
+</html>

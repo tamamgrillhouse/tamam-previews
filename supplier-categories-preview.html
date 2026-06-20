@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAMAM — Κατηγορίες Προμηθευτών (Preview)</title>
+<style>
+:root {
+  --sidebar-bg:   #1e2d3d;
+  --sidebar-text: #94a3b8;
+  --accent:       #f59e0b;
+  --accent-dark:  #d97706;
+  --content-bg:   #f1f5f9;
+  --white:        #ffffff;
+  --text:         #1e293b;
+  --text-muted:   #64748b;
+  --border:       #e2e8f0;
+  --success:      #10b981;
+  --danger:       #ef4444;
+  --shadow-sm:    0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:    0 4px 12px rgba(0,0,0,.10);
+  --radius:       10px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--content-bg);
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  width: 220px;
+  background: var(--sidebar-bg);
+  position: fixed;
+  left: 0; top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  z-index: 200;
+}
+.sidebar-header {
+  padding: 16px 14px 14px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.sidebar-logo-text {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -.5px;
+}
+.sidebar-subtitle {
+  font-size: 10px;
+  color: var(--sidebar-text);
+  margin-top: 5px;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+}
+nav { padding: 8px 0; flex: 1; }
+.nav-divider { height: 1px; background: rgba(255,255,255,.06); margin: 6px 12px; }
+.nav-link {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 16px;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  font-size: 13.5px;
+  border-left: 3px solid transparent;
+  transition: background .12s, color .12s;
+}
+.nav-link:hover { color: var(--white); background: rgba(255,255,255,.05); }
+.nav-link.active {
+  color: var(--white);
+  border-left-color: var(--accent);
+  background: rgba(245,158,11,.1);
+}
+.nav-icon { font-size: 16px; opacity: .7; flex-shrink: 0; }
+.nav-link.active .nav-icon, .nav-link:hover .nav-icon { opacity: 1; }
+
+/* ── Main ── */
+.main-content { margin-left: 220px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+.topbar {
+  position: sticky; top: 0; z-index: 100;
+  height: 54px; background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  box-shadow: var(--shadow-sm);
+}
+.topbar-title { font-size: 15px; font-weight: 600; }
+.topbar-right { display: flex; align-items: center; gap: 18px; }
+.status-badge { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--success); font-weight: 500; }
+.status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--success); }
+.page-content { padding: 28px 24px; flex: 1; }
+
+/* ── Page header ── */
+.page-header { margin-bottom: 24px; display: flex; align-items: flex-start; justify-content: space-between; }
+.page-title { font-size: 22px; font-weight: 700; line-height: 1.2; }
+.page-subtitle { font-size: 13px; color: var(--text-muted); margin-top: 5px; }
+
+/* ── Buttons ── */
+.btn-primary {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  min-height: 44px; padding: 0 22px;
+  background: var(--accent); color: var(--white);
+  border: none; border-radius: 8px;
+  font-size: 14px; font-weight: 600; cursor: pointer;
+  text-decoration: none; white-space: nowrap;
+  transition: background .15s;
+}
+.btn-primary:hover { background: var(--accent-dark); }
+.btn-secondary {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  min-height: 44px; padding: 0 18px;
+  background: var(--white); color: var(--text-muted);
+  border: 1.5px solid var(--border); border-radius: 8px;
+  font-size: 14px; font-weight: 600; cursor: pointer;
+  text-decoration: none;
+  transition: background .12s, color .12s;
+}
+.btn-secondary:hover { background: var(--content-bg); color: var(--text); }
+.btn-sm { min-height: 36px; padding: 0 14px; font-size: 13px; border-radius: 7px; }
+
+/* ── Layout 2-col ── */
+.two-col { display: grid; grid-template-columns: 1fr 1.6fr; gap: 24px; align-items: start; }
+
+/* ── Card ── */
+.card {
+  background: var(--white);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.card-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.card-title { font-size: 14px; font-weight: 700; }
+.card-subtitle { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.card-body { padding: 20px; }
+
+/* ── Add form inside card ── */
+.add-form { display: flex; flex-direction: column; gap: 12px; }
+.add-form label { font-size: 12px; font-weight: 500; color: var(--text); }
+.add-form input {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 7px;
+  font-size: 13.5px;
+  color: var(--text);
+  background: var(--white);
+  outline: none;
+  font-family: inherit;
+  transition: border-color .15s, box-shadow .15s;
+}
+.add-form input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(245,158,11,.12);
+}
+.add-form input::placeholder { color: #cbd5e1; }
+
+/* ── Category list ── */
+.cat-list { list-style: none; }
+.cat-row {
+  display: flex; align-items: center;
+  padding: 11px 20px;
+  border-bottom: 1px solid #f1f5f9;
+  transition: background .1s;
+  gap: 12px;
+}
+.cat-row:last-child { border-bottom: none; }
+.cat-row:hover { background: #fafbfc; }
+.cat-icon {
+  font-size: 18px;
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: #fef3c7;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.cat-name { flex: 1; font-size: 13.5px; font-weight: 500; }
+.cat-count {
+  font-size: 11.5px; color: var(--text-muted);
+  background: var(--content-bg);
+  padding: 2px 9px; border-radius: 20px;
+  font-weight: 500;
+  min-width: 60px; text-align: center;
+}
+.btn-del-cat {
+  width: 32px; height: 32px;
+  border: 1.5px solid #fecaca;
+  background: #fef2f2;
+  color: #dc2626;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 15px;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .12s;
+  flex-shrink: 0;
+}
+.btn-del-cat:hover { background: #fee2e2; }
+
+/* ── Info box ── */
+.info-box {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 12.5px;
+  color: #92400e;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+.info-box strong { font-weight: 600; }
+
+/* ── "Used in form" preview ── */
+.section-label {
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .7px;
+  color: var(--accent);
+  padding: 14px 20px 0;
+  border-top: 1px solid var(--border);
+}
+.form-field-row {
+  padding: 12px 20px;
+  display: flex; flex-direction: column; gap: 5px;
+}
+.form-field-row label { font-size: 12px; font-weight: 500; }
+.field-with-btn { display: flex; gap: 8px; align-items: center; }
+.select-wrap { position: relative; flex: 1; }
+.select-wrap select {
+  width: 100%;
+  padding: 8px 32px 8px 11px;
+  appearance: none; -webkit-appearance: none;
+  border: 1.5px solid var(--border);
+  border-radius: 7px;
+  font-size: 13.5px;
+  color: var(--text);
+  background: var(--white);
+  cursor: pointer; outline: none;
+  font-family: inherit;
+  transition: border-color .15s;
+}
+.select-wrap select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(245,158,11,.12); }
+.select-wrap::after {
+  content: '▼'; position: absolute;
+  right: 11px; top: 50%; transform: translateY(-50%);
+  pointer-events: none; color: var(--text-muted); font-size: 11px;
+}
+.btn-manage-cats {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 8px 13px; min-height: 38px;
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  color: var(--text-muted);
+  border-radius: 7px;
+  font-size: 12.5px; font-weight: 500;
+  cursor: pointer; white-space: nowrap;
+  text-decoration: none;
+  transition: border-color .12s, color .12s, background .12s;
+}
+.btn-manage-cats:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: #fef3c7;
+}
+
+/* ── Section nav tabs (top of preview) ── */
+.preview-tabs {
+  display: flex; gap: 10px; margin-bottom: 28px;
+}
+.preview-tab {
+  padding: 8px 18px; border-radius: 8px;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  border: 1.5px solid var(--border);
+  background: var(--white); color: var(--text-muted);
+  transition: all .12s;
+}
+.preview-tab.active {
+  background: var(--accent); color: var(--white); border-color: var(--accent);
+}
+
+/* ── Views ── */
+.view { display: none; }
+.view.active { display: block; }
+
+/* ── Confirm modal ── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 9000;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity .15s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal-box {
+  background: var(--white);
+  border-radius: 14px;
+  padding: 28px 28px 22px;
+  width: 340px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+  transform: scale(.95);
+  transition: transform .15s;
+}
+.modal-overlay.open .modal-box { transform: scale(1); }
+.modal-title { font-size: 16px; font-weight: 700; margin-bottom: 10px; }
+.modal-msg { font-size: 13.5px; color: var(--text-muted); line-height: 1.6; margin-bottom: 22px; }
+.modal-msg strong { color: var(--text); font-weight: 600; }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+.btn-modal-cancel {
+  padding: 9px 18px; min-height: 40px;
+  background: var(--white); color: var(--text-muted);
+  border: 1.5px solid var(--border); border-radius: 8px;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+}
+.btn-modal-del {
+  padding: 9px 18px; min-height: 40px;
+  background: var(--white); color: var(--danger);
+  border: 1.5px solid #fecaca; border-radius: 8px;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+}
+.btn-modal-del:hover { background: #fef2f2; }
+
+/* ── Toast ── */
+.toast {
+  position: fixed; bottom: 24px; right: 24px;
+  background: #1e293b; color: #fff;
+  padding: 12px 20px; border-radius: 10px;
+  font-size: 13.5px; font-weight: 500;
+  box-shadow: 0 8px 24px rgba(0,0,0,.25);
+  z-index: 9999;
+  opacity: 0; transform: translateY(10px);
+  transition: opacity .2s, transform .2s;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+
+/* ── Empty state ── */
+.empty-state {
+  text-align: center; padding: 40px 20px;
+  color: var(--text-muted);
+}
+.empty-state .big { font-size: 36px; margin-bottom: 10px; }
+.empty-state p { font-size: 13px; }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo-text">TAMAM</div>
+    <div class="sidebar-subtitle">Back Office</div>
+  </div>
+  <nav>
+    <a class="nav-link active" href="#">
+      <span class="nav-icon">🚚</span> Προμηθευτές
+    </a>
+    <a class="nav-link" href="#">
+      <span class="nav-icon">📦</span> Πρώτες Ύλες
+    </a>
+    <a class="nav-link" href="#">
+      <span class="nav-icon">🧾</span> Συνταγές
+    </a>
+    <div class="nav-divider"></div>
+    <a class="nav-link" href="#">
+      <span class="nav-icon">💰</span> Έξοδα
+    </a>
+    <a class="nav-link" href="#">
+      <span class="nav-icon">📊</span> Αναφορές
+    </a>
+    <div class="nav-divider"></div>
+    <a class="nav-link" href="#">
+      <span class="nav-icon">⚙️</span> Ρυθμίσεις
+    </a>
+  </nav>
+</aside>
+
+<!-- Main -->
+<div class="main-content">
+  <header class="topbar">
+    <span class="topbar-title">Προμηθευτές → Κατηγορίες</span>
+    <div class="topbar-right">
+      <div class="status-badge"><span class="status-dot"></span>Σύνδεση OK</div>
+    </div>
+  </header>
+
+  <div class="page-content">
+
+    <!-- Preview tabs -->
+    <div class="preview-tabs">
+      <div class="preview-tab active" onclick="showView('manage')">📋 Σελίδα Διαχείρισης</div>
+      <div class="preview-tab" onclick="showView('form')">📝 Πώς φαίνεται στη Φόρμα</div>
+    </div>
+
+    <!-- VIEW 1: Management page -->
+    <div id="view-manage" class="view active">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Κατηγορίες Προμηθευτών</div>
+          <div class="page-subtitle">Διαχείριση κατηγοριών — προσθήκη, μετονομασία, διαγραφή</div>
+        </div>
+        <a href="#" class="btn-secondary btn-sm" onclick="return false">← Πίσω στους Προμηθευτές</a>
+      </div>
+
+      <div class="two-col">
+
+        <!-- LEFT: Add new -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">➕ Νέα Κατηγορία</div>
+              <div class="card-subtitle">Συμπλήρωσε το όνομα και πάτα Προσθήκη</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="info-box">
+              💡 Οι κατηγορίες εμφανίζονται στο dropdown κάθε φόρμας προμηθευτή και χρησιμοποιούνται για φιλτράρισμα & αναφορές.
+            </div>
+            <div class="add-form">
+              <label for="new-cat">Όνομα κατηγορίας</label>
+              <input id="new-cat" type="text" placeholder="π.χ. Αρτοποιείο" maxlength="60">
+              <button class="btn-primary" onclick="addCategory()">➕ Προσθήκη</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: List -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Κατηγορίες</div>
+              <div class="card-subtitle" id="cat-count-label">8 κατηγορίες</div>
+            </div>
+          </div>
+          <ul class="cat-list" id="cat-list">
+            <li class="cat-row">
+              <div class="cat-icon">🥩</div>
+              <span class="cat-name">Κρεοπωλείο</span>
+              <span class="cat-count">2 προμηθευτές</span>
+              <button class="btn-del-cat" onclick="askDelete(this, 'Κρεοπωλείο', 2)" title="Διαγραφή">🗑</button>
+            </li>
+            <li class="cat-row">
+              <div class="cat-icon">🛒</div>
+              <span class="cat-name">Τρόφιμα &amp; Ξηρά</span>
+              <span class="cat-count">1 προμηθευτής</span>
+              <button class="btn-del-cat" onclick="askDelete(this, 'Τρόφιμα & Ξηρά', 1)" title="Διαγραφή">🗑</button>
+            </li>
+            <li class="cat-row">
+              <div class="cat-icon">🥬</div>
+              <span class="cat-name">Λαχανικά &amp; Φρούτα</span>
+              <span class="cat-count">0 προμηθευτές</span>
+              <button class="btn-del-cat" onclick="askDelete(this, 'Λαχανικά & Φρούτα', 0)" title="Διαγραφή">🗑</button>
+            </li>
+            <li class="cat-row">
+              <div class="cat-icon">🥤</div>
+              <span class="cat-name">Ποτά &amp; Αναψυκτικά</span>
+              <span class="cat-count">0 προμηθευτές</span>
+              <button class="btn-del-cat" onclick="askDelete(this, 'Ποτά & Αναψυκτικά', 0)" title="Διαγραφή">🗑</button>
+            </li>
+            <li class="cat-row">
+              <div class="cat-icon">🫒</div>
+              <span class="cat-name">Ελαιόλαδο &amp; Λίπη</span>
+              <span class="cat-count">0 προμηθευτές</span>
+              <button class="btn-del-cat" onclick="askDelete(this, 'Ελαιόλαδο & Λίπη', 0)" title="Διαγραφή">🗑</button>
+            </li>
+            <li class="cat-row">
+              <div class="cat-icon">🧀</div>
+              <span class="cat-name">Γαλακτοκομικά</span>
+              <span class="cat-count">0 προμηθευτές</span>
+              <button class="btn-del-cat" onclick="askDelete(this, 'Γαλακτοκομικά', 0)" title="Διαγραφή">🗑</button>
+            </li>
+            <li class="cat-row">
+              <div class="cat-icon">🐟</div>
+              <span class="cat-name">Ψάρια &amp; Θαλασσινά</span>
+              <span class="cat-count">0 προμηθευτές</span>
+              <button class="btn-del-cat" onclick="askDelete(this, 'Ψάρια & Θαλασσινά', 0)" title="Διαγραφή">🗑</button>
+            </li>
+            <li class="cat-row">
+              <div class="cat-icon">🧻</div>
+              <span class="cat-name">Αναλώσιμα</span>
+              <span class="cat-count">0 προμηθευτές</span>
+              <button class="btn-del-cat" onclick="askDelete(this, 'Αναλώσιμα', 0)" title="Διαγραφή">🗑</button>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div><!-- /view-manage -->
+
+    <!-- VIEW 2: How it looks in the form -->
+    <div id="view-form" class="view">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Φόρμα Προμηθευτή (απόσπασμα)</div>
+          <div class="page-subtitle">Πώς φαίνεται το dropdown Κατηγορία με το κουμπί διαχείρισης</div>
+        </div>
+      </div>
+
+      <div style="max-width:680px">
+        <div class="card">
+          <div class="section-label">Βασικά Στοιχεία</div>
+          <div style="padding:12px 20px; display:grid; grid-template-columns:1fr 1fr; gap:0 20px;">
+            <div style="display:flex;flex-direction:column;gap:5px;padding:6px 0">
+              <label style="font-size:12px;font-weight:500">Επωνυμία / Όνομα *</label>
+              <input type="text" value="Παπάς Χρήστος" style="padding:8px 11px;border:1.5px solid var(--border);border-radius:7px;font-size:13.5px;outline:none;font-family:inherit">
+            </div>
+            <div style="display:flex;flex-direction:column;gap:5px;padding:6px 0">
+              <label style="font-size:12px;font-weight:500">ΑΦΜ</label>
+              <input type="text" value="123456789" style="padding:8px 11px;border:1.5px solid var(--border);border-radius:7px;font-size:13.5px;outline:none;font-family:inherit">
+            </div>
+          </div>
+
+          <div class="form-field-row">
+            <label style="font-size:12px;font-weight:500">Κατηγορία Προμηθευτή</label>
+            <div class="field-with-btn">
+              <div class="select-wrap">
+                <select>
+                  <option>— Επίλεξε κατηγορία —</option>
+                  <option selected>Κρεοπωλείο</option>
+                  <option>Τρόφιμα &amp; Ξηρά</option>
+                  <option>Λαχανικά &amp; Φρούτα</option>
+                  <option>Ποτά &amp; Αναψυκτικά</option>
+                  <option>Ελαιόλαδο &amp; Λίπη</option>
+                  <option>Γαλακτοκομικά</option>
+                  <option>Ψάρια &amp; Θαλασσινά</option>
+                  <option>Αναλώσιμα</option>
+                </select>
+              </div>
+              <a href="#" class="btn-manage-cats" onclick="showView('manage');document.querySelectorAll('.preview-tab').forEach((t,i)=>t.classList.toggle('active',i===0));return false" title="Επεξεργασία κατηγοριών">
+                ⚙ Κατηγορίες
+              </a>
+            </div>
+            <span style="font-size:11.5px;color:var(--text-muted)">Ανοίγει σε νέα καρτέλα για να μη χαθεί η φόρμα</span>
+          </div>
+
+          <div style="padding:12px 20px;display:grid;grid-template-columns:1fr 1fr;gap:0 20px">
+            <div style="display:flex;flex-direction:column;gap:5px;padding:6px 0">
+              <label style="font-size:12px;font-weight:500">Τηλέφωνο</label>
+              <input type="text" value="2462 022345" style="padding:8px 11px;border:1.5px solid var(--border);border-radius:7px;font-size:13.5px;outline:none;font-family:inherit">
+            </div>
+            <div style="display:flex;flex-direction:column;gap:5px;padding:6px 0">
+              <label style="font-size:12px;font-weight:500">Email</label>
+              <input type="text" placeholder="email@example.com" style="padding:8px 11px;border:1.5px solid var(--border);border-radius:7px;font-size:13.5px;outline:none;font-family:inherit;color:#94a3b8">
+            </div>
+          </div>
+
+          <div style="padding:16px 20px;border-top:1px solid var(--border);display:flex;gap:10px">
+            <button class="btn-primary">💾 Αποθήκευση</button>
+            <a href="#" class="btn-secondary">Ακύρωση</a>
+          </div>
+        </div>
+      </div>
+    </div><!-- /view-form -->
+
+  </div><!-- /page-content -->
+</div><!-- /main-content -->
+
+<!-- Confirm modal -->
+<div class="modal-overlay" id="confirm-modal">
+  <div class="modal-box">
+    <div class="modal-title">Διαγραφή κατηγορίας;</div>
+    <div class="modal-msg" id="confirm-msg"></div>
+    <div class="modal-actions">
+      <button class="btn-modal-cancel" onclick="closeModal()">Ακύρωση</button>
+      <button class="btn-modal-del" id="confirm-yes" onclick="doDelete()">Διαγραφή</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Tab switching
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  document.querySelectorAll('.preview-tab').forEach((t, i) => {
+    t.classList.toggle('active', (i === 0 && name === 'manage') || (i === 1 && name === 'form'));
+  });
+}
+document.querySelectorAll('.preview-tab').forEach((tab, i) => {
+  tab.onclick = () => showView(i === 0 ? 'manage' : 'form');
+});
+
+// ── Add category
+function addCategory() {
+  const inp = document.getElementById('new-cat');
+  const val = inp.value.trim();
+  if (!val) { inp.focus(); return; }
+
+  const icons = ['📦','🏪','🚛','🌾','🍖','🧴','🥚','🍞'];
+  const icon = icons[Math.floor(Math.random() * icons.length)];
+
+  const li = document.createElement('li');
+  li.className = 'cat-row';
+  li.innerHTML = `
+    <div class="cat-icon">${icon}</div>
+    <span class="cat-name">${val}</span>
+    <span class="cat-count">0 προμηθευτές</span>
+    <button class="btn-del-cat" onclick="askDelete(this,'${val.replace(/'/g,"\\'")}',0)" title="Διαγραφή">🗑</button>
+  `;
+  document.getElementById('cat-list').appendChild(li);
+  inp.value = '';
+  updateCount();
+  showToast(`✅ Η κατηγορία «${val}» προστέθηκε`);
+}
+
+// ── Delete confirm
+let _delRow = null;
+let _delName = '';
+
+function askDelete(btn, name, count) {
+  _delRow = btn.closest('.cat-row');
+  _delName = name;
+  const msg = count > 0
+    ? `Η κατηγορία <strong>«${name}»</strong> χρησιμοποιείται από <strong>${count} προμηθευτ${count===1?'ή':'ές'}</strong>.<br><br>Αν τη διαγράψεις, οι προμηθευτές αυτοί θα μείνουν χωρίς κατηγορία.`
+    : `Διαγραφή κατηγορίας <strong>«${name}»</strong>;`;
+  document.getElementById('confirm-msg').innerHTML = msg;
+  document.getElementById('confirm-modal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('confirm-modal').classList.remove('open');
+  _delRow = null;
+}
+
+function doDelete() {
+  if (_delRow) { _delRow.remove(); updateCount(); }
+  closeModal();
+  showToast(`🗑 Η κατηγορία «${_delName}» διαγράφηκε`);
+}
+
+// Click outside modal
+document.getElementById('confirm-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ── Update count label
+function updateCount() {
+  const n = document.querySelectorAll('.cat-row').length;
+  document.getElementById('cat-count-label').textContent =
+    n === 0 ? 'Δεν υπάρχουν κατηγορίες' : `${n} κατηγορί${n===1?'α':'ες'}`;
+}
+
+// ── Toast
+let _toastTimer = null;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// Enter key in input
+document.getElementById('new-cat').addEventListener('keydown', e => {
+  if (e.key === 'Enter') addCategory();
+});
+</script>
+</body>
+</html>
