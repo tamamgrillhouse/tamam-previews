@@ -38,11 +38,14 @@
   .del{background:none;border:none;color:var(--danger);font-size:15px;cursor:pointer;font-weight:700;text-align:center}
 
   /* packaging rows — extra column of type toggles */
-  .hrow.pk,.line.pk{grid-template-columns:1fr 70px 218px 78px 28px}
-  .types{display:flex;gap:5px;justify-content:center}
+  .hrow.pk,.line.pk{grid-template-columns:1fr 64px 290px 70px 26px}
+  .types{display:flex;gap:5px;justify-content:center;align-items:center}
   .tg{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:700;border:1.5px solid var(--border);border-radius:8px;padding:5px 7px;cursor:pointer;user-select:none;background:#fff;color:var(--text-muted);white-space:nowrap}
   .tg input{accent-color:var(--accent);width:14px;height:14px;margin:0}
   .tg.on{border-color:var(--accent);background:var(--accent-soft);color:#9a3412}
+  .tg-all{font-weight:800;border-color:var(--navy);color:var(--navy);padding:6px 10px}
+  .tg-all.on{background:var(--navy);border-color:var(--navy);color:#fff}
+  .types .divider{width:1px;align-self:stretch;background:var(--border);margin:2px 1px}
 
   .addrow{margin-top:10px;background:var(--accent-soft);border:1.5px dashed var(--accent);color:#9a3412;border-radius:9px;padding:9px 12px;font-size:13px;font-weight:700;cursor:pointer;width:100%}
 
@@ -144,6 +147,8 @@
         <span class="c-m"><select class="cell sel" style="width:100%"><option>Λαδόκολλα Μεγάλη</option></select></span>
         <span class="c-q"><input class="cell" style="width:100%" value="1"></span>
         <span class="types">
+          <button type="button" class="tg tg-all on">Πάντα</button>
+          <span class="divider"></span>
           <label class="tg on"><input type="checkbox" checked>Τραπέζι</label>
           <label class="tg on"><input type="checkbox" checked>Take&nbsp;Away</label>
           <label class="tg on"><input type="checkbox" checked>Delivery</label>
@@ -156,6 +161,8 @@
         <span class="c-m"><select class="cell sel" style="width:100%"><option>Χαρτοσακούλα</option></select></span>
         <span class="c-q"><input class="cell" style="width:100%" value="1"></span>
         <span class="types">
+          <button type="button" class="tg tg-all">Πάντα</button>
+          <span class="divider"></span>
           <label class="tg"><input type="checkbox">Τραπέζι</label>
           <label class="tg on"><input type="checkbox" checked>Take&nbsp;Away</label>
           <label class="tg on"><input type="checkbox" checked>Delivery</label>
@@ -168,6 +175,8 @@
         <span class="c-m"><select class="cell sel" style="width:100%"><option>Χαρτοπετσέτα 24</option></select></span>
         <span class="c-q"><input class="cell" style="width:100%" value="2"></span>
         <span class="types">
+          <button type="button" class="tg tg-all on">Πάντα</button>
+          <span class="divider"></span>
           <label class="tg on"><input type="checkbox" checked>Τραπέζι</label>
           <label class="tg on"><input type="checkbox" checked>Take&nbsp;Away</label>
           <label class="tg on"><input type="checkbox" checked>Delivery</label>
@@ -180,6 +189,8 @@
         <span class="c-m"><select class="cell sel" style="width:100%"><option>Γωνία (θήκη delivery)</option></select></span>
         <span class="c-q"><input class="cell" style="width:100%" value="1"></span>
         <span class="types">
+          <button type="button" class="tg tg-all">Πάντα</button>
+          <span class="divider"></span>
           <label class="tg"><input type="checkbox">Τραπέζι</label>
           <label class="tg"><input type="checkbox">Take&nbsp;Away</label>
           <label class="tg on"><input type="checkbox" checked>Delivery</label>
@@ -188,7 +199,7 @@
         <button class="del c-del">✕</button>
       </div>
       <button class="addrow">＋ Προσθήκη συσκευασίας</button>
-      <p class="legend">💡 Άναψε τους τύπους όπου μπαίνει το κάθε υλικό. Π.χ. η <b>χαρτοσακούλα</b> δεν μπαίνει στο τραπέζι· η <b>γωνία</b> μόνο στο delivery.</p>
+      <p class="legend">💡 Πάτα <b>«Πάντα»</b> για να μπει το υλικό σε όλους τους τύπους με ένα κλικ· ή άναψε μόνο όσους θες. Π.χ. η <b>χαρτοσακούλα</b> δεν μπαίνει στο τραπέζι· η <b>γωνία</b> μόνο στο delivery. (Αν σβήσεις έναν τύπο, το «Πάντα» σβήνει μόνο του.)</p>
 
       <!-- ── ΚΟΣΤΟΣ ΑΝΑ ΤΥΠΟ ────────────────── -->
       <div class="sec">💶 Κόστος &amp; Κέρδος ανά τύπο <span class="pill-new">ΝΕΟ</span></div>
@@ -250,9 +261,24 @@
 </div>
 
 <script>
-  // toggle pill look on click (demo only)
-  document.querySelectorAll('.tg input').forEach(function(cb){
-    cb.addEventListener('change',function(){ this.closest('.tg').classList.toggle('on', this.checked); });
+  // individual type toggle (demo only)
+  document.querySelectorAll('.types').forEach(function(grp){
+    var boxes = grp.querySelectorAll('input[type=checkbox]');
+    var allBtn = grp.querySelector('.tg-all');
+    function syncAll(){ // "Πάντα" lights up only when all three are on
+      var every = Array.prototype.every.call(boxes,function(b){return b.checked;});
+      allBtn.classList.toggle('on', every);
+    }
+    boxes.forEach(function(cb){
+      cb.addEventListener('change',function(){
+        this.closest('.tg').classList.toggle('on', this.checked); syncAll();
+      });
+    });
+    allBtn.addEventListener('click',function(){
+      var turnOn = !this.classList.contains('on'); // toggle: if not all-on -> set all on
+      boxes.forEach(function(cb){ cb.checked = turnOn; cb.closest('.tg').classList.toggle('on', turnOn); });
+      syncAll();
+    });
   });
 </script>
 </body>
