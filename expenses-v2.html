@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>TAMAM · Έξοδα v2</title>
+<style>
+:root{
+  --sidebar-bg:#1e2d3d; --accent:#f59e0b; --accent-dark:#d97706;
+  --content-bg:#f1f5f9; --white:#fff; --text:#1e293b; --muted:#64748b;
+  --border:#e2e8f0; --success:#10b981; --danger:#ef4444; --radius:10px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.08); --shadow-md:0 8px 24px rgba(0,0,0,.14);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,"Segoe UI",Roboto,sans-serif;font-size:14px;color:var(--text);background:var(--content-bg);line-height:1.45}
+
+/* layout */
+.app{display:flex;min-height:100vh}
+.sidebar{width:210px;background:var(--sidebar-bg);color:#94a3b8;flex-shrink:0;padding:16px 0;position:sticky;top:0;height:100vh}
+.sidebar .brand{padding:0 16px 14px;border-bottom:1px solid rgba(255,255,255,.08);color:#fff;font-weight:800;font-size:17px;display:flex;align-items:center;gap:8px}
+.sidebar .brand .tag{font-size:9px;background:var(--accent);color:#1a1206;padding:2px 7px;border-radius:20px}
+.sidebar nav{padding:10px 0}
+.sidebar a{display:flex;align-items:center;gap:10px;padding:10px 16px;color:#94a3b8;text-decoration:none;font-size:13.5px;border-left:3px solid transparent}
+.sidebar a.active{color:#fff;background:rgba(245,158,11,.12);border-left-color:var(--accent)}
+.sidebar a:hover{color:#fff}
+.main{flex:1;min-width:0}
+.topbar{background:#fff;border-bottom:1px solid var(--border);padding:14px 24px;position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.topbar h1{font-size:19px;display:flex;align-items:center;gap:9px}
+.tabs{display:flex;gap:6px;background:#fff;border-bottom:1px solid var(--border);padding:0 24px;position:sticky;top:55px;z-index:25}
+.tab{padding:13px 16px;cursor:pointer;font-size:14px;font-weight:600;color:var(--muted);border-bottom:3px solid transparent}
+.tab.active{color:var(--text);border-bottom-color:var(--accent)}
+.wrap{padding:22px 24px 70px;max-width:1080px}
+.screen{display:none}.screen.active{display:block}
+
+/* atoms */
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm)}
+.pad{padding:18px}
+.h{font-size:16px;font-weight:700}
+.sub{color:var(--muted);font-size:12.5px}
+.muted{color:var(--muted)}
+.between{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.row{display:flex;align-items:center;gap:10px}
+.mt{margin-top:16px}.mt8{margin-top:8px}
+.btn{min-height:44px;border-radius:9px;font-size:13.5px;font-weight:700;cursor:pointer;border:1.5px solid;padding:0 16px;display:inline-flex;align-items:center;justify-content:center;gap:7px}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:#1a1206}
+.btn-primary:hover{background:var(--accent-dark);border-color:var(--accent-dark)}
+.btn-secondary{background:#fff;border-color:var(--border);color:var(--text)}
+.btn-danger{background:#fff;border-color:#fecaca;color:var(--danger)}
+.btn-sm{min-height:34px;padding:0 11px;font-size:12.5px}
+.iconbtn{min-height:46px;min-width:46px;border:1.5px solid var(--border);background:#fff;border-radius:10px;font-size:19px;cursor:pointer}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12.5px;font-weight:600;color:#334155;margin-bottom:5px}
+.field input,.field select,.field textarea{width:100%;min-height:44px;border:1.5px solid var(--border);border-radius:9px;padding:0 12px;font-size:14px;font-family:inherit;background:#fff;color:var(--text)}
+.field textarea{padding:10px 12px;min-height:64px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.select-wrap{position:relative}
+.select-wrap select{appearance:none;padding-right:34px;width:100%;min-height:44px;border:1.5px solid var(--border);border-radius:9px;padding-left:12px;font-size:14px;background:#fff}
+.select-wrap::after{content:"▼";position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:10px;color:var(--muted);pointer-events:none}
+.tip{background:#fff7ed;border:1px solid #fed7aa;border-radius:9px;padding:10px 12px;color:#9a3412;font-size:12.5px}
+.warn{background:#fef2f2;border:1px solid #fecaca;border-radius:9px;padding:11px 13px;color:#991b1b;font-size:13px;display:flex;gap:9px;align-items:flex-start}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);padding:11px 12px;border-bottom:2px solid var(--border);background:#f8fafc}
+td{padding:13px 12px;border-bottom:1px solid var(--border);font-size:13.5px}
+tr.clickable{cursor:pointer}tr.clickable:hover td{background:#fff7ed}
+.amt{font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap}
+.tag-cat{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:11.5px;font-weight:700;white-space:nowrap}
+.c-prom{background:#fef3c7;color:#92400e}.c-anal{background:#e0e7ff;color:#3730a3}.c-ener{background:#dbeafe;color:#1e40af}
+.c-misth{background:#dcfce7;color:#166534}.c-pag{background:#fae8ff;color:#86198f}.c-apol{background:#fee2e2;color:#991b1b}
+.c-synt{background:#ffedd5;color:#9a3412}.c-kath{background:#ccfbf1;color:#115e59}.c-diaf{background:#fce7f3;color:#9d174d}
+.c-trap{background:#e2e8f0;color:#334155}.c-kaus{background:#fef9c3;color:#854d0e}.c-allo{background:#f1f5f9;color:#475569}
+.chip{border:1.5px solid var(--border);background:#fff;border-radius:20px;padding:7px 13px;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#1a1206}
+.bar{height:9px;border-radius:6px;background:#eef2f7;overflow:hidden}
+.bar>span{display:block;height:100%;border-radius:6px}
+.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.kpi .lbl{font-size:12px;color:var(--muted);font-weight:600}
+.kpi .val{font-size:26px;font-weight:800;margin-top:4px;font-variant-numeric:tabular-nums}
+.ok-pill{background:#dcfce7;color:#166534;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700}
+.due-pill{background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700}
+.soon-pill{background:#fef9c3;color:#854d0e;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700}
+input[type=range]{width:100%;accent-color:var(--accent);height:30px}
+.seg{display:inline-flex;background:#eef2f7;border-radius:9px;padding:3px}
+.seg button{border:none;background:transparent;padding:7px 13px;border-radius:7px;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer}
+.seg button.on{background:#fff;color:var(--text);box-shadow:var(--shadow-sm)}
+
+/* modal */
+.backdrop{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:flex-start;justify-content:center;z-index:80;padding:30px 14px;overflow:auto}
+.backdrop.show{display:flex}
+.modal{background:#fff;border-radius:14px;box-shadow:var(--shadow-md);width:100%;max-width:520px;overflow:hidden}
+.modal .mhead{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.modal .mhead .x{cursor:pointer;font-size:20px;color:var(--muted);background:none;border:none}
+.modal .mbody{padding:18px;max-height:70vh;overflow:auto}
+.modal .mfoot{padding:14px 18px;border-top:1px solid var(--border);display:flex;gap:10px}
+.kv{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:13.5px}
+.kv:last-child{border:none}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e293b;color:#fff;padding:12px 18px;border-radius:10px;font-size:13px;opacity:0;transition:.25s;z-index:99;box-shadow:var(--shadow-md)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.note{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;border-radius:9px;padding:9px 12px;font-size:12px;margin:0 24px 0}
+@media(max-width:780px){.sidebar{display:none}.kpi{grid-template-columns:1fr}.two{grid-template-columns:1fr}.wrap{padding:16px 14px 60px}.tabs{top:55px}}
+</style>
+</head>
+<body>
+<div class="note mt" style="margin-top:10px;margin-bottom:-6px">Δείγμα οθόνης (mockup) — όχι αληθινά νούμερα. Κλικ σε γραμμή εξόδου → ανοίγει η καρτέλα του με επεξεργασία. «+ Έξοδο» πάνω δεξιά.</div>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">🏪 TAMAM <span class="tag">BACK-OFFICE</span></div>
+    <nav>
+      <a>🚚 Προμηθευτές</a>
+      <a>📦 Πρώτες Ύλες</a>
+      <a>🧾 Συνταγές</a>
+      <a class="active">💰 Έξοδα</a>
+      <a>💲 Τιμές</a>
+      <a>📊 Αναφορές</a>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <h1>💰 Έξοδα & Κερδοφορία</h1>
+      <button class="btn btn-primary" onclick="openAdd()">＋ Έξοδο</button>
+    </div>
+    <div class="tabs">
+      <div class="tab active" onclick="tab('list')">📒 Λίστα εξόδων</div>
+      <div class="tab" onclick="tab('fixed')">📌 Πάγια</div>
+      <div class="tab" onclick="tab('prof')">🎯 Κερδοφορία</div>
+    </div>
+
+    <div class="wrap">
+
+    <!-- ───────── ΟΘΟΝΗ 1 — ΛΙΣΤΑ ───────── -->
+    <div class="screen active" id="sc-list">
+      <div class="between">
+        <div class="seg"><button class="on">Ιούνιος 2026</button><button>Μάιος</button><button>Έτος</button></div>
+        <div class="row"><span class="sub">Σύνολο μήνα</span><span class="amt" style="font-size:18px" id="hdrSum">9.690,00 €</span></div>
+      </div>
+
+      <!-- φίλτρα κατηγορίας (chips) -->
+      <div class="row mt" style="flex-wrap:wrap;gap:8px">
+        <div class="chip on" data-cat="" onclick="setChip(this)">Όλες</div>
+        <div class="chip" data-cat="Προμήθειες" onclick="setChip(this)">🥩 Προμήθειες</div>
+        <div class="chip" data-cat="Μισθοδοσία" onclick="setChip(this)">👤 Μισθοδοσία</div>
+        <div class="chip" data-cat="Ενέργεια" onclick="setChip(this)">⚡ Ενέργεια</div>
+        <div class="chip" data-cat="Πάγια" onclick="setChip(this)">🏠 Πάγια</div>
+        <div class="chip" data-cat="Αναλώσιμα" onclick="setChip(this)">📦 Αναλώσιμα</div>
+        <div class="chip" data-cat="Συντήρηση" onclick="setChip(this)">🔧 Συντήρηση</div>
+        <div class="chip" data-cat="Καύσιμα" onclick="setChip(this)">⛽ Καύσιμα</div>
+        <div class="chip" data-cat="Απώλειες" onclick="setChip(this)">🗑️ Απώλειες</div>
+        <div class="chip" style="border-style:dashed" onclick="toast('⚙️ Εδώ προσθέτεις/μετονομάζεις κατηγορίες — δεν είναι κλειδωμένες')">＋ Κατηγορία</div>
+      </div>
+
+      <input class="mt8" id="q" placeholder="🔎 Αναζήτηση (περιγραφή, προμηθευτής…)" oninput="render()"
+        style="width:100%;min-height:42px;border:1.5px solid var(--border);border-radius:9px;padding:0 12px;margin-top:12px">
+
+      <div class="card mt" style="overflow:hidden">
+        <table id="tbl">
+          <thead><tr><th>Ημ/νία</th><th>Περιγραφή</th><th>Κατηγορία</th><th>Πληρωμή</th><th style="text-align:right">Ποσό</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <div class="pad between" style="background:#f8fafc;border-top:2px solid var(--border)">
+          <span class="muted" id="cnt">—</span>
+          <span class="amt" style="font-size:15px">Σύνολο: <span id="sum">—</span></span>
+        </div>
+      </div>
+
+      <div class="card pad mt">
+        <div class="h" style="font-size:14px">Πού πήγαν τα λεφτά — Ιούνιος</div>
+        <div id="cats" class="mt8" style="display:grid;gap:10px"></div>
+      </div>
+    </div>
+
+    <!-- ───────── ΟΘΟΝΗ 2 — ΠΑΓΙΑ ───────── -->
+    <div class="screen" id="sc-fixed">
+      <div class="between">
+        <div><div class="h">📌 Πάγια έξοδα</div><div class="sub">Επαναλαμβανόμενα — μπαίνουν μόνα τους · ειδοποίηση 3 μέρες πριν</div></div>
+        <button class="btn btn-primary" onclick="toast('Νέο πάγιο — ίδια φόρμα με συχνότητα')">＋ Πάγιο</button>
+      </div>
+      <div class="warn mt">🔔 <div><b>Λήγει σε 2 μέρες:</b> Τηλέφωνο + Internet — 55,00 € (28/06). <b>Λήγει σε 4 μέρες:</b> Λογιστής — 120,00 €.</div></div>
+
+      <div class="kpi mt">
+        <div class="card pad"><div class="lbl">Μηνιαία πάγια (περίπου)</div><div class="val">~2.060 €</div></div>
+        <div class="card pad"><div class="lbl">Εκκρεμούν αυτόν τον μήνα</div><div class="val" style="color:var(--danger)">2</div></div>
+        <div class="card pad"><div class="lbl">Ετήσια (κατανεμημένα)</div><div class="val">~640 €</div><div class="sub">ασφάλιση + τέλη</div></div>
+      </div>
+
+      <div class="card mt" style="overflow:hidden">
+        <table>
+          <thead><tr><th>Πάγιο</th><th>Συχνότητα</th><th>Επόμενη</th><th style="text-align:right">Ποσό</th><th></th></tr></thead>
+          <tbody id="fxbody"></tbody>
+        </table>
+      </div>
+      <div class="sub mt8">💡 «Έξτρα κατηγορίες» που μπορεί να θες: Λογιστής, ΕΦΚΑ, Δημοτικά τέλη, Δάνειο/Leasing, Συνδρομή POS, Συντήρηση εξοπλισμού. Όλα προστίθενται εδώ.</div>
+    </div>
+
+    <!-- ───────── ΟΘΟΝΗ 3 — ΚΕΡΔΟΦΟΡΙΑ ───────── -->
+    <div class="screen" id="sc-prof">
+      <div class="between">
+        <div><div class="h">🎯 Κερδοφορία</div><div class="sub">Μπήκαν − βγήκαν − έμειναν · και ποιο πιάτο σε συμφέρει</div></div>
+        <div class="seg"><button class="on">Μήνας</button><button>Εβδομάδα</button><button>Σήμερα</button></div>
+      </div>
+      <div class="kpi mt">
+        <div class="card pad"><div class="lbl">💵 Τζίρος (POS)</div><div class="val" style="color:var(--success)">13.400 €</div></div>
+        <div class="card pad"><div class="lbl">💸 Έξοδα</div><div class="val" style="color:var(--danger)">9.690 €</div></div>
+        <div class="card pad"><div class="lbl">✅ Κέρδος</div><div class="val">3.710 €</div><div class="sub">περιθώριο 27,7%</div></div>
+      </div>
+
+      <div class="card pad mt">
+        <div class="h" style="font-size:14px">🏆 Κερδοφορία ανά πιάτο <span class="muted" style="font-weight:400">(μετά τα γενικά έξοδα)</span></div>
+        <table class="mt8">
+          <thead><tr><th>Πιάτο</th><th style="text-align:right">Υλικά</th><th style="text-align:right">+Γενικά</th><th style="text-align:right">Πλήρες</th><th style="text-align:right">Τιμή</th><th style="text-align:right">Κέρδος/μερ.</th></tr></thead>
+          <tbody>
+            <tr><td>Γύρος πίτα</td><td class="amt" style="text-align:right">1,00</td><td class="amt" style="text-align:right">0,90</td><td class="amt" style="text-align:right">1,90 €</td><td class="amt" style="text-align:right">3,00 €</td><td class="amt" style="text-align:right;color:var(--success)">1,10 € (37%)</td></tr>
+            <tr><td>Μπιφτέκι μερίδα</td><td class="amt" style="text-align:right">2,45</td><td class="amt" style="text-align:right">0,95</td><td class="amt" style="text-align:right">3,40 €</td><td class="amt" style="text-align:right">6,50 €</td><td class="amt" style="text-align:right;color:var(--success)">3,10 € (48%)</td></tr>
+            <tr><td>Σουβλάκι καλαμάκι</td><td class="amt" style="text-align:right">0,30</td><td class="amt" style="text-align:right">0,45</td><td class="amt" style="text-align:right">0,75 €</td><td class="amt" style="text-align:right">1,50 €</td><td class="amt" style="text-align:right;color:var(--success)">0,75 € (50%)</td></tr>
+            <tr><td>Πατάτες μερίδα</td><td class="amt" style="text-align:right">0,40</td><td class="amt" style="text-align:right">0,75</td><td class="amt" style="text-align:right">1,15 €</td><td class="amt" style="text-align:right">2,50 €</td><td class="amt" style="text-align:right;color:var(--success)">1,35 € (54%)</td></tr>
+            <tr><td>Σαλάτα εποχής</td><td class="amt" style="text-align:right">1,80</td><td class="amt" style="text-align:right">0,60</td><td class="amt" style="text-align:right">2,40 €</td><td class="amt" style="text-align:right">3,50 €</td><td class="amt" style="text-align:right;color:#b45309">1,10 € (31%)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card pad mt" style="max-width:640px">
+        <div class="h" style="font-size:14px">🎚️ What-if — «Αν αλλάξει κάτι;»</div>
+        <div class="sub">Σύρε και δες ζωντανά. Δεν αποθηκεύεται.</div>
+        <div class="mt"><label class="muted">Τιμή κρέατος: <b id="wfM">+0%</b></label><input type="range" min="-20" max="50" value="0" id="wfMR" oninput="wf()"></div>
+        <div><label class="muted">Τιμή πώλησης γύρου: <b id="wfP">3,00 €</b></label><input type="range" min="250" max="400" value="300" id="wfPR" oninput="wf()"></div>
+        <div class="card pad mt8" style="background:#f8fafc">
+          <div class="between"><span>Νέο πλήρες κόστος</span><span class="amt" id="wfC">1,90 €</span></div>
+          <div class="between mt8"><span>Νέο κέρδος / μερίδα</span><span class="amt" id="wfPr">1,10 €</span></div>
+          <div class="between mt8"><span>Επίπτωση στον μήνα <span class="muted">(~800 μερ.)</span></span><span class="amt" id="wfMo">—</span></div>
+        </div>
+      </div>
+    </div>
+
+    </div><!-- wrap -->
+  </div><!-- main -->
+</div>
+
+<!-- ── MODAL (καρτέλα/προσθήκη εξόδου) ── -->
+<div class="backdrop" id="bd" onclick="if(event.target===this)closeM()">
+  <div class="modal" id="modal"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const EXP=[
+ {id:1,d:'18-06',desc:'Παπάς Χρήστος (κρεοπωλείο)',cat:'Προμήθειες',cls:'c-prom',ic:'🥩',pay:'Μεταφορά',amt:420,inv:'#2462',note:'Κρέατα εβδομάδας'},
+ {id:2,d:'18-06',desc:'ΔΕΗ — προκαταβολή ρεύματος',cat:'Ενέργεια',cls:'c-ener',ic:'⚡',pay:'Κάρτα',amt:310,note:''},
+ {id:3,d:'17-06',desc:'Χαρτοσακούλες (χονδρική)',cat:'Αναλώσιμα',cls:'c-anal',ic:'📦',pay:'Μετρητά',amt:64,note:''},
+ {id:4,d:'16-06',desc:'Επισκευή ψυγείου βιτρίνας',cat:'Συντήρηση',cls:'c-synt',ic:'🔧',pay:'Μετρητά',amt:140,note:'Τεχνικός — αλλαγή θερμοστάτη'},
+ {id:5,d:'15-06',desc:'Μισθός — Γιώργος',cat:'Μισθοδοσία',cls:'c-misth',ic:'👤',pay:'Μεταφορά',amt:1050,note:''},
+ {id:6,d:'14-06',desc:'Βενζίνη — διανομές',cat:'Καύσιμα',cls:'c-kaus',ic:'⛽',pay:'Κάρτα',amt:60,note:''},
+ {id:7,d:'14-06',desc:'Φιάλες υγραερίου ×3',cat:'Ενέργεια',cls:'c-ener',ic:'🔥',pay:'Μετρητά',amt:127.5,note:''},
+ {id:8,d:'12-06',desc:'ΑΦΟΙ Κιβρόγλου (τρόφιμα)',cat:'Προμήθειες',cls:'c-prom',ic:'🛒',pay:'Επιταγή',amt:280,inv:'#1187',note:''},
+ {id:9,d:'10-06',desc:'Ενοίκιο Ιουνίου',cat:'Πάγια',cls:'c-pag',ic:'🏠',pay:'Μεταφορά',amt:1200,note:''},
+ {id:10,d:'08-06',desc:'Χαλασμένα λαχανικά',cat:'Απώλειες',cls:'c-apol',ic:'🗑️',pay:'—',amt:35,note:'Καταγραφή απώλειας'},
+];
+const CATS=[['Προμήθειες','c-prom','🥩',5200],['Μισθοδοσία','c-misth','👤',2100],['Πάγια','c-pag','🏠',1200],['Ενέργεια','c-ener','⚡',720],['Αναλώσιμα','c-anal','📦',380],['Συντήρηση','c-synt','🔧',140],['Καύσιμα','c-kaus','⛽',60],['Απώλειες','c-apol','🗑️',90]];
+const FIXED=[
+ ['🏠 Ενοίκιο','Μηνιαίο','01-07-2026','ok','σε 13 μέρες','1.200,00 €'],
+ ['📞 Τηλέφωνο + Internet','Μηνιαίο','28-06-2026','due','σε 2 μέρες','55,00 €'],
+ ['🧮 Λογιστής','Μηνιαίο','30-06-2026','due','σε 4 μέρες','120,00 €'],
+ ['⚡ ΔΕΗ (ρεύμα)','Διμηνιαίο','20-07-2026','ok','σε 1 μήνα','~310,00 €'],
+ ['💧 Νερό (ΔΕΥΑ)','Τριμηνιαίο','05-08-2026','ok','σε 2 μήνες','95,00 €'],
+ ['🏛️ ΕΦΚΑ','Μηνιαίο','31-07-2026','ok','σε 1 μήνα','~290,00 €'],
+ ['🛡️ Ασφάλιση καταστήματος','Ετήσιο','15-11-2026','soon','σε 5 μήνες','480,00 €'],
+ ['🔥 Φιάλες υγραερίου','Όταν τελειώνουν','—','','—','42,50 €/φιάλη'],
+];
+const eur=n=>n.toLocaleString('el-GR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €';
+let curCat='';
+
+function tab(t){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sc-'+t).classList.add('active');
+  document.querySelectorAll('.tab').forEach((x,i)=>x.classList.toggle('active',['list','fixed','prof'][i]===t));
+  window.scrollTo(0,0);
+}
+function setChip(el){
+  document.querySelectorAll('.chip[data-cat]').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');curCat=el.dataset.cat;render();
+}
+function render(){
+  const q=document.getElementById('q').value.toLowerCase();
+  const rows=EXP.filter(e=>(!curCat||e.cat===curCat)&&(!q||e.desc.toLowerCase().includes(q)));
+  document.querySelector('#tbl tbody').innerHTML=rows.map(e=>`<tr class="clickable" onclick="openExp(${e.id})">
+    <td>${e.d}</td><td>${e.ic} ${e.desc}${e.inv?' <span class="muted">'+e.inv+'</span>':''}</td>
+    <td><span class="tag-cat ${e.cls}">${e.cat}</span></td><td class="muted">${e.pay}</td>
+    <td class="amt" style="text-align:right">${eur(e.amt)}</td></tr>`).join('');
+  const s=rows.reduce((a,e)=>a+e.amt,0);
+  document.getElementById('cnt').textContent=rows.length+' εγγραφές';
+  document.getElementById('sum').textContent=eur(s);
+}
+function buildCats(){
+  const max=Math.max(...CATS.map(c=>c[3]));
+  document.getElementById('cats').innerHTML=CATS.map(c=>`
+   <div><div class="between" style="font-size:13px"><span class="tag-cat ${c[1]}">${c[2]} ${c[0]}</span><span class="amt">${eur(c[3])}</span></div>
+   <div class="bar mt8"><span style="width:${c[3]/max*100}%;background:var(--accent)"></span></div></div>`).join('');
+}
+function buildFixed(){
+  const pillCls={ok:'ok-pill',due:'due-pill',soon:'soon-pill','':''};
+  document.getElementById('fxbody').innerHTML=FIXED.map(f=>`<tr>
+    <td>${f[0]}</td><td>${f[1]}</td>
+    <td>${f[2]}${f[3]?' <span class="'+pillCls[f[3]]+'">'+f[4]+'</span>':''}</td>
+    <td class="amt" style="text-align:right">${f[5]}</td>
+    <td style="text-align:right"><button class="btn ${f[3]==='due'?'btn-primary':'btn-secondary'} btn-sm" onclick="toast('✅ Σημειώθηκε ως πληρωμένο — μετακινείται στην επόμενη περίοδο')">${f[2]==='—'?'Καταγραφή':'Πληρώθηκε'}</button></td></tr>`).join('');
+}
+
+/* ── modal: καρτέλα εξόδου (με επεξεργασία μέσα) ── */
+function openExp(id){
+  const e=EXP.find(x=>x.id===id);
+  document.getElementById('modal').innerHTML=`
+    <div class="mhead"><div><div class="h" style="font-size:16px">${e.ic} ${e.desc}</div><div class="sub">Καρτέλα εξόδου · ${e.d}-2026</div></div>
+      <button class="x" onclick="closeM()">✕</button></div>
+    <div class="mbody">
+      <div class="two">
+        <div class="field"><label>Ημερομηνία</label><input type="date" value="2026-06-${e.d.slice(0,2)}"></div>
+        <div class="field"><label>Ποσό (€)</label><input type="number" value="${e.amt}"></div>
+      </div>
+      <div class="field"><label>Κατηγορία</label><div class="select-wrap"><select>
+        ${CATS.map(c=>`<option ${c[0]===e.cat?'selected':''}>${c[0]}</option>`).join('')}
+      </select></div></div>
+      <div class="field"><label>Περιγραφή</label><input value="${e.desc}"></div>
+      <div class="field"><label>Τρόπος πληρωμής</label><div class="select-wrap"><select>
+        ${['Μετρητά','Κάρτα','Μεταφορά','Επιταγή','—'].map(p=>`<option ${p===e.pay?'selected':''}>${p}</option>`).join('')}
+      </select></div></div>
+      <div class="field"><label>Σημειώσεις</label><textarea>${e.note||''}</textarea></div>
+      ${e.inv?`<div class="tip">🔗 Συνδεδεμένο με <b>τιμολόγιο ${e.inv}</b> (Προμηθευτές). Το ποσό ήρθε αυτόματα.</div>`:''}
+    </div>
+    <div class="mfoot">
+      <button class="btn btn-primary" style="flex:1" onclick="toast('✅ Αποθηκεύτηκε');closeM()">💾 Αποθήκευση</button>
+      <button class="btn btn-danger" onclick="delExp('${e.desc}')">🗑️ Διαγραφή</button>
+    </div>`;
+  show();
+}
+
+/* ── modal: προσθήκη εξόδου ── */
+function openAdd(){
+  document.getElementById('modal').innerHTML=`
+    <div class="mhead"><div><div class="h" style="font-size:16px">＋ Νέο έξοδο</div><div class="sub">Συμπλήρωσε και αποθήκευσε</div></div>
+      <button class="x" onclick="closeM()">✕</button></div>
+    <div class="mbody">
+      <div class="tip">💡 Διάλεξε προμηθευτή/περιγραφή και η κατηγορία προτείνεται <b>μόνη της</b>. Ή τράβα φωτο την απόδειξη.</div>
+      <div class="two">
+        <div class="field"><label>Ημερομηνία</label><input type="date" value="2026-06-18"></div>
+        <div class="field"><label>Ποσό (€)</label><input type="number" placeholder="0,00"></div>
+      </div>
+      <div class="field"><label>Κατηγορία</label><div class="select-wrap"><select>
+        ${CATS.map(c=>`<option>${c[0]}</option>`).join('')}<option>＋ Νέα κατηγορία…</option>
+      </select></div></div>
+      <div class="field"><label>Περιγραφή</label><input placeholder="π.χ. Μανάβης — λαχανικά"></div>
+      <div class="field"><label>Τρόπος πληρωμής</label><div class="select-wrap"><select><option>Μετρητά</option><option>Κάρτα</option><option>Μεταφορά</option><option>Επιταγή</option></select></div></div>
+    </div>
+    <div class="mfoot">
+      <button class="btn btn-primary" style="flex:1" onclick="toast('✅ Το έξοδο αποθηκεύτηκε');closeM()">💾 Αποθήκευση</button>
+      <button class="iconbtn" title="Φωτο" onclick="toast('📷 OCR απόδειξης')">📷</button>
+      <button class="iconbtn" title="Φωνή" onclick="toast('🎙️ Φωνητική καταχώρηση')">🎙️</button>
+    </div>`;
+  show();
+}
+function delExp(name){if(confirm('[Δείγμα] Στην εφαρμογή: κομψό popup. Διαγραφή «'+name+'»;')){toast('🗑️ Διαγράφηκε');closeM();}}
+function show(){document.getElementById('bd').classList.add('show')}
+function closeM(){document.getElementById('bd').classList.remove('show')}
+
+function wf(){
+  const meat=+document.getElementById('wfMR').value, price=+document.getElementById('wfPR').value/100;
+  const cost=1.00+0.55*(meat/100)+0.30*price, profit=price-cost;
+  document.getElementById('wfM').textContent=(meat>=0?'+':'')+meat+'%';
+  document.getElementById('wfP').textContent=eur(price);
+  document.getElementById('wfC').textContent=eur(cost);
+  const pr=document.getElementById('wfPr');pr.textContent=eur(profit)+' ('+(profit/price*100).toFixed(0)+'%)';pr.style.color=profit>=0?'var(--success)':'var(--danger)';
+  const mo=(profit-1.10)*800,me=document.getElementById('wfMo');me.textContent=(mo>=0?'+':'')+eur(mo);me.style.color=mo>=0?'var(--success)':'var(--danger)';
+}
+let tt;function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2200);}
+
+render();buildCats();buildFixed();wf();
+</script>
+</body>
+</html>
