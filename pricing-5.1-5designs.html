@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>TAMAM · 💲 Τιμές & Περιθώρια (5.1) — 5 Σχέδια</title>
+<style>
+:root{
+  --sidebar-bg:#1e2d3d; --accent:#f59e0b; --accent-dark:#d97706;
+  --content-bg:#f1f5f9; --white:#fff; --text:#1e293b; --muted:#64748b;
+  --border:#e2e8f0; --success:#10b981; --danger:#ef4444; --radius:10px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.08); --shadow-md:0 10px 30px rgba(0,0,0,.16);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,"Segoe UI",Roboto,sans-serif;font-size:14px;color:var(--text);background:var(--content-bg);line-height:1.45}
+.app{display:flex;min-height:100vh}
+.sidebar{width:210px;background:var(--sidebar-bg);color:#94a3b8;flex-shrink:0;padding:16px 0;position:sticky;top:0;height:100vh}
+.sidebar .brand{padding:0 16px 14px;border-bottom:1px solid rgba(255,255,255,.08);color:#fff;font-weight:800;font-size:17px;display:flex;align-items:center;gap:8px}
+.sidebar .brand .tag{font-size:9px;background:var(--accent);color:#1a1206;padding:2px 7px;border-radius:20px}
+.sidebar nav{padding:10px 0}
+.sidebar a{display:flex;align-items:center;gap:10px;padding:10px 16px;color:#94a3b8;text-decoration:none;font-size:13.5px;border-left:3px solid transparent}
+.sidebar a.active{color:#fff;background:rgba(245,158,11,.12);border-left-color:var(--accent)}
+.sidebar a:hover{color:#fff}
+.main{flex:1;min-width:0}
+.topbar{background:#fff;border-bottom:1px solid var(--border);padding:14px 24px;position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:9px}
+.topbar h1{font-size:19px;display:flex;align-items:center;gap:9px}
+
+/* design switcher */
+.switch{display:flex;gap:7px;flex-wrap:wrap;background:#fff;border-bottom:1px solid var(--border);padding:11px 24px;position:sticky;top:55px;z-index:25}
+.switch button{border:1.5px solid var(--border);background:#fff;color:var(--muted);padding:7px 13px;border-radius:30px;font-size:12.5px;font-weight:700;cursor:pointer;min-height:36px}
+.switch button.active{background:var(--accent);border-color:var(--accent);color:#1a1206}
+
+.wrap{padding:22px 24px 100px;max-width:1180px}
+.design{display:none}
+.design.show{display:block}
+.dhead{margin-bottom:16px}
+.dhead .t{font-size:17px;font-weight:800;display:flex;align-items:center;gap:9px}
+.dhead .d{color:var(--muted);font-size:13px;margin-top:4px}
+
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm)}
+.pad{padding:18px}
+.muted{color:var(--muted)}
+.between{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+/* order-type toggle (shared) */
+.seg{display:inline-flex;border:1.5px solid var(--border);border-radius:9px;overflow:hidden}
+.seg button{border:none;background:#fff;color:var(--muted);padding:8px 14px;font-size:12.5px;font-weight:700;cursor:pointer;min-height:38px}
+.seg button.active{background:#eff6ff;color:#1e40af}
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.dot{width:11px;height:11px;border-radius:50%}
+.dot.g{background:var(--success)}.dot.a{background:var(--accent)}.dot.r{background:var(--danger)}
+
+/* pills */
+.pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:12px;font-weight:800;font-variant-numeric:tabular-nums}
+.pill.g{background:#dcfce7;color:#166534}.pill.a{background:#fef3c7;color:#92400e}.pill.r{background:#fee2e2;color:#991b1b}
+
+/* ---- table (D1) ---- */
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);padding:11px;border-bottom:2px solid var(--border);background:#f8fafc;cursor:pointer;user-select:none;white-space:nowrap}
+th .ar{font-size:9px;opacity:.5;margin-left:3px}
+td{padding:11px;border-bottom:1px solid var(--border);font-size:13px}
+tbody tr:hover{background:#fafbfc}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.pname{font-weight:700}
+.cat-tag{font-size:11px;color:var(--muted)}
+.lowrow td{background:#fff7f5}
+
+/* ---- cards (D2) ---- */
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.pcard{border:1px solid var(--border);border-radius:11px;padding:14px;background:#fff;border-left:4px solid var(--border)}
+.pcard.g{border-left-color:var(--success)}.pcard.a{border-left-color:var(--accent)}.pcard.r{border-left-color:var(--danger)}
+.pcard .pc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:11px}
+.pcard .pc-name{font-weight:800;font-size:14px}
+.pcard .pc-cat{font-size:11px;color:var(--muted)}
+.pcard .pc-price{font-size:20px;font-weight:800}
+.bar{height:13px;border-radius:7px;overflow:hidden;display:flex;background:#f1f5f9;margin:10px 0 6px}
+.bar .b-mat{background:#fca5a5}.bar .b-oh{background:#fcd34d}.bar .b-pro{background:#86efac}
+.barleg{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}
+.pc-rows{margin-top:11px;font-size:12.5px}
+.pc-rows div{display:flex;justify-content:space-between;padding:3px 0}
+.pc-rows .tot{border-top:1px solid var(--border);margin-top:4px;padding-top:6px;font-weight:700}
+
+/* ---- accordion category (D3) ---- */
+.catacc{border:1px solid var(--border);border-radius:11px;margin-bottom:11px;overflow:hidden;background:#fff}
+.catacc .cah{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 15px;cursor:pointer;background:#f8fafc}
+.catacc .cah .cname{font-weight:800;font-size:14px;display:flex;align-items:center;gap:8px}
+.catacc .cah .cmeta{font-size:12px;color:var(--muted);display:flex;gap:14px;align-items:center}
+.catacc .cabody{display:none}
+.catacc.open .cabody{display:block}
+.catacc .cah .chev{transition:transform .2s}
+.catacc.open .cah .chev{transform:rotate(90deg)}
+
+/* ---- health view (D4) ---- */
+.hsec{margin-bottom:20px}
+.hsec .hh{display:flex;align-items:center;gap:9px;font-weight:800;font-size:15px;margin-bottom:11px}
+.hbanner{border-radius:10px;padding:12px 15px;font-size:13.5px;margin-bottom:14px;display:flex;gap:10px;align-items:flex-start}
+.hbanner.bad{background:#fef2f2;border:1px solid #fecaca;color:#7f1d1d}
+.hitem{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 15px;border:1px solid var(--border);border-radius:10px;margin-bottom:9px;background:#fff}
+.hitem.r{border-color:#fecaca;background:#fff7f5}
+.hitem .hi-l{min-width:0}
+.hitem .hi-name{font-weight:800}
+.hitem .hi-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.hitem .hi-r{text-align:right;flex-shrink:0}
+.hitem .hi-big{font-size:18px;font-weight:800}
+.hsec.ok summary{cursor:pointer;font-weight:700;color:var(--muted);padding:8px 0}
+
+/* ---- editable (D5) ---- */
+.etable td{padding:10px 11px}
+.priceedit{display:inline-flex;align-items:center;gap:4px;border:1.5px solid var(--border);border-radius:8px;padding:3px 4px 3px 9px;background:#fff;max-width:120px}
+.priceedit input{border:none;width:54px;font-size:13.5px;font-weight:700;text-align:right;font-variant-numeric:tabular-nums;outline:none;color:var(--text)}
+.priceedit:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(245,158,11,.15)}
+.applybtn{font-size:11px;font-weight:800;color:#166534;background:#dcfce7;border:none;border-radius:6px;padding:5px 9px;cursor:pointer;visibility:hidden}
+.etable tr.dirty .applybtn{visibility:visible}
+.etable tr.dirty td{background:#fffbeb}
+.changed{color:var(--accent-dark);font-weight:800}
+
+.demo-note{position:fixed;bottom:0;left:0;right:0;background:#1e2d3d;color:#cbd5e1;font-size:11.5px;text-align:center;padding:7px;z-index:50}
+.tip{background:#eff6ff;border:1px solid #bfdbfe;border-radius:9px;padding:10px 13px;color:#1e40af;font-size:12.5px;margin-bottom:14px;display:flex;gap:8px}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">🍽 TAMAM <span class="tag">BACK</span></div>
+    <nav>
+      <a href="#">🏠 Πίνακας</a>
+      <a href="#">🚚 Προμηθευτές</a>
+      <a href="#">📦 Αποθήκη</a>
+      <a href="#">🧾 Συνταγές</a>
+      <a href="#">💰 Έξοδα</a>
+      <a href="#" class="active">💲 Τιμές</a>
+    </nav>
+  </aside>
+  <div class="main">
+    <div class="topbar"><h1>💲 Τιμές & Περιθώρια <span class="muted" style="font-size:13px;font-weight:400">· ιδέα 5.1</span></h1></div>
+
+    <div class="switch">
+      <button class="active" onclick="showD(1,this)">1 · Πίνακας</button>
+      <button onclick="showD(2,this)">2 · Κάρτες</button>
+      <button onclick="showD(3,this)">3 · Ανά κατηγορία</button>
+      <button onclick="showD(4,this)">4 · «Φανάρι» υγείας</button>
+      <button onclick="showD(5,this)">5 · Επεξεργασία τιμών</button>
+    </div>
+
+    <div class="wrap">
+
+      <!-- shared toolbar note -->
+      <div class="tip">
+        <span>💡</span>
+        <div>Κοινό σε όλα τα σχέδια: διακόπτης <b>Τραπέζι / Take Away / Delivery</b> (το κόστος συσκευασίας αλλάζει ανά τύπο), χρωματισμός περιθωρίου, και ταξινόμηση ώστε τα <b>χαμηλά περιθώρια να φαίνονται πρώτα</b>.</div>
+      </div>
+
+      <!-- ================= DESIGN 1: TABLE ================= -->
+      <div class="design show" id="d1">
+        <div class="dhead">
+          <div class="t">1 · Κλασικός πίνακας</div>
+          <div class="d">Όλα σε μία ματιά, ταξινομήσιμος. Κλικ σε κεφαλίδα = ταξινόμηση. Τα προβληματικά (κόκκινα) μένουν στην κορυφή με ταξινόμηση «Πλήρες %».</div>
+        </div>
+        <div class="card pad">
+          <div class="toolbar">
+            <div class="seg" id="seg1"></div>
+            <div class="legend">
+              <span><i class="dot g"></i> ≥55% υγιές</span>
+              <span><i class="dot a"></i> 30–55% οριακό</span>
+              <span><i class="dot r"></i> &lt;30% πρόβλημα</span>
+            </div>
+          </div>
+          <div style="overflow-x:auto">
+          <table id="tbl1">
+            <thead><tr>
+              <th onclick="sort1('name')">Προϊόν</th>
+              <th class="num" onclick="sort1('mat')">Κόστος υλικών</th>
+              <th class="num" onclick="sort1('full')">Πλήρες κόστος</th>
+              <th class="num" onclick="sort1('price')">Τιμή πώλησης</th>
+              <th class="num" onclick="sort1('gp')">Μικτό περιθ. €</th>
+              <th class="num" onclick="sort1('gm')">Μικτό %</th>
+              <th class="num" onclick="sort1('fm')">Πλήρες % <span class="ar">▼</span></th>
+            </tr></thead>
+            <tbody></tbody>
+          </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= DESIGN 2: CARDS ================= -->
+      <div class="design" id="d2">
+        <div class="dhead">
+          <div class="t">2 · Κάρτες προϊόντων</div>
+          <div class="d">Κάθε προϊόν μια κάρτα με «μπάρα» που δείχνει οπτικά πού πάει το ευρώ: υλικά / γενικά / κέρδος. Καλό για κινητό.</div>
+        </div>
+        <div class="toolbar">
+          <div class="seg" id="seg2"></div>
+          <div class="legend">
+            <span><i class="dot r" style="background:#fca5a5"></i> Υλικά</span>
+            <span><i class="dot a" style="background:#fcd34d"></i> Γενικά</span>
+            <span><i class="dot g" style="background:#86efac"></i> Κέρδος</span>
+          </div>
+        </div>
+        <div class="cgrid" id="cards2"></div>
+      </div>
+
+      <!-- ================= DESIGN 3: BY CATEGORY ================= -->
+      <div class="design" id="d3">
+        <div class="dhead">
+          <div class="t">3 · Ομαδοποίηση ανά κατηγορία</div>
+          <div class="d">Σύμπτυξη/ανάπτυξη ανά οικογένεια (Πίτα, Μερίδα, Burgers…) με μέσο περιθώριο κατηγορίας. Καλό όταν τα προϊόντα είναι πολλά.</div>
+        </div>
+        <div class="toolbar">
+          <div class="seg" id="seg3"></div>
+          <div class="muted" style="font-size:12px">Κλικ στην κατηγορία για άνοιγμα</div>
+        </div>
+        <div id="acc3"></div>
+      </div>
+
+      <!-- ================= DESIGN 4: HEALTH ================= -->
+      <div class="design" id="d4">
+        <div class="dhead">
+          <div class="t">4 · «Φανάρι» υγείας</div>
+          <div class="d">Δείχνει πρώτα ΜΟΝΟ ό,τι χρειάζεται προσοχή (χαμηλό/αρνητικό περιθώριο), με σαφή πρόταση. Τα υγιή κρυμμένα από κάτω.</div>
+        </div>
+        <div class="toolbar"><div class="seg" id="seg4"></div></div>
+        <div id="health4"></div>
+      </div>
+
+      <!-- ================= DESIGN 5: EDIT ================= -->
+      <div class="design" id="d5">
+        <div class="dhead">
+          <div class="t">5 · Επεξεργασία τιμών (ζωντανά)</div>
+          <div class="d">Αλλάζεις την τιμή πώλησης μέσα στον πίνακα και το περιθώριο ξαναϋπολογίζεται αμέσως. Κουμπί «Εφαρμογή» όταν αλλάξει κάτι (στην πραγματική εφαρμογή αποθηκεύεται).</div>
+        </div>
+        <div class="card pad">
+          <div class="toolbar">
+            <div class="seg" id="seg5"></div>
+            <div class="muted" style="font-size:12px">✏️ Δοκίμασε ν' αλλάξεις μια τιμή</div>
+          </div>
+          <div style="overflow-x:auto">
+          <table class="etable" id="tbl5">
+            <thead><tr>
+              <th>Προϊόν</th><th class="num">Πλήρες κόστος</th><th class="num">Τιμή πώλησης</th>
+              <th class="num">Νέο περιθώριο</th><th></th>
+            </tr></thead>
+            <tbody></tbody>
+          </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="demo-note">🔬 ΔΕΙΓΜΑ με ψεύτικα νούμερα — έτσι θα δουλεύει η σελίδα «Τιμές» (5.1). Δεν είναι τα πραγματικά σου δεδομένα.</div>
+
+<script>
+/* ---------- ΨΕΥΤΙΚΑ ΔΕΔΟΜΕΝΑ (μόνο για το δείγμα) ---------- */
+/* matT/matD = κόστος υλικών (ίδιο σε όλους τους τύπους — το φαγητό)
+   pack = κόστος συσκευασίας ανά τύπο (Τραπέζι ~0, Take Away, Delivery)
+   price = τιμή πώλησης POS, cat = κατηγορία, vol = πωλήσεις/μήνα */
+const OH = 0.11; // ποσοστό γενικών × τιμή (επιμερισμός ανά τζίρο, 4.6) — δείγμα 11%
+const ITEMS = [
+  {name:"Πίτα γύρος χοιρινός", cat:"Πίτα", mat:0.98, price:4.00, pack:{dinein:0.04,takeaway:0.18,delivery:0.34}, vol:920},
+  {name:"Πίτα σουβλάκι χοιρινό", cat:"Πίτα", mat:0.86, price:3.50, pack:{dinein:0.04,takeaway:0.18,delivery:0.34}, vol:740},
+  {name:"Πίτα κοτόπουλο", cat:"Πίτα", mat:0.92, price:3.50, pack:{dinein:0.04,takeaway:0.18,delivery:0.34}, vol:510},
+  {name:"Πατατόπιτα", cat:"Πίτα", mat:0.71, price:2.50, pack:{dinein:0.04,takeaway:0.16,delivery:0.30}, vol:160},
+  {name:"Γύρος XXL", cat:"XXL", mat:1.84, price:7.00, pack:{dinein:0.06,takeaway:0.28,delivery:0.46}, vol:230},
+  {name:"Ντόνερ XXL", cat:"XXL", mat:1.96, price:7.00, pack:{dinein:0.06,takeaway:0.28,delivery:0.46}, vol:140},
+  {name:"Μερίδα γύρος", cat:"Μερίδα", mat:2.55, price:9.00, pack:{dinein:0.10,takeaway:0.42,delivery:0.62}, vol:310},
+  {name:"Μερίδα σουβλάκι (3τεμ)", cat:"Μερίδα", mat:2.30, price:8.50, pack:{dinein:0.10,takeaway:0.42,delivery:0.62}, vol:180},
+  {name:"Tamam Burger", cat:"Burgers", mat:2.62, price:7.00, pack:{dinein:0.08,takeaway:0.30,delivery:0.48}, vol:260},
+  {name:"Cheeseburger", cat:"Burgers", mat:1.42, price:4.00, pack:{dinein:0.08,takeaway:0.30,delivery:0.48}, vol:300},
+  {name:"Falafel πίτα", cat:"Πίτα", mat:0.78, price:4.00, pack:{dinein:0.04,takeaway:0.18,delivery:0.34}, vol:90},
+  {name:"Μπιφτέκι Λαχανικών πίτα", cat:"Πίτα", mat:1.34, price:3.70, pack:{dinein:0.04,takeaway:0.18,delivery:0.34}, vol:70},
+  {name:"Χωριάτικη σαλάτα", cat:"Σαλάτες", mat:1.86, price:5.50, pack:{dinein:0.05,takeaway:0.35,delivery:0.55}, vol:120},
+  {name:"Πατάτες τηγανιτές", cat:"Συνοδευτικά", mat:0.62, price:3.00, pack:{dinein:0.05,takeaway:0.20,delivery:0.36}, vol:540},
+];
+
+let otype = "takeaway";
+const TLAB={dinein:"🍽 Τραπέζι",takeaway:"🛍 Take Away",delivery:"🛵 Delivery"};
+
+const eur = v => (v).toLocaleString("el-GR",{minimumFractionDigits:2,maximumFractionDigits:2})+"€";
+const eur0= v => Math.round(v).toLocaleString("el-GR")+"€";
+const mclass = p => p===null?"":p>=55?"g":p>=30?"a":"r";
+
+/* υπολογισμός πεδίων ανά item για τον τρέχοντα τύπο */
+function compute(it){
+  const pack = it.pack[otype]||0;
+  const matTotal = it.mat + pack;            // κόστος υλικών+συσκευασία
+  const oh = OH*it.price;                     // γενικά (ανά τζίρο)
+  const full = matTotal + oh;                 // πλήρες κόστος
+  const gp = it.price - matTotal;             // μικτό περιθώριο €
+  const gm = it.price? gp/it.price*100 : null;// μικτό %
+  const fp = it.price - full;                 // πλήρες κέρδος €
+  const fm = it.price? fp/it.price*100 : null;// πλήρες %
+  return {...it, pack, matTotal, oh, full, gp, gm, fp, fm};
+}
+function rows(){ return ITEMS.map(compute); }
+
+/* ---- segmented control builder (shared) ---- */
+function buildSeg(id){
+  const el=document.getElementById(id); if(!el) return;
+  el.innerHTML = Object.entries(TLAB).map(([k,l])=>
+    `<button data-t="${k}" class="${k===otype?'active':''}" onclick="setType('${k}')">${l}</button>`).join("");
+}
+function setType(t){
+  otype=t;
+  ["seg1","seg2","seg3","seg4","seg5"].forEach(buildSeg);
+  renderAll();
+}
+
+/* ---------- DESIGN 1: TABLE ---------- */
+let sortKey="fm", sortDir=1; // 1 asc (χαμηλά πρώτα)
+function sort1(k){ if(sortKey===k) sortDir*=-1; else {sortKey=k;sortDir=1;} render1(); }
+function render1(){
+  const r=rows();
+  r.sort((a,b)=>{
+    let va=a[sortKey], vb=b[sortKey];
+    if(sortKey==="name"){ return va.localeCompare(vb,"el")*sortDir; }
+    return ((va??0)-(vb??0))*sortDir;
+  });
+  document.querySelector("#tbl1 tbody").innerHTML = r.map(x=>`
+    <tr class="${x.fm<30?'lowrow':''}">
+      <td><div class="pname">${x.name}</div><div class="cat-tag">${x.cat}</div></td>
+      <td class="num">${eur(x.matTotal)}</td>
+      <td class="num">${eur(x.full)}</td>
+      <td class="num"><b>${eur(x.price)}</b></td>
+      <td class="num">${eur(x.gp)}</td>
+      <td class="num"><span class="pill ${mclass(x.gm)}">${x.gm.toFixed(0)}%</span></td>
+      <td class="num"><span class="pill ${mclass(x.fm)}">${x.fm.toFixed(0)}%</span></td>
+    </tr>`).join("");
+}
+
+/* ---------- DESIGN 2: CARDS ---------- */
+function render2(){
+  const r=rows().sort((a,b)=>a.fm-b.fm);
+  document.getElementById("cards2").innerHTML = r.map(x=>{
+    const matPct=Math.max(0,x.matTotal/x.price*100);
+    const ohPct =Math.max(0,x.oh/x.price*100);
+    const proPct=Math.max(0,100-matPct-ohPct);
+    return `<div class="pcard ${mclass(x.fm)}">
+      <div class="pc-top">
+        <div><div class="pc-name">${x.name}</div><div class="pc-cat">${x.cat}</div></div>
+        <div style="text-align:right"><div class="pc-price">${eur(x.price)}</div>
+          <span class="pill ${mclass(x.fm)}">${x.fm.toFixed(0)}% καθαρό</span></div>
+      </div>
+      <div class="bar">
+        <div class="b-mat" style="width:${matPct}%"></div>
+        <div class="b-oh" style="width:${ohPct}%"></div>
+        <div class="b-pro" style="width:${proPct}%"></div>
+      </div>
+      <div class="barleg"><span>Υλικά ${matPct.toFixed(0)}%</span><span>Γενικά ${ohPct.toFixed(0)}%</span><span>Κέρδος ${proPct.toFixed(0)}%</span></div>
+      <div class="pc-rows">
+        <div><span class="muted">Κόστος υλικών+συσκ.</span><span>${eur(x.matTotal)}</span></div>
+        <div><span class="muted">Γενικά (επιμερισμός)</span><span>${eur(x.oh)}</span></div>
+        <div class="tot"><span>Καθαρό κέρδος/μερίδα</span><span class="${x.fp<0?'':''}">${eur(x.fp)}</span></div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+/* ---------- DESIGN 3: BY CATEGORY ---------- */
+let openCats={};
+function render3(){
+  const r=rows();
+  const cats={};
+  r.forEach(x=>{(cats[x.cat]=cats[x.cat]||[]).push(x);});
+  // sort categories by avg full margin asc
+  const order=Object.keys(cats).sort((a,b)=>avg(cats[a])-avg(cats[b]));
+  document.getElementById("acc3").innerHTML = order.map(cat=>{
+    const list=cats[cat].sort((a,b)=>a.fm-b.fm);
+    const am=avg(list);
+    const open=openCats[cat];
+    return `<div class="catacc ${open?'open':''}">
+      <div class="cah" onclick="toggleCat('${cat}')">
+        <div class="cname"><span class="chev">▶</span> ${cat} <span class="muted" style="font-weight:400">(${list.length})</span></div>
+        <div class="cmeta"><span>Μέσο περιθώριο</span><span class="pill ${mclass(am)}">${am.toFixed(0)}%</span></div>
+      </div>
+      <div class="cabody"><table>
+        <thead><tr><th>Προϊόν</th><th class="num">Κόστος</th><th class="num">Τιμή</th><th class="num">Μικτό %</th><th class="num">Πλήρες %</th></tr></thead>
+        <tbody>${list.map(x=>`<tr>
+          <td class="pname">${x.name}</td>
+          <td class="num">${eur(x.full)}</td>
+          <td class="num"><b>${eur(x.price)}</b></td>
+          <td class="num"><span class="pill ${mclass(x.gm)}">${x.gm.toFixed(0)}%</span></td>
+          <td class="num"><span class="pill ${mclass(x.fm)}">${x.fm.toFixed(0)}%</span></td>
+        </tr>`).join("")}</tbody>
+      </table></div>
+    </div>`;
+  }).join("");
+}
+function avg(list){return list.reduce((s,x)=>s+x.fm,0)/list.length;}
+function toggleCat(c){openCats[c]=!openCats[c];render3();}
+
+/* ---------- DESIGN 4: HEALTH ---------- */
+function render4(){
+  const r=rows();
+  const bad=r.filter(x=>x.fm<30).sort((a,b)=>a.fm-b.fm);
+  const ok =r.filter(x=>x.fm>=30).sort((a,b)=>a.fm-b.fm);
+  let html="";
+  html+=`<div class="hsec">
+    <div class="hh">🔴 Χρειάζονται προσοχή (${bad.length})</div>`;
+  if(bad.length){
+    html+=`<div class="hbanner bad"><span>⚠️</span><div>Αυτά τα προϊόντα έχουν περιθώριο <b>κάτω από 30%</b> — μετά τα γενικά έξοδα βγάζεις ελάχιστο ή χάνεις. Σκέψου μικρή αύξηση τιμής ή φθηνότερο υλικό.</div></div>`;
+    html+=bad.map(x=>{
+      const need=x.full/0.70; // τιμή για 30% πλήρες περιθώριο
+      return `<div class="hitem r">
+        <div class="hi-l">
+          <div class="hi-name">${x.name} <span class="muted" style="font-weight:400;font-size:12px">· ${x.cat}</span></div>
+          <div class="hi-sub">Κόστος ${eur(x.full)} · Τιμή ${eur(x.price)} · 💡 για 30% χρειάζεται <b>${eur(need)}</b></div>
+        </div>
+        <div class="hi-r"><div class="hi-big" style="color:var(--danger)">${x.fm.toFixed(0)}%</div><span class="muted" style="font-size:11px">πλήρες</span></div>
+      </div>`;
+    }).join("");
+  } else html+=`<div class="muted" style="padding:6px 2px">✅ Κανένα προβληματικό προϊόν — μπράβο!</div>`;
+  html+=`</div>`;
+  html+=`<div class="hsec ok"><details><summary>🟢 Υγιή προϊόντα (${ok.length}) — κλικ για εμφάνιση</summary><div style="margin-top:11px">`;
+  html+=ok.map(x=>`<div class="hitem">
+      <div class="hi-l"><div class="hi-name">${x.name} <span class="muted" style="font-weight:400;font-size:12px">· ${x.cat}</span></div>
+        <div class="hi-sub">Κόστος ${eur(x.full)} · Τιμή ${eur(x.price)}</div></div>
+      <div class="hi-r"><div class="hi-big" style="color:var(--success)">${x.fm.toFixed(0)}%</div><span class="muted" style="font-size:11px">πλήρες</span></div>
+    </div>`).join("");
+  html+=`</div></details></div>`;
+  document.getElementById("health4").innerHTML=html;
+}
+
+/* ---------- DESIGN 5: EDITABLE ---------- */
+let edited={};
+function render5(){
+  const r=rows().sort((a,b)=>a.fm-b.fm);
+  document.querySelector("#tbl5 tbody").innerHTML = r.map((x,i)=>{
+    const cur = edited[x.name]!==undefined ? edited[x.name] : x.price;
+    const full=x.full, fm = cur? (cur-full)/cur*100 : 0;
+    const dirty = edited[x.name]!==undefined && edited[x.name]!==x.price;
+    return `<tr class="${dirty?'dirty':''}" data-i="${i}">
+      <td class="pname">${x.name}<div class="cat-tag">${x.cat}</div></td>
+      <td class="num">${eur(full)}</td>
+      <td class="num"><div class="priceedit"><input type="number" step="0.10" value="${cur.toFixed(2)}"
+           oninput="editPrice('${x.name}',${full},this)">€</div></td>
+      <td class="num"><span class="pill ${mclass(fm)}" id="fm-${i}">${fm.toFixed(0)}%</span>
+         ${dirty?`<div class="changed" style="font-size:11px">από ${((x.price-full)/x.price*100).toFixed(0)}%</div>`:''}</td>
+      <td class="num"><button class="applybtn" onclick="applyPrice('${x.name}')">✓ Εφαρμογή</button></td>
+    </tr>`;
+  }).join("");
+}
+function editPrice(name,full,inp){
+  const v=parseFloat(inp.value)||0;
+  edited[name]=v;
+  const tr=inp.closest("tr"); tr.classList.add("dirty");
+  const i=tr.dataset.i;
+  const fm=v?(v-full)/v*100:0;
+  const pill=document.getElementById("fm-"+i);
+  pill.textContent=fm.toFixed(0)+"%"; pill.className="pill "+mclass(fm);
+}
+function applyPrice(name){ showToast("✓ (δείγμα) Θα αποθηκευόταν η νέα τιμή για «"+name+"»."); }
+function showToast(m){ const d=document.querySelector(".demo-note"); const o=d.textContent; d.textContent=m; setTimeout(()=>d.textContent=o,2200); }
+
+/* ---------- orchestration ---------- */
+function renderAll(){ render1(); render2(); render3(); render4(); render5(); }
+function showD(n,btn){
+  document.querySelectorAll(".design").forEach(d=>d.classList.remove("show"));
+  document.getElementById("d"+n).classList.add("show");
+  document.querySelectorAll(".switch button").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+}
+window.onload=()=>{ ["seg1","seg2","seg3","seg4","seg5"].forEach(buildSeg); renderAll(); };
+</script>
+</body>
+</html>
