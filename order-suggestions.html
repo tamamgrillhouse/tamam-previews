@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAMAM · Προτάσεις Παραγγελιών (1.6) — Preview</title>
+<style>
+  :root{
+    --accent:#f59e0b; --accent-dark:#d97706; --content-bg:#f1f5f9;
+    --white:#fff; --text:#1e293b; --text-muted:#64748b; --border:#e2e8f0;
+    --success:#10b981; --danger:#ef4444; --radius:10px;
+    --shadow-sm:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+    --shadow-md:0 4px 12px rgba(0,0,0,.10);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--content-bg);color:var(--text);line-height:1.5;padding:24px 16px 80px}
+  .wrap{max-width:1000px;margin:0 auto}
+
+  /* preview banner */
+  .pv{background:#fffbeb;border:1px dashed var(--accent);border-radius:var(--radius);padding:12px 16px;margin-bottom:22px;font-size:13px;color:#92400e}
+  .pv b{color:var(--accent-dark)}
+
+  /* stage legend */
+  .legend{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:16px 18px;margin-bottom:22px}
+  .legend h3{font-size:14px;margin-bottom:10px;color:var(--text)}
+  .legend ol{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px}
+  .legend li{display:flex;gap:8px;font-size:12.5px;color:var(--text-muted);align-items:flex-start}
+  .num{flex:none;width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center}
+
+  /* top tabs (real component) */
+  .mat-toptabs{display:flex;gap:4px;margin-bottom:18px;border-bottom:2px solid var(--border)}
+  .mat-toptab{padding:11px 20px;font-size:14px;font-weight:700;color:var(--text-muted);text-decoration:none;border-bottom:3px solid transparent;margin-bottom:-2px;display:flex;align-items:center;gap:7px;background:none;cursor:pointer}
+  .mat-toptab.on{color:var(--accent-dark);border-color:var(--accent)}
+
+  /* page header */
+  .phead{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:18px;flex-wrap:wrap}
+  .phead h1{font-size:22px}
+  .phead .sub{font-size:13px;color:var(--text-muted);margin-top:3px}
+  .btn{min-height:44px;padding:0 18px;border-radius:var(--radius);font-size:14px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border)}
+  .btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .btn-secondary{background:var(--white);color:var(--text)}
+
+  /* learning banner */
+  .learn{display:flex;gap:10px;align-items:center;background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;border-radius:var(--radius);padding:11px 15px;font-size:13px;margin-bottom:20px}
+
+  /* supplier group card */
+  .grp{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);margin-bottom:18px;overflow:hidden;position:relative}
+  .grp-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;background:#fafbfc;border-bottom:1px solid var(--border);flex-wrap:wrap}
+  .grp-head .who{font-size:16px;font-weight:700;display:flex;align-items:center;gap:9px}
+  .av{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px}
+  .meta{display:flex;gap:8px;flex-wrap:wrap}
+  .pill{font-size:12px;font-weight:600;padding:4px 10px;border-radius:20px;background:#f1f5f9;color:var(--text-muted)}
+  .pill.day{background:#ecfdf5;color:#047857}
+  .pill.cov{background:#fff7ed;color:var(--accent-dark)}
+
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  thead th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--text-muted);padding:10px 18px;background:#f8fafc;border-bottom:1px solid var(--border)}
+  thead th.r,td.r{text-align:right}
+  thead th.c,td.c{text-align:center}
+  tbody td{padding:11px 18px;border-bottom:1px solid #f1f5f9}
+  tbody tr:last-child td{border-bottom:none}
+  .mname{font-weight:600}
+  .low{color:var(--danger);font-weight:700}
+  .qty-in{width:78px;min-height:38px;text-align:center;font-weight:700;font-size:14px;border:1.5px solid var(--accent);border-radius:8px;padding:6px;background:#fffdf7}
+  .unit{color:var(--text-muted);font-size:12px;margin-left:3px}
+  .grp-foot{padding:11px 18px;background:#fafbfc;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:13px;color:var(--text-muted)}
+  .grp-foot b{color:var(--text)}
+
+  /* no-supplier box */
+  .nosup{background:#fff7ed;border:1px dashed var(--accent);border-radius:var(--radius);padding:14px 18px;font-size:13px;color:#92400e}
+  .nosup b{display:block;margin-bottom:6px;color:var(--accent-dark)}
+  .nosup ul{margin:0 0 0 18px}
+
+  /* stage badge on UI */
+  .tag{position:absolute;top:-11px;right:14px;background:var(--text);color:#fff;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;z-index:2}
+  .anchor{position:relative}
+  .tag-inline{display:inline-flex;width:20px;height:20px;border-radius:50%;background:var(--text);color:#fff;font-size:11px;font-weight:700;align-items:center;justify-content:center;vertical-align:middle;margin-left:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="pv">🔎 <b>PREVIEW — ιδέα 1.6 «Προτάσεις Παραγγελιών».</b> Δείγμα δεδομένων (ΟΧΙ πραγματικά κόστη/προμηθευτές). Δείχνει ακριβώς τι θα φτιαχτεί. Τα <b>①–⑤</b> δείχνουν πού «κάθεται» κάθε ένα από τα 5 στάδια.</div>
+
+  <!-- LEGEND: the 5 build stages -->
+  <div class="legend">
+    <h3>Τι θα φτιαχτεί — τα 5 στάδια</h3>
+    <ol>
+      <li><span class="num">1</span><span><b>Μηχανή υπολογισμού</b> — κατανάλωση 4 εβδ. × κενό παραδόσεων − απόθεμα (κρυφό, στο παρασκήνιο)</span></li>
+      <li><span class="num">2</span><span><b>Νέα σελίδα</b> στην Αποθήκη (/materials/orders)</span></li>
+      <li><span class="num">3</span><span><b>Λίστα ανά προμηθευτή</b> με επεξεργάσιμες ποσότητες + κουμπί εκτύπωσης</span></li>
+      <li><span class="num">4</span><span><b>Νέο tab «🛒 Παραγγελίες»</b> στα κεντρικά tabs</span></li>
+      <li><span class="num">5</span><span><b>Ένδειξη «μαθαίνει»</b> + κουτί για υλικά χωρίς προμηθευτή</span></li>
+    </ol>
+  </div>
+
+  <!-- STAGE 4: central tabs -->
+  <div class="anchor">
+    <span class="tag">Στάδιο ④</span>
+    <div class="mat-toptabs">
+      <span class="mat-toptab">📦 Πρώτες Ύλες</span>
+      <span class="mat-toptab">📊 Αναφορές</span>
+      <span class="mat-toptab on">🛒 Παραγγελίες</span>
+    </div>
+  </div>
+
+  <!-- STAGE 2: page -->
+  <div class="phead">
+    <div>
+      <h1>🛒 Προτάσεις Παραγγελιών <span class="tag-inline">2</span></h1>
+      <div class="sub">Τι και πόσο να παραγγείλεις — με βάση πωλήσεις, απόθεμα & πρόγραμμα κάθε προμηθευτή</div>
+    </div>
+    <button class="btn btn-primary">🖨️ Εκτύπωση / Εξαγωγή λίστας</button>
+  </div>
+
+  <!-- STAGE 5: learning notice -->
+  <div class="learn">⏳ <span><b>Ακόμα μαθαίνει</b> — οι προτάσεις βασίζονται σε <b>2 εβδομάδες</b> πωλήσεων μέχρι τώρα. Θα γίνονται πιο ακριβείς όσο περνάει ο καιρός (στόχος: 4 εβδομάδες). <span class="tag-inline">5</span></span></div>
+
+  <!-- STAGE 3: supplier group — daily (meat) -->
+  <div class="grp anchor">
+    <span class="tag">Στάδιο ③</span>
+    <div class="grp-head">
+      <div class="who"><span class="av" style="background:#dc2626">ΠΧ</span>Παπάς Χρήστος</div>
+      <div class="meta">
+        <span class="pill">Κρεοπωλείο</span>
+        <span class="pill day">Παράδοση: Δευ–Παρ · επόμενη Δευτέρα</span>
+        <span class="pill cov">Κάλυψη: 3 μέρες (Σ/Κ)</span>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Υλικό</th><th class="r">Απόθεμα</th><th class="r">Μέση εβδ. κατανάλωση</th><th class="r">Χρειάζεσαι</th><th class="c">Πρόταση</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="mname">Χοιρινό σουβλάκι</td><td class="r low">2,0 kg</td><td class="r">28,0 kg</td><td class="r">14,5 kg</td><td class="c"><input class="qty-in" value="13"><span class="unit">kg</span></td></tr>
+        <tr><td class="mname">Πανσέτα</td><td class="r low">1,5 kg</td><td class="r">12,0 kg</td><td class="r">6,5 kg</td><td class="c"><input class="qty-in" value="5"><span class="unit">kg</span></td></tr>
+        <tr><td class="mname">Κιμάς ανάμεικτος</td><td class="r">4,0 kg</td><td class="r">9,0 kg</td><td class="r">5,0 kg</td><td class="c"><input class="qty-in" value="1"><span class="unit">kg</span></td></tr>
+      </tbody>
+    </table>
+    <div class="grp-foot"><span>3 υλικά προς παραγγελία</span><span>Τηλ: <b>24620 22xxx</b></span></div>
+  </div>
+
+  <!-- supplier group — weekly (food) -->
+  <div class="grp">
+    <div class="grp-head">
+      <div class="who"><span class="av" style="background:#0ea5e9">ΑΚ</span>ΑΦΟΙ Κιβρόγλου</div>
+      <div class="meta">
+        <span class="pill">Εμπόριο Τροφίμων</span>
+        <span class="pill day">Παράδοση: Τετάρτη · 1×/εβδ.</span>
+        <span class="pill cov">Κάλυψη: 7 μέρες</span>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Υλικό</th><th class="r">Απόθεμα</th><th class="r">Μέση εβδ. κατανάλωση</th><th class="r">Χρειάζεσαι</th><th class="c">Πρόταση</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="mname">Λάδι FYTEL</td><td class="r low">3,0 L</td><td class="r">10,0 L</td><td class="r">12,0 L</td><td class="c"><input class="qty-in" value="9"><span class="unit">L</span></td></tr>
+        <tr><td class="mname">Πατάτες</td><td class="r">8,0 kg</td><td class="r">35,0 kg</td><td class="r">40,0 kg</td><td class="c"><input class="qty-in" value="32"><span class="unit">kg</span></td></tr>
+        <tr><td class="mname">Τυρί φέτα</td><td class="r low">1,0 kg</td><td class="r">6,0 kg</td><td class="r">7,0 kg</td><td class="c"><input class="qty-in" value="6"><span class="unit">kg</span></td></tr>
+      </tbody>
+    </table>
+    <div class="grp-foot"><span>3 υλικά προς παραγγελία</span><span>Τηλ: <b>24620 24xxx</b></span></div>
+  </div>
+
+  <!-- STAGE 5: no-supplier box -->
+  <div class="nosup anchor">
+    <span class="tag" style="background:var(--accent-dark)">Στάδιο ⑤</span>
+    <b>⚠️ Χρειάζονται παραγγελία αλλά δεν έχουν προμηθευτή ορισμένο</b>
+    <ul>
+      <li>Χαρτοπετσέτες — απόθεμα 1 πακ (μέση εβδ. 4 πακ)</li>
+      <li>Σως BBQ — απόθεμα 0,5 L (μέση εβδ. 2 L)</li>
+    </ul>
+    <div style="margin-top:6px">Όρισε κύριο προμηθευτή στην καρτέλα τους για να μπουν στις προτάσεις.</div>
+  </div>
+
+</div>
+</body>
+</html>

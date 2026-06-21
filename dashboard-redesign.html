@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — Νέος Σχεδιασμός (Preview)</title>
+<style>
+  :root{
+    --accent:#f59e0b; --accent-dark:#d97706; --content-bg:#f1f5f9; --white:#fff;
+    --text:#1e293b; --text-muted:#64748b; --border:#e2e8f0;
+    --success:#10b981; --danger:#ef4444; --sidebar-bg:#1e2d3d;
+    --shadow-sm:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+    --shadow-md:0 4px 12px rgba(0,0,0,.10); --radius:10px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    font-size:14px;color:var(--text);background:var(--content-bg);padding:28px 22px;}
+  .wrap{max-width:1080px;margin:0 auto}
+
+  .banner{background:#fffbeb;border:1px solid #fde68a;color:#92400e;border-radius:10px;
+    padding:10px 14px;font-size:12.5px;margin-bottom:22px;text-align:center}
+
+  .page-title{font-size:24px;font-weight:800;letter-spacing:-.3px}
+  .page-subtitle{color:var(--text-muted);font-size:13px;margin:2px 0 22px}
+
+  /* ---- 1. KPIs ---- */
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:30px}
+  .stat-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);
+    padding:16px 18px;box-shadow:var(--shadow-sm)}
+  .stat-label{font-size:12px;color:var(--text-muted);font-weight:600;margin-bottom:6px}
+  .stat-value{font-size:24px;font-weight:800}
+  .stat-value.green{color:var(--success)} .stat-value.red{color:var(--danger)}
+
+  /* ---- group heading ---- */
+  .group-head{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800;
+    text-transform:uppercase;letter-spacing:.6px;color:var(--text-muted);
+    margin:0 0 14px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+
+  /* ---- 2. Quick actions ---- */
+  .quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:34px}
+  .quick-card{display:flex;flex-direction:column;gap:10px;text-decoration:none;
+    background:linear-gradient(135deg,#fff7ed,#ffffff);border:1.5px solid #fed7aa;
+    border-radius:var(--radius);padding:18px;color:var(--text);transition:.15s;
+    box-shadow:var(--shadow-sm);position:relative;overflow:hidden}
+  .quick-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:var(--accent)}
+  .quick-ic{width:46px;height:46px;display:flex;align-items:center;justify-content:center;
+    font-size:24px;background:var(--accent);border-radius:12px;box-shadow:0 3px 8px rgba(245,158,11,.35)}
+  .quick-title{font-weight:700;font-size:14.5px;line-height:1.2}
+  .quick-sub{font-size:11.5px;color:var(--text-muted)}
+
+  /* ---- 3. Sections ---- */
+  .sections-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:30px}
+  .section-card{display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--text);
+    background:var(--white);border:1px solid var(--border);border-radius:var(--radius);
+    padding:16px 18px;box-shadow:var(--shadow-sm);transition:.15s}
+  .section-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+  .section-card.soon{opacity:.62}
+  .section-icon{font-size:26px;width:46px;height:46px;display:flex;align-items:center;
+    justify-content:center;background:var(--content-bg);border-radius:10px;flex-shrink:0}
+  .section-title{font-weight:700;font-size:14.5px}
+  .badge{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:20px;margin-top:4px}
+  .badge.ok{background:#dcfce7;color:#166534}
+  .badge.soon{background:#f1f5f9;color:#94a3b8}
+
+  @media(max-width:880px){
+    .stats-grid,.quick-grid{grid-template-columns:repeat(2,1fr)}
+    .sections-grid{grid-template-columns:repeat(2,1fr)}
+  }
+  @media(max-width:560px){
+    .stats-grid,.quick-grid,.sections-grid{grid-template-columns:1fr 1fr}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="banner">🔍 PREVIEW — δείγμα με ψεύτικα νούμερα. Έτσι θα δείχνει το νέο Dashboard.</div>
+
+  <div class="page-title">Καλώς ήρθες 👋</div>
+  <div class="page-subtitle">TAMAM Grill House — Γρεβενά</div>
+
+  <!-- 1. KPIs -->
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Τζίρος σήμερα</div><div class="stat-value">1.240 €</div></div>
+    <div class="stat-card"><div class="stat-label">Κέρδος μήνα</div><div class="stat-value green">4.870 €</div></div>
+    <div class="stat-card"><div class="stat-label">Ανεξόφλητα τιμολόγια</div><div class="stat-value red">3</div></div>
+    <div class="stat-card"><div class="stat-label">Ειδοποιήσεις</div><div class="stat-value">2</div></div>
+  </div>
+
+  <!-- 2. Quick actions -->
+  <div class="group-head">🚀 Γρήγορες ενέργειες</div>
+  <div class="quick-grid">
+    <a class="quick-card" href="#">
+      <div class="quick-ic">🧾</div>
+      <div><div class="quick-title">Καταχώρηση Τιμολογίου</div><div class="quick-sub">Νέα παραλαβή από προμηθευτή</div></div>
+    </a>
+    <a class="quick-card" href="#">
+      <div class="quick-ic">💰</div>
+      <div><div class="quick-title">Νέο Έξοδο</div><div class="quick-sub">Γρήγορη καταχώρηση εξόδου</div></div>
+    </a>
+    <a class="quick-card" href="#">
+      <div class="quick-ic">🛒</div>
+      <div><div class="quick-title">Παραγγελίες</div><div class="quick-sub">Προτάσεις προς προμηθευτές</div></div>
+    </a>
+    <a class="quick-card" href="#">
+      <div class="quick-ic">📦</div>
+      <div><div class="quick-title">Παραλαβή / Αποθήκη</div><div class="quick-sub">Είσοδος στην αποθήκη</div></div>
+    </a>
+  </div>
+
+  <!-- 3. Sections -->
+  <div class="group-head">📂 Ενότητες</div>
+  <div class="sections-grid">
+    <a class="section-card" href="#"><span class="section-icon">🚚</span><div><div class="section-title">Προμηθευτές</div><span class="badge ok">✓ Έτοιμο</span></div></a>
+    <a class="section-card" href="#"><span class="section-icon">📦</span><div><div class="section-title">Πρώτες Ύλες</div><span class="badge ok">✓ Έτοιμο</span></div></a>
+    <a class="section-card" href="#"><span class="section-icon">🧾</span><div><div class="section-title">Συνταγές</div><span class="badge ok">✓ Έτοιμο</span></div></a>
+    <a class="section-card" href="#"><span class="section-icon">💰</span><div><div class="section-title">Έξοδα & Κέρδος</div><span class="badge ok">✓ Έτοιμο</span></div></a>
+    <a class="section-card soon" href="#"><span class="section-icon">💲</span><div><div class="section-title">Τιμές & Μενού</div><span class="badge soon">Υπό κατασκευή</span></div></a>
+    <a class="section-card soon" href="#"><span class="section-icon">📸</span><div><div class="section-title">OCR Τιμολογίων</div><span class="badge soon">Υπό κατασκευή</span></div></a>
+    <a class="section-card soon" href="#"><span class="section-icon">🔮</span><div><div class="section-title">Πρόβλεψη</div><span class="badge soon">Υπό κατασκευή</span></div></a>
+    <a class="section-card soon" href="#"><span class="section-icon">👤</span><div><div class="section-title">Εργατικό Κόστος</div><span class="badge soon">Υπό κατασκευή</span></div></a>
+    <a class="section-card soon" href="#"><span class="section-icon">📊</span><div><div class="section-title">Αναφορές</div><span class="badge soon">Υπό κατασκευή</span></div></a>
+    <a class="section-card soon" href="#"><span class="section-icon">🛡️</span><div><div class="section-title">Συμμόρφωση</div><span class="badge soon">Υπό κατασκευή</span></div></a>
+    <a class="section-card soon" href="#"><span class="section-icon">🔐</span><div><div class="section-title">Ασφάλεια</div><span class="badge soon">Υπό κατασκευή</span></div></a>
+    <a class="section-card soon" href="#"><span class="section-icon">💾</span><div><div class="section-title">Αντίγραφα</div><span class="badge soon">Υπό κατασκευή</span></div></a>
+  </div>
+</div>
+</body>
+</html>

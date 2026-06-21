@@ -1,0 +1,61 @@
+<!DOCTYPE html><html lang="el"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>2.6 Ανίχνευση Διαρροής — 5 σχέδια</title>
+<style>
+:root{--sb:#1e2d3d;--ac:#f59e0b;--acd:#d97706;--bg:#f1f5f9;--w:#fff;--tx:#1e293b;--mu:#64748b;--bd:#e2e8f0;--gn:#10b981;--dn:#ef4444;--rad:10px;--sh:0 1px 3px rgba(0,0,0,.08)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--tx);background:var(--bg);padding-bottom:60px}
+.nav{position:sticky;top:0;z-index:9;background:var(--sb);color:#fff;padding:13px 20px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.nav b{margin-right:10px}.nav a{color:#cbd5e1;text-decoration:none;font-size:13px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.06)}.nav a:hover{background:rgba(245,158,11,.25);color:#fff}
+.d{max-width:1020px;margin:30px auto;padding:0 20px}.d>h2{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--acd);font-weight:800}.d>.s{color:var(--mu);font-size:13px;margin:3px 0 16px}
+.card{background:var(--w);border:1px solid var(--bd);border-radius:var(--rad);box-shadow:var(--sh);overflow:hidden}
+.ctx{font-size:11px;color:var(--mu);background:#fff7ed;border:1px dashed var(--ac);border-radius:8px;padding:7px 11px;margin-bottom:12px;display:inline-block}
+.ph{padding:14px 18px;border-bottom:1px solid var(--bd);font-weight:700;display:flex;align-items:center;gap:8px;justify-content:space-between}
+table{width:100%;border-collapse:collapse}td,th{padding:11px 16px;font-size:13.5px;text-align:left;border-bottom:1px solid #f4f6f8}th{font-size:11px;text-transform:uppercase;color:var(--mu);background:#fafbfc}
+.r{color:#b91c1c;font-weight:800}.g{color:#047857;font-weight:700}.mut{color:var(--mu)}
+.pill{display:inline-flex;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px}.pr{background:rgba(239,68,68,.12);color:#b91c1c}.pg{background:rgba(16,185,129,.12);color:#047857}.py{background:rgba(245,158,11,.15);color:#b45309}
+.wf{display:flex;align-items:center;gap:2px;height:30px}.wf i{height:100%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:700;border-radius:3px}
+.acard{border-left:4px solid var(--dn);background:#fff;border:1px solid var(--bd);border-radius:10px;padding:14px;margin-bottom:10px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:16px 18px}
+.scard{border:1px solid var(--bd);border-radius:9px;padding:13px;text-align:center}.scard .n{font-size:24px;font-weight:800;color:#b91c1c}.scard .l{font-size:12px;color:var(--mu);margin-top:3px}
+.gb{display:flex;gap:3px;align-items:flex-end;height:60px}.gb i{flex:1;border-radius:3px 3px 0 0}
+</style></head><body>
+<div class="nav"><b>🕵️ 2.6 Ανίχνευση Διαρροής</b>
+<a href="#d1">1·Πίνακας</a><a href="#d2">2·Κάρτες ύποπτων</a><a href="#d3">3·Waterfall</a><a href="#d4">4·Dashboard</a><a href="#d5">5·Ραβδοί σύγκρισης</a></div>
+
+<div class="d"><div class="ctx">📍 Όλα ζουν στις «📊 Αναφορές Αποθήκης» → καρτέλα «Διαρροή». Τύπος: <b>Αγοράστηκε − Πουλήθηκε(συνταγή) − Φύρα − Απώλειες = Ανεξήγητο</b></div></div>
+
+<div class="d" id="d1"><h2>Σχέδιο 1 — Πίνακας με «ανεξήγητο» σε κόκκινο</h2><p class="s">Όλα τα υλικά σε σειρά, ταξινομημένα κατά μεγαλύτερη ανεξήγητη απόκλιση. Κόκκινο = ύποπτο.</p>
+<div class="card"><div class="ph"><span>Διαρροή — Ιούνιος</span><span class="mut" style="font-size:12px">ταξ. κατά ανεξήγητο</span></div>
+<table><thead><tr><th>Υλικό</th><th>Αγοράστηκε</th><th>Πουλήθηκε</th><th>Φύρα</th><th>Απώλειες</th><th>Ανεξήγητο</th></tr></thead><tbody>
+<tr><td><b>Γύρος Χοιρινός</b></td><td>80 kg</td><td>72 kg</td><td>2,4 kg</td><td>3 kg</td><td class="r">2,6 kg ⚠️</td></tr>
+<tr><td>Κασέρι</td><td>10 kg</td><td>8,1 kg</td><td>0,3 kg</td><td>0,2 kg</td><td class="r">1,4 kg ⚠️</td></tr>
+<tr><td>Πατάτες</td><td>120 kg</td><td>116 kg</td><td>3 kg</td><td>1 kg</td><td class="g">0 kg ✓</td></tr>
+<tr><td>Τζατζίκι</td><td>15 kg</td><td>14,2 kg</td><td>0,4 kg</td><td>0,3 kg</td><td class="g">0,1 kg ✓</td></tr>
+</tbody></table></div></div>
+
+<div class="d" id="d2"><h2>Σχέδιο 2 — Μόνο κάρτες «ύποπτων»</h2><p class="s">Δεν δείχνει όλα — μόνο όσα έχουν σημαντική ανεξήγητη απόκλιση, ως ειδοποιήσεις δράσης.</p>
+<div class="acard"><div style="display:flex;justify-content:space-between"><b>Γύρος Χοιρινός</b><span class="pill pr">Ανεξήγητο 2,6 kg</span></div>
+<div class="mut" style="margin-top:6px">Αγοράστηκε 80 · Πουλήθηκε 72 · Φύρα 2,4 · Απώλειες 3 → <b class="r">λείπουν 2,6 kg</b> (≈3,3%) — αξίζει έλεγχο.</div></div>
+<div class="acard"><div style="display:flex;justify-content:space-between"><b>Κασέρι</b><span class="pill pr">Ανεξήγητο 1,4 kg</span></div>
+<div class="mut" style="margin-top:6px">Αγοράστηκε 10 · Πουλήθηκε 8,1 · Φύρα 0,3 · Απώλειες 0,2 → <b class="r">λείπουν 1,4 kg</b> (≈14%) — υψηλό!</div></div></div>
+
+<div class="d" id="d3"><h2>Σχέδιο 3 — «Waterfall» ανά υλικό</h2><p class="s">Οπτική ανάλυση: από τα αγορασμένα αφαιρούνται διαδοχικά πωλήσεις/φύρα/απώλειες — ό,τι μένει = ανεξήγητο.</p>
+<div class="card"><div class="ph">Γύρος Χοιρινός — πού πήγαν τα 80 kg</div><div style="padding:18px">
+<div class="wf"><i style="width:90%;background:#10b981">Πουλήθηκε 72</i><i style="width:3%;background:#94a3b8" title="φύρα"></i><i style="width:4%;background:#f59e0b" title="απώλειες"></i><i style="width:3%;background:#ef4444">2,6</i></div>
+<div style="display:flex;gap:14px;margin-top:10px;font-size:12px"><span class="pg">■ Πωλήθηκε</span><span class="mut">■ Φύρα</span><span class="py">■ Απώλειες</span><span class="pr">■ Ανεξήγητο</span></div>
+</div></div></div>
+
+<div class="d" id="d4"><h2>Σχέδιο 4 — Dashboard: top ύποπτα + πίνακας</h2><p class="s">Πάνω τα 3 χειρότερα, κάτω όλος ο πίνακας.</p>
+<div class="card"><div class="grid"><div class="scard"><div class="n">2,6 kg</div><div class="l">Γύρος Χοιρινός</div></div><div class="scard"><div class="n">1,4 kg</div><div class="l">Κασέρι</div></div><div class="scard"><div class="n">0,9 kg</div><div class="l">Μπέικον</div></div></div>
+<table><thead><tr><th>Υλικό</th><th>Ανεξήγητο</th><th>%</th></tr></thead><tbody>
+<tr><td>Γύρος Χοιρινός</td><td class="r">2,6 kg</td><td class="r">3,3%</td></tr><tr><td>Κασέρι</td><td class="r">1,4 kg</td><td class="r">14%</td></tr><tr><td>Πατάτες</td><td class="g">0 kg</td><td class="g">0%</td></tr>
+</tbody></table></div></div>
+
+<div class="d" id="d5"><h2>Σχέδιο 5 — Ραβδοί: Αγοράστηκε vs Πουλήθηκε vs Ανεξήγητο</h2><p class="s">Ομαδοποιημένες μπάρες ανά υλικό — το «κενό» ανάμεσα σε αγορά & πώληση είναι ορατό.</p>
+<div class="card"><div class="ph">Σύγκριση ανά υλικό</div><div style="padding:18px;display:flex;gap:24px;align-items:flex-end">
+<div style="text-align:center"><div class="gb" style="width:80px"><i style="background:#94a3b8;height:100%"></i><i style="background:#10b981;height:90%"></i><i style="background:#ef4444;height:12%"></i></div><div class="mut" style="margin-top:5px">Γύρος</div></div>
+<div style="text-align:center"><div class="gb" style="width:80px"><i style="background:#94a3b8;height:60%"></i><i style="background:#10b981;height:48%"></i><i style="background:#ef4444;height:18%"></i></div><div class="mut" style="margin-top:5px">Κασέρι</div></div>
+<div style="text-align:center"><div class="gb" style="width:80px"><i style="background:#94a3b8;height:100%"></i><i style="background:#10b981;height:97%"></i><i style="background:#ef4444;height:1%"></i></div><div class="mut" style="margin-top:5px">Πατάτες</div></div>
+<div style="font-size:12px;margin-left:10px"><div class="mut">■ Αγοράστηκε</div><div class="pg">■ Πουλήθηκε</div><div class="pr">■ Ανεξήγητο</div></div>
+</div></div></div>
+
+</body></html>
