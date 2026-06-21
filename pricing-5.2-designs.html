@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>TAMAM · 📈 Ακρίβυναν → Προτάσεις τιμών (5.2) — 3 Σχέδια</title>
+<style>
+:root{
+  --sidebar-bg:#1e2d3d; --accent:#f59e0b; --accent-dark:#d97706;
+  --content-bg:#f1f5f9; --white:#fff; --text:#1e293b; --muted:#64748b;
+  --border:#e2e8f0; --success:#10b981; --danger:#ef4444; --radius:10px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.08);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,"Segoe UI",Roboto,sans-serif;font-size:14px;color:var(--text);background:var(--content-bg);line-height:1.45}
+.app{display:flex;min-height:100vh}
+.sidebar{width:210px;background:var(--sidebar-bg);color:#94a3b8;flex-shrink:0;padding:16px 0;position:sticky;top:0;height:100vh}
+.sidebar .brand{padding:0 16px 14px;border-bottom:1px solid rgba(255,255,255,.08);color:#fff;font-weight:800;font-size:17px;display:flex;align-items:center;gap:8px}
+.sidebar .brand .tag{font-size:9px;background:var(--accent);color:#1a1206;padding:2px 7px;border-radius:20px}
+.sidebar nav{padding:10px 0}
+.sidebar a{display:flex;align-items:center;gap:10px;padding:10px 16px;color:#94a3b8;text-decoration:none;font-size:13.5px;border-left:3px solid transparent}
+.sidebar a.active{color:#fff;background:rgba(245,158,11,.12);border-left-color:var(--accent)}
+.main{flex:1;min-width:0}
+.topbar{background:#fff;border-bottom:1px solid var(--border);padding:14px 24px;position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:9px}
+.topbar h1{font-size:19px;display:flex;align-items:center;gap:9px}
+/* page tabs (Τιμές: 5.1 πίνακας / 5.2 ακρίβυναν) */
+.ptabs{display:flex;gap:6px;background:#fff;border-bottom:1px solid var(--border);padding:0 24px;position:sticky;top:55px;z-index:25}
+.ptab{padding:13px 16px;cursor:pointer;font-size:14px;font-weight:600;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap;text-decoration:none}
+.ptab.active{color:var(--text);border-bottom-color:var(--accent)}
+.ptab .badge{background:var(--danger);color:#fff;font-size:10px;font-weight:800;padding:1px 7px;border-radius:20px;margin-left:6px}
+/* design switcher */
+.switch{display:flex;gap:7px;flex-wrap:wrap;padding:14px 24px 0}
+.switch button{border:1.5px solid var(--border);background:#fff;color:var(--muted);padding:7px 13px;border-radius:30px;font-size:12.5px;font-weight:700;cursor:pointer;min-height:36px}
+.switch button.active{background:var(--accent);border-color:var(--accent);color:#1a1206}
+.wrap{padding:16px 24px 100px;max-width:1100px}
+.design{display:none}.design.show{display:block}
+.dhead{margin:8px 0 16px}
+.dhead .t{font-size:17px;font-weight:800}
+.dhead .d{color:var(--muted);font-size:13px;margin-top:4px}
+.tip{background:#fef2f2;border:1px solid #fecaca;border-radius:9px;padding:11px 14px;color:#991b1b;font-size:13px;display:flex;gap:9px;align-items:flex-start;margin-bottom:16px}
+.muted{color:var(--muted)}
+.pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:12px;font-weight:800;font-variant-numeric:tabular-nums}
+.pill.g{background:#dcfce7;color:#166534}.pill.a{background:#fef3c7;color:#92400e}.pill.r{background:#fee2e2;color:#991b1b}
+.arrow{color:var(--muted);font-weight:600}
+.up{color:var(--danger);font-weight:800}
+.btn{border:1.5px solid var(--border);background:#fff;border-radius:8px;font-size:12.5px;font-weight:800;cursor:pointer;min-height:38px;padding:8px 13px}
+.btn-yes{background:var(--accent);border-color:var(--accent);color:#1a1206}
+.btn-no{color:var(--muted)}
+.done{font-size:12.5px;font-weight:800;color:var(--success)}
+.skip{font-size:12.5px;font-weight:700;color:var(--muted)}
+
+/* ---- material cost header (shared) ---- */
+.matband{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13.5px}
+.matband .mn{font-weight:800;font-size:14.5px}
+.matband .chg{font-variant-numeric:tabular-nums}
+
+/* ===== D1: grouped by material (cards) ===== */
+.mcard{background:#fff;border:1px solid var(--border);border-radius:11px;box-shadow:var(--shadow-sm);margin-bottom:14px;overflow:hidden}
+.mcard .mhead{padding:13px 16px;background:#fff7f5;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);padding:9px 14px;border-bottom:1px solid var(--border);background:#f8fafc;white-space:nowrap}
+td{padding:11px 14px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.dish{font-weight:700}
+.price-sug{font-weight:800;font-size:14.5px}
+.acts{display:flex;gap:7px;justify-content:flex-end}
+
+/* ===== D2: flat table ===== */
+.flat{background:#fff;border:1px solid var(--border);border-radius:11px;box-shadow:var(--shadow-sm);overflow:hidden}
+
+/* ===== D3: feed cards ===== */
+.feed{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px}
+.fcard{background:#fff;border:1px solid var(--border);border-left:4px solid var(--danger);border-radius:11px;padding:15px;box-shadow:var(--shadow-sm)}
+.fcard .fd{font-weight:800;font-size:15px}
+.fcard .fwhy{font-size:12.5px;color:var(--muted);margin-top:3px}
+.fcard .frow{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:1px dashed var(--border)}
+.fcard .fbig{margin:11px 0 4px;font-size:13.5px}
+.fcard .fbig b{font-size:19px}
+.fcard .facts{display:flex;gap:8px;margin-top:12px}
+.fcard .facts .btn{flex:1}
+
+.demo-note{position:fixed;bottom:0;left:0;right:0;background:#1e2d3d;color:#cbd5e1;font-size:11.5px;text-align:center;padding:7px;z-index:50}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">🍽 TAMAM <span class="tag">BACK</span></div>
+    <nav>
+      <a href="#">🏠 Πίνακας</a><a href="#">🚚 Προμηθευτές</a><a href="#">📦 Αποθήκη</a>
+      <a href="#">🧾 Συνταγές</a><a href="#">💰 Έξοδα</a><a href="#" class="active">💲 Τιμές</a>
+    </nav>
+  </aside>
+  <div class="main">
+    <div class="topbar"><h1>💲 Τιμές & Περιθώρια</h1></div>
+    <div class="ptabs">
+      <a class="ptab" href="#">📊 Πίνακας τιμών</a>
+      <a class="ptab active" href="#">📈 Ακρίβυναν <span class="badge">3</span></a>
+    </div>
+
+    <div class="switch">
+      <button class="active" onclick="showD(1,this)">1 · Ανά υλικό</button>
+      <button onclick="showD(2,this)">2 · Πίνακας</button>
+      <button onclick="showD(3,this)">3 · Κάρτες</button>
+    </div>
+
+    <div class="wrap">
+      <div class="tip">
+        <span>📈</span>
+        <div><b>Υλικά που ακρίβυναν πρόσφατα</b> (από τα τιμολόγιά σου) και τα πιάτα που χτυπήθηκαν.
+        Σου προτείνω τιμή που <b>επαναφέρει το ίδιο περιθώριο</b> που είχες. Εσύ <b>αποδέχεσαι ή όχι</b> — η αλλαγή στο μενού γίνεται από το POS.</div>
+      </div>
+
+      <!-- ============ DESIGN 1: GROUPED BY MATERIAL ============ -->
+      <div class="design show" id="d1">
+        <div class="dhead"><div class="t">1 · Ομαδοποίηση ανά υλικό</div>
+          <div class="d">Κάθε υλικό που ακρίβυνε = μια κάρτα, με τα πιάτα του από κάτω. Καθαρή αιτία→αποτέλεσμα.</div></div>
+        <div id="d1body"></div>
+      </div>
+
+      <!-- ============ DESIGN 2: FLAT TABLE ============ -->
+      <div class="design" id="d2">
+        <div class="dhead"><div class="t">2 · Ενιαίος πίνακας προτάσεων</div>
+          <div class="d">Όλα τα πιάτα μαζί, με στήλη «λόγω» (ποιο υλικό ακρίβυνε). Πυκνό, γρήγορη ματιά.</div></div>
+        <div class="flat"><table id="d2tbl">
+          <thead><tr>
+            <th>Πιάτο</th><th>Λόγω</th><th class="num">Κόστος</th><th class="num">Τιμή τώρα</th>
+            <th class="num">Περιθώριο</th><th class="num">Πρόταση</th><th class="num">Ενέργεια</th>
+          </tr></thead><tbody></tbody>
+        </table></div>
+      </div>
+
+      <!-- ============ DESIGN 3: FEED CARDS ============ -->
+      <div class="design" id="d3">
+        <div class="dhead"><div class="t">3 · Κάρτες πρότασης</div>
+          <div class="d">Μία κάρτα ανά πιάτο, μεγάλα κουμπιά. Ιδανικό για κινητό.</div></div>
+        <div class="feed" id="d3body"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="demo-note">🔬 ΔΕΙΓΜΑ με ψεύτικα νούμερα — έτσι θα δουλεύει η καρτέλα «Ακρίβυναν» (5.2). Δεν είναι τα πραγματικά σου δεδομένα.</div>
+
+<script>
+/* ---------- ΨΕΥΤΙΚΑ ΔΕΔΟΜΕΝΑ ---------- */
+// Υλικά που ακρίβυναν: παλιό→νέο κόστος/μονάδα + ημερομηνία
+const MATS = [
+  {key:"gyros", name:"Γύρος χοιρινός", unit:"κιλό", oldc:6.50, newc:7.15, date:"18-06"},
+  {key:"kotop", name:"Φιλέτο κοτόπουλο", unit:"κιλό", oldc:5.20, newc:5.95, date:"17-06"},
+  {key:"feta",  name:"Φέτα", unit:"κιλό", oldc:7.00, newc:7.70, date:"15-06"},
+];
+// Πιάτα: ποιο υλικό, ποσότητα/μερίδα (μονάδα αποθήκης), τιμή πώλησης, πλήρες κόστος ΑΛΛΩΝ υλικών+γενικά (σταθερό)
+const DISHES = [
+  {mat:"gyros", name:"Πίτα γύρος χοιρινός", qty:0.15, price:4.00, other:0.62},
+  {mat:"gyros", name:"Μερίδα γύρος",        qty:0.25, price:9.00, other:1.05},
+  {mat:"gyros", name:"Γύρος XXL",           qty:0.30, price:7.00, other:0.74},
+  {mat:"kotop", name:"Πίτα κοτόπουλο",      qty:0.15, price:3.50, other:0.66},
+  {mat:"kotop", name:"Μερίδα κοτόπουλο",    qty:0.25, price:8.50, other:1.02},
+  {mat:"feta",  name:"Χωριάτικη σαλάτα",    qty:0.10, price:5.50, other:1.06},
+];
+
+const eur = v => v.toLocaleString("el-GR",{minimumFractionDigits:2,maximumFractionDigits:2})+"€";
+const mclass = p => p>=55?"g":p>=30?"a":"r";
+const byKey = k => MATS.find(m=>m.key===k);
+
+// υπολογισμοί ανά πιάτο
+function calc(d){
+  const m = byKey(d.mat);
+  const oldCost = d.qty*m.oldc + d.other;
+  const newCost = d.qty*m.newc + d.other;
+  const oldMargin = (d.price-oldCost)/d.price*100;
+  const newMargin = (d.price-newCost)/d.price*100;          // πεσμένο
+  // πρόταση: κράτα το ΠΑΛΙΟ περιθώριο % → τιμή = newCost / (1 − oldMargin/100)
+  const sug = Math.ceil( (newCost/(1-oldMargin/100)) *10)/10; // στρογγυλό 0,10
+  const sugMargin = (sug-newCost)/sug*100;
+  return {m,oldCost,newCost,oldMargin,newMargin,sug,sugMargin};
+}
+
+/* ----- DESIGN 1 ----- */
+function renderD1(){
+  let html="";
+  for(const m of MATS){
+    const dishes = DISHES.filter(d=>d.mat===m.key);
+    const pct = Math.round((m.newc/m.oldc-1)*100);
+    html += `<div class="mcard">
+      <div class="mhead">
+        <div class="matband"><span style="font-size:20px">🥩</span>
+          <span class="mn">${m.name}</span>
+          <span class="muted">ακρίβυνε στις ${m.date}</span></div>
+        <div class="matband"><span class="chg">${eur(m.oldc)}<span class="arrow"> → </span><b>${eur(m.newc)}</b>/${m.unit}</span>
+          <span class="pill r">+${pct}%</span></div>
+      </div>
+      <table><thead><tr>
+        <th>Πιάτο</th><th class="num">Κόστος τώρα</th><th class="num">Τιμή</th>
+        <th class="num">Περιθώριο</th><th class="num">Προτείνω</th><th class="num">Ενέργεια</th>
+      </tr></thead><tbody>`;
+    for(const d of dishes){
+      const c=calc(d), id=d.name.replace(/\s/g,"");
+      html += `<tr id="r1-${id}">
+        <td class="dish">${d.name}</td>
+        <td class="num"><span class="up">${eur(c.newCost)}</span><br><span class="muted" style="font-size:11px">ήταν ${eur(c.oldCost)}</span></td>
+        <td class="num">${eur(d.price)}</td>
+        <td class="num"><span class="pill ${mclass(c.oldMargin)}">${c.oldMargin.toFixed(0)}%</span><span class="arrow"> → </span><span class="pill ${mclass(c.newMargin)}">${c.newMargin.toFixed(0)}%</span></td>
+        <td class="num"><span class="price-sug">${eur(c.sug)}</span><br><span class="muted" style="font-size:11px">→ ${c.sugMargin.toFixed(0)}%</span></td>
+        <td class="num"><div class="acts">
+          <button class="btn btn-yes" onclick="accept('r1-${id}','${eur(c.sug)}')">✓ Αποδοχή</button>
+          <button class="btn btn-no" onclick="skip('r1-${id}')">✕</button></div></td>
+      </tr>`;
+    }
+    html += `</tbody></table></div>`;
+  }
+  document.getElementById("d1body").innerHTML=html;
+}
+
+/* ----- DESIGN 2 ----- */
+function renderD2(){
+  let rows="";
+  for(const d of DISHES){
+    const c=calc(d), id=d.name.replace(/\s/g,"")+"2";
+    rows += `<tr id="r2-${id}">
+      <td class="dish">${d.name}</td>
+      <td class="muted">${c.m.name} <span class="pill r" style="font-size:10px">+${Math.round((c.m.newc/c.m.oldc-1)*100)}%</span></td>
+      <td class="num"><span class="up">${eur(c.newCost)}</span></td>
+      <td class="num">${eur(d.price)}</td>
+      <td class="num"><span class="pill ${mclass(c.newMargin)}">${c.newMargin.toFixed(0)}%</span></td>
+      <td class="num"><span class="price-sug">${eur(c.sug)}</span></td>
+      <td class="num"><div class="acts">
+        <button class="btn btn-yes" onclick="accept('r2-${id}','${eur(c.sug)}')">✓</button>
+        <button class="btn btn-no" onclick="skip('r2-${id}')">✕</button></div></td>
+    </tr>`;
+  }
+  document.querySelector("#d2tbl tbody").innerHTML=rows;
+}
+
+/* ----- DESIGN 3 ----- */
+function renderD3(){
+  let html="";
+  for(const d of DISHES){
+    const c=calc(d), id=d.name.replace(/\s/g,"")+"3";
+    html += `<div class="fcard" id="r3-${id}">
+      <div class="fd">${d.name}</div>
+      <div class="fwhy">📈 ${c.m.name}: ${eur(c.m.oldc)} → ${eur(c.m.newc)}/${c.m.unit}</div>
+      <div class="frow"><span class="muted">Κόστος μερίδας</span><span><span class="muted" style="text-decoration:line-through">${eur(c.oldCost)}</span> <span class="up">${eur(c.newCost)}</span></span></div>
+      <div class="frow"><span class="muted">Περιθώριο</span><span><span class="pill ${mclass(c.oldMargin)}">${c.oldMargin.toFixed(0)}%</span> <span class="arrow">→</span> <span class="pill ${mclass(c.newMargin)}">${c.newMargin.toFixed(0)}%</span></span></div>
+      <div class="fbig">Προτείνω τιμή <b>${eur(c.sug)}</b> <span class="muted">(από ${eur(d.price)} · ξανά ${c.sugMargin.toFixed(0)}%)</span></div>
+      <div class="facts">
+        <button class="btn btn-yes" onclick="accept('r3-${id}','${eur(c.sug)}')">✓ Αποδοχή</button>
+        <button class="btn btn-no" onclick="skip('r3-${id}')">✕ Όχι τώρα</button>
+      </div>
+    </div>`;
+  }
+  document.getElementById("d3body").innerHTML=html;
+}
+
+function accept(rowId,price){
+  const el=document.getElementById(rowId);
+  if(el.classList.contains("fcard")){
+    el.querySelector(".facts").innerHTML=`<span class="done">✓ Αποθηκεύτηκε ${price} — βάλ' το και στο POS</span>`;
+    el.style.borderLeftColor="var(--success)";
+  }else{
+    el.querySelector(".acts").innerHTML=`<span class="done">✓ ${price} — βάλ' το στο POS</span>`;
+  }
+}
+function skip(rowId){
+  const el=document.getElementById(rowId);
+  const box = el.classList.contains("fcard")? el.querySelector(".facts"):el.querySelector(".acts");
+  box.innerHTML=`<span class="skip">— παραβλέφθηκε</span>`;
+  el.style.opacity=".55";
+}
+
+function showD(n,btn){
+  document.querySelectorAll(".design").forEach(d=>d.classList.remove("show"));
+  document.getElementById("d"+n).classList.add("show");
+  document.querySelectorAll(".switch button").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+}
+window.onload=()=>{ renderD1(); renderD2(); renderD3(); };
+</script>
+</body>
+</html>
