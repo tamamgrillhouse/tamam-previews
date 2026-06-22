@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>TAMAM · 🍽 Μενού & Τιμές (πίνακας ελέγχου) — 3 Σχέδια</title>
+<style>
+:root{
+  --sidebar-bg:#1e2d3d; --accent:#f59e0b; --accent-dark:#d97706;
+  --content-bg:#f1f5f9; --white:#fff; --text:#1e293b; --muted:#64748b;
+  --border:#e2e8f0; --success:#10b981; --danger:#ef4444; --radius:10px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.08);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,"Segoe UI",Roboto,sans-serif;font-size:14px;color:var(--text);background:var(--content-bg);line-height:1.45}
+.app{display:flex;min-height:100vh}
+.sidebar{width:210px;background:var(--sidebar-bg);color:#94a3b8;flex-shrink:0;padding:16px 0;position:sticky;top:0;height:100vh}
+.sidebar .brand{padding:0 16px 14px;border-bottom:1px solid rgba(255,255,255,.08);color:#fff;font-weight:800;font-size:17px;display:flex;align-items:center;gap:8px}
+.sidebar .brand .tag{font-size:9px;background:var(--accent);color:#1a1206;padding:2px 7px;border-radius:20px}
+.sidebar nav{padding:10px 0}
+.sidebar a{display:flex;align-items:center;gap:10px;padding:10px 16px;color:#94a3b8;text-decoration:none;font-size:13.5px;border-left:3px solid transparent}
+.sidebar a.active{color:#fff;background:rgba(245,158,11,.12);border-left-color:var(--accent)}
+.main{flex:1;min-width:0}
+.topbar{background:#fff;border-bottom:1px solid var(--border);padding:14px 24px;position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:9px}
+.topbar h1{font-size:19px;display:flex;align-items:center;gap:9px}
+.ptabs{display:flex;gap:6px;background:#fff;border-bottom:1px solid var(--border);padding:0 24px;position:sticky;top:55px;z-index:25;overflow-x:auto}
+.ptab{padding:13px 16px;cursor:pointer;font-size:14px;font-weight:600;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap;text-decoration:none}
+.ptab.active{color:var(--text);border-bottom-color:var(--accent)}
+.switch{display:flex;gap:7px;flex-wrap:wrap;padding:14px 24px 0}
+.switch button{border:1.5px solid var(--border);background:#fff;color:var(--muted);padding:7px 13px;border-radius:30px;font-size:12.5px;font-weight:700;cursor:pointer;min-height:36px}
+.switch button.active{background:var(--accent);border-color:var(--accent);color:#1a1206}
+.wrap{padding:16px 24px 120px;max-width:1080px}
+.design{display:none}.design.show{display:block}
+.dhead{margin:8px 0 14px}
+.dhead .t{font-size:17px;font-weight:800}
+.dhead .d{color:var(--muted);font-size:13px;margin-top:4px}
+.tip{background:#eff6ff;border:1px solid #bfdbfe;border-radius:9px;padding:11px 14px;color:#1e40af;font-size:13px;display:flex;gap:9px;align-items:flex-start;margin-bottom:16px}
+.muted{color:var(--muted)}
+.pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11.5px;font-weight:800;font-variant-numeric:tabular-nums}
+.pill.g{background:#dcfce7;color:#166534}.pill.a{background:#fef3c7;color:#92400e}.pill.r{background:#fee2e2;color:#991b1b}
+.pill.d{background:#e0e7ff;color:#3730a3}
+
+/* price input (shared) */
+.pinp{display:inline-flex;align-items:center;gap:2px;border:1.5px solid var(--border);border-radius:8px;background:#fff;padding:3px 7px 3px 9px;max-width:118px}
+.pinp input{border:none;width:58px;font-size:14px;font-weight:800;text-align:right;font-variant-numeric:tabular-nums;outline:none;color:var(--text);background:transparent}
+.pinp:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(245,158,11,.15)}
+.pinp .eu{font-weight:700;color:var(--muted)}
+.row-changed{background:#fffbeb !important}
+.savedchip{font-size:11.5px;font-weight:800;color:var(--success)}
+
+/* sync bar */
+.syncbar{position:fixed;bottom:0;left:210px;right:0;background:#fff;border-top:1px solid var(--border);padding:11px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:40;box-shadow:0 -4px 12px rgba(0,0,0,.05)}
+.syncbar .info{font-size:13px;color:var(--muted)}
+.btn{border:none;border-radius:9px;font-size:13.5px;font-weight:800;cursor:pointer;min-height:42px;padding:9px 18px}
+.btn-primary{background:var(--accent);color:#1a1206}
+.btn-primary:disabled{opacity:.4;cursor:default}
+
+/* ---- D1 accordion ---- */
+.cat{border:1px solid var(--border);border-radius:11px;margin-bottom:11px;overflow:hidden;background:#fff;box-shadow:var(--shadow-sm)}
+.cat .ch{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 15px;cursor:pointer;background:#f8fafc}
+.cat .ch .cn{font-weight:800;font-size:14.5px;display:flex;align-items:center;gap:8px}
+.cat .ch .cm{font-size:12px;color:var(--muted)}
+.cat .cb{display:none}.cat.open .cb{display:block}
+.cat .chev{transition:transform .2s}.cat.open .chev{transform:rotate(90deg)}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);padding:8px 15px;border-bottom:1px solid var(--border);background:#fcfdfe}
+th.num,td.num{text-align:right}
+td{padding:10px 15px;border-bottom:1px solid var(--border);font-size:13.5px;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+.pname{font-weight:700}
+.costcell{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* ---- D2 flat price-list ---- */
+.sec{margin-bottom:22px}
+.sec-h{font-weight:800;font-size:15px;padding:8px 2px;border-bottom:2px solid var(--accent);margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.lrow{display:flex;align-items:center;gap:12px;padding:10px 6px;border-bottom:1px solid var(--border)}
+.lrow .ln{flex:1;font-weight:700}
+.lrow .lc{width:170px;font-size:12px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+
+/* ---- D3 compact cards ---- */
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;margin-bottom:18px}
+.pc{border:1px solid var(--border);border-radius:10px;background:#fff;padding:11px 12px;box-shadow:var(--shadow-sm)}
+.pc .pcn{font-weight:700;font-size:13.5px;margin-bottom:7px;min-height:34px}
+.pc .pcb{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.pc .pcm{font-size:11px;color:var(--muted);margin-top:6px}
+.demo-note{position:fixed;bottom:0;left:0;right:0;background:#1e2d3d;color:#cbd5e1;font-size:11.5px;text-align:center;padding:7px;z-index:50}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">🍽 TAMAM <span class="tag">BACK</span></div>
+    <nav>
+      <a href="#">🏠 Πίνακας</a><a href="#">🚚 Προμηθευτές</a><a href="#">📦 Αποθήκη</a>
+      <a href="#">🧾 Συνταγές</a><a href="#">💰 Έξοδα</a><a href="#" class="active">💲 Τιμές</a>
+    </nav>
+  </aside>
+  <div class="main">
+    <div class="topbar"><h1>💲 Τιμές & Περιθώρια</h1></div>
+    <div class="ptabs">
+      <a class="ptab active" href="#">🍽 Μενού & Τιμές</a>
+      <a class="ptab" href="#">📊 Πίνακας τιμών</a>
+      <a class="ptab" href="#">📈 Ακρίβυναν</a>
+    </div>
+
+    <div class="switch">
+      <button class="active" onclick="showD(1,this)">1 · Accordion ανά κατηγορία</button>
+      <button onclick="showD(2,this)">2 · Τιμοκατάλογος</button>
+      <button onclick="showD(3,this)">3 · Κάρτες</button>
+    </div>
+
+    <div class="wrap">
+      <div class="tip">
+        <span>🍽</span>
+        <div><b>Ο πίνακας ελέγχου τιμών — όλο το μενού, όπως στο POS.</b> Άλλαξε όποια τιμή θες·
+        όπου υπάρχει συνταγή βλέπεις <b>κόστος &amp; περιθώριο</b> για να μην ανεβάζεις στα τυφλά.
+        Ό,τι αλλάξεις &amp; αποθηκεύσεις <b>πάει αυτόματα στο POS</b>.</div>
+      </div>
+
+      <!-- D1 -->
+      <div class="design show" id="d1"><div class="dhead"><div class="t">1 · Accordion ανά κατηγορία</div><div class="d">Σύμπτυξη/άνοιγμα ανά κατηγορία. Καθαρό όταν οι κατηγορίες είναι πολλές.</div></div><div id="d1body"></div></div>
+      <!-- D2 -->
+      <div class="design" id="d2"><div class="dhead"><div class="t">2 · Τιμοκατάλογος (όλα ανοιχτά)</div><div class="d">Όλες οι κατηγορίες ανοιχτές, σαν λίστα τιμών — γρήγορο scroll & μαζική αλλαγή.</div></div><div id="d2body"></div></div>
+      <!-- D3 -->
+      <div class="design" id="d3"><div class="dhead"><div class="t">3 · Κάρτες ανά προϊόν</div><div class="d">Κάθε προϊόν κάρτα. Πιο «οπτικό», καλό για κινητό/tablet.</div></div><div id="d3body"></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="syncbar">
+  <span class="info" id="syncInfo">Καμία αλλαγή.</span>
+  <button class="btn btn-primary" id="syncBtn" disabled onclick="doSync()">💾 Αποθήκευση & αποστολή στο POS</button>
+</div>
+<div class="demo-note">🔬 ΔΕΙΓΜΑ με ψεύτικα νούμερα — έτσι θα δουλεύει η καρτέλα «Μενού & Τιμές». Δεν είναι τα πραγματικά σου δεδομένα.</div>
+
+<script>
+/* ΨΕΥΤΙΚΟ μενού ανά κατηγορία POS. cost=null → ποτό/εμπορεύσιμο (χωρίς συνταγή) */
+const MENU = [
+  {cat:"🥙 Πίτα", items:[
+    {id:"p9", n:"Γύρος Χοιρινός Πίτα", price:4.00, cost:2.34},
+    {id:"p3", n:"Σουβλάκι Χοιρινό Πίτα", price:3.50, cost:1.86},
+    {id:"p4", n:"Σουβλάκι Κοτόπουλο Πίτα", price:3.50, cost:1.92},
+    {id:"p11", n:"Πατατόπιτα", price:2.50, cost:1.71},
+  ]},
+  {cat:"🍢 Μερίδες", items:[
+    {id:"m9", n:"Γύρος Μερίδα", price:9.00, cost:3.55},
+    {id:"m3", n:"Σουβλάκι Χοιρινό Μερίδα", price:8.50, cost:3.30},
+  ]},
+  {cat:"🍔 Burgers", items:[
+    {id:"b1", n:"Tamam Burger", price:7.00, cost:3.62},
+    {id:"b4", n:"Cheeseburger", price:4.00, cost:2.42},
+  ]},
+  {cat:"🥗 Σαλάτες", items:[
+    {id:"s1", n:"Σαλάτα Caesar's", price:7.00, cost:2.86},
+    {id:"s3", n:"Αγγουροντομάτα", price:4.00, cost:1.40},
+  ]},
+  {cat:"🧄 Αλοιφές", items:[
+    {id:"al4", n:"Τζατζίκι", price:1.00, cost:0.32},
+    {id:"al1", n:"Σως Ταμάμ", price:1.00, cost:0.41},
+  ]},
+  {cat:"🥤 Ποτά", items:[
+    {id:"d1", n:"Coca-Cola 330ml", price:1.50, cost:null},
+    {id:"d2", n:"Νερό 500ml", price:0.50, cost:null},
+    {id:"d3", n:"Άμστελ 330ml", price:2.00, cost:null},
+  ]},
+];
+
+const eur = v => v.toLocaleString("el-GR",{minimumFractionDigits:2,maximumFractionDigits:2})+"€";
+const mcls = p => p>=55?"g":p>=30?"a":"r";
+const changed = {};
+
+function marginInfo(it){
+  if(it.cost==null) return {txt:'<span class="pill d">ποτό</span>', m:null};
+  const m=(it.price-it.cost)/it.price*100;
+  return {txt:`κόστος ${eur(it.cost)} · <span class="pill ${mcls(m)}">${m.toFixed(0)}%</span>`, m};
+}
+function onEdit(id, inp){
+  const v=parseFloat(inp.value)||0;
+  changed[id]=v;
+  inp.closest('[data-row]')?.classList.add('row-changed');
+  const n=Object.keys(changed).length;
+  document.getElementById('syncInfo').textContent = n? `${n} αλλαγ${n===1?'ή':'ές'} — έτοιμες για αποστολή στο POS` : 'Καμία αλλαγή.';
+  document.getElementById('syncBtn').disabled = n===0;
+  // ζωντανό margin update όπου υπάρχει
+  const mEl=document.querySelector(`[data-margin="${id}"]`);
+  if(mEl){ const it=findItem(id); if(it.cost!=null){const m=(v-it.cost)/v*100; mEl.innerHTML=`κόστος ${eur(it.cost)} · <span class="pill ${mcls(m)}">${isFinite(m)?m.toFixed(0):'—'}%</span>`;} }
+}
+function findItem(id){ for(const c of MENU) for(const it of c.items) if(it.id===id) return it; }
+function doSync(){
+  const n=Object.keys(changed).length;
+  document.getElementById('syncInfo').innerHTML=`<span class="savedchip">✓ Αποθηκεύτηκαν ${n} & στάλθηκαν στο POS</span>`;
+  document.getElementById('syncBtn').disabled=true;
+  document.querySelectorAll('.row-changed').forEach(r=>r.classList.remove('row-changed'));
+  for(const k in changed) delete changed[k];
+}
+function priceInput(it){
+  return `<span class="pinp"><input type="number" step="0.10" value="${it.price.toFixed(2)}" data-id="${it.id}" oninput="onEdit('${it.id}',this)"><span class="eu">€</span></span>`;
+}
+
+/* D1 accordion */
+function renderD1(){
+  document.getElementById('d1body').innerHTML = MENU.map((c,i)=>`
+    <div class="cat ${i===0?'open':''}">
+      <div class="ch" onclick="this.closest('.cat').classList.toggle('open')">
+        <div class="cn"><span class="chev">▶</span> ${c.cat} <span class="muted" style="font-weight:400">(${c.items.length})</span></div>
+        <div class="cm">${c.items.filter(x=>x.cost!=null).length} με συνταγή</div>
+      </div>
+      <div class="cb"><table><thead><tr><th>Προϊόν</th><th>Κόστος / Περιθώριο</th><th class="num">Τιμή POS</th></tr></thead><tbody>
+        ${c.items.map(it=>{const mi=marginInfo(it);return `<tr data-row><td class="pname">${it.n}</td><td class="costcell" data-margin="${it.id}">${mi.txt}</td><td class="num">${priceInput(it)}</td></tr>`}).join("")}
+      </tbody></table></div>
+    </div>`).join("");
+}
+/* D2 flat list */
+function renderD2(){
+  document.getElementById('d2body').innerHTML = MENU.map(c=>`
+    <div class="sec"><div class="sec-h">${c.cat} <span class="muted" style="font-weight:400;font-size:12px">(${c.items.length})</span></div>
+      ${c.items.map(it=>{const mi=marginInfo(it);return `<div class="lrow" data-row><span class="ln">${it.n}</span><span class="lc" data-margin="${it.id}">${mi.txt}</span>${priceInput(it)}</div>`}).join("")}
+    </div>`).join("");
+}
+/* D3 cards */
+function renderD3(){
+  document.getElementById('d3body').innerHTML = MENU.map(c=>`
+    <div class="sec"><div class="sec-h">${c.cat} <span class="muted" style="font-weight:400;font-size:12px">(${c.items.length})</span></div>
+      <div class="cgrid">${c.items.map(it=>{const mi=marginInfo(it);return `<div class="pc" data-row><div class="pcn">${it.n}</div><div class="pcb">${priceInput(it)}<span></span></div><div class="pcm" data-margin="${it.id}">${mi.txt}</div></div>`}).join("")}</div>
+    </div>`).join("");
+}
+function showD(n,btn){
+  document.querySelectorAll(".design").forEach(d=>d.classList.remove("show"));
+  document.getElementById("d"+n).classList.add("show");
+  document.querySelectorAll(".switch button").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+}
+window.onload=()=>{ renderD1(); renderD2(); renderD3(); };
+</script>
+</body>
+</html>
