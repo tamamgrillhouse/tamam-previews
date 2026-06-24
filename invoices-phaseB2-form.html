@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Preview — Τιμολόγιο Φάση Β-2 (ΔΕΙΓΜΑ)</title>
+<style>
+:root{
+  --white:#fff;--border:#e2e8f0;--shadow-sm:0 1px 3px rgba(0,0,0,.06);
+  --accent:#f59e0b;--accent-dark:#b45309;--text:#0f172a;--text-muted:#64748b;--danger:#dc2626;
+  --bg:#f1f5f9;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:24px}
+.wrap{max-width:1000px;margin:0 auto}
+.demo-banner{background:#fef3c7;border:1px solid #fcd34d;color:#92400e;border-radius:10px;padding:10px 16px;font-size:13px;margin-bottom:18px;font-weight:600}
+.tag{display:inline-block;background:#1e293b;color:#fff;font-size:10px;font-weight:700;border-radius:6px;padding:2px 7px;margin-right:6px;vertical-align:middle;letter-spacing:.5px}
+.inv-head{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;margin-bottom:16px;flex-wrap:wrap}
+.inv-head h1{font-size:21px;margin:0}
+.btn-secondary{background:#fff;border:1.5px solid var(--border);border-radius:8px;padding:9px 16px;font-size:14px;font-weight:600;cursor:pointer;color:var(--text);min-height:44px}
+.btn-primary{background:var(--accent);border:none;border-radius:8px;padding:9px 18px;font-size:14px;font-weight:700;cursor:pointer;color:#fff;min-height:44px}
+.inv-card{background:var(--white);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow-sm);margin-bottom:16px}
+.inv-cb{padding:16px 18px}
+.inv-hgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.inv-fld label.lbl{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;color:var(--text-muted);margin-bottom:4px}
+.inv-in{width:100%;min-height:40px;border:1.5px solid var(--border);border-radius:8px;padding:7px 10px;font-size:14px;background:#fff}
+.select-wrap{position:relative}
+.select-wrap select{width:100%;min-height:40px;border:1.5px solid var(--border);border-radius:8px;padding:7px 32px 7px 10px;font-size:14px;background:#fff;appearance:none;cursor:pointer}
+.select-wrap::after{content:"▼";position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:10px;color:var(--text-muted);pointer-events:none}
+.inv-tbl{width:100%;border-collapse:collapse;font-size:13px}
+.inv-tbl th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.3px;color:var(--text-muted);padding:9px 8px;background:#f8fafc;border-bottom:1px solid var(--border)}
+.inv-tbl th.r,.inv-tbl td.r{text-align:right}.inv-tbl th.c,.inv-tbl td.c{text-align:center}
+.inv-tbl td{padding:8px;border-bottom:1px solid #f1f5f9;vertical-align:top}
+.cin{width:100%;min-height:36px;border:1px solid var(--border);border-radius:7px;padding:5px 8px;font-size:13px;background:#fff}
+.cin.r{text-align:right}
+.lnet{font-weight:700;white-space:nowrap}
+.note{font-size:12px;color:var(--text-muted);background:#f8fafc;border-left:3px solid var(--accent);padding:8px 12px;border-radius:0 8px 8px 0;margin-top:12px}
+
+/* ── ΝΕΑ ΚΟΜΜΑΤΙΑ Φ Β-2 ─────────────────────────────────── */
+.new-flag{display:inline-block;background:#16a34a;color:#fff;font-size:9.5px;font-weight:800;border-radius:5px;padding:1px 6px;margin-left:8px;vertical-align:middle;letter-spacing:.4px}
+
+/* Β18 — έξυπνος υπολογισμός λήξης */
+.pay-hint{font-size:12px;color:#155e63;background:#ecfeff;border:1px solid #a5f3fc;border-radius:8px;padding:7px 11px;margin-top:6px;display:flex;align-items:center;gap:6px;line-height:1.4}
+
+/* Β17 — ζώνη υπολοίπου */
+.bal-zone{margin-top:14px;border-top:1px dashed var(--border);padding-top:14px}
+.bal-zone .bz-title{font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.bal-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;align-items:end}
+.bal-calc{font-size:12.5px;color:var(--text-muted);background:#f8fafc;border-radius:8px;padding:8px 12px;text-align:center}
+.bal-calc b{color:var(--text)}
+
+/* Β16 — γενική έκπτωση */
+.totbox{display:flex;justify-content:space-between;gap:24px;margin-top:16px;flex-wrap:wrap}
+.gen-disc{flex:1;min-width:300px;background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:12px 14px}
+.gen-disc .gd-h{font-size:12.5px;font-weight:700;color:var(--accent-dark);margin-bottom:9px;display:flex;align-items:center;gap:6px}
+.gd-row{display:flex;gap:10px;align-items:center;margin-bottom:9px}
+.gd-row label.s{font-size:12px;color:var(--text-muted);min-width:96px}
+.gd-amt{width:120px;min-height:36px;border:1px solid var(--border);border-radius:7px;padding:5px 8px;font-size:13px;text-align:right}
+.gd-where{font-size:12px;color:var(--text-muted);margin-bottom:6px}
+.gd-opts{display:flex;flex-direction:column;gap:6px}
+.gd-opt{display:flex;align-items:center;gap:8px;font-size:13px;padding:6px 9px;border:1px solid var(--border);border-radius:8px;cursor:pointer;background:#fff}
+.gd-opt.sel{border-color:var(--accent);background:#fff7ed;font-weight:600}
+.gd-opt .badge{margin-left:auto;font-size:10px;color:var(--accent-dark);background:#fef3c7;border-radius:10px;padding:1px 8px;font-weight:700}
+.gd-prod{display:none;margin-top:8px}
+.gd-prod.on{display:block}
+
+.inv-tot{display:flex;flex-direction:column;gap:5px;min-width:260px;font-size:14px}
+.inv-tot .row{display:flex;justify-content:space-between}
+.inv-tot .row.big{font-size:18px;font-weight:800;border-top:2px solid var(--border);padding-top:7px;margin-top:3px}
+.inv-tot .mut{color:var(--text-muted)}
+.inv-tot .row.disc{color:var(--accent-dark)}
+
+/* Β9 — έλεγχος «βγαίνουν τα νούμερα» */
+.b9-field{display:flex;justify-content:flex-end;margin-top:10px}
+.b9-box{display:flex;align-items:center;gap:10px;font-size:13px}
+.b9-box label{color:var(--text-muted);font-weight:600}
+.b9-in{width:130px;min-height:36px;border:1px solid var(--border);border-radius:7px;padding:5px 8px;font-size:13px;text-align:right}
+.b9-warn{margin-top:10px;background:#fef9c3;border:1px solid #fde047;border-radius:8px;padding:9px 13px;font-size:13px;color:#854d0e;display:flex;align-items:center;gap:8px;line-height:1.45}
+.b9-ok{margin-top:10px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:9px 13px;font-size:13px;color:#166534;display:flex;align-items:center;gap:8px}
+@media(max-width:760px){.inv-hgrid{grid-template-columns:1fr 1fr}.bal-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="demo-banner">📐 PREVIEW — ΔΕΙΓΜΑ δεδομένα. Δείχνει πού μπαίνουν τα 4 νέα κομμάτια της Φάσης Β-2 (Β9 · Β16 · Β17 · Β18). Δεν είναι λειτουργικό.</div>
+
+  <div class="inv-head">
+    <div><h1>🧾 Νέο Τιμολόγιο</h1></div>
+    <button class="btn-secondary">← Πίσω</button>
+  </div>
+
+  <!-- ΚΕΦΑΛΙΔΑ -->
+  <div class="inv-card"><div class="inv-cb">
+    <div class="inv-hgrid">
+      <div class="inv-fld">
+        <label class="lbl">Προμηθευτής *</label>
+        <div class="select-wrap"><select><option>ΤΡΟΦΟ (Ν. ΣΙΟΚΑΣ)</option></select></div>
+      </div>
+      <div class="inv-fld"><label class="lbl">Αρ. Τιμολογίου</label><input class="inv-in" value="18123"></div>
+      <div class="inv-fld"><label class="lbl">Ημερομηνία</label><input class="inv-in" type="date" value="2026-06-23"></div>
+      <div class="inv-fld"><label class="lbl">Λήξη πληρωμής</label><input class="inv-in" type="date" value="2026-07-23"></div>
+    </div>
+
+    <div class="inv-hgrid" style="margin-top:12px">
+      <div class="inv-fld">
+        <label class="lbl">Τρόπος πληρωμής <span class="new-flag">Β18</span></label>
+        <div class="select-wrap"><select>
+          <option>Μετρητά (ήδη πληρωμένο)</option>
+          <option selected>Πίστωση 30 ημερών</option>
+          <option>Επί πιστώσει (ανοιχτό)</option>
+          <option>Τραπεζική Μεταφορά</option>
+        </select></div>
+        <div class="pay-hint">📅 Πίστωση 30 ημερών → λήξη <b>23-07-2026</b> (συμπληρώθηκε αυτόματα)</div>
+      </div>
+      <div class="inv-fld"><label class="lbl">Κατάσταση</label>
+        <label style="display:flex;align-items:center;gap:8px;min-height:40px;font-size:14px;font-weight:600">
+          <input type="checkbox" style="width:18px;height:18px"> Εξοφλημένο
+        </label>
+      </div>
+      <div class="inv-fld"><label class="lbl">📷 Φωτογραφία</label><input class="inv-in" type="file"></div>
+      <div class="inv-fld"><label class="lbl">Σημειώσεις</label><input class="inv-in"></div>
+    </div>
+
+    <!-- Β17 — ΤΡΕΧΟΥΜΕΝΟ ΥΠΟΛΟΙΠΟ -->
+    <div class="bal-zone">
+      <div class="bz-title">💳 Τρεχούμενο υπόλοιπο προμηθευτή <span class="new-flag">Β17</span>
+        <span style="font-weight:500;color:var(--text-muted)">— προαιρετικό, για διασταύρωση οφειλής</span>
+      </div>
+      <div class="bal-grid">
+        <div class="inv-fld">
+          <label class="lbl">Προηγούμενο υπόλοιπο</label>
+          <input class="inv-in" style="text-align:right" value="340,00">
+        </div>
+        <div class="bal-calc">+ τιμολόγιο <b>266,91 €</b> =<br><span style="color:var(--text-muted)">αναμενόμενο νέο υπόλοιπο</span> <b>606,91 €</b></div>
+        <div class="inv-fld">
+          <label class="lbl">Νέο υπόλοιπο (όπως στο χαρτί)</label>
+          <input class="inv-in" style="text-align:right" value="606,91">
+        </div>
+      </div>
+      <div class="note" style="margin-top:10px">⚠️ Το «Νέο υπόλοιπο» είναι η <b>συνολική οφειλή</b> σου στον προμηθευτή — <b>όχι</b> το ποσό αυτού του τιμολογίου. Χρησιμεύει μόνο για να διασταυρώνεις ότι συμφωνείτε στα χρωστούμενα (banner πληρωμών 1.7).</div>
+    </div>
+  </div></div>
+
+  <!-- ΓΡΑΜΜΕΣ -->
+  <div class="inv-card"><div class="inv-cb">
+    <table class="inv-tbl">
+      <thead><tr>
+        <th style="width:24%">Περιγραφή</th>
+        <th style="width:20%">Αντιστοίχιση αποθήκης</th>
+        <th class="r" style="width:8%">Ποσότ.</th>
+        <th style="width:11%">Μον.</th>
+        <th class="r" style="width:11%">Τιμή/μον.</th>
+        <th class="r" style="width:8%">Έκπτ.%</th>
+        <th style="width:8%">ΦΠΑ</th>
+        <th class="r" style="width:10%">Καθαρό</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><input class="cin" value="Πατάτες Κύπρου"></td>
+          <td><div class="select-wrap"><select><option>Πατάτα</option></select></div></td>
+          <td><input class="cin r" value="50"></td>
+          <td><div class="select-wrap"><select><option>Κιλό</option></select></div></td>
+          <td><input class="cin r" value="0,85"></td>
+          <td><input class="cin r" value="3"></td>
+          <td><div class="select-wrap"><select><option>13%</option></select></div></td>
+          <td class="r"><span class="lnet">41,23</span></td>
+        </tr>
+        <tr>
+          <td><input class="cin" value="Λάδι Ηλιέλαιο 10L"></td>
+          <td><div class="select-wrap"><select><option>Ηλιέλαιο</option></select></div></td>
+          <td><input class="cin r" value="12"></td>
+          <td><div class="select-wrap"><select><option>Τεμάχιο</option></select></div></td>
+          <td><input class="cin r" value="18,50"></td>
+          <td><input class="cin r" value="0"></td>
+          <td><div class="select-wrap"><select><option>13%</option></select></div></td>
+          <td class="r"><span class="lnet">222,00</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="margin-top:12px"><button class="btn-secondary">＋ Γραμμή</button></div>
+
+    <!-- ΣΥΝΟΛΑ + Β16 ΓΕΝΙΚΗ ΕΚΠΤΩΣΗ -->
+    <div class="totbox">
+      <!-- Β16 -->
+      <div class="gen-disc">
+        <div class="gd-h">🏷️ Γενική έκπτωση (κάτω μέρος τιμολογίου) <span class="new-flag">Β16</span></div>
+        <div class="gd-row">
+          <label class="s">Ποσό έκπτωσης</label>
+          <input class="gd-amt" value="15,00"> €
+        </div>
+        <div class="gd-where">Πού ανήκει;</div>
+        <div class="gd-opts">
+          <label class="gd-opt sel">
+            <input type="radio" name="gdw" checked> Μοιρασμένη σε όλα τα προϊόντα (αναλογικά)
+            <span class="badge">προεπιλογή</span>
+          </label>
+          <label class="gd-opt">
+            <input type="radio" name="gdw"> Σε ένα συγκεκριμένο προϊόν…
+          </label>
+          <div class="gd-prod">
+            <div class="select-wrap"><select><option>— Διάλεξε γραμμή —</option><option>Πατάτες Κύπρου</option><option>Λάδι Ηλιέλαιο 10L</option></select></div>
+          </div>
+          <label class="gd-opt">
+            <input type="radio" name="gdw"> Γενικό μπόνους (δεν αλλάζει κόστη)
+          </label>
+        </div>
+      </div>
+
+      <!-- ΣΥΝΟΛΑ -->
+      <div class="inv-tot">
+        <div class="row mut"><span>Καθαρή αξία</span><span>263,23 €</span></div>
+        <div class="row disc"><span>Γενική έκπτωση</span><span>− 15,00 €</span></div>
+        <div class="row mut"><span>ΦΠΑ 13%</span><span>32,27 €</span></div>
+        <div class="row big"><span>Σύνολο</span><span>280,50 €</span></div>
+
+        <!-- Β9 -->
+        <div class="b9-field">
+          <div class="b9-box">
+            <label>Σύνολο στο χαρτί <span class="new-flag">Β9</span></label>
+            <input class="b9-in" value="266,91">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Β9 προειδοποίηση (κατάσταση: ΔΕΝ βγαίνουν) -->
+    <div class="b9-warn">⚠️ <span><b>Τα νούμερα δεν ταιριάζουν:</b> το σύστημα υπολόγισε <b>280,50 €</b> αλλά το χαρτί γράφει <b>266,91 €</b> (διαφορά 13,59 €). Έλεγξε ποσότητες/τιμές/έκπτωση πριν την καταχώρηση.</span></div>
+
+    <!-- Β9 εναλλακτική κατάσταση (πληροφοριακά μέσα στο preview) -->
+    <div class="b9-ok">✓ <span><b>Παράδειγμα όταν ΒΓΑΙΝΟΥΝ:</b> σύστημα = χαρτί → εμφανίζεται αυτό το πράσινο «τα νούμερα ταιριάζουν».</span></div>
+
+    <div class="note">📦 Όσες γραμμές έχουν αντιστοίχιση ενημερώνουν απόθεμα & τιμές. Η γενική έκπτωση (Β16) μειώνει ανάλογα το κόστος των υλικών που διάλεξες.</div>
+  </div></div>
+
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-bottom:24px">
+    <button class="btn-secondary">Ακύρωση</button>
+    <button class="btn-primary">✓ Καταχώρηση Τιμολογίου</button>
+  </div>
+</div>
+</body>
+</html>

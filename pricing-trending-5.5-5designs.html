@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>TAMAM · 📉📈 Πεθαμένα & Ανερχόμενα (5.5) — 5 Σχέδια</title>
+<style>
+:root{
+  --sidebar-bg:#1e2d3d; --accent:#f59e0b; --accent-dark:#d97706;
+  --content-bg:#f1f5f9; --white:#fff; --text:#1e293b; --muted:#64748b;
+  --border:#e2e8f0; --success:#10b981; --danger:#ef4444; --radius:10px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.08);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,"Segoe UI",Roboto,sans-serif;font-size:14px;color:var(--text);background:var(--content-bg);line-height:1.45}
+.app{display:flex;min-height:100vh}
+.sidebar{width:210px;background:var(--sidebar-bg);color:#94a3b8;flex-shrink:0;padding:16px 0;position:sticky;top:0;height:100vh}
+.sidebar .brand{padding:0 16px 14px;border-bottom:1px solid rgba(255,255,255,.08);color:#fff;font-weight:800;font-size:17px;display:flex;align-items:center;gap:8px}
+.sidebar .brand .tag{font-size:9px;background:var(--accent);color:#1a1206;padding:2px 7px;border-radius:20px}
+.sidebar nav{padding:10px 0}
+.sidebar a{display:flex;align-items:center;gap:10px;padding:10px 16px;color:#94a3b8;text-decoration:none;font-size:13.5px;border-left:3px solid transparent}
+.sidebar a.active{color:#fff;background:rgba(245,158,11,.12);border-left-color:var(--accent)}
+.main{flex:1;min-width:0}
+.topbar{background:#fff;border-bottom:1px solid var(--border);padding:14px 24px;position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:9px}
+.topbar h1{font-size:19px;display:flex;align-items:center;gap:9px}
+.ptabs{display:flex;gap:6px;background:#fff;border-bottom:1px solid var(--border);padding:0 24px;position:sticky;top:55px;z-index:25;overflow-x:auto}
+.ptab{padding:13px 16px;cursor:pointer;font-size:14px;font-weight:600;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap;text-decoration:none}
+.ptab.active{color:var(--text);border-bottom-color:var(--accent)}
+.switch{display:flex;gap:7px;flex-wrap:wrap;padding:14px 24px 0}
+.switch button{border:1.5px solid var(--border);background:#fff;color:var(--muted);padding:7px 13px;border-radius:30px;font-size:12.5px;font-weight:700;cursor:pointer;min-height:36px}
+.switch button.active{background:var(--accent);border-color:var(--accent);color:#1a1206}
+.wrap{padding:16px 24px 100px;max-width:1120px}
+.design{display:none}.design.show{display:block}
+.dhead{margin:8px 0 16px}
+.dhead .t{font-size:17px;font-weight:800}
+.dhead .d{color:var(--muted);font-size:13px;margin-top:4px}
+.tip{background:#eff6ff;border:1px solid #bfdbfe;border-radius:9px;padding:11px 14px;color:#1e40af;font-size:13px;display:flex;gap:9px;align-items:flex-start;margin-bottom:16px}
+.tip.learn{background:#fefce8;border-color:#fde68a;color:#854d0e}
+.muted{color:var(--muted)}
+.pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:12px;font-weight:800;font-variant-numeric:tabular-nums}
+.pill.g{background:#dcfce7;color:#166534}.pill.a{background:#fef3c7;color:#92400e}.pill.r{background:#fee2e2;color:#991b1b}
+.pill.b{background:#dbeafe;color:#1e40af}
+.up{color:var(--success);font-weight:800}
+.down{color:var(--danger);font-weight:800}
+.btn{border:1.5px solid var(--border);background:#fff;border-radius:8px;font-size:12.5px;font-weight:800;cursor:pointer;min-height:38px;padding:8px 13px}
+.btn-yes{background:var(--accent);border-color:var(--accent);color:#1a1206}
+.btn-no{color:var(--muted)}
+.sectit{font-size:15px;font-weight:800;margin:6px 0 12px;display:flex;align-items:center;gap:8px}
+.learnbadge{background:#fefce8;color:#854d0e;border:1px solid #fde68a;font-size:10.5px;font-weight:800;padding:1px 8px;border-radius:20px}
+
+/* sparkline */
+.spark{display:inline-flex;align-items:flex-end;gap:2px;height:30px}
+.spark span{width:5px;border-radius:1px;background:#cbd5e1}
+.spark.dn span{background:#fca5a5}.spark.dn span:last-child{background:var(--danger)}
+.spark.up span{background:#86efac}.spark.up span:last-child{background:var(--success)}
+
+/* tables */
+table{width:100%;border-collapse:collapse}
+.tcard{background:#fff;border:1px solid var(--border);border-radius:11px;box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:18px}
+th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);padding:10px 14px;border-bottom:1px solid var(--border);background:#f8fafc;white-space:nowrap}
+td{padding:12px 14px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.dish{font-weight:700}
+.acts{display:flex;gap:7px;justify-content:flex-end}
+
+/* two columns (D1) */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:860px){.cols{grid-template-columns:1fr}}
+.colcard{background:#fff;border:1px solid var(--border);border-radius:11px;box-shadow:var(--shadow-sm);overflow:hidden}
+.colcard .ch{padding:13px 16px;border-bottom:1px solid var(--border);font-weight:800;font-size:14.5px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.colcard .ch.dead{background:#fef2f2;color:#991b1b}.colcard .ch.rise{background:#f0fdf4;color:#166534}
+.lrow{padding:13px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:13px}
+.lrow:last-child{border-bottom:none}
+.lrow .lmain{flex:1;min-width:0}
+.lrow .lt{font-weight:700;display:flex;align-items:center;gap:8px}
+.lrow .ls{font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.5}
+.lrow .lpct{font-size:20px;font-weight:900;font-variant-numeric:tabular-nums;min-width:62px;text-align:right}
+
+/* feed cards (D3) */
+.feed{display:grid;grid-template-columns:repeat(auto-fill,minmax(350px,1fr));gap:14px}
+.fcard{background:#fff;border:1px solid var(--border);border-left:4px solid var(--danger);border-radius:11px;padding:16px;box-shadow:var(--shadow-sm)}
+.fcard.rise{border-left-color:var(--success)}
+.fcard .fd{font-weight:800;font-size:15.5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.fcard .fwhy{font-size:12.5px;color:var(--muted);margin-top:6px;line-height:1.55}
+.fcard .frow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:13px 0}
+.fcard .bigpct{font-size:30px;font-weight:900;font-variant-numeric:tabular-nums}
+.fcard .action{background:#f8fafc;border:1px solid var(--border);border-radius:9px;padding:10px 12px;font-size:12.5px;line-height:1.6;margin-top:8px}
+.fcard .facts{display:flex;gap:8px;margin-top:12px}
+.fcard .facts .btn{flex:1}
+
+/* heatmap grid (D5) */
+.hgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.hcell{border-radius:10px;padding:12px;color:#fff;box-shadow:var(--shadow-sm);min-height:78px;display:flex;flex-direction:column;justify-content:space-between}
+.hcell .hn{font-weight:700;font-size:12.5px;line-height:1.3}
+.hcell .hp{font-size:18px;font-weight:900;font-variant-numeric:tabular-nums;align-self:flex-end}
+.legend{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px;font-size:12px;color:var(--muted)}
+.legend .sw{display:inline-block;width:16px;height:16px;border-radius:4px;vertical-align:middle;margin-right:5px}
+
+.demo-note{position:fixed;bottom:0;left:0;right:0;background:#1e2d3d;color:#cbd5e1;font-size:11.5px;text-align:center;padding:7px;z-index:50}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">🍽 TAMAM <span class="tag">BACK</span></div>
+    <nav>
+      <a href="#">🏠 Πίνακας</a>
+      <a href="#">🚚 Προμηθευτές</a>
+      <a href="#">📦 Αποθήκη</a>
+      <a href="#">🧾 Συνταγές</a>
+      <a href="#">💰 Έξοδα</a>
+      <a href="#" class="active">💲 Τιμές</a>
+      <a href="#">🧾 Τιμολόγια</a>
+      <a href="#">⚙️ Ρυθμίσεις</a>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <div class="topbar"><h1>💲 Τιμές & Περιθώρια</h1></div>
+    <div class="ptabs">
+      <a class="ptab" href="#">🍽 Μενού & Τιμές</a>
+      <a class="ptab" href="#">📊 Πίνακας</a>
+      <a class="ptab" href="#">📈 Ακρίβυναν</a>
+      <a class="ptab" href="#">📊 Ελαστικότητα</a>
+      <a class="ptab" href="#">🧺 Combo Offers</a>
+      <a class="ptab active" href="#">📉 Τάσεις</a>
+    </div>
+
+    <div class="switch">
+      <button class="active" onclick="show(1,this)">1 · Δύο στήλες</button>
+      <button onclick="show(2,this)">2 · Πίνακας + τάση</button>
+      <button onclick="show(3,this)">3 · Κάρτες ενεργειών</button>
+      <button onclick="show(4,this)">4 · Λίστα προτεραιότητας</button>
+      <button onclick="show(5,this)">5 · Θερμικός χάρτης</button>
+    </div>
+
+    <div class="wrap">
+
+      <!-- ===================== D1: two columns ===================== -->
+      <div class="design show" id="d1">
+        <div class="dhead">
+          <div class="t">Σχέδιο 1 — Δύο στήλες: Πεθαμένα | Ανερχόμενα</div>
+          <div class="d">Αριστερά τα πιάτα που σβήνουν, δεξιά αυτά που απογειώνονται. Κάθε γραμμή δείχνει τη μικρή «καμπύλη» των 8 εβδομάδων.</div>
+        </div>
+        <div class="tip">💡 Σύγκριση: μέσος όρος πωλήσεων <b>τελευταίων 4 εβδομάδων</b> vs <b>4 προηγούμενων</b>. Πτώση &gt;30% → «πεθαμένο» · άνοδος &gt;20% → «ανερχόμενο». Η μπάρα δεξιά = πωλήσεις κάθε εβδομάδας.</div>
+        <div class="cols">
+          <div class="colcard">
+            <div class="ch dead"><span>📉 Πεθαμένα</span><span class="pill r">3</span></div>
+            <div class="lrow">
+              <div class="lmain">
+                <div class="lt">🥬 Μπιφτέκι Λαχανικών</div>
+                <div class="ls">Από 24 → 11 μερίδες/εβδ. — πέφτει σταθερά 7 εβδομάδες.</div>
+              </div>
+              <div class="spark dn"><span style="height:90%"></span><span style="height:80%"></span><span style="height:78%"></span><span style="height:60%"></span><span style="height:55%"></span><span style="height:45%"></span><span style="height:40%"></span><span style="height:30%"></span></div>
+              <div class="lpct down">−54%</div>
+            </div>
+            <div class="lrow">
+              <div class="lmain">
+                <div class="lt">🥧 Πατατόπιτα</div>
+                <div class="ls">Από 18 → 9 μερίδες/εβδ. Σχεδόν δεν την παραγγέλνει κανείς πια.</div>
+              </div>
+              <div class="spark dn"><span style="height:85%"></span><span style="height:88%"></span><span style="height:70%"></span><span style="height:62%"></span><span style="height:58%"></span><span style="height:50%"></span><span style="height:48%"></span><span style="height:38%"></span></div>
+              <div class="lpct down">−50%</div>
+            </div>
+            <div class="lrow">
+              <div class="lmain">
+                <div class="lt">🥗 Χωριάτικη Σαλάτα</div>
+                <div class="ls">Από 31 → 21 μερίδες/εβδ. — ήπια αλλά σταθερή πτώση.</div>
+              </div>
+              <div class="spark dn"><span style="height:95%"></span><span style="height:90%"></span><span style="height:85%"></span><span style="height:80%"></span><span style="height:75%"></span><span style="height:70%"></span><span style="height:68%"></span><span style="height:62%"></span></div>
+              <div class="lpct down">−32%</div>
+            </div>
+          </div>
+
+          <div class="colcard">
+            <div class="ch rise"><span>📈 Ανερχόμενα</span><span class="pill g">3</span></div>
+            <div class="lrow">
+              <div class="lmain">
+                <div class="lt">🧀 Τυρόπιτα</div>
+                <div class="ls">Από 14 → 27 μερίδες/εβδ. — διπλασιάστηκε σχεδόν!</div>
+              </div>
+              <div class="spark up"><span style="height:35%"></span><span style="height:40%"></span><span style="height:48%"></span><span style="height:55%"></span><span style="height:65%"></span><span style="height:75%"></span><span style="height:85%"></span><span style="height:95%"></span></div>
+              <div class="lpct up">+93%</div>
+            </div>
+            <div class="lrow">
+              <div class="lmain">
+                <div class="lt">🍗 Φτερούγες Buffalo</div>
+                <div class="ls">Από 22 → 35 μερίδες/εβδ. Νέο αγαπημένο.</div>
+              </div>
+              <div class="spark up"><span style="height:45%"></span><span style="height:50%"></span><span style="height:52%"></span><span style="height:60%"></span><span style="height:70%"></span><span style="height:78%"></span><span style="height:88%"></span><span style="height:95%"></span></div>
+              <div class="lpct up">+59%</div>
+            </div>
+            <div class="lrow">
+              <div class="lmain">
+                <div class="lt">🌯 Ντονερ Κοτόπουλο</div>
+                <div class="ls">Από 40 → 51 μερίδες/εβδ. — σταθερά ανεβαίνει.</div>
+              </div>
+              <div class="spark up"><span style="height:60%"></span><span style="height:62%"></span><span style="height:68%"></span><span style="height:72%"></span><span style="height:78%"></span><span style="height:84%"></span><span style="height:90%"></span><span style="height:95%"></span></div>
+              <div class="lpct up">+28%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== D2: table + sparkline ===================== -->
+      <div class="design" id="d2">
+        <div class="dhead">
+          <div class="t">Σχέδιο 2 — Πίνακας με τάση</div>
+          <div class="d">Όλα τα προϊόντα που κουνήθηκαν, σε μία ματιά: εβδομαδιαίες πωλήσεις πριν/τώρα, μεταβολή % και η καμπύλη 8 εβδομάδων.</div>
+        </div>
+        <div class="tip">💡 «Τζίρος/εβδ.» = πόσα € φέρνει τώρα. Ένα πιάτο μπορεί να πέφτει σε ποσότητα αλλά να αξίζει ακόμα — γι' αυτό δείχνω και το κέρδος.</div>
+        <div class="tcard">
+          <table>
+            <thead><tr>
+              <th>Προϊόν</th><th>Τάση 8 εβδ.</th><th class="num">Πριν</th><th class="num">Τώρα</th>
+              <th class="num">Μεταβολή</th><th class="num">Τζίρος/εβδ.</th><th>Κατάσταση</th>
+            </tr></thead>
+            <tbody>
+              <tr>
+                <td class="dish">🥬 Μπιφτέκι Λαχανικών</td>
+                <td><div class="spark dn"><span style="height:90%"></span><span style="height:80%"></span><span style="height:78%"></span><span style="height:60%"></span><span style="height:55%"></span><span style="height:45%"></span><span style="height:40%"></span><span style="height:30%"></span></div></td>
+                <td class="num">24</td><td class="num">11</td>
+                <td class="num down">−54%</td><td class="num">66€</td>
+                <td><span class="pill r">📉 πεθαμένο</span></td>
+              </tr>
+              <tr>
+                <td class="dish">🥧 Πατατόπιτα</td>
+                <td><div class="spark dn"><span style="height:85%"></span><span style="height:88%"></span><span style="height:70%"></span><span style="height:62%"></span><span style="height:58%"></span><span style="height:50%"></span><span style="height:48%"></span><span style="height:38%"></span></div></td>
+                <td class="num">18</td><td class="num">9</td>
+                <td class="num down">−50%</td><td class="num">27€</td>
+                <td><span class="pill r">📉 πεθαμένο</span></td>
+              </tr>
+              <tr>
+                <td class="dish">🥗 Χωριάτικη Σαλάτα</td>
+                <td><div class="spark dn"><span style="height:95%"></span><span style="height:90%"></span><span style="height:85%"></span><span style="height:80%"></span><span style="height:75%"></span><span style="height:70%"></span><span style="height:68%"></span><span style="height:62%"></span></div></td>
+                <td class="num">31</td><td class="num">21</td>
+                <td class="num down">−32%</td><td class="num">126€</td>
+                <td><span class="pill r">📉 πεθαμένο</span></td>
+              </tr>
+              <tr>
+                <td class="dish">🌯 Ντονερ Κοτόπουλο</td>
+                <td><div class="spark up"><span style="height:60%"></span><span style="height:62%"></span><span style="height:68%"></span><span style="height:72%"></span><span style="height:78%"></span><span style="height:84%"></span><span style="height:90%"></span><span style="height:95%"></span></div></td>
+                <td class="num">40</td><td class="num">51</td>
+                <td class="num up">+28%</td><td class="num">189€</td>
+                <td><span class="pill g">📈 ανερχόμενο</span></td>
+              </tr>
+              <tr>
+                <td class="dish">🍗 Φτερούγες Buffalo</td>
+                <td><div class="spark up"><span style="height:45%"></span><span style="height:50%"></span><span style="height:52%"></span><span style="height:60%"></span><span style="height:70%"></span><span style="height:78%"></span><span style="height:88%"></span><span style="height:95%"></span></div></td>
+                <td class="num">22</td><td class="num">35</td>
+                <td class="num up">+59%</td><td class="num">175€</td>
+                <td><span class="pill g">📈 ανερχόμενο</span></td>
+              </tr>
+              <tr>
+                <td class="dish">🧀 Τυρόπιτα</td>
+                <td><div class="spark up"><span style="height:35%"></span><span style="height:40%"></span><span style="height:48%"></span><span style="height:55%"></span><span style="height:65%"></span><span style="height:75%"></span><span style="height:85%"></span><span style="height:95%"></span></div></td>
+                <td class="num">14</td><td class="num">27</td>
+                <td class="num up">+93%</td><td class="num">81€</td>
+                <td><span class="pill g">📈 ανερχόμενο</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ===================== D3: action cards ===================== -->
+      <div class="design" id="d3">
+        <div class="dhead">
+          <div class="t">Σχέδιο 3 — Κάρτες με πρόταση ενέργειας</div>
+          <div class="d">Κάθε προϊόν που κουνήθηκε γίνεται μια κάρτα με σαφή πρόταση: τι να κάνεις γι' αυτό.</div>
+        </div>
+        <div class="tip learn">💡 Το σύστημα <b>προτείνει</b>, εσύ <b>αποφασίζεις</b>. Δεν κόβει τίποτα μόνο του — απλώς σου δείχνει πού να κοιτάξεις.</div>
+        <div class="feed">
+          <div class="fcard">
+            <div class="fd">🥬 Μπιφτέκι Λαχανικών</div>
+            <div class="frow"><span class="bigpct down">−54%</span><div class="spark dn"><span style="height:90%"></span><span style="height:80%"></span><span style="height:78%"></span><span style="height:60%"></span><span style="height:55%"></span><span style="height:45%"></span><span style="height:40%"></span><span style="height:30%"></span></div></div>
+            <div class="fwhy">Έπεσε από 24 σε 11 μερίδες/εβδ. εδώ και 7 εβδομάδες. Φέρνει μόλις <b>66€/εβδ.</b></div>
+            <div class="action">💡 <b>Εξέτασε αφαίρεση</b> από το μενού ή προσφορά για να το «ξυπνήσεις». Πιάνει θέση χωρίς να αποδίδει.</div>
+            <div class="facts"><button class="btn btn-yes">👁 Δες λεπτομέρειες</button><button class="btn btn-no">✕ Αγνόησέ το</button></div>
+          </div>
+          <div class="fcard rise">
+            <div class="fd">🧀 Τυρόπιτα</div>
+            <div class="frow"><span class="bigpct up">+93%</span><div class="spark up"><span style="height:35%"></span><span style="height:40%"></span><span style="height:48%"></span><span style="height:55%"></span><span style="height:65%"></span><span style="height:75%"></span><span style="height:85%"></span><span style="height:95%"></span></div></div>
+            <div class="fwhy">Σχεδόν διπλασιάστηκε: 14 → 27 μερίδες/εβδ. Ο κόσμος την ανακάλυψε.</div>
+            <div class="action">🚀 <b>Προώθησέ την!</b> Βάλ' την σε combo ή σε εμφανές σημείο. Δες μήπως αντέχει μικρή αύξηση τιμής (→ Ελαστικότητα).</div>
+            <div class="facts"><button class="btn btn-yes">👁 Δες λεπτομέρειες</button><button class="btn btn-no">✕ Αγνόησέ το</button></div>
+          </div>
+          <div class="fcard rise">
+            <div class="fd">🍗 Φτερούγες Buffalo</div>
+            <div class="frow"><span class="bigpct up">+59%</span><div class="spark up"><span style="height:45%"></span><span style="height:50%"></span><span style="height:52%"></span><span style="height:60%"></span><span style="height:70%"></span><span style="height:78%"></span><span style="height:88%"></span><span style="height:95%"></span></div></div>
+            <div class="fwhy">22 → 35 μερίδες/εβδ. Σταθερή άνοδος 6 εβδομάδες.</div>
+            <div class="action">📦 <b>Πρόσεχε το απόθεμα</b> — αν ανεβαίνει, φρόντισε να μην ξεμείνεις από τα υλικά τις ώρες αιχμής.</div>
+            <div class="facts"><button class="btn btn-yes">👁 Δες λεπτομέρειες</button><button class="btn btn-no">✕ Αγνόησέ το</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== D4: priority list ===================== -->
+      <div class="design" id="d4">
+        <div class="dhead">
+          <div class="t">Σχέδιο 4 — Λίστα προτεραιότητας</div>
+          <div class="d">Μία ενιαία λίστα, ταξινομημένη από «το πιο επείγον» προς τα κάτω — είτε πέφτει είτε ανεβαίνει. Τα ακραία πρώτα.</div>
+        </div>
+        <div class="tip">💡 Πάνω-πάνω τα προϊόντα με τη μεγαλύτερη μεταβολή (καλή ή κακή) — αυτά που αξίζουν την προσοχή σου τώρα.</div>
+        <div class="tcard">
+          <div class="lrow" style="background:#fef2f2">
+            <div style="font-size:24px">📉</div>
+            <div class="lmain">
+              <div class="lt">🥬 Μπιφτέκι Λαχανικών <span class="pill r">πεθαμένο</span></div>
+              <div class="ls">24 → 11 μερίδες/εβδ. (7 εβδ. πτώση) · προτείνω: <b>εξέτασε αφαίρεση</b></div>
+            </div>
+            <div class="lpct down">−54%</div>
+          </div>
+          <div class="lrow">
+            <div style="font-size:24px">📈</div>
+            <div class="lmain">
+              <div class="lt">🧀 Τυρόπιτα <span class="pill g">ανερχόμενο</span></div>
+              <div class="ls">14 → 27 μερίδες/εβδ. · προτείνω: <b>προώθησέ την / βάλ' την σε combo</b></div>
+            </div>
+            <div class="lpct up">+93%</div>
+          </div>
+          <div class="lrow">
+            <div style="font-size:24px">📈</div>
+            <div class="lmain">
+              <div class="lt">🍗 Φτερούγες Buffalo <span class="pill g">ανερχόμενο</span></div>
+              <div class="ls">22 → 35 μερίδες/εβδ. · προτείνω: <b>πρόσεχε το απόθεμα</b></div>
+            </div>
+            <div class="lpct up">+59%</div>
+          </div>
+          <div class="lrow" style="background:#fef2f2">
+            <div style="font-size:24px">📉</div>
+            <div class="lmain">
+              <div class="lt">🥧 Πατατόπιτα <span class="pill r">πεθαμένο</span></div>
+              <div class="ls">18 → 9 μερίδες/εβδ. · προτείνω: <b>εξέτασε αφαίρεση</b></div>
+            </div>
+            <div class="lpct down">−50%</div>
+          </div>
+          <div class="lrow">
+            <div style="font-size:24px">📈</div>
+            <div class="lmain">
+              <div class="lt">🌯 Ντονερ Κοτόπουλο <span class="pill g">ανερχόμενο</span></div>
+              <div class="ls">40 → 51 μερίδες/εβδ. · προτείνω: <b>κράτα το ψηλά στο μενού</b></div>
+            </div>
+            <div class="lpct up">+28%</div>
+          </div>
+          <div class="lrow" style="background:#fef2f2">
+            <div style="font-size:24px">📉</div>
+            <div class="lmain">
+              <div class="lt">🥗 Χωριάτικη Σαλάτα <span class="pill r">πεθαμένο</span></div>
+              <div class="ls">31 → 21 μερίδες/εβδ. · προτείνω: <b>παρακολούθησε άλλη μία εβδομάδα</b></div>
+            </div>
+            <div class="lpct down">−32%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== D5: heatmap ===================== -->
+      <div class="design" id="d5">
+        <div class="dhead">
+          <div class="t">Σχέδιο 5 — Θερμικός χάρτης</div>
+          <div class="d">Όλο το μενού με μια ματιά. Πράσινο = ανεβαίνει, κόκκινο = πέφτει, γκρι = σταθερό. Όσο πιο έντονο το χρώμα, τόσο πιο ακραία η μεταβολή.</div>
+        </div>
+        <div class="legend">
+          <span><span class="sw" style="background:#16a34a"></span>Ανεβαίνει πολύ</span>
+          <span><span class="sw" style="background:#86efac"></span>Ανεβαίνει λίγο</span>
+          <span><span class="sw" style="background:#cbd5e1"></span>Σταθερό</span>
+          <span><span class="sw" style="background:#fca5a5"></span>Πέφτει λίγο</span>
+          <span><span class="sw" style="background:#dc2626"></span>Πέφτει πολύ</span>
+        </div>
+        <div class="hgrid">
+          <div class="hcell" style="background:#16a34a"><div class="hn">🧀 Τυρόπιτα</div><div class="hp">+93%</div></div>
+          <div class="hcell" style="background:#16a34a"><div class="hn">🍗 Φτερούγες Buffalo</div><div class="hp">+59%</div></div>
+          <div class="hcell" style="background:#22c55e"><div class="hn">🌯 Ντονερ Κοτόπουλο</div><div class="hp">+28%</div></div>
+          <div class="hcell" style="background:#86efac;color:#14532d"><div class="hn">🍟 Πατάτες</div><div class="hp">+12%</div></div>
+          <div class="hcell" style="background:#cbd5e1;color:#334155"><div class="hn">🥩 Σουβλάκι χοιρινό</div><div class="hp">+3%</div></div>
+          <div class="hcell" style="background:#cbd5e1;color:#334155"><div class="hn">🍔 Tamam Burger</div><div class="hp">−1%</div></div>
+          <div class="hcell" style="background:#cbd5e1;color:#334155"><div class="hn">🥤 Coca-Cola</div><div class="hp">−4%</div></div>
+          <div class="hcell" style="background:#fca5a5;color:#7f1d1d"><div class="hn">🥗 Χωριάτικη Σαλάτα</div><div class="hp">−32%</div></div>
+          <div class="hcell" style="background:#dc2626"><div class="hn">🥧 Πατατόπιτα</div><div class="hp">−50%</div></div>
+          <div class="hcell" style="background:#dc2626"><div class="hn">🥬 Μπιφτέκι Λαχανικών</div><div class="hp">−54%</div></div>
+        </div>
+        <p class="muted" style="font-size:12.5px;margin-top:16px">Κλικ σε κουτάκι → λεπτομέρειες προϊόντος (καμπύλη 8 εβδ. + προτεινόμενη ενέργεια).</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="demo-note">🔒 Προεπισκόπηση με ΕΙΚΟΝΙΚΑ δεδομένα · TAMAM Back-Office · Ιδέα 5.5 — Πεθαμένα & Ανερχόμενα προϊόντα</div>
+
+<script>
+function show(n,btn){
+  document.querySelectorAll('.design').forEach(d=>d.classList.remove('show'));
+  document.getElementById('d'+n).classList.add('show');
+  document.querySelectorAll('.switch button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>

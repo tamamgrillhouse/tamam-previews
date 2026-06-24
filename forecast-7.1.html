@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>TAMAM · 🔮 Πρόβλεψη & Προετοιμασία (7.1) — Δείγμα</title>
+<style>
+:root{
+  --sidebar-bg:#1e2d3d; --accent:#f59e0b; --accent-dark:#d97706;
+  --content-bg:#f1f5f9; --white:#fff; --text:#1e293b; --muted:#64748b;
+  --border:#e2e8f0; --success:#10b981; --danger:#ef4444; --radius:10px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.08); --shadow-md:0 10px 30px rgba(0,0,0,.16);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,"Segoe UI",Roboto,sans-serif;font-size:14px;color:var(--text);background:var(--content-bg);line-height:1.45}
+.app{display:flex;min-height:100vh}
+.sidebar{width:210px;background:var(--sidebar-bg);color:#94a3b8;flex-shrink:0;padding:16px 0;position:sticky;top:0;height:100vh}
+.sidebar .brand{padding:0 16px 14px;border-bottom:1px solid rgba(255,255,255,.08);color:#fff;font-weight:800;font-size:17px;display:flex;align-items:center;gap:8px}
+.sidebar .brand .tag{font-size:9px;background:var(--accent);color:#1a1206;padding:2px 7px;border-radius:20px}
+.sidebar nav{padding:10px 0}
+.sidebar a{display:flex;align-items:center;gap:10px;padding:10px 16px;color:#94a3b8;text-decoration:none;font-size:13.5px;border-left:3px solid transparent}
+.sidebar a.active{color:#fff;background:rgba(245,158,11,.12);border-left-color:var(--accent)}
+.sidebar a:hover{color:#fff}
+.main{flex:1;min-width:0}
+.topbar{background:#fff;border-bottom:1px solid var(--border);padding:14px 24px;position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:9px;justify-content:space-between}
+.topbar h1{font-size:19px;display:flex;align-items:center;gap:9px}
+.wrap{padding:22px 24px 100px;max-width:1100px}
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm)}
+.pad{padding:18px}
+.h{font-size:16px;font-weight:700}
+.sub{color:var(--muted);font-size:12.5px}
+.muted{color:var(--muted)}
+.between{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.banner{background:#eff6ff;border:1px solid #bfdbfe;border-radius:9px;padding:11px 14px;color:#1e40af;font-size:13px;display:flex;gap:9px;align-items:flex-start;margin-bottom:18px}
+/* controls bar */
+.controls{display:flex;gap:18px;align-items:flex-end;flex-wrap:wrap;margin-bottom:18px}
+.ctrl label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);margin-bottom:5px;font-weight:700}
+.select-wrap{position:relative;display:inline-block}
+.select-wrap select{appearance:none;padding-right:34px;min-width:170px;min-height:42px;border:1.5px solid var(--border);border-radius:9px;padding-left:12px;font-size:14px;background:#fff;color:var(--text);font-weight:600}
+.select-wrap::after{content:"▼";position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:10px;color:var(--muted);pointer-events:none}
+/* segmented (4/6/8) */
+.seg{display:inline-flex;border:1.5px solid var(--border);border-radius:9px;overflow:hidden}
+.seg button{border:none;background:#fff;padding:0 16px;min-height:42px;font-size:14px;font-weight:700;color:var(--muted);cursor:pointer;border-right:1px solid var(--border)}
+.seg button:last-child{border-right:none}
+.seg button.on{background:var(--accent);color:#1a1206}
+/* day headline */
+.dayhead{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.dayhead .big{font-size:30px}
+.dayhead .t{font-size:20px;font-weight:800}
+.dayhead .d{color:var(--muted);font-size:13px}
+.basis{display:inline-block;background:#f1f5f9;border:1px solid var(--border);border-radius:20px;padding:3px 12px;font-size:12px;color:#475569;font-weight:600}
+/* prep table */
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);padding:11px;border-bottom:2px solid var(--border);background:#f8fafc}
+td{padding:12px 11px;border-bottom:1px solid var(--border);font-size:14px;vertical-align:middle}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.cat td{background:#fafbfc;font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:.4px;color:#475569;padding:8px 11px}
+.qbig{font-size:17px;font-weight:800}
+.pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:12.5px;font-weight:700}
+.pill.prep{background:#fef3c7;color:#92400e}
+.pill.ok{background:#dcfce7;color:#166534}
+.pill.learn{background:#ede9fe;color:#6d28d9}
+.itemname{font-weight:700}
+.itemnote{font-size:12px;color:var(--muted)}
+/* yesterday compare */
+.cmp{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:6px}
+.cmprow{border:1px solid var(--border);border-radius:9px;padding:11px 13px}
+.cmprow .nm{font-weight:700;margin-bottom:7px}
+.bar{height:9px;border-radius:6px;background:#e2e8f0;position:relative;margin-bottom:5px}
+.bar > span{position:absolute;left:0;top:0;height:100%;border-radius:6px}
+.bar.pred > span{background:#93c5fd}
+.bar.real > span{background:var(--accent)}
+.cmprow .legend{font-size:12px;color:var(--muted);display:flex;justify-content:space-between}
+.acc{font-weight:800}
+.acc.good{color:var(--success)}.acc.mid{color:var(--accent-dark)}.acc.bad{color:var(--danger)}
+.btn{display:inline-flex;align-items:center;gap:7px;min-height:42px;padding:0 16px;border-radius:9px;font-size:13.5px;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:#fff;color:var(--text);text-decoration:none}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#1a1206}
+.demo-note{position:fixed;bottom:0;left:0;right:0;background:#1e2d3d;color:#cbd5e1;font-size:11.5px;text-align:center;padding:7px;z-index:50}
+.sect-title{font-size:15px;font-weight:800;margin:24px 0 10px;display:flex;align-items:center;gap:8px}
+@media print{.sidebar,.demo-note,.controls .seg,.btn{display:none}.wrap{max-width:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">🍽 TAMAM <span class="tag">BACK</span></div>
+    <nav>
+      <a href="#">🏠 Πίνακας</a>
+      <a href="#">🚚 Προμηθευτές</a>
+      <a href="#">🧾 Τιμολόγια</a>
+      <a href="#">📦 Αποθήκη</a>
+      <a href="#">🧾 Συνταγές</a>
+      <a href="#">💰 Έξοδα</a>
+      <a href="#">💲 Τιμές</a>
+      <a href="#" class="active">🔮 Πρόβλεψη</a>
+    </nav>
+  </aside>
+  <div class="main">
+    <div class="topbar">
+      <h1>🔮 Πρόβλεψη & Προετοιμασία</h1>
+      <button class="btn" onclick="window.print()">🖨 Εκτύπωση λίστας</button>
+    </div>
+    <div class="wrap">
+      <div class="banner">
+        <span>🔮</span>
+        <div><b>Τι να ετοιμάσεις σήμερα.</b> Κοιτάω τι πούλησες τις τελευταίες
+        ίδιες μέρες, το μεταφράζω σε <b>κιλά & τεμάχια πρώτων υλών</b> μέσω των συνταγών,
+        και αφαιρώ ό,τι έχεις ήδη στην αποθήκη. Έτσι: <b>λιγότερη φύρα, ποτέ έλλειψη σε αιχμή.</b></div>
+      </div>
+
+      <!-- controls -->
+      <div class="controls">
+        <div class="ctrl">
+          <label>Ποια μέρα ετοιμάζεις;</label>
+          <div class="select-wrap">
+            <select id="day" onchange="render()">
+              <option value="0">Δευτέρα</option>
+              <option value="1">Τρίτη</option>
+              <option value="2">Τετάρτη</option>
+              <option value="3">Πέμπτη</option>
+              <option value="4" selected>Παρασκευή</option>
+              <option value="5">Σάββατο</option>
+              <option value="6">Κυριακή</option>
+            </select>
+          </div>
+        </div>
+        <div class="ctrl">
+          <label>Μέσος όρος από</label>
+          <div class="seg" id="seg">
+            <button data-w="4" class="on" onclick="setW(4)">4 εβδ.</button>
+            <button data-w="6" onclick="setW(6)">6 εβδ.</button>
+            <button data-w="8" onclick="setW(8)">8 εβδ.</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card pad">
+        <div class="dayhead">
+          <span class="big" id="dayIcon">🍢</span>
+          <div>
+            <div class="t">Σήμερα: <span id="dayName">Παρασκευή</span></div>
+            <div class="d">Πρόβλεψη βάσει <span class="basis" id="basisTxt">μέσου όρου 4 Παρασκευών</span></div>
+          </div>
+        </div>
+
+        <table>
+          <thead><tr>
+            <th>Πρώτη ύλη</th>
+            <th class="num">Θα χρειαστείς</th>
+            <th class="num">Έχεις τώρα</th>
+            <th class="num">Ετοίμασε</th>
+            <th></th>
+          </tr></thead>
+          <tbody id="prep"></tbody>
+        </table>
+      </div>
+
+      <div class="sect-title">📊 Έλεγχος χθες — πρόβλεψη vs πραγματικό</div>
+      <div class="card pad">
+        <div class="sub" style="margin-bottom:12px">Πόσο έπεσε μέσα η χθεσινή πρόβλεψη. Όσο μαζεύονται δεδομένα, βελτιώνεται μόνη της.</div>
+        <div class="cmp" id="cmp"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="demo-note">🔬 ΔΕΙΓΜΑ με ψεύτικα νούμερα — έτσι θα δουλεύει η σελίδα. Δεν είναι τα πραγματικά σου δεδομένα.</div>
+
+<script>
+/* ============ ΨΕΥΤΙΚΑ ΔΕΔΟΜΕΝΑ (μόνο για το δείγμα) ============ */
+const DAYS=["Δευτέρα","Τρίτη","Τετάρτη","Πέμπτη","Παρασκευή","Σάββατο","Κυριακή"];
+const ICON=["🍽","🍽","🍽","🍽","🍢","🔥","🔥"];
+
+// Πρώτες ύλες: μονάδα + απώλεια ψησίματος + τι έχεις στην αποθήκη τώρα
+const MAT={
+  gyros: {name:"Γύρος χοιρινός", cat:"Κρέατα", unit:"κιλό", loss:0.40, stock:5.0},
+  kotop: {name:"Κοτόπουλο φιλέτο", cat:"Κρέατα", unit:"κιλό", loss:0.30, stock:3.0},
+  souvl: {name:"Σουβλάκι χοιρινό", cat:"Κρέατα", unit:"τεμ.", loss:0.25, stock:40},
+  pita:  {name:"Πίτα", cat:"Αρτοποιία", unit:"τεμ.", loss:0, stock:90},
+  patata:{name:"Πατάτες", cat:"Λαχανικά", unit:"κιλό", loss:0, stock:8.0},
+  laxano:{name:"Λάχανο-καρότο", cat:"Λαχανικά", unit:"κιλό", loss:0, stock:1.5},
+  tzatz: {name:"Τζατζίκι", cat:"Σάλτσες", unit:"κιλό", loss:0, stock:2.0},
+};
+// Πιάτα: συνταγή (υλικό→ποσότητα ωμού πριν την απώλεια ΔΕΝ — βάζουμε καθαρή ποσότητα συνταγής)
+const DISH={
+  pgyros:{name:"Πίτα γύρου χοιρινή", r:{gyros:0.15, pita:1, laxano:0.04, tzatz:0.03}},
+  mgyros:{name:"Μερίδα γύρου",        r:{gyros:0.25, pita:1, patata:0.20, tzatz:0.05}},
+  pkot:  {name:"Πίτα κοτόπουλο",      r:{kotop:0.15, pita:1, laxano:0.04, tzatz:0.03}},
+  souv:  {name:"Σουβλάκι καλαμάκι",   r:{souvl:1, pita:0.5}},
+  pat:   {name:"Μερίδα πατάτες",      r:{patata:0.30}},
+};
+
+// Πωλήσεις ανά μέρα εβδομάδας: για κάθε πιάτο, 8 τιμές (8 ίδιες μέρες πίσω, νεότερη πρώτη)
+// Φτιαγμένα ώστε Παρ/Σαβ/Κυρ να έχουν μεγάλη κίνηση, καθημερινές λιγότερη.
+function gen(base, jitter, n=8){const a=[];for(let i=0;i<n;i++)a.push(Math.max(0,Math.round(base+(Math.sin(i*1.3)+ (i%2?-.5:.5))*jitter)));return a;}
+const SALES={ // [day][dish] = πίνακας ποσοτήτων
+  0:{pgyros:gen(28,5),mgyros:gen(10,3),pkot:gen(14,4),souv:gen(40,8),pat:gen(12,3)},
+  1:{pgyros:gen(26,5),mgyros:gen(9,3), pkot:gen(13,4),souv:gen(38,8),pat:gen(11,3)},
+  2:{pgyros:gen(30,6),mgyros:gen(11,3),pkot:gen(15,4),souv:gen(44,9),pat:gen(13,3)},
+  3:{pgyros:gen(34,6),mgyros:gen(13,4),pkot:gen(17,5),souv:gen(50,10),pat:gen(15,4)},
+  4:{pgyros:gen(52,8),mgyros:gen(20,5),pkot:gen(26,6),souv:gen(78,12),pat:gen(24,5)},
+  5:{pgyros:gen(60,9),mgyros:gen(24,6),pkot:gen(30,7),souv:gen(92,14),pat:gen(28,6)},
+  6:{pgyros:gen(45,8),mgyros:gen(18,5),pkot:gen(22,6),souv:gen(64,11),pat:gen(20,5)},
+};
+// «Χθες» πραγματικές πωλήσεις vs πρόβλεψη (για το κάτω μέρος)
+const YESTERDAY={day:"Πέμπτη", rows:[
+  {nm:"Γύρος χοιρινός", unit:"κιλά", pred:6.2, real:6.8},
+  {nm:"Πίτες", unit:"τεμ.", pred:118, real:104},
+  {nm:"Σουβλάκι χοιρινό", unit:"τεμ.", pred:50, real:53},
+  {nm:"Πατάτες", unit:"κιλά", pred:4.5, real:5.1},
+]};
+
+let W=4;
+const fmt=(v,u)=> (u==="τεμ."? Math.round(v) : (Math.round(v*10)/10).toLocaleString("el-GR",{minimumFractionDigits:0,maximumFractionDigits:1})) + " " + u;
+
+function setW(w){W=w;document.querySelectorAll("#seg button").forEach(b=>b.classList.toggle("on",+b.dataset.w===w));render();}
+
+function render(){
+  const day=+document.getElementById("day").value;
+  document.getElementById("dayName").textContent=DAYS[day];
+  document.getElementById("dayIcon").textContent=ICON[day];
+  document.getElementById("basisTxt").textContent=`μέσου όρου ${W} ${genitive(DAYS[day])}`;
+
+  // 1) μέσος όρος πωλήσεων ανά πιάτο (τελευταίες W ίδιες μέρες)
+  const avg={};
+  for(const [k,arr] of Object.entries(SALES[day])){
+    const slice=arr.slice(0,W);
+    avg[k]=slice.reduce((a,b)=>a+b,0)/slice.length;
+  }
+  const dataWeeks = SALES[day][Object.keys(SALES[day])[0]].length; // πόσες ίδιες μέρες υπάρχουν
+
+  // 2) μετάφραση πωλήσεων → ωμές πρώτες ύλες (με απώλεια ψησίματος)
+  const need={};
+  for(const [dk,d] of Object.entries(DISH)){
+    const q=avg[dk]||0;
+    for(const [mk,mq] of Object.entries(d.r)){
+      const m=MAT[mk];
+      const raw = mq*q/(1-m.loss);
+      need[mk]=(need[mk]||0)+raw;
+    }
+  }
+
+  // 3) ομαδοποίηση ανά κατηγορία + ετοίμασε = χρειάζεσαι - απόθεμα
+  const cats={};
+  for(const [mk,m] of Object.entries(MAT)){
+    if(!(mk in need)) continue;
+    (cats[m.cat]=cats[m.cat]||[]).push(mk);
+  }
+  let html="";
+  for(const [cat,mats] of Object.entries(cats)){
+    html+=`<tr class="cat"><td colspan="5">${cat}</td></tr>`;
+    for(const mk of mats){
+      const m=MAT[mk], req=need[mk], have=m.stock, prep=Math.max(0,req-have);
+      // ειλικρίνεια: λίγες ίδιες μέρες → «μαθαίνω»
+      const learning = dataWeeks < W;
+      let badge, prepCell;
+      if(learning){
+        badge=`<span class="pill learn">🌱 Μαθαίνω</span>`;
+        prepCell=`<span class="muted">—</span>`;
+      } else if(prep<=0){
+        badge=`<span class="pill ok">✓ Έχεις αρκετό</span>`;
+        prepCell=`<span class="muted">—</span>`;
+      } else {
+        badge=`<span class="pill prep">ετοίμασε</span>`;
+        prepCell=`<span class="qbig">${fmt(prep,m.unit)}</span>`;
+      }
+      html+=`<tr>
+        <td><span class="itemname">${m.name}</span></td>
+        <td class="num">${fmt(req,m.unit)}</td>
+        <td class="num muted">${fmt(have,m.unit)}</td>
+        <td class="num">${prepCell}</td>
+        <td>${badge}</td>
+      </tr>`;
+    }
+  }
+  document.getElementById("prep").innerHTML=html;
+
+  // κάτω: χθες πρόβλεψη vs πραγματικό
+  renderYesterday();
+}
+
+function renderYesterday(){
+  const y=YESTERDAY;
+  const max=Math.max(...y.rows.flatMap(r=>[r.pred,r.real]));
+  document.getElementById("cmp").innerHTML=y.rows.map(r=>{
+    const diff=Math.abs(r.real-r.pred)/r.real*100;
+    const acc=100-diff;
+    const cls= acc>=90?"good": acc>=75?"mid":"bad";
+    const w=v=>Math.round(v/max*100);
+    return `<div class="cmprow">
+      <div class="nm">${r.nm}</div>
+      <div class="bar pred"><span style="width:${w(r.pred)}%"></span></div>
+      <div class="legend"><span>🔵 Πρόβλεψη</span><span>${fmt(r.pred,r.unit)}</span></div>
+      <div class="bar real" style="margin-top:6px"><span style="width:${w(r.real)}%"></span></div>
+      <div class="legend"><span>🟠 Πραγματικό</span><span>${fmt(r.real,r.unit)}</span></div>
+      <div class="legend" style="margin-top:7px"><span>Ακρίβεια</span><span class="acc ${cls}">${Math.round(acc)}%</span></div>
+    </div>`;
+  }).join("");
+}
+
+function genitive(d){
+  // απλό πληθυντικό για το «μέσου όρου X Παρασκευών»
+  const map={"Δευτέρα":"Δευτερών","Τρίτη":"Τρίτων","Τετάρτη":"Τετάρτων","Πέμπτη":"Πεμπτών","Παρασκευή":"Παρασκευών","Σάββατο":"Σαββάτων","Κυριακή":"Κυριακών"};
+  return map[d]||d;
+}
+
+render();
+</script>
+</body>
+</html>
