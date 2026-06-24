@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💾 Αντίγραφα & Επαναφορά — Preview §12</title>
+<style>
+  :root{
+    --sidebar-bg:#1e2d3d; --sidebar-text:#94a3b8; --accent:#f59e0b; --accent-dark:#d97706;
+    --content-bg:#f1f5f9; --white:#fff; --text:#1e293b; --text-muted:#64748b;
+    --border:#e2e8f0; --success:#10b981; --danger:#ef4444;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--content-bg);color:var(--text);line-height:1.5}
+  .wrap{max-width:1080px;margin:0 auto;padding:28px 20px 80px}
+
+  .preview-flag{background:#fef9c3;border:1px solid #fde047;color:#854d0e;padding:10px 16px;
+    border-radius:10px;font-size:13px;margin-bottom:22px;text-align:center}
+
+  .page-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:6px;flex-wrap:wrap;gap:12px}
+  .page-head h1{font-size:26px;display:flex;align-items:center;gap:10px}
+  .page-head p{color:var(--text-muted);font-size:14px;margin-top:4px}
+
+  /* status strip */
+  .status-strip{display:flex;align-items:center;gap:14px;background:var(--white);border:1px solid var(--border);
+    border-radius:14px;padding:16px 20px;margin:18px 0;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+  .status-strip .dot{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:20px;flex:none}
+  .status-ok .dot{background:#f0fdf4}
+  .status-strip .txt{flex:1}
+  .status-strip .txt b{font-size:15px}
+  .status-strip .txt small{color:var(--text-muted);display:block;font-size:13px}
+
+  .banner-alert{display:flex;align-items:center;gap:12px;background:#fef2f2;border:1px solid #fecaca;
+    color:#991b1b;border-radius:12px;padding:13px 18px;margin:14px 0;font-size:14px}
+
+  /* tabs */
+  .tabs{display:flex;gap:6px;border-bottom:2px solid var(--border);margin:22px 0 0}
+  .tab{padding:11px 20px;cursor:pointer;border:none;background:none;font-size:15px;color:var(--text-muted);
+    font-weight:600;border-bottom:3px solid transparent;margin-bottom:-2px}
+  .tab.active{color:var(--accent-dark);border-bottom-color:var(--accent)}
+  .panel{display:none;padding-top:24px}
+  .panel.active{display:block}
+
+  .card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:22px;
+    margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+  .card h2{font-size:17px;display:flex;align-items:center;gap:8px;margin-bottom:4px}
+  .card .sub{color:var(--text-muted);font-size:13px;margin-bottom:16px}
+
+  .tip{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:11px 14px;font-size:13px;
+    color:#92400e;margin-bottom:16px;display:flex;gap:8px}
+
+  /* buttons */
+  .btn{min-height:44px;padding:0 18px;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer;
+    display:inline-flex;align-items:center;gap:8px;border:1px solid transparent}
+  .btn-primary{background:var(--accent);color:#fff}
+  .btn-primary:hover{background:var(--accent-dark)}
+  .btn-secondary{background:#fff;color:var(--text);border-color:var(--border)}
+  .btn-secondary:hover{border-color:var(--accent)}
+  .btn-danger{background:#fff;color:#dc2626;border:1px solid #fecaca}
+  .btn-danger:hover{background:#fef2f2}
+  .btn-sm{min-height:36px;padding:0 12px;font-size:13px}
+  .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+
+  /* table */
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  thead th{text-align:left;padding:11px 12px;background:#f8fafc;color:var(--text-muted);
+    font-size:12px;text-transform:uppercase;letter-spacing:.3px;border-bottom:1px solid var(--border)}
+  tbody td{padding:13px 12px;border-bottom:1px solid #f1f5f9}
+  tbody tr:hover{background:#fafbfc}
+  .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:12px;font-weight:600}
+  .b-ok{background:#f0fdf4;color:#166534}
+  .b-blue{background:#eff6ff;color:#1e40af}
+  .b-neutral{background:#f1f5f9;color:#475569}
+  .b-warn{background:#fff7ed;color:#9a3412}
+  .src-chip{font-size:12px;color:var(--text-muted)}
+
+  /* settings form */
+  .field{margin-bottom:18px;max-width:520px}
+  .field label{display:block;font-weight:600;font-size:14px;margin-bottom:6px}
+  .field .hint{color:var(--text-muted);font-size:12px;margin-top:5px}
+  .field input[type=text],.field input[type=number],.field input[type=time]{width:100%;padding:10px 12px;
+    border:1px solid var(--border);border-radius:9px;font-size:14px}
+  .field input:focus{outline:none;border-color:var(--accent)}
+  .select-wrap{position:relative;max-width:520px}
+  .select-wrap select{width:100%;padding:10px 36px 10px 12px;border:1px solid var(--border);border-radius:9px;
+    font-size:14px;appearance:none;background:#fff}
+  .select-wrap::after{content:"▼";position:absolute;right:14px;top:50%;transform:translateY(-50%);
+    font-size:10px;color:var(--text-muted);pointer-events:none}
+  .switch-row{display:flex;align-items:center;justify-content:space-between;max-width:520px;
+    padding:14px 0;border-bottom:1px solid #f1f5f9}
+  .switch-row .lbl b{display:block;font-size:14px}
+  .switch-row .lbl small{color:var(--text-muted);font-size:12px}
+  .toggle{width:48px;height:27px;background:var(--accent);border-radius:20px;position:relative;cursor:pointer;flex:none}
+  .toggle.off{background:#cbd5e1}
+  .toggle::after{content:"";position:absolute;width:21px;height:21px;background:#fff;border-radius:50%;top:3px;right:3px;transition:.2s}
+  .toggle.off::after{right:24px}
+
+  .danger-zone{border-color:#fecaca;background:#fffafa}
+  .warn-box{background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:14px;font-size:13px;color:#991b1b;margin-bottom:16px}
+
+  /* modal */
+  .modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.55);display:none;place-items:center;z-index:50;padding:20px}
+  .modal-bg.show{display:grid}
+  .modal{background:#fff;border-radius:16px;max-width:430px;width:100%;padding:26px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+  .modal h3{font-size:18px;margin-bottom:8px}
+  .modal p{color:var(--text-muted);font-size:14px;margin-bottom:18px}
+  .modal .code-in{width:100%;text-align:center;letter-spacing:8px;font-size:24px;padding:12px;
+    border:2px solid var(--border);border-radius:10px;margin-bottom:18px}
+  .modal-btns{display:flex;gap:10px;justify-content:flex-end}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:520px}
+  @media(max-width:600px){.two-col{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="preview-flag">👁️ ΠΡΟΕΠΙΣΚΟΠΗΣΗ — δείγμα δεδομένων. Τα κουμπιά είναι ενδεικτικά (δοκίμασε «Επαναφορά» & «Email» για να δεις τα παράθυρα).</div>
+
+  <div class="page-head">
+    <div>
+      <h1>💾 Αντίγραφα & Επαναφορά</h1>
+      <p>Το δίχτυ ασφαλείας σου — ποτέ μην χάσεις τα δεδομένα της επιχείρησης.</p>
+    </div>
+    <button class="btn btn-secondary">← Πίσω</button>
+  </div>
+
+  <!-- STATUS -->
+  <div class="status-strip status-ok">
+    <div class="dot">✓</div>
+    <div class="txt">
+      <b>Τελευταίο αντίγραφο: σήμερα 02:00</b>
+      <small>Ελεγμένο &amp; ακέραιο · Αποθηκεύτηκε σε 💻 Υπολογιστή + 🔌 USB (Backup-Stick)</small>
+    </div>
+    <span class="badge b-ok">✓ Όλα καλά</span>
+  </div>
+
+  <!-- (demo of the alert banner that appears only when stale) -->
+  <div class="banner-alert">
+    🔔 <b>Παράδειγμα καμπανακιού:</b>&nbsp; «Έχουν περάσει 4 μέρες χωρίς αντίγραφο ασφαλείας — κάνε ένα τώρα.» (εμφανίζεται μόνο όταν κάτι πάει στραβά)
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="showTab(0)">🗂️ Αντίγραφα</button>
+    <button class="tab" onclick="showTab(1)">⚙️ Ρυθμίσεις</button>
+    <button class="tab" onclick="showTab(2)">♻️ Επαναφορά &amp; Εξαγωγή</button>
+  </div>
+
+  <!-- PANEL 1: LIST -->
+  <div class="panel active">
+    <div class="btn-row">
+      <button class="btn btn-primary">💾 Αντίγραφο τώρα</button>
+      <button class="btn btn-secondary" onclick="openEmail()">📧 Στείλ' το στο email μου</button>
+    </div>
+    <div class="card">
+      <h2>🗂️ Διαθέσιμα αντίγραφα</h2>
+      <div class="sub">Κρατάμε τα τελευταία 30. Τα παλιότερα σβήνονται αυτόματα.</div>
+      <table>
+        <thead><tr><th>Ημερομηνία</th><th>Μέγεθος</th><th>Πού</th><th>Κατάσταση</th><th>Αιτία</th><th></th></tr></thead>
+        <tbody>
+          <tr>
+            <td><b>24-06-2026</b> · 02:00</td><td>4,2 MB</td>
+            <td><span class="src-chip">💻 + 🔌 USB</span></td>
+            <td><span class="badge b-ok">✓ Ελεγμένο</span></td>
+            <td><span class="badge b-neutral">Αυτόματο</span></td>
+            <td style="text-align:right"><button class="btn btn-secondary btn-sm">⬇ Κατέβασμα</button> <button class="btn btn-danger btn-sm">Διαγραφή</button></td>
+          </tr>
+          <tr>
+            <td><b>24-06-2026</b> · 13:40</td><td>4,2 MB</td>
+            <td><span class="src-chip">💻 Υπολογιστής</span></td>
+            <td><span class="badge b-ok">✓ Ελεγμένο</span></td>
+            <td><span class="badge b-blue">🛟 Πριν τον μηδενισμό</span></td>
+            <td style="text-align:right"><button class="btn btn-secondary btn-sm">⬇ Κατέβασμα</button> <button class="btn btn-danger btn-sm">Διαγραφή</button></td>
+          </tr>
+          <tr>
+            <td><b>23-06-2026</b> · 02:00</td><td>4,1 MB</td>
+            <td><span class="src-chip">💻 + 🔌 USB</span></td>
+            <td><span class="badge b-ok">✓ Ελεγμένο</span></td>
+            <td><span class="badge b-neutral">Αυτόματο</span></td>
+            <td style="text-align:right"><button class="btn btn-secondary btn-sm">⬇ Κατέβασμα</button> <button class="btn btn-danger btn-sm">Διαγραφή</button></td>
+          </tr>
+          <tr>
+            <td><b>22-06-2026</b> · 02:00</td><td>4,1 MB</td>
+            <td><span class="src-chip">💻 Υπολογιστής</span></td>
+            <td><span class="badge b-warn">⚠ USB αποσυνδεμένο</span></td>
+            <td><span class="badge b-neutral">Αυτόματο</span></td>
+            <td style="text-align:right"><button class="btn btn-secondary btn-sm">⬇ Κατέβασμα</button> <button class="btn btn-danger btn-sm">Διαγραφή</button></td>
+          </tr>
+          <tr>
+            <td><b>21-06-2026</b> · 18:22</td><td>4,0 MB</td>
+            <td><span class="src-chip">💻 Υπολογιστής</span></td>
+            <td><span class="badge b-ok">✓ Ελεγμένο</span></td>
+            <td><span class="badge b-neutral">Χειροκίνητο</span></td>
+            <td style="text-align:right"><button class="btn btn-secondary btn-sm">⬇ Κατέβασμα</button> <button class="btn btn-danger btn-sm">Διαγραφή</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PANEL 2: SETTINGS -->
+  <div class="panel">
+    <div class="card">
+      <h2>⚙️ Ρυθμίσεις αυτόματων αντιγράφων</h2>
+      <div class="tip">💡 Το σύστημα φτιάχνει αντίγραφο μόνο του κάθε βράδυ. Εσύ απλώς λες πότε &amp; πού.</div>
+
+      <div class="switch-row">
+        <div class="lbl"><b>Αυτόματο αντίγραφο κάθε βράδυ</b><small>Τρέχει στο παρασκήνιο, χωρίς να κάνεις τίποτα</small></div>
+        <div class="toggle" onclick="this.classList.toggle('off')"></div>
+      </div>
+
+      <div class="two-col" style="margin-top:18px">
+        <div class="field">
+          <label>Ώρα δημιουργίας</label>
+          <input type="time" value="02:00">
+          <div class="hint">Καλύτερα νύχτα, που είναι κλειστό το μαγαζί.</div>
+        </div>
+        <div class="field">
+          <label>Πόσα αντίγραφα να κρατάει</label>
+          <input type="number" value="30">
+          <div class="hint">Τα παλιότερα σβήνονται αυτόματα για να μη γεμίζει ο δίσκος.</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>🔌 2ος προορισμός — USB / εξωτερικός δίσκος <span style="color:var(--text-muted);font-weight:400">(προαιρετικό, αλλά πολύ συστήνεται)</span></label>
+        <input type="text" value="E:\TAMAM-Backups" placeholder="π.χ. E:\TAMAM-Backups">
+        <div class="hint">Αν χαλάσει ο υπολογιστής, το αντίγραφο ζει στο USB. Όταν δεν είναι συνδεμένο, απλώς παραλείπεται (χωρίς σφάλμα).</div>
+      </div>
+
+      <div class="field">
+        <label>Ειδοποίηση αν περάσουν χωρίς αντίγραφο</label>
+        <div class="select-wrap">
+          <select><option>2 μέρες</option><option selected>3 μέρες</option><option>5 μέρες</option><option>7 μέρες</option></select>
+        </div>
+        <div class="hint">Κόκκινο καμπανάκι + email, ώστε να μη μείνεις ποτέ απροστάτευτος χωρίς να το πάρεις είδηση.</div>
+      </div>
+
+      <button class="btn btn-primary">Αποθήκευση ρυθμίσεων</button>
+    </div>
+
+    <div class="card">
+      <h2>🛟 Αυτόματο δίχτυ ασφαλείας</h2>
+      <div class="sub">Πάντα ενεργό — δεν χρειάζεται ρύθμιση.</div>
+      <p style="font-size:14px;color:var(--text)">Πριν από κάθε <b>επικίνδυνη ενέργεια</b> (επαναφορά, μηδενισμός δοκιμαστικών δεδομένων, μεγάλη εισαγωγή), το σύστημα κρατάει αυτόματα ένα αντίγραφο. Έτσι ένα λάθος πατημένο κουμπί γυρίζει πίσω με ένα κλικ.</p>
+    </div>
+  </div>
+
+  <!-- PANEL 3: RESTORE & EXPORT -->
+  <div class="panel">
+    <div class="card danger-zone">
+      <h2>♻️ Επαναφορά από αντίγραφο</h2>
+      <div class="sub">Φέρνει πίσω τα δεδομένα από μια προηγούμενη μέρα.</div>
+      <div class="warn-box">
+        ⚠️ <b>Προσοχή:</b> Η επαναφορά αντικαθιστά ΟΛΑ τα τωρινά δεδομένα με αυτά του αντιγράφου.
+        Για ασφάλεια ζητάμε <b>κωδικό στο email σου</b> και κρατάμε αυτόματα αντίγραφο της τωρινής κατάστασης πρώτα.
+      </div>
+      <div class="field" style="max-width:520px">
+        <label>Διάλεξε αντίγραφο για επαναφορά</label>
+        <div class="select-wrap">
+          <select>
+            <option>24-06-2026 · 02:00 (4,2 MB) ✓</option>
+            <option>23-06-2026 · 02:00 (4,1 MB) ✓</option>
+            <option>22-06-2026 · 02:00 (4,1 MB) ✓</option>
+            <option>21-06-2026 · 18:22 (4,0 MB) ✓ χειροκίνητο</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn btn-danger" onclick="openRestore()">♻️ Επαναφορά (θα ζητηθεί κωδικός)</button>
+    </div>
+
+    <div class="card">
+      <h2>📤 Εξαγωγή για τον λογιστή</h2>
+      <div class="sub">Αναγνώσιμα αρχεία (Excel / PDF) με τα δεδομένα μιας περιόδου — όχι το «μηχανικό» αντίγραφο.</div>
+      <div class="two-col">
+        <div class="field">
+          <label>Από</label><input type="text" value="01-06-2026">
+        </div>
+        <div class="field">
+          <label>Έως</label><input type="text" value="24-06-2026">
+        </div>
+      </div>
+      <div class="field">
+        <label>Τι να περιλαμβάνει</label>
+        <div class="select-wrap">
+          <select><option>Όλα (τιμολόγια, έξοδα, τζίρος)</option><option>Μόνο τιμολόγια</option><option>Μόνο έξοδα</option><option>Σύνοψη ΦΠΑ</option></select>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary">📊 Εξαγωγή σε Excel</button>
+        <button class="btn btn-secondary">📄 Εξαγωγή σε PDF</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESTORE MODAL (email code) -->
+<div class="modal-bg" id="mRestore">
+  <div class="modal">
+    <h3>🔐 Επιβεβαίωση επαναφοράς</h3>
+    <p>Στείλαμε 6ψήφιο κωδικό στο email <b>tam***@gmail.com</b>. Γράψ' τον εδώ για να συνεχίσεις.</p>
+    <input class="code-in" maxlength="6" placeholder="• • • • • •" value="">
+    <div class="modal-btns">
+      <button class="btn btn-secondary" onclick="closeModal('mRestore')">Ακύρωση</button>
+      <button class="btn btn-danger" onclick="closeModal('mRestore')">Επιβεβαίωση &amp; επαναφορά</button>
+    </div>
+  </div>
+</div>
+
+<!-- EMAIL MODAL -->
+<div class="modal-bg" id="mEmail">
+  <div class="modal">
+    <h3>📧 Αποστολή αντιγράφου στο email</h3>
+    <p>Θα σταλεί το πιο πρόσφατο αντίγραφο (4,2 MB) ως συνημμένο στο <b>to-email-sou@gmail.com</b>. Έτσι κρατάς ένα αντίγραφο <b>έξω από το μαγαζί</b>.</p>
+    <div class="modal-btns">
+      <button class="btn btn-secondary" onclick="closeModal('mEmail')">Ακύρωση</button>
+      <button class="btn btn-primary" onclick="closeModal('mEmail')">📧 Αποστολή τώρα</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function showTab(i){
+    document.querySelectorAll('.tab').forEach((t,n)=>t.classList.toggle('active',n===i));
+    document.querySelectorAll('.panel').forEach((p,n)=>p.classList.toggle('active',n===i));
+  }
+  function openRestore(){document.getElementById('mRestore').classList.add('show')}
+  function openEmail(){document.getElementById('mEmail').classList.add('show')}
+  function closeModal(id){document.getElementById(id).classList.remove('show')}
+</script>
+</body>
+</html>
