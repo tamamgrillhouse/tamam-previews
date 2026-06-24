@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔐 §11 Ασφάλεια — Πλήρες Preview</title>
+<style>
+:root{
+  --sidebar-bg:#1e2d3d; --sidebar-text:#94a3b8; --accent:#f59e0b; --accent-dark:#d97706;
+  --content-bg:#f1f5f9; --white:#fff; --text:#1e293b; --text-muted:#64748b; --border:#e2e8f0;
+  --success:#10b981; --danger:#ef4444; --radius:10px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 12px rgba(0,0,0,.10);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:14px;color:var(--text);background:var(--content-bg);display:flex;min-height:100vh;}
+
+/* sidebar */
+.sidebar{width:220px;background:var(--sidebar-bg);position:fixed;left:0;top:0;height:100vh;display:flex;flex-direction:column;overflow-y:auto;z-index:200;}
+.sidebar-header{padding:16px 14px 14px;border-bottom:1px solid rgba(255,255,255,.08);}
+.sidebar-brand{color:#fff;font-weight:800;font-size:18px;letter-spacing:1px;}
+.sidebar-status{display:inline-flex;align-items:center;gap:7px;margin-top:9px;padding:4px 10px 4px 8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:20px;}
+.sidebar-status span{font-size:9.5px;color:var(--sidebar-text);text-transform:uppercase;letter-spacing:1.2px;font-weight:600;}
+.led{width:7px;height:7px;border-radius:50%;background:var(--success);flex-shrink:0;animation:pulse 2s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(16,185,129,.5);}70%{box-shadow:0 0 0 6px rgba(16,185,129,0);}100%{box-shadow:0 0 0 0 rgba(16,185,129,0);}}
+nav{padding:8px 0;flex:1;}
+.nav-link{display:flex;align-items:center;gap:10px;padding:9px 16px;color:var(--sidebar-text);text-decoration:none;font-size:13.5px;border-left:3px solid transparent;}
+.nav-link:hover{color:#fff;background:rgba(255,255,255,.05);}
+.nav-link.active{color:#fff;border-left-color:var(--accent);background:rgba(245,158,11,.1);}
+
+/* main */
+.main-content{margin-left:220px;flex:1;display:flex;flex-direction:column;min-height:100vh;}
+.topbar{position:sticky;top:0;z-index:100;height:54px;background:var(--white);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm);}
+.topbar-title{font-size:15px;font-weight:600;}
+.topbar-right{display:flex;align-items:center;gap:14px;}
+.page-content{padding:24px;flex:1;}
+.page-header{margin-bottom:20px;}
+.page-title{font-size:22px;font-weight:700;line-height:1.2;}
+.page-subtitle{font-size:13px;color:var(--text-muted);margin-top:5px;}
+
+/* cards */
+.card{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);padding:24px;box-shadow:var(--shadow-sm);}
+.card+.card{margin-top:18px;}
+.card-title{font-size:16px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px;}
+.card-sub{font-size:12.5px;color:var(--text-muted);margin-bottom:18px;line-height:1.5;}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:40px;padding:0 18px;border-radius:8px;font-size:13.5px;font-weight:600;cursor:pointer;border:1.5px solid transparent;text-decoration:none;}
+.btn-primary{background:var(--accent);color:#fff;}
+.btn-primary:hover{background:var(--accent-dark);}
+.btn-secondary{background:#fff;color:var(--text);border-color:var(--border);}
+.btn-secondary:hover{background:var(--content-bg);}
+.btn-danger{background:#fff;color:var(--danger);border-color:#fca5a5;}
+.btn-danger:hover{background:#fef2f2;}
+.btn-sm{min-height:32px;padding:0 12px;font-size:12.5px;}
+
+/* tabs */
+.tabs{display:flex;gap:4px;border-bottom:2px solid var(--border);margin-bottom:22px;flex-wrap:wrap;}
+.tab{padding:10px 16px;font-size:13.5px;font-weight:600;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;}
+.tab:hover{color:var(--text);}
+.tab.active{color:var(--accent-dark);border-bottom-color:var(--accent);}
+.panel{display:none;}
+.panel.active{display:block;}
+
+/* forms */
+.field{margin-bottom:16px;}
+.field label{display:block;font-size:12.5px;font-weight:600;margin-bottom:6px;}
+.field .hint{font-size:11.5px;color:var(--text-muted);margin-top:4px;}
+input[type=text],input[type=password],input[type=number],input[type=email],select{width:100%;max-width:360px;padding:9px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;}
+input:focus,select:focus{outline:none;border-color:var(--accent);}
+
+/* toggle switch */
+.switch{position:relative;display:inline-block;width:46px;height:26px;flex-shrink:0;}
+.switch input{opacity:0;width:0;height:0;}
+.slider{position:absolute;cursor:pointer;inset:0;background:#cbd5e1;border-radius:26px;transition:.2s;}
+.slider:before{content:"";position:absolute;height:20px;width:20px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.2s;}
+input:checked+.slider{background:var(--success);}
+input:checked+.slider:before{transform:translateX(20px);}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid var(--border);}
+.toggle-row:last-child{border-bottom:none;}
+.toggle-row .tr-title{font-weight:600;font-size:13.5px;}
+.toggle-row .tr-desc{font-size:12px;color:var(--text-muted);margin-top:2px;max-width:520px;line-height:1.45;}
+
+/* tables */
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{text-align:left;padding:9px 10px;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);border-bottom:2px solid var(--border);}
+td{padding:10px;border-bottom:1px solid var(--border);}
+tr:hover td{background:#f8fafc;}
+
+/* pills */
+.pill{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:600;}
+.pill-admin{background:#fef3c7;color:#92400e;}
+.pill-emp{background:#e0f2fe;color:#075985;}
+.pill-ok{background:#dcfce7;color:#166534;}
+.pill-fail{background:#fee2e2;color:#991b1b;}
+.pill-blocked{background:#fee2e2;color:#991b1b;}
+
+/* tip box */
+.tip{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 14px;font-size:12.5px;color:#92400e;line-height:1.5;margin-bottom:18px;}
+.tip-blue{background:#eff6ff;border-color:#bfdbfe;color:#1e40af;}
+
+/* banners */
+.warn-banner{background:#fee2e2;border:1px solid #dc2626;border-radius:8px;padding:11px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;font-size:13.5px;color:#991b1b;}
+.panic-bar{display:none;background:#dc2626;color:#fff;text-align:center;font-weight:700;letter-spacing:2px;font-size:13px;padding:9px;position:sticky;top:54px;z-index:99;}
+body.panic .panic-bar{display:block;}
+body.panic .money{filter:none;background:#1e293b;color:#1e293b;border-radius:4px;user-select:none;}
+.money{font-weight:700;}
+
+/* panic button in topbar */
+.panic-btn{background:#fff;border:1.5px solid #fca5a5;color:var(--danger);border-radius:8px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;}
+.panic-btn:hover{background:#fef2f2;}
+body.panic .panic-btn{background:var(--danger);color:#fff;border-color:var(--danger);}
+
+/* status indicator */
+.status-chip{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--text-muted);}
+.status-chip .led{width:8px;height:8px;}
+
+.demo-note{font-size:11px;color:#9333ea;background:#faf5ff;border:1px dashed #d8b4fe;border-radius:6px;padding:2px 8px;display:inline-block;margin-left:8px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+@media(max-width:860px){.grid2{grid-template-columns:1fr;}}
+.userlist li{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);list-style:none;}
+.userlist li:last-child{border-bottom:none;}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;}
+.perm-grid{display:grid;grid-template-columns:1fr auto auto;gap:0;font-size:13px;margin-top:8px;}
+.perm-grid .ph{font-size:11px;text-transform:uppercase;color:var(--text-muted);font-weight:600;text-align:center;padding-bottom:8px;}
+.perm-grid .pr{padding:9px 0;border-top:1px solid var(--border);display:flex;align-items:center;}
+.perm-grid .pc{padding:9px 0;border-top:1px solid var(--border);text-align:center;}
+.code-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;max-width:340px;margin-top:10px;}
+.code-chip{font-family:monospace;font-size:14px;letter-spacing:1px;background:#f1f5f9;border:1px solid var(--border);border-radius:6px;padding:8px;text-align:center;}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-brand">TAMAM</div>
+    <div class="sidebar-status"><span class="led"></span><span>Σύνδεση ενεργή</span></div>
+  </div>
+  <nav>
+    <a class="nav-link">🏠 Πίνακας</a>
+    <a class="nav-link">🚚 Προμηθευτές</a>
+    <a class="nav-link">🧾 Τιμολόγια</a>
+    <a class="nav-link">📦 Πρώτες Ύλες</a>
+    <a class="nav-link">💰 Έξοδα & Κέρδος</a>
+    <a class="nav-link">💲 Τιμές & Μενού</a>
+    <a class="nav-link">🔮 Πρόβλεψη</a>
+    <a class="nav-link">👤 Εργατικό Κόστος</a>
+    <a class="nav-link">📊 Αναφορές</a>
+    <a class="nav-link active">🔐 Ασφάλεια</a>
+    <a class="nav-link">💾 Αντίγραφα</a>
+  </nav>
+</aside>
+
+<div class="main-content">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-title">🔐 Ασφάλεια & Πρόσβαση</div>
+    <div class="topbar-right">
+      <span class="status-chip"><span class="led"></span> Server τοπικά</span>
+      <button class="panic-btn" onclick="togglePanic()"><span id="panicIcon">🔒</span> <span id="panicLabel">Πανικός</span></button>
+      <button class="btn-logout" style="background:none;border:none;color:var(--text-muted);cursor:pointer;">Αποσύνδεση</button>
+    </div>
+  </div>
+
+  <!-- PANIC BAR -->
+  <div class="panic-bar">🔒 &nbsp; ΛΕΙΤΟΥΡΓΙΑ ΑΠΟΡΡΗΤΟΥ ΕΝΕΡΓΗ — ΤΑ ΟΙΚΟΝΟΜΙΚΑ ΕΙΝΑΙ ΚΡΥΜΜΕΝΑ &nbsp; 🔒</div>
+
+  <div class="page-content">
+
+    <!-- DEFAULT CREDS WARNING (πρόταση 3) -->
+    <div class="warn-banner">
+      ⚠️ <div><strong>Χρησιμοποιείς ακόμα τον πρόχειρο κωδικό (admin / 1234).</strong>
+      Πριν ανοίξεις το σύστημα, άλλαξέ τον από την καρτέλα «Λογαριασμός». <span class="demo-note">πρόταση 3 — υπενθύμιση</span></div>
+    </div>
+
+    <div class="page-header">
+      <div class="page-title">🔐 Ασφάλεια & Πρόσβαση</div>
+      <div class="page-subtitle">Όλα τα κλειδιά του συστήματος σε ένα μέρος. Το πράσινο σημάδι δείχνει ότι ο εγκέφαλος τρέχει στον υπολογιστή σου.</div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+      <div class="tab active" onclick="showTab(this,'account')">🔑 Λογαριασμός</div>
+      <div class="tab" onclick="showTab(this,'users')">👥 Χρήστες & Ρόλοι</div>
+      <div class="tab" onclick="showTab(this,'panic')">🔒 Κουμπί Πανικού</div>
+      <div class="tab" onclick="showTab(this,'log')">📜 Ιστορικό & Προστασία</div>
+      <div class="tab" onclick="showTab(this,'devices')">📱 Συσκευές</div>
+    </div>
+
+    <!-- ============ ΛΟΓΑΡΙΑΣΜΟΣ ============ -->
+    <div class="panel active" id="account">
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">🔑 Όνομα χρήστη & κωδικός</div>
+          <div class="card-sub">Ο κωδικός αποθηκεύεται κρυπτογραφημένος — ποτέ καθαρός.</div>
+          <div class="field"><label>Όνομα χρήστη</label><input type="text" value="admin"></div>
+          <div class="field"><label>Τρέχων κωδικός</label><input type="password" value="••••"></div>
+          <div class="field"><label>Νέος κωδικός</label><input type="password" placeholder="τουλάχιστον 4 χαρακτήρες"></div>
+          <div class="field"><label>Επανάληψη νέου κωδικού</label><input type="password"></div>
+          <button class="btn btn-primary">Αποθήκευση</button>
+        </div>
+        <div class="card">
+          <div class="card-title">🔐 Διπλό κλείδωμα (2FA)</div>
+          <div class="card-sub">Σε νέα/άγνωστη συσκευή θα ζητείται και 2ος κωδικός.</div>
+          <div class="toggle-row"><div><div class="tr-title">Ζήτα 2ο κωδικό από έξω</div><div class="tr-desc">Ενεργό για συσκευές που δεν είναι «έμπιστες».</div></div><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+          <div class="toggle-row"><div><div class="tr-title">📧 Κωδικός στο email</div><div class="tr-desc">6ψήφιος στο tamamgrillhouse@gmail.com</div></div><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+          <div class="toggle-row"><div><div class="tr-title">📱 Authenticator (Google/Microsoft)</div><div class="tr-desc">Κωδικός που αλλάζει κάθε 30''.</div></div><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+          <div class="toggle-row"><div><div class="tr-title">🗝️ Εφεδρικοί κωδικοί</div><div class="tr-desc">10 κωδικοί μιας χρήσης — μένουν 7.</div></div><button class="btn btn-secondary btn-sm">Δημιουργία</button></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">⚙️ Γενικά</div>
+        <div class="toggle-row"><div><div class="tr-title">Να ζητάει σύνδεση (login)</div><div class="tr-desc">Αν το κλείσεις, η εφαρμογή ανοίγει χωρίς κωδικό — μόνο για ανάπτυξη.</div></div><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+      </div>
+    </div>
+
+    <!-- ============ ΧΡΗΣΤΕΣ & ΡΟΛΟΙ (11.4) ============ -->
+    <div class="panel" id="users">
+      <div class="tip">👥 <strong>Δύο ρόλοι:</strong> ο <b>Διαχειριστής</b> (εσύ) βλέπει & αλλάζει τα πάντα. Ο <b>Υπάλληλος</b> βοηθάει σε καθημερινές δουλειές (π.χ. καταχώρηση τιμολογίων, μέτρημα αποθήκης) <b>χωρίς να βλέπει κέρδη, κόστη & τιμές</b>.</div>
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">Χρήστες</div>
+          <div class="card-sub">Ποιοι μπορούν να μπουν στο σύστημα.</div>
+          <ul class="userlist" style="margin:0;padding:0;">
+            <li><div class="avatar">Α</div><div style="flex:1;"><div style="font-weight:600;">admin</div><div style="font-size:12px;color:var(--text-muted);">Ο ιδιοκτήτης</div></div><span class="pill pill-admin">Διαχειριστής</span></li>
+            <li><div class="avatar" style="background:#0ea5e9;">Γ</div><div style="flex:1;"><div style="font-weight:600;">giorgos</div><div style="font-size:12px;color:var(--text-muted);">Προσωπικό</div></div><span class="pill pill-emp">Υπάλληλος</span> <button class="btn btn-danger btn-sm">Διαγραφή</button></li>
+            <li><div class="avatar" style="background:#0ea5e9;">Μ</div><div style="flex:1;"><div style="font-weight:600;">maria</div><div style="font-size:12px;color:var(--text-muted);">Προσωπικό</div></div><span class="pill pill-emp">Υπάλληλος</span> <button class="btn btn-danger btn-sm">Διαγραφή</button></li>
+          </ul>
+          <button class="btn btn-primary btn-sm" style="margin-top:14px;">＋ Νέος χρήστης</button>
+        </div>
+        <div class="card">
+          <div class="card-title">Τι βλέπει ο «Υπάλληλος»</div>
+          <div class="card-sub">Άνοιξε/κλείσε πρόσβαση ανά ενότητα. Τα οικονομικά είναι κλειστά από προεπιλογή.</div>
+          <div class="perm-grid">
+            <div class="ph" style="text-align:left;">Ενότητα</div><div class="ph">Βλέπει</div><div class="ph">Αλλάζει</div>
+            <div class="pr">📦 Πρώτες Ύλες / Αποθήκη</div><div class="pc">✅</div><div class="pc">✅</div>
+            <div class="pr">🧾 Τιμολόγια (καταχώρηση)</div><div class="pc">✅</div><div class="pc">✅</div>
+            <div class="pr">🔮 Πρόβλεψη (λίστα prep)</div><div class="pc">✅</div><div class="pc">—</div>
+            <div class="pr">💰 Έξοδα & Κέρδος</div><div class="pc">🚫</div><div class="pc">🚫</div>
+            <div class="pr">💲 Τιμές & Μενού</div><div class="pc">🚫</div><div class="pc">🚫</div>
+            <div class="pr">📊 Αναφορές</div><div class="pc">🚫</div><div class="pc">🚫</div>
+            <div class="pr">👤 Εργατικό Κόστος</div><div class="pc">🚫</div><div class="pc">🚫</div>
+          </div>
+          <button class="btn btn-primary btn-sm" style="margin-top:16px;">Αποθήκευση δικαιωμάτων</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ ΠΑΝΙΚΟΣ (11.6) ============ -->
+    <div class="panel" id="panic">
+      <div class="tip">🔒 Πάτα το κόκκινο κουμπί <b>«Πανικός»</b> πάνω δεξιά (ή τη συντόμευση) → όλα τα νούμερα γίνονται μαύρα πλακάκια. Η εφαρμογή μοιάζει να δουλεύει κανονικά, αλλά κανείς δεν βλέπει τζίρο/κόστος/κέρδος. <b>Δοκίμασέ το τώρα στο preview!</b></div>
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">Ρυθμίσεις Πανικού</div>
+          <div class="toggle-row"><div><div class="tr-title">Κουμπί πάντα ορατό</div><div class="tr-desc">Το 🔒 στην πάνω μπάρα.</div></div><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+          <div class="toggle-row"><div><div class="tr-title">Συντόμευση πληκτρολογίου</div><div class="tr-desc">Πάτα <b>Ctrl + Shift + H</b> για άμεση ενεργοποίηση.</div></div><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+          <div class="field" style="margin-top:18px;"><label>Κωδικός ξεκλειδώματος Πανικού</label><input type="password" value="••••••"><div class="hint">Διαφορετικός από τον κανονικό σου — για να βγεις από τη λειτουργία απορρήτου.</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">🆘 Κωδικός-παγίδα (duress) <span class="demo-note">πρόταση 4</span></div>
+          <div class="card-sub">Αν κάποιος σε <b>αναγκάζει</b> να συνδεθείς, βάλε αυτόν τον κωδικό στο login αντί του κανονικού: μπαίνεις κατευθείαν σε «καθαρή» οθόνη, με τα οικονομικά ήδη κρυμμένα. Κανείς δεν καταλαβαίνει.</div>
+          <div class="field"><label>Κωδικός-παγίδα</label><input type="password" placeholder="προαιρετικό"></div>
+          <div class="toggle-row"><div><div class="tr-title">Ενεργοποίηση κωδικού-παγίδας</div></div><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Τι κρύβει ο Πανικός</div>
+        <div class="card-sub">Παράδειγμα — δες πώς αλλάζουν τα νούμερα όταν είναι ενεργός:</div>
+        <table>
+          <tr><th>Δείκτης</th><th>Κανονικά</th></tr>
+          <tr><td>Τζίρος μήνα</td><td class="money">€ 18.240</td></tr>
+          <tr><td>Κόστος φαγητού</td><td class="money">€ 6.120</td></tr>
+          <tr><td>Καθαρό κέρδος</td><td class="money">€ 3.480</td></tr>
+          <tr><td>Απλήρωτα τιμολόγια</td><td class="money">€ 2.150</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- ============ ΙΣΤΟΡΙΚΟ & ΠΡΟΣΤΑΣΙΑ (11.5 + προτάσεις 1,2) ============ -->
+    <div class="panel" id="log">
+      <div class="card">
+        <div class="card-title">⚙️ Προστασία σύνδεσης</div>
+        <div class="toggle-row"><div><div class="tr-title">⏱️ Αυτόματη αποσύνδεση μετά από αδράνεια <span class="demo-note">πρόταση 1</span></div><div class="tr-desc">Αν αφήσεις τον υπολογιστή ανοιχτό, κλειδώνει μόνο του.</div></div><div style="display:flex;align-items:center;gap:8px;"><input type="number" value="15" style="width:70px;"> <span style="font-size:12px;color:var(--text-muted);">λεπτά</span></div></div>
+        <div class="toggle-row"><div><div class="tr-title">📧 Ειδοποίηση για νέα σύνδεση <span class="demo-note">πρόταση 2</span></div><div class="tr-desc">Email όταν μπει κάποιος από καινούρια συσκευή.</div></div><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="toggle-row"><div><div class="tr-title">🛑 Μπλοκάρισμα μετά από Χ αποτυχίες</div><div class="tr-desc">Φρένο σε επίμονες λάθος προσπάθειες.</div></div><div style="display:flex;align-items:center;gap:8px;"><input type="number" value="5" style="width:70px;"> <span style="font-size:12px;color:var(--text-muted);">προσπάθειες</span></div></div>
+        <div class="toggle-row"><div><div class="tr-title">🔒 Επιβολή HTTPS (κρυπτογράφηση)</div><div class="tr-desc">Άνοιξέ το ΜΟΝΟ όταν συνδέεσαι από έξω (internet). Τοπικά δεν χρειάζεται.</div></div><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="tip tip-blue" style="margin:16px 0 0;">ℹ️ Το μπλοκάρισμα IP & το HTTPS έχουν αξία μόνο όταν ανοίξεις πρόσβαση από το internet. Τοπικά στο μαγαζί «κοιμούνται» — δεν σε επιβαρύνουν.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📜 Ιστορικό συνδέσεων</div>
+        <div class="card-sub">Ποιος, πότε, από πού — και αν πέτυχε.</div>
+        <table>
+          <tr><th>Ώρα</th><th>Χρήστης</th><th>Συσκευή</th><th>IP</th><th>Αποτέλεσμα</th></tr>
+          <tr><td>24-06 14:32</td><td>admin</td><td>Chrome σε Windows</td><td>127.0.0.1</td><td><span class="pill pill-ok">✓ Επιτυχία</span></td></tr>
+          <tr><td>24-06 09:05</td><td>maria</td><td>Safari σε iPhone</td><td>192.168.1.14</td><td><span class="pill pill-ok">✓ Επιτυχία</span></td></tr>
+          <tr><td>23-06 22:48</td><td>admin</td><td>Άγνωστη</td><td>85.74.x.x</td><td><span class="pill pill-fail">✕ Λάθος κωδικός ×3</span></td></tr>
+          <tr><td>23-06 22:41</td><td>—</td><td>Άγνωστη</td><td>85.74.x.x</td><td><span class="pill pill-blocked">🛑 Μπλοκαρισμένη</span></td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🛑 Μπλοκαρισμένες IP</div>
+        <table>
+          <tr><th>IP</th><th>Λόγος</th><th></th></tr>
+          <tr><td>85.74.x.x</td><td>5 αποτυχίες σε 5 λεπτά</td><td style="text-align:right;"><button class="btn btn-secondary btn-sm">Ξεμπλοκάρισμα</button></td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- ============ ΣΥΣΚΕΥΕΣ ============ -->
+    <div class="panel" id="devices">
+      <div class="card">
+        <div class="card-title">📱 Έμπιστες συσκευές</div>
+        <div class="card-sub">Σε αυτές δεν ζητείται 2ος κωδικός. Μπορείς να αφαιρέσεις όποια δεν αναγνωρίζεις.</div>
+        <table>
+          <tr><th>Συσκευή</th><th>Τελευταία χρήση</th><th>IP</th><th></th></tr>
+          <tr><td>💻 Chrome σε Windows <span class="pill pill-ok" style="margin-left:6px;">αυτή η συσκευή</span></td><td>24-06 14:32</td><td>127.0.0.1</td><td></td></tr>
+          <tr><td>📱 Safari σε iPhone</td><td>24-06 09:05</td><td>192.168.1.14</td><td style="text-align:right;"><button class="btn btn-danger btn-sm">Αφαίρεση</button></td></tr>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function showTab(el,id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+function togglePanic(){
+  document.body.classList.toggle('panic');
+  const on=document.body.classList.contains('panic');
+  document.getElementById('panicIcon').textContent=on?'🔓':'🔒';
+  document.getElementById('panicLabel').textContent=on?'Έξοδος':'Πανικός';
+}
+document.addEventListener('keydown',e=>{
+  if(e.ctrlKey&&e.shiftKey&&(e.key==='H'||e.key==='h')){e.preventDefault();togglePanic();}
+});
+</script>
+</body>
+</html>
