@@ -46,6 +46,21 @@
   .btn-s{background:#fff;color:var(--ink);border:1px solid var(--line)}
   .btn-d{background:#fff;color:var(--red);border:1px solid #f2c4c1}
 
+  /* ===== desktop modal (what each button opens) ===== */
+  .modal-ov{display:none;position:fixed;inset:0;background:rgba(15,18,25,.55);z-index:100;align-items:center;justify-content:center;padding:18px}
+  .modal-ov.on{display:flex}
+  .modal{display:none;background:#fff;border-radius:18px;width:430px;max-width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden}
+  .modal.on{display:block}
+  .modal-h{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;font-weight:800;font-size:16px}
+  .modal-h .x{border:0;background:none;font-size:20px;cursor:pointer;color:var(--grey)}
+  .modal-b{padding:18px}
+  .amount-big{text-align:center;margin:4px 0 14px}
+  .amount-big .lbl{font-size:11px;color:var(--grey);text-transform:uppercase;letter-spacing:1px;font-weight:700}
+  .amount-big .e{font-size:40px;font-weight:800}
+  .calc{background:var(--grey-l);border-radius:12px;padding:12px 14px;font-size:13.5px;margin-bottom:14px}
+  .calc .r{display:flex;justify-content:space-between;padding:3px 0}
+  .calc .r b{font-weight:800}
+
   /* ===== desktop sub-tabs ===== */
   .subtabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:18px;flex-wrap:wrap}
   .subtabs button{border:0;background:none;font:inherit;font-weight:700;color:var(--grey);padding:11px 16px;cursor:pointer;border-bottom:3px solid transparent;font-size:14px}
@@ -139,6 +154,9 @@
   .ph-acts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
   .ph-acts button{border:0;border-radius:16px;padding:16px 8px;cursor:pointer;font:inherit;font-weight:800;color:#fff;font-size:14px;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;gap:6px}
   .ph-acts .ic{font-size:26px}
+  .ph-acts button{opacity:.5;transition:opacity .12s}
+  .ph-acts button.act-on{opacity:1;box-shadow:0 0 0 3px rgba(0,0,0,.14)}
+  .msheet{display:none}.msheet.on{display:block}
   .a-pay{background:var(--red)}
   .a-in{background:var(--green)}
   .a-draw{background:#7a52c9}
@@ -251,9 +269,9 @@
       </div>
 
       <div class="qa">
-        <button class="accent"><span class="ic">💸</span><span class="t">Πήρα μετρητά</span><span class="s">από το σύνολο · σήμερα</span></button>
-        <button><span class="ic">🧾</span><span class="t">Πληρωμή / Έξοδο</span><span class="s">κρέμεται από μέρα</span></button>
-        <button><span class="ic">📋</span><span class="t">Μέτρησα το ταμείο</span><span class="s">ίσιωμα υπολοίπου</span></button>
+        <button class="accent" data-modal="m-draw"><span class="ic">💸</span><span class="t">Πήρα μετρητά</span><span class="s">από το σύνολο · σήμερα</span></button>
+        <button data-modal="m-pay"><span class="ic">🧾</span><span class="t">Πληρωμή / Έξοδο</span><span class="s">κρέμεται από μέρα</span></button>
+        <button data-modal="m-count"><span class="ic">📋</span><span class="t">Μέτρησα το ταμείο</span><span class="s">ίσιωμα υπολοίπου</span></button>
       </div>
       <div class="note blue" style="margin:-2px 0 16px">💰 <b>Εισπράξεις:</b> μπαίνουν με <b>καταμέτρηση του ταμείου κάθε μέρας</b> (συνήθως την Τρίτη) → δες την οθόνη «Κλείσιμο» στο κινητό. Μόνο μετρητά (οι κάρτες πάνε στην τράπεζα, εκτός ταμείου).</div>
 
@@ -377,44 +395,69 @@
             </div>
             <div class="ph-body">
               <div class="ph-acts">
-                <button class="a-pay"><span class="ic">🧾</span>Πληρωμή / Έξοδο</button>
-                <button class="a-draw"><span class="ic">💸</span>Πήρα μετρητά</button>
-                <button class="a-count"><span class="ic">📋</span>Μέτρησα ταμείο</button>
-                <button class="a-in"><span class="ic">🌙</span>Κλείσιμο (Είσπραξη)</button>
+                <button class="a-pay act-on" data-msheet="ms-pay"><span class="ic">🧾</span>Πληρωμή / Έξοδο</button>
+                <button class="a-draw" data-msheet="ms-draw"><span class="ic">💸</span>Πήρα μετρητά</button>
+                <button class="a-count" data-msheet="ms-count"><span class="ic">📋</span>Μέτρησα ταμείο</button>
+                <button class="a-in" data-msheet="ms-close"><span class="ic">🌙</span>Κλείσιμο (Είσπραξη)</button>
               </div>
+              <div class="muted" style="font-size:11px;text-align:center;margin-bottom:10px">👆 πάτα ένα κουμπί να δεις τι ανοίγει</div>
 
-              <!-- inline sheet demo: payment -->
-              <div class="sheet">
+              <!-- ms-pay -->
+              <div class="sheet msheet on" id="ms-pay">
                 <h4>🧾 Νέα πληρωμή / έξοδο</h4>
                 <div class="fld">
-                  <label>Από ποια μέρα; (ταμείο που αξιοποιείς)</label>
+                  <label>Από ποιο ταμείο μέρας;</label>
                   <div class="daypick">
-                    <button>Δευ 16</button>
-                    <button class="rep">Τρι 17</button>
-                    <button>Τετ 18</button>
-                    <button class="sel">Πεμ 19 ✓</button>
-                    <button>Παρ 20</button>
-                    <button>Σαβ 21</button>
+                    <button>Δευ 16</button><button class="rep">Τρι 17</button><button>Τετ 18</button>
+                    <button class="sel">Πεμ 19 ✓</button><button>Παρ 20</button><button>Σαβ 21</button>
                   </div>
-                  <div class="muted" style="font-size:11.5px;margin-top:4px">Προ-διαλεγμένη η <b>προηγούμενη ανοιχτή μέρα</b> (η γυναίκα κλείνει το βράδυ → τα ξοδεύεις την επόμενη)</div>
+                  <div class="muted" style="font-size:11.5px;margin-top:4px">Προ-διαλεγμένη η <b>προηγούμενη ανοιχτή μέρα</b> · η Τρίτη (ρεπό) παρακάμπτεται</div>
                 </div>
-                <div class="fld"><label>Κατηγορία</label><select><option>🥩 Παππάς (κρεοπωλείο)</option><option>🛒 Ιπποκράτης</option><option>⚡ Ρεύμα</option><option>＋ Νέα κατηγορία…</option></select></div>
+                <div class="fld"><label>Κατηγορία</label><select><option>🧹 Καθαρίστρια</option><option>🥩 Παππάς (μετρητά)</option><option>⚡ Ρεύμα</option><option>＋ Νέα κατηγορία…</option></select></div>
                 <div class="fld"><label>Ποσό</label><input value="120,00 €"></div>
                 <div class="fld">
                   <label>Είναι της επιχείρησης;</label>
                   <div class="toggle"><button class="g on">🟢 Επιχείρηση</button><button class="p">⚪ Προσωπικό</button></div>
                 </div>
                 <button class="btn btn-p" style="width:100%">Αποθήκευση</button>
+                <div class="ph-sec" style="margin-top:14px">💡 ή πάτα ένα πάγιο (προ-γεμίζει & ρωτά μέρα)</div>
+                <div class="fixed-tap">
+                  <button>🏠 Ενοίκιο · 800 €</button>
+                  <button>🧮 Λογιστής · 150 €</button>
+                  <button>⚡ Ρεύμα (ΔΕΗ)</button>
+                  <button>👤 Μισθοί</button>
+                </div>
               </div>
 
-              <!-- #8 fixed costs (quick, but still pick the day) -->
-              <div class="ph-sec">💡 Πάγια — γρήγορη πληρωμή</div>
-              <div class="muted" style="font-size:11.5px;margin:-4px 2px 8px">Πατάς → προ-γεμίζει κατηγορία &amp; ποσό, αλλά <b>διαλέγεις από ποιο ταμείο μέρας</b> (όπως οι πληρωμές)</div>
-              <div class="fixed-tap">
-                <button>🏠 Ενοίκιο · 800 €</button>
-                <button>🧮 Λογιστής · 150 €</button>
-                <button>⚡ Ρεύμα (ΔΕΗ)</button>
-                <button>👤 Μισθοί</button>
+              <!-- ms-draw -->
+              <div class="sheet msheet" id="ms-draw">
+                <h4>💸 Πήρα μετρητά (για μένα)</h4>
+                <div class="muted" style="font-size:12px;margin-bottom:10px">Από το <b>σύνολο</b>, με <b>σημερινή</b> ημερομηνία — χωρίς επιλογέα μέρας.</div>
+                <div class="fld"><label>Ποσό</label><input value="100,00 €"></div>
+                <div class="fld"><label>Είναι της επιχείρησης;</label>
+                  <div class="toggle"><button class="g">🟢 Επιχείρηση</button><button class="p on">⚪ Προσωπικό</button></div>
+                </div>
+                <div class="fld"><label>Σημείωση (προαιρετικό)</label><input placeholder="π.χ. ψώνια σπιτιού"></div>
+                <button class="btn btn-p" style="width:100%">Αποθήκευση</button>
+              </div>
+
+              <!-- ms-count -->
+              <div class="sheet msheet" id="ms-count">
+                <h4>📋 Μέτρησα το ταμείο μου</h4>
+                <div class="muted" style="font-size:12px;margin-bottom:10px">Μέτρα τα πραγματικά μετρητά· φτιάχνεται «προσαρμογή» που ισιώνει το υπόλοιπο.</div>
+                <div class="fld"><label>Πόσα μέτρησες;</label><input value="3.825,00 €"></div>
+                <div class="calc">
+                  <div class="r"><span>Το σύστημα λέει</span><b>3.840,00 €</b></div>
+                  <div class="r"><span>Μέτρησες</span><b>3.825,00 €</b></div>
+                  <div class="r" style="border-top:1px solid #dfe2e7;margin-top:4px;padding-top:6px"><span>Διαφορά</span><b style="color:var(--red)">−15,00 €</b></div>
+                </div>
+                <button class="btn btn-p" style="width:100%">Ίσιωσε το υπόλοιπο</button>
+              </div>
+
+              <!-- ms-close -->
+              <div class="sheet msheet" id="ms-close">
+                <h4>🌙 Κλείσιμο / Είσπραξη</h4>
+                <div class="muted" style="font-size:13px">Εδώ βάζεις <b>πόσα μετρητά μάζεψες κάθε μέρα</b> (καταμέτρηση, συνήθως Τρίτη). 👉 Δες την πλήρη οθόνη στο <b>②ο κινητό δίπλα</b>.</div>
               </div>
 
               <!-- #13 edit/delete on entries -->
@@ -545,7 +588,62 @@
     </div>
   </div>
 
-  <div class="legend">Preview ενότητας «👜 Ταμείο» · ψεύτικα δεδομένα · 3 όψεις μιας ενότητας (Υπολογιστής / Κινητό / Κατηγορίες)</div>
+  <div class="legend">Preview ενότητας «👜 Ταμείο» · ψεύτικα δεδομένα · 3 όψεις μιας ενότητας (Υπολογιστής / Κινητό / Κατηγορίες)<br>💡 Πάτα τα κουμπιά «Πήρα μετρητά / Πληρωμή / Μέτρησα το ταμείο» (Υπολογιστής) και τα κουμπιά του Κινητού για να δεις τι ανοίγουν.</div>
+
+  <!-- ===== Desktop modals (what each button opens) ===== -->
+  <div class="modal-ov" id="mov">
+
+    <!-- 💸 Πήρα μετρητά -->
+    <div class="modal" id="m-draw">
+      <div class="modal-h"><span>💸 Πήρα μετρητά (για μένα)</span><button class="x" data-close>✕</button></div>
+      <div class="modal-b">
+        <div class="note">Γενική ανάληψη από το <b>ΣΥΝΟΛΟ</b> των μετρητών. Μπαίνει αυτόματα με <b>σημερινή</b> ημερομηνία — <b>χωρίς</b> επιλογέα μέρας.</div>
+        <div class="amount-big"><div class="lbl">Ποσό</div><div class="e">100,00 €</div></div>
+        <div class="fld"><label>Είναι της επιχείρησης;</label>
+          <div class="toggle"><button class="g">🟢 Επιχείρηση</button><button class="p on">⚪ Προσωπικό</button></div>
+        </div>
+        <div class="fld"><label>Σημείωση (προαιρετικό)</label><input placeholder="π.χ. για ψώνια σπιτιού"></div>
+        <button class="btn btn-p" style="width:100%">Αποθήκευση</button>
+      </div>
+    </div>
+
+    <!-- 🧾 Πληρωμή / Έξοδο -->
+    <div class="modal" id="m-pay">
+      <div class="modal-h"><span>🧾 Νέα πληρωμή / έξοδο</span><button class="x" data-close>✕</button></div>
+      <div class="modal-b">
+        <div class="fld">
+          <label>Από ποιο ταμείο μέρας;</label>
+          <div class="daypick">
+            <button>Δευ 16</button><button class="rep">Τρι 17</button><button>Τετ 18</button>
+            <button class="sel">Πεμ 19 ✓</button><button>Παρ 20</button><button>Σαβ 21</button>
+          </div>
+          <div class="muted" style="font-size:11.5px;margin-top:4px">Προ-διαλεγμένη η <b>προηγούμενη ανοιχτή μέρα</b> · η Τρίτη (ρεπό) παρακάμπτεται</div>
+        </div>
+        <div class="fld"><label>Κατηγορία</label><select><option>🧹 Καθαρίστρια</option><option>🥩 Παππάς (μετρητά)</option><option>⚡ Ρεύμα</option><option>＋ Νέα κατηγορία…</option></select></div>
+        <div class="fld"><label>Ποσό</label><input value="120,00 €"></div>
+        <div class="fld"><label>Είναι της επιχείρησης;</label>
+          <div class="toggle"><button class="g on">🟢 Επιχείρηση</button><button class="p">⚪ Προσωπικό</button></div>
+        </div>
+        <button class="btn btn-p" style="width:100%">Αποθήκευση</button>
+      </div>
+    </div>
+
+    <!-- 📋 Μέτρησα το ταμείο -->
+    <div class="modal" id="m-count">
+      <div class="modal-h"><span>📋 Μέτρησα το ταμείο μου</span><button class="x" data-close>✕</button></div>
+      <div class="modal-b">
+        <div class="note">Μέτρα τα πραγματικά μετρητά. Αν δεν ταιριάζουν με το υπόλοιπο (ξεχασμένη κίνηση/ρέστα), φτιάχνεται μια εγγραφή «προσαρμογή» που τα <b>ισιώνει</b>.</div>
+        <div class="fld"><label>Πόσα μέτρησες πραγματικά;</label><input value="3.825,00 €"></div>
+        <div class="calc">
+          <div class="r"><span>Το σύστημα λέει</span><b>3.840,00 €</b></div>
+          <div class="r"><span>Μέτρησες</span><b>3.825,00 €</b></div>
+          <div class="r" style="border-top:1px solid #dfe2e7;margin-top:4px;padding-top:6px"><span>Διαφορά → προσαρμογή</span><b style="color:var(--red)">−15,00 €</b></div>
+        </div>
+        <button class="btn btn-p" style="width:100%">Ίσιωσε το υπόλοιπο</button>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <script>
@@ -582,6 +680,35 @@
   document.querySelectorAll('.toggle').forEach(t=>{
     t.querySelectorAll('button').forEach(btn=>{
       btn.onclick=()=>{t.querySelectorAll('button').forEach(x=>x.classList.remove('on'));btn.classList.add('on');};
+    });
+  });
+  // desktop modals — open what each button does
+  var mov=document.getElementById('mov');
+  document.querySelectorAll('[data-modal]').forEach(b=>{
+    b.onclick=()=>{
+      document.querySelectorAll('.modal').forEach(m=>m.classList.remove('on'));
+      document.getElementById(b.dataset.modal).classList.add('on');
+      mov.classList.add('on');
+    };
+  });
+  function closeMov(){mov.classList.remove('on');}
+  mov.addEventListener('click',e=>{if(e.target===mov)closeMov();});
+  document.querySelectorAll('[data-close]').forEach(x=>x.onclick=closeMov);
+  // mobile — each action button swaps the sheet below
+  document.querySelectorAll('.ph-acts button[data-msheet]').forEach(b=>{
+    b.onclick=()=>{
+      var wrap=b.closest('.ph-body');
+      wrap.querySelectorAll('.ph-acts button').forEach(x=>x.classList.remove('act-on'));
+      b.classList.add('act-on');
+      wrap.querySelectorAll('.msheet').forEach(s=>s.classList.remove('on'));
+      wrap.querySelector('#'+b.dataset.msheet).classList.add('on');
+    };
+  });
+  // day-picker chips (visual feel)
+  document.querySelectorAll('.daypick').forEach(dp=>{
+    dp.querySelectorAll('button').forEach(btn=>{
+      if(btn.classList.contains('rep'))return;
+      btn.onclick=()=>{dp.querySelectorAll('button').forEach(x=>x.classList.remove('sel'));btn.classList.add('sel');};
     });
   });
 </script>
