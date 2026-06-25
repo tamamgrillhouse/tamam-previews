@@ -20,10 +20,11 @@
   .pvseg{display:inline-flex;background:#f1f5f9;border:1px solid var(--border);border-radius:12px;padding:4px}
   .pvseg button{border:0;background:transparent;font:inherit;font-weight:700;color:var(--muted);padding:9px 16px;border-radius:9px;cursor:pointer;font-size:14px}
   .pvseg button.on{background:var(--accent);color:#fff}
-  .view{display:none}.view.on{display:block}
+  .view{display:none}
+  #od.on{display:flex}#om.on{display:flex}#oc.on{display:flex}
 
   /* ============================================================= DESKTOP (#od) */
-  #od{display:flex;min-height:80vh}
+  #od{min-height:80vh}
   #od .sidebar{width:220px;background:var(--sidebar-bg);display:flex;flex-direction:column;padding:14px 0;flex-shrink:0}
   #od .sb-head{padding:6px 16px 14px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:8px}
   #od .sb-logo{font-size:20px;font-weight:800;color:#fff;letter-spacing:1px}
@@ -94,7 +95,7 @@
   #od .tabs button.on{color:var(--accent);border-bottom-color:var(--accent)}
 
   /* ============================================================= MOBILE (#om) */
-  #om{padding:30px 16px;display:flex;flex-wrap:wrap;gap:40px;justify-content:center;align-items:flex-start;background:#e2e8f0}
+  #om{padding:30px 16px;flex-wrap:wrap;gap:40px;justify-content:center;align-items:flex-start;background:#e2e8f0}
   #om .intro{width:100%;text-align:center;margin-bottom:6px}
   #om .intro h1{font-size:20px;font-weight:800;color:#1e293b}
   #om .intro p{color:#475569;font-size:13px;margin-top:5px}
@@ -149,7 +150,7 @@
   #om .banner{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;padding:11px 14px;font-size:12px;border-radius:12px;margin:0 14px 14px;display:flex;gap:8px}
 
   /* ============================================================= CATEGORIES (#oc) */
-  #oc{padding:30px 16px;display:flex;flex-wrap:wrap;gap:40px;justify-content:center;align-items:flex-start;background:#e2e8f0}
+  #oc{padding:30px 16px;flex-wrap:wrap;gap:40px;justify-content:center;align-items:flex-start;background:#e2e8f0}
   #oc .intro{width:100%;text-align:center;margin-bottom:6px}
   #oc .intro h1{font-size:20px;font-weight:800}
   #oc .intro p{color:#475569;font-size:13px;margin-top:5px}
