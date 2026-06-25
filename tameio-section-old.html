@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>👜 Ταμείο — ΠΑΛΙΟ Preview (ενοποιημένο)</title>
+<style>
+  :root{
+    --sidebar-bg:#1e2d3d; --sidebar-text:#94a3b8; --accent:#f59e0b; --accent-dark:#d97706;
+    --content-bg:#f1f5f9; --white:#fff; --text:#1e293b; --muted:#64748b; --border:#e2e8f0;
+    --success:#10b981; --danger:#ef4444; --radius:10px;
+    --shadow-sm:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--content-bg);color:var(--text)}
+
+  /* ===== switcher (unique names so they don't clash with old class names) ===== */
+  .pvbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:16px 20px;background:#fff;border-bottom:1px solid var(--border)}
+  .pvttl{font-size:18px;font-weight:800}.pvttl small{display:block;font-size:12px;font-weight:500;color:var(--muted)}
+  .pvseg{display:inline-flex;background:#f1f5f9;border:1px solid var(--border);border-radius:12px;padding:4px}
+  .pvseg button{border:0;background:transparent;font:inherit;font-weight:700;color:var(--muted);padding:9px 16px;border-radius:9px;cursor:pointer;font-size:14px}
+  .pvseg button.on{background:var(--accent);color:#fff}
+  .view{display:none}.view.on{display:block}
+
+  /* ============================================================= DESKTOP (#od) */
+  #od{display:flex;min-height:80vh}
+  #od .sidebar{width:220px;background:var(--sidebar-bg);display:flex;flex-direction:column;padding:14px 0;flex-shrink:0}
+  #od .sb-head{padding:6px 16px 14px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:8px}
+  #od .sb-logo{font-size:20px;font-weight:800;color:#fff;letter-spacing:1px}
+  #od .sb-logo small{display:block;font-size:9px;color:var(--sidebar-text);letter-spacing:2px;font-weight:600;margin-top:3px}
+  #od .sb-status{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:4px 10px;background:rgba(255,255,255,.05);border-radius:20px;font-size:9px;color:var(--sidebar-text);letter-spacing:1px;font-weight:600}
+  #od .led{width:7px;height:7px;border-radius:50%;background:var(--success);box-shadow:0 0 6px var(--success)}
+  #od .nav a{display:flex;align-items:center;gap:10px;padding:9px 16px;color:var(--sidebar-text);text-decoration:none;font-size:13px;font-weight:500}
+  #od .nav a:hover{background:rgba(255,255,255,.04);color:#fff}
+  #od .nav a.active{background:var(--accent);color:#fff;font-weight:700}
+  #od .main{flex:1;display:flex;flex-direction:column}
+  #od .topbar{height:54px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px}
+  #od .topbar .crumb{font-size:13px;color:var(--muted)}
+  #od .topbar .right{display:flex;gap:10px;align-items:center}
+  #od .chip{font-size:12px;background:#fef3c7;color:#92400e;padding:4px 10px;border-radius:20px;font-weight:600}
+  #od .content{padding:22px 24px;max-width:1280px}
+  #od .page-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:12px}
+  #od .page-head h1{font-size:22px;font-weight:800}
+  #od .page-head p{color:var(--muted);font-size:13px;margin-top:3px}
+  #od .actions{display:flex;gap:10px;align-items:center}
+  #od .sel{appearance:none;border:1px solid var(--border);background:var(--white);padding:9px 30px 9px 12px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;min-height:42px}
+  #od .btn{border:none;border-radius:8px;padding:0 16px;min-height:42px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:7px}
+  #od .btn-primary{background:var(--accent);color:#fff}
+  #od .btn-green{background:var(--success);color:#fff}
+  #od .kpis{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:14px;margin-bottom:20px}
+  #od .card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm)}
+  #od .kpi{padding:16px 18px}
+  #od .kpi .l{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;font-weight:700;display:flex;align-items:center;gap:6px}
+  #od .kpi .v{font-size:30px;font-weight:800;margin-top:6px;line-height:1}
+  #od .kpi .d{font-size:12px;margin-top:7px;color:var(--muted)}
+  #od .kpi.hero{background:linear-gradient(135deg,#1e2d3d,#2d4256);color:#fff;border:none}
+  #od .kpi.hero .l{color:#cbd5e1}#od .kpi.hero .v{color:#fff;font-size:34px}#od .kpi.hero .d{color:#94d8b6}
+  #od .up{color:var(--success)}#od .down{color:var(--danger)}
+  #od .sec{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);margin-bottom:20px;overflow:hidden}
+  #od .sec-h{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+  #od .sec-h h2{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
+  #od .sec-h .hint{font-size:12px;color:var(--muted)}
+  #od table{width:100%;border-collapse:collapse}
+  #od th,#od td{padding:11px 18px;text-align:left;font-size:13px}
+  #od thead th{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:700;background:#f8fafc;border-bottom:1px solid var(--border)}
+  #od tbody tr{border-bottom:1px solid #f1f5f9}
+  #od tbody tr:hover{background:#fffbeb}
+  #od .num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+  #od .in{color:var(--success)}#od .out{color:var(--danger)}
+  #od .day-rest{background:#f8fafc;color:var(--muted)}#od .day-rest td{font-style:italic}
+  #od .pos-tag{font-size:10px;background:#eff6ff;color:#1d4ed8;padding:2px 6px;border-radius:5px;margin-left:6px;font-weight:600}
+  #od .diff{font-size:10px;background:#fef3c7;color:#92400e;padding:2px 6px;border-radius:5px;margin-left:6px;font-weight:600}
+  #od tfoot td{font-weight:800;font-size:14px;border-top:2px solid var(--border);background:#f8fafc}
+  #od .edit{border:1px dashed #cbd5e1;background:#fff;border-radius:6px;padding:4px 8px;width:90px;text-align:right;font-weight:700;font-size:13px}
+  #od .grid2{display:grid;grid-template-columns:1.1fr 1fr;gap:20px}
+  #od .bar-row{display:flex;align-items:center;gap:10px;padding:9px 18px;font-size:13px;border-bottom:1px solid #f1f5f9}
+  #od .bar-row .nm{width:120px;font-weight:600}
+  #od .bar-wrap{flex:1;background:#f1f5f9;border-radius:6px;height:18px;overflow:hidden}
+  #od .bar{height:100%;background:var(--accent);border-radius:6px}
+  #od .bar-row .am{width:80px;text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+  #od .due{display:flex;align-items:center;justify-content:space-between;padding:11px 18px;border-bottom:1px solid #f1f5f9;font-size:13px}
+  #od .due .who{font-weight:700}#od .due .sub{font-size:11px;color:var(--muted)}
+  #od .pill{padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700}
+  #od .pill-red{background:#fee2e2;color:#b91c1c}#od .pill-amber{background:#fef3c7;color:#92400e}
+  #od .stat{display:flex;justify-content:space-between;padding:10px 18px;border-bottom:1px solid #f1f5f9;font-size:13px}
+  #od .stat b{font-weight:700}
+  #od .entry{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;border-bottom:1px solid #f1f5f9;font-size:13px}
+  #od .entry .cat{font-weight:600}#od .entry .meta{font-size:11px;color:var(--muted)}
+  #od .tag-biz{font-size:10px;background:#dcfce7;color:#166534;padding:2px 6px;border-radius:5px;margin-left:6px;font-weight:700}
+  #od .tag-pers{font-size:10px;background:#f1f5f9;color:#64748b;padding:2px 6px;border-radius:5px;margin-left:6px;font-weight:700}
+  #od .note{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;padding:10px 14px;border-radius:8px;font-size:12px;margin-top:14px;display:flex;gap:8px}
+  #od .tabs{display:flex;gap:4px;padding:0 18px;border-bottom:1px solid var(--border)}
+  #od .tabs button{border:none;background:none;padding:12px 14px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent}
+  #od .tabs button.on{color:var(--accent);border-bottom-color:var(--accent)}
+
+  /* ============================================================= MOBILE (#om) */
+  #om{padding:30px 16px;display:flex;flex-wrap:wrap;gap:40px;justify-content:center;align-items:flex-start;background:#e2e8f0}
+  #om .intro{width:100%;text-align:center;margin-bottom:6px}
+  #om .intro h1{font-size:20px;font-weight:800;color:#1e293b}
+  #om .intro p{color:#475569;font-size:13px;margin-top:5px}
+  #om .chip{display:inline-block;font-size:11px;background:#fef3c7;color:#92400e;padding:4px 12px;border-radius:20px;font-weight:700;margin-top:8px}
+  #om .phone{width:360px;background:#000;border-radius:42px;padding:11px;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+  #om .screen{background:#f1f5f9;border-radius:32px;overflow:hidden;height:740px;position:relative;display:flex;flex-direction:column}
+  #om .notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:24px;background:#000;border-radius:0 0 16px 16px;z-index:30}
+  #om .label{width:360px;text-align:center;font-size:13px;font-weight:700;color:#334155;margin-top:14px}
+  #om .appbar{background:linear-gradient(135deg,#1e2d3d,#2d4256);color:#fff;padding:30px 18px 16px;flex-shrink:0}
+  #om .appbar .t{font-size:15px;font-weight:700;display:flex;align-items:center;gap:7px;opacity:.85}
+  #om .appbar .bal{font-size:38px;font-weight:800;margin-top:6px;line-height:1}
+  #om .appbar .sub{font-size:12px;color:#94d8b6;margin-top:6px}
+  #om .body{flex:1;overflow-y:auto;padding:14px}
+  #om .actions{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:14px}
+  #om .act{border:none;border-radius:16px;padding:18px 10px;font-size:15px;font-weight:800;color:#fff;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
+  #om .act .ic{font-size:26px}
+  #om .act.pay{background:var(--accent)}#om .act.in{background:var(--success)}
+  #om .card{background:#fff;border:1px solid var(--border);border-radius:16px;margin-bottom:14px;overflow:hidden}
+  #om .card-h{padding:13px 16px;font-size:13px;font-weight:700;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+  #om .card-h .more{font-size:12px;color:var(--accent);font-weight:600}
+  #om .row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #f1f5f9;font-size:14px}
+  #om .row:last-child{border-bottom:none}
+  #om .row .nm{font-weight:600}#om .row .meta{font-size:11px;color:var(--muted);margin-top:2px}
+  #om .amt{font-weight:800;font-variant-numeric:tabular-nums}
+  #om .in-c{color:var(--success)}#om .out-c{color:var(--danger)}
+  #om .tag{font-size:10px;padding:2px 7px;border-radius:6px;font-weight:700;margin-left:6px}
+  #om .tag-b{background:#dcfce7;color:#166534}#om .tag-p{background:#f1f5f9;color:#64748b}
+  #om .wk{display:flex;justify-content:space-between;padding:10px 16px;font-size:13px;border-bottom:1px solid #f1f5f9}
+  #om .wk b{font-variant-numeric:tabular-nums}
+  #om .sheet{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:22px 22px 0 0;box-shadow:0 -10px 40px rgba(0,0,0,.25);padding:8px 18px 22px;z-index:20}
+  #om .grab{width:42px;height:5px;background:#cbd5e1;border-radius:3px;margin:8px auto 14px}
+  #om .sheet h3{font-size:17px;font-weight:800;margin-bottom:14px;text-align:center}
+  #om .amount-box{text-align:center;margin-bottom:16px}
+  #om .amount-box .e{font-size:44px;font-weight:800;color:var(--danger)}
+  #om .amount-box .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:700}
+  #om .field{margin-bottom:13px}
+  #om .field label{font-size:12px;font-weight:700;color:#475569;display:block;margin-bottom:6px}
+  #om .chips{display:flex;flex-wrap:wrap;gap:7px}
+  #om .cchip{border:1.5px solid var(--border);background:#fff;border-radius:20px;padding:7px 13px;font-size:13px;font-weight:600;cursor:pointer}
+  #om .cchip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  #om .inp{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:11px 13px;font-size:14px;font-weight:600}
+  #om .sel{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:11px 13px;font-size:14px;font-weight:600;background:#fff;appearance:none}
+  #om .toggle-row{display:flex;align-items:center;justify-content:space-between;background:#f8fafc;border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:16px}
+  #om .toggle-row .tl{font-size:13px;font-weight:700}#om .toggle-row .ts{font-size:11px;color:var(--muted);margin-top:2px}
+  #om .sw{width:48px;height:28px;border-radius:20px;position:relative;flex-shrink:0}
+  #om .sw::after{content:"";position:absolute;width:22px;height:22px;background:#fff;border-radius:50%;top:3px;right:3px;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+  #om .save{width:100%;background:var(--accent);color:#fff;border:none;border-radius:14px;padding:16px;font-size:16px;font-weight:800;cursor:pointer}
+  #om .close-row{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid #f1f5f9}
+  #om .close-row .d{font-weight:700;font-size:14px}#om .close-row .pos{font-size:11px;color:#1d4ed8;background:#eff6ff;padding:2px 7px;border-radius:6px;font-weight:600;margin-top:3px;display:inline-block}
+  #om .cin{border:1.5px solid #cbd5e1;border-radius:9px;padding:9px 11px;width:96px;text-align:right;font-weight:800;font-size:15px}
+  #om .cin.ok{border-color:var(--success);background:#f0fdf4}
+  #om .banner{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;padding:11px 14px;font-size:12px;border-radius:12px;margin:0 14px 14px;display:flex;gap:8px}
+
+  /* ============================================================= CATEGORIES (#oc) */
+  #oc{padding:30px 16px;display:flex;flex-wrap:wrap;gap:40px;justify-content:center;align-items:flex-start;background:#e2e8f0}
+  #oc .intro{width:100%;text-align:center;margin-bottom:6px}
+  #oc .intro h1{font-size:20px;font-weight:800}
+  #oc .intro p{color:#475569;font-size:13px;margin-top:5px}
+  #oc .chip{display:inline-block;font-size:11px;background:#fef3c7;color:#92400e;padding:4px 12px;border-radius:20px;font-weight:700;margin-top:8px}
+  #oc .label{text-align:center;font-size:13px;font-weight:700;color:#334155;margin-bottom:12px}
+  #oc .phone{width:360px;background:#000;border-radius:42px;padding:11px;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+  #oc .screen{background:#fff;border-radius:32px;overflow:hidden;height:760px;position:relative;display:flex;flex-direction:column}
+  #oc .notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:24px;background:#000;border-radius:0 0 16px 16px;z-index:30}
+  #oc .sheet-head{padding:30px 18px 12px;text-align:center;flex-shrink:0;border-bottom:1px solid var(--border)}
+  #oc .sheet-head h3{font-size:17px;font-weight:800}
+  #oc .search{margin:12px 18px 6px;position:relative;flex-shrink:0}
+  #oc .search input{width:100%;border:1.5px solid var(--border);border-radius:12px;padding:11px 13px 11px 38px;font-size:14px;font-weight:600}
+  #oc .search::before{content:"🔍";position:absolute;left:12px;top:10px;font-size:15px}
+  #oc .scroll{flex:1;overflow-y:auto;padding:6px 0 80px}
+  #oc .grp{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;padding:14px 18px 6px}
+  #oc .starred{display:flex;flex-wrap:wrap;gap:8px;padding:6px 18px 4px}
+  #oc .cchip{border:1.5px solid var(--border);background:#fff;border-radius:20px;padding:9px 14px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+  #oc .cchip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  #oc .crow{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid #f6f8fa;cursor:pointer}
+  #oc .crow:hover{background:#fffbeb}
+  #oc .crow .ic{width:34px;height:34px;border-radius:9px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+  #oc .crow .nm{font-weight:700;font-size:14px;flex:1}
+  #oc .crow .meta{font-size:11px;color:var(--muted);margin-top:1px;font-weight:500}
+  #oc .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+  #oc .dot-b{background:var(--success)}#oc .dot-p{background:#94a3b8}#oc .dot-s{background:#3b82f6}
+  #oc .addbar{position:absolute;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--border);padding:14px 18px}
+  #oc .addbtn{width:100%;background:#fff;border:2px dashed var(--accent);color:var(--accent-dark);border-radius:14px;padding:14px;font-size:15px;font-weight:800;cursor:pointer}
+  #oc .panel{width:760px}
+  #oc .panel .ph{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+  #oc .panel .ph h2{font-size:20px;font-weight:800}#oc .panel .ph p{font-size:13px;color:var(--muted);margin-top:3px}
+  #oc .back{background:#fff;border:1px solid var(--border);border-radius:8px;padding:9px 14px;font-size:13px;font-weight:600;cursor:pointer}
+  #oc .pp{display:grid;grid-template-columns:1fr 1.5fr;gap:22px}
+  #oc .pcard{background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow-sm);overflow:hidden}
+  #oc .pcard-h{padding:14px 16px;font-weight:700;font-size:14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+  #oc .pbody{padding:16px}
+  #oc .fld{margin-bottom:14px}
+  #oc .fld label{font-size:12px;font-weight:700;color:#475569;display:block;margin-bottom:6px}
+  #oc .fld input,#oc .fld select{width:100%;border:1.5px solid var(--border);border-radius:9px;padding:10px 12px;font-size:13px;font-weight:600;background:#fff}
+  #oc .icns{display:flex;gap:6px;flex-wrap:wrap}
+  #oc .icns span{width:38px;height:38px;border:1.5px solid var(--border);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer}
+  #oc .icns span.on{border-color:var(--accent);background:#fef3c7}
+  #oc .seg{display:flex;gap:8px}
+  #oc .seg button{flex:1;border:1.5px solid var(--border);background:#fff;border-radius:9px;padding:10px;font-size:13px;font-weight:700;cursor:pointer}
+  #oc .seg button.on-b{border-color:var(--success);background:#f0fdf4;color:#166534}
+  #oc .seg button.on-p{border-color:#94a3b8;background:#f8fafc;color:#475569}
+  #oc .tip{background:#fef3c7;border:1px solid #fde68a;color:#92400e;padding:10px 12px;border-radius:9px;font-size:12px;margin-bottom:14px}
+  #oc .save{width:100%;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:800;cursor:pointer}
+  #oc .count{font-size:12px;background:#f1f5f9;color:var(--muted);padding:2px 9px;border-radius:20px;font-weight:700;margin-left:auto}
+  #oc .litem{display:flex;align-items:center;gap:11px;padding:11px 16px;border-bottom:1px solid #f6f8fa}
+  #oc .litem .ic{width:32px;height:32px;border-radius:8px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:16px}
+  #oc .litem .nm{font-weight:700;font-size:13px}
+  #oc .litem .tags{font-size:10px;margin-top:2px}
+  #oc .tg{padding:2px 7px;border-radius:5px;font-weight:700;margin-right:5px}
+  #oc .tg-b{background:#dcfce7;color:#166534}#oc .tg-p{background:#f1f5f9;color:#64748b}#oc .tg-s{background:#dbeafe;color:#1d4ed8}
+  #oc .cnt{margin-left:auto;font-size:12px;color:var(--muted);font-weight:700}
+  #oc .del{background:#fff;border:1px solid #fecaca;color:var(--danger);border-radius:7px;padding:6px 10px;font-size:12px;font-weight:600;cursor:pointer;margin-left:10px}
+  #oc .grphdr{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;padding:12px 16px 4px;background:#f8fafc}
+</style>
+</head>
+<body>
+
+<div class="pvbar">
+  <div class="pvttl">👜 Ταμείο — ΠΑΛΙΟ σχέδιο <small>ενοποιημένο · για σύγκριση με το νέο</small></div>
+  <div class="pvseg">
+    <button class="on" data-v="od">🖥️ Υπολογιστής</button>
+    <button data-v="om">📱 Κινητό</button>
+    <button data-v="oc">🏷️ Κατηγορίες</button>
+  </div>
+</div>
+
+<!-- ================= OLD DESKTOP ================= -->
+<div class="view on" id="od">
+  <aside class="sidebar">
+    <div class="sb-head">
+      <div class="sb-logo">TAMAM <small>BACK-OFFICE</small></div>
+      <div class="sb-status"><span class="led"></span><span>POS ΣΥΝΔΕΔΕΜΕΝΟ</span></div>
+    </div>
+    <nav class="nav">
+      <a href="#">🏠 Πίνακας</a>
+      <a href="#">🚚 Προμηθευτές</a>
+      <a href="#">🧾 Τιμολόγια</a>
+      <a href="#">📦 Αποθήκη</a>
+      <a href="#">🧾 Συνταγές</a>
+      <a href="#">💰 Έξοδα</a>
+      <a href="#" class="active">👜 Ταμείο</a>
+      <a href="#">💲 Τιμές &amp; Μενού</a>
+      <a href="#">🔮 Πρόβλεψη</a>
+      <a href="#">📊 Αναφορές</a>
+      <a href="#">🛡️ Συμμόρφωση</a>
+      <a href="#">💾 Αντίγραφα</a>
+    </nav>
+  </aside>
+  <div class="main">
+    <div class="topbar">
+      <div class="crumb">👜 Ταμείο — Βιβλίο μετρητών</div>
+      <div class="right">
+        <span class="chip">PREVIEW · δείγμα δεδομένων</span>
+        <span style="font-size:13px;color:var(--muted)">Καλησπέρα 👋</span>
+      </div>
+    </div>
+    <div class="content">
+      <div class="page-head">
+        <div>
+          <h1>👜 Ταμείο</h1>
+          <p>Πόσα μετρητά κρατάς — εισπράξεις, πληρωμές &amp; εβδομαδιαίο κλείσιμο. Αντικαθιστά το «Ταμείο Pro».</p>
+        </div>
+        <div class="actions">
+          <select class="sel"><option>📅 Ιούνιος 2026</option><option>Μάιος 2026</option><option>Όλο το έτος</option></select>
+          <button class="btn btn-green">💰 Είσπραξη</button>
+          <button class="btn btn-primary">💸 Πληρωμή</button>
+        </div>
+      </div>
+      <div class="kpis">
+        <div class="card kpi hero">
+          <div class="l">👜 ΥΠΟΛΟΙΠΟ ΜΕΤΡΗΤΩΝ</div>
+          <div class="v">3.840 €</div>
+          <div class="d">Τόσα μετρητά κρατάς αυτή τη στιγμή</div>
+        </div>
+        <div class="card kpi">
+          <div class="l">💰 Εισπράξεις μήνα</div>
+          <div class="v in">11.350 €</div>
+          <div class="d"><span class="up">▲ 6%</span> vs Μάιος</div>
+        </div>
+        <div class="card kpi">
+          <div class="l">💸 Πληρωμές μήνα</div>
+          <div class="v out">9.870 €</div>
+          <div class="d"><span class="down">▲ 3%</span> vs Μάιος</div>
+        </div>
+        <div class="card kpi">
+          <div class="l">✅ Καθαρό μήνα</div>
+          <div class="v">+1.480 €</div>
+          <div class="d">Εισπράξεις − Πληρωμές</div>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-h">
+          <h2>📅 Η εβδομάδα σου <span style="font-weight:400;color:var(--muted);font-size:12px">(22–28 Ιουν)</span></h2>
+          <span class="hint">Οι εισπράξεις μπαίνουν μόνες από τον POS — εσύ τις επιβεβαιώνεις. Τα έξοδα κρέμονται από τη μέρα τους.</span>
+        </div>
+        <table>
+          <thead><tr>
+            <th>Μέρα</th><th class="num">💰 Εισπράξεις</th><th class="num">💸 Πληρωμές</th><th class="num">Καθαρό</th>
+          </tr></thead>
+          <tbody>
+            <tr><td><b>Τετ</b> 22</td><td class="num in">485 <span class="pos-tag">POS 485</span></td><td class="num out">−1.240 <span style="font-size:11px;color:var(--muted)">(Παππάς, Μαγαζιού)</span></td><td class="num">−755</td></tr>
+            <tr><td><b>Πεμ</b> 23</td><td class="num in">390 <span class="pos-tag">POS 390</span></td><td class="num out">−45</td><td class="num">+345</td></tr>
+            <tr><td><b>Παρ</b> 24</td><td class="num in"><input class="edit" value="520"> <span class="diff">POS 540 · −20</span></td><td class="num out">−30</td><td class="num">+490</td></tr>
+            <tr><td><b>Σαβ</b> 25</td><td class="num in">610 <span class="pos-tag">POS 610</span></td><td class="num out">−85</td><td class="num">+525</td></tr>
+            <tr><td><b>Κυρ</b> 26</td><td class="num in">430 <span class="pos-tag">POS 430</span></td><td class="num out">−10 <span style="font-size:11px;color:var(--muted)">(τσιγάρα)</span></td><td class="num">+420</td></tr>
+            <tr><td><b>Δευ</b> 27</td><td class="num in">375 <span class="pos-tag">POS 375</span></td><td class="num out">−260</td><td class="num">+115</td></tr>
+            <tr class="day-rest"><td><b>Τρι</b> 28 · ρεπό</td><td class="num">—</td><td class="num">—</td><td class="num">κλείσιμο εβδ.</td></tr>
+          </tbody>
+          <tfoot><tr><td>Σύνολο εβδομάδας</td><td class="num in">2.810 €</td><td class="num out">−1.670 €</td><td class="num">+1.140 €</td></tr></tfoot>
+        </table>
+        <div class="note">ℹ️ <span>Στην <b>Παρασκευή</b> ο POS λέει 540€ αλλά μέτρησες 520€ — διαφορά 20€ (ίσως ξέφυγε κάποια πώληση). Κρατάμε το <b>δικό σου</b> νούμερο· ο POS είναι μόνο για σύγκριση.</span></div>
+      </div>
+      <div class="grid2">
+        <div>
+          <div class="sec">
+            <div class="sec-h"><h2>💸 Πληρωμές ανά κατηγορία</h2><span class="hint">Ιούνιος</span></div>
+            <div class="bar-row"><span class="nm">Μαγαζιού</span><div class="bar-wrap"><div class="bar" style="width:100%"></div></div><span class="am">5.720 €</span></div>
+            <div class="bar-row"><span class="nm">Ιπποκράτης</span><div class="bar-wrap"><div class="bar" style="width:38%"></div></div><span class="am">2.180 €</span></div>
+            <div class="bar-row"><span class="nm">Παππάς</span><div class="bar-wrap"><div class="bar" style="width:32%"></div></div><span class="am">1.830 €</span></div>
+            <div class="bar-row"><span class="nm">Ενοίκιο</span><div class="bar-wrap"><div class="bar" style="width:14%"></div></div><span class="am">800 €</span></div>
+            <div class="bar-row"><span class="nm">Λογιστής</span><div class="bar-wrap"><div class="bar" style="width:5%"></div></div><span class="am">300 €</span></div>
+            <div class="bar-row"><span class="nm">Καθαρίστρια</span><div class="bar-wrap"><div class="bar" style="width:4%"></div></div><span class="am">240 €</span></div>
+          </div>
+          <div class="sec">
+            <div class="sec-h"><h2>🛒 Πληρωμές Τετάρτης</h2><span class="hint">αυτόματα από Προμηθευτές</span></div>
+            <div class="due"><div><div class="who">Ιπποκράτης</div><div class="sub">Τιμολόγιο #4521 · παράδοση Τετ</div></div><span class="pill pill-red">700 € ληξιπρόθεσμο</span></div>
+            <div class="due"><div><div class="who">Παππάς (κρεοπωλείο)</div><div class="sub">Τιμολόγιο #1180 · λήγει 24/6</div></div><span class="pill pill-amber">535 € σε 2 μέρες</span></div>
+            <div class="due"><div><div class="who">Λάμπρος</div><div class="sub">Εβδομαδιαία παραλαβή</div></div><span class="pill pill-amber">~480 €</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="sec">
+            <div class="sec-h"><h2>📊 Στατιστικά μήνα</h2><span class="hint">εισπράξεις/μέρα</span></div>
+            <div class="stat"><span>Μέσος όρος ημέρας</span><b>473 €</b></div>
+            <div class="stat"><span>🏆 Καλύτερη μέρα</span><b>610 € · Σάβ 25</b></div>
+            <div class="stat"><span>Χαμηλότερη μέρα</span><b>330 € · Δευ 16</b></div>
+            <div class="stat"><span>vs ίδιος μήνας πέρσι</span><b class="up">▲ 9%</b></div>
+          </div>
+          <div class="sec">
+            <div class="tabs">
+              <button class="on">Πρόσφατες κινήσεις</button>
+              <button>Μόνο πληρωμές</button>
+            </div>
+            <div class="entry"><div><span class="cat">Παππάς</span> <span class="tag-biz">επιχείρηση</span><div class="meta">Τετ 22 · κρέας</div></div><span class="num out">−535 €</span></div>
+            <div class="entry"><div><span class="cat">Εσοδα</span><div class="meta">Τετ 22 · POS</div></div><span class="num in">+485 €</span></div>
+            <div class="entry"><div><span class="cat">Τσιγάρα</span> <span class="tag-pers">προσωπικό</span><div class="meta">Κυρ 26 · από ταμείο Κυρ</div></div><span class="num out">−10 €</span></div>
+            <div class="entry"><div><span class="cat">Μαγαζιού</span> <span class="tag-biz">επιχείρηση</span><div class="meta">Δευ 27 · διάφορα</div></div><span class="num out">−260 €</span></div>
+            <div class="entry"><div><span class="cat">Συνδρομή</span> <span class="tag-pers">προσωπικό</span><div class="meta">Δευ 27 · από ταμείο Δευ</div></div><span class="num out">−10 €</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="note">💡 <span>Κάθε πληρωμή έχει διακόπτη <b>«της επιχείρησης;»</b> — όσες είναι 🟢 επιχείρηση μετράνε στο κέρδος &amp; στις Αναφορές, όσες είναι ⚪ προσωπικές μένουν μόνο εδώ στο ταμείο σου.</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= OLD MOBILE ================= -->
+<div class="view" id="om">
+  <div class="intro">
+    <h1>👜 Ταμείο — στο κινητό σου</h1>
+    <p>Το εικονίδιο-εφαρμογή στην αρχική οθόνη. Καταγράφεις με ένα πάτημα, χωρίς υπολογιστή.</p>
+    <span class="chip">PREVIEW · δείγμα δεδομένων</span>
+  </div>
+  <div>
+    <div class="label">① Καθημερινή χρήση — γρήγορη πληρωμή</div>
+    <div class="phone"><div class="screen">
+      <div class="notch"></div>
+      <div class="appbar">
+        <div class="t">👜 Ταμείο</div>
+        <div class="bal">3.840 €</div>
+        <div class="sub">μετρητά που κρατάς τώρα</div>
+      </div>
+      <div class="body" style="filter:blur(1.5px);opacity:.5">
+        <div class="actions">
+          <button class="act in"><span class="ic">💰</span>Είσπραξη</button>
+          <button class="act pay"><span class="ic">💸</span>Πληρωμή</button>
+        </div>
+        <div class="card">
+          <div class="card-h">Σήμερα · Παρ 24 <span class="more">όλα ›</span></div>
+          <div class="row"><div><div class="nm">Εσοδα <span class="tag tag-b">επιχ.</span></div><div class="meta">από POS</div></div><div class="amt in-c">+520 €</div></div>
+          <div class="row"><div><div class="nm">Μαγαζιού <span class="tag tag-b">επιχ.</span></div><div class="meta">διάφορα</div></div><div class="amt out-c">−30 €</div></div>
+        </div>
+      </div>
+      <div class="sheet">
+        <div class="grab"></div>
+        <h3>💸 Νέα πληρωμή</h3>
+        <div class="amount-box"><div class="lbl">Ποσό</div><div class="e">10 €</div></div>
+        <div class="field">
+          <label>Κατηγορία</label>
+          <div class="chips">
+            <span class="cchip">Μαγαζιού</span>
+            <span class="cchip on">Τσιγάρα</span>
+            <span class="cchip">Παππάς</span>
+            <span class="cchip">Ιπποκράτης</span>
+            <span class="cchip">Ενοίκιο</span>
+            <span class="cchip">＋ άλλη</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Από ποια μέρα (ταμείο);</label>
+          <select class="sel"><option>Σήμερα · Παρ 24</option><option>Πεμ 23</option><option>Τετ 22</option></select>
+        </div>
+        <div class="field">
+          <label>Περιγραφή (προαιρετικό)</label>
+          <input class="inp" placeholder="π.χ. τσιγάρα">
+        </div>
+        <div class="toggle-row">
+          <div><div class="tl">Της επιχείρησης;</div><div class="ts">Αν ΟΧΙ, μένει μόνο στο ταμείο σου</div></div>
+          <div class="sw" style="background:#cbd5e1"></div>
+        </div>
+        <button class="save">Αποθήκευση</button>
+      </div>
+    </div></div>
+  </div>
+  <div>
+    <div class="label">② Τρίτη (ρεπό) — κλείσιμο εβδομάδας</div>
+    <div class="phone"><div class="screen">
+      <div class="notch"></div>
+      <div class="appbar">
+        <div class="t">🌙 Κλείσιμο εβδομάδας</div>
+        <div class="bal">+1.140 €</div>
+        <div class="sub">καθαρό εβδομάδας (22–28 Ιουν)</div>
+      </div>
+      <div class="body">
+        <div class="banner">ℹ️ <span>Συμπλήρωσε <b>μόνο</b> πόσα μάζεψες κάθε μέρα. Τα έξοδα είναι ήδη περασμένα — μπαίνουν μόνα.</span></div>
+        <div class="card">
+          <div class="card-h">💰 Εισπράξεις ανά μέρα</div>
+          <div class="close-row"><div><div class="d">Τετ 22</div><span class="pos">POS: 485 €</span></div><input class="cin ok" value="485"></div>
+          <div class="close-row"><div><div class="d">Πεμ 23</div><span class="pos">POS: 390 €</span></div><input class="cin ok" value="390"></div>
+          <div class="close-row"><div><div class="d">Παρ 24</div><span class="pos">POS: 540 €</span></div><input class="cin" value="520"></div>
+          <div class="close-row"><div><div class="d">Σαβ 25</div><span class="pos">POS: 610 €</span></div><input class="cin ok" value="610"></div>
+          <div class="close-row"><div><div class="d">Κυρ 26</div><span class="pos">POS: 430 €</span></div><input class="cin ok" value="430"></div>
+          <div class="close-row"><div><div class="d">Δευ 27</div><span class="pos">POS: 375 €</span></div><input class="cin ok" value="375"></div>
+        </div>
+        <div class="card">
+          <div class="card-h">📋 Σύνοψη εβδομάδας</div>
+          <div class="wk"><span>💰 Εισπράξεις</span><b class="in-c">2.810 €</b></div>
+          <div class="wk"><span>💸 Πληρωμές</span><b class="out-c">−1.670 €</b></div>
+          <div class="wk"><span>✅ Καθαρό</span><b>+1.140 €</b></div>
+          <div class="wk"><span>👜 Νέο υπόλοιπο ταμείου</span><b>3.840 €</b></div>
+        </div>
+        <div class="card">
+          <div class="card-h">🛒 Πληρωμές Τετάρτης</div>
+          <div class="row"><div><div class="nm">Ιπποκράτης</div><div class="meta">τιμολόγιο #4521</div></div><div class="amt out-c">700 €</div></div>
+          <div class="row"><div><div class="nm">Παππάς</div><div class="meta">τιμολόγιο #1180</div></div><div class="amt out-c">535 €</div></div>
+        </div>
+        <button class="save" style="margin-top:2px">✓ Κλείσιμο εβδομάδας</button>
+      </div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ================= OLD CATEGORIES ================= -->
+<div class="view" id="oc">
+  <div class="intro">
+    <h1>👜 Ταμείο — Διαχείριση κατηγοριών</h1>
+    <p>Πώς δουλεύει όταν οι κατηγορίες γίνουν πολλές (αφού σπάσεις τα «μαζεμένα» έξοδα)</p>
+    <span class="chip">PREVIEW · δείγμα δεδομένων</span>
+  </div>
+  <div>
+    <div class="label">📱 Επιλογέας κατηγορίας (πολλές κατηγορίες)</div>
+    <div class="phone"><div class="screen">
+      <div class="notch"></div>
+      <div class="sheet-head"><h3>Διάλεξε κατηγορία</h3></div>
+      <div class="search"><input placeholder="Αναζήτηση…"></div>
+      <div class="scroll">
+        <div class="grp">⭐ Συχνές</div>
+        <div class="starred">
+          <span class="cchip on">🛒 Μαγαζιού</span>
+          <span class="cchip">🥩 Κρέας</span>
+          <span class="cchip">🚬 Τσιγάρα</span>
+          <span class="cchip">🥤 Ποτά</span>
+          <span class="cchip">🧀 Ψιλικά</span>
+        </div>
+        <div class="grp">🟢 Επιχείρηση</div>
+        <div class="crow"><div class="ic">🥩</div><div><div class="nm">Κρέας</div><div class="meta">μετράει στο κέρδος</div></div><div class="dot dot-b"></div></div>
+        <div class="crow"><div class="ic">🧀</div><div><div class="nm">Ψιλικά / Τρόφιμα</div><div class="meta">μετράει στο κέρδος</div></div><div class="dot dot-b"></div></div>
+        <div class="crow"><div class="ic">🥤</div><div><div class="nm">Ποτά / Αναψυκτικά</div><div class="meta">μετράει στο κέρδος</div></div><div class="dot dot-b"></div></div>
+        <div class="crow"><div class="ic">🧴</div><div><div class="nm">Καθαριστικά / Αναλώσιμα</div><div class="meta">μετράει στο κέρδος</div></div><div class="dot dot-b"></div></div>
+        <div class="crow"><div class="ic">⚡</div><div><div class="nm">ΔΕΗ / Ρεύμα</div><div class="meta">πάγιο</div></div><div class="dot dot-b"></div></div>
+        <div class="crow"><div class="ic">🏠</div><div><div class="nm">Ενοίκιο</div><div class="meta">πάγιο</div></div><div class="dot dot-b"></div></div>
+        <div class="crow"><div class="ic">🧮</div><div><div class="nm">Λογιστής</div><div class="meta">πάγιο</div></div><div class="dot dot-b"></div></div>
+        <div class="crow"><div class="ic">🛒</div><div><div class="nm">Μαγαζιού (χύμα)</div><div class="meta">διάφορα μαζί</div></div><div class="dot dot-b"></div></div>
+        <div class="grp">🚚 Προμηθευτές <span style="font-weight:500;text-transform:none;letter-spacing:0">· συνδεδεμένοι</span></div>
+        <div class="crow"><div class="ic">🥩</div><div><div class="nm">Παππάς</div><div class="meta">κρεοπωλείο · καρτέλα προμηθευτή</div></div><div class="dot dot-s"></div></div>
+        <div class="crow"><div class="ic">📦</div><div><div class="nm">Ιπποκράτης</div><div class="meta">τρόφιμα · καρτέλα προμηθευτή</div></div><div class="dot dot-s"></div></div>
+        <div class="crow"><div class="ic">📦</div><div><div class="nm">Λάμπρος</div><div class="meta">καρτέλα προμηθευτή</div></div><div class="dot dot-s"></div></div>
+        <div class="grp">⚪ Προσωπικά</div>
+        <div class="crow"><div class="ic">🚬</div><div><div class="nm">Τσιγάρα</div><div class="meta">ΔΕΝ μετράει στο κέρδος</div></div><div class="dot dot-p"></div></div>
+        <div class="crow"><div class="ic">👨‍👩‍👧</div><div><div class="nm">Οικογένεια</div><div class="meta">ΔΕΝ μετράει στο κέρδος</div></div><div class="dot dot-p"></div></div>
+        <div class="crow"><div class="ic">💸</div><div><div class="nm">Διάφορα προσωπικά</div><div class="meta">ΔΕΝ μετράει στο κέρδος</div></div><div class="dot dot-p"></div></div>
+      </div>
+      <div class="addbar"><button class="addbtn">＋ Νέα κατηγορία</button></div>
+    </div></div>
+  </div>
+  <div class="panel">
+    <div class="ph">
+      <div><h2>⚙️ Κατηγορίες Ταμείου</h2><p>Πρόσθεσε, μετονόμασε ή κρύψε κατηγορίες — όσες θες</p></div>
+      <button class="back">← Πίσω στο Ταμείο</button>
+    </div>
+    <div class="pp">
+      <div class="pcard">
+        <div class="pcard-h">➕ Νέα κατηγορία</div>
+        <div class="pbody">
+          <div class="tip">💡 Διάλεξε αν μετράει «της επιχείρησης» (μπαίνει στο κέρδος) ή «προσωπικό» (μένει μόνο στο ταμείο σου).</div>
+          <div class="fld"><label>Όνομα</label><input value="Κρέας"></div>
+          <div class="fld"><label>Εικονίδιο</label>
+            <div class="icns"><span>🛒</span><span class="on">🥩</span><span>🧀</span><span>🥤</span><span>🧴</span><span>⚡</span><span>🏠</span><span>🚬</span><span>💸</span></div>
+          </div>
+          <div class="fld"><label>Τι είναι;</label>
+            <div class="seg"><button class="on-b">🟢 Επιχείρηση</button><button>⚪ Προσωπικό</button></div>
+          </div>
+          <div class="fld"><label>Σύνδεση με προμηθευτή (προαιρετικό)</label>
+            <select><option>— Κανένα —</option><option>Παππάς (κρεοπωλείο)</option><option>Ιπποκράτης</option><option>Λάμπρος</option></select>
+          </div>
+          <button class="save">Αποθήκευση κατηγορίας</button>
+        </div>
+      </div>
+      <div class="pcard">
+        <div class="pcard-h">📋 Οι κατηγορίες σου <span class="count">14</span></div>
+        <div>
+          <div class="grphdr">🟢 Επιχείρηση</div>
+          <div class="litem"><div class="ic">🥩</div><div><div class="nm">Κρέας</div><div class="tags"><span class="tg tg-b">επιχ.</span></div></div><span class="cnt">42×</span><button class="del">✕</button></div>
+          <div class="litem"><div class="ic">🧀</div><div><div class="nm">Ψιλικά / Τρόφιμα</div><div class="tags"><span class="tg tg-b">επιχ.</span></div></div><span class="cnt">31×</span><button class="del">✕</button></div>
+          <div class="litem"><div class="ic">🥤</div><div><div class="nm">Ποτά</div><div class="tags"><span class="tg tg-b">επιχ.</span></div></div><span class="cnt">18×</span><button class="del">✕</button></div>
+          <div class="litem"><div class="ic">⚡</div><div><div class="nm">ΔΕΗ / Ρεύμα</div><div class="tags"><span class="tg tg-b">επιχ.</span></div></div><span class="cnt">6×</span><button class="del">✕</button></div>
+          <div class="litem"><div class="ic">🏠</div><div><div class="nm">Ενοίκιο</div><div class="tags"><span class="tg tg-b">επιχ.</span></div></div><span class="cnt">6×</span><button class="del">✕</button></div>
+          <div class="litem"><div class="ic">🛒</div><div><div class="nm">Μαγαζιού (χύμα)</div><div class="tags"><span class="tg tg-b">επιχ.</span></div></div><span class="cnt">88×</span><button class="del">✕</button></div>
+          <div class="grphdr">🚚 Προμηθευτές</div>
+          <div class="litem"><div class="ic">🥩</div><div><div class="nm">Παππάς</div><div class="tags"><span class="tg tg-s">προμηθευτής</span></div></div><span class="cnt">22×</span><button class="del">✕</button></div>
+          <div class="litem"><div class="ic">📦</div><div><div class="nm">Ιπποκράτης</div><div class="tags"><span class="tg tg-s">προμηθευτής</span></div></div><span class="cnt">19×</span><button class="del">✕</button></div>
+          <div class="grphdr">⚪ Προσωπικά</div>
+          <div class="litem"><div class="ic">🚬</div><div><div class="nm">Τσιγάρα</div><div class="tags"><span class="tg tg-p">προσωπικό</span></div></div><span class="cnt">25×</span><button class="del">✕</button></div>
+          <div class="litem"><div class="ic">💸</div><div><div class="nm">Διάφορα προσωπικά</div><div class="tags"><span class="tg tg-p">προσωπικό</span></div></div><span class="cnt">9×</span><button class="del">✕</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.pvseg button').forEach(b=>{
+    b.onclick=()=>{
+      document.querySelectorAll('.pvseg button').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+      document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+      document.getElementById(b.dataset.v).classList.add('on');
+      window.scrollTo({top:0,behavior:'smooth'});
+    };
+  });
+</script>
+</body>
+</html>
