@@ -76,7 +76,7 @@
   .recon-row .ok{color:var(--green);font-weight:700}
   .recon-row .bad{color:var(--red);font-weight:700}
 
-  .qa{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+  .qa{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:16px 0}
   @media(max-width:880px){.qa{grid-template-columns:repeat(2,1fr)}}
   .qa button{border:1px solid var(--line);background:#fff;border-radius:14px;padding:14px 10px;cursor:pointer;font:inherit;text-align:center;box-shadow:var(--shadow)}
   .qa button .ic{font-size:24px;display:block;margin-bottom:6px}
@@ -115,7 +115,18 @@
   @media(max-width:880px){.grid{grid-template-columns:1fr}}
 
   /* ===== MOBILE phone frame ===== */
-  .phone-stage{display:flex;justify-content:center;padding:8px}
+  .phone-stage{display:flex;flex-wrap:wrap;gap:36px;justify-content:center;align-items:flex-start;padding:8px}
+  .ph-col{display:flex;flex-direction:column;align-items:center;gap:10px}
+  .ph-label{font-size:13px;font-weight:800;color:var(--grey)}
+  .feed .acts{display:flex;gap:6px}
+  .feed .acts button{border:1px solid var(--line);background:#fff;border-radius:8px;width:30px;height:30px;cursor:pointer;font-size:13px}
+  .fixed-tap{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .fixed-tap button{border:1px solid var(--line);background:#fff;border-radius:12px;padding:11px 8px;font:inherit;font-weight:700;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:7px;justify-content:center}
+  .close-row{display:flex;align-items:center;justify-content:space-between;padding:11px 13px;border-bottom:1px solid var(--line)}
+  .close-row .d{font-weight:700;font-size:14px}
+  .close-row .pos{font-size:11px;color:var(--blue);background:var(--blue-l);padding:2px 7px;border-radius:6px;font-weight:700;margin-top:3px;display:inline-block}
+  .cin{border:1.5px solid var(--line);border-radius:9px;padding:8px 10px;width:92px;text-align:right;font-weight:800;font-size:15px;font:inherit}
+  .cin.ok{border-color:var(--green);background:var(--green-l)}
   .phone{width:390px;max-width:100%;background:#fff;border:10px solid #14171d;border-radius:42px;box-shadow:0 18px 50px rgba(0,0,0,.25);overflow:hidden}
   .ph-not{height:26px;background:#14171d;display:flex;justify-content:center;align-items:flex-start}
   .ph-not span{width:120px;height:16px;background:#14171d;border-radius:0 0 12px 12px;box-shadow:inset 0 -4px 0 #000}
@@ -204,6 +215,7 @@
       <button class="on" data-p="ov">🏠 Επισκόπηση</button>
       <button data-p="wed">🛒 Πληρωμές Τετάρτης <span class="badge">3</span></button>
       <button data-p="stats">📊 Στατιστικά</button>
+      <button data-p="set">⚙️ Ρυθμίσεις</button>
     </div>
 
     <!-- ---- PANE: Overview (clean) ---- -->
@@ -244,6 +256,7 @@
         <button><span class="ic">🧾</span><span class="t">Πληρωμή / Έξοδο</span><span class="s">κρέμεται από μέρα</span></button>
         <button><span class="ic">💰</span><span class="t">Είσπραξη</span><span class="s">μόνο μετρητά</span></button>
         <button><span class="ic">📋</span><span class="t">Μέτρησα το ταμείο</span><span class="s">ίσιωμα υπολοίπου</span></button>
+        <button><span class="ic">🏦</span><span class="t">Κατάθεση / Μεταφορά</span><span class="s">μειώνει ταμείο, ΟΧΙ έξοδο</span></button>
       </div>
 
       <div class="card">
@@ -335,65 +348,150 @@
         </div>
       </div>
     </div>
+
+    <!-- ---- PANE: Settings ---- -->
+    <div class="pane" id="p-set">
+      <div class="grid">
+        <div class="card">
+          <div class="card-h">💶 Αρχικό υπόλοιπο μετρητών</div>
+          <div class="card-b">
+            <div class="note">Μία φορά, στην αρχή: «από πόσα μετρητά ξεκινάς». Από εκεί και πέρα το υπόλοιπο το χτίζει μόνο του (εισπράξεις − πληρωμές).</div>
+            <div class="fld"><label>Ποσό εκκίνησης</label><input value="2.300,00 €"></div>
+            <div class="fld"><label>Ημερομηνία εκκίνησης</label><input value="01-06-2026"></div>
+            <button class="btn btn-p">Αποθήκευση</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-h">📅 Κλειστές μέρες <span class="muted" style="font-weight:600;font-size:12px">(τις διαβάζει & Πρόβλεψη/Εργατικό/Αναφορές)</span></div>
+          <div class="card-b">
+            <div class="note">Ορίζεις <b>μία φορά</b> πότε είσαι κλειστά → το σύστημα δεν γκρινιάζει για ρεπό και ο επιλογέας μέρας τις παρακάμπτει.</div>
+            <div class="fld">
+              <label>Σταθερό ρεπό (κάθε εβδομάδα)</label>
+              <div class="chiprow">
+                <span class="chip">Δευ</span><span class="chip star">Τρι ✓</span><span class="chip">Τετ</span>
+                <span class="chip">Πεμ</span><span class="chip">Παρ</span><span class="chip">Σαβ</span><span class="chip">Κυρ</span>
+              </div>
+            </div>
+            <div class="fld">
+              <label>Έκτακτα κλειστά (αργίες / διακοπές)</label>
+              <div class="catline"><span class="emo">🎉</span><span class="nm">15 Αυγ · Δεκαπενταύγουστος</span><button class="btn btn-d" style="padding:6px 10px;min-height:auto">✕</button></div>
+              <div class="catline"><span class="emo">🏖️</span><span class="nm">24–31 Αυγ · Καλοκαιρινές διακοπές</span><button class="btn btn-d" style="padding:6px 10px;min-height:auto">✕</button></div>
+            </div>
+            <button class="btn btn-s">＋ Προσθήκη κλειστής μέρας</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- ================= MOBILE ================= -->
   <div class="view" id="v-mob">
     <div class="phone-stage">
-      <div class="phone">
-        <div class="ph-not"><span></span></div>
-        <div class="ph-screen">
-          <div class="ph-top">
-            <div class="h">👜 Το ταμείο μου</div>
-            <div class="bal">3.840,00 €</div>
-            <div class="sub">📟 σύγκριση POS εβδομάδας: ⚠️ −12 €</div>
-          </div>
-          <div class="ph-body">
-            <div class="ph-acts">
-              <button class="a-pay"><span class="ic">🧾</span>Πληρωμή / Έξοδο</button>
-              <button class="a-in"><span class="ic">💰</span>Είσπραξη</button>
-              <button class="a-draw"><span class="ic">💸</span>Πήρα μετρητά</button>
-              <button class="a-count"><span class="ic">📋</span>Μέτρησα ταμείο</button>
-            </div>
 
-            <!-- inline sheet demo: payment -->
-            <div class="sheet">
-              <h4>🧾 Νέα πληρωμή / έξοδο</h4>
-              <div class="fld">
-                <label>Από ποια μέρα; (ταμείο που αξιοποιείς)</label>
-                <div class="daypick">
-                  <button>Δευ 16</button>
-                  <button class="rep">Τρι 17</button>
-                  <button>Τετ 18</button>
-                  <button class="sel">Πεμ 19 ✓</button>
-                  <button>Παρ 20</button>
-                  <button>Σαβ 21</button>
+      <!-- PHONE 1: daily use -->
+      <div class="ph-col">
+        <div class="ph-label">① Καθημερινή χρήση</div>
+        <div class="phone">
+          <div class="ph-not"><span></span></div>
+          <div class="ph-screen">
+            <div class="ph-top">
+              <div class="h">👜 Το ταμείο μου</div>
+              <div class="bal">3.840,00 €</div>
+              <div class="sub">📟 σύγκριση POS εβδομάδας: ⚠️ −12 €</div>
+            </div>
+            <div class="ph-body">
+              <div class="ph-acts">
+                <button class="a-pay"><span class="ic">🧾</span>Πληρωμή / Έξοδο</button>
+                <button class="a-in"><span class="ic">💰</span>Είσπραξη</button>
+                <button class="a-draw"><span class="ic">💸</span>Πήρα μετρητά</button>
+                <button class="a-count"><span class="ic">📋</span>Μέτρησα ταμείο</button>
+              </div>
+
+              <!-- inline sheet demo: payment -->
+              <div class="sheet">
+                <h4>🧾 Νέα πληρωμή / έξοδο</h4>
+                <div class="fld">
+                  <label>Από ποια μέρα; (ταμείο που αξιοποιείς)</label>
+                  <div class="daypick">
+                    <button>Δευ 16</button>
+                    <button class="rep">Τρι 17</button>
+                    <button>Τετ 18</button>
+                    <button class="sel">Πεμ 19 ✓</button>
+                    <button>Παρ 20</button>
+                    <button>Σαβ 21</button>
+                  </div>
+                  <div class="muted" style="font-size:11.5px;margin-top:4px">Προ-διαλεγμένη η <b>προηγούμενη ανοιχτή μέρα</b> (η γυναίκα κλείνει το βράδυ → τα ξοδεύεις την επόμενη)</div>
                 </div>
-                <div class="muted" style="font-size:11.5px;margin-top:4px">Προ-διαλεγμένη η <b>προηγούμενη ανοιχτή μέρα</b> (η γυναίκα κλείνει το βράδυ → τα ξοδεύεις την επόμενη)</div>
+                <div class="fld"><label>Κατηγορία</label><select><option>🥩 Παππάς (κρεοπωλείο)</option><option>🛒 Ιπποκράτης</option><option>⚡ Ρεύμα</option><option>🏦 Κατάθεση / Μεταφορά</option><option>＋ Νέα κατηγορία…</option></select></div>
+                <div class="fld"><label>Ποσό</label><input value="120,00 €"></div>
+                <div class="fld">
+                  <label>Είναι της επιχείρησης;</label>
+                  <div class="toggle"><button class="g on">🟢 Επιχείρηση</button><button class="p">⚪ Προσωπικό</button></div>
+                </div>
+                <button class="btn btn-p" style="width:100%">Αποθήκευση</button>
               </div>
-              <div class="fld"><label>Κατηγορία</label><select><option>🥩 Παππάς (κρεοπωλείο)</option><option>🛒 Ιπποκράτης</option><option>⚡ Ρεύμα</option><option>＋ Νέα κατηγορία…</option></select></div>
-              <div class="fld"><label>Ποσό</label><input value="120,00 €"></div>
-              <div class="fld">
-                <label>Είναι της επιχείρησης;</label>
-                <div class="toggle"><button class="g on">🟢 Επιχείρηση</button><button class="p">⚪ Προσωπικό</button></div>
+
+              <!-- #8 fixed costs one-tap -->
+              <div class="ph-sec">💡 Πάγια με ένα πάτημα</div>
+              <div class="fixed-tap">
+                <button>🏠 Ενοίκιο · 800 €</button>
+                <button>🧮 Λογιστής · 150 €</button>
+                <button>⚡ Ρεύμα (ΔΕΗ)</button>
+                <button>👤 Μισθοί</button>
               </div>
-              <button class="btn btn-p" style="width:100%">Αποθήκευση</button>
-            </div>
 
-            <div class="ph-sec">Σημερινές κινήσεις</div>
-            <div class="feed">
-              <div class="it"><span class="emo">🥩</span><div class="tx"><div class="t1">Παππάς</div><div class="t2">από ταμείο Πεμ 19 · 🟢 επιχ.</div></div><div class="amt out">−120 €</div></div>
-              <div class="it"><span class="emo">💰</span><div class="tx"><div class="t1">Είσπραξη ημέρας</div><div class="t2">μόνο μετρητά</div></div><div class="amt inn">+650 €</div></div>
-              <div class="it"><span class="emo">💸</span><div class="tx"><div class="t1">Πήρα μετρητά</div><div class="t2">γενική ανάληψη · σήμερα · ⚪</div></div><div class="amt out">−100 €</div></div>
-            </div>
-
-            <div class="ph-close">
-              <div class="t">📋 Κλείσιμο Τρίτης</div>
-              <div class="s">Πέρασε έσοδα/έξοδα εβδομάδας & ετοίμασε πληρωμές Τετάρτης</div>
+              <!-- #13 edit/delete on entries -->
+              <div class="ph-sec" style="margin-top:14px">Σημερινές κινήσεις <span class="muted" style="font-weight:500;text-transform:none">· διορθώνονται όλα</span></div>
+              <div class="feed">
+                <div class="it"><span class="emo">🥩</span><div class="tx"><div class="t1">Παππάς</div><div class="t2">από ταμείο Πεμ 19 · 🟢 επιχ.</div></div><div class="amt out">−120 €</div><div class="acts"><button>✏️</button><button>🗑</button></div></div>
+                <div class="it"><span class="emo">💰</span><div class="tx"><div class="t1">Είσπραξη ημέρας</div><div class="t2">μόνο μετρητά</div></div><div class="amt inn">+650 €</div><div class="acts"><button>✏️</button><button>🗑</button></div></div>
+                <div class="it"><span class="emo">🏦</span><div class="tx"><div class="t1">Κατάθεση τράπεζα</div><div class="t2">μεταφορά · ΟΧΙ έξοδο</div></div><div class="amt out">−500 €</div><div class="acts"><button>✏️</button><button>🗑</button></div></div>
+              </div>
+              <div class="muted" style="font-size:11.5px;margin-top:8px;text-align:center">✏️ διόρθωση / 🗑 σβήσιμο → το υπόλοιπο & τα στατιστικά ξαναϋπολογίζονται μόνα τους</div>
             </div>
           </div>
         </div>
       </div>
+
+      <!-- PHONE 2: Tuesday closing (full) -->
+      <div class="ph-col">
+        <div class="ph-label">② Τρίτη (ρεπό) — Κλείσιμο εβδομάδας</div>
+        <div class="phone">
+          <div class="ph-not"><span></span></div>
+          <div class="ph-screen">
+            <div class="ph-top" style="background:linear-gradient(135deg,#2b2f3a,#1f2430)">
+              <div class="h">🌙 Κλείσιμο εβδομάδας</div>
+              <div class="bal">+1.540 €</div>
+              <div class="sub">καθαρό εβδομάδας (16–22 Ιουν)</div>
+            </div>
+            <div class="ph-body">
+              <div class="note">ℹ️ Συμπλήρωσε <b>μόνο</b> πόσα μετρητά μάζεψες κάθε μέρα. Τα έξοδα είναι ήδη περασμένα.</div>
+
+              <div class="ph-sec">💰 Εισπράξεις ανά μέρα (μετρητά)</div>
+              <div class="feed">
+                <div class="close-row"><div><div class="d">Δευ 16</div><span class="pos">POS: 540 €</span></div><input class="cin ok" value="540"></div>
+                <div class="close-row"><div><div class="d">Τετ 18</div><span class="pos">POS: 620 €</span></div><input class="cin ok" value="620"></div>
+                <div class="close-row"><div><div class="d">Πεμ 19</div><span class="pos">POS: 585 €</span></div><input class="cin" value="580"></div>
+                <div class="close-row"><div><div class="d">Παρ 20</div><span class="pos">POS: 717 €</span></div><input class="cin" value="710"></div>
+                <div class="close-row"><div><div class="d">Σαβ 21</div><span class="pos">POS: 930 €</span></div><input class="cin ok" value="930"></div>
+                <div class="close-row"><div><div class="d">Κυρ 22</div><span class="pos">POS: 650 €</span></div><input class="cin ok" value="650"></div>
+              </div>
+
+              <div class="ph-sec" style="margin-top:14px">📋 Σύνοψη εβδομάδας</div>
+              <div class="feed">
+                <div class="it"><div class="tx"><div class="t1">💰 Εισπράξεις</div></div><div class="amt inn">+4.030 €</div></div>
+                <div class="it"><div class="tx"><div class="t1">💸 Πληρωμές</div></div><div class="amt out">−2.490 €</div></div>
+                <div class="it"><div class="tx"><div class="t1">✅ Καθαρό</div></div><div class="amt">+1.540 €</div></div>
+                <div class="it"><div class="tx"><div class="t1">👜 Νέο υπόλοιπο ταμείου</div></div><div class="amt">3.840 €</div></div>
+              </div>
+
+              <button class="btn btn-p" style="width:100%;margin-top:14px">✓ Κλείσιμο εβδομάδας</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -440,6 +538,10 @@
             <div class="crow"><span class="dot p"></span><span class="emo">🚬</span><span class="nm">Τσιγάρα</span><span class="cnt">25×</span></div>
             <div class="crow"><span class="dot p"></span><span class="emo">👛</span><span class="nm">Έλενα (στη γυναίκα)</span><span class="cnt">12×</span></div>
             <div class="crow"><span class="dot p"></span><span class="emo">💸</span><span class="nm">Διάφορα προσωπικά</span><span class="cnt">9×</span></div>
+          </div>
+          <div class="catgrp">
+            <h5>🏦 Καταθέσεις / Μεταφορές</h5>
+            <div class="crow"><span class="dot b"></span><span class="emo">🏦</span><span class="nm">Κατάθεση στην τράπεζα</span><span class="lnk">μειώνει ταμείο, ΟΧΙ έξοδο</span><span class="cnt">4×</span></div>
           </div>
         </div>
       </div>
