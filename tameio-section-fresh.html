@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>👜 Ταμείο — Preview Ενότητας</title>
+<style>
+  :root{
+    --orange:#e8722c; --orange-d:#cf5f1e; --orange-l:#fff3eb;
+    --green:#2e9e5b; --green-l:#e9f7ee;
+    --red:#d9453c; --red-l:#fdecec;
+    --grey:#6b7280; --grey-l:#f3f4f6;
+    --ink:#1f2430; --line:#e6e8ec; --card:#fff; --bg:#f5f6f8;
+    --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.04);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.45}
+  .wrap{max-width:1180px;margin:0 auto;padding:18px}
+
+  /* ===== preview switcher ===== */
+  .pv-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:18px}
+  .pv-title{font-size:22px;font-weight:800}
+  .pv-title small{display:block;font-size:13px;font-weight:500;color:var(--grey)}
+  .seg{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:12px;padding:4px;box-shadow:var(--shadow)}
+  .seg button{border:0;background:transparent;font:inherit;font-weight:700;color:var(--grey);padding:9px 16px;border-radius:9px;cursor:pointer;font-size:14px}
+  .seg button.on{background:var(--orange);color:#fff}
+
+  .view{display:none}
+  .view.on{display:block}
+
+  /* ===== generic cards ===== */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+  .card-h{padding:14px 18px;border-bottom:1px solid var(--line);font-weight:800;font-size:15px;display:flex;align-items:center;gap:8px;justify-content:space-between}
+  .card-b{padding:16px 18px}
+  .muted{color:var(--grey)}
+  .pill{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-size:12px;font-weight:700}
+  .pill.g{background:var(--green-l);color:var(--green)}
+  .pill.p{background:var(--grey-l);color:var(--grey)}
+  .pill.r{background:var(--red-l);color:var(--red)}
+  .pill.o{background:var(--orange-l);color:var(--orange-d)}
+
+  .btn{border:0;font:inherit;font-weight:700;border-radius:11px;padding:11px 16px;cursor:pointer;min-height:44px;display:inline-flex;align-items:center;gap:8px;justify-content:center}
+  .btn-p{background:var(--orange);color:#fff}
+  .btn-s{background:#fff;color:var(--ink);border:1px solid var(--line)}
+  .btn-d{background:#fff;color:var(--red);border:1px solid #f2c4c1}
+
+  /* ===== DESKTOP layout ===== */
+  .grid{display:grid;grid-template-columns:1.6fr 1fr;gap:18px;align-items:start}
+  @media(max-width:880px){.grid{grid-template-columns:1fr}}
+
+  .balance{background:linear-gradient(135deg,#2b2f3a,#1f2430);color:#fff;border-radius:18px;padding:22px;box-shadow:var(--shadow)}
+  .balance .lab{font-size:13px;opacity:.8;letter-spacing:.3px}
+  .balance .big{font-size:42px;font-weight:800;margin:2px 0 10px}
+  .balance .cmp{display:flex;gap:18px;flex-wrap:wrap;font-size:13.5px}
+  .balance .cmp b{font-weight:800}
+  .cmp .ok{color:#7ee2a8}.cmp .bad{color:#ff9b94}
+
+  .qa{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+  @media(max-width:880px){.qa{grid-template-columns:repeat(2,1fr)}}
+  .qa button{border:1px solid var(--line);background:#fff;border-radius:14px;padding:14px 10px;cursor:pointer;font:inherit;text-align:center;box-shadow:var(--shadow)}
+  .qa button .ic{font-size:24px;display:block;margin-bottom:6px}
+  .qa button .t{font-weight:800;font-size:13.5px}
+  .qa button .s{font-size:11.5px;color:var(--grey)}
+  .qa button.accent{background:var(--orange-l);border-color:#f3cfb3}
+
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+  th{font-size:12px;color:var(--grey);text-transform:uppercase;letter-spacing:.4px}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+  tr.closed td{color:#9aa0aa;background:#fafbfc}
+  .day-pill{font-weight:700}
+
+  .stat-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px dashed var(--line);font-size:14px}
+  .stat-row:last-child{border-bottom:0}
+  .stat-row b{font-weight:800}
+
+  .catline{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+  .catline:last-child{border-bottom:0}
+  .catline .nm{flex:1;font-weight:600}
+  .catline .am{font-weight:800;font-variant-numeric:tabular-nums}
+
+  /* ===== MOBILE phone frame ===== */
+  .phone-stage{display:flex;justify-content:center;padding:8px}
+  .phone{width:390px;max-width:100%;background:#fff;border:10px solid #14171d;border-radius:42px;box-shadow:0 18px 50px rgba(0,0,0,.25);overflow:hidden}
+  .ph-not{height:26px;background:#14171d;display:flex;justify-content:center;align-items:flex-start}
+  .ph-not span{width:120px;height:16px;background:#14171d;border-radius:0 0 12px 12px;box-shadow:inset 0 -4px 0 #000}
+  .ph-screen{height:720px;overflow-y:auto;background:var(--bg)}
+  .ph-top{background:var(--orange);color:#fff;padding:16px 18px 18px}
+  .ph-top .h{font-weight:800;font-size:17px}
+  .ph-top .bal{font-size:30px;font-weight:800;margin-top:6px}
+  .ph-top .sub{font-size:12px;opacity:.92}
+  .ph-body{padding:14px}
+  .ph-acts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+  .ph-acts button{border:0;border-radius:16px;padding:16px 8px;cursor:pointer;font:inherit;font-weight:800;color:#fff;font-size:14px;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;gap:6px}
+  .ph-acts .ic{font-size:26px}
+  .a-pay{background:var(--red)}
+  .a-in{background:var(--green)}
+  .a-draw{background:#7a52c9}
+  .a-count{background:#3a7bd5}
+  .ph-sec{font-weight:800;font-size:13px;color:var(--grey);margin:6px 2px 8px;text-transform:uppercase;letter-spacing:.4px}
+  .feed{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .feed .it{display:flex;align-items:center;gap:11px;padding:11px 13px;border-bottom:1px solid var(--line)}
+  .feed .it:last-child{border-bottom:0}
+  .feed .emo{font-size:20px}
+  .feed .tx{flex:1}
+  .feed .tx .t1{font-weight:700;font-size:14px}
+  .feed .tx .t2{font-size:12px;color:var(--grey)}
+  .feed .amt{font-weight:800;font-variant-numeric:tabular-nums}
+  .amt.out{color:var(--red)}.amt.inn{color:var(--green)}
+  .ph-close{margin-top:14px;background:#fff;border:2px dashed var(--orange);border-radius:16px;padding:14px;text-align:center}
+  .ph-close .t{font-weight:800;color:var(--orange-d)}
+  .ph-close .s{font-size:12px;color:var(--grey);margin-top:3px}
+
+  /* sheet (modal mock for payment) */
+  .sheet{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:14px}
+  .sheet h4{font-size:14px;margin-bottom:10px}
+  .fld{margin-bottom:11px}
+  .fld label{display:block;font-size:12px;font-weight:700;color:var(--grey);margin-bottom:5px}
+  .fld input,.fld select{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:11px;font:inherit;background:#fff}
+  .daypick{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+  .daypick button{flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;text-align:center;min-width:62px}
+  .daypick button.sel{background:var(--orange);color:#fff;border-color:var(--orange)}
+  .daypick button.rep{background:var(--grey-l);color:#aaa;text-decoration:line-through}
+  .toggle{display:flex;gap:8px}
+  .toggle button{flex:1;border:1px solid var(--line);background:#fff;border-radius:11px;padding:10px;font:inherit;font-weight:800;cursor:pointer}
+  .toggle button.g.on{background:var(--green-l);border-color:var(--green);color:var(--green)}
+  .toggle button.p.on{background:var(--grey-l);border-color:var(--grey);color:var(--grey)}
+
+  /* ===== CATEGORIES ===== */
+  .pp{display:grid;grid-template-columns:1fr 1.5fr;gap:18px;align-items:start}
+  @media(max-width:880px){.pp{grid-template-columns:1fr}}
+  .catgrp{margin-bottom:6px}
+  .catgrp h5{font-size:12px;color:var(--grey);text-transform:uppercase;letter-spacing:.4px;margin:14px 0 6px}
+  .catgrp h5:first-child{margin-top:0}
+  .crow{display:flex;align-items:center;gap:11px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;margin-bottom:8px;background:#fff}
+  .crow .emo{font-size:20px}
+  .crow .nm{flex:1;font-weight:700}
+  .crow .lnk{font-size:11.5px;color:var(--grey)}
+  .dot{width:9px;height:9px;border-radius:50%}
+  .dot.g{background:var(--green)}.dot.p{background:var(--grey)}
+
+  .picker-demo{margin-top:18px}
+  .chiprow{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 4px}
+  .chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 13px;font-weight:700;font-size:13px;cursor:pointer}
+  .chip.star{background:var(--orange-l);border-color:#f3cfb3}
+
+  .note{background:var(--orange-l);border:1px solid #f3cfb3;border-radius:12px;padding:11px 13px;font-size:13px;color:#7a4a22;margin-bottom:14px}
+  .legend{font-size:12px;color:var(--grey);margin-top:18px;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="pv-top">
+    <div class="pv-title">👜 Ταμείο <small>Νέα ενότητα back-office — preview (ψεύτικα δεδομένα)</small></div>
+    <div class="seg">
+      <button class="on" data-v="desk">🖥️ Υπολογιστής</button>
+      <button data-v="mob">📱 Κινητό</button>
+      <button data-v="cat">🏷️ Κατηγορίες</button>
+    </div>
+  </div>
+
+  <!-- ================= DESKTOP ================= -->
+  <div class="view on" id="v-desk">
+    <div class="grid">
+      <!-- LEFT column -->
+      <div>
+        <div class="balance">
+          <div class="lab">ΥΠΟΛΟΙΠΟ ΜΕΤΡΗΤΩΝ (το ταμείο σου)</div>
+          <div class="big">3.840,00 €</div>
+          <div class="cmp">
+            <span>📟 POS μετρητά εβδομάδας: <b>4.120 €</b></span>
+            <span>🧮 Δικό σου: <b>4.108 €</b></span>
+            <span class="bad">⚠️ Διαφορά: <b>−12 €</b> (ξεχασμένη κίνηση;)</span>
+          </div>
+        </div>
+
+        <div class="qa">
+          <button class="accent"><span class="ic">💸</span><span class="t">Πήρα μετρητά</span><span class="s">από το σύνολο · σήμερα</span></button>
+          <button><span class="ic">🧾</span><span class="t">Πληρωμή / Έξοδο</span><span class="s">κρέμεται από μέρα</span></button>
+          <button><span class="ic">💰</span><span class="t">Είσπραξη</span><span class="s">μετρητά ημέρας</span></button>
+          <button><span class="ic">📋</span><span class="t">Μέτρησα το ταμείο</span><span class="s">ίσιωμα υπολοίπου</span></button>
+        </div>
+
+        <div class="card" style="margin-bottom:18px">
+          <div class="card-h">📅 Η εβδομάδα <span class="muted" style="font-weight:600;font-size:12px">16–22 Ιουν 2026</span></div>
+          <div class="card-b" style="padding:0">
+            <table>
+              <thead><tr><th>Μέρα</th><th class="num">Εισπράξεις</th><th class="num">Πληρωμές</th><th class="num">Υπόλοιπο</th></tr></thead>
+              <tbody>
+                <tr><td><span class="day-pill">Δευ 16</span></td><td class="num">+540</td><td class="num">−210</td><td class="num">3.450</td></tr>
+                <tr class="closed"><td><span class="day-pill">Τρι 17</span> <span class="pill p">ρεπό</span></td><td class="num">—</td><td class="num">−1.150</td><td class="num">2.300</td></tr>
+                <tr><td><span class="day-pill">Τετ 18</span></td><td class="num">+620</td><td class="num">−180</td><td class="num">2.740</td></tr>
+                <tr><td><span class="day-pill">Πεμ 19</span></td><td class="num">+580</td><td class="num">−90</td><td class="num">3.230</td></tr>
+                <tr><td><span class="day-pill">Παρ 20</span></td><td class="num">+710</td><td class="num">−140</td><td class="num">3.800</td></tr>
+                <tr><td><span class="day-pill">Σαβ 21</span></td><td class="num">+930</td><td class="num">−60</td><td class="num">4.670</td></tr>
+                <tr><td><span class="day-pill">Κυρ 22</span></td><td class="num">+650</td><td class="num">−30</td><td class="num"><b>3.840</b></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-h">💸 Πληρωμές εβδομάδας ανά κατηγορία</div>
+          <div class="card-b">
+            <div class="catline"><span class="emo">🥩</span><span class="nm">Παππάς (κρεοπωλείο) <span class="pill g">🟢 επιχ.</span> <span class="pill o">🚚 τιμολόγιο</span></span><span class="am">−820 €</span></div>
+            <div class="catline"><span class="emo">🛒</span><span class="nm">Ιπποκράτης (τρόφιμα) <span class="pill g">🟢 επιχ.</span></span><span class="am">−640 €</span></div>
+            <div class="catline"><span class="emo">⚡</span><span class="nm">Ρεύμα (ΔΕΗ) <span class="pill g">🟢 επιχ.</span></span><span class="am">−150 €</span></div>
+            <div class="catline"><span class="emo">🚬</span><span class="nm">Τσιγάρα <span class="pill p">⚪ προσωπικό</span></span><span class="am">−90 €</span></div>
+            <div class="catline"><span class="emo">👛</span><span class="nm">Έλενα (στη γυναίκα) <span class="pill p">⚪ προσωπικό</span></span><span class="am">−120 €</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT column -->
+      <div>
+        <div class="card" style="margin-bottom:18px">
+          <div class="card-h">📊 Στατιστικά μήνα</div>
+          <div class="card-b">
+            <div class="stat-row"><span>Μ.Ο. ημερήσιας είσπραξης</span><b>648 €</b></div>
+            <div class="stat-row"><span>📈 Καλύτερη μέρα</span><b>Σαβ 21 · 930 €</b></div>
+            <div class="stat-row"><span>📉 Χαμηλότερη</span><b>Πεμ 19 · 580 €</b></div>
+            <div class="stat-row"><span>Σύνολο εισπράξεων</span><b>14.300 €</b></div>
+            <div class="stat-row"><span>Σύνολο πληρωμών</span><b>10.460 €</b></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:18px">
+          <div class="card-h">👛 Προσωπικά (τι τράβηξα για μένα)</div>
+          <div class="card-b">
+            <div class="stat-row"><span>💸 Αναλήψεις μήνα</span><b>1.150 €</b></div>
+            <div class="stat-row"><span>🚬 Τσιγάρα</span><b>240 €</b></div>
+            <div class="stat-row"><span>👛 Έλενα</span><b>480 €</b></div>
+            <div class="stat-row"><span class="muted" style="font-size:12.5px">Δεν μετράνε στο κέρδος/Αναφορές</span><span></span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-h">🟢/⚪ Έλεγχος υγείας</div>
+          <div class="card-b">
+            <div class="stat-row"><span>🟢 Έξοδα επιχείρησης</span><b>8.910 €</b></div>
+            <div class="stat-row"><span>⚪ Προσωπικά</span><b>1.550 €</b></div>
+            <p class="muted" style="font-size:12.5px;margin-top:10px">Μόνο τα 🟢 περνάνε στα Έξοδα/κέρδος. Καμία διπλοεγγραφή με τον τζίρο του POS.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MOBILE ================= -->
+  <div class="view" id="v-mob">
+    <div class="phone-stage">
+      <div class="phone">
+        <div class="ph-not"><span></span></div>
+        <div class="ph-screen">
+          <div class="ph-top">
+            <div class="h">👜 Το ταμείο μου</div>
+            <div class="bal">3.840,00 €</div>
+            <div class="sub">📟 POS: 4.120 € · ⚠️ διαφορά −12 €</div>
+          </div>
+          <div class="ph-body">
+            <div class="ph-acts">
+              <button class="a-pay"><span class="ic">🧾</span>Πληρωμή / Έξοδο</button>
+              <button class="a-in"><span class="ic">💰</span>Είσπραξη</button>
+              <button class="a-draw"><span class="ic">💸</span>Πήρα μετρητά</button>
+              <button class="a-count"><span class="ic">📋</span>Μέτρησα ταμείο</button>
+            </div>
+
+            <!-- inline sheet demo: payment -->
+            <div class="sheet">
+              <h4>🧾 Νέα πληρωμή / έξοδο</h4>
+              <div class="fld">
+                <label>Από ποια μέρα; (ταμείο που αξιοποιείς)</label>
+                <div class="daypick">
+                  <button>Δευ 16</button>
+                  <button class="rep">Τρι 17</button>
+                  <button>Τετ 18</button>
+                  <button class="sel">Πεμ 19 ✓</button>
+                  <button>Παρ 20</button>
+                  <button>Σαβ 21</button>
+                </div>
+              </div>
+              <div class="fld"><label>Κατηγορία</label><select><option>🥩 Παππάς (κρεοπωλείο)</option><option>🛒 Ιπποκράτης</option><option>⚡ Ρεύμα</option><option>＋ Νέα κατηγορία…</option></select></div>
+              <div class="fld"><label>Ποσό</label><input value="120,00 €"></div>
+              <div class="fld">
+                <label>Είναι της επιχείρησης;</label>
+                <div class="toggle"><button class="g on">🟢 Επιχείρηση</button><button class="p">⚪ Προσωπικό</button></div>
+              </div>
+              <button class="btn btn-p" style="width:100%">Αποθήκευση</button>
+            </div>
+
+            <div class="ph-sec">Σημερινές κινήσεις</div>
+            <div class="feed">
+              <div class="it"><span class="emo">🥩</span><div class="tx"><div class="t1">Παππάς</div><div class="t2">από ταμείο Πεμ 19 · 🟢 επιχ.</div></div><div class="amt out">−120 €</div></div>
+              <div class="it"><span class="emo">💰</span><div class="tx"><div class="t1">Είσπραξη ημέρας</div><div class="t2">μόνο μετρητά</div></div><div class="amt inn">+650 €</div></div>
+              <div class="it"><span class="emo">💸</span><div class="tx"><div class="t1">Πήρα μετρητά</div><div class="t2">γενική ανάληψη · ⚪</div></div><div class="amt out">−100 €</div></div>
+            </div>
+
+            <div class="ph-close">
+              <div class="t">📋 Κλείσιμο Τρίτης</div>
+              <div class="s">Πέρασε έσοδα/έξοδα εβδομάδας & ετοίμασε πληρωμές Τετάρτης</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= CATEGORIES ================= -->
+  <div class="view" id="v-cat">
+    <div class="note">🏷️ Οι κατηγορίες είναι κομμάτι της ίδιας ενότητας — κοινές με τα «Έξοδα» (§4), ώστε να μην κρατάς δύο λίστες. Κάθε κατηγορία έχει προ-ρυθμισμένο 🟢/⚪ και (προαιρετικά) σύνδεση με προμηθευτή.</div>
+
+    <div class="pp">
+      <!-- left: form -->
+      <div class="card">
+        <div class="card-h">＋ Νέα κατηγορία</div>
+        <div class="card-b">
+          <div class="fld"><label>Όνομα</label><input placeholder="π.χ. Τσιγάρα"></div>
+          <div class="fld"><label>Εικονίδιο</label><input value="🚬" style="width:70px;text-align:center;font-size:20px"></div>
+          <div class="fld">
+            <label>Προεπιλογή διακόπτη</label>
+            <div class="toggle"><button class="g">🟢 Επιχείρηση</button><button class="p on">⚪ Προσωπικό</button></div>
+          </div>
+          <div class="fld"><label>Σύνδεση με προμηθευτή (προαιρετικό)</label><select><option>— κανένας —</option><option>Παππάς Χρήστος</option><option>ΑΦΟΙ Κιβρόγλου</option></select></div>
+          <button class="btn btn-p" style="width:100%">Προσθήκη</button>
+        </div>
+      </div>
+
+      <!-- right: list grouped -->
+      <div class="card">
+        <div class="card-h">Οι κατηγορίες σου <span class="pill o">12</span></div>
+        <div class="card-b">
+          <div class="catgrp">
+            <h5>🟢 Επιχείρηση</h5>
+            <div class="crow"><span class="dot g"></span><span class="emo">⚡</span><span class="nm">Ρεύμα</span><span class="lnk">ΔΕΗ</span><button class="btn btn-s" style="padding:6px 10px;min-height:auto">✏️</button></div>
+            <div class="crow"><span class="dot g"></span><span class="emo">🧊</span><span class="nm">Αναλώσιμα</span><button class="btn btn-s" style="padding:6px 10px;min-height:auto">✏️</button></div>
+            <div class="crow"><span class="dot g"></span><span class="emo">🏪</span><span class="nm">Μαγαζιού (χύμα)</span><span class="lnk">για βιαστικές μέρες</span><button class="btn btn-s" style="padding:6px 10px;min-height:auto">✏️</button></div>
+          </div>
+          <div class="catgrp">
+            <h5>🚚 Προμηθευτές</h5>
+            <div class="crow"><span class="dot g"></span><span class="emo">🥩</span><span class="nm">Παππάς (κρεοπωλείο)</span><span class="lnk">→ τιμολόγια</span><button class="btn btn-s" style="padding:6px 10px;min-height:auto">✏️</button></div>
+            <div class="crow"><span class="dot g"></span><span class="emo">🛒</span><span class="nm">Ιπποκράτης (τρόφιμα)</span><span class="lnk">→ τιμολόγια</span><button class="btn btn-s" style="padding:6px 10px;min-height:auto">✏️</button></div>
+          </div>
+          <div class="catgrp">
+            <h5>⚪ Προσωπικά</h5>
+            <div class="crow"><span class="dot p"></span><span class="emo">🚬</span><span class="nm">Τσιγάρα</span><button class="btn btn-s" style="padding:6px 10px;min-height:auto">✏️</button></div>
+            <div class="crow"><span class="dot p"></span><span class="emo">👛</span><span class="nm">Έλενα (στη γυναίκα)</span><button class="btn btn-s" style="padding:6px 10px;min-height:auto">✏️</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- mobile picker demo -->
+    <div class="picker-demo">
+      <div class="card">
+        <div class="card-h">📱 Πώς διαλέγεις κατηγορία στο κινητό (γρήγορα)</div>
+        <div class="card-b">
+          <p class="muted" style="font-size:13px;margin-bottom:6px">⭐ Συχνές πάνω · αναζήτηση · ομάδες · ＋ νέα inline</p>
+          <input class="fld" style="width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:11px" placeholder="🔍 Αναζήτηση κατηγορίας…">
+          <div style="font-size:11px;color:var(--grey);font-weight:700;margin:12px 0 4px;text-transform:uppercase">⭐ Συχνές</div>
+          <div class="chiprow">
+            <span class="chip star">🥩 Παππάς</span>
+            <span class="chip star">🛒 Ιπποκράτης</span>
+            <span class="chip star">🏪 Μαγαζιού</span>
+            <span class="chip star">🚬 Τσιγάρα</span>
+          </div>
+          <div style="font-size:11px;color:var(--grey);font-weight:700;margin:12px 0 4px;text-transform:uppercase">Όλες</div>
+          <div class="chiprow">
+            <span class="chip">⚡ Ρεύμα</span>
+            <span class="chip">🧊 Αναλώσιμα</span>
+            <span class="chip">👛 Έλενα</span>
+            <span class="chip" style="border-style:dashed;color:var(--orange-d)">＋ Νέα κατηγορία</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="legend">Preview ενότητας «👜 Ταμείο» · ψεύτικα δεδομένα · 3 όψεις μιας ενότητας (Υπολογιστής / Κινητό / Κατηγορίες)</div>
+</div>
+
+<script>
+  document.querySelectorAll('.seg button').forEach(b=>{
+    b.onclick=()=>{
+      document.querySelectorAll('.seg button').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+      document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+      document.getElementById('v-'+b.dataset.v).classList.add('on');
+      window.scrollTo({top:0,behavior:'smooth'});
+    };
+  });
+  // toggle demo buttons
+  document.querySelectorAll('.toggle').forEach(t=>{
+    t.querySelectorAll('button').forEach(btn=>{
+      btn.onclick=()=>{t.querySelectorAll('button').forEach(x=>x.classList.remove('on'));btn.classList.add('on');};
+    });
+  });
+</script>
+</body>
+</html>
