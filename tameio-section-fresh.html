@@ -76,7 +76,7 @@
   .recon-row .ok{color:var(--green);font-weight:700}
   .recon-row .bad{color:var(--red);font-weight:700}
 
-  .qa{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:16px 0}
+  .qa{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
   @media(max-width:880px){.qa{grid-template-columns:repeat(2,1fr)}}
   .qa button{border:1px solid var(--line);background:#fff;border-radius:14px;padding:14px 10px;cursor:pointer;font:inherit;text-align:center;box-shadow:var(--shadow)}
   .qa button .ic{font-size:24px;display:block;margin-bottom:6px}
@@ -254,10 +254,9 @@
       <div class="qa">
         <button class="accent"><span class="ic">💸</span><span class="t">Πήρα μετρητά</span><span class="s">από το σύνολο · σήμερα</span></button>
         <button><span class="ic">🧾</span><span class="t">Πληρωμή / Έξοδο</span><span class="s">κρέμεται από μέρα</span></button>
-        <button><span class="ic">💰</span><span class="t">Είσπραξη</span><span class="s">μόνο μετρητά</span></button>
         <button><span class="ic">📋</span><span class="t">Μέτρησα το ταμείο</span><span class="s">ίσιωμα υπολοίπου</span></button>
-        <button><span class="ic">🏦</span><span class="t">Κατάθεση / Μεταφορά</span><span class="s">μειώνει ταμείο, ΟΧΙ έξοδο</span></button>
       </div>
+      <div class="note blue" style="margin:-2px 0 16px">💰 <b>Εισπράξεις:</b> μπαίνουν με <b>καταμέτρηση του ταμείου κάθε μέρας</b> (συνήθως την Τρίτη) → δες την οθόνη «Κλείσιμο» στο κινητό. Μόνο μετρητά (οι κάρτες πάνε στην τράπεζα, εκτός ταμείου).</div>
 
       <div class="card">
         <div class="card-h">
@@ -403,9 +402,9 @@
             <div class="ph-body">
               <div class="ph-acts">
                 <button class="a-pay"><span class="ic">🧾</span>Πληρωμή / Έξοδο</button>
-                <button class="a-in"><span class="ic">💰</span>Είσπραξη</button>
                 <button class="a-draw"><span class="ic">💸</span>Πήρα μετρητά</button>
                 <button class="a-count"><span class="ic">📋</span>Μέτρησα ταμείο</button>
+                <button class="a-in"><span class="ic">🌙</span>Κλείσιμο (Είσπραξη)</button>
               </div>
 
               <!-- inline sheet demo: payment -->
@@ -423,7 +422,7 @@
                   </div>
                   <div class="muted" style="font-size:11.5px;margin-top:4px">Προ-διαλεγμένη η <b>προηγούμενη ανοιχτή μέρα</b> (η γυναίκα κλείνει το βράδυ → τα ξοδεύεις την επόμενη)</div>
                 </div>
-                <div class="fld"><label>Κατηγορία</label><select><option>🥩 Παππάς (κρεοπωλείο)</option><option>🛒 Ιπποκράτης</option><option>⚡ Ρεύμα</option><option>🏦 Κατάθεση / Μεταφορά</option><option>＋ Νέα κατηγορία…</option></select></div>
+                <div class="fld"><label>Κατηγορία</label><select><option>🥩 Παππάς (κρεοπωλείο)</option><option>🛒 Ιπποκράτης</option><option>⚡ Ρεύμα</option><option>＋ Νέα κατηγορία…</option></select></div>
                 <div class="fld"><label>Ποσό</label><input value="120,00 €"></div>
                 <div class="fld">
                   <label>Είναι της επιχείρησης;</label>
@@ -432,8 +431,9 @@
                 <button class="btn btn-p" style="width:100%">Αποθήκευση</button>
               </div>
 
-              <!-- #8 fixed costs one-tap -->
-              <div class="ph-sec">💡 Πάγια με ένα πάτημα</div>
+              <!-- #8 fixed costs (quick, but still pick the day) -->
+              <div class="ph-sec">💡 Πάγια — γρήγορη πληρωμή</div>
+              <div class="muted" style="font-size:11.5px;margin:-4px 2px 8px">Πατάς → προ-γεμίζει κατηγορία &amp; ποσό, αλλά <b>διαλέγεις από ποιο ταμείο μέρας</b> (όπως οι πληρωμές)</div>
               <div class="fixed-tap">
                 <button>🏠 Ενοίκιο · 800 €</button>
                 <button>🧮 Λογιστής · 150 €</button>
@@ -445,8 +445,8 @@
               <div class="ph-sec" style="margin-top:14px">Σημερινές κινήσεις <span class="muted" style="font-weight:500;text-transform:none">· διορθώνονται όλα</span></div>
               <div class="feed">
                 <div class="it"><span class="emo">🥩</span><div class="tx"><div class="t1">Παππάς</div><div class="t2">από ταμείο Πεμ 19 · 🟢 επιχ.</div></div><div class="amt out">−120 €</div><div class="acts"><button>✏️</button><button>🗑</button></div></div>
-                <div class="it"><span class="emo">💰</span><div class="tx"><div class="t1">Είσπραξη ημέρας</div><div class="t2">μόνο μετρητά</div></div><div class="amt inn">+650 €</div><div class="acts"><button>✏️</button><button>🗑</button></div></div>
-                <div class="it"><span class="emo">🏦</span><div class="tx"><div class="t1">Κατάθεση τράπεζα</div><div class="t2">μεταφορά · ΟΧΙ έξοδο</div></div><div class="amt out">−500 €</div><div class="acts"><button>✏️</button><button>🗑</button></div></div>
+                <div class="it"><span class="emo">🏠</span><div class="tx"><div class="t1">Ενοίκιο (πάγιο)</div><div class="t2">από ταμείο Πεμ 19 · 🟢 επιχ.</div></div><div class="amt out">−800 €</div><div class="acts"><button>✏️</button><button>🗑</button></div></div>
+                <div class="it"><span class="emo">💸</span><div class="tx"><div class="t1">Πήρα μετρητά</div><div class="t2">γενική ανάληψη · σήμερα · ⚪</div></div><div class="amt out">−100 €</div><div class="acts"><button>✏️</button><button>🗑</button></div></div>
               </div>
               <div class="muted" style="font-size:11.5px;margin-top:8px;text-align:center">✏️ διόρθωση / 🗑 σβήσιμο → το υπόλοιπο & τα στατιστικά ξαναϋπολογίζονται μόνα τους</div>
             </div>
@@ -538,10 +538,6 @@
             <div class="crow"><span class="dot p"></span><span class="emo">🚬</span><span class="nm">Τσιγάρα</span><span class="cnt">25×</span></div>
             <div class="crow"><span class="dot p"></span><span class="emo">👛</span><span class="nm">Έλενα (στη γυναίκα)</span><span class="cnt">12×</span></div>
             <div class="crow"><span class="dot p"></span><span class="emo">💸</span><span class="nm">Διάφορα προσωπικά</span><span class="cnt">9×</span></div>
-          </div>
-          <div class="catgrp">
-            <h5>🏦 Καταθέσεις / Μεταφορές</h5>
-            <div class="crow"><span class="dot b"></span><span class="emo">🏦</span><span class="nm">Κατάθεση στην τράπεζα</span><span class="lnk">μειώνει ταμείο, ΟΧΙ έξοδο</span><span class="cnt">4×</span></div>
           </div>
         </div>
       </div>
