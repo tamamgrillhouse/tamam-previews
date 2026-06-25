@@ -441,17 +441,19 @@
                 <button class="btn btn-p" style="width:100%">Αποθήκευση</button>
               </div>
 
-              <!-- ms-count -->
+              <!-- ms-count (weekly, per day) -->
               <div class="sheet msheet" id="ms-count">
-                <h4>📋 Μέτρησα το ταμείο μου</h4>
-                <div class="muted" style="font-size:12px;margin-bottom:10px">Μέτρα τα πραγματικά μετρητά· φτιάχνεται «προσαρμογή» που ισιώνει το υπόλοιπο.</div>
-                <div class="fld"><label>Πόσα μέτρησες;</label><input value="3.825,00 €"></div>
-                <div class="calc">
-                  <div class="r"><span>Το σύστημα λέει</span><b>3.840,00 €</b></div>
-                  <div class="r"><span>Μέτρησες</span><b>3.825,00 €</b></div>
-                  <div class="r" style="border-top:1px solid #dfe2e7;margin-top:4px;padding-top:6px"><span>Διαφορά</span><b style="color:var(--red)">−15,00 €</b></div>
+                <h4>📋 Μέτρησα το ταμείο — εβδομάδα</h4>
+                <div class="muted" style="font-size:12px;margin-bottom:8px">Βάλε <b>ανά μέρα</b> τι μέτρησες· δίπλα τα έξοδα της μέρας.</div>
+                <div class="feed">
+                  <div class="close-row"><div><div class="d">Δευ 16</div><span class="pos" style="background:var(--red-l);color:var(--red)">έξοδα −210</span></div><input class="cin" value="540"></div>
+                  <div class="close-row"><div><div class="d">Τετ 18</div><span class="pos" style="background:var(--red-l);color:var(--red)">έξοδα −1.240</span></div><input class="cin" value="620"></div>
+                  <div class="close-row"><div><div class="d">Πεμ 19</div><span class="pos" style="background:var(--red-l);color:var(--red)">έξοδα −90</span></div><input class="cin" value="580"></div>
+                  <div class="close-row"><div><div class="d">Παρ 20</div><span class="pos" style="background:var(--red-l);color:var(--red)">έξοδα −140</span></div><input class="cin" value="710"></div>
+                  <div class="close-row"><div><div class="d">Σαβ 21</div><span class="pos" style="background:var(--red-l);color:var(--red)">έξοδα −60</span></div><input class="cin" value="930"></div>
+                  <div class="close-row"><div><div class="d">Κυρ 22</div><span class="pos" style="background:var(--red-l);color:var(--red)">έξοδα −30</span></div><input class="cin" value="650"></div>
                 </div>
-                <button class="btn btn-p" style="width:100%">Ίσιωσε το υπόλοιπο</button>
+                <button class="btn btn-p" style="width:100%;margin-top:10px">Αποθήκευση εβδομάδας</button>
               </div>
 
               <!-- ms-close -->
@@ -628,18 +630,31 @@
       </div>
     </div>
 
-    <!-- 📋 Μέτρησα το ταμείο -->
-    <div class="modal" id="m-count">
-      <div class="modal-h"><span>📋 Μέτρησα το ταμείο μου</span><button class="x" data-close>✕</button></div>
+    <!-- 📋 Μέτρησα το ταμείο (εβδομάδας, ανά μέρα) -->
+    <div class="modal" id="m-count" style="width:600px">
+      <div class="modal-h"><span>📋 Μέτρησα το ταμείο — εβδομάδα 16–22 Ιουν</span><button class="x" data-close>✕</button></div>
       <div class="modal-b">
-        <div class="note">Μέτρα τα πραγματικά μετρητά. Αν δεν ταιριάζουν με το υπόλοιπο (ξεχασμένη κίνηση/ρέστα), φτιάχνεται μια εγγραφή «προσαρμογή» που τα <b>ισιώνει</b>.</div>
-        <div class="fld"><label>Πόσα μέτρησες πραγματικά;</label><input value="3.825,00 €"></div>
+        <div class="note">Πέρασε <b>ανά μέρα</b> τι μετρητά μέτρησες. Δίπλα βλέπεις τα <b>έξοδα κάθε μέρας</b>, ώστε να ξέρει ακριβώς σε ποιες μέρες ήταν — και να ισιώνει σωστά.</div>
+        <table style="margin-bottom:14px">
+          <thead><tr><th>Μέρα</th><th class="num">Τι μέτρησα</th><th class="num">Έξοδα μέρας</th><th class="num">Καθαρό</th></tr></thead>
+          <tbody>
+            <tr><td>Δευ 16</td><td class="num"><input class="cin" value="540"></td><td class="num" style="color:var(--red)">−210</td><td class="num">+330</td></tr>
+            <tr class="closed"><td>Τρι 17 <span class="pill p">ρεπό</span></td><td class="num"><input class="cin" value="—"></td><td class="num" style="color:var(--red)">−720</td><td class="num">−720</td></tr>
+            <tr><td>Τετ 18</td><td class="num"><input class="cin" value="620"></td><td class="num" style="color:var(--red)">−1.240</td><td class="num">−620</td></tr>
+            <tr><td>Πεμ 19</td><td class="num"><input class="cin" value="580"></td><td class="num" style="color:var(--red)">−90</td><td class="num">+490</td></tr>
+            <tr><td>Παρ 20</td><td class="num"><input class="cin" value="710"></td><td class="num" style="color:var(--red)">−140</td><td class="num">+570</td></tr>
+            <tr><td>Σαβ 21</td><td class="num"><input class="cin" value="930"></td><td class="num" style="color:var(--red)">−60</td><td class="num">+870</td></tr>
+            <tr><td>Κυρ 22</td><td class="num"><input class="cin" value="650"></td><td class="num" style="color:var(--red)">−30</td><td class="num">+620</td></tr>
+          </tbody>
+          <tfoot><tr style="font-weight:800;background:#fafbfc">
+            <td>Σύνολο</td><td class="num">4.030</td><td class="num" style="color:var(--red)">−2.490</td><td class="num">+1.540</td>
+          </tr></tfoot>
+        </table>
         <div class="calc">
-          <div class="r"><span>Το σύστημα λέει</span><b>3.840,00 €</b></div>
-          <div class="r"><span>Μέτρησες</span><b>3.825,00 €</b></div>
-          <div class="r" style="border-top:1px solid #dfe2e7;margin-top:4px;padding-top:6px"><span>Διαφορά → προσαρμογή</span><b style="color:var(--red)">−15,00 €</b></div>
+          <div class="r"><span>Νέο υπόλοιπο ταμείου</span><b>3.840 €</b></div>
+          <div class="r"><span>Αν κάποια μέρα δεν ταιριάζει</span><b class="muted" style="font-size:12.5px">μπαίνει «προσαρμογή» σ' εκείνη τη μέρα</b></div>
         </div>
-        <button class="btn btn-p" style="width:100%">Ίσιωσε το υπόλοιπο</button>
+        <button class="btn btn-p" style="width:100%">Αποθήκευση εβδομάδας</button>
       </div>
     </div>
 
