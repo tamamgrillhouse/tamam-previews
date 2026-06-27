@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>👜 Ταμείο — Μονόγραμμα «T€» Παραλλαγές</title>
+<style>
+  :root{--ink:#1f2733; --muted:#6b7280; --line:#e5e7eb; --bg:#f4f6f9;}
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.5; padding:40px 20px 80px;}
+  .wrap{max-width:1000px; margin:0 auto;}
+  header{text-align:center; margin-bottom:8px;}
+  header h1{font-size:29px; font-weight:800; letter-spacing:-.5px;}
+  header p{color:var(--muted); font-size:16px; margin-top:6px;}
+  .hint{max-width:640px; margin:22px auto 40px; background:#fff; border:1px solid var(--line);
+    border-radius:14px; padding:16px 20px; font-size:14.5px; color:#374151; box-shadow:0 1px 3px rgba(0,0,0,.04);}
+  .hint b{color:var(--ink);}
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:32px 24px;}
+  .card{background:#fff; border:1px solid var(--line); border-radius:18px; padding:26px 18px 20px;
+    text-align:center; box-shadow:0 1px 3px rgba(0,0,0,.05); transition:transform .15s, box-shadow .15s; position:relative;}
+  .card:hover{transform:translateY(-4px); box-shadow:0 10px 26px rgba(0,0,0,.10);}
+  .tag{position:absolute; top:12px; left:14px; font-size:12px; font-weight:700; color:#9ca3af;
+    background:#f3f4f6; border-radius:20px; padding:3px 9px;}
+  .icon{width:130px; height:130px; border-radius:27%; margin:6px auto 14px; display:flex;
+    align-items:center; justify-content:center; position:relative; overflow:hidden;
+    box-shadow:0 8px 18px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.22);}
+  .icon::after{content:""; position:absolute; inset:0;
+    background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,0) 55%); pointer-events:none;}
+  .icon svg{width:88px; height:88px; position:relative; z-index:1;}
+  .applabel{font-size:11px; color:#374151; font-weight:600; margin-top:-6px; margin-bottom:12px;}
+  .name{font-size:15px; font-weight:700;}
+  .desc{font-size:12.5px; color:var(--muted); margin-top:3px; min-height:32px;}
+  .glasspane{position:absolute; z-index:1; width:82px; height:82px; border-radius:22px;
+    background:rgba(255,255,255,.14); backdrop-filter:blur(7px); -webkit-backdrop-filter:blur(7px);
+    border:1px solid rgba(255,255,255,.45); display:flex; align-items:center; justify-content:center;}
+  footer{text-align:center; margin-top:50px; color:var(--muted); font-size:13px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>👜 Ταμείο — Μονόγραμμα «T€»</h1>
+    <p>8 τελειωμένες παραλλαγές του αγαπημένου σου #6 · διάλεξε χρώμα & στήσιμο</p>
+  </header>
+
+  <div class="hint">
+    Όλα δείχνουν το ίδιο σύμβολο «<b>T€</b>» (TAMAM + Ευρώ), αλλάζει το <b>χρώμα</b> και το
+    <b>στήσιμο</b>. Πες μου τον αριθμό — ή «το σχέδιο του Δ με το χρώμα του Β». Μετά το κάνω
+    τελικό εικονίδιο σε όλα τα μεγέθη του κινητού.
+  </div>
+
+  <div class="grid">
+
+    <!-- Α · Original refined (σκούρο + κεχριμπάρι) -->
+    <div class="card"><span class="tag">Α</span>
+      <div class="icon" style="background:linear-gradient(150deg,#27303f,#0f172a);">
+        <svg viewBox="0 0 120 120">
+          <rect x="30" y="36" width="54" height="12" rx="3" fill="#F59E0B"/>
+          <rect x="51" y="36" width="12" height="50" rx="3" fill="#F59E0B"/>
+          <text x="84" y="92" font-size="48" font-weight="800" fill="#FCD34D" text-anchor="middle" font-family="Georgia,serif">€</text>
+        </svg>
+      </div>
+      <div class="applabel">Ταμείο</div>
+      <div class="name">Σκούρο κλασικό</div>
+      <div class="desc">Η αρχική ιδέα, καθαρισμένη. Σοβαρό & εταιρικό.</div>
+    </div>
+
+    <!-- Β · Brand orange + white -->
+    <div class="card"><span class="tag">Β</span>
+      <div class="icon" style="background:linear-gradient(150deg,#FBBF24,#EA580C);">
+        <svg viewBox="0 0 120 120">
+          <rect x="30" y="36" width="54" height="12" rx="3" fill="#fff"/>
+          <rect x="51" y="36" width="12" height="50" rx="3" fill="#fff"/>
+          <text x="84" y="92" font-size="48" font-weight="800" fill="#fff" text-anchor="middle" font-family="Georgia,serif">€</text>
+        </svg>
+      </div>
+      <div class="applabel">Ταμείο</div>
+      <div class="name">Πορτοκαλί brand</div>
+      <div class="desc">Λευκό σε πορτοκαλί — ζεστό, στο χρώμα του TAMAM.</div>
+    </div>
+
+    <!-- Γ · Luxury black + gold ring -->
+    <div class="card"><span class="tag">Γ</span>
+      <div class="icon" style="background:linear-gradient(150deg,#1c1c1e,#000);">
+        <svg viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="46" fill="none" stroke="#B8860B" stroke-width="2.5" opacity=".7"/>
+          <rect x="32" y="38" width="50" height="11" rx="3" fill="url(#gold)"/>
+          <rect x="52" y="38" width="11" height="46" rx="3" fill="url(#gold)"/>
+          <text x="83" y="90" font-size="44" font-weight="800" fill="url(#gold)" text-anchor="middle" font-family="Georgia,serif">€</text>
+          <defs><linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#FDE68A"/><stop offset="1" stop-color="#B8860B"/>
+          </linearGradient></defs>
+        </svg>
+      </div>
+      <div class="applabel">Ταμείο</div>
+      <div class="name">Μαύρο & Χρυσό</div>
+      <div class="desc">Πολυτελές «premium». Με λεπτό χρυσό δαχτυλίδι.</div>
+    </div>
+
+    <!-- Δ · Amber fill + dark mark -->
+    <div class="card"><span class="tag">Δ</span>
+      <div class="icon" style="background:linear-gradient(150deg,#FCD34D,#F59E0B);">
+        <svg viewBox="0 0 120 120">
+          <rect x="30" y="36" width="54" height="12" rx="3" fill="#1f2937"/>
+          <rect x="51" y="36" width="12" height="50" rx="3" fill="#1f2937"/>
+          <text x="84" y="92" font-size="48" font-weight="800" fill="#1f2937" text-anchor="middle" font-family="Georgia,serif">€</text>
+        </svg>
+      </div>
+      <div class="applabel">Ταμείο</div>
+      <div class="name">Κεχριμπάρι</div>
+      <div class="desc">Σκούρο σύμβολο σε χρυσό — πολύ καθαρή ανάγνωση.</div>
+    </div>
+
+    <!-- Ε · Stacked lockup -->
+    <div class="card"><span class="tag">Ε</span>
+      <div class="icon" style="background:linear-gradient(150deg,#27303f,#0f172a);">
+        <svg viewBox="0 0 120 120">
+          <rect x="34" y="26" width="52" height="11" rx="3" fill="#F59E0B"/>
+          <rect x="54" y="26" width="12" height="34" rx="3" fill="#F59E0B"/>
+          <text x="60" y="100" font-size="44" font-weight="800" fill="#FCD34D" text-anchor="middle" font-family="Georgia,serif">€</text>
+        </svg>
+      </div>
+      <div class="applabel">Ταμείο</div>
+      <div class="name">Στοιχισμένο</div>
+      <div class="desc">Το «T» πάνω, το «€» κάτω — συμμετρικό, τακτικό.</div>
+    </div>
+
+    <!-- ΣΤ · Glass 2026 -->
+    <div class="card"><span class="tag">ΣΤ</span>
+      <div class="icon" style="background:linear-gradient(150deg,#7C3AED,#DB2777);">
+        <div class="glasspane">
+          <svg viewBox="0 0 120 120" style="width:64px;height:64px;">
+            <rect x="30" y="36" width="54" height="12" rx="3" fill="#fff"/>
+            <rect x="51" y="36" width="12" height="50" rx="3" fill="#fff"/>
+            <text x="84" y="92" font-size="48" font-weight="800" fill="#fff" text-anchor="middle" font-family="Georgia,serif">€</text>
+          </svg>
+        </div>
+      </div>
+      <div class="applabel">Ταμείο</div>
+      <div class="name">Γυαλί (2026)</div>
+      <div class="desc">Το μονόγραμμα πίσω από παγωμένο γυαλί. Μοντέρνο.</div>
+    </div>
+
+    <!-- Ζ · Navy + gold -->
+    <div class="card"><span class="tag">Ζ</span>
+      <div class="icon" style="background:linear-gradient(150deg,#1e3a5f,#0c2236);">
+        <svg viewBox="0 0 120 120">
+          <rect x="30" y="36" width="54" height="12" rx="3" fill="#FCD34D"/>
+          <rect x="51" y="36" width="12" height="50" rx="3" fill="#FCD34D"/>
+          <text x="84" y="92" font-size="48" font-weight="800" fill="#F59E0B" text-anchor="middle" font-family="Georgia,serif">€</text>
+        </svg>
+      </div>
+      <div class="applabel">Ταμείο</div>
+      <div class="name">Μπλε & Χρυσό</div>
+      <div class="desc">Τραπεζικό, αξιόπιστο ύφος. Πολύ «οικονομικό».</div>
+    </div>
+
+    <!-- Η · Interlocked (κοινός κορμός) -->
+    <div class="card"><span class="tag">Η</span>
+      <div class="icon" style="background:linear-gradient(150deg,#27303f,#0f172a);">
+        <svg viewBox="0 0 120 120">
+          <text x="62" y="86" font-size="56" font-weight="800" fill="#FCD34D" text-anchor="middle" font-family="Georgia,serif">€</text>
+          <rect x="36" y="32" width="48" height="11" rx="3" fill="#F59E0B"/>
+          <rect x="54" y="32" width="11" height="58" rx="3" fill="#F59E0B"/>
+        </svg>
+      </div>
+      <div class="applabel">Ταμείο</div>
+      <div class="name">Δεμένο μονόγραμμα</div>
+      <div class="desc">Το «T» περνά μέσα από το «€» — ένα ενιαίο σήμα.</div>
+    </div>
+
+  </div>
+
+  <footer>
+    TAMAM · Back-Office — παραλλαγές μονογράμματος «T€» · τοπικό αρχείο, δεν δημοσιεύεται
+  </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Συγχρονισμός κινητού — 3 προτάσεις</title>
+<style>
+  :root{
+    --accent:#f59e0b; --accent-dark:#d97706; --content-bg:#f1f5f9; --white:#fff;
+    --text:#1e293b; --muted:#64748b; --border:#e2e8f0; --success:#10b981; --danger:#ef4444;
+    --radius:12px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"Segoe UI",Roboto,sans-serif;font-size:14px;color:var(--text);background:var(--content-bg);padding:0 0 60px}
+  .chooser{position:sticky;top:0;z-index:10;background:#1e2d3d;padding:14px 16px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+  .chooser b{color:#fff;margin-right:8px;font-size:15px}
+  .chooser button{border:0;background:#33485f;color:#cbd5e1;padding:9px 16px;border-radius:8px;font-size:13.5px;font-weight:600;cursor:pointer}
+  .chooser button.on{background:var(--accent);color:#1e2d3d}
+  .wrap{max-width:760px;margin:24px auto;padding:0 16px}
+  .design{display:none}
+  .design.on{display:block}
+  .panel{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 1px 3px rgba(0,0,0,.06);overflow:hidden}
+  .ptitle{font-size:13px;color:var(--muted);text-align:center;margin:0 0 16px;font-weight:600}
+  h1{font-size:19px;margin-bottom:4px}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:18px}
+
+  /* shared bits */
+  label{display:block;font-size:12.5px;font-weight:600;color:var(--text);margin-bottom:5px}
+  .inp{width:100%;min-height:42px;padding:9px 11px;border:1.5px solid var(--border);border-radius:9px;font-size:13.5px;font-family:inherit;background:#fff}
+  .inp.mono{font-family:monospace;font-size:12.5px;background:#f8fafc}
+  .hint{font-size:11.5px;color:var(--muted);margin-top:4px;line-height:1.5}
+  .btn{min-height:44px;padding:10px 18px;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer;border:1.5px solid transparent}
+  .btn-primary{background:var(--accent);color:#fff}
+  .btn-secondary{background:#fff;color:var(--text);border-color:var(--border)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:560px){.row2{grid-template-columns:1fr}}
+  .toggle{width:46px;height:26px;border-radius:20px;background:var(--success);position:relative;flex:none}
+  .toggle::after{content:"";position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#fff}
+  .qr{width:150px;height:150px;border-radius:10px;background:
+    repeating-linear-gradient(0deg,#1e293b 0 8px,#fff 8px 16px),
+    repeating-linear-gradient(90deg,#1e293b 0 8px,transparent 8px 16px);
+    background-blend-mode:multiply;border:8px solid #fff;box-shadow:0 0 0 1px var(--border)}
+
+  /* ============ DESIGN 1 — WIZARD / STEPPER ============ */
+  .steps{padding:22px}
+  .step{position:relative;padding:0 0 26px 52px}
+  .step:last-child{padding-bottom:0}
+  .step::before{content:"";position:absolute;left:17px;top:34px;bottom:0;width:2px;background:var(--border)}
+  .step:last-child::before{display:none}
+  .snum{position:absolute;left:0;top:0;width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:15px}
+  .step.done .snum{background:var(--success)}
+  .step.done::before{background:var(--success)}
+  .sh{font-size:15px;font-weight:700;margin-bottom:2px}
+  .sd{font-size:12px;color:var(--muted);margin-bottom:12px}
+  .scard{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:16px}
+  .donebox{display:flex;align-items:center;gap:8px;background:#dcfce7;border:1px solid #86efac;color:#166534;padding:10px 14px;border-radius:9px;font-size:13px;font-weight:600}
+
+  /* ============ DESIGN 2 — STATUS DASHBOARD ============ */
+  .hero{padding:22px;background:linear-gradient(135deg,#ecfdf5,#f0fdf4);border-bottom:1px solid var(--border)}
+  .hero.warn{background:linear-gradient(135deg,#fffbeb,#fef9ee)}
+  .hero h2{font-size:17px;display:flex;align-items:center;gap:8px}
+  .lights{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+  .light{flex:1;min-width:120px;background:#fff;border:1px solid var(--border);border-radius:10px;padding:11px 13px;display:flex;align-items:center;gap:9px}
+  .dot{width:11px;height:11px;border-radius:50%;flex:none}
+  .dot.ok{background:var(--success)} .dot.wait{background:var(--accent)} .dot.off{background:#cbd5e1}
+  .light small{display:block;color:var(--muted);font-size:11px}
+  .light b{font-size:13px}
+  .cards{padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:560px){.cards{grid-template-columns:1fr}}
+  .card{border:1px solid var(--border);border-radius:11px;padding:16px}
+  .card.full{grid-column:1/-1}
+  .card h3{font-size:14px;margin-bottom:12px;display:flex;align-items:center;gap:7px}
+  .card .hint{margin-bottom:10px}
+
+  /* ============ DESIGN 3 — CALM ACCORDION ============ */
+  .statusbar{display:flex;align-items:center;gap:12px;padding:18px 22px;border-bottom:1px solid var(--border)}
+  .pill{padding:7px 14px;border-radius:20px;font-size:12.5px;font-weight:700;display:inline-flex;align-items:center;gap:6px}
+  .pill.ok{background:#dcfce7;color:#166534}
+  .acc{border-bottom:1px solid var(--border)}
+  .acc:last-child{border-bottom:0}
+  .ahead{padding:16px 22px;display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none}
+  .ahead .ic{width:34px;height:34px;border-radius:9px;background:#fef3c7;display:flex;align-items:center;justify-content:center;font-size:17px;flex:none}
+  .ahead .ic.green{background:#dcfce7}
+  .ahead h4{font-size:14.5px}
+  .ahead .st{font-size:11.5px;color:var(--muted);margin-top:1px}
+  .ahead .chev{margin-left:auto;color:var(--muted);transition:transform .2s}
+  .acc.open .chev{transform:rotate(180deg)}
+  .abody{padding:0 22px 20px 68px;display:none}
+  .acc.open .abody{display:block}
+  @media(max-width:560px){.abody{padding:0 22px 20px}}
+  .note{display:flex;gap:8px;background:#fffbeb;border:1px solid #fde68a;color:#92400e;padding:10px 13px;border-radius:9px;font-size:12px;line-height:1.5;margin-top:10px}
+</style>
+</head>
+<body>
+
+<div class="chooser">
+  <b>📮 Συγχρονισμός — 3 προτάσεις:</b>
+  <button class="on" onclick="show(1,this)">① Οδηγός βημάτων</button>
+  <button onclick="show(2,this)">② Πίνακας κατάστασης</button>
+  <button onclick="show(3,this)">③ Ήρεμες καρτέλες</button>
+</div>
+
+<!-- ================= DESIGN 1 ================= -->
+<div class="wrap design on" id="d1">
+  <p class="ptitle">ΠΡΟΤΑΣΗ ① — Οδηγός 4 βημάτων (σε σειρά: κάνε 1 → 2 → 3 → 4)</p>
+  <div class="panel">
+    <div class="steps">
+
+      <div class="step done">
+        <div class="snum">✓</div>
+        <div class="sh">Η θυρίδα</div>
+        <div class="sd">Το «γραμματοκιβώτιο» στο internet όπου ανταλλάσσουν κινήσεις υπολογιστής & κινητό.</div>
+        <div class="donebox">✅ Ρυθμίστηκε — <span style="font-weight:400;color:#166534">tamamgrillhouse/mn-archive · token αποθηκευμένο</span>
+          <button class="btn btn-secondary" style="margin-left:auto;min-height:34px;padding:6px 12px;font-size:12.5px">Αλλαγή</button></div>
+      </div>
+
+      <div class="step done">
+        <div class="snum">✓</div>
+        <div class="sh">Το μυστικό κλειδί</div>
+        <div class="sd">Κλειδώνει τα γράμματα ώστε η θυρίδα να βλέπει «κινέζικα». Το ίδιο μπαίνει & στο κινητό.</div>
+        <div class="donebox">🔑 Δημιουργήθηκε
+          <button class="btn btn-secondary" style="margin-left:auto;min-height:34px;padding:6px 12px;font-size:12.5px">📋 Αντιγραφή</button></div>
+      </div>
+
+      <div class="step">
+        <div class="snum">3</div>
+        <div class="sh">Δοκιμή & ενεργοποίηση</div>
+        <div class="sd">Πάτα «Δοκιμή» για να βεβαιωθείς ότι όλα παίζουν, μετά άναψε τον συγχρονισμό.</div>
+        <div class="scard">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+            <div class="toggle"></div>
+            <div><b style="font-size:13.5px">Ενεργός συγχρονισμός</b>
+              <div class="hint" style="margin-top:1px">Ανταλλαγή κινήσεων κάθε λίγα λεπτά αυτόματα.</div></div>
+          </div>
+          <button class="btn btn-secondary">🔌 Δοκιμή σύνδεσης</button>
+          <button class="btn btn-secondary" style="margin-left:8px">🔄 Συγχρονισμός τώρα</button>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="snum">4</div>
+        <div class="sh">Σύνδεση κινητού</div>
+        <div class="sd">Σκάναρε το QR με την κάμερα του κινητού — συνδέεται μόνο του.</div>
+        <div class="scard" style="display:flex;gap:18px;align-items:center;flex-wrap:wrap">
+          <div class="qr"></div>
+          <div style="flex:1;min-width:180px">
+            <button class="btn btn-secondary" style="width:100%">📋 Αντιγραφή κωδικού σύνδεσης</button>
+            <div class="note" style="margin-top:12px">⚠️ Περιέχει το μυστικό token — δείξ' το μόνο στο δικό σου κινητό.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <p class="hint" style="text-align:center;margin-top:14px">Τα ολοκληρωμένα βήματα «κλείνουν» με πράσινο ✓ — βλέπεις με μια ματιά τι μένει.</p>
+</div>
+
+<!-- ================= DESIGN 2 ================= -->
+<div class="wrap design" id="d2">
+  <p class="ptitle">ΠΡΟΤΑΣΗ ② — Πίνακας κατάστασης με «φωτάκια» + κάρτες</p>
+  <div class="panel">
+    <div class="hero">
+      <h2>🟢 Όλα έτοιμα — ο συγχρονισμός δουλεύει</h2>
+      <div class="lights">
+        <div class="light"><span class="dot ok"></span><div><b>Θυρίδα</b><small>συνδεδεμένη</small></div></div>
+        <div class="light"><span class="dot ok"></span><div><b>Κλειδί</b><small>ενεργό</small></div></div>
+        <div class="light"><span class="dot wait"></span><div><b>Κινητό</b><small>σκάναρε το QR</small></div></div>
+      </div>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <h3>📬 Θυρίδα</h3>
+        <label>Όνομα repo</label>
+        <input class="inp mono" value="tamamgrillhouse/mn-archive">
+        <label style="margin-top:12px">Token GitHub</label>
+        <input class="inp mono" value="●●●●●●●●●●●● αποθηκευμένο">
+      </div>
+      <div class="card">
+        <h3>🔑 Κλειδί</h3>
+        <div class="hint">Το μυστικό που κλειδώνει τα γράμματα.</div>
+        <input class="inp mono" value="k7Fa-9Qd2-Lm4x-Zp8w" readonly>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <button class="btn btn-secondary" style="flex:1;font-size:13px">📋 Αντιγραφή</button>
+          <button class="btn btn-secondary" style="flex:1;font-size:13px">🔑 Νέο</button>
+        </div>
+      </div>
+      <div class="card full" style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:10px"><div class="toggle"></div>
+          <b style="font-size:13.5px">Ενεργός συγχρονισμός</b></div>
+        <div style="margin-left:auto;display:flex;gap:8px">
+          <button class="btn btn-secondary">🔌 Δοκιμή</button>
+          <button class="btn btn-secondary">🔄 Τώρα</button>
+        </div>
+      </div>
+      <div class="card full" style="display:flex;gap:18px;align-items:center;flex-wrap:wrap">
+        <div class="qr"></div>
+        <div style="flex:1;min-width:200px">
+          <h3 style="margin-bottom:6px">📱 Σύνδεση κινητού</h3>
+          <div class="hint" style="margin-bottom:12px">Σκάναρε με την κάμερα ή αντίγραψε τον κωδικό.</div>
+          <button class="btn btn-secondary" style="width:100%">📋 Αντιγραφή κωδικού σύνδεσης</button>
+          <div class="note" style="margin-top:10px">⚠️ Περιέχει το μυστικό token — μόνο στο δικό σου κινητό.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="hint" style="text-align:center;margin-top:14px">Πάνω-πάνω βλέπεις «τι παίζει» με 3 φωτάκια· κάθε ρύθμιση σε δική της καθαρή κάρτα.</p>
+</div>
+
+<!-- ================= DESIGN 3 ================= -->
+<div class="wrap design" id="d3">
+  <p class="ptitle">ΠΡΟΤΑΣΗ ③ — Ήρεμες καρτέλες που ανοιγοκλείνουν (μία στήλη, χωρίς θόρυβο)</p>
+  <div class="panel">
+    <div class="statusbar">
+      <span class="pill ok">✅ Ο συγχρονισμός δουλεύει</span>
+      <span class="hint" style="margin:0">Τελευταίος: σήμερα 14:32</span>
+    </div>
+
+    <div class="acc open" onclick="acc(this)">
+      <div class="ahead"><div class="ic green">📬</div>
+        <div><h4>1. Θυρίδα & κλειδί</h4><div class="st">Ρυθμισμένα ✓</div></div>
+        <div class="chev">▾</div></div>
+      <div class="abody" onclick="event.stopPropagation()">
+        <div class="row2">
+          <div><label>Όνομα repo</label><input class="inp mono" value="tamamgrillhouse/mn-archive"></div>
+          <div><label>Token GitHub</label><input class="inp mono" value="●●●●●● αποθηκευμένο"></div>
+        </div>
+        <label style="margin-top:14px">Μυστικό κλειδί</label>
+        <input class="inp mono" value="k7Fa-9Qd2-Lm4x-Zp8w" readonly>
+        <div style="margin-top:12px"><button class="btn btn-primary">Αποθήκευση</button></div>
+      </div>
+    </div>
+
+    <div class="acc" onclick="acc(this)">
+      <div class="ahead"><div class="ic green">🔄</div>
+        <div><h4>2. Δοκιμή & διακόπτης</h4><div class="st">Ενεργός · αυτόματα κάθε λίγα λεπτά</div></div>
+        <div class="chev">▾</div></div>
+      <div class="abody" onclick="event.stopPropagation()">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+          <div class="toggle"></div><b>Ενεργός συγχρονισμός</b></div>
+        <button class="btn btn-secondary">🔌 Δοκιμή σύνδεσης</button>
+        <button class="btn btn-secondary" style="margin-left:8px">🔄 Συγχρονισμός τώρα</button>
+      </div>
+    </div>
+
+    <div class="acc" onclick="acc(this)">
+      <div class="ahead"><div class="ic">📱</div>
+        <div><h4>3. Σύνδεση κινητού</h4><div class="st">QR + κωδικός</div></div>
+        <div class="chev">▾</div></div>
+      <div class="abody" onclick="event.stopPropagation()" style="text-align:center">
+        <div class="qr" style="margin:0 auto"></div>
+        <button class="btn btn-secondary" style="margin-top:14px">📋 Αντιγραφή κωδικού σύνδεσης</button>
+        <div class="note" style="text-align:left">⚠️ Περιέχει το μυστικό token — δείξ' το μόνο στο δικό σου κινητό.</div>
+      </div>
+    </div>
+  </div>
+  <p class="hint" style="text-align:center;margin-top:14px">Όλα κλειστά & καθαρά· ανοίγεις μόνο αυτό που θες να πειράξεις. Λιγότερο «χάος» στην οθόνη.</p>
+</div>
+
+<script>
+function show(n,btn){
+  document.querySelectorAll('.design').forEach(d=>d.classList.remove('on'));
+  document.getElementById('d'+n).classList.add('on');
+  document.querySelectorAll('.chooser button').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  window.scrollTo(0,0);
+}
+function acc(el){el.classList.toggle('open')}
+</script>
+</body>
+</html>

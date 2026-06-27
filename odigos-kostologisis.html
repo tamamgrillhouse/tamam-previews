@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAMAM — Οδηγός Κοστολόγησης</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --accent:#f59e0b; --accent2:#fb7185; --accent-dark:#d97706;
+    --ink:#0b1220; --ink2:#131c2b;
+    --bg:#f6f7f9; --card:#ffffff; --text:#0f172a; --muted:#64748b; --border:#eceef2;
+    --green:#10b981; --red:#ef4444;
+    --r:22px;
+    --font:'Inter',system-ui,'Segoe UI',Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:var(--font);background:var(--bg);color:var(--text);
+       line-height:1.6;-webkit-font-smoothing:antialiased;letter-spacing:-.01em}
+  .wrap{max-width:760px;margin:0 auto;padding:0 18px 100px}
+
+  /* ───── HERO ───── */
+  .hero{position:relative;margin:0 -18px 18px;padding:64px 34px 54px;color:#fff;overflow:hidden;
+        background:radial-gradient(120% 120% at 80% -10%,#2a3850 0%,var(--ink) 55%);
+        border-radius:0 0 34px 34px}
+  .glow{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55;pointer-events:none}
+  .glow.a{width:340px;height:340px;background:#f59e0b;top:-130px;right:-60px;opacity:.35;animation:float1 12s ease-in-out infinite}
+  .glow.b{width:300px;height:300px;background:#fb7185;bottom:-160px;left:-80px;opacity:.28;animation:float2 14s ease-in-out infinite}
+  @keyframes float1{50%{transform:translate(-20px,30px) scale(1.1)}}
+  @keyframes float2{50%{transform:translate(30px,-20px) scale(1.08)}}
+  .hero-in{position:relative;z-index:2}
+  .back{display:inline-flex;align-items:center;gap:6px;color:#9fb0c7;text-decoration:none;font-size:13.5px;
+        font-weight:500;margin-bottom:26px;transition:.2s}
+  .back:hover{color:#fff;transform:translateX(-3px)}
+  .kick{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.12em;
+        text-transform:uppercase;color:var(--accent);background:rgba(245,158,11,.12);
+        border:1px solid rgba(245,158,11,.3);padding:6px 13px;border-radius:999px}
+  .hero h1{margin:18px 0 12px;font-size:clamp(30px,7vw,46px);font-weight:900;line-height:1.04;letter-spacing:-.03em}
+  .hero h1 em{font-style:normal;background:linear-gradient(100deg,#fbbf24,#fb7185);
+              -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .hero p{margin:0;color:#c7d2e0;font-size:17px;max-width:520px;font-weight:400}
+
+  /* ───── TL;DR ───── */
+  .tldr{position:relative;margin:-28px 4px 40px;background:var(--card);border:1px solid var(--border);
+        border-radius:var(--r);padding:22px 24px;box-shadow:0 18px 40px -24px rgba(15,23,42,.3);z-index:5}
+  .tldr .tag{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:var(--accent-dark);
+             letter-spacing:.04em;text-transform:uppercase;margin-bottom:8px}
+  .tldr p{margin:0;font-size:16.5px;font-weight:500}
+  .tldr b{color:var(--text);font-weight:800}
+
+  /* ───── TIMELINE STEPS ───── */
+  .steps{position:relative}
+  .steps::before{content:"";position:absolute;left:23px;top:20px;bottom:60px;width:2px;
+                 background:linear-gradient(var(--border),var(--border) 60%,transparent);z-index:0}
+  .step{position:relative;padding-left:64px;margin-bottom:30px;opacity:0;transform:translateY(24px);
+        transition:opacity .6s cubic-bezier(.2,.7,.2,1),transform .6s cubic-bezier(.2,.7,.2,1)}
+  .step.in{opacity:1;transform:none}
+  .step .num{position:absolute;left:0;top:0;width:48px;height:48px;border-radius:15px;z-index:2;
+             background:linear-gradient(140deg,#fbbf24,#f59e0b);color:#fff;font-weight:800;font-size:19px;
+             display:flex;align-items:center;justify-content:center;
+             box-shadow:0 10px 22px -8px rgba(245,158,11,.7);border:3px solid var(--bg)}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px 24px 20px;
+        box-shadow:0 1px 2px rgba(15,23,42,.04);transition:.3s}
+  .card:hover{box-shadow:0 22px 50px -30px rgba(15,23,42,.28);transform:translateY(-2px)}
+  .card h2{margin:0 0 5px;font-size:21px;font-weight:800;letter-spacing:-.02em}
+  .card .lead{color:var(--muted);font-size:15px;margin:0 0 16px;font-weight:500}
+  .card p{margin:0 0 12px;font-size:15.5px}
+
+  .rule{background:var(--ink);color:#fff;border-radius:15px;padding:15px 18px;font-size:16px;font-weight:600;
+        margin:16px 0;display:flex;align-items:center;gap:11px;letter-spacing:-.01em}
+  .rule .ic{font-size:20px;flex:none}
+
+  .example{background:linear-gradient(180deg,#fbfcfe,#f6f8fb);border:1px solid var(--border);border-radius:15px;
+           padding:16px 18px;margin:16px 0}
+  .example .h{font-weight:800;color:var(--accent-dark);font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px}
+  .example .calc{font-family:ui-monospace,'SF Mono',Menlo,monospace;background:var(--ink);color:#e2e8f0;border-radius:10px;
+                 padding:11px 14px;margin-top:10px;font-size:14px;letter-spacing:0}
+  .example .calc b{color:#fbbf24}
+
+  .tool-link{display:flex;align-items:center;gap:12px;background:linear-gradient(100deg,#fff7ed,#fffdf8);
+             border:1px solid #fcd9a0;border-radius:15px;padding:14px 16px;margin-top:14px;text-decoration:none;
+             color:#9a3412;font-weight:700;font-size:15px;transition:.25s}
+  .tool-link:hover{border-color:var(--accent);box-shadow:0 14px 30px -18px rgba(245,158,11,.6);transform:translateY(-2px)}
+  .tool-link .ar{margin-left:auto;font-size:18px;color:var(--accent);transition:.25s}
+  .tool-link:hover .ar{transform:translateX(4px)}
+
+  .note{border-radius:13px;padding:13px 16px;margin:14px 0;font-size:14.5px;font-weight:500;display:flex;gap:9px}
+  .note.good{background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46}
+  .note.warn{background:#fff1f2;border:1px solid #fecdd3;color:#9f1239}
+
+  /* ───── CHECKLIST ───── */
+  .checklist{position:relative;margin-top:42px;border-radius:26px;padding:34px 30px;overflow:hidden;
+             background:radial-gradient(120% 120% at 90% 0%,#2a3850,var(--ink));color:#fff;
+             opacity:0;transform:translateY(24px);transition:.7s cubic-bezier(.2,.7,.2,1)}
+  .checklist.in{opacity:1;transform:none}
+  .checklist .cg{position:absolute;width:260px;height:260px;border-radius:50%;background:#f59e0b;filter:blur(80px);opacity:.25;top:-100px;right:-60px}
+  .checklist h2{margin:0 0 4px;font-size:24px;font-weight:900;letter-spacing:-.02em;position:relative}
+  .checklist .lead{color:#9fb0c7;margin:0 0 20px;position:relative;font-size:15px}
+  .ck{position:relative;display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+  .ck:last-child{border-bottom:none}
+  .ck .n{flex:none;width:30px;height:30px;border-radius:10px;background:linear-gradient(140deg,#fbbf24,#f59e0b);
+         color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:14px}
+  .ck .tx b{display:block;font-size:15.5px;font-weight:700}
+  .ck .tx span{color:#9fb0c7;font-size:14px}
+
+  .foot{text-align:center;color:var(--muted);font-size:13px;margin-top:34px;line-height:1.7}
+  .demo-note{background:#eef2ff;border:1px solid #c7d2fe;color:#3730a3;padding:11px 15px;border-radius:13px;font-size:13px;margin-top:18px;font-weight:500}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="glow a"></div><div class="glow b"></div>
+    <div class="hero-in">
+      <a href="#" class="back">← Πίσω στις Συνταγές</a><br>
+      <span class="kick">📚 Συνταγές · Βοήθεια</span>
+      <h1>Πώς κοστολογώ <em>σωστά</em></h1>
+      <p>Όταν οι ποσότητες δεν είναι ποτέ ακριβείς — γύρος, σως γιαουρτιού, αλοιφές. Η σωστή μέθοδος σε 5 βήματα.</p>
+    </div>
+  </div>
+
+  <div class="tldr">
+    <span class="tag">⭐ Σε μία πρόταση</span>
+    <p>Κανένα εστιατόριο <b>δεν</b> βάζει ακριβές γραμμάριο κάθε φορά. Η σωστή κοστολόγηση δεν θέλει ακρίβεια της στιγμής — θέλει <b>σωστό μέσο όρο</b> και <b>σύγκριση με την πραγματικότητα</b>.</p>
+  </div>
+
+  <div class="steps">
+
+    <!-- 1 -->
+    <div class="step"><div class="num">1</div>
+      <div class="card">
+        <h2>🧪 Ζύγισε μία φορά, σωστά</h2>
+        <p class="lead">Μην μαντεύεις «πόσος γύρος μπαίνει». Μέτρα τον μέσο όρο.</p>
+        <p>Φτιάξε <b>5 έως 10 μερίδες κανονικά</b>, ζύγισέ τες όλες μαζί και διαίρεσε. Ο μέσος όρος 10 μερίδων είναι 10 φορές πιο σωστός από το μάντεμα της μίας.</p>
+        <div class="example">
+          <div class="h">Παράδειγμα — Γύρος</div>
+          Ζυγίζεις 10 μερίδες γύρου → σύνολο 1.620 γρ.
+          <div class="calc">1.620 γρ ÷ 10 = <b>162 γρ / μερίδα</b></div>
+        </div>
+        <a href="kostologisi-yield-batch.html" class="tool-link">🧪 Το κάνει αυτόματα το «Τεστ Απόδοσης», δίπλα σε κάθε υλικό<span class="ar">→</span></a>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="step"><div class="num">2</div>
+      <div class="card">
+        <h2>🔥 Ωμό vs Ψημένο</h2>
+        <p class="lead">Αγοράζεις ωμό, σερβίρεις ψημένο — το κρέας «χάνει» στο ψήσιμο.</p>
+        <p>Ένα υλικό που μαγειρεύεται κοστίζει στην πραγματικότητα <b>περισσότερο</b> απ' όσο το αγόρασες, γιατί ένα μέρος του φεύγει.</p>
+        <div class="rule"><span class="ic">📐</span> Πραγματικό κόστος = Τιμή αγοράς ÷ Απόδοση&nbsp;%</div>
+        <div class="example">
+          <div class="h">Παράδειγμα — Γύρος με 40% απώλεια</div>
+          Για 150 γρ <b>ψημένο</b> γύρο, χρειάζεσαι 250 γρ <b>ωμό</b>.
+          <div class="calc">Τιμή ωμού × 150 ÷ (1 − 0,40) = <b>κόστος μερίδας</b></div>
+        </div>
+        <div class="note good">✅&nbsp;<span><b>Το σύστημα το κάνει ήδη μόνο του.</b> Στο υλικό «Γύρος» ορίσαμε απώλεια 40% — εσύ γράφεις πόσο σερβίρεις, αυτό υπολογίζει το ωμό.</span></div>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="step"><div class="num">3</div>
+      <div class="card">
+        <h2>🫙 Σάλτσες → κοστολόγησε την κανάτα</h2>
+        <p class="lead">Η λύση στο «δεν είναι 100% τα γραμμάρια».</p>
+        <p>Μην κοστολογείς την κουταλιά. Κοστολόγησε <b>όλη την παρτίδα</b> και μοίρασέ τη.</p>
+        <div class="rule"><span class="ic">➗</span> Κόστος μερίδας = Κόστος παρτίδας ÷ Πόσες μερίδες</div>
+        <div class="example">
+          <div class="h">Παράδειγμα — Σως Ταμάμ</div>
+          3 κιλά σως, υλικά ≈ 8 € → βγάζει ≈ 100 μερίδες.
+          <div class="calc">8 € ÷ 100 = <b>0,08 € / μερίδα</b></div>
+        </div>
+        <a href="kostologisi-yield-batch.html" class="tool-link">🫙 Το υπολογίζει η «Κοστολόγηση Παρτίδας» — ενημερώνεται μόνη της όταν ακριβύνει υλικό<span class="ar">→</span></a>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="step"><div class="num">4</div>
+      <div class="card">
+        <h2>🎯 Άσε την πραγματικότητα να σε διορθώσει</h2>
+        <p class="lead">Δεν χρειάζεται να είσαι τέλειος από την πρώτη μέρα.</p>
+        <p>Το σύστημα συγκρίνει τι <b>λένε</b> οι συνταγές ότι ξόδεψες, με τι <b>πραγματικά</b> έφυγε από την αποθήκη.</p>
+        <div class="example">
+          <div class="h">Παράδειγμα — Διόρθωση</div>
+          Συνταγή: 150 γρ × 500 γύροι = 75 κιλά. Αποθήκη: έφυγαν 82 κιλά.
+          <div class="calc">+9% απόκλιση → ανέβασε στα <b>165 γρ</b></div>
+        </div>
+        <div class="note good">✅&nbsp;<span><b>Κάτω από 2–3%</b> απόκλιση = φυσιολογικό, μην το αγγίξεις.</span></div>
+        <div class="note warn">⚠️&nbsp;<span><b>Πάνω από 5%</b> = κάτι τρέχει → διόρθωσε τη συνταγή ή ψάξε για σπατάλη. Έλεγχος κάθε ~30 μέρες.</span></div>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="step"><div class="num">5</div>
+      <div class="card">
+        <h2>⚖️ Μην κυνηγάς τα ψίχουλα</h2>
+        <p class="lead">Ο κανόνας 80/20: το 80% του κόστους είναι σε 2–3 υλικά.</p>
+        <p>Κρέας, τυρί, πίτα → <b>ζύγισέ τα προσεκτικά</b>. Αλάτι, μπαχαρικά, μια στάλα λάδι → κοστίζουν λεπτά· ακόμα κι αν πέσεις ±50%, η διαφορά είναι 1 λεπτό. Άστα στο περίπου.</p>
+        <div class="note warn">⚠️&nbsp;<span><b>Εξαίρεση:</b> όταν το «μικρό» υλικό είναι η ψυχή του πιάτου (π.χ. ακριβό ταχίνι/ελαιόλαδο που κυριαρχεί σε μια αλοιφή) — εκεί ζύγισέ το.</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="checklist">
+    <div class="cg"></div>
+    <h2>Τι κάνω αύριο</h2>
+    <p class="lead">Η σειρά για να στρώσεις την κοστολόγηση χωρίς κόπο.</p>
+    <div class="ck"><div class="n">1</div><div class="tx"><b>Τα 5 πιο ακριβά υλικά σου</b><span>κρέας, τυρί, πίτα → Τεστ Απόδοσης 10 μερίδων</span></div></div>
+    <div class="ck"><div class="n">2</div><div class="tx"><b>Τις σάλτσες ως παρτίδα</b><span>κανάτα ÷ μερίδες (Σως Ταμάμ, αλοιφές)</span></div></div>
+    <div class="ck"><div class="n">3</div><div class="tx"><b>Τα ψίχουλα στο περίπου</b><span>αλάτι, μπαχαρικά — μην χάνεις χρόνο</span></div></div>
+    <div class="ck"><div class="n">4</div><div class="tx"><b>Σε 1 μήνα: Portion-drift</b><span>διόρθωσε όπου η απόκλιση ξεπερνά το 5%</span></div></div>
+    <div class="ck"><div class="n">5</div><div class="tx"><b>Επανάλαβε</b><span>σε 2–3 μήνες οι αριθμοί σου θα είναι πιο σωστοί από κάθε λογιστή</span></div></div>
+  </div>
+
+  <div class="foot">Επαγγελματική μέθοδος: yield test + batch costing + έλεγχος απόκλισης.<br>Η ίδια που χρησιμοποιούν οι μεγάλες αλυσίδες.</div>
+  <div class="demo-note">ℹ️ Προεπισκόπηση στιλ. Στο πραγματικό σύστημα οι σύνδεσμοι «🧪 / 🫙» πάνε στα εργαλεία και το «← Πίσω» στις Συνταγές.</div>
+</div>
+
+<script>
+  // scroll reveal
+  const io = new IntersectionObserver((es)=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  },{threshold:.18});
+  document.querySelectorAll('.step,.checklist').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

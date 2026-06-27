@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>👜 Ταμείο — Εικονίδια Εφαρμογής</title>
+<style>
+  :root{
+    --ink:#1f2733; --muted:#6b7280; --line:#e5e7eb; --bg:#f4f6f9;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.5;
+    padding:40px 20px 80px;
+  }
+  .wrap{max-width:1100px; margin:0 auto;}
+  header{text-align:center; margin-bottom:8px;}
+  header h1{font-size:30px; font-weight:800; letter-spacing:-.5px;}
+  header p{color:var(--muted); font-size:16px; margin-top:6px;}
+  .hint{
+    max-width:640px; margin:22px auto 40px; background:#fff; border:1px solid var(--line);
+    border-radius:14px; padding:16px 20px; font-size:14.5px; color:#374151;
+    box-shadow:0 1px 3px rgba(0,0,0,.04);
+  }
+  .hint b{color:var(--ink);}
+  .grid{
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+    gap:30px 24px;
+  }
+  .card{
+    background:#fff; border:1px solid var(--line); border-radius:18px;
+    padding:24px 18px 20px; text-align:center;
+    box-shadow:0 1px 3px rgba(0,0,0,.05); transition:transform .15s, box-shadow .15s;
+    position:relative;
+  }
+  .card:hover{transform:translateY(-4px); box-shadow:0 10px 26px rgba(0,0,0,.10);}
+  .num{
+    position:absolute; top:12px; left:14px; font-size:12px; font-weight:700;
+    color:#9ca3af; background:#f3f4f6; border-radius:20px; padding:3px 9px;
+  }
+  /* App icon squircle (iOS style) */
+  .icon{
+    width:118px; height:118px; border-radius:27%;
+    margin:6px auto 16px; display:flex; align-items:center; justify-content:center;
+    box-shadow:0 8px 18px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.25);
+    position:relative; overflow:hidden;
+  }
+  .icon::after{ /* subtle top gloss */
+    content:""; position:absolute; inset:0;
+    background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,0) 55%);
+    pointer-events:none;
+  }
+  .icon svg{width:78px; height:78px; position:relative; z-index:1;}
+  .name{font-size:15px; font-weight:700;}
+  .desc{font-size:12.5px; color:var(--muted); margin-top:3px; min-height:32px;}
+  .label{
+    margin-top:12px; font-size:11px; color:#9ca3af; font-weight:600;
+    letter-spacing:.3px; text-transform:uppercase;
+  }
+  /* tiny home-screen label under icon, like a phone */
+  .applabel{font-size:11px; color:#374151; font-weight:600; margin-top:-8px; margin-bottom:14px;}
+  footer{text-align:center; margin-top:50px; color:var(--muted); font-size:13px;}
+  /* ---- Modern «2026» effects ---- */
+  .section-divider{text-align:center; margin:70px auto 30px; max-width:680px;}
+  .section-divider h2{font-size:25px; font-weight:800; letter-spacing:-.4px;}
+  .section-divider p{color:var(--muted); font-size:15px; margin-top:5px;}
+  .eu{font-family:Arial,Helvetica,sans-serif; font-weight:800; line-height:1;}
+  .glasspane{position:absolute; z-index:1; width:74px; height:74px; border-radius:22px;
+    background:rgba(255,255,255,.16); backdrop-filter:blur(7px); -webkit-backdrop-filter:blur(7px);
+    border:1px solid rgba(255,255,255,.5); display:flex; align-items:center; justify-content:center;
+    box-shadow:0 4px 14px rgba(0,0,0,.12);}
+  .neu{width:72px; height:72px; border-radius:50%; background:#e8ebf2; position:relative; z-index:1;
+    box-shadow:6px 6px 13px #c4c8d6,-6px -6px 13px #ffffff; display:flex; align-items:center; justify-content:center;}
+  .clay{width:74px; height:74px; border-radius:50%; position:relative; z-index:1;
+    background:linear-gradient(145deg,#FDE68A,#FBBF24);
+    box-shadow:inset 4px 4px 9px rgba(255,255,255,.75),inset -5px -5px 9px rgba(180,83,9,.25),0 8px 14px rgba(0,0,0,.18);
+    display:flex; align-items:center; justify-content:center;}
+  .blob{position:absolute; border-radius:50%; filter:blur(14px);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>👜 Ταμείο — Εικονίδιο Εφαρμογής</h1>
+    <p>10 επαγγελματικές προτάσεις · έτσι θα φαίνεται στην αρχική οθόνη του κινητού σου</p>
+  </header>
+
+  <div class="hint">
+    Διάλεξε <b>μία</b> πρόταση (π.χ. «Πρόταση 4»). Μπορείς να ζητήσεις και <b>αλλαγή χρώματος</b> ή
+    συνδυασμό («το σχέδιο του 7 με το χρώμα του 2»). Όλα είναι σχεδιασμένα να διαβάζονται καθαρά
+    και <b>μικρά</b> στο τηλέφωνο.
+  </div>
+
+  <div class="grid">
+
+    <!-- 1 · Πορτοφόλι -->
+    <div class="card"><span class="num">1</span>
+      <div class="icon" style="background:linear-gradient(145deg,#FBBF24,#EA580C);">
+        <svg viewBox="0 0 100 100">
+          <rect x="16" y="30" width="68" height="44" rx="10" fill="#fff"/>
+          <rect x="16" y="30" width="68" height="13" rx="10" fill="#fde9c7"/>
+          <rect x="58" y="46" width="34" height="20" rx="6" fill="#fde9c7"/>
+          <circle cx="74" cy="56" r="6.5" fill="#EA580C"/>
+          <text x="74" y="60.5" font-size="9" font-weight="800" fill="#fff" text-anchor="middle" font-family="Arial">€</text>
+        </svg>
+      </div>
+      <div class="applabel">Ταμείο</div>
+      <div class="name">Πορτοφόλι</div>
+      <div class="desc">Κλασικό, αναγνωρίσιμο «λεφτά στην τσέπη».</div>
+      <div class="label">Πορτοκαλί brand</div>
+    </div>
+
+    <!-- 2 · Στοίβα κέρματα -->
+    <div class="card"><span class="num">2</span>
+      <div class="icon" style="background:linear-gradient(145deg,#34D399,#059669);">
+        <svg viewBox="0 0 100 100">
+          <ellipse cx="50" cy="72" rx="26" ry="9" fill="#FCD34D"/>
+          <rect x="24" y="58" width="52" height="14" fill="#FBBF24"/>
+          <ellipse cx="50" cy="58" rx="26" ry="9" fill="#FCD34D"/>
+          <rect x="24" y="46" width="52" height="12" fill="#FBBF24"/>
+          <ellipse cx="50" cy="46" rx="26" ry="9" fill="#FDE68A"/>
+          <text x="50" y="50" font-size="12" font-weight="800" fill="#B45309" text-anchor="middle" font-family="Arial">€</text>
+        </svg>
+      </div>
+      <div class="applabel">Ταμείο</div>
+      <div class="name">Στοίβα Κέρματα</div>
+      <div class="desc">«Χρήματα που μαζεύονται» — πράσινο = ταμείο.</div>
+      <div class="label">Πράσινο</div>
+    </div>
+
+    <!-- 3 · Σακούλα χρημάτων -->
+    <div class="card"><span class="num">3</span>
+      <div class="icon" style="background:linear-gradient(145deg,#FB923C,#C2410C);">
+        <svg viewBox="0 0 100 100">
+          <path d="M38 30 q12 -6 24 0 l-6 8 h-12 z" fill="#fff" opacity=".9"/>
+          <path d="M44 38 h12 q20 8 20 26 a26 22 0 0 1 -52 0 q0 -18 20 -26 z" fill="#fff"/>
+          <text x="50" y="70" font-size="20" font-weight="800" fill="#C2410C" text-anchor="middle" font-family="Arial">€</text>
+        </svg>
+      </div>
+      <div class="applabel">Ταμείο</div>
+      <div class="name">Σακούλα 👜</div>
+      <div class="desc">Ταιριάζει με το σημερινό σύμβολο στο sidebar.</div>
+      <div class="label">Πορτοκαλί βαθύ</div>
+    </div>
+
+    <!-- 4 · Ταμειακή μηχανή -->
+    <div class="card"><span class="num">4</span>
+      <div class="icon" style="background:linear-gradient(145deg,#F59E0B,#B45309);">
+        <svg viewBox="0 0 100 100">
+          <rect x="20" y="44" width="60" height="34" rx="5" fill="#fff"/>
+          <rect x="26" y="30" width="34" height="16" rx="3" fill="#fff"/>
+          <rect x="30" y="49" width="40" height="11" rx="2" fill="#1f2937"/>
+          <text x="50" y="58" font-size="8" font-weight="800" fill="#34D399" text-anchor="middle" font-family="Arial">€ 540</text>
+          <rect x="28" y="64" width="9" height="9" rx="2" fill="#FBBF24"/>
+          <rect x="40" y="64" width="9" height="9" rx="2" fill="#FBBF24"/>
+          <rect x="52" y="64" width="9" height="9" rx="2" fill="#FBBF24"/>
+          <rect x="64" y="64" width="9" height="9" rx="2" fill="#EA580C"/>
+        </svg>
+      </div>
+      <div class="applabel">Ταμείο</div>
+      <div class="name">Ταμειακή</div>
+      <div class="desc">Άμεσα «ταμείο μαγαζιού». Πολύ ξεκάθαρο.</div>
+      <div class="label">Κεχριμπάρι</div>
+    </div>
+
+    <!-- 5 · Κέρμα Ευρώ -->
+    <div class="card"><span class="num">5</span>
+      <div class="icon" style="background:linear-gradient(145deg,#1e293b,#0f172a);">
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="30" fill="#FCD34D"/>
+          <circle cx="50" cy="50" r="30" fill="none" stroke="#B45309" stroke-width="3"/>
+          <circle cx="50" cy="50" r="23" fill="none" stroke="#F59E0B" stroke-width="2"/>
+          <text x="50" y="62" font-size="34" font-weight="800" fill="#92400E" text-anchor="middle" font-family="Georgia,serif">€</text>
+        </svg>
+      </div>
+      <div class="applabel">Ταμείο</div>
+      <div class="name">Χρυσό Ευρώ</div>
+      <div class="desc">Πολυτελές & «premium» σε σκούρο φόντο.</div>
+      <div class="label">Σκούρο + χρυσό</div>
+    </div>
+
+    <!-- 6 · Μονόγραμμα T€ -->
+    <div class="card"><span class="num">6</span>
+      <div class="icon" style="background:linear-gradient(145deg,#27303f,#111827);">
+        <svg viewBox="0 0 100 100">
+          <rect x="24" y="28" width="40" height="9" rx="3" fill="#F59E0B"/>
+          <rect x="39" y="28" width="10" height="46" rx="3" fill="#F59E0B"/>
+          <text x="64" y="74" font-size="40" font-weight="800" fill="#FCD34D" text-anchor="middle" font-family="Georgia,serif">€</text>
+        </svg>
+      </div>
+      <div class="applabel">Ταμείο</div>
+      <div class="name">Μονόγραμμα «T€»</div>
+      <div class="desc">TAMAM + Ευρώ. Μοναδικό, εταιρικό.</div>
+      <div class="label">Σκούρο + κεχριμπάρι</div>
+    </div>
+
+    <!-- 7 · Χαρτονομίσματα -->
+    <div class="card"><span class="num">7</span>
+      <div class="icon" style="background:linear-gradient(145deg,#10B981,#047857);">
+        <svg viewBox="0 0 100 100">
+          <g transform="rotate(-12 50 50)">
+            <rect x="20" y="40" width="60" height="34" rx="5" fill="#D1FAE5"/>
+          </g>
+          <g transform="rotate(-2 50 50)">
+            <rect x="22" y="36" width="58" height="32" rx="5" fill="#fff"/>
+            <circle cx="51" cy="52" r="10" fill="none" stroke="#10B981" stroke-width="2.5"/>
+            <text x="51" y="56.5" font-size="13" font-weight="800" fill="#059669" text-anchor="middle" font-family="Arial">€</text>
+          </g>
+        </svg>
+      </div>
+      <div class="applabel">Ταμείο</div>
+      <div class="name">Χαρτονομίσματα</div>
+      <div class="desc">«Μετρητά» — ζεστό, φιλικό, καθαρό.</div>
+      <div class="label">Πράσινο μέντα</div>
+    </div>
+
+    <!-- 8 · Χρηματοκιβώτιο -->
+    <div class="card"><span class="num">8</span>
+      <div class="icon" style="background:linear-gradient(145deg,#475569,#1e293b);">
+        <svg viewBox="0 0 100 100">
+          <rect x="22" y="24" width="56" height="52" rx="8" fill="#cbd5e1"/>
+          <rect x="29" y="31" width="42" height="38" rx="5" fill="#94a3b8"/>
+          <circle cx="50" cy="50" r="14" fill="#1e293b"/>
+          <circle cx="50" cy="50" r="14" fill="none" stroke="#F59E0B" stroke-width="3"/>
+          <circle cx="50" cy="50" r="4" fill="#FCD34D"/>
+          <rect x="49" y="36" width="2.5" height="8" fill="#FCD34D"/>
+          <rect x="49" y="56" width="2.5" height="8" fill="#FCD34D"/>
+        </svg>
+      </div>
+      <div class="applabel">Ταμείο</div>
+      <div class="name">Χρηματοκιβώτιο</div>
+      <div class="desc">«Ασφάλεια & λεφτά κλειδωμένα». Σοβαρό.</div>
+      <div class="label">Ατσάλι + κεχριμπάρι</div>
+    </div>
+
+    <!-- 9 · Βιβλίο Ταμείου -->
+    <div class="card"><span class="num">9</span>
+      <div class="icon" style="background:linear-gradient(145deg,#FBBF24,#D97706);">
+        <svg viewBox="0 0 100 100">
+          <path d="M50 30 C40 24 26 24 20 28 L20 72 C26 68 40 68 50 74 Z" fill="#fff"/>
+          <path d="M50 30 C60 24 74 24 80 28 L80 72 C74 68 60 68 50 74 Z" fill="#f3f4f6"/>
+          <rect x="49" y="30" width="2" height="44" fill="#D97706"/>
+          <line x1="27" y1="38" x2="44" y2="40" stroke="#d1d5db" stroke-width="2.5"/>
+          <line x1="27" y1="46" x2="44" y2="48" stroke="#d1d5db" stroke-width="2.5"/>
+          <text x="66" y="55" font-size="18" font-weight="800" fill="#D97706" text-anchor="middle" font-family="Arial">€</text>
+        </svg>
+      </div>
+      <div class="applabel">Ταμείο</div>
+      <div class="name">Βιβλίο Ταμείου</div>
+      <div class="desc">«Το κατάστιχό μου» — ακριβώς αυτό που είναι.</div>
+      <div class="label">Κεχριμπάρι</div>
+    </div>
+
+    <!-- 10 · Κουμπαράς -->
+    <div class="card"><span class="num">10</span>
+      <div class="icon" style="background:linear-gradient(145deg,#FB7185,#E11D48);">
+        <svg viewBox="0 0 100 100">
+          <ellipse cx="50" cy="56" rx="30" ry="24" fill="#fff"/>
+          <path d="M68 40 q10 -2 9 8" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+          <polygon points="30,38 40,34 38,46" fill="#fff"/>
+          <rect x="42" y="34" width="16" height="4" rx="2" fill="#E11D48"/>
+          <circle cx="68" cy="54" r="2.6" fill="#E11D48"/>
+          <rect x="36" y="76" width="6" height="9" rx="2" fill="#fff"/>
+          <rect x="58" y="76" width="6" height="9" rx="2" fill="#fff"/>
+          <text x="50" y="28" font-size="14" font-weight="800" fill="#fff" text-anchor="middle" font-family="Arial">€</text>
+        </svg>
+      </div>
+      <div class="applabel">Ταμείο</div>
+      <div class="name">Κουμπαράς</div>
+      <div class="desc">Φιλικό & ζεστό «αποταμίευση». Πιο παιχνιδιάρικο.</div>
+      <div class="label">Κοραλί</div>
+    </div>
+
+  </div>
+
+  <div class="section-divider">
+    <h2>✨ Πιο «2026» — μοντέρνα στυλ</h2>
+    <p>Γυαλί, neon, απαλά χρώματα, holographic — οι τελευταίες τάσεις σε εικονίδια εφαρμογών.</p>
+  </div>
+
+  <div class="grid">
+
+    <!-- 11 · Γυαλί (glassmorphism) -->
+    <div class="card"><span class="num">11</span>
+      <div class="icon" style="background:linear-gradient(145deg,#7C3AED,#DB2777);">
+        <div class="glasspane"><span class="eu" style="font-size:36px;color:#fff;">€</span></div>
+      </div>
+      <div class="applabel">Ταμείο</div>
+      <div class="name">Γυαλί (Glass)</div>
+      <div class="desc">Παγωμένο γυαλί πάνω σε χρώμα — πολύ «τώρα».</div>
+      <div class="label">Glassmorphism</div>
+    </div>
+
+    <!-- 12 · Mesh gradient -->
+    <div class="card"><span class="num">12</span>
+      <div class="icon" style="background:
+            radial-gradient(circle at 25% 20%,#F472B6,transparent 45%),
+            radial-gradient(circle at 80% 25%,#FBBF24,transparent 45%),
+            radial-gradient(circle at 50% 88%,#38BDF8,transparent 52%),
+            linear-gradient(145deg,#6366F1,#8B5CF6);">
+        <span class="eu" style="font-size:44px;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.25);">€</span>
+      </div>
+      <div class="applabel">Ταμείο</div>
+      <div class="name">Χρωματικό Σύννεφο</div>
+      <div class="desc">Πολύχρωμο «mesh» φόντο — ζωντανό & μοντέρνο.</div>
+      <div class="label">Mesh gradient</div>
+    </div>
+
+    <!-- 13 · Neumorphic (soft UI) -->
+    <div class="card"><span class="num">13</span>
+      <div class="icon" style="background:#e8ebf2;box-shadow:0 8px 18px rgba(0,0,0,.10);">
+        <div class="neu"><span class="eu" style="font-size:32px;color:#8a93a8;">€</span></div>
+      </div>
+      <div class="applabel">Ταμείο</div>
+      <div class="name">Απαλό (Soft UI)</div>
+      <div class="desc">Διακριτικό, «ανάγλυφο» — κομψό & ήρεμο.</div>
+      <div class="label">Neumorphism</div>
+    </div>
+
+    <!-- 14 · Neon glow -->
+    <div class="card"><span class="num">14</span>
+      <div class="icon" style="background:linear-gradient(145deg,#0B1020,#161B2E);">
+        <span class="eu" style="font-size:46px;color:#22D3EE;text-shadow:0 0 6px #22D3EE,0 0 16px #22D3EE,0 0 30px #0891B2;">€</span>
+      </div>
+      <div class="applabel">Ταμείο</div>
+      <div class="name">Neon</div>
+      <div class="desc">Φωτεινό περίγραμμα σε σκούρο — εντυπωσιακό.</div>
+      <div class="label">Glow / σκούρο</div>
+    </div>
+
+    <!-- 15 · Claymorphism -->
+    <div class="card"><span class="num">15</span>
+      <div class="icon" style="background:linear-gradient(145deg,#FCA5A5,#F87171);">
+        <div class="clay"><span class="eu" style="font-size:34px;color:#B45309;">€</span></div>
+      </div>
+      <div class="applabel">Ταμείο</div>
+      <div class="name">Πλαστελίνη (3D)</div>
+      <div class="desc">Παχουλό, «3D» κουμπί — φιλικό & πατητό.</div>
+      <div class="label">Claymorphism</div>
+    </div>
+
+    <!-- 16 · Duotone flat -->
+    <div class="card"><span class="num">16</span>
+      <div class="icon" style="background:linear-gradient(145deg,#22D3EE,#0EA5E9);">
+        <svg viewBox="0 0 100 100">
+          <rect x="20" y="34" width="60" height="40" rx="9" fill="#fff"/>
+          <rect x="20" y="34" width="60" height="40" rx="9" fill="#0EA5E9" opacity=".16"/>
+          <rect x="54" y="48" width="30" height="16" rx="5" fill="#0EA5E9"/>
+          <circle cx="69" cy="56" r="4.5" fill="#fff"/>
+        </svg>
+      </div>
+      <div class="applabel">Ταμείο</div>
+      <div class="name">Duotone</div>
+      <div class="desc">Επίπεδο, δύο τόνοι — καθαρό & σύγχρονο.</div>
+      <div class="label">Flat / γαλάζιο</div>
+    </div>
+
+    <!-- 17 · Bold gradient T€ -->
+    <div class="card"><span class="num">17</span>
+      <div class="icon" style="background:linear-gradient(145deg,#4F46E5,#EC4899);">
+        <span class="eu" style="font-size:36px;color:#fff;letter-spacing:-2px;">T€</span>
+      </div>
+      <div class="applabel">Ταμείο</div>
+      <div class="name">Μονόγραμμα Pop</div>
+      <div class="desc">«T€» σε ζωηρό gradient — νεανικό, εταιρικό.</div>
+      <div class="label">Vivid gradient</div>
+    </div>
+
+    <!-- 18 · Holographic -->
+    <div class="card"><span class="num">18</span>
+      <div class="icon" style="background:conic-gradient(from 210deg,#A78BFA,#67E8F9,#FDE68A,#F9A8D4,#A78BFA);">
+        <div class="glasspane"><span class="eu" style="font-size:34px;color:#fff;">€</span></div>
+      </div>
+      <div class="applabel">Ταμείο</div>
+      <div class="name">Holographic</div>
+      <div class="desc">Ιριδίζον «ουράνιο τόξο» + γυαλί — premium tech.</div>
+      <div class="label">Iridescent</div>
+    </div>
+
+    <!-- 19 · Line-art minimal -->
+    <div class="card"><span class="num">19</span>
+      <div class="icon" style="background:linear-gradient(145deg,#F59E0B,#EF4444);">
+        <svg viewBox="0 0 100 100" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="22" y="33" width="56" height="40" rx="11"/>
+          <path d="M22 47 h56"/>
+          <circle cx="66" cy="60" r="4"/>
+        </svg>
+      </div>
+      <div class="applabel">Ταμείο</div>
+      <div class="name">Λεπτή Γραμμή</div>
+      <div class="desc">Μινιμαλιστικό περίγραμμα — διαχρονικά κομψό.</div>
+      <div class="label">Line-art</div>
+    </div>
+
+    <!-- 20 · Aurora blobs -->
+    <div class="card"><span class="num">20</span>
+      <div class="icon" style="background:#0F172A;">
+        <span class="blob" style="width:60px;height:60px;background:#8B5CF6;top:12px;left:8px;"></span>
+        <span class="blob" style="width:56px;height:56px;background:#F472B6;bottom:10px;right:8px;"></span>
+        <span class="blob" style="width:48px;height:48px;background:#22D3EE;top:34px;left:42px;"></span>
+        <span class="eu" style="font-size:44px;color:#fff;position:relative;z-index:2;text-shadow:0 2px 10px rgba(0,0,0,.45);">€</span>
+      </div>
+      <div class="applabel">Ταμείο</div>
+      <div class="name">Aurora</div>
+      <div class="desc">Θολά χρωματιστά φώτα σε σκούρο — «δωρικό» tech.</div>
+      <div class="label">Aurora / σκούρο</div>
+    </div>
+
+  </div>
+
+  <footer>
+    TAMAM · Back-Office — preview εικονιδίων «👜 Ταμείο» · τοπικό αρχείο, δεν δημοσιεύεται
+  </footer>
+</div>
+</body>
+</html>
