@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ταμείο — Animated δαχτυλικό στο κέντρο</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,Roboto,Arial,sans-serif;background:#eef0f4;color:#1f2430;
+    padding:26px 16px 60px;-webkit-tap-highlight-color:transparent;}
+  .head{max-width:760px;margin:0 auto 22px;text-align:center;}
+  .head h1{font-size:23px;font-weight:800;}
+  .head p{color:#5a6270;font-size:14px;margin-top:8px;line-height:1.55;}
+  .note{max-width:680px;margin:14px auto 0;background:#fff7ed;border:1px solid #f3cfb3;border-radius:14px;
+    padding:13px 16px;font-size:13px;color:#7a4a22;line-height:1.5;text-align:left;}
+  .stage{display:flex;flex-wrap:wrap;gap:30px;justify-content:center;align-items:flex-start;max-width:900px;margin:26px auto 0;}
+
+  /* phone */
+  .phone{position:relative;width:330px;height:640px;background:#000;border-radius:38px;padding:10px;
+    box-shadow:0 14px 38px rgba(0,0,0,.28);overflow:hidden;}
+  .screen{position:relative;width:100%;height:100%;border-radius:30px;overflow:hidden;}
+  .statusbar{position:absolute;top:0;left:0;right:0;height:26px;z-index:40;display:flex;align-items:center;
+    justify-content:space-between;padding:0 16px;font-size:11px;font-weight:700;color:#fff;pointer-events:none;}
+
+  .lock{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:space-between;
+    padding:42px 22px 22px;color:#fff;background:linear-gradient(160deg,#f6953f 0%,#e8722c 55%,#cf5f1e 100%);}
+  .lk-top{display:flex;flex-direction:column;align-items:center;gap:8px;}
+  .lk-title{font-weight:800;font-size:20px;text-align:center;}
+
+  /* ── center animated fingerprint ─────────────────────────── */
+  .fpc{display:flex;flex-direction:column;align-items:center;gap:16px;}
+  .fpwrap{position:relative;width:140px;height:140px;display:flex;align-items:center;justify-content:center;}
+  .ring{position:absolute;inset:0;border-radius:50%;border:3px solid rgba(255,255,255,.5);}
+  .ring.r2{inset:14px;border-color:rgba(255,255,255,.28);}
+  .glyph{font-size:62px;line-height:1;filter:drop-shadow(0 4px 10px rgba(0,0,0,.18));z-index:2;transition:transform .25s;}
+  /* scanning sweep */
+  .sweep{position:absolute;left:0;right:0;height:46%;top:27%;overflow:hidden;border-radius:14px;z-index:3;pointer-events:none;opacity:0;}
+  .sweep .bar{position:absolute;left:-10%;right:-10%;height:5px;background:linear-gradient(90deg,transparent,#fff,transparent);
+    box-shadow:0 0 14px 4px rgba(255,255,255,.7);border-radius:4px;}
+  .fplabel{font-size:14.5px;font-weight:700;text-align:center;min-height:22px;}
+  .fpsub{font-size:12.5px;opacity:.9;text-align:center;margin-top:-8px;max-width:230px;}
+
+  /* state: waiting */
+  .st-wait .ring{animation:ringpulse 1.6s ease-in-out infinite;}
+  .st-wait .ring.r2{animation:ringpulse 1.6s ease-in-out infinite .3s;}
+  .st-wait .glyph{animation:glyphbreathe 1.6s ease-in-out infinite;}
+  .st-wait .sweep{opacity:1;}
+  .st-wait .sweep .bar{animation:sweepmove 1.5s linear infinite;}
+  @keyframes ringpulse{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.06);opacity:.9}}
+  @keyframes glyphbreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+  @keyframes sweepmove{0%{top:-10%}100%{top:104%}}
+
+  /* state: success */
+  .st-ok .fpwrap{animation:popok .4s ease;}
+  .st-ok .ring{border-color:#bff0cf;}
+  .st-ok .ring.r2{border-color:#8fe0ad;}
+  .st-ok .glyph{transform:scale(1.05);}
+  @keyframes popok{0%{transform:scale(.9)}55%{transform:scale(1.12)}100%{transform:scale(1)}}
+
+  /* state: fail */
+  .st-fail .fpwrap{animation:shake .5s;}
+  .st-fail .ring{border-color:#ffc9c2;}
+  .st-fail .ring.r2{border-color:#ff9d92;}
+  @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-12px)}40%{transform:translateX(12px)}60%{transform:translateX(-8px)}80%{transform:translateX(8px)}}
+
+  /* keypad */
+  .pad{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;width:100%;max-width:250px;}
+  .key{height:48px;border-radius:14px;border:0;background:rgba(255,255,255,.16);color:#fff;font-size:20px;
+    font-weight:700;display:flex;align-items:center;justify-content:center;font-family:inherit;}
+  .key.fn{background:rgba(255,255,255,.10);}
+  .bottom{display:flex;flex-direction:column;align-items:center;gap:11px;width:100%;}
+  .forgot{background:none;border:0;color:#fff;font:inherit;font-size:13px;font-weight:700;text-decoration:underline;opacity:.9;}
+  .padwrap{transition:opacity .3s,max-height .3s;overflow:hidden;}
+  .padwrap.dim{opacity:.45;}
+  .padwrap.hot{animation:hotglow 1s ease;}
+  @keyframes hotglow{0%{filter:brightness(1)}40%{filter:brightness(1.5)}100%{filter:brightness(1)}}
+
+  /* mocked Android dialog (representation only) */
+  .scrim{position:absolute;inset:0;background:rgba(0,0,0,.42);z-index:55;opacity:0;pointer-events:none;transition:opacity .25s;}
+  .scrim.on{opacity:1;}
+  .afp{position:absolute;left:0;right:0;bottom:0;z-index:60;transform:translateY(115%);transition:transform .28s cubic-bezier(.2,.7,.3,1);
+    background:#20242b;color:#e8eaed;border-radius:22px 22px 0 0;padding:20px 20px 24px;}
+  .afp.on{transform:translateY(0);}
+  .afp .tag{font-size:10px;font-weight:800;letter-spacing:.4px;color:#9aa0a6;background:rgba(255,255,255,.06);
+    display:inline-block;padding:3px 9px;border-radius:6px;margin-bottom:10px;}
+  .afp .t{font-size:15px;font-weight:700;}
+  .afp .s{font-size:12px;color:#9aa0a6;margin-top:3px;}
+  .afp .ar{width:56px;height:56px;margin:14px auto 6px;border-radius:50%;border:2px solid #3c4250;display:flex;
+    align-items:center;justify-content:center;font-size:28px;color:#8ab4f8;}
+  .afp .ast{text-align:center;font-size:12px;color:#9aa0a6;min-height:16px;}
+  .afp .row{display:flex;justify-content:flex-end;margin-top:12px;}
+  .afp .cancel{background:none;border:0;color:#8ab4f8;font:inherit;font-weight:700;font-size:14px;padding:6px;}
+
+  /* home */
+  .home{position:absolute;inset:0;background:#f3f4f6;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;gap:8px;opacity:0;pointer-events:none;transition:opacity .35s;text-align:center;padding:20px;}
+  .home.on{opacity:1;}
+  .home .hg{font-size:48px;} .home .ht{font-weight:800;font-size:18px;} .home .hs{font-size:13px;color:#6b7280;}
+
+  /* controls */
+  .controls{width:300px;background:#fff;border:1px solid #e6e8ec;border-radius:16px;padding:18px;}
+  .controls h3{font-size:15px;font-weight:800;margin-bottom:4px;}
+  .controls .ch{font-size:12.5px;color:#6b7280;margin-bottom:14px;line-height:1.5;}
+  .cbtn{display:block;width:100%;margin-bottom:10px;border:0;border-radius:12px;padding:13px;font:inherit;
+    font-weight:700;font-size:14px;cursor:pointer;}
+  .cbtn.start{background:#1f2430;color:#fff;}
+  .cbtn.ok{background:#2e9e5b;color:#fff;}
+  .cbtn.fail{background:#d9453c;color:#fff;}
+  .cbtn.reset{background:#fff;color:#1f2430;border:1px solid #e6e8ec;}
+  .legend{margin-top:14px;font-size:12px;color:#4b5260;line-height:1.8;border-top:1px solid #eef0f3;padding-top:12px;}
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>🔒 Animated δαχτυλικό στο κέντρο</h1>
+  <p>Χωρίς δικό μας μαύρο παράθυρο. Στο κέντρο της πορτοκαλί οθόνης ζει το εφέ που δείχνει live το αποτέλεσμα.</p>
+  <div class="note">
+    ⚠️ <b>Ειλικρινά:</b> ο browser μας δίνει <b>μόνο το τελικό αποτέλεσμα</b> (πέτυχε / απέτυχε). Το «ξαναδοκίμασε <i>τώρα</i>»
+    ανά άγγιγμα το χειρίζεται <b>μόνο του το παράθυρο του Android</b>. Άρα το εφέ δείχνει 3 πραγματικές καταστάσεις:
+    <b>αναμονή → ✓ πέτυχε → ✗ απέτυχε (ξαναδοκίμασε ή κωδικός)</b>. Το σκούρο παράθυρο εδώ είναι απλώς αναπαράσταση του Android.
+  </div>
+</div>
+
+<div class="stage">
+  <div class="phone"><div class="screen">
+    <div class="statusbar"><span>21:30</span><span>📶 🔋</span></div>
+
+    <div class="lock">
+      <div class="lk-top"><div class="lk-title">Ξεκλείδωσε το Ταμείο</div></div>
+
+      <div class="fpc st-wait" id="fpc">
+        <div class="fpwrap">
+          <div class="ring"></div>
+          <div class="ring r2"></div>
+          <div class="sweep"><div class="bar"></div></div>
+          <div class="glyph" id="glyph">👆</div>
+        </div>
+        <div class="fplabel" id="fplabel">Σάρωσε το δαχτυλικό σου</div>
+        <div class="fpsub" id="fpsub">Άγγιξε τον αισθητήρα του κινητού</div>
+      </div>
+
+      <div class="bottom">
+        <div class="padwrap" id="padwrap">
+          <div class="pad">
+            <button class="key">1</button><button class="key">2</button><button class="key">3</button>
+            <button class="key">4</button><button class="key">5</button><button class="key">6</button>
+            <button class="key">7</button><button class="key">8</button><button class="key">9</button>
+            <button class="key fn" id="fpkey">👆</button><button class="key">0</button><button class="key fn">⌫</button>
+          </div>
+        </div>
+        <button class="forgot">Ξέχασα τον κωδικό;</button>
+      </div>
+    </div>
+
+    <div class="scrim" id="scrim"></div>
+    <div class="afp" id="afp">
+      <div class="tag">🤖 ΠΑΡΑΘΥΡΟ ANDROID — δεν αλλάζει</div>
+      <div class="t">Επιβεβαίωση ταυτότητας</div>
+      <div class="s">Ταμείο · χρησιμοποίησε το δαχτυλικό σου</div>
+      <div class="ar">👆</div>
+      <div class="ast">Άγγιξε τον αισθητήρα</div>
+      <div class="row"><button class="cancel" id="afpcancel">Άκυρο</button></div>
+    </div>
+
+    <div class="home" id="home">
+      <div class="hg">💶</div><div class="ht">Καλώς ήρθες!</div><div class="hs">Το ταμείο ξεκλείδωσε.</div>
+    </div>
+  </div></div>
+
+  <div class="controls">
+    <h3>🎮 Δοκίμασε τη ροή</h3>
+    <div class="ch">Πάτα «Ξεκίνα» — βγαίνει το παράθυρο του Android & το κέντρο μπαίνει σε «αναμονή». Μετά διάλεξε αποτέλεσμα.</div>
+    <button class="cbtn start" id="bStart">▶ Ξεκίνα (άνοιξε δαχτυλικό)</button>
+    <button class="cbtn ok" id="bOk">✓ Πέτυχε το δαχτυλικό</button>
+    <button class="cbtn fail" id="bFail">✗ Απέτυχε / ακυρώθηκε</button>
+    <button class="cbtn reset" id="bReset">↺ Επαναφορά</button>
+    <div class="legend">
+      <b>Αναμονή:</b> παλλόμενο 👆 + «σάρωση»<br>
+      <b>✓ Πέτυχε:</b> πράσινο τικ → μπαίνεις<br>
+      <b>✗ Απέτυχε:</b> κόκκινο, τρέμει → φωτίζεται το πληκτρολόγιο για κωδικό
+    </div>
+  </div>
+</div>
+
+<script>
+  var fpc=document.getElementById('fpc'), glyph=document.getElementById('glyph'),
+      label=document.getElementById('fplabel'), sub=document.getElementById('fpsub'),
+      scrim=document.getElementById('scrim'), afp=document.getElementById('afp'),
+      home=document.getElementById('home'), padwrap=document.getElementById('padwrap');
+
+  function setState(s){ fpc.className='fpc '+s; }
+  function openAndroid(){ scrim.classList.add('on'); afp.classList.add('on'); }
+  function closeAndroid(){ scrim.classList.remove('on'); afp.classList.remove('on'); }
+
+  function start(){
+    reset();
+    setState('st-wait'); glyph.textContent='👆';
+    label.textContent='Σάρωσε το δαχτυλικό σου';
+    sub.textContent='Άγγιξε τον αισθητήρα του κινητού';
+    openAndroid();
+  }
+  function ok(){
+    closeAndroid();
+    setState('st-ok'); glyph.textContent='✓';
+    label.textContent='Ξεκλείδωσε!'; sub.textContent='Καλώς ήρθες';
+    padwrap.classList.add('dim');
+    setTimeout(function(){ home.classList.add('on'); }, 700);
+  }
+  function fail(){
+    closeAndroid();
+    setState('st-fail'); glyph.textContent='✗';
+    label.textContent='Δεν αναγνωρίστηκε';
+    sub.textContent='Ξαναδοκίμασε το δαχτυλικό ή βάλε τον κωδικό';
+    padwrap.classList.remove('dim'); padwrap.classList.add('hot');
+    setTimeout(function(){ padwrap.classList.remove('hot'); }, 1000);
+  }
+  function reset(){
+    closeAndroid(); home.classList.remove('on');
+    padwrap.classList.remove('dim','hot');
+    setState('st-wait'); glyph.textContent='👆';
+    label.textContent='Σάρωσε το δαχτυλικό σου';
+    sub.textContent='Άγγιξε τον αισθητήρα του κινητού';
+  }
+
+  document.getElementById('bStart').addEventListener('click', start);
+  document.getElementById('bOk').addEventListener('click', ok);
+  document.getElementById('bFail').addEventListener('click', fail);
+  document.getElementById('bReset').addEventListener('click', reset);
+  document.getElementById('afpcancel').addEventListener('click', fail);
+  document.getElementById('fpkey').addEventListener('click', start);
+  document.getElementById('afp').querySelector('.ar').addEventListener('click', ok);
+
+  reset();
+</script>
+</body>
+</html>
