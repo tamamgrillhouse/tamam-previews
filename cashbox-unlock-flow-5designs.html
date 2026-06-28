@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ταμείο — Ξεκλείδωμα: 5 προτάσεις</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, Roboto, Arial, sans-serif;
+    background: #eef0f4; color: #1f2430; padding: 26px 16px 60px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .head { max-width: 1100px; margin: 0 auto 26px; text-align: center; }
+  .head h1 { font-size: 24px; font-weight: 800; }
+  .head p { color: #5a6270; font-size: 14px; margin-top: 8px; line-height: 1.55; }
+  .androidnote {
+    max-width: 760px; margin: 16px auto 0; background: #fff7ed; border: 1px solid #f3cfb3;
+    border-radius: 14px; padding: 13px 16px; font-size: 13px; color: #7a4a22; line-height: 1.5; text-align: left;
+  }
+  .grid {
+    display: flex; flex-wrap: wrap; gap: 30px 26px; justify-content: center;
+    max-width: 1300px; margin: 0 auto;
+  }
+  .col { width: 320px; }
+  .col > h2 { font-size: 16px; font-weight: 800; text-align: center; margin-bottom: 4px; }
+  .col > .desc { font-size: 12.5px; color: #5a6270; text-align: center; min-height: 52px; line-height: 1.5; margin-bottom: 12px; padding: 0 6px; }
+  .col.pick { }
+  .col.pick .phone-wrap::after {
+    content: '★ προτεινόμενο'; position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
+    background: #2e9e5b; color: #fff; font-size: 11px; font-weight: 800; padding: 4px 12px; border-radius: 999px; z-index: 5; white-space: nowrap;
+  }
+  .phone-wrap { position: relative; }
+  /* phone frame */
+  .phone {
+    position: relative; width: 320px; height: 600px; background: #000; border-radius: 36px;
+    padding: 10px; box-shadow: 0 14px 38px rgba(0,0,0,.28); overflow: hidden; margin: 0 auto;
+  }
+  .screen {
+    position: relative; width: 100%; height: 100%; border-radius: 28px; overflow: hidden; background: #fff;
+  }
+  .statusbar {
+    position: absolute; top: 0; left: 0; right: 0; height: 26px; z-index: 40;
+    display: flex; align-items: center; justify-content: space-between; padding: 0 16px;
+    font-size: 11px; font-weight: 700; color: #fff; pointer-events: none;
+  }
+  /* lock overlay (our screen) */
+  .lock {
+    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center;
+    justify-content: space-between; padding: 40px 22px 22px; color: #fff;
+    background: linear-gradient(160deg,#f6953f 0%,#e8722c 55%,#cf5f1e 100%);
+  }
+  .lk-top { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .lk-glyph { width: 66px; height: 66px; border-radius: 20px; background: rgba(255,255,255,.18);
+    display: flex; align-items: center; justify-content: center; font-size: 31px; box-shadow: 0 6px 18px rgba(0,0,0,.18); }
+  .lk-title { font-weight: 800; font-size: 19px; text-align: center; }
+  .lk-sub { font-size: 12.5px; opacity: .92; text-align: center; max-width: 250px; margin-top: -3px; }
+  .dots { display: flex; gap: 13px; margin-top: 4px; }
+  .dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid rgba(255,255,255,.75); }
+  .dot.fill { background: #fff; border-color: #fff; }
+  .pad { display: grid; grid-template-columns: repeat(3,1fr); gap: 11px; width: 100%; max-width: 250px; }
+  .key { height: 50px; border-radius: 15px; border: 0; background: rgba(255,255,255,.16); color: #fff;
+    font-size: 21px; font-weight: 700; display: flex; align-items: center; justify-content: center; font-family: inherit; }
+  .key.fn { background: rgba(255,255,255,.10); font-size: 23px; }
+  .key.ph { background: none; }
+  .bottom { display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%; }
+  .forgot { background: none; border: 0; color: #fff; font: inherit; font-size: 13px; font-weight: 700;
+    text-decoration: underline; opacity: .9; }
+  .mid { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+
+  /* big fingerprint zone */
+  .fpzone { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .fpbig { width: 92px; height: 92px; border-radius: 50%; background: rgba(255,255,255,.16);
+    border: 3px solid rgba(255,255,255,.55); display: flex; align-items: center; justify-content: center;
+    font-size: 46px; color: #fff; cursor: pointer; }
+  .fpbig.pulse { animation: pulse 1.4s infinite; }
+  @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.4)} 50%{box-shadow:0 0 0 14px rgba(255,255,255,0)} }
+  .fphint { font-size: 13px; font-weight: 700; }
+
+  /* choice buttons */
+  .choice { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 250px; }
+  .cbtn { background: rgba(255,255,255,.16); border: 1.5px solid rgba(255,255,255,.45); color: #fff;
+    border-radius: 16px; padding: 16px; font: inherit; font-size: 15px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; }
+  .cbtn .ic { font-size: 24px; }
+  .cbtn.solid { background: #fff; color: #cf5f1e; border-color: #fff; }
+
+  .linklike { background: none; border: 0; color: #fff; font: inherit; font-size: 14px; font-weight: 700;
+    text-decoration: underline; opacity: .92; cursor: pointer; padding: 6px; }
+
+  /* mocked Android fingerprint dialog */
+  .androidfp {
+    position: absolute; left: 0; right: 0; bottom: 0; z-index: 60; transform: translateY(110%);
+    transition: transform .28s cubic-bezier(.2,.7,.3,1);
+    background: #20242b; color: #e8eaed; border-radius: 22px 22px 0 0; padding: 22px 20px 26px;
+    box-shadow: 0 -8px 30px rgba(0,0,0,.4);
+  }
+  .androidfp.on { transform: translateY(0); }
+  .afp-tag { font-size: 10px; font-weight: 800; letter-spacing: .4px; color: #9aa0a6;
+    background: rgba(255,255,255,.06); display: inline-block; padding: 3px 9px; border-radius: 6px; margin-bottom: 12px; }
+  .afp-title { font-size: 16px; font-weight: 700; }
+  .afp-sub { font-size: 12.5px; color: #9aa0a6; margin-top: 4px; }
+  .afp-ring { width: 64px; height: 64px; margin: 18px auto 8px; border-radius: 50%;
+    border: 2px solid #3c4250; display: flex; align-items: center; justify-content: center; font-size: 32px; color: #8ab4f8;
+    cursor: pointer; }
+  .afp-ring.ok { color: #81c995; border-color: #81c995; }
+  .afp-ring.err { color: #f28b82; border-color: #f28b82; }
+  .afp-st { text-align: center; font-size: 12.5px; color: #9aa0a6; min-height: 18px; }
+  .afp-row { display: flex; justify-content: flex-end; margin-top: 16px; }
+  .afp-cancel { background: none; border: 0; color: #8ab4f8; font: inherit; font-weight: 700; font-size: 14px; padding: 8px 6px; cursor: pointer; }
+  .scrim { position: absolute; inset: 0; background: rgba(0,0,0,.45); z-index: 55; opacity: 0; pointer-events: none; transition: opacity .25s; }
+  .scrim.on { opacity: 1; }
+
+  /* unlocked home (mock) */
+  .home { position: absolute; inset: 0; background: #f3f4f6; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 10px; opacity: 0; pointer-events: none; transition: opacity .3s; padding: 20px; text-align: center; }
+  .home.on { opacity: 1; }
+  .home .hg { font-size: 46px; }
+  .home .ht { font-weight: 800; font-size: 18px; color: #1f2430; }
+  .home .hs { font-size: 13px; color: #6b7280; }
+  .replay { margin-top: 10px; background: #e8722c; color: #fff; border: 0; border-radius: 12px;
+    padding: 11px 18px; font: inherit; font-weight: 700; cursor: pointer; }
+
+  .demo-hint { text-align: center; font-size: 12px; color: #8a92a0; margin-top: 12px; }
+  .startbtn { display: block; margin: 12px auto 0; background: #1f2430; color: #fff; border: 0;
+    border-radius: 12px; padding: 11px 20px; font: inherit; font-weight: 700; cursor: pointer; }
+  .pros { margin-top: 14px; font-size: 12px; color: #4b5260; line-height: 1.7; padding: 0 4px; }
+  .pros .p { color: #166534; } .pros .c { color: #b45309; }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>🔒 Ταμείο — Ξεκλείδωμα στο κινητό</h1>
+  <p>5 προτάσεις για το πώς ξεκλειδώνεις την εφαρμογή. Πάτησε <b>«▶ Δες τη ροή»</b> σε κάθε κινητό για να δοκιμάσεις.<br>
+  Στο σκούρο παράθυρο πάτα τον κύκλο = «πέτυχε το δαχτυλικό», ή «Άκυρο» = γύρνα στον κωδικό.</p>
+  <div class="androidnote">
+    ⚠️ <b>Σημαντικό & ειλικρινές:</b> το <b>σκούρο παράθυρο του δαχτυλικού</b> το βγάζει το ίδιο το <b>Android</b> και
+    <b>δεν αλλάζει</b> — ίδιο σε όλες τις προτάσεις (έτσι είναι σε κάθε εφαρμογή, ακόμα και στις τράπεζες).
+    Αυτό που <b>αλλάζει</b> και διαλέγεις εδώ είναι η <b>δική μας πορτοκαλί οθόνη</b> και το <b>πότε/πώς</b> ξεκινάει το δαχτυλικό.
+  </div>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<script>
+/* ---- shared builders ---------------------------------------------------- */
+function statusbar(){ return '<div class="statusbar"><span>21:30</span><span>📶 🔋</span></div>'; }
+function dots(n){ var h='<div class="dots">'; for(var i=0;i<6;i++) h+='<div class="dot'+(i<n?' fill':'')+'"></div>'; h+='</div>'; return h; }
+function pad(withFp){
+  var h='<div class="pad">';
+  ['1','2','3','4','5','6','7','8','9'].forEach(function(k){ h+='<button class="key">'+k+'</button>'; });
+  h+= withFp ? '<button class="key fn" data-act="fp">👆</button>' : '<span class="key ph"></span>';
+  h+='<button class="key">0</button><button class="key fn">⌫</button></div>';
+  return h;
+}
+function androidDialog(){
+  return '<div class="scrim" data-scrim></div>'
+    +'<div class="androidfp" data-afp>'
+    +'<div class="afp-tag">🤖 ΠΑΡΑΘΥΡΟ ANDROID — δεν αλλάζει</div>'
+    +'<div class="afp-title">Επιβεβαίωση ταυτότητας</div>'
+    +'<div class="afp-sub">Ταμείο · χρησιμοποίησε το δαχτυλικό σου</div>'
+    +'<div class="afp-ring" data-fpring title="πάτα = πέτυχε">👆</div>'
+    +'<div class="afp-st" data-fpst>Άγγιξε τον αισθητήρα</div>'
+    +'<div class="afp-row"><button class="afp-cancel" data-fpcancel>Άκυρο</button></div>'
+    +'</div>';
+}
+function home(){
+  return '<div class="home"><div class="hg">💶</div>'
+    +'<div class="ht">Καλώς ήρθες!</div><div class="hs">Το ταμείο ξεκλείδωσε.</div>'
+    +'<button class="replay" data-replay>↺ Ξαναδές τη ροή</button></div>';
+}
+
+/* ---- the 5 variants ----------------------------------------------------- */
+var VARIANTS = [
+  {
+    key:'A', pick:true,
+    title:'Α — Αυτόματο δαχτυλικό (καθαρό)',
+    desc:'Ανοίγεις → βγαίνει αμέσως το δαχτυλικό του Android. Από πίσω η πορτοκαλί οθόνη με τον κωδικό για εφεδρεία. (Σαν τώρα, αλλά χωρίς το άχρηστο δικό μας παραθυράκι.)',
+    pros:'<span class="p">✓ Πιο γρήγορο — δάχτυλο και μπήκες</span><br><span class="p">✓ Έτσι κάνουν οι περισσότερες εφαρμογές</span><br><span class="c">• Σου «επιβάλλει» το παράθυρο μόλις ανοίξεις</span>',
+    lock:function(){
+      return '<div class="lock">'
+        +'<div class="lk-top"><div class="lk-glyph">🔒</div><div class="lk-title">Ξεκλείδωσε το Ταμείο</div>'
+        +'<div class="lk-sub">Δαχτυλικό ή 6ψήφιος κωδικός</div></div>'
+        +'<div class="mid">'+dots(0)+'</div>'
+        +'<div class="bottom">'+pad(true)+'<button class="forgot">Ξέχασα τον κωδικό;</button></div>'
+        +'</div>';
+    },
+    auto:true
+  },
+  {
+    key:'B',
+    title:'Β — Μεγάλο κουμπί δαχτυλικού',
+    desc:'Πορτοκαλί οθόνη με ένα μεγάλο δαχτυλικό πάνω-πάνω (πάλλεται) και το πληκτρολόγιο από κάτω. Πατάς το δαχτυλικό όποτε θες — δεν πετάγεται μόνο του.',
+    pros:'<span class="p">✓ Εσύ αποφασίζεις πότε</span><br><span class="p">✓ Φαίνεται ξεκάθαρα ότι υπάρχει δαχτυλικό</span><br><span class="c">• Ένα παραπάνω πάτημα</span>',
+    lock:function(){
+      return '<div class="lock">'
+        +'<div class="lk-top"><div class="lk-title" style="margin-top:6px">Ξεκλείδωσε το Ταμείο</div></div>'
+        +'<div class="fpzone"><div class="fpbig pulse" data-act="fp">👆</div><div class="fphint">Άγγιξε για δαχτυλικό</div></div>'
+        +'<div class="mid">'+dots(0)+'</div>'
+        +'<div class="bottom">'+pad(false)+'<button class="forgot">Ξέχασα τον κωδικό;</button></div>'
+        +'</div>';
+    },
+    auto:false
+  },
+  {
+    key:'C',
+    title:'Γ — Οθόνη επιλογής πρώτα',
+    desc:'Πρώτα σε ρωτάει: «Δαχτυλικό» ή «Κωδικός». Διαλέγεις και πας. Καθαρή, μεγάλα κουμπιά — ιδανικό αν κάποιες φορές προτιμάς κωδικό.',
+    pros:'<span class="p">✓ Πεντακάθαρο, χωρίς μπέρδεμα</span><br><span class="p">✓ Μεγάλα κουμπιά</span><br><span class="c">• Πάντα ένα πάτημα παραπάνω</span>',
+    lock:function(){
+      return '<div class="lock" data-choicescreen>'
+        +'<div class="lk-top"><div class="lk-glyph">🔒</div><div class="lk-title">Ξεκλείδωσε το Ταμείο</div>'
+        +'<div class="lk-sub">Διάλεξε τρόπο</div></div>'
+        +'<div class="choice"><button class="cbtn solid" data-act="fp"><span class="ic">👆</span> Με δαχτυλικό</button>'
+        +'<button class="cbtn" data-act="showpin"><span class="ic">🔢</span> Με κωδικό</button></div>'
+        +'<button class="forgot">Ξέχασα τον κωδικό;</button>'
+        +'</div>'
+        +'<div class="lock" data-pinscreen style="display:none">'
+        +'<div class="lk-top"><div class="lk-glyph">🔢</div><div class="lk-title">Βάλε τον κωδικό</div>'
+        +'<div class="lk-sub">6ψήφιος κωδικός</div></div>'
+        +'<div class="mid">'+dots(0)+'</div>'
+        +'<div class="bottom">'+pad(false)+'<button class="linklike" data-act="back">← Πίσω</button></div>'
+        +'</div>';
+    },
+    auto:false
+  },
+  {
+    key:'D',
+    title:'Δ — Πληκτρολόγιο πρώτα, διακριτικό 👆',
+    desc:'Μπαίνεις κατευθείαν στο πληκτρολόγιο του κωδικού. Το δαχτυλικό υπάρχει σαν μικρό κουμπί 👆 κάτω-αριστερά, αν το θες. Τίποτα δεν πετάγεται μόνο του.',
+    pros:'<span class="p">✓ Πιο «ήσυχο» — κανένα pop-up</span><br><span class="p">✓ Ο κωδικός είναι το κύριο</span><br><span class="c">• Το δαχτυλικό λιγότερο εμφανές</span>',
+    lock:function(){
+      return '<div class="lock">'
+        +'<div class="lk-top"><div class="lk-glyph">🔒</div><div class="lk-title">Ξεκλείδωσε το Ταμείο</div>'
+        +'<div class="lk-sub">Βάλε τον 6ψήφιο κωδικό</div></div>'
+        +'<div class="mid">'+dots(0)+'</div>'
+        +'<div class="bottom">'+pad(true)+'<button class="forgot">Ξέχασα τον κωδικό;</button></div>'
+        +'</div>';
+    },
+    auto:false
+  },
+  {
+    key:'E',
+    title:'Ε — Μόνο δαχτυλικό (κωδικός κρυμμένος)',
+    desc:'Καθαρή οθόνη με μόνο το μεγάλο δαχτυλικό. Το πληκτρολόγιο εμφανίζεται ΜΟΝΟ αν πατήσεις «Χρήση κωδικού». Πιο μινιμαλ — για όταν σχεδόν πάντα μπαίνεις με δάχτυλο.',
+    pros:'<span class="p">✓ Πιο όμορφο/καθαρό</span><br><span class="p">✓ Αυτόματο δαχτυλικό + κουμπί εφεδρείας</span><br><span class="c">• Ο κωδικός θέλει 1 πάτημα παραπάνω</span>',
+    lock:function(){
+      return '<div class="lock" data-fpfirst>'
+        +'<div class="lk-top"><div class="lk-glyph">🔒</div><div class="lk-title">Ξεκλείδωσε το Ταμείο</div></div>'
+        +'<div class="fpzone"><div class="fpbig pulse" data-act="fp">👆</div><div class="fphint">Άγγιξε το δαχτυλικό</div></div>'
+        +'<div class="bottom"><button class="linklike" data-act="showpin">🔢 Χρήση κωδικού</button>'
+        +'<button class="forgot">Ξέχασα τον κωδικό;</button></div>'
+        +'</div>'
+        +'<div class="lock" data-pinscreen style="display:none">'
+        +'<div class="lk-top"><div class="lk-glyph">🔢</div><div class="lk-title">Βάλε τον κωδικό</div>'
+        +'<div class="lk-sub">6ψήφιος κωδικός</div></div>'
+        +'<div class="mid">'+dots(0)+'</div>'
+        +'<div class="bottom">'+pad(false)+'<button class="linklike" data-act="back">← Πίσω (δαχτυλικό)</button></div>'
+        +'</div>';
+    },
+    auto:true
+  }
+];
+
+/* ---- render + wire demo ------------------------------------------------- */
+var grid = document.getElementById('grid');
+VARIANTS.forEach(function(v){
+  var col = document.createElement('div');
+  col.className = 'col' + (v.pick ? ' pick' : '');
+  col.innerHTML =
+    '<h2>'+v.title+'</h2>'
+    +'<div class="desc">'+v.desc+'</div>'
+    +'<div class="phone-wrap"><div class="phone"><div class="screen">'
+    +  statusbar()
+    +  v.lock()
+    +  androidDialog()
+    +  home()
+    +'</div></div></div>'
+    +'<button class="startbtn" data-start>▶ Δες τη ροή</button>'
+    +'<div class="pros">'+v.pros+'</div>';
+  grid.appendChild(col);
+  wire(col, v);
+});
+
+function wire(col, v){
+  var screen = col.querySelector('.screen');
+  var afp = col.querySelector('[data-afp]');
+  var scrim = col.querySelector('[data-scrim]');
+  var ring = col.querySelector('[data-fpring]');
+  var fpst = col.querySelector('[data-fpst]');
+  var homeEl = col.querySelector('.home');
+  var choiceScreen = col.querySelector('[data-choicescreen]');
+  var fpFirst = col.querySelector('[data-fpfirst]');
+  var pinScreen = col.querySelector('[data-pinscreen]');
+
+  function openAndroid(){
+    ring.className = 'afp-ring'; ring.textContent='👆'; fpst.textContent='Άγγιξε τον αισθητήρα';
+    scrim.classList.add('on'); afp.classList.add('on');
+  }
+  function closeAndroid(){ scrim.classList.remove('on'); afp.classList.remove('on'); }
+  function succeed(){
+    ring.className='afp-ring ok'; ring.textContent='✓'; fpst.textContent='Επιτυχία!';
+    setTimeout(function(){ closeAndroid(); homeEl.classList.add('on'); }, 550);
+  }
+  function reset(){
+    closeAndroid(); homeEl.classList.remove('on');
+    if(choiceScreen){ choiceScreen.style.display='flex'; }
+    if(fpFirst){ fpFirst.style.display='flex'; }
+    if(pinScreen){ pinScreen.style.display='none'; }
+  }
+
+  col.querySelector('[data-start]').addEventListener('click', function(){
+    reset();
+    if(v.auto) setTimeout(openAndroid, 350);
+  });
+
+  ring.addEventListener('click', succeed);
+  col.querySelector('[data-fpcancel]').addEventListener('click', function(){
+    closeAndroid();
+    // after cancel: variant E shows fp-first still; others keep their pin pad visible behind
+    if(fpFirst){ /* stay on fp-first, user can use pin link */ }
+  });
+
+  // clicks inside the lock screens
+  screen.addEventListener('click', function(e){
+    var act = e.target.closest('[data-act]');
+    if(!act) return;
+    var a = act.getAttribute('data-act');
+    if(a==='fp'){ openAndroid(); }
+    else if(a==='showpin'){
+      if(choiceScreen){ choiceScreen.style.display='none'; }
+      if(fpFirst){ fpFirst.style.display='none'; }
+      if(pinScreen){ pinScreen.style.display='flex'; }
+    }
+    else if(a==='back'){
+      if(pinScreen){ pinScreen.style.display='none'; }
+      if(choiceScreen){ choiceScreen.style.display='flex'; }
+      if(fpFirst){ fpFirst.style.display='flex'; }
+    }
+  });
+
+  col.querySelector('[data-replay]').addEventListener('click', function(){
+    reset(); if(v.auto) setTimeout(openAndroid, 300);
+  });
+}
+</script>
+</body>
+</html>

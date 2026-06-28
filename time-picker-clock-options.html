@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Επιλογή ώρας — Ρολόι (5 προτάσεις)</title>
+<style>
+  :root{
+    --accent:#f59e0b; --accent-dark:#d97706; --accent-soft:#fff7ed;
+    --bg:#f1f5f9; --white:#fff; --text:#1e293b; --muted:#64748b;
+    --border:#e2e8f0; --border-strong:#cbd5e1; --face:#fff;
+  }
+  *{box-sizing:border-box}
+  body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    background:var(--bg); color:var(--text); margin:0; padding:24px; line-height:1.5;}
+  .wrap{max-width:760px; margin:0 auto}
+  h1{font-size:24px; margin:0 0 4px}
+  .sub{color:var(--muted); margin:0 0 28px; font-size:15px}
+  .card{background:var(--white); border:1px solid var(--border); border-radius:14px;
+    padding:22px 24px; margin-bottom:20px; box-shadow:0 1px 3px rgba(0,0,0,.04);}
+  .card h2{font-size:17px; margin:0 0 4px; display:flex; align-items:center; gap:8px}
+  .num{background:var(--accent); color:#fff; width:26px; height:26px; border-radius:50%;
+    display:inline-flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; flex:none}
+  .desc{color:var(--muted); font-size:13.5px; margin:0 0 18px}
+  .out{margin-top:16px; font-size:13px; color:var(--accent-dark); background:var(--accent-soft);
+    border:1px dashed var(--accent); border-radius:8px; padding:8px 12px; display:inline-block}
+  .out b{font-size:15px}
+  .center{display:flex; flex-direction:column; align-items:center}
+
+  /* ===== shared clock face ===== */
+  .clock{position:relative; width:240px; height:240px; border-radius:50%;
+    background:var(--face); border:3px solid var(--border-strong);
+    box-shadow:inset 0 0 0 8px #f8fafc; touch-action:none; user-select:none}
+  .clock .tick-num{position:absolute; width:30px; height:30px; margin:-15px 0 0 -15px;
+    text-align:center; line-height:30px; font-weight:700; font-size:15px; color:var(--text);
+    border-radius:50%; cursor:pointer}
+  .clock .tick-num.sel{background:var(--accent); color:#fff}
+  .clock .center-dot{position:absolute; left:50%; top:50%; width:12px; height:12px;
+    background:var(--accent); border-radius:50%; transform:translate(-50%,-50%); z-index:5}
+  .hand{position:absolute; left:50%; top:50%; transform-origin:0 0; z-index:3;
+    border-radius:4px; background:var(--accent-dark)}
+  .hand.hour{width:6px; height:60px}
+  .hand.min{width:4px; height:90px; background:var(--accent)}
+  .digital{font-size:30px; font-weight:700; font-variant-numeric:tabular-nums; margin:14px 0 0;
+    letter-spacing:1px}
+  .digital .part{padding:2px 6px; border-radius:6px; cursor:pointer}
+  .digital .part.act{background:var(--accent-soft); color:var(--accent-dark)}
+  .hint{font-size:12px; color:var(--muted); margin-top:4px}
+
+  /* ===== iOS wheel ===== */
+  .wheel-row{display:flex; align-items:center; gap:6px; position:relative}
+  .wheel{height:150px; width:84px; overflow-y:scroll; scroll-snap-type:y mandatory;
+    border:1.5px solid var(--border-strong); border-radius:12px; background:#fff;
+    text-align:center; -ms-overflow-style:none; scrollbar-width:none}
+  .wheel::-webkit-scrollbar{display:none}
+  .wheel .pad{height:55px}
+  .wheel .it{height:40px; line-height:40px; font-size:22px; font-weight:600; scroll-snap-align:center; color:var(--muted)}
+  .wheel-colon{font-size:28px; font-weight:700; color:var(--muted)}
+  .wheel-band{position:absolute; left:0; right:0; top:50%; height:40px; transform:translateY(-20px);
+    border-top:2px solid var(--accent); border-bottom:2px solid var(--accent);
+    pointer-events:none; background:rgba(245,158,11,.06); border-radius:6px}
+
+  /* ===== rotary knob ===== */
+  .knob-wrap{display:flex; gap:30px; align-items:center; flex-wrap:wrap; justify-content:center}
+  .knob{position:relative; width:150px; height:150px; border-radius:50%;
+    background:radial-gradient(circle at 50% 38%, #fff, #f1f5f9); border:3px solid var(--border-strong);
+    touch-action:none; cursor:grab; box-shadow:0 2px 6px rgba(0,0,0,.08)}
+  .knob:active{cursor:grabbing}
+  .knob .pointer{position:absolute; left:50%; top:8px; width:6px; height:42px; margin-left:-3px;
+    background:var(--accent-dark); border-radius:3px; transform-origin:50% 67px}
+  .knob .kval{position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-size:30px; font-weight:700; pointer-events:none; font-variant-numeric:tabular-nums}
+  .knob-cap{text-align:center; font-size:13px; color:var(--muted); margin-top:8px}
+
+  .verdict{background:#fffbeb; border:1px solid var(--accent); border-radius:12px; padding:18px 22px; font-size:14px}
+  .verdict h3{margin:0 0 8px; font-size:16px}
+  .verdict ul{margin:6px 0 0; padding-left:20px}
+  .verdict li{margin-bottom:5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🕐 Επιλογή ώρας με «κανονικό ρολόι» — 5 προτάσεις</h1>
+  <p class="sub">Όλες ζωντανές: πάτα/σύρε πάνω στο ρολόι. Πες μου ποια προτιμάς.</p>
+
+  <!-- 1 Material clock -->
+  <div class="card center">
+    <h2 style="align-self:flex-start"><span class="num">1</span> Ρολόι «πάτα τον αριθμό» (Android style) — 24ωρο</h2>
+    <p class="desc" style="align-self:flex-start">Πατάς πρώτα την ώρα πάνω στο καντράν, μετά τα λεπτά. <b>Διπλό δαχτυλίδι:</b> έξω 1–12 (μεσημέρι), μέσα 13–23 & 00 (απόγευμα/βράδυ). Όπως στα κινητά Android.</p>
+    <div class="digital">
+      <span class="part act" id="m1h" onclick="m1mode('h')">12</span>:<span class="part" id="m1m" onclick="m1mode('m')">00</span>
+    </div>
+    <div class="hint" id="m1hint">Διάλεξε ΩΡΑ</div>
+    <div class="clock" id="m1clock" style="margin-top:12px">
+      <div class="hand hour" id="m1hand"></div>
+      <div class="center-dot"></div>
+    </div>
+    <div class="out">Επιλογή: <b id="o1">12:00</b></div>
+  </div>
+
+  <!-- 2 draggable hands -->
+  <div class="card center">
+    <h2 style="align-self:flex-start"><span class="num">2</span> Ρολόι με βελόνες που σέρνεις — 24ωρο</h2>
+    <p class="desc" style="align-self:flex-start">Πιάνεις και γυρνάς τις βελόνες με το δάχτυλο — η μεγάλη=λεπτά, η μικρή=ώρα. <b>24ωρο καντράν:</b> μία πλήρης στροφή της μικρής βελόνας = όλη η μέρα (πάνω=00, δεξιά=06, κάτω=12, αριστερά=18).</p>
+    <div class="clock" id="m2clock">
+      <div class="hand hour" id="m2hh"></div>
+      <div class="hand min" id="m2mh"></div>
+      <div class="center-dot"></div>
+    </div>
+    <div class="digital" id="m2dig">12:00</div>
+    <div class="out">Επιλογή: <b id="o2">12:00</b></div>
+  </div>
+
+  <!-- 3 iOS wheel -->
+  <div class="card center">
+    <h2 style="align-self:flex-start"><span class="num">3</span> Ρολός που κυλάει (iPhone style)</h2>
+    <p class="desc" style="align-self:flex-start">Κυλάς πάνω/κάτω σαν «ζάρι» — η ώρα στη μέση στο πορτοκαλί κουτάκι κλειδώνει. Όπως στο iPhone.</p>
+    <div class="wheel-row">
+      <div class="wheel" id="m3h"></div>
+      <span class="wheel-colon">:</span>
+      <div class="wheel" id="m3m"></div>
+      <div class="wheel-band"></div>
+    </div>
+    <div class="out">Επιλογή: <b id="o3">12:00</b></div>
+  </div>
+
+  <!-- 4 rotary knobs -->
+  <div class="card center">
+    <h2 style="align-self:flex-start"><span class="num">4</span> Δύο «κουμπιά» που γυρνάς (knob)</h2>
+    <p class="desc" style="align-self:flex-start">Γυρνάς δύο στρογγυλά κουμπιά σαν ρυθμιστικά — ένα για ώρα, ένα για λεπτά. Παιχνιδιάρικο & ακριβές.</p>
+    <div class="knob-wrap">
+      <div>
+        <div class="knob" id="k4h"><div class="pointer"></div><div class="kval" id="k4hv">12</div></div>
+        <div class="knob-cap">ΩΡΑ</div>
+      </div>
+      <div>
+        <div class="knob" id="k4m"><div class="pointer"></div><div class="kval" id="k4mv">00</div></div>
+        <div class="knob-cap">ΛΕΠΤΑ</div>
+      </div>
+    </div>
+    <div class="out">Επιλογή: <b id="o4">12:00</b></div>
+  </div>
+
+  <!-- 5 clock + tap, fixed minutes -->
+  <div class="card center">
+    <h2 style="align-self:flex-start"><span class="num">5</span> Ρολόι ώρας + κουμπιά λεπτών — 24ωρο</h2>
+    <p class="desc" style="align-self:flex-start">Πατάς την ώρα στο καντράν (διπλό δαχτυλίδι: έξω 1–12, μέσα 13–23 & 00) και διαλέγεις λεπτά (00/15/30/45) από κάτω. Γρήγορο & ξεκάθαρο.</p>
+    <div class="clock" id="m5clock">
+      <div class="hand hour" id="m5hand"></div>
+      <div class="center-dot"></div>
+    </div>
+    <div style="display:flex; gap:8px; margin-top:14px" id="m5mins"></div>
+    <div class="out">Επιλογή: <b id="o5">12:00</b></div>
+  </div>
+
+  <div class="verdict">
+    <h3>💡 Η γνώμη μου</h3>
+    Από τα «ρολόγια», για κινητό η <b>#3 (κυλιόμενος ρολός iPhone)</b> είναι η πιο άνετη με το δάχτυλο.
+    <ul>
+      <li><b>#1</b>: το πιο «γνώριμο» από κινητά Android.</li>
+      <li><b>#2</b>: το πιο εντυπωσιακό (αληθινές βελόνες) — λίγο πιο δύσκολο σε ακρίβεια λεπτού.</li>
+      <li><b>#5</b>: καλός συμβιβασμός — ρολόι για ώρα, κουμπιά για λεπτά.</li>
+    </ul>
+    Πες μου ποια θες (από εδώ ή από τις πρώτες 6) και τη βάζω παντού.
+  </div>
+</div>
+
+<script>
+function pad(n){return String(n).padStart(2,'0');}
+
+/* ============ #1 Material tap clock — 24h double ring ============ */
+(function(){
+  var clock=document.getElementById('m1clock'), hand=document.getElementById('m1hand');
+  var H=12,M=0,mode='h';
+  var nums=[]; // {el, h}
+  function place(label,hourVal,r){
+    var pos=hourVal%12; // angular slot 0..11 (12 & 00 -> top)
+    var ang=(pos/12)*2*Math.PI - Math.PI/2;
+    var x=120+r*Math.cos(ang), y=120+r*Math.sin(ang);
+    var d=document.createElement('div'); d.className='tick-num'; d.textContent=label;
+    d.style.left=x+'px'; d.style.top=y+'px'; d.style.fontSize=(r<80?'12px':'15px');
+    d.onclick=function(){ if(mode==='h'){H=hourVal; redraw(); window.m1mode('m'); } };
+    clock.appendChild(d); nums.push({el:d,h:hourVal});
+  }
+  for(var i=1;i<=12;i++) place(i, i, 92);      // outer 1..12 (noon)
+  for(var j=13;j<=23;j++) place(j, j, 60);     // inner 13..23
+  place('00', 0, 60);                          // inner midnight
+  window.m1mode=function(mm){mode=mm;
+    document.getElementById('m1h').classList.toggle('act',mm==='h');
+    document.getElementById('m1m').classList.toggle('act',mm==='m');
+    document.getElementById('m1hint').textContent= mm==='h'?'Διάλεξε ΩΡΑ (έξω 1–12, μέσα 13–00)':'Διάλεξε ΛΕΠΤΑ (σύρε ή πάτα)';
+    nums.forEach(function(n){n.el.style.opacity= mm==='h'?'1':'.25';});
+    redraw();
+  };
+  function setFromPoint(e){
+    var r=clock.getBoundingClientRect(), cx=r.left+120, cy=r.top+120;
+    var p=e.touches?e.touches[0]:e;
+    var dx=p.clientX-cx, dy=p.clientY-cy;
+    var a=Math.atan2(dy,dx)+Math.PI/2; if(a<0)a+=2*Math.PI;
+    if(mode==='h'){
+      var pos=Math.round(a/(2*Math.PI)*12)%12;
+      var dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<78){ H = pos===0?0:pos+12; }   // inner ring: 0(=00),13..23
+      else       { H = pos===0?12:pos; }      // outer ring: 12,1..11
+    } else { M=Math.round(a/(2*Math.PI)*60)%60; }
+    redraw();
+  }
+  var down=false;
+  clock.addEventListener('mousedown',function(e){down=true;setFromPoint(e);});
+  window.addEventListener('mousemove',function(e){if(down)setFromPoint(e);});
+  window.addEventListener('mouseup',function(){down=false;});
+  clock.addEventListener('touchstart',function(e){setFromPoint(e);e.preventDefault();});
+  clock.addEventListener('touchmove',function(e){setFromPoint(e);e.preventDefault();});
+  function redraw(){
+    document.getElementById('m1h').textContent=pad(H);
+    document.getElementById('m1m').textContent=pad(M);
+    var inner = (H===0)||(H>=13&&H<=23);
+    if(mode==='h'){ hand.style.height=(inner?56:80)+'px'; hand.style.transform='rotate('+((H%12)/12*360)+'deg)'; }
+    else          { hand.style.height='84px'; hand.style.transform='rotate('+(M/60*360)+'deg)'; }
+    nums.forEach(function(n){n.el.classList.toggle('sel', mode==='h' && n.h===H);});
+    document.getElementById('o1').textContent=pad(H)+':'+pad(M);
+  }
+  redraw();
+})();
+
+/* ============ #2 draggable hands — 24h face (1 turn = 24h) ============ */
+(function(){
+  var clock=document.getElementById('m2clock'), hh=document.getElementById('m2hh'), mh=document.getElementById('m2mh');
+  var H=12,M=0, grab=null;
+  // 24h reference numbers 0..23 (0 at top, clockwise)
+  for(var i=0;i<24;i++){(function(i){
+    var a=(i/24)*2*Math.PI - Math.PI/2, r=96, x=120+r*Math.cos(a), y=120+r*Math.sin(a);
+    var d=document.createElement('div'); d.className='tick-num'; d.textContent=pad(i);
+    d.style.left=x+'px'; d.style.top=y+'px'; d.style.fontSize='11px'; d.style.cursor='default'; d.style.color=(i%6===0?'#1e293b':'#94a3b8');
+    clock.appendChild(d);
+  })(i);}
+  function ang(e){var r=clock.getBoundingClientRect(),cx=r.left+120,cy=r.top+120;
+    var p=e.touches?e.touches[0]:e; var a=Math.atan2(p.clientY-cy,p.clientX-cx)+Math.PI/2; if(a<0)a+=2*Math.PI; return a;}
+  function start(e){var a=ang(e);
+    var ha=((H+M/60)/24)*2*Math.PI, ma=(M/60)*2*Math.PI;
+    var dh=Math.abs(((a-ha+Math.PI)%(2*Math.PI))-Math.PI), dm=Math.abs(((a-ma+Math.PI)%(2*Math.PI))-Math.PI);
+    grab = dm<dh?'m':'h'; move(e); e.preventDefault&&e.preventDefault();}
+  function move(e){ if(!grab)return; var a=ang(e);
+    if(grab==='h'){H=Math.round(a/(2*Math.PI)*24)%24;}
+    else{M=Math.round(a/(2*Math.PI)*60)%60;} redraw();}
+  function end(){grab=null;}
+  clock.addEventListener('mousedown',start); window.addEventListener('mousemove',move); window.addEventListener('mouseup',end);
+  clock.addEventListener('touchstart',start); clock.addEventListener('touchmove',move); clock.addEventListener('touchend',end);
+  function redraw(){
+    hh.style.transform='rotate('+(((H+M/60)/24)*360)+'deg)';  // hour hand: full turn = 24h
+    mh.style.transform='rotate('+(M/60*360)+'deg)';
+    var v=pad(H)+':'+pad(M);
+    document.getElementById('m2dig').textContent=v; document.getElementById('o2').textContent=v;
+  }
+  redraw();
+})();
+
+/* ============ #3 iOS wheel ============ */
+(function(){
+  function build(el,max,sel,cb){
+    el.innerHTML='<div class="pad"></div>';
+    for(var i=0;i<max;i++){var d=document.createElement('div');d.className='it';d.textContent=pad(i);el.appendChild(d);}
+    var p=document.createElement('div');p.className='pad';el.appendChild(p);
+    var t;
+    el.addEventListener('scroll',function(){clearTimeout(t);t=setTimeout(function(){
+      var idx=Math.round(el.scrollTop/40); idx=Math.max(0,Math.min(max-1,idx));
+      el.scrollTo({top:idx*40,behavior:'smooth'}); cb(idx);
+    },90);});
+    // init position
+    setTimeout(function(){el.scrollTop=sel*40;},0);
+  }
+  var H=12,M=0;
+  function upd(){var v=pad(H)+':'+pad(M);document.getElementById('o3').textContent=v;}
+  build(document.getElementById('m3h'),24,12,function(i){H=i;upd();});
+  build(document.getElementById('m3m'),60,0,function(i){M=i;upd();});
+})();
+
+/* ============ #4 rotary knobs ============ */
+(function(){
+  function knob(el,valEl,max,init,cb){
+    var V=init, dragging=false;
+    function ang(e){var r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+      var p=e.touches?e.touches[0]:e;var a=Math.atan2(p.clientY-cy,p.clientX-cx)+Math.PI/2;if(a<0)a+=2*Math.PI;return a;}
+    function set(e){var a=ang(e);V=Math.round(a/(2*Math.PI)*max)%max;draw();}
+    function draw(){el.querySelector('.pointer').style.transform='rotate('+(V/max*360)+'deg)';valEl.textContent=pad(V);cb(V);}
+    el.addEventListener('mousedown',function(e){dragging=true;set(e);});
+    window.addEventListener('mousemove',function(e){if(dragging)set(e);});
+    window.addEventListener('mouseup',function(){dragging=false;});
+    el.addEventListener('touchstart',function(e){set(e);e.preventDefault();});
+    el.addEventListener('touchmove',function(e){set(e);e.preventDefault();});
+    draw();
+  }
+  var H=12,M=0;
+  function upd(){document.getElementById('o4').textContent=pad(H)+':'+pad(M);}
+  knob(document.getElementById('k4h'),document.getElementById('k4hv'),24,12,function(v){H=v;upd();});
+  knob(document.getElementById('k4m'),document.getElementById('k4mv'),60,0,function(v){M=v;upd();});
+})();
+
+/* ============ #5 clock hour (24h double ring) + minute buttons ============ */
+(function(){
+  var clock=document.getElementById('m5clock'), hand=document.getElementById('m5hand');
+  var H=12,M=0; var nums=[];
+  function place(label,hourVal,r){
+    var pos=hourVal%12, ang=(pos/12)*2*Math.PI-Math.PI/2, x=120+r*Math.cos(ang), y=120+r*Math.sin(ang);
+    var d=document.createElement('div');d.className='tick-num';d.textContent=label;d.style.left=x+'px';d.style.top=y+'px';d.style.fontSize=(r<80?'12px':'15px');
+    d.onclick=function(){H=hourVal;redraw();};
+    clock.appendChild(d); nums.push({el:d,h:hourVal});
+  }
+  for(var i=1;i<=12;i++) place(i,i,92);
+  for(var j=13;j<=23;j++) place(j,j,60);
+  place('00',0,60);
+  function setFromPoint(e){var r=clock.getBoundingClientRect(),cx=r.left+120,cy=r.top+120;
+    var p=e.touches?e.touches[0]:e;var dx=p.clientX-cx,dy=p.clientY-cy;var a=Math.atan2(dy,dx)+Math.PI/2;if(a<0)a+=2*Math.PI;
+    var pos=Math.round(a/(2*Math.PI)*12)%12, dist=Math.sqrt(dx*dx+dy*dy);
+    if(dist<78){H=pos===0?0:pos+12;}else{H=pos===0?12:pos;} redraw();}
+  var down=false;
+  clock.addEventListener('mousedown',function(e){down=true;setFromPoint(e);});
+  window.addEventListener('mousemove',function(e){if(down)setFromPoint(e);});
+  window.addEventListener('mouseup',function(){down=false;});
+  clock.addEventListener('touchstart',function(e){setFromPoint(e);e.preventDefault();});
+  clock.addEventListener('touchmove',function(e){setFromPoint(e);e.preventDefault();});
+  var mbox=document.getElementById('m5mins');
+  [0,15,30,45].forEach(function(mm){
+    var b=document.createElement('button');b.textContent=':'+pad(mm);
+    b.style.cssText='min-height:44px;padding:0 16px;font-size:16px;font-weight:600;border-radius:8px;border:1.5px solid #cbd5e1;background:#fff;cursor:pointer';
+    b.onclick=function(){M=mm;document.querySelectorAll('#m5mins button').forEach(function(x){x.style.background='#fff';x.style.color='#1e293b';x.style.borderColor='#cbd5e1';});b.style.background='#f59e0b';b.style.color='#fff';b.style.borderColor='#f59e0b';redraw();};
+    if(mm===0){b.style.background='#f59e0b';b.style.color='#fff';b.style.borderColor='#f59e0b';}
+    mbox.appendChild(b);
+  });
+  function redraw(){
+    var inner=(H===0)||(H>=13&&H<=23);
+    hand.style.height=(inner?56:80)+'px';
+    hand.style.transform='rotate('+((H%12)/12*360)+'deg)';
+    nums.forEach(function(n){n.el.classList.toggle('sel', n.h===H);});
+    document.getElementById('o5').textContent=pad(H)+':'+pad(M);
+  }
+  redraw();
+})();
+</script>
+</body>
+</html>

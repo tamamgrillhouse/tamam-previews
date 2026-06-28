@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Κλείδωμα Ταμείου — Preview</title>
+<style>
+:root{
+  --orange:#e8722c; --orange-d:#cf5f1e; --orange-l:#fff3eb;
+  --green:#2e9e5b; --green-l:#e9f7ee; --red:#d9453c; --red-l:#fdecec;
+  --blue:#3a7bd5; --blue-l:#eaf1fc; --purple:#7a52c9;
+  --grey:#6b7280; --grey-l:#f3f4f6; --ink:#1f2430; --line:#e6e8ec; --bg:#f5f6f8;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Segoe UI',system-ui,Roboto,Arial,sans-serif;background:#11151c;color:var(--ink);
+  line-height:1.45;display:flex;flex-direction:column;align-items:center;min-height:100dvh}
+.phone{width:100%;max-width:430px;background:var(--bg);min-height:100dvh;position:relative;overflow:hidden;
+  display:flex;flex-direction:column}
+
+/* ============ screens ============ */
+.screen{display:none;flex:1 1 auto;flex-direction:column;min-height:0}
+.screen.on{display:flex}
+
+/* ============ LOCK SCREEN ============ */
+#s-lock{background:linear-gradient(160deg,#f6953f 0%,var(--orange) 55%,var(--orange-d) 100%);
+  color:#fff;align-items:center;padding:38px 26px calc(26px + env(safe-area-inset-bottom));justify-content:space-between}
+.lk-top{display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:14px}
+.lk-glyph{width:78px;height:78px;border-radius:24px;background:rgba(255,255,255,.18);
+  display:flex;align-items:center;justify-content:center;font-size:38px;box-shadow:0 6px 20px rgba(0,0,0,.18)}
+.lk-title{font-weight:800;font-size:21px;text-align:center}
+.lk-sub{font-size:13.5px;opacity:.92;text-align:center;margin-top:-6px}
+
+.lk-dots{display:flex;gap:15px;margin:10px 0 4px}
+.lk-dot{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.75);transition:.12s}
+.lk-dot.fill{background:#fff;border-color:#fff;transform:scale(1.12)}
+.lk-err-txt{font-size:13px;font-weight:700;min-height:20px;color:#ffe2da;text-align:center}
+.shake{animation:shake .42s}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-9px)}40%{transform:translateX(9px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+
+/* keypad */
+.lk-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;width:100%;max-width:300px;margin-top:6px}
+.lk-key{height:64px;border-radius:18px;border:0;background:rgba(255,255,255,.16);color:#fff;
+  font-size:25px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:.1s}
+.lk-key:active{background:rgba(255,255,255,.34);transform:scale(.96)}
+.lk-key.fn{font-size:30px;background:rgba(255,255,255,.10)}
+.lk-key.bk{font-size:24px;background:rgba(255,255,255,.10)}
+.lk-forgot{background:none;border:0;color:#fff;font:inherit;font-size:14px;font-weight:700;
+  text-decoration:underline;opacity:.92;cursor:pointer;padding:8px}
+
+/* fingerprint OS prompt (simulated) */
+.fp-prompt{position:absolute;inset:0;z-index:50;background:rgba(10,12,16,.55);
+  display:none;align-items:flex-end;justify-content:center}
+.fp-prompt.on{display:flex}
+.fp-card{background:#fff;color:var(--ink);width:100%;max-width:430px;border-radius:24px 24px 0 0;
+  padding:26px 22px calc(26px + env(safe-area-inset-bottom));text-align:center;animation:up .25s ease}
+@keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.fp-ring{width:74px;height:74px;margin:6px auto 14px;border-radius:50%;background:var(--orange-l);
+  display:flex;align-items:center;justify-content:center;font-size:36px;color:var(--orange-d);
+  border:3px solid var(--orange)}
+.fp-ring.ok{background:var(--green-l);border-color:var(--green);color:var(--green)}
+.fp-ring.scan{animation:pulse 1.1s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(232,114,44,.4)}70%{box-shadow:0 0 0 16px rgba(232,114,44,0)}100%{box-shadow:0 0 0 0 rgba(232,114,44,0)}}
+.fp-t{font-weight:800;font-size:17px}
+.fp-s{font-size:13px;color:var(--grey);margin:6px 0 18px}
+.fp-x{background:#fff;border:1px solid var(--line);border-radius:12px;padding:13px;font:inherit;
+  font-weight:700;width:100%;cursor:pointer;min-height:48px}
+
+/* ============ shared top bar (cashbox + subpages) ============ */
+.m-top{background:linear-gradient(135deg,#f08a3d,var(--orange));color:#fff;padding:20px 18px 22px;border-radius:0 0 22px 22px}
+.m-top-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.m-title{font-weight:800;font-size:18px;display:flex;align-items:center;gap:10px}
+.m-tools{display:flex;gap:8px}
+.m-tools a,.m-tools button{color:#fff;text-decoration:none;background:rgba(255,255,255,.18);width:38px;height:38px;
+  border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px;border:0;cursor:pointer}
+.m-back{display:inline-flex;align-items:center;gap:6px;color:#fff;text-decoration:none;background:rgba(255,255,255,.18);
+  padding:9px 14px;border-radius:999px;font-weight:800;font-size:14px;cursor:pointer;border:0;font-family:inherit}
+.m-bal-row{display:flex;align-items:center;gap:12px;margin-top:12px}
+.m-bal{flex:1;font-size:36px;font-weight:800;letter-spacing:-.5px}
+.m-eye{background:rgba(255,255,255,.2);border:0;color:#fff;width:40px;height:40px;border-radius:12px;font-size:18px;cursor:pointer}
+.m-sub{font-size:12px;opacity:.9;margin-top:4px}
+.m-body{padding:16px 14px;flex:1 1 auto}
+
+.m-tiles{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:18px}
+.m-tile{border:0;border-radius:16px;padding:18px 10px;font:inherit;font-weight:800;color:#fff;font-size:14px;
+  display:flex;flex-direction:column;align-items:center;gap:8px;min-height:96px;justify-content:center}
+.m-tile .ic{font-size:28px}
+.m-tile.pay{background:var(--red)} .m-tile.draw{background:var(--purple)}
+.m-tile.count{background:var(--blue);grid-column:1/-1;flex-direction:row;min-height:64px}
+.m-sec{font-weight:800;font-size:13px;color:var(--grey);margin:4px 2px 10px;text-transform:uppercase;letter-spacing:.4px}
+.m-feed{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.m-it{display:flex;align-items:center;gap:11px;padding:12px 13px;border-bottom:1px solid var(--line)}
+.m-it:last-child{border-bottom:0}
+.m-it .emo{font-size:21px}
+.m-it .tx{flex:1;min-width:0}
+.m-it .t1{font-weight:700;font-size:14px}
+.m-it .t2{font-size:12px;color:var(--grey)}
+.m-it .amt{font-weight:800;color:var(--red)}
+.m-it .amt.inn{color:var(--green)}
+
+/* cards (settings / forgot) */
+.m-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 15px;margin-bottom:16px}
+.m-card-h{font-weight:800;font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.m-note{background:var(--orange-l);border:1px solid #f3cfb3;border-radius:12px;padding:12px 14px;font-size:12.5px;color:#7a4a22;margin-bottom:14px}
+.m-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+.m-row:last-child{border-bottom:0}
+.m-row .rt{font-weight:700;font-size:14px}
+.m-row .rs{font-size:12px;color:var(--grey);margin-top:2px}
+.btn-primary{background:var(--orange);color:#fff;border:0;font:inherit;font-weight:800;border-radius:12px;padding:13px 16px;cursor:pointer;min-height:48px;width:100%}
+.btn-secondary{background:#fff;color:var(--ink);border:1px solid var(--line);font:inherit;font-weight:700;border-radius:12px;padding:13px 16px;cursor:pointer;min-height:48px;width:100%}
+
+/* slider switch */
+.sw{position:relative;width:52px;height:30px;flex:0 0 auto;cursor:pointer}
+.sw input{display:none}
+.sw .track{position:absolute;inset:0;background:#cfd3da;border-radius:999px;transition:.2s}
+.sw .knob{position:absolute;top:3px;left:3px;width:24px;height:24px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.sw input:checked ~ .track{background:var(--green)}
+.sw input:checked ~ .knob{left:25px}
+.sw.dis{opacity:.4;pointer-events:none}
+.pin-set{display:flex;gap:8px;margin-top:10px}
+.pin-set input{flex:1;padding:13px 12px;border:1px solid var(--line);border-radius:12px;font:inherit;font-size:16px;font-weight:700;letter-spacing:4px;text-align:center}
+
+.steps{counter-reset:st;margin:6px 0}
+.steps li{list-style:none;position:relative;padding:10px 0 10px 42px;font-size:13.5px;border-bottom:1px solid var(--line)}
+.steps li:last-child{border-bottom:0}
+.steps li::before{counter-increment:st;content:counter(st);position:absolute;left:0;top:9px;width:28px;height:28px;
+  background:var(--orange);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px}
+
+/* preview navigator */
+.nav{position:sticky;bottom:0;background:#11151c;color:#fff;display:flex;gap:6px;padding:9px 8px;justify-content:center;flex-wrap:wrap;z-index:80}
+.nav b{width:100%;text-align:center;font-size:11px;opacity:.7;margin-bottom:2px}
+.nav button{background:#262c38;color:#fff;border:0;border-radius:9px;padding:8px 11px;font:inherit;font-size:12px;font-weight:700;cursor:pointer}
+.nav button.act{background:var(--orange)}
+.toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);background:#1f2430;color:#fff;padding:11px 18px;border-radius:12px;font-size:13.5px;font-weight:700;opacity:0;transition:.2s;pointer-events:none;z-index:200}
+.toast.on{opacity:1}
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <!-- ============ 1) LOCK SCREEN ============ -->
+  <section id="s-lock" class="screen on">
+    <div class="lk-top">
+      <div class="lk-glyph">🔒</div>
+      <div class="lk-title">Ξεκλείδωσε το Ταμείο</div>
+      <div class="lk-sub">Βάλε τον 6ψήφιο κωδικό ή χρησιμοποίησε δαχτυλικό</div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+      <div class="lk-dots" id="dots">
+        <div class="lk-dot"></div><div class="lk-dot"></div><div class="lk-dot"></div>
+        <div class="lk-dot"></div><div class="lk-dot"></div><div class="lk-dot"></div>
+      </div>
+      <div class="lk-err-txt" id="lkerr"></div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;align-items:center;gap:14px;width:100%">
+      <div class="lk-pad" id="pad">
+        <button class="lk-key" data-k="1">1</button>
+        <button class="lk-key" data-k="2">2</button>
+        <button class="lk-key" data-k="3">3</button>
+        <button class="lk-key" data-k="4">4</button>
+        <button class="lk-key" data-k="5">5</button>
+        <button class="lk-key" data-k="6">6</button>
+        <button class="lk-key" data-k="7">7</button>
+        <button class="lk-key" data-k="8">8</button>
+        <button class="lk-key" data-k="9">9</button>
+        <button class="lk-key fn" data-fp title="Δαχτυλικό">👆</button>
+        <button class="lk-key" data-k="0">0</button>
+        <button class="lk-key bk" data-bk>⌫</button>
+      </div>
+      <button class="lk-forgot" data-go="s-forgot">Ξέχασα τον κωδικό;</button>
+    </div>
+
+    <!-- simulated OS fingerprint prompt -->
+    <div class="fp-prompt" id="fp">
+      <div class="fp-card">
+        <div class="fp-ring scan" id="fpring">👆</div>
+        <div class="fp-t" id="fpt">Σάρωσε το δαχτυλικό σου</div>
+        <div class="fp-s" id="fps">Άγγιξε τον αισθητήρα του κινητού</div>
+        <button class="fp-x" onclick="fpCancel()">Άκυρο — χρήση κωδικού</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2) CASHBOX (sample) ============ -->
+  <section id="s-cash" class="screen">
+    <div class="m-top">
+      <div class="m-top-row">
+        <div class="m-title">👜 Ταμείο</div>
+        <div class="m-tools">
+          <button data-go="s-settings" title="Ρυθμίσεις">⚙️</button>
+          <button onclick="lock()" title="Κλείδωμα">🔒</button>
+        </div>
+      </div>
+      <div class="m-bal-row">
+        <div class="m-bal">€ 342,50</div>
+        <button class="m-eye">👁</button>
+      </div>
+      <div class="m-sub">Διαθέσιμα μετρητά · ✓ συγχρονισμένο</div>
+    </div>
+    <div class="m-body">
+      <div class="m-tiles">
+        <button class="m-tile pay"><span class="ic">🧾</span>Πληρωμή / Έξοδο</button>
+        <button class="m-tile draw"><span class="ic">💸</span>Πήρα μετρητά</button>
+        <button class="m-tile count"><span class="ic">📋</span>Κλείσιμο εβδομάδας</button>
+      </div>
+      <div class="m-sec">Πρόσφατες κινήσεις</div>
+      <div class="m-feed">
+        <div class="m-it"><span class="emo">🥬</span><div class="tx"><div class="t1">Λαχανικά (δείγμα)</div><div class="t2">Σήμερα 11:20</div></div><div class="amt">− € 18,40</div></div>
+        <div class="m-it"><span class="emo">🧾</span><div class="tx"><div class="t1">Πληρωμή προμηθευτή (δείγμα)</div><div class="t2">Σήμερα 09:05</div></div><div class="amt">− € 60,00</div></div>
+        <div class="m-it"><span class="emo">💸</span><div class="tx"><div class="t1">Πήρα μετρητά (δείγμα)</div><div class="t2">Χθες 21:30</div></div><div class="amt">− € 50,00</div></div>
+        <div class="m-it"><span class="emo">📋</span><div class="tx"><div class="t1">Κλείσιμο εβδομάδας (δείγμα)</div><div class="t2">Δευτέρα</div></div><div class="amt inn">+ € 480,00</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3) SETTINGS: lock ============ -->
+  <section id="s-settings" class="screen">
+    <div class="m-top">
+      <div class="m-top-row">
+        <button class="m-back" onclick="show('s-cash')"><span>←</span> Πίσω</button>
+        <div class="m-title" style="font-size:16px">Ρυθμίσεις</div>
+      </div>
+    </div>
+    <div class="m-body">
+      <div class="m-card">
+        <div class="m-card-h">🔒 Κλείδωμα εφαρμογής</div>
+        <div class="m-note">Όταν είναι ενεργό, η εφαρμογή ζητάει κωδικό (ή δαχτυλικό) <b>κάθε φορά</b> που την ανοίγεις — και ξανακλειδώνει όταν την αφήνεις στην άκρη.</div>
+
+        <div class="m-row">
+          <div>
+            <div class="rt">Κωδικός PIN (6 ψηφία)</div>
+            <div class="rs" id="pinstate">Δεν έχει οριστεί ακόμα</div>
+          </div>
+          <button class="btn-secondary" style="width:auto;padding:10px 14px" onclick="togglePinSet()">Ορισμός</button>
+        </div>
+        <div id="pinsetbox" style="display:none">
+          <div class="pin-set">
+            <input id="pin1" inputmode="numeric" maxlength="6" placeholder="••••••">
+            <input id="pin2" inputmode="numeric" maxlength="6" placeholder="Ξανά">
+          </div>
+          <button class="btn-primary" style="margin-top:10px" onclick="savePin()">Αποθήκευση κωδικού</button>
+        </div>
+
+        <div class="m-row">
+          <div>
+            <div class="rt">Άνοιγμα με δαχτυλικό 👆</div>
+            <div class="rs" id="fpstate">Χρειάζεται πρώτα κωδικό PIN</div>
+          </div>
+          <label class="sw dis" id="fpsw">
+            <input type="checkbox" id="fpchk" onchange="toast('Το δαχτυλικό '+(this.checked?'ενεργοποιήθηκε':'απενεργοποιήθηκε'))">
+            <span class="track"></span><span class="knob"></span>
+          </label>
+        </div>
+      </div>
+
+      <button class="btn-secondary" onclick="show('s-cash')">Τέλος</button>
+    </div>
+  </section>
+
+  <!-- ============ 4) FORGOT PIN / reset ============ -->
+  <section id="s-forgot" class="screen">
+    <div class="m-top">
+      <div class="m-top-row">
+        <button class="m-back" onclick="show('s-lock')"><span>←</span> Πίσω</button>
+        <div class="m-title" style="font-size:16px">Ξέχασα τον κωδικό</div>
+      </div>
+    </div>
+    <div class="m-body">
+      <div class="m-card">
+        <div class="m-card-h">🔓 Μηδενισμός κλειδώματος</div>
+        <div class="m-note">Το κλείδωμα μηδενίζεται <b>μόνο από τον υπολογιστή σου</b> — εκεί που υπάρχει ο κωδικός QR σύνδεσης. Έτσι κανείς άλλος δεν μπορεί να το ανοίξει.</div>
+        <ol class="steps">
+          <li>Άνοιξε στον υπολογιστή: <b>Ρυθμίσεις → 📮 Συγχρονισμός κινητού</b></li>
+          <li>Εμφανίζεται ο κωδικός <b>QR σύνδεσης</b></li>
+          <li>Πάτησε εδώ κάτω «Σάρωση QR» και σάρωσε τον</li>
+          <li>Το κλείδωμα μηδενίζεται — βάλε <b>νέο κωδικό PIN</b></li>
+        </ol>
+        <button class="btn-primary" style="margin-top:12px" onclick="toast('Εδώ θα ανοίξει η κάμερα για σάρωση QR')">📷 Σάρωση QR από τον υπολογιστή</button>
+      </div>
+      <button class="btn-secondary" onclick="show('s-lock')">Άκυρο</button>
+    </div>
+  </section>
+
+</div>
+
+<!-- preview navigator (μόνο για το preview) -->
+<div class="nav">
+  <b>🔎 PREVIEW — πάτα να δεις κάθε οθόνη</b>
+  <button data-go="s-lock" class="act">🔒 Κλείδωμα</button>
+  <button data-go="s-cash">👜 Ταμείο (μετά)</button>
+  <button data-go="s-settings">⚙️ Ρυθμίσεις</button>
+  <button data-go="s-forgot">🔓 Ξέχασα PIN</button>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const DEMO_PIN = "111111";   // demo μόνο
+let buf = "";
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on', s.id===id));
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('act', b.dataset.go===id));
+  if(id==='s-lock'){ resetPin(); setTimeout(fpStart, 350); }   // δαχτυλικό αυτόματα στο άνοιγμα
+  window.scrollTo(0,0);
+}
+document.querySelectorAll('[data-go]').forEach(el=>el.onclick=()=>show(el.dataset.go));
+
+/* ---- PIN entry ---- */
+function paint(){
+  document.querySelectorAll('#dots .lk-dot').forEach((d,i)=>d.classList.toggle('fill', i<buf.length));
+}
+function resetPin(){ buf=""; paint(); document.getElementById('lkerr').textContent=""; }
+document.getElementById('pad').addEventListener('click', e=>{
+  const k = e.target.closest('button'); if(!k) return;
+  if(k.dataset.fp){ fpStart(); return; }
+  if(k.dataset.bk!==undefined){ buf=buf.slice(0,-1); paint(); return; }
+  if(k.dataset.k===undefined) return;
+  if(buf.length>=6) return;
+  buf += k.dataset.k; paint();
+  if(buf.length===6) setTimeout(tryPin, 120);
+});
+function tryPin(){
+  if(buf===DEMO_PIN){ unlock(); }
+  else {
+    const dots=document.getElementById('dots');
+    dots.classList.add('shake');
+    document.getElementById('lkerr').textContent="Λάθος κωδικός — δοκίμασε ξανά";
+    setTimeout(()=>{dots.classList.remove('shake'); resetPin();}, 480);
+  }
+}
+function unlock(){ show('s-cash'); toast('Ξεκλειδώθηκε ✓'); }
+function lock(){ show('s-lock'); }
+
+/* ---- fingerprint (simulated) ---- */
+let fpTimer=null;
+function fpStart(){
+  const fp=document.getElementById('fp'), ring=document.getElementById('fpring');
+  ring.className='fp-ring scan'; ring.textContent='👆';
+  document.getElementById('fpt').textContent='Σάρωσε το δαχτυλικό σου';
+  document.getElementById('fps').textContent='Άγγιξε τον αισθητήρα του κινητού';
+  fp.classList.add('on');
+  clearTimeout(fpTimer);
+  fpTimer=setTimeout(()=>{   // demo: «επιτυχία» μετά από 1.4s
+    ring.className='fp-ring ok'; ring.textContent='✓';
+    document.getElementById('fpt').textContent='Επιτυχία!';
+    document.getElementById('fps').textContent='Καλώς ήρθες';
+    setTimeout(()=>{ fp.classList.remove('on'); unlock(); }, 600);
+  }, 1400);
+}
+function fpCancel(){ clearTimeout(fpTimer); document.getElementById('fp').classList.remove('on'); }
+
+/* ---- settings: PIN + fingerprint toggle ---- */
+let pinSaved=false;
+function togglePinSet(){ const b=document.getElementById('pinsetbox'); b.style.display = b.style.display==='none'?'block':'none'; }
+function savePin(){
+  const a=document.getElementById('pin1').value, b=document.getElementById('pin2').value;
+  if(a.length!==6){ toast('Ο κωδικός θέλει 6 ψηφία'); return; }
+  if(a!==b){ toast('Οι δύο κωδικοί δεν ταιριάζουν'); return; }
+  pinSaved=true;
+  document.getElementById('pinstate').textContent='✓ Έχει οριστεί 6ψήφιος κωδικός';
+  document.getElementById('pinsetbox').style.display='none';
+  document.getElementById('pin1').value=''; document.getElementById('pin2').value='';
+  document.getElementById('fpsw').classList.remove('dis');           // ξεκλειδώνει το δαχτυλικό
+  document.getElementById('fpstate').textContent='Διαθέσιμο — άνοιξέ το αν θες';
+  toast('Ο κωδικός αποθηκεύτηκε ✓');
+}
+
+/* ---- toast ---- */
+let tt=null;
+function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('on'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('on'),1900); }
+
+/* εκκίνηση: ζήτα δαχτυλικό αυτόματα */
+setTimeout(fpStart, 500);
+</script>
+</body>
+</html>
