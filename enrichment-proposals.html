@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAMAM — Προτάσεις νέων εργαλείων</title>
+<style>
+  :root{
+    --orange:#E8651E; --orange-soft:#fff3ec; --orange-line:#f3c9b1;
+    --ink:#1f2429; --muted:#6b7682; --line:#e7ebef; --bg:#f4f6f8;
+    --green:#1e8e4a; --green-soft:#e9f7ee; --amber:#b97400; --amber-soft:#fdf3e0;
+    --card:#fff; --shadow:0 1px 3px rgba(16,24,32,.06),0 8px 24px rgba(16,24,32,.05);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px 80px}
+
+  /* hero */
+  .hero{background:linear-gradient(135deg,#E8651E,#c9521a);color:#fff;
+    padding:48px 20px 60px;margin-bottom:-30px;text-align:center;position:relative;overflow:hidden}
+  .hero::after{content:"";position:absolute;inset:0;
+    background:radial-gradient(circle at 80% 20%,rgba(255,255,255,.12),transparent 45%)}
+  .hero .inner{max-width:1080px;margin:0 auto;position:relative;z-index:1}
+  .hero .tag{display:inline-block;font-size:13px;font-weight:600;letter-spacing:.06em;
+    text-transform:uppercase;background:rgba(255,255,255,.18);padding:6px 14px;border-radius:999px}
+  .hero h1{font-size:34px;margin:14px 0 8px;font-weight:800;letter-spacing:-.01em}
+  .hero p{font-size:17px;margin:0 auto;max-width:620px;opacity:.95}
+  .hero .meta{margin-top:22px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .hero .chip{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.25);
+    padding:7px 14px;border-radius:10px;font-size:14px;font-weight:600}
+  .hero .chip b{font-size:16px}
+
+  /* section labels */
+  .sec-label{display:flex;align-items:center;gap:10px;margin:46px 0 18px}
+  .sec-label .dot{width:9px;height:9px;border-radius:50%;background:var(--orange)}
+  .sec-label h2{font-size:15px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+    color:var(--muted);margin:0}
+  .sec-label .line{flex:1;height:1px;background:var(--line)}
+
+  /* cards grid */
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;
+    box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}
+  .card.feat{grid-column:1/-1;border:1px solid var(--orange-line)}
+  .card-head{padding:18px 20px 14px;display:flex;gap:14px;align-items:flex-start}
+  .card-ico{width:46px;height:46px;border-radius:12px;background:var(--orange-soft);
+    display:flex;align-items:center;justify-content:center;font-size:23px;flex-shrink:0}
+  .card-head h3{margin:0;font-size:18px;font-weight:750;letter-spacing:-.01em}
+  .card-head .num{font-size:12px;font-weight:700;color:var(--orange);letter-spacing:.04em}
+  .card-desc{padding:0 20px 14px;color:var(--muted);font-size:14.5px;margin:0}
+
+  /* mockup box */
+  .mock{margin:0 16px 16px;border:1px solid var(--line);border-radius:12px;
+    background:#fafbfc;padding:14px;font-size:13px}
+  .mock-title{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    color:#9aa4ad;margin:0 0 10px}
+
+  /* badges */
+  .badges{display:flex;gap:8px;padding:0 20px 18px;margin-top:auto;flex-wrap:wrap}
+  .badge{font-size:12px;font-weight:650;padding:5px 11px;border-radius:8px;display:inline-flex;gap:5px;align-items:center}
+  .b-val{background:var(--green-soft);color:var(--green)}
+  .b-eff{background:var(--amber-soft);color:var(--amber)}
+  .b-dep{background:#eef1f4;color:#566069}
+
+  /* generic mock components */
+  .row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px dashed #e7ebef}
+  .row:last-child{border-bottom:0}
+  .pill{font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px}
+  .pill-red{background:#fdecec;color:#c0392b}
+  .pill-green{background:var(--green-soft);color:var(--green)}
+  .pill-amber{background:var(--amber-soft);color:var(--amber)}
+  .pill-grey{background:#eef1f4;color:#566069}
+  .warnbar{background:#fdecec;border:1px solid #f5c6c6;color:#a5281f;border-radius:9px;
+    padding:9px 12px;font-weight:600;display:flex;gap:8px;align-items:center;font-size:13px}
+  .okbar{background:var(--green-soft);border:1px solid #bfe6cd;color:var(--green);border-radius:9px;
+    padding:9px 12px;font-weight:600;font-size:13px}
+  .muted{color:var(--muted)}
+  .strike{text-decoration:line-through;color:#aab2b9}
+  .big{font-size:22px;font-weight:800}
+  .bar{height:8px;border-radius:999px;background:#e7ebef;overflow:hidden;margin-top:4px}
+  .bar>i{display:block;height:100%;border-radius:999px;background:var(--orange)}
+  .miniinput{border:1px solid #d8dee4;border-radius:8px;padding:6px 9px;background:#fff;font-size:13px;color:var(--ink)}
+  .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .achip{font-size:11.5px;font-weight:650;padding:4px 9px;border-radius:999px;background:#eef1f4;color:#566069}
+  .achip.on{background:var(--orange-soft);color:var(--orange);border:1px solid var(--orange-line)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  table.mt{width:100%;border-collapse:collapse;font-size:12.5px}
+  table.mt th{text-align:left;color:#9aa4ad;font-weight:700;font-size:10.5px;
+    text-transform:uppercase;letter-spacing:.04em;padding:0 0 6px}
+  table.mt td{padding:6px 0;border-top:1px solid #eef1f4}
+  table.mt td.num{text-align:right;font-variant-numeric:tabular-nums}
+
+  .note{background:#fff;border:1px dashed var(--orange-line);border-radius:12px;
+    padding:16px 18px;margin-top:30px;font-size:14px;color:var(--muted)}
+  .note b{color:var(--ink)}
+  .foot{text-align:center;color:#9aa4ad;font-size:13px;margin-top:36px}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="inner">
+    <span class="tag">TAMAM Back-Office · Προτάσεις</span>
+    <h1>Τι μπορούμε να φτιάξουμε ακόμη</h1>
+    <p>Τα 12 εργαλεία που <b>δεν</b> έχουμε φτιάξει — με μικρή «ζωντανή» εικόνα του καθενός
+       για να δεις τι ακριβώς κάνει. Όλα τα νούμερα εδώ είναι <b>δείγματα</b>.</p>
+    <div class="meta">
+      <span class="chip"><b>23</b> έτοιμα ✔️</span>
+      <span class="chip"><b>1</b> μισό 🟡</span>
+      <span class="chip"><b>11</b> ανοιχτά ❌</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ===== TOP PICKS ===== -->
+  <div class="sec-label"><span class="dot"></span><h2>⭐ Οι 5 κορυφαίες προτάσεις μου</h2><span class="line"></span></div>
+
+  <div class="grid">
+
+    <!-- #5 duplicate invoice (FEATURED) -->
+    <div class="card feat">
+      <div class="card-head">
+        <div class="card-ico">🧾</div>
+        <div>
+          <div class="num">#5 · ΠΡΟΤΑΣΗ Νο1</div>
+          <h3>Προστασία από διπλό τιμολόγιο</h3>
+        </div>
+      </div>
+      <p class="card-desc">Όταν καταχωρείς τιμολόγιο με <b>ίδιο αριθμό + ίδιο προμηθευτή</b> που υπάρχει ήδη,
+        σε προειδοποιεί <b>πριν</b> το αποθηκεύσεις — για να μην πληρώσεις δύο φορές το ίδιο.</p>
+      <div class="mock">
+        <p class="mock-title">Φόρμα νέου τιμολογίου</p>
+        <div class="grid2" style="margin-bottom:10px">
+          <div><span class="muted" style="font-size:11px">Προμηθευτής</span><br>
+            <span class="miniinput" style="display:inline-block;width:100%">Παπάς Χρήστος</span></div>
+          <div><span class="muted" style="font-size:11px">Αριθμός</span><br>
+            <span class="miniinput" style="display:inline-block;width:100%">2462 022345</span></div>
+        </div>
+        <div class="warnbar">⚠️ Προσοχή: τιμολόγιο <b>2462 022345</b> από «Παπάς Χρήστος»
+          υπάρχει ήδη (12-06-2026, 184,50€). <u>Δες το</u></div>
+        <p class="muted" style="margin:8px 0 0;font-size:12px">Δεν σε μπλοκάρει — απλά σε ρωτάει,
+          γιατί ένας αριθμός μπορεί νόμιμα να επαναληφθεί.</p>
+      </div>
+      <div class="badges">
+        <span class="badge b-val">💪 Αξία: πολύ υψηλή</span>
+        <span class="badge b-eff">⏱️ Κόπος: μικρός</span>
+        <span class="badge b-dep">🔗 Έτοιμα: φόρμα τιμολογίου</span>
+      </div>
+    </div>
+
+    <!-- #34 audit log -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-ico">📜</div>
+        <div><div class="num">#34 · ΠΡΟΤΑΣΗ Νο2</div><h3>Ιστορικό ενεργειών</h3></div>
+      </div>
+      <p class="card-desc">Ποιος άλλαξε τι και πότε — τιμές, διαγραφές, πληρωμές. Χρήσιμο τώρα
+        που υπάρχουν ρόλοι (αφεντικό / υπάλληλος).</p>
+      <div class="mock">
+        <p class="mock-title">Πρόσφατες ενέργειες</p>
+        <div class="row"><span>💶 Αλλαγή τιμής «Γύρος» 6,50→6,80€</span><span class="pill pill-grey">Γιάννης · 14:20</span></div>
+        <div class="row"><span>🗑️ Διαγραφή εξόδου «Καθαριστικά»</span><span class="pill pill-grey">Αφεντικό · 11:05</span></div>
+        <div class="row"><span>✅ Πληρωμή παγίου «ΔΕΗ»</span><span class="pill pill-grey">Αφεντικό · χθες</span></div>
+      </div>
+      <div class="badges">
+        <span class="badge b-val">💪 Αξία: υψηλή</span>
+        <span class="badge b-eff">⏱️ Κόπος: μεσαίος</span>
+        <span class="badge b-dep">🔗 Δένει με: ρόλους #32</span>
+      </div>
+    </div>
+
+    <!-- #11 recipe photo -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-ico">📷</div>
+        <div><div class="num">#11 · ΠΡΟΤΑΣΗ Νο3</div><h3>Φωτό + οδηγίες στη συνταγή</h3></div>
+      </div>
+      <p class="card-desc">Ο νέος υπάλληλος βλέπει ακριβώς πόσο να βάλει → ίδια μερίδα κάθε φορά
+        → λιγότερη σπατάλη.</p>
+      <div class="mock">
+        <p class="mock-title">Συνταγή: Πίτα Γύρος</p>
+        <div style="display:flex;gap:10px;align-items:center">
+          <div style="width:64px;height:64px;border-radius:10px;background:var(--orange-soft);
+            display:flex;align-items:center;justify-content:center;font-size:30px;flex-shrink:0">🌯</div>
+          <div style="font-size:12.5px" class="muted">«120γρ γύρος, 2 φέτες ντομάτα, 1 κ.σ. τζατζίκι.
+            Τύλιξε σφιχτά, ψήσε 20"».</div>
+        </div>
+      </div>
+      <div class="badges">
+        <span class="badge b-val">💪 Αξία: υψηλή</span>
+        <span class="badge b-eff">⏱️ Κόπος: μικρός</span>
+        <span class="badge b-dep">🔗 Δένει με: §2.7 drift</span>
+      </div>
+    </div>
+
+    <!-- #28 shift suggestion -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-ico">👥</div>
+        <div><div class="num">#28 · ΠΡΟΤΑΣΗ Νο4 · 🟡 μισό</div><h3>Πρόταση βαρδιών από πρόβλεψη</h3></div>
+      </div>
+      <p class="card-desc">Η §7 λέει «αύριο κίνηση» → η §8 προτείνει «βάλε +1 το βράδυ».
+        Η σελίδα staffing υπάρχει· λείπει η αυτόματη πρόταση.</p>
+      <div class="mock">
+        <p class="mock-title">Πρόταση για αύριο (Σάββατο)</p>
+        <div class="okbar">🔮 Αναμένεται +35% κίνηση το βράδυ → <b>πρόταση: +1 άτομο 19:00–24:00</b></div>
+        <div class="row" style="margin-top:8px"><span>Τώρα προγραμματισμένοι το βράδυ</span><span class="pill pill-amber">3 άτομα</span></div>
+        <div class="row"><span>Προτεινόμενοι</span><span class="pill pill-green">4 άτομα</span></div>
+      </div>
+      <div class="badges">
+        <span class="badge b-val">💪 Αξία: υψηλή</span>
+        <span class="badge b-eff">⏱️ Κόπος: μικρός (ολοκλήρωση)</span>
+        <span class="badge b-dep">🔗 Έτοιμα: §7 + §8</span>
+      </div>
+    </div>
+
+    <!-- #17 cost per category -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-ico">🗂️</div>
+        <div><div class="num">#17 · ΠΡΟΤΑΣΗ Νο5</div><h3>Κόστος ανά κατηγορία μενού</h3></div>
+      </div>
+      <p class="card-desc">Πόσο σου κοστίζουν συνολικά «τυλιχτά» vs «μερίδες» vs «ποτά» — βλέπεις πού «φεύγουν» τα λεφτά.</p>
+      <div class="mock">
+        <p class="mock-title">Κόστος υλικών ανά κατηγορία (Ιούνιος)</p>
+        <div class="row"><span>🌯 Τυλιχτά</span><span><b>1.240€</b> <span class="muted">(42%)</span></span></div>
+        <div class="bar"><i style="width:42%"></i></div>
+        <div class="row" style="margin-top:6px"><span>🍽️ Μερίδες</span><span><b>980€</b> <span class="muted">(33%)</span></span></div>
+        <div class="bar"><i style="width:33%"></i></div>
+        <div class="row" style="margin-top:6px"><span>🥤 Ποτά</span><span><b>520€</b> <span class="muted">(18%)</span></span></div>
+        <div class="bar"><i style="width:18%"></i></div>
+      </div>
+      <div class="badges">
+        <span class="badge b-val">💪 Αξία: μεσαία-υψηλή</span>
+        <span class="badge b-eff">⏱️ Κόπος: μικρός</span>
+        <span class="badge b-dep">🔗 Έτοιμα engine (reuse)</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== REST ===== -->
+  <div class="sec-label"><span class="dot"></span><h2>Οι υπόλοιπες ανοιχτές ιδέες</h2><span class="line"></span></div>
+
+  <div class="grid">
+
+    <!-- #19 psychological -->
+    <div class="card">
+      <div class="card-head"><div class="card-ico">🎯</div>
+        <div><div class="num">#19</div><h3>Ψυχολογική τιμολόγηση</h3></div></div>
+      <p class="card-desc">Προτείνει 4,90€ αντί για 5,00€ (ή το αντίθετο), ανά πιάτο. Πρόταση — αποφασίζεις εσύ.</p>
+      <div class="mock">
+        <p class="mock-title">Προτάσεις στρογγυλοποίησης</p>
+        <div class="row"><span>Σαλάτα χωριάτικη</span><span><span class="strike">5,00€</span> → <b>4,90€</b></span></div>
+        <div class="row"><span>Μπύρα 500ml</span><span><span class="strike">3,80€</span> → <b>3,90€</b></span></div>
+      </div>
+      <div class="badges"><span class="badge b-val">💪 Αξία: μεσαία</span><span class="badge b-eff">⏱️ Κόπος: μικρός</span></div>
+    </div>
+
+    <!-- #14 budget -->
+    <div class="card">
+      <div class="card-head"><div class="card-ico">📊</div>
+        <div><div class="num">#14</div><h3>Πρόβλεψη vs πραγματικό (budget)</h3></div></div>
+      <p class="card-desc">Στην αρχή του μήνα ορίζεις στόχο εξόδων → στο τέλος βλέπεις τη διαφορά.</p>
+      <div class="mock">
+        <p class="mock-title">Ιούνιος — στόχος vs πραγματικό</p>
+        <table class="mt"><tr><th>Κατηγορία</th><th class="num">Στόχος</th><th class="num">Πραγμ.</th></tr>
+          <tr><td>Πρώτες ύλες</td><td class="num">3.000€</td><td class="num" style="color:#c0392b">3.420€</td></tr>
+          <tr><td>Λειτουργικά</td><td class="num">900€</td><td class="num" style="color:var(--green)">820€</td></tr>
+        </table>
+      </div>
+      <div class="badges"><span class="badge b-val">💪 Αξία: υψηλή</span><span class="badge b-eff">⏱️ Κόπος: μεσαίος</span><span class="badge b-dep">🔗 νέος πίνακας</span></div>
+    </div>
+
+    <!-- #22 ocr check -->
+    <div class="card">
+      <div class="card-head"><div class="card-ico">🔢</div>
+        <div><div class="num">#22</div><h3>«Δεν βγαίνουν τα νούμερα» στο OCR</h3></div></div>
+      <p class="card-desc">Αν ποσότητες × τιμές ≠ σύνολο, το κοκκινίζει στην οθόνη ελέγχου του OCR πριν την καταχώρηση.</p>
+      <div class="mock">
+        <p class="mock-title">Έλεγχος τιμολογίου (OCR)</p>
+        <div class="row"><span>3 × 12,00€</span><span>= 36,00€ <span class="pill pill-green">ΟΚ</span></span></div>
+        <div class="row"><span>5 × 4,00€</span><span class="muted">= <s>18,00€</s> <span class="pill pill-red">πρέπει 20,00€</span></span></div>
+      </div>
+      <div class="badges"><span class="badge b-val">💪 Αξία: μεσαία</span><span class="badge b-eff">⏱️ Κόπος: μικρός</span><span class="badge b-dep">🔗 reuse Β9</span></div>
+    </div>
+
+    <!-- #25 shopping list tomorrow -->
+    <div class="card">
+      <div class="card-head"><div class="card-ico">🛒</div>
+        <div><div class="num">#25</div><h3>Λίστα αγορών για αύριο</h3></div></div>
+      <p class="card-desc">Ενώνει πρόβλεψη §7 + απόθεμα → έτοιμη λίστα «τι να παραγγείλεις».</p>
+      <div class="mock">
+        <p class="mock-title">Για αύριο χρειάζεσαι</p>
+        <div class="row"><span>🥩 Χοιρινό γύρος</span><span class="pill pill-amber">+ 8 κιλά</span></div>
+        <div class="row"><span>🍅 Ντομάτες</span><span class="pill pill-amber">+ 5 κιλά</span></div>
+        <div class="row"><span>🫓 Πίτες</span><span class="pill pill-red">+ 120 τεμ.</span></div>
+      </div>
+      <div class="badges"><span class="badge b-val">💪 Αξία: υψηλή</span><span class="badge b-eff">⏱️ Κόπος: μικρός</span><span class="badge b-dep">🔗 §7 + §1.6 reuse</span></div>
+    </div>
+
+    <!-- #26 forecast accuracy -->
+    <div class="card">
+      <div class="card-head"><div class="card-ico">🎯</div>
+        <div><div class="num">#26</div><h3>Ιστορικό ακρίβειας πρόβλεψης</h3></div></div>
+      <p class="card-desc">«Πόσο πέφτω έξω συνήθως;» — ένα σκορ που χτίζει εμπιστοσύνη στο εργαλείο.</p>
+      <div class="mock">
+        <p class="mock-title">Ακρίβεια τελευταίων 30 ημερών</p>
+        <div class="big" style="color:var(--green)">87% <span class="muted" style="font-size:13px;font-weight:400">μέση ακρίβεια</span></div>
+        <div class="bar" style="margin-top:8px"><i style="width:87%;background:var(--green)"></i></div>
+      </div>
+      <div class="badges"><span class="badge b-val">💪 Αξία: μεσαία</span><span class="badge b-eff">⏱️ Κόπος: μικρός</span><span class="badge b-dep">🔗 reuse §7</span></div>
+    </div>
+
+    <!-- #23 bulk scan -->
+    <div class="card">
+      <div class="card-head"><div class="card-ico">📚</div>
+        <div><div class="num">#23</div><h3>Μαζικό σκανάρισμα</h3></div></div>
+      <p class="card-desc">Ρίχνεις 10 φωτό μαζί → μπαίνουν σε ουρά και επεξεργάζονται μία-μία.</p>
+      <div class="mock">
+        <p class="mock-title">Ουρά OCR (4 αρχεία)</p>
+        <div class="row"><span>📄 τιμολόγιο_1.jpg</span><span class="pill pill-green">έτοιμο</span></div>
+        <div class="row"><span>📄 τιμολόγιο_2.jpg</span><span class="pill pill-amber">επεξεργασία…</span></div>
+        <div class="row"><span>📄 τιμολόγιο_3.jpg</span><span class="pill pill-grey">αναμονή</span></div>
+      </div>
+      <div class="badges"><span class="badge b-val">💪 Αξία: μεσαία</span><span class="badge b-eff">⏱️ Κόπος: μεσαίος</span><span class="badge b-dep">⚠️ AI: κόστος ×10</span></div>
+    </div>
+
+    <!-- #7 barcode -->
+    <div class="card">
+      <div class="card-head"><div class="card-ico">📷</div>
+        <div><div class="num">#7</div><h3>Barcode / QR στο κινητό</h3></div></div>
+      <p class="card-desc">Σκανάρεις για να βρεις γρήγορα μια πρώτη ύλη. «Nice-to-have» όταν μεγαλώσει η λίστα.</p>
+      <div class="mock">
+        <p class="mock-title">Σάρωση με κάμερα</p>
+        <div style="border:2px dashed var(--orange-line);border-radius:10px;padding:18px;text-align:center;color:var(--muted)">
+          📷 <b>Στόχευσε το barcode</b><br><span style="font-size:12px">→ «Φέτα ΠΟΠ 1κιλό»</span></div>
+      </div>
+      <div class="badges"><span class="badge b-val">💪 Αξία: χαμηλή-μεσαία</span><span class="badge b-eff">⏱️ Κόπος: μεσαίος</span></div>
+    </div>
+
+    <!-- #21 ocr autolearn -->
+    <div class="card">
+      <div class="card-head"><div class="card-ico">🧠</div>
+        <div><div class="num">#21</div><h3>OCR αυτο-μάθηση (χωρίς πρότυπο)</h3></div></div>
+      <p class="card-desc">Μετά από 2-3 τιμολόγια του ίδιου προμηθευτή, θυμάται μόνο του τη δομή. Φιλόδοξο — προτείνω «ημι-αυτόματο».</p>
+      <div class="mock">
+        <p class="mock-title">Πρόταση προτύπου</p>
+        <div class="okbar">🧠 Έμαθα τη δομή «Κιβρόγλου» από 3 τιμολόγια. <b>Να την εφαρμόσω;</b></div>
+      </div>
+      <div class="badges"><span class="badge b-val">💪 Αξία: υψηλή</span><span class="badge b-eff">⏱️ Κόπος: μεγάλος</span><span class="badge b-dep">⚠️ ρίσκο πολυπλοκότητας</span></div>
+    </div>
+
+    <!-- #24 weather -->
+    <div class="card">
+      <div class="card-head"><div class="card-ico">🌦️</div>
+        <div><div class="num">#24</div><h3>Πρόβλεψη με τον καιρό</h3></div></div>
+      <p class="card-desc">Βροχή/ζέστη μετακινεί delivery vs τραπέζι. Θέλει εξωτερικό weather API + μήνες δεδομένων για να «μάθει».</p>
+      <div class="mock">
+        <p class="mock-title">Αύριο</p>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="font-size:30px">🌧️</div>
+          <div style="font-size:12.5px" class="muted">Βροχή → αναμένεται <b>+20% delivery</b>, −10% τραπέζι</div></div>
+      </div>
+      <div class="badges"><span class="badge b-val">💪 Αξία: μεσαία</span><span class="badge b-eff">⏱️ Κόπος: μεγάλος</span><span class="badge b-dep">🌐 online-only</span></div>
+    </div>
+
+  </div>
+
+  <div class="note">
+    <b>Σημείωση:</b> όλα τα νούμερα/ονόματα εδώ είναι <b>δείγματα</b> για να καταλάβεις την εικόνα — όχι πραγματικά
+    δεδομένα του μαγαζιού. Κάθε εργαλείο θα φτιαχτεί ξεχωριστά, αφού πρώτα σου εξηγήσω την προσέγγιση και
+    συμφωνήσουμε στις λεπτομέρειες. <b>Πες μου ποιο θες να δούμε πρώτο.</b>
+  </div>
+
+  <div class="foot">TAMAM Back-Office · Preview προτάσεων · 29-06-2026 · τοπικό αρχείο (δεν δημοσιεύτηκε)</div>
+
+</div>
+</body>
+</html>

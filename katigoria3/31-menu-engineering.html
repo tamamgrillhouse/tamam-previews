@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>3.1 Μηχανική Μενού — Preview</title>
+<link rel="stylesheet" href="_shell.css">
+<style>
+/* ── page-scoped (me-*) ── */
+.me-legend{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px}
+.me-leg{background:#fff;border:1px solid var(--border);border-radius:10px;padding:13px 15px;box-shadow:var(--shadow-sm)}
+.me-leg .h{display:flex;align-items:center;gap:8px;font-weight:800;font-size:14px;margin-bottom:4px}
+.me-leg .d{font-size:12px;color:var(--text-muted);line-height:1.45}
+.me-leg .n{font-size:11px;font-weight:700;color:var(--text-muted);margin-top:6px}
+/* matrix */
+.me-matrix{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:12px;overflow:hidden;border:2px solid var(--border);margin:0 0 8px 46px;box-shadow:var(--shadow-sm)}
+.me-q{min-height:215px;padding:14px 16px;position:relative}
+.me-q .qh{display:flex;align-items:center;gap:8px;font-weight:800;font-size:15px;margin-bottom:3px}
+.me-q .qs{font-size:11.5px;color:var(--text-muted);margin-bottom:11px}
+.me-q.star{background:linear-gradient(135deg,#f0fdf4,#dcfce7)}
+.me-q.puzzle{background:linear-gradient(135deg,#eff6ff,#dbeafe)}
+.me-q.horse{background:linear-gradient(135deg,#fffbeb,#fef3c7)}
+.me-q.dog{background:linear-gradient(135deg,#fef2f2,#fee2e2)}
+.me-q.star{border-right:2px dashed rgba(0,0,0,.07);border-bottom:none}
+.me-matrix .me-q:nth-child(1),.me-matrix .me-q:nth-child(2){border-bottom:2px dashed rgba(0,0,0,.07)}
+.me-matrix .me-q:nth-child(1),.me-matrix .me-q:nth-child(3){border-right:2px dashed rgba(0,0,0,.07)}
+.me-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.85);border:1px solid rgba(0,0,0,.08);border-radius:20px;padding:5px 11px;font-size:12.5px;font-weight:600;margin:0 6px 6px 0}
+.me-chip .meta{font-weight:400;color:var(--text-muted);font-size:11px}
+/* axes labels */
+.me-axis-y{position:absolute;left:-2px;top:50%;transform:rotate(-180deg);writing-mode:vertical-rl;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted)}
+.me-axis-x{text-align:center;margin:6px 0 26px 46px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted)}
+.me-wrap{position:relative}
+/* per-dish table */
+.tag{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:700}
+.tag.star{background:#dcfce7;color:#166534}.tag.puzzle{background:#dbeafe;color:#1e40af}
+.tag.horse{background:#fef3c7;color:#92400e}.tag.dog{background:#fee2e2;color:#991b1b}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">TAMAM</div>
+    <div class="sidebar-status"><span class="sidebar-status-led"></span><span>Back-office</span></div>
+  </div>
+  <nav>
+    <div class="nav-group">Επισκόπηση</div>
+    <a class="nav-link"><span class="nav-ico">🏠</span> Αρχική</a>
+    <div class="nav-group">Χρήματα</div>
+    <a class="nav-link"><span class="nav-ico">💲</span> Τιμές & Μενού</a>
+    <a class="nav-link active"><span class="nav-ico">⭐</span> Μηχανική Μενού</a>
+    <a class="nav-link"><span class="nav-ico">📊</span> Αναφορές</a>
+    <a class="nav-link"><span class="nav-ico">💰</span> Έξοδα & Κέρδος</a>
+  </nav>
+</aside>
+
+<div class="main-content">
+  <div class="topbar">
+    <div class="topbar-title">⭐ Μηχανική Μενού</div>
+    <div class="topbar-right"><span>Γιώργος</span><span>Έξοδος</span></div>
+  </div>
+
+  <div class="page-content">
+    <div class="page-header">
+      <div class="page-title">⭐ Μηχανική Μενού</div>
+      <div class="page-subtitle">Κάθε πιάτο σε 4 ομάδες — πόσο <b>πουλάει</b> & πόσο <b>κερδίζει</b>. Σύγκριση με τον μέσο όρο του μενού σου (περίοδος: <b>1–30 Ιουνίου 2026</b>).</div>
+    </div>
+
+    <div class="info-box">
+      <span class="i">💡</span>
+      <div>Το σύστημα παίρνει <b>πόσα τεμάχια πούλησε</b> κάθε πιάτο (από το POS) και <b>πόσο κερδίζεις</b> σε κάθε ένα (από τις συνταγές/κόστος). Τα συγκρίνει με τον μέσο όρο: πάνω από τον μέσο = «ψηλά», κάτω = «χαμηλά». Έτσι κάθε πιάτο πέφτει σε ένα από τα 4 κουτιά.</div>
+    </div>
+
+    <!-- legend -->
+    <div class="me-legend">
+      <div class="me-leg"><div class="h">⭐ Αστέρια</div><div class="d">Πουλάνε πολύ ΚΑΙ κερδίζουν. Οι πρωταθλητές σου.</div><div class="n">→ Πρόβαλέ τα, μην τα πειράξεις</div></div>
+      <div class="me-leg"><div class="h">🐎 Άλογα</div><div class="d">Πουλάνε πολύ αλλά κερδίζουν λίγο. Γερά «άλογα κούρσας».</div><div class="n">→ Μικρή αύξηση τιμής ή μείωση κόστους</div></div>
+      <div class="me-leg"><div class="h">🧩 Γρίφοι</div><div class="d">Κερδίζουν καλά αλλά λίγοι τα ζητούν.</div><div class="n">→ Διαφήμισέ τα / βάλ' τα μπροστά στο μενού</div></div>
+      <div class="me-leg"><div class="h">🐕 Σκυλιά</div><div class="d">Ούτε πουλάνε ούτε κερδίζουν.</div><div class="n">→ Σκέψου να τα βγάλεις ή να τα αλλάξεις</div></div>
+    </div>
+
+    <!-- matrix -->
+    <div class="me-wrap">
+      <div class="me-axis-y">Κέρδος →</div>
+      <div class="me-matrix">
+        <!-- TL puzzle (high profit, low pop) -->
+        <div class="me-q puzzle">
+          <div class="qh">🧩 Γρίφοι</div>
+          <div class="qs">κερδίζουν · πουλάνε λίγο</div>
+          <span class="me-chip">Σνίτσελ Κοτόπουλο XXL <span class="meta">12 τεμ · 70%</span></span>
+          <span class="me-chip">Σαλάτα Caesar's <span class="meta">9 τεμ · 68%</span></span>
+          <span class="me-chip">Καλαμαράκι Λαβάς <span class="meta">7 τεμ · 66%</span></span>
+        </div>
+        <!-- TR star (high profit, high pop) -->
+        <div class="me-q star">
+          <div class="qh">⭐ Αστέρια</div>
+          <div class="qs">πουλάνε · κερδίζουν</div>
+          <span class="me-chip">Σουβλάκι Χοιρινό Πίτα <span class="meta">312 τεμ · 76%</span></span>
+          <span class="me-chip">Γύρος Χοιρινός Αραβική <span class="meta">188 τεμ · 73%</span></span>
+          <span class="me-chip">Ντόνερ Λαβάς <span class="meta">96 τεμ · 74%</span></span>
+          <span class="me-chip">Κεμπαπάκι Μερίδα <span class="meta">74 τεμ · 73%</span></span>
+        </div>
+        <!-- BL dog (low profit, low pop) -->
+        <div class="me-q dog">
+          <div class="qh">🐕 Σκυλιά</div>
+          <div class="qs">πουλάνε λίγο · κερδίζουν λίγο</div>
+          <span class="me-chip">Cheeseburger <span class="meta">8 τεμ · 42%</span></span>
+          <span class="me-chip">Falafel πίτα <span class="meta">6 τεμ · 48%</span></span>
+        </div>
+        <!-- BR horse (low profit, high pop) -->
+        <div class="me-q horse">
+          <div class="qh">🐎 Άλογα</div>
+          <div class="qs">πουλάνε · κερδίζουν λίγο</div>
+          <span class="me-chip">Coca-Cola 500ml <span class="meta">210 τεμ · 38%</span></span>
+          <span class="me-chip">Πατάτες Λαβάς <span class="meta">142 τεμ · 45%</span></span>
+          <span class="me-chip">Αλφα 330ml <span class="meta">98 τεμ · 40%</span></span>
+        </div>
+      </div>
+    </div>
+    <div class="me-axis-x">Δημοτικότητα (πόσα πούλησε) →</div>
+
+    <!-- per-dish table -->
+    <div class="section-heading" style="margin-top:8px">Όλα τα πιάτα — αναλυτικά</div>
+    <div class="table-wrap">
+      <div class="table-toolbar">
+        <div class="select-wrap"><select><option>Όλες οι κατηγορίες</option><option>Αστέρια</option><option>Άλογα</option><option>Γρίφοι</option><option>Σκυλιά</option></select></div>
+        <span class="muted" style="font-size:12.5px">Μέσος όρος μενού: <b>54 τεμ./πιάτο</b> · <b>62% περιθώριο</b></span>
+      </div>
+      <table class="data-table">
+        <thead><tr>
+          <th>Πιάτο</th><th class="c">Πούλησε</th><th class="r">Τζίρος</th><th class="r">Περιθώριο</th><th class="c">Ομάδα</th><th>Πρόταση</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>Σουβλάκι Χοιρινό Πίτα</td><td class="c">312</td><td class="r">1.092€</td><td class="r">76%</td><td class="c"><span class="tag star">⭐ Αστέρι</span></td><td class="muted">Κράτα το ίδιο — δουλεύει τέλεια.</td></tr>
+          <tr><td>Γύρος Χοιρινός Αραβική</td><td class="c">188</td><td class="r">1.260€</td><td class="r">73%</td><td class="c"><span class="tag star">⭐ Αστέρι</span></td><td class="muted">Βάλ' το σε σημείο που φαίνεται.</td></tr>
+          <tr><td>Coca-Cola 500ml</td><td class="c">210</td><td class="r">378€</td><td class="r">38%</td><td class="c"><span class="tag horse">🐎 Άλογο</span></td><td class="muted">Δες προμηθευτή/τιμή — μικρό περιθώριο για τόσο όγκο.</td></tr>
+          <tr><td>Πατάτες Λαβάς</td><td class="c">142</td><td class="r">710€</td><td class="r">45%</td><td class="c"><span class="tag horse">🐎 Άλογο</span></td><td class="muted">+0,30€ τιμή δεν θα το χαλάσει.</td></tr>
+          <tr><td>Σνίτσελ Κοτόπουλο XXL</td><td class="c">12</td><td class="r">78€</td><td class="r">70%</td><td class="c"><span class="tag puzzle">🧩 Γρίφος</span></td><td class="muted">Κερδίζει — προώθησέ το (προσφορά/φωτό).</td></tr>
+          <tr><td>Σαλάτα Caesar's</td><td class="c">9</td><td class="r">63€</td><td class="r">68%</td><td class="c"><span class="tag puzzle">🧩 Γρίφος</span></td><td class="muted">Λίγοι το ξέρουν — ανέβασέ το στο μενού.</td></tr>
+          <tr><td>Cheeseburger</td><td class="c">8</td><td class="r">32€</td><td class="r">42%</td><td class="c"><span class="tag dog">🐕 Σκυλί</span></td><td class="muted">Ούτε πουλάει ούτε κερδίζει — σκέψου αλλαγή/αφαίρεση.</td></tr>
+          <tr><td>Falafel πίτα</td><td class="c">6</td><td class="r">22€</td><td class="r">48%</td><td class="c"><span class="tag dog">🐕 Σκυλί</span></td><td class="muted">Χαμηλή ζήτηση — αξίζει να μείνει;</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top:22px;display:flex;gap:10px">
+      <a class="btn-secondary btn-sm">🖨️ Εκτύπωση</a>
+      <a class="btn-secondary btn-sm">📅 Αλλαγή περιόδου</a>
+    </div>
+  </div>
+</div>
+
+<div class="preview-flag">PREVIEW — δείγμα δεδομένων</div>
+</body>
+</html>

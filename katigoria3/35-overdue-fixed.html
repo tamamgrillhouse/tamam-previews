@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>3.5 Εκπρόθεσμα πάγια — Preview</title>
+<link rel="stylesheet" href="_shell.css">
+<style>
+.banner{display:flex;align-items:center;gap:13px;padding:13px 18px;border-radius:10px;font-size:14px;font-weight:600;margin-bottom:12px;box-shadow:var(--shadow-sm)}
+.banner.red{background:#fef2f2;border:1px solid #fca5a5;color:#991b1b}
+.banner .x{margin-left:auto;cursor:pointer;color:#b91c1c;font-weight:700;text-decoration:none;font-size:13px;border:1px solid #fca5a5;border-radius:7px;padding:5px 11px;background:#fff}
+.banner .go{color:#b91c1c;font-weight:700;text-decoration:underline}
+.due-tag{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:700}
+.due-tag.over{background:#fee2e2;color:#991b1b}
+.due-tag.today{background:#fef3c7;color:#92400e}
+.due-tag.ok{background:#dcfce7;color:#166534}
+.pay-btn{background:#16a34a;color:#fff;border:none;border-radius:7px;min-height:34px;padding:0 13px;font-size:12.5px;font-weight:700;cursor:pointer}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">TAMAM</div>
+    <div class="sidebar-status"><span class="sidebar-status-led"></span><span>Back-office</span></div>
+  </div>
+  <nav>
+    <div class="nav-group">Επισκόπηση</div>
+    <a class="nav-link active"><span class="nav-ico">🏠</span> Αρχική</a>
+    <div class="nav-group">Χρήματα</div>
+    <a class="nav-link"><span class="nav-ico">💰</span> Έξοδα & Πάγια</a>
+    <a class="nav-link"><span class="nav-ico">📊</span> Αναφορές</a>
+  </nav>
+</aside>
+
+<div class="main-content">
+  <div class="topbar">
+    <div class="topbar-title">🏠 Αρχική</div>
+    <div class="topbar-right"><span>Γιώργος</span><span>Έξοδος</span></div>
+  </div>
+
+  <div class="page-content">
+
+    <!-- THE NEW BANNER (στο υπάρχον banner-area, πάνω-πάνω) -->
+    <div class="banner red">
+      <span style="font-size:18px">🔴</span>
+      <div>ΕΚΠΡΟΘΕΣΜΑ ΠΑΓΙΑ: <b>Ενοίκιο</b> (13 μέρες) & <b>Ρεύμα/Νερό</b> (18 μέρες) — σύνολο <b>1.040€</b> απλήρωτα.
+        <a class="go" href="#list">Δες τα →</a></div>
+      <a class="x">Κατάλαβα ✓</a>
+    </div>
+
+    <div class="page-header">
+      <div class="page-title">Καλημέρα, Γιώργο 👋</div>
+      <div class="page-subtitle">Σήμερα: 28 Ιουνίου 2026</div>
+    </div>
+
+    <div class="info-box">
+      <span class="i">🆕</span>
+      <div>Σήμερα το σύστημα ειδοποιεί μόνο «<b>πληρωμή σε ≤3 μέρες</b>». Προσθέτουμε το αντίθετο: <b>πάγιο που πέρασε η προθεσμία & δεν πληρώθηκε</b> → κόκκινη γραμμή στην Αρχική, για να μη σου ξεφεύγει ΔΕΗ/ενοίκιο.</div>
+    </div>
+
+    <!-- list of recurring expenses -->
+    <div class="section-heading" id="list">Πάγια έξοδα — κατάσταση πληρωμών</div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Πάγιο</th><th class="r">Ποσό</th><th>Συχνότητα</th><th>Προθεσμία</th><th class="c">Κατάσταση</th><th class="c">Ενέργεια</th></tr></thead>
+        <tbody>
+          <tr style="background:#fef2f2"><td><b>Ρεύμα & Νερό (ΔΕΗ)</b></td><td class="r">240,00€</td><td class="muted">Μηνιαίο</td><td>10 Ιουν 2026</td>
+            <td class="c"><span class="due-tag over">🔴 18 μέρες πέρασε</span></td><td class="c"><button class="pay-btn">✓ Πληρώθηκε</button></td></tr>
+          <tr style="background:#fef2f2"><td><b>Ενοίκιο Καταστήματος</b></td><td class="r">800,00€</td><td class="muted">Μηνιαίο</td><td>15 Ιουν 2026</td>
+            <td class="c"><span class="due-tag over">🔴 13 μέρες πέρασε</span></td><td class="c"><button class="pay-btn">✓ Πληρώθηκε</button></td></tr>
+          <tr style="background:#fffbeb"><td>Ασφάλιση</td><td class="r">200,50€</td><td class="muted">Εξαμηνιαίο</td><td>30 Ιουν 2026</td>
+            <td class="c"><span class="due-tag today">🟡 λήγει σε 2 μέρες</span></td><td class="c"><button class="pay-btn">✓ Πληρώθηκε</button></td></tr>
+          <tr><td>Λογιστής</td><td class="r">150,00€</td><td class="muted">Μηνιαίο</td><td>25 Ιουλ 2026</td>
+            <td class="c"><span class="due-tag ok">🟢 εντάξει</span></td><td class="c muted">—</td></tr>
+          <tr><td>Συντήρηση εξοπλισμού</td><td class="r">120,00€</td><td class="muted">Τριμηνιαίο</td><td>15 Αυγ 2026</td>
+            <td class="c"><span class="due-tag ok">🟢 εντάξει</span></td><td class="c muted">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="info-box warn" style="margin-top:20px">
+      <span class="i">💡</span>
+      <div>Πατώντας <b>«✓ Πληρώθηκε»</b> καταχωρείται το έξοδο και η προθεσμία προχωράει στον επόμενο μήνα — η κόκκινη γραμμή φεύγει αυτόματα.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="preview-flag">PREVIEW — δείγμα δεδομένων</div>
+</body>
+</html>

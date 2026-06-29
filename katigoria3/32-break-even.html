@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>3.2 Νεκρό Σημείο — Preview</title>
+<link rel="stylesheet" href="_shell.css">
+<style>
+.be-card{background:#fff;border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow-sm);padding:22px 24px;max-width:560px}
+.be-card .ttl{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:18px}
+.be-big{font-size:40px;font-weight:800;line-height:1;color:var(--text)}
+.be-big small{font-size:17px;font-weight:600;color:var(--text-muted)}
+.be-row{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px;font-size:14px}
+.be-row b{font-size:22px;font-weight:800}
+.be-bar{height:16px;border-radius:10px;background:#f1f5f9;margin:18px 0 6px;overflow:hidden;position:relative}
+.be-bar .fill{height:100%;border-radius:10px;background:linear-gradient(90deg,#22c55e,#16a34a)}
+.be-bar .mark{position:absolute;top:-5px;bottom:-5px;width:3px;background:#1e293b;border-radius:3px}
+.be-bar .mark::after{content:'νεκρό σημείο';position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#1e293b;white-space:nowrap}
+.be-scale{display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)}
+.be-note{margin-top:18px;padding:12px 14px;border-radius:9px;font-size:13px;line-height:1.5;background:#f0fdf4;border:1px solid #86efac;color:#166534}
+.be-mini{font-size:12.5px;color:var(--text-muted);margin-top:12px;line-height:1.6}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">TAMAM</div>
+    <div class="sidebar-status"><span class="sidebar-status-led"></span><span>Back-office</span></div>
+  </div>
+  <nav>
+    <div class="nav-group">Επισκόπηση</div>
+    <a class="nav-link active"><span class="nav-ico">🏠</span> Αρχική</a>
+    <div class="nav-group">Χρήματα</div>
+    <a class="nav-link"><span class="nav-ico">💲</span> Τιμές & Μενού</a>
+    <a class="nav-link"><span class="nav-ico">📊</span> Αναφορές</a>
+    <a class="nav-link"><span class="nav-ico">💰</span> Έξοδα & Κέρδος</a>
+  </nav>
+</aside>
+
+<div class="main-content">
+  <div class="topbar">
+    <div class="topbar-title">🏠 Αρχική</div>
+    <div class="topbar-right"><span>Γιώργος</span><span>Έξοδος</span></div>
+  </div>
+
+  <div class="page-content">
+    <div class="page-header">
+      <div class="page-title">Καλημέρα, Γιώργο 👋</div>
+      <div class="page-subtitle">Η εικόνα του μήνα με μια ματιά — Ιούνιος 2026</div>
+    </div>
+
+    <!-- existing dashboard stats (context) -->
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-label">Τζίρος μήνα</div><div class="stat-value">15.120€</div></div>
+      <div class="stat-card"><div class="stat-label">Έξοδα μήνα</div><div class="stat-value">6.180€</div></div>
+      <div class="stat-card"><div class="stat-label">Κέρδος</div><div class="stat-value" style="color:#16a34a">8.940€</div></div>
+      <div class="stat-card"><div class="stat-label">Μέσο περιθώριο</div><div class="stat-value">59%</div></div>
+    </div>
+
+    <div class="info-box">
+      <span class="i">🆕</span>
+      <div>Η νέα κάρτα <b>«Νεκρό σημείο»</b> προστίθεται στην Αρχική. Σου λέει το πιο αφυπνιστικό νούμερο: <b>πόσο τζίρο τη μέρα χρειάζεσαι για να μη χάνεις</b>.</div>
+    </div>
+
+    <!-- THE NEW CARD -->
+    <div class="be-card">
+      <div class="ttl">🎯 Νεκρό σημείο (break-even)</div>
+      <div class="be-big">312€ <small>/ μέρα</small></div>
+      <div class="be-mini">Τόσο τζίρο χρειάζεσαι κάθε μέρα <b>μόνο για να βγάλεις τα πάγια</b> (ενοίκιο, ρεύμα, μισθοί). Από εκεί και πάνω = κέρδος.</div>
+
+      <div class="be-bar">
+        <div class="fill" style="width:73%"></div>
+        <div class="mark" style="left:58%"></div>
+      </div>
+      <div class="be-scale"><span>0€</span><span>ο φετινός σου μέσος: 540€/μέρα</span></div>
+
+      <div class="be-row"><span>Φετινός μέσος όρος σου</span><b style="color:#16a34a">540€/μέρα ✅</b></div>
+      <div class="be-note">👍 Είσαι <b>228€/μέρα πάνω</b> από το νεκρό σημείο — κάθε μέρα βγάζεις κέρδος. Ακόμη κι αν πέσει ο τζίρος ~42%, δεν μπαίνεις μέσα.</div>
+
+      <div class="be-mini">
+        <b>Πώς βγαίνει:</b> Πάγια μήνα 6.180€ ÷ 30 μέρες = 206€/μέρα σταθερά κόστη · διά μέσο περιθώριο 59% (γιατί κάθε 1€ τζίρου αφήνει 0,59€) → χρειάζεσαι <b>312€</b> τζίρο/μέρα.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="preview-flag">PREVIEW — δείγμα δεδομένων</div>
+</body>
+</html>

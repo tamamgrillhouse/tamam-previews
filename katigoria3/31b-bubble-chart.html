@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>3.1 Μηχανική Μενού — Έκδοση Β' (Διάγραμμα φούσκες)</title>
+<link rel="stylesheet" href="_shell.css">
+<style>
+/* ── bubble chart (bc-*) ── */
+.bc-wrap{display:grid;grid-template-columns:1fr 280px;gap:20px;align-items:start}
+@media(max-width:1000px){.bc-wrap{grid-template-columns:1fr}}
+.bc-chart-card{background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow-sm);padding:18px 20px 14px}
+.bc-plot-row{display:flex;gap:10px}
+.bc-yaxis{display:flex;flex-direction:column;justify-content:space-between;align-items:flex-end;font-size:10.5px;color:var(--text-muted);padding:4px 0 22px;width:34px;text-align:right}
+.bc-ylabel{writing-mode:vertical-rl;transform:rotate(180deg);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);display:flex;align-items:center}
+.bc-plot{position:relative;flex:1;height:420px;border-left:2px solid var(--border);border-bottom:2px solid var(--border);
+  background:
+    linear-gradient(0deg,rgba(0,0,0,.03) 1px,transparent 1px) 0 0/100% 25%,
+    linear-gradient(90deg,rgba(0,0,0,.03) 1px,transparent 1px) 0 0/25% 100%;}
+/* quadrant tints */
+.bc-quad{position:absolute;width:50%;height:50%;opacity:.5;pointer-events:none}
+.bc-quad.tl{top:0;left:0;background:linear-gradient(135deg,#eff6ff,transparent)}
+.bc-quad.tr{top:0;right:0;background:linear-gradient(225deg,#dcfce7,transparent)}
+.bc-quad.bl{bottom:0;left:0;background:linear-gradient(45deg,#fee2e2,transparent)}
+.bc-quad.br{bottom:0;right:0;background:linear-gradient(315deg,#fef3c7,transparent)}
+.bc-qlabel{position:absolute;font-size:12px;font-weight:800;opacity:.55;pointer-events:none}
+.bc-qlabel.tl{top:10px;left:12px;color:#1e40af}.bc-qlabel.tr{top:10px;right:12px;color:#166534}
+.bc-qlabel.bl{bottom:26px;left:12px;color:#991b1b}.bc-qlabel.br{bottom:26px;right:12px;color:#92400e}
+/* avg crosshair */
+.bc-avg-x{position:absolute;top:0;bottom:0;width:2px;background:repeating-linear-gradient(0deg,#475569,#475569 4px,transparent 4px,transparent 8px);left:50%}
+.bc-avg-y{position:absolute;left:0;right:0;height:2px;background:repeating-linear-gradient(90deg,#475569,#475569 4px,transparent 4px,transparent 8px);bottom:50%}
+.bc-avg-tag{position:absolute;font-size:9.5px;font-weight:700;color:#475569;background:#fff;padding:1px 5px;border-radius:4px;border:1px solid var(--border)}
+/* bubbles */
+.bub{position:absolute;border-radius:50%;transform:translate(-50%,50%);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.18);border:2px solid rgba(255,255,255,.7);transition:transform .12s}
+.bub:hover{transform:translate(-50%,50%) scale(1.12);z-index:5}
+.bub.star{background:#16a34a}.bub.horse{background:#f59e0b}.bub.puzzle{background:#3b82f6}.bub.dog{background:#ef4444}
+.bub .lab{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:4px;background:#1e293b;color:#fff;font-size:10px;font-weight:600;white-space:nowrap;padding:3px 7px;border-radius:5px;opacity:0;pointer-events:none;transition:opacity .12s}
+.bub:hover .lab{opacity:1}
+.bc-xaxis{display:flex;justify-content:space-between;font-size:10.5px;color:var(--text-muted);margin:6px 0 2px 44px}
+.bc-xlabel{text-align:center;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin:8px 0 0 44px}
+/* side panel */
+.bc-side .leg{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px}
+.bc-side .leg:last-child{border-bottom:none}
+.bc-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0}
+.bc-dot.star{background:#16a34a}.bc-dot.horse{background:#f59e0b}.bc-dot.puzzle{background:#3b82f6}.bc-dot.dog{background:#ef4444}
+.bc-side .leg b{margin-left:auto}
+.bc-size-note{font-size:11.5px;color:var(--text-muted);line-height:1.5;margin-top:14px;padding-top:14px;border-top:1px dashed var(--border)}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">TAMAM</div>
+    <div class="sidebar-status"><span class="sidebar-status-led"></span><span>Back-office</span></div>
+  </div>
+  <nav>
+    <div class="nav-group">Επισκόπηση</div>
+    <a class="nav-link"><span class="nav-ico">🏠</span> Αρχική</a>
+    <div class="nav-group">Χρήματα</div>
+    <a class="nav-link"><span class="nav-ico">💲</span> Τιμές & Μενού</a>
+    <a class="nav-link active"><span class="nav-ico">⭐</span> Μηχανική Μενού</a>
+    <a class="nav-link"><span class="nav-ico">📊</span> Αναφορές</a>
+  </nav>
+</aside>
+
+<div class="main-content">
+  <div class="topbar">
+    <div class="topbar-title">⭐ Μηχανική Μενού — Έκδοση Β'</div>
+    <div class="topbar-right"><span>Γιώργος</span><span>Έξοδος</span></div>
+  </div>
+
+  <div class="page-content">
+    <div class="page-header">
+      <div class="page-title">⭐ Μηχανική Μενού <span class="badge badge-blue" style="vertical-align:middle">Έκδοση Β' · Διάγραμμα</span></div>
+      <div class="page-subtitle">Κάθε πιάτο = μία φούσκα. Θέση = πόσο πουλάει & πόσο κερδίζει · μέγεθος φούσκας = τζίρος. (1–30 Ιουνίου 2026)</div>
+    </div>
+
+    <div class="info-box">
+      <span class="i">💡</span>
+      <div>Πιο «αναλυτική» εικόνα: βλέπεις με μια ματιά <b>πόσο μακριά</b> είναι κάθε πιάτο από τον μέσο όρο (διακεκομμένος σταυρός) και <b>πόσο μεγάλο</b> είναι σε τζίρο. Πάνε το ποντίκι πάνω σε μια φούσκα για όνομα.</div>
+    </div>
+
+    <div class="bc-wrap">
+      <div class="bc-chart-card">
+        <div class="bc-plot-row">
+          <div class="bc-ylabel">Κέρδος (περιθώριο %) →</div>
+          <div class="bc-yaxis"><span>80%</span><span>60%</span><span>40%</span><span>20%</span></div>
+          <div class="bc-plot">
+            <div class="bc-quad tl"></div><div class="bc-quad tr"></div><div class="bc-quad bl"></div><div class="bc-quad br"></div>
+            <div class="bc-qlabel tl">🧩 Γρίφοι</div><div class="bc-qlabel tr">⭐ Αστέρια</div>
+            <div class="bc-qlabel bl">🐕 Σκυλιά</div><div class="bc-qlabel br">🐎 Άλογα</div>
+            <div class="bc-avg-x"></div><div class="bc-avg-y"></div>
+            <div class="bc-avg-tag" style="left:50%;top:4px;transform:translateX(-50%)">μέσος όγκος</div>
+            <div class="bc-avg-tag" style="bottom:50%;left:4px;transform:translateY(50%)">μέσο %</div>
+
+            <!-- bubbles: left% = popularity, bottom% = margin, size = revenue -->
+            <div class="bub star"  style="left:92%;bottom:78%;width:56px;height:56px"><span class="lab">Σουβλάκι Χοιρ. Πίτα · 312τεμ · 76%</span>Σουβ.</div>
+            <div class="bub star"  style="left:74%;bottom:73%;width:60px;height:60px"><span class="lab">Γύρος Χοιρ. Αραβ. · 188τεμ · 73%</span>Γύρ.</div>
+            <div class="bub star"  style="left:60%;bottom:74%;width:42px;height:42px"><span class="lab">Ντόνερ Λαβάς · 96τεμ · 74%</span>Ντόν.</div>
+            <div class="bub star"  style="left:55%;bottom:73%;width:40px;height:40px"><span class="lab">Κεμπαπάκι Μερίδα · 74τεμ · 73%</span>Κεμπ.</div>
+            <div class="bub horse" style="left:80%;bottom:38%;width:44px;height:44px"><span class="lab">Coca-Cola 500ml · 210τεμ · 38%</span>Coca</div>
+            <div class="bub horse" style="left:66%;bottom:45%;width:46px;height:46px"><span class="lab">Πατάτες Λαβάς · 142τεμ · 45%</span>Πατ.</div>
+            <div class="bub horse" style="left:58%;bottom:40%;width:36px;height:36px"><span class="lab">Αλφα 330ml · 98τεμ · 40%</span>Αλφα</div>
+            <div class="bub puzzle" style="left:22%;bottom:70%;width:34px;height:34px"><span class="lab">Σνίτσελ Κοτ. XXL · 12τεμ · 70%</span>Σνίτ.</div>
+            <div class="bub puzzle" style="left:16%;bottom:68%;width:30px;height:30px"><span class="lab">Σαλάτα Caesar's · 9τεμ · 68%</span>Caes.</div>
+            <div class="bub puzzle" style="left:13%;bottom:66%;width:28px;height:28px"><span class="lab">Καλαμαράκι Λαβάς · 7τεμ · 66%</span>Καλ.</div>
+            <div class="bub dog"   style="left:14%;bottom:42%;width:26px;height:26px"><span class="lab">Cheeseburger · 8τεμ · 42%</span>Chs.</div>
+            <div class="bub dog"   style="left:10%;bottom:48%;width:24px;height:24px"><span class="lab">Falafel πίτα · 6τεμ · 48%</span>Fal.</div>
+          </div>
+        </div>
+        <div class="bc-xaxis"><span>λίγα</span><span>μέσος όγκος</span><span>πολλά</span></div>
+        <div class="bc-xlabel">Δημοτικότητα (τεμάχια που πούλησε) →</div>
+      </div>
+
+      <div class="bc-side">
+        <div class="card" style="padding:18px 20px">
+          <div class="section-heading" style="margin-bottom:12px">Σύνοψη</div>
+          <div class="leg"><span class="bc-dot star"></span> ⭐ Αστέρια <b>4</b></div>
+          <div class="leg"><span class="bc-dot horse"></span> 🐎 Άλογα <b>3</b></div>
+          <div class="leg"><span class="bc-dot puzzle"></span> 🧩 Γρίφοι <b>3</b></div>
+          <div class="leg"><span class="bc-dot dog"></span> 🐕 Σκυλιά <b>2</b></div>
+          <div class="bc-size-note">⭕ Όσο <b>μεγαλύτερη</b> η φούσκα, τόσο μεγαλύτερος ο <b>τζίρος</b> του πιάτου.<br>✛ Ο διακεκομμένος σταυρός = ο μέσος όρος του μενού σου.</div>
+        </div>
+
+        <div class="info-box good" style="margin-top:14px">
+          <span class="i">✅</span>
+          <div>Οι μεγάλες πράσινες φούσκες πάνω-δεξιά (Σουβλάκι, Γύρος) κρατούν την επιχείρηση. Στόχος: <b>σπρώξε τις μικρές μπλε (Γρίφοι) δεξιά</b>.</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:22px;display:flex;gap:10px">
+      <a class="btn-secondary btn-sm">📋 Δες & ως πίνακα</a>
+      <a class="btn-secondary btn-sm">📅 Αλλαγή περιόδου</a>
+    </div>
+  </div>
+</div>
+
+<div class="preview-flag">PREVIEW — δείγμα δεδομένων</div>
+</body>
+</html>
