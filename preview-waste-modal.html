@@ -86,6 +86,18 @@
   .li-sub{font-size:11px;color:var(--muted);margin-top:2px}
   .li-right{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:7px}
   .li-grms{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end;max-width:230px}
+  .more-btn{display:flex;align-items:center;gap:8px;width:100%;margin-top:14px;background:var(--card);
+    border:1px dashed var(--border);border-radius:var(--r-card);padding:13px;color:var(--muted);
+    font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit}
+  .more-btn .chev{margin-left:auto;transition:transform .2s;font-size:16px}
+  .more-btn.open{color:var(--yellow);border-color:rgba(245,200,66,.4)}
+  .more-btn.open .chev{transform:rotate(180deg)}
+  .more-grp{display:none}
+  .more-grp.show{display:block;animation:slidein .18s ease}
+  @keyframes slidein{from{opacity:0;transform:translateY(-4px)}to{opacity:1}}
+  .more-lbl{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin:14px 0 2px;font-weight:700}
+  .chosen-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;
+    background:rgba(56,217,122,.16);color:var(--green);padding:3px 10px;border-radius:20px;margin-left:8px;vertical-align:middle}
 
   /* ===== P2 tiles ===== */
   .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
@@ -163,8 +175,8 @@
   <div class="prop">
     <div class="prop-head">
       <div class="prop-num">1</div>
-      <div><div class="prop-title">Κάθετη Λίστα</div>
-        <div class="prop-when">Όλα τα είδη σε μια λίστα. Κατεβαίνεις και βάζεις ποσότητα όπου χρειάζεται.</div></div>
+      <div><div class="prop-title">Κάθετη Λίστα <span class="chosen-badge">✓ Η επιλογή σου</span></div>
+        <div class="prop-when">Τα συχνά κρεατικά πάνω. Τα vegan/σπάνια κρυμμένα κάτω από «➕ Άλλα είδη» — πάτα το για να ανοίξουν.</div></div>
     </div>
     <div class="pc-tags">
       <span class="pc-tag t-pro">✓ Τα βλέπεις όλα μαζί</span>
@@ -294,18 +306,23 @@ const GRAMS  = [100,200,300,500];
 const countItems = obj => Object.values(obj).filter(v=>v>0).length;
 const tot = (id,obj)=>{ const n=countItems(obj); document.getElementById(id).textContent = n? (n+(n===1?' είδος':' είδη')) : '0 είδη'; };
 
-/* ============ P1: list ============ */
+/* ============ P1: list (frequent + collapsible vegan) ============ */
 (()=>{
   const body=document.getElementById('p1body'); const st={};
-  let html='';
-  PIECES.forEach(n=>{ st[n]=0;
-    html+=`<div class="li"><div><div class="li-name">${n} <span class="unit-pill u-pc">τεμ</span></div></div>
-      <div class="li-right"><div class="stepper" data-n="${n}"><button data-d="-1">−</button><span class="v zero" data-v>0</span><button data-d="1">+</button></div></div></div>`; });
-  BULK.forEach(n=>{ st[n]=0;
-    html+=`<div class="li"><div><div class="li-name">${n} <span class="unit-pill u-gr">γρ</span></div></div>
-      <div class="li-right li-grms" data-n="${n}">${GRAMS.map(g=>`<span class="gchip" data-g="${g}">${g}γρ</span>`).join('')}<input class="gnum" inputmode="numeric" placeholder="γρ" data-manual></div></div>`; });
-  body.innerHTML=html;
+  const VEG=['Μπιφτέκι Λαχ.','Φαλάφελ','Καλαμαράκι'];                 // frequent:false → κρυμμένα
+  const MEAT=PIECES.filter(n=>!VEG.includes(n));                      // frequent → πάνω
+  const pcRow = n => `<div class="li"><div><div class="li-name">${n} <span class="unit-pill u-pc">τεμ</span></div></div>
+      <div class="li-right"><div class="stepper" data-n="${n}"><button data-d="-1">−</button><span class="v zero" data-v>0</span><button data-d="1">+</button></div></div></div>`;
+  const grRow = n => `<div class="li"><div><div class="li-name">${n} <span class="unit-pill u-gr">γρ</span></div></div>
+      <div class="li-right li-grms" data-n="${n}">${GRAMS.map(g=>`<span class="gchip" data-g="${g}">${g}γρ</span>`).join('')}<input class="gnum" inputmode="numeric" placeholder="γρ" data-manual></div></div>`;
+  [...MEAT,...BULK,...VEG].forEach(n=>st[n]=0);
+  body.innerHTML =
+    MEAT.map(pcRow).join('') +
+    BULK.map(grRow).join('') +
+    `<button class="more-btn" id="p1more"><span>➕ Άλλα είδη</span><span style="font-size:11px;opacity:.7">vegan / σπάνια · ${VEG.length}</span><span class="chev">⌄</span></button>` +
+    `<div class="more-grp" id="p1moregrp"><div class="more-lbl">Λιγότερο συχνά</div>` + VEG.map(pcRow).join('') + `</div>`;
   body.addEventListener('click',e=>{
+    const mb=e.target.closest('.more-btn'); if(mb){ mb.classList.toggle('open'); document.getElementById('p1moregrp').classList.toggle('show'); return; }
     const s=e.target.closest('.stepper'); if(s){ const d=+e.target.dataset.d; if(!d)return; const n=s.dataset.n;
       st[n]=Math.max(0,st[n]+d); const v=s.querySelector('[data-v]'); v.textContent=st[n]; v.classList.toggle('zero',st[n]===0); tot('p1tot',st); }
     const g=e.target.closest('.gchip'); if(g){ const row=g.closest('.li-grms'); const n=row.dataset.n;
