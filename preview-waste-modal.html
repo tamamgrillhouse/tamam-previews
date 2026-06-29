@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>TAMAM — Φύρα: 5 προτάσεις Modal</title>
+<style>
+  :root{
+    --black:#0d0f14; --dark:#141a33; --card:#1c2554; --card2:#222c5e;
+    --yellow:#f5c842; --white:#eef1f8; --muted:#8b93b8;
+    --red:#e05a5a; --green:#38d97a; --orange:#e8923a; --border:#2a3580;
+    --r:16px; --r-sm:10px; --r-card:8px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{
+    font-family:'Segoe UI','Noto Sans',system-ui,sans-serif;
+    background:radial-gradient(ellipse at top,#1a1f3a,var(--black) 70%);
+    color:var(--white); min-height:100vh; padding:24px 14px 70px; line-height:1.5;
+  }
+  .wrap{max-width:760px;margin:0 auto}
+  .logo{font-size:25px;font-weight:800;letter-spacing:.5px;display:flex;align-items:center;gap:10px}
+  .logo .tag{font-size:10px;background:var(--yellow);color:#1a1206;padding:3px 9px;border-radius:20px;font-weight:800}
+  .lead{color:var(--muted);margin-top:12px;font-size:14px;line-height:1.65}
+  .lead b{color:var(--white)}
+  .howsend{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--yellow);
+    border-radius:var(--r-card);padding:13px 15px;margin-top:16px;font-size:13px;color:var(--muted);line-height:1.7}
+  .howsend b{color:var(--yellow)}
+
+  /* proposal block */
+  .prop{margin-top:34px}
+  .prop-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:6px}
+  .prop-num{flex-shrink:0;width:34px;height:34px;border-radius:10px;background:var(--yellow);color:#1a1206;
+    font-weight:800;font-size:17px;display:flex;align-items:center;justify-content:center}
+  .prop-title{font-size:18px;font-weight:750}
+  .prop-when{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .pc-tags{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0 46px}
+  .pc-tag{font-size:11px;font-weight:650;padding:4px 9px;border-radius:7px;display:inline-flex;gap:5px;align-items:center}
+  .t-pro{background:rgba(56,217,122,.13);color:var(--green)}
+  .t-con{background:rgba(224,90,90,.13);color:var(--red)}
+
+  /* modal mockup shell */
+  .modal{margin-top:14px;background:var(--dark);border:1px solid var(--border);border-radius:var(--r);
+    overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.45)}
+  .m-head{display:flex;align-items:center;gap:10px;padding:15px 16px;border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg,rgba(245,200,66,.06),transparent)}
+  .m-head .ico{font-size:20px}
+  .m-head .ht{font-weight:750;font-size:16px}
+  .m-head .hs{font-size:11.5px;color:var(--muted)}
+  .m-x{margin-left:auto;width:32px;height:32px;border-radius:8px;background:var(--card2);border:1px solid var(--border);
+    color:var(--muted);font-size:16px;display:flex;align-items:center;justify-content:center}
+  .m-body{padding:14px 16px;max-height:430px;overflow-y:auto}
+  .m-foot{display:flex;gap:10px;padding:13px 16px;border-top:1px solid var(--border);align-items:center}
+  .m-total{font-weight:750;font-size:14px}
+  .m-total span{color:var(--yellow)}
+  .btn{flex:1;border:none;border-radius:var(--r-sm);padding:13px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
+  .btn-save{background:linear-gradient(135deg,#28c96e,#4de891);color:#08150c}
+  .btn-cancel{flex:0 0 auto;background:transparent;border:1px solid var(--border);color:var(--muted);padding:13px 18px}
+
+  /* generic item bits */
+  .unit-pill{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;letter-spacing:.3px}
+  .u-pc{background:rgba(74,158,240,.16);color:#6fb4f5}
+  .u-gr{background:rgba(232,146,58,.18);color:var(--orange)}
+  .stepper{display:flex;align-items:center;gap:0;background:var(--black);border:1px solid var(--border);border-radius:9px;overflow:hidden}
+  .stepper button{width:38px;height:38px;border:none;background:transparent;color:var(--white);font-size:20px;font-weight:700;cursor:pointer}
+  .stepper button:active{background:var(--card2)}
+  .stepper .v{min-width:42px;text-align:center;font-weight:750;font-size:16px}
+  .stepper .v.zero{color:var(--muted);font-weight:500}
+  .gchip{font-size:12.5px;font-weight:700;padding:7px 11px;border-radius:8px;background:var(--black);
+    border:1px solid var(--border);color:var(--muted);cursor:pointer}
+  .gchip.on{background:rgba(232,146,58,.16);border-color:var(--orange);color:var(--orange)}
+  .gnum{width:74px;background:var(--black);border:1px solid var(--border);border-radius:8px;color:var(--white);
+    padding:8px;font-size:14px;text-align:center;font-family:inherit}
+  .gnum::placeholder{color:#4a5480}
+  .reason{display:flex;gap:5px;flex-wrap:wrap}
+  .rchip{font-size:11px;font-weight:650;padding:5px 10px;border-radius:20px;background:var(--black);
+    border:1px solid var(--border);color:var(--muted);cursor:pointer}
+  .rchip.on{background:rgba(245,200,66,.14);border-color:var(--yellow);color:var(--yellow)}
+
+  .footnote{margin-top:8px;font-size:11px;color:#566087}
+
+  /* ===== P1 list ===== */
+  .li{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid rgba(42,53,128,.5)}
+  .li:last-child{border-bottom:none}
+  .li-name{font-weight:650;font-size:15px;display:flex;align-items:center;gap:7px}
+  .li-sub{font-size:11px;color:var(--muted);margin-top:2px}
+  .li-right{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:7px}
+  .li-grms{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end;max-width:230px}
+
+  /* ===== P2 tiles ===== */
+  .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+  @media(max-width:560px){.tiles{grid-template-columns:repeat(2,1fr)}}
+  .tile{position:relative;background:var(--card);border:1px solid var(--border);border-radius:var(--r-card);
+    padding:14px 8px;text-align:center;cursor:pointer;transition:transform .1s,border-color .1s}
+  .tile:active{transform:scale(.96)}
+  .tile.has{border-color:var(--yellow);background:rgba(245,200,66,.07)}
+  .tile .tn{font-weight:700;font-size:13.5px}
+  .tile .tu{font-size:10px;color:var(--muted);margin-top:3px}
+  .tile .badge{position:absolute;top:-7px;right:-7px;min-width:24px;height:24px;border-radius:14px;
+    background:var(--yellow);color:#1a1206;font-size:12px;font-weight:800;display:none;align-items:center;justify-content:center;padding:0 5px}
+  .tile.has .badge{display:flex}
+  .tile.gr.has .badge{background:var(--orange);color:#1a1206}
+  .gpanel{margin-top:12px;background:var(--black);border:1px solid var(--orange);border-radius:var(--r-card);padding:13px;display:none}
+  .gpanel.show{display:block}
+  .gpanel-h{font-size:13px;font-weight:700;margin-bottom:10px;color:var(--orange)}
+
+  /* ===== P3 builder ===== */
+  .addrow{display:flex;gap:8px;align-items:center;background:var(--card);border:1px dashed var(--border);
+    border-radius:var(--r-card);padding:11px;flex-wrap:wrap}
+  .sel{flex:1;min-width:130px;background:var(--black);border:1px solid var(--border);border-radius:8px;
+    color:var(--white);padding:10px;font-size:13.5px;font-family:inherit}
+  .addbtn{background:var(--yellow);color:#1a1206;border:none;border-radius:8px;padding:10px 15px;font-weight:750;font-size:13px;cursor:pointer}
+  .bline{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);
+    border-radius:var(--r-card);padding:11px 13px;margin-top:9px}
+  .bline .bn{font-weight:650;font-size:14px}
+  .bline .bq{margin-left:auto;font-weight:750;color:var(--yellow);font-size:15px}
+  .bline .bx{width:30px;height:30px;border-radius:7px;background:var(--black);border:1px solid var(--border);
+    color:var(--red);font-size:15px;cursor:pointer}
+  .b-empty{text-align:center;color:var(--muted);font-size:13px;padding:22px 10px;font-style:normal;opacity:.6}
+
+  /* ===== P4 tabs ===== */
+  .tabs{display:flex;gap:8px;margin-bottom:14px}
+  .tab{flex:1;background:var(--card);border:1px solid var(--border);border-radius:9px;padding:11px;
+    font-weight:700;font-size:13.5px;color:var(--muted);cursor:pointer;text-align:center}
+  .tab.on{background:rgba(245,200,66,.13);border-color:var(--yellow);color:var(--yellow)}
+  .tab .tc{font-size:10.5px;opacity:.8;display:block;font-weight:600}
+  .pane{display:none}
+  .pane.on{display:block}
+
+  /* ===== P5 quick counter ===== */
+  .qgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media(max-width:560px){.qgrid{grid-template-columns:1fr}}
+  .qbtn{position:relative;background:var(--card);border:1px solid var(--border);border-radius:var(--r-sm);
+    padding:16px 14px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:transform .08s}
+  .qbtn:active{transform:scale(.97);border-color:var(--yellow)}
+  .qbtn .qn{font-weight:750;font-size:15px}
+  .qbtn .qstep{font-size:11px;color:var(--muted);margin-top:2px}
+  .qbtn .qv{margin-left:auto;font-weight:800;font-size:22px;color:var(--muted);min-width:46px;text-align:right}
+  .qbtn.has{border-color:var(--yellow);background:rgba(245,200,66,.06)}
+  .qbtn.has .qv{color:var(--yellow)}
+  .qminus{width:34px;height:34px;border-radius:8px;background:var(--black);border:1px solid var(--border);
+    color:var(--red);font-size:18px;font-weight:700;cursor:pointer;flex-shrink:0}
+  .qhint{font-size:11.5px;color:var(--muted);text-align:center;margin-top:12px;line-height:1.6}
+
+  /* recommendation */
+  .reco{margin-top:40px;background:linear-gradient(135deg,rgba(56,217,122,.1),rgba(245,200,66,.06));
+    border:1px solid rgba(56,217,122,.35);border-radius:var(--r);padding:20px}
+  .reco h3{font-size:16px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+  .reco p{font-size:13.5px;color:#c5cce8;line-height:1.7}
+  .reco b{color:var(--white)}
+  .foot{margin-top:34px;font-size:11px;color:var(--muted);text-align:center;line-height:1.7;border-top:1px solid var(--border);padding-top:16px}
+  .back{display:inline-block;margin-bottom:18px;color:var(--yellow);text-decoration:none;font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">‹ Πίσω στα previews</a>
+  <div class="logo">🔥 TAMAM <span class="tag">ΦΥΡΑ — MOCKUPS</span></div>
+  <p class="lead">5 προτάσεις για το <b>modal καταγραφής φύρας</b> στο κλείσιμο βάρδιας. Όλα είναι ζωντανά — <b>δοκίμασέ τα με το δάχτυλο</b> (κουμπιά, στεπάκια, γραμμάρια). Διάλεξε αυτό που σου φαίνεται πιο γρήγορο για τον υπάλληλο τα βράδια.</p>
+  <div class="howsend">📦 Και στις 5 προτάσεις τα δεδομένα φεύγουν <b>ίδια</b> στο back-office (είδος + ποσότητα + μονάδα). Αλλάζει <b>μόνο ο τρόπος που τα βάζει</b> ο υπάλληλος. <span style="color:#6fb4f5">μπλε = τεμάχια</span> · <span style="color:var(--orange)">πορτοκαλί = γραμμάρια (χύμα)</span>.</div>
+
+  <!-- ============ P1 ============ -->
+  <div class="prop">
+    <div class="prop-head">
+      <div class="prop-num">1</div>
+      <div><div class="prop-title">Κάθετη Λίστα</div>
+        <div class="prop-when">Όλα τα είδη σε μια λίστα. Κατεβαίνεις και βάζεις ποσότητα όπου χρειάζεται.</div></div>
+    </div>
+    <div class="pc-tags">
+      <span class="pc-tag t-pro">✓ Τα βλέπεις όλα μαζί</span>
+      <span class="pc-tag t-pro">✓ Οικείο & απλό</span>
+      <span class="pc-tag t-con">✗ Μεγάλη λίστα = scroll</span>
+    </div>
+    <div class="modal" data-p="1">
+      <div class="m-head"><span class="ico">🔥</span><div><div class="ht">Φύρα Βάρδιας</div><div class="hs">Τι έμεινε & πάει για πέταμα</div></div><div class="m-x">✕</div></div>
+      <div class="m-body" id="p1body"></div>
+      <div class="m-foot"><div class="m-total">Σύνολο: <span id="p1tot">0 είδη</span></div><button class="btn btn-save">Καταχώρηση</button></div>
+    </div>
+  </div>
+
+  <!-- ============ P2 ============ -->
+  <div class="prop">
+    <div class="prop-head">
+      <div class="prop-num">2</div>
+      <div><div class="prop-title">Πλακάκια (tap)</div>
+        <div class="prop-when">Σαν το μέτρημα ταμείου. Τσιμπάς το πλακάκι → +1. Ο γύρος ανοίγει μικρό πάνελ γραμμαρίων.</div></div>
+    </div>
+    <div class="pc-tags">
+      <span class="pc-tag t-pro">✓ Πολύ γρήγορο</span>
+      <span class="pc-tag t-pro">✓ Ίδιο με το ταμείο (το ξέρουν)</span>
+      <span class="pc-tag t-con">✗ Λάθος tap = +1 κατά λάθος</span>
+    </div>
+    <div class="modal" data-p="2">
+      <div class="m-head"><span class="ico">🔥</span><div><div class="ht">Φύρα Βάρδιας</div><div class="hs">Τσίμπα το είδος που πετάχτηκε</div></div><div class="m-x">✕</div></div>
+      <div class="m-body">
+        <div class="tiles" id="p2tiles"></div>
+        <div class="gpanel" id="p2panel">
+          <div class="gpanel-h" id="p2ph">Γύρος — πόσα γραμμάρια;</div>
+          <div class="reason" style="gap:7px" id="p2gchips"></div>
+        </div>
+      </div>
+      <div class="m-foot"><div class="m-total">Σύνολο: <span id="p2tot">0 είδη</span></div><button class="btn btn-save">Καταχώρηση</button></div>
+    </div>
+  </div>
+
+  <!-- ============ P3 ============ -->
+  <div class="prop">
+    <div class="prop-head">
+      <div class="prop-num">3</div>
+      <div><div class="prop-title">Πρόσθεσε Γραμμή</div>
+        <div class="prop-when">Ξεκινά άδειο. «+ Πρόσθεσε» → διάλεξε είδος → ποσότητα. Ίδιο με τα έξοδα ταμείου (paid-outs).</div></div>
+    </div>
+    <div class="pc-tags">
+      <span class="pc-tag t-pro">✓ Καθαρό όταν είναι λίγα</span>
+      <span class="pc-tag t-pro">✓ Ίδιο με «Ταμείο»</span>
+      <span class="pc-tag t-con">✗ Πιο αργό αν είναι πολλά είδη</span>
+    </div>
+    <div class="modal" data-p="3">
+      <div class="m-head"><span class="ico">🔥</span><div><div class="ht">Φύρα Βάρδιας</div><div class="hs">Πρόσθεσε ό,τι πετάχτηκε</div></div><div class="m-x">✕</div></div>
+      <div class="m-body">
+        <div class="addrow">
+          <select class="sel" id="p3sel"></select>
+          <input class="gnum" id="p3qty" style="width:84px" inputmode="numeric" placeholder="ποσότ.">
+          <button class="addbtn" id="p3add">+ Πρόσθεσε</button>
+        </div>
+        <div id="p3lines"><div class="b-empty">Καμία γραμμή ακόμη — πρόσθεσε παραπάνω αν πετάχτηκε κάτι.</div></div>
+      </div>
+      <div class="m-foot"><div class="m-total">Σύνολο: <span id="p3tot">0 είδη</span></div><button class="btn btn-save">Καταχώρηση</button></div>
+    </div>
+  </div>
+
+  <!-- ============ P4 ============ -->
+  <div class="prop">
+    <div class="prop-head">
+      <div class="prop-num">4</div>
+      <div><div class="prop-title">Δύο Καρτέλες: Τεμάχια | Χύμα</div>
+        <div class="prop-when">Χωρισμένα ανά μονάδα. Μία καρτέλα για τεμάχια (στεπάκια), μία για γύρο/ντόνερ (γραμμάρια).</div></div>
+    </div>
+    <div class="pc-tags">
+      <span class="pc-tag t-pro">✓ Ξεκάθαρος διαχωρισμός</span>
+      <span class="pc-tag t-pro">✓ Καθαρή οθόνη</span>
+      <span class="pc-tag t-con">✗ 2 καρτέλες = 1 παραπάνω tap</span>
+    </div>
+    <div class="modal" data-p="4">
+      <div class="m-head"><span class="ico">🔥</span><div><div class="ht">Φύρα Βάρδιας</div><div class="hs">Τεμάχια & χύμα ξεχωριστά</div></div><div class="m-x">✕</div></div>
+      <div class="m-body">
+        <div class="tabs">
+          <div class="tab on" data-tab="pc">🍢 Τεμάχια<span class="tc">κομμάτια</span></div>
+          <div class="tab" data-tab="gr">🥙 Χύμα<span class="tc">γραμμάρια</span></div>
+        </div>
+        <div class="pane on" id="p4pc"></div>
+        <div class="pane" id="p4gr"></div>
+      </div>
+      <div class="m-foot"><div class="m-total">Σύνολο: <span id="p4tot">0 είδη</span></div><button class="btn btn-save">Καταχώρηση</button></div>
+    </div>
+  </div>
+
+  <!-- ============ P5 ============ -->
+  <div class="prop">
+    <div class="prop-head">
+      <div class="prop-num">5</div>
+      <div><div class="prop-title">Γρήγορος Μετρητής</div>
+        <div class="prop-when">Μεγάλα κουμπιά. Κάθε πάτημα: τεμάχιο +1, γύρος +100γρ. Το «–» διορθώνει. Για βιαστικά βράδια.</div></div>
+    </div>
+    <div class="pc-tags">
+      <span class="pc-tag t-pro">✓ Πιο γρήγορο με το ένα χέρι</span>
+      <span class="pc-tag t-pro">✓ Τεράστια κουμπιά</span>
+      <span class="pc-tag t-con">✗ Γραμμάρια μόνο σε βήματα 100</span>
+    </div>
+    <div class="modal" data-p="5">
+      <div class="m-head"><span class="ico">🔥</span><div><div class="ht">Φύρα Βάρδιας</div><div class="hs">Πάτα να μετρήσεις</div></div><div class="m-x">✕</div></div>
+      <div class="m-body">
+        <div class="qgrid" id="p5grid"></div>
+        <div class="qhint">Πάτημα στο κουμπί = +1 (ή +100γρ για χύμα). Το κόκκινο «–» αφαιρεί.</div>
+      </div>
+      <div class="m-foot"><div class="m-total">Σύνολο: <span id="p5tot">0 είδη</span></div><button class="btn btn-save">Καταχώρηση</button></div>
+    </div>
+  </div>
+
+  <!-- recommendation -->
+  <div class="reco">
+    <h3>💡 Η πρότασή μου</h3>
+    <p>Για το <b>κλείσιμο βάρδιας</b> (βιασύνη, κουρασμένος υπάλληλος) θα έλεγα <b>Πρόταση 2 (Πλακάκια)</b> ή <b>Πρόταση 5 (Μετρητής)</b> — είναι τα πιο γρήγορα και μοιάζουν με κάτι που ήδη ξέρει (το μέτρημα ταμείου). Η <b>Πρόταση 4</b> είναι η πιο «τακτική» αν θες ξεκάθαρο διαχωρισμό τεμαχίων/γραμμαρίων. Η <b>Πρόταση 3</b> ταιριάζει αν συνήθως πετιούνται 2-3 πράγματα μόνο. Πες μου ποιο σου κάθεται καλύτερα — ή συνδυασμό (π.χ. «το 2, αλλά με τα γραμμάρια του 5»).</p>
+  </div>
+
+  <div class="foot">TAMAM Grill House · ιδιωτικό mockup · μη ευρετηριάσιμο · καμία πραγματική αποστολή δεδομένων</div>
+</div>
+
+<script>
+/* ---- shared data ---- */
+const PIECES = ['Κεμπαπάκι','Σουβλάκι','Μπιφτέκι Λαχ.','Φιλέτο','Πανσέτα','Λουκάνικο','Φαλάφελ','Καλαμαράκι'];
+const BULK   = ['Γύρος','Ντόνερ'];
+const GRAMS  = [100,200,300,500];
+const countItems = obj => Object.values(obj).filter(v=>v>0).length;
+const tot = (id,obj)=>{ const n=countItems(obj); document.getElementById(id).textContent = n? (n+(n===1?' είδος':' είδη')) : '0 είδη'; };
+
+/* ============ P1: list ============ */
+(()=>{
+  const body=document.getElementById('p1body'); const st={};
+  let html='';
+  PIECES.forEach(n=>{ st[n]=0;
+    html+=`<div class="li"><div><div class="li-name">${n} <span class="unit-pill u-pc">τεμ</span></div></div>
+      <div class="li-right"><div class="stepper" data-n="${n}"><button data-d="-1">−</button><span class="v zero" data-v>0</span><button data-d="1">+</button></div></div></div>`; });
+  BULK.forEach(n=>{ st[n]=0;
+    html+=`<div class="li"><div><div class="li-name">${n} <span class="unit-pill u-gr">γρ</span></div></div>
+      <div class="li-right li-grms" data-n="${n}">${GRAMS.map(g=>`<span class="gchip" data-g="${g}">${g}γρ</span>`).join('')}<input class="gnum" inputmode="numeric" placeholder="γρ" data-manual></div></div>`; });
+  body.innerHTML=html;
+  body.addEventListener('click',e=>{
+    const s=e.target.closest('.stepper'); if(s){ const d=+e.target.dataset.d; if(!d)return; const n=s.dataset.n;
+      st[n]=Math.max(0,st[n]+d); const v=s.querySelector('[data-v]'); v.textContent=st[n]; v.classList.toggle('zero',st[n]===0); tot('p1tot',st); }
+    const g=e.target.closest('.gchip'); if(g){ const row=g.closest('.li-grms'); const n=row.dataset.n;
+      row.querySelectorAll('.gchip').forEach(c=>c.classList.remove('on')); g.classList.add('on');
+      row.querySelector('[data-manual]').value=''; st[n]=+g.dataset.g; tot('p1tot',st); }
+  });
+  body.addEventListener('input',e=>{ if(e.target.matches('[data-manual]')){ const row=e.target.closest('.li-grms');
+    row.querySelectorAll('.gchip').forEach(c=>c.classList.remove('on')); st[row.dataset.n]=+e.target.value||0; tot('p1tot',st); }});
+})();
+
+/* ============ P2: tiles ============ */
+(()=>{
+  const grid=document.getElementById('p2tiles'); const st={}; let active=null;
+  [...PIECES,...BULK].forEach(n=>{ st[n]=0; const gr=BULK.includes(n);
+    grid.insertAdjacentHTML('beforeend',`<div class="tile ${gr?'gr':''}" data-n="${n}" data-gr="${gr}">
+      <div class="badge">0</div><div class="tn">${n}</div><div class="tu">${gr?'γραμμάρια':'τεμάχια'}</div></div>`); });
+  const panel=document.getElementById('p2panel'), ph=document.getElementById('p2ph'), chips=document.getElementById('p2gchips');
+  chips.innerHTML=GRAMS.map(g=>`<span class="gchip" data-g="${g}">${g}γρ</span>`).join('')+`<input class="gnum" inputmode="numeric" placeholder="άλλο" data-manual>`;
+  const paint=t=>{ const n=t.dataset.n; t.classList.toggle('has',st[n]>0); t.querySelector('.badge').textContent= st[n]>=1000? (st[n]/1000)+'κ' : st[n]; };
+  grid.addEventListener('click',e=>{ const t=e.target.closest('.tile'); if(!t)return; const n=t.dataset.n;
+    if(t.dataset.gr==='true'){ active=n; ph.textContent=n+' — πόσα γραμμάρια;'; panel.classList.add('show');
+      chips.querySelectorAll('.gchip').forEach(c=>c.classList.toggle('on',+c.dataset.g===st[n])); chips.querySelector('[data-manual]').value= st[n]&&!GRAMS.includes(st[n])? st[n]:''; }
+    else { st[n]++; paint(t); tot('p2tot',st); } });
+  panel.addEventListener('click',e=>{ const g=e.target.closest('.gchip'); if(!g||!active)return;
+    st[active]=+g.dataset.g; chips.querySelectorAll('.gchip').forEach(c=>c.classList.remove('on')); g.classList.add('on');
+    chips.querySelector('[data-manual]').value=''; paint(grid.querySelector(`[data-n="${CSS.escape(active)}"]`)); tot('p2tot',st); });
+  panel.addEventListener('input',e=>{ if(e.target.matches('[data-manual]')&&active){ st[active]=+e.target.value||0;
+    chips.querySelectorAll('.gchip').forEach(c=>c.classList.remove('on')); paint(grid.querySelector(`[data-n="${CSS.escape(active)}"]`)); tot('p2tot',st); }});
+})();
+
+/* ============ P3: builder ============ */
+(()=>{
+  const sel=document.getElementById('p3sel'), qty=document.getElementById('p3qty'), add=document.getElementById('p3add'),
+    lines=document.getElementById('p3lines'); const st=[];
+  [...PIECES,...BULK].forEach(n=>{ const gr=BULK.includes(n); sel.insertAdjacentHTML('beforeend',`<option value="${n}" data-gr="${gr}">${n} (${gr?'γρ':'τεμ'})</option>`); });
+  const render=()=>{ if(!st.length){ lines.innerHTML='<div class="b-empty">Καμία γραμμή ακόμη — πρόσθεσε παραπάνω αν πετάχτηκε κάτι.</div>';
+      document.getElementById('p3tot').textContent='0 είδη'; return; }
+    lines.innerHTML=st.map((l,i)=>`<div class="bline"><span class="bn">${l.n}</span><span class="bq">${l.q} ${l.gr?'γρ':'τεμ'}</span><button class="bx" data-i="${i}">✕</button></div>`).join('');
+    const n=st.length; document.getElementById('p3tot').textContent=n+(n===1?' είδος':' είδη'); };
+  add.addEventListener('click',()=>{ const q=+qty.value; if(!q)return; const o=sel.options[sel.selectedIndex];
+    st.push({n:sel.value,q,gr:o.dataset.gr==='true'}); qty.value=''; render(); });
+  lines.addEventListener('click',e=>{ const b=e.target.closest('.bx'); if(b){ st.splice(+b.dataset.i,1); render(); }});
+})();
+
+/* ============ P4: tabs ============ */
+(()=>{
+  const pc=document.getElementById('p4pc'), gr=document.getElementById('p4gr'); const st={};
+  PIECES.forEach(n=>{ st[n]=0; pc.insertAdjacentHTML('beforeend',`<div class="li"><div class="li-name">${n}</div>
+    <div class="li-right"><div class="stepper" data-n="${n}"><button data-d="-1">−</button><span class="v zero" data-v>0</span><button data-d="1">+</button></div></div></div>`); });
+  BULK.forEach(n=>{ st[n]=0; gr.insertAdjacentHTML('beforeend',`<div class="li"><div class="li-name" style="margin-bottom:8px">${n} <span class="unit-pill u-gr">γρ</span></div>
+    <div class="li-grms" data-n="${n}" style="max-width:none;justify-content:flex-start">${GRAMS.map(g=>`<span class="gchip" data-g="${g}">${g}γρ</span>`).join('')}<input class="gnum" inputmode="numeric" placeholder="γρ" data-manual></div></div>`); });
+  const modal=document.querySelector('[data-p="4"]');
+  modal.querySelector('.tabs').addEventListener('click',e=>{ const t=e.target.closest('.tab'); if(!t)return;
+    modal.querySelectorAll('.tab').forEach(x=>x.classList.remove('on')); t.classList.add('on');
+    pc.classList.toggle('on',t.dataset.tab==='pc'); gr.classList.toggle('on',t.dataset.tab==='gr'); });
+  modal.querySelector('.m-body').addEventListener('click',e=>{
+    const s=e.target.closest('.stepper'); if(s){ const d=+e.target.dataset.d; if(!d)return; const n=s.dataset.n;
+      st[n]=Math.max(0,st[n]+d); const v=s.querySelector('[data-v]'); v.textContent=st[n]; v.classList.toggle('zero',st[n]===0); tot('p4tot',st); }
+    const g=e.target.closest('.gchip'); if(g){ const row=g.closest('.li-grms');
+      row.querySelectorAll('.gchip').forEach(c=>c.classList.remove('on')); g.classList.add('on');
+      row.querySelector('[data-manual]').value=''; st[row.dataset.n]=+g.dataset.g; tot('p4tot',st); }});
+  modal.querySelector('.m-body').addEventListener('input',e=>{ if(e.target.matches('[data-manual]')){ const row=e.target.closest('.li-grms');
+    row.querySelectorAll('.gchip').forEach(c=>c.classList.remove('on')); st[row.dataset.n]=+e.target.value||0; tot('p4tot',st); }});
+})();
+
+/* ============ P5: quick counter ============ */
+(()=>{
+  const grid=document.getElementById('p5grid'); const st={};
+  [...PIECES,...BULK].forEach(n=>{ st[n]=0; const gr=BULK.includes(n);
+    grid.insertAdjacentHTML('beforeend',`<div class="qbtn" data-n="${n}" data-gr="${gr}" data-step="${gr?100:1}">
+      <button class="qminus" data-minus>–</button><div><div class="qn">${n}</div><div class="qstep">+${gr?'100γρ':'1 τεμ'} ανά πάτημα</div></div>
+      <div class="qv">0</div></div>`); });
+  const paint=(el,n)=>{ el.classList.toggle('has',st[n]>0); el.querySelector('.qv').textContent= st[n]>=1000? (st[n]/1000)+'κ':st[n]; };
+  grid.addEventListener('click',e=>{ const el=e.target.closest('.qbtn'); if(!el)return; const n=el.dataset.n, step=+el.dataset.step;
+    if(e.target.closest('[data-minus]')) st[n]=Math.max(0,st[n]-step); else st[n]+=step;
+    paint(el,n); tot('p5tot',st); });
+})();
+</script>
+</body>
+</html>
