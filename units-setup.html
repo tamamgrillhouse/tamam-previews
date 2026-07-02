@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>🧮 Ρύθμιση Μονάδων — Preview</title>
+<style>
+  :root{
+    --orange:#e8630a; --orange-soft:#fff3e8; --orange-border:#f5c9a4;
+    --ink:#1f2733; --muted:#6b7686; --line:#e5e9f0; --bg:#f4f6f9;
+    --green:#166534; --green-soft:#ecfdf3; --amber-bg:#fffbeb; --amber-bd:#fde68a;
+    --red:#b91c1c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI','Noto Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink);padding:20px 14px 120px}
+  .wrap{max-width:980px;margin:0 auto}
+
+  .demo-note{background:#1c2554;color:#eef1f8;border-radius:12px;padding:12px 16px;font-size:13px;line-height:1.6;margin-bottom:18px}
+  .demo-note b{color:#f5c842}
+
+  .page-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+  h1{font-size:22px;display:flex;align-items:center;gap:8px}
+  .subtitle{color:var(--muted);font-size:13.5px;margin-top:4px;line-height:1.5}
+  .btn{border-radius:10px;padding:10px 18px;font-size:14px;font-weight:700;cursor:pointer;min-height:44px;border:1px solid var(--line);background:#fff;color:var(--ink)}
+  .btn-primary{background:var(--orange);border-color:var(--orange);color:#fff}
+  .btn-primary:disabled{opacity:.45;cursor:not-allowed}
+  .btn-danger{background:#fff;border:1px solid #fca5a5;color:var(--red)}
+
+  .tip{background:var(--amber-bg);border:1px solid var(--amber-bd);border-radius:12px;padding:14px 16px;font-size:13.5px;line-height:1.7;margin-bottom:18px}
+  .tip .rule{display:block;margin-top:8px;padding:8px 12px;background:#fff;border-radius:8px;border:1px dashed var(--amber-bd);font-weight:700}
+  .tip ol{margin:6px 0 0 20px}
+
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+  .search{flex:1;min-width:220px;position:relative}
+  .search input{width:100%;padding:11px 14px 11px 38px;border:1px solid var(--line);border-radius:10px;font-size:14px;background:#fff}
+  .search input:focus{outline:none;border-color:var(--orange)}
+  .search::before{content:"🔍";position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px}
+  .pill{border:1px solid var(--line);background:#fff;border-radius:20px;padding:8px 14px;font-size:13px;cursor:pointer;font-weight:600;color:var(--muted)}
+  .pill.on{background:var(--orange);border-color:var(--orange);color:#fff}
+
+  .cat-card{background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:16px;overflow:hidden}
+  .cat-head{padding:12px 16px;font-weight:800;font-size:15px;background:#fafbfc;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
+  .cat-head .cnt{margin-left:auto;font-size:12px;color:var(--muted);font-weight:600}
+
+  .row{display:grid;grid-template-columns:190px 175px 175px 1fr;gap:12px;align-items:start;padding:14px 16px;border-bottom:1px solid var(--line)}
+  .row:last-child{border-bottom:none}
+  .row.changed{background:var(--orange-soft)}
+  .row .mat{font-weight:700;font-size:14px;padding-top:8px}
+  .row .mat .cur{display:block;font-size:11.5px;color:var(--muted);font-weight:500;margin-top:3px}
+  .fld label{display:block;font-size:11px;color:var(--muted);font-weight:700;margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px}
+  .select-wrap{position:relative;border:1px solid var(--line);border-radius:9px;background:#fff}
+  .select-wrap::after{content:"▾";position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;font-size:12px}
+  .select-wrap select{width:100%;padding:9px 26px 9px 10px;border:none;background:transparent;font-size:13.5px;appearance:none;cursor:pointer;font-family:inherit}
+  .select-wrap select:focus{outline:2px solid var(--orange);border-radius:9px}
+  .factor input{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:9px;font-size:13.5px}
+  .factor input:focus{outline:none;border-color:var(--orange)}
+  .factor input.miss{border-color:#f59e0b;background:var(--amber-bg)}
+
+  .live{font-size:12.5px;line-height:1.55;padding:8px 10px;border-radius:9px}
+  .live.same{color:var(--muted);background:#fafbfc}
+  .live.ok{background:var(--green-soft);color:var(--green)}
+  .live.warn{background:var(--amber-bg);color:#92400e}
+  .live b{font-weight:800}
+  .live .conv-note{display:block;margin-top:4px;color:var(--orange);font-weight:700}
+
+  /* sticky save bar */
+  .savebar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:2px solid var(--orange);padding:12px 16px;display:none;z-index:50;box-shadow:0 -4px 18px rgba(0,0,0,.08)}
+  .savebar.show{display:block}
+  .savebar .in{max-width:980px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .savebar .msg{font-weight:700;font-size:14px}
+  .savebar .msg .n{color:var(--orange)}
+  .savebar .sp{flex:1}
+
+  /* modal */
+  .overlay{position:fixed;inset:0;background:rgba(15,20,30,.55);display:none;align-items:center;justify-content:center;z-index:100;padding:16px}
+  .overlay.show{display:flex}
+  .modal{background:#fff;border-radius:16px;max-width:560px;width:100%;max-height:86vh;overflow:auto;padding:22px}
+  .modal h3{font-size:17px;margin-bottom:6px}
+  .modal .m-sub{color:var(--muted);font-size:13px;margin-bottom:14px}
+  .chg{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:13px;line-height:1.6}
+  .chg b{color:var(--orange)}
+  .chg .auto{display:block;font-size:12px;color:var(--muted)}
+  .chg.pend{background:var(--amber-bg);border-color:var(--amber-bd)}
+  .m-btns{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
+
+  .toast{position:fixed;top:18px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;padding:12px 22px;border-radius:12px;font-weight:700;font-size:14px;display:none;z-index:200;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+  .toast.show{display:block}
+
+  /* section 2: invoice demo */
+  .sect2{margin-top:34px}
+  .sect2 h2{font-size:18px;margin-bottom:4px}
+  .inv-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;margin-top:12px}
+  .inv-line{display:grid;grid-template-columns:1.4fr .8fr .7fr .8fr;gap:10px;align-items:end}
+  .inv-line .fld input{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:9px;font-size:13.5px}
+  .mismatch{display:none;margin-top:12px;background:var(--amber-bg);border:1px solid var(--amber-bd);border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.7}
+  .mismatch.show{display:block}
+  .mismatch .ask{display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}
+  .mismatch .ask input{width:90px;padding:8px;border:1px solid var(--amber-bd);border-radius:8px;font-size:13.5px}
+  .mismatch .result{display:none;margin-top:10px;background:#fff;border-radius:8px;padding:10px 12px;font-weight:700;color:var(--green)}
+  .mismatch .result.show{display:block}
+  .foot{margin-top:30px;text-align:center;color:var(--muted);font-size:12px;line-height:1.7}
+
+  @media(max-width:760px){
+    .row{grid-template-columns:1fr 1fr;}
+    .row .mat{grid-column:1/-1;padding-top:0}
+    .row .live-cell{grid-column:1/-1}
+    .inv-line{grid-template-columns:1fr 1fr}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="demo-note">🧪 <b>PREVIEW με δείγμα δεδομένων</b> — έτσι θα λειτουργεί η νέα οθόνη μέσα στο σύστημα. Όλα εδώ είναι ζωντανά: άλλαξε μονάδες, γράψε συντελεστές, πάτα Αποθήκευση για να δεις όλη τη ροή. Τα υλικά/νούμερα είναι ενδεικτικά.</div>
+
+  <div class="page-head">
+    <div>
+      <h1>🧮 Ρύθμιση Μονάδων</h1>
+      <div class="subtitle">Για κάθε υλικό: πώς το μετράς στο μαγαζί, πώς το χρεώνει το τιμολόγιο, και πόσο κάνει το ένα στο άλλο. Το συμπληρώνεις μία φορά.</div>
+    </div>
+    <button class="btn">← Πίσω</button>
+  </div>
+
+  <div class="tip">
+    💡 <b>Πώς δουλεύει:</b>
+    <ol>
+      <li><b>① Πώς το μετράς στο μαγαζί;</b> — έτσι θα μιλάνε οι συνταγές, το απόθεμα και η απογραφή (π.χ. τεμάχια, φέτες, κιλά).</li>
+      <li><b>② Πώς σ' το χρεώνει το τιμολόγιο;</b> — η μονάδα δίπλα στην <u>τιμή</u> του τιμολογίου.</li>
+      <li><b>③ 1 μονάδα τιμολογίου = πόσα δικά σου;</b> — π.χ. 1 κιλό = 10 μπιφτέκια, 1 κιβώτιο = 24 κουτάκια.</li>
+    </ol>
+    <span class="rule">📌 Ο χρυσός κανόνας: στο ② διαλέγεις ό,τι γράφει η ΤΙΜΗ στο τιμολόγιο — όχι το κουτί που τα κουβαλάει.</span>
+  </div>
+
+  <div class="toolbar">
+    <div class="search"><input id="q" type="text" placeholder="Αναζήτηση υλικού…" oninput="applyFilter()"></div>
+    <button class="pill on" data-cat="all" onclick="pickCat(this)">Όλα</button>
+    <button class="pill" data-cat="meat" onclick="pickCat(this)">🥩 Κρέατα</button>
+    <button class="pill" data-cat="frozen" onclick="pickCat(this)">🧊 Κατεψυγμένα</button>
+    <button class="pill" data-cat="veg" onclick="pickCat(this)">🥬 Λαχανικά</button>
+    <button class="pill" data-cat="dairy" onclick="pickCat(this)">🧀 Γαλακτοκομικά</button>
+    <button class="pill" data-cat="oil" onclick="pickCat(this)">🫒 Λάδια</button>
+    <button class="pill" data-cat="drinks" onclick="pickCat(this)">🥤 Αναψυκτικά</button>
+    <button class="pill" data-cat="pack" onclick="pickCat(this)">📦 Αναλώσιμα</button>
+  </div>
+
+  <div id="cats"></div>
+
+  <!-- Section 2: invoice mini-converter demo -->
+  <div class="sect2">
+    <h2>🔔 …και έτσι θα σε προστατεύει στο τιμολόγιο</h2>
+    <div class="subtitle">Όταν σπάνια ένα τιμολόγιο έρθει σε ΑΛΛΗ μονάδα απ' ό,τι έχεις ρυθμίσει, δεν κάνεις πράξεις με το μυαλό — το σύστημα ρωτάει και μετατρέπει μόνο του. Δοκίμασέ το: άλλαξε τη μονάδα σε «Κιβώτιο».</div>
+    <div class="inv-card">
+      <div class="inv-line">
+        <div class="fld"><label>Υλικό</label>
+          <div class="select-wrap"><select disabled><option>Πανσέτα (ρυθμισμένη: Κιλό)</option></select></div>
+        </div>
+        <div class="fld"><label>Μονάδα τιμολογίου</label>
+          <div class="select-wrap">
+            <select id="inv-unit" onchange="invUnit()">
+              <option value="Κιλό">Κιλό</option>
+              <option value="Τεμάχιο">Τεμάχιο</option>
+              <option value="Κιβώτιο">Κιβώτιο</option>
+            </select>
+          </div>
+        </div>
+        <div class="fld"><label>Ποσότητα</label><input id="inv-qty" type="text" value="3" oninput="invCalc()"></div>
+        <div class="fld"><label>Τιμή € / μονάδα</label><input id="inv-price" type="text" value="45,00" oninput="invCalc()"></div>
+      </div>
+      <div class="mismatch" id="inv-warn">
+        ⚠️ Η <b>Πανσέτα</b> είναι ρυθμισμένη να χρεώνεται σε <b>Κιλά</b> — εσύ διάλεξες <b>Κιβώτιο</b>.
+        Πες μου την αντιστοιχία και θα τη μετατρέψω εγώ:
+        <div class="ask">1 Κιβώτιο = <input id="inv-f" type="text" placeholder="π.χ. 5" oninput="invCalc()"> Κιλά
+          <button class="btn btn-primary" style="min-height:38px;padding:7px 14px" onclick="invApply()">✔ Μετέτρεψέ το</button>
+        </div>
+        <div class="result" id="inv-res"></div>
+      </div>
+      <div class="mismatch show" id="inv-done" style="display:none;background:var(--green-soft);border-color:#bbf7d0;color:var(--green);font-weight:700"></div>
+    </div>
+  </div>
+
+  <div class="foot">TAMAM Back-Office · preview οθόνης · δείγμα δεδομένων — κανένα πραγματικό οικονομικό στοιχείο</div>
+</div>
+
+<!-- sticky save bar -->
+<div class="savebar" id="savebar">
+  <div class="in">
+    <span class="msg">✏️ Άλλαξες <span class="n" id="nchg">0</span> υλικά</span>
+    <span class="sp"></span>
+    <button class="btn" onclick="resetAll()">Επαναφορά</button>
+    <button class="btn btn-primary" onclick="openModal()">💾 Αποθήκευση</button>
+  </div>
+</div>
+
+<!-- confirm modal -->
+<div class="overlay" id="ovl">
+  <div class="modal">
+    <h3>Επιβεβαίωση αλλαγών</h3>
+    <div class="m-sub">Δες τι θα γίνει σε κάθε υλικό. Τίποτα δεν αλλάζει κρυφά — ό,τι μετατραπεί, γράφεται και στο ιστορικό.</div>
+    <div id="chglist"></div>
+    <div class="m-btns">
+      <button class="btn" onclick="closeModal()">Άκυρο</button>
+      <button class="btn btn-primary" onclick="applySave()">Ναι, εφάρμοσέ τα</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">✅ Αποθηκεύτηκε — συνταγές &amp; απόθεμα μετατράπηκαν αυτόματα</div>
+
+<script>
+const UNITS = ["Κιλό","Γραμμάριο","Λίτρο","ml","Τεμάχιο","Κιβώτιο","Συσκευασία","Σακί","Δοχείο","Ρολό","Πακέτο"];
+
+// δείγμα υλικών: saved = πώς είναι αποθηκευμένο τώρα (stock=①, buy=②, f=③)
+const MATS = [
+  {cat:"meat",  icon:"🥩", name:"Γύρος Χοιρινός",   stock:"Κιλό",    buy:"Κιλό",    f:1,    note:""},
+  {cat:"meat",  icon:"🥩", name:"Πανσέτα",           stock:"Τεμάχιο", buy:"Κιλό",    f:8,    note:""},
+  {cat:"meat",  icon:"🥩", name:"Μπιφτέκι 100γρ",    stock:"Τεμάχιο", buy:"Κιλό",    f:10,   note:""},
+  {cat:"meat",  icon:"🥩", name:"Κεμπαπάκι",         stock:"Τεμάχιο", buy:"Κιλό",    f:null, note:""},
+  {cat:"frozen",icon:"🧊", name:"Καλαμαράκι",        stock:"Τεμάχιο", buy:"Κιλό",    f:6,    note:""},
+  {cat:"frozen",icon:"🧊", name:"Falafel",           stock:"Τεμάχιο", buy:"Κιλό",    f:null, note:""},
+  {cat:"veg",   icon:"🥬", name:"Ντομάτα",           stock:"Κιλό",    buy:"Κιλό",    f:1,    note:""},
+  {cat:"veg",   icon:"🥬", name:"Καλαμπόκι",         stock:"Κιλό",    buy:"Τεμάχιο", f:0.4,  note:"κονσέρβα"},
+  {cat:"dairy", icon:"🧀", name:"Κασέρι",            stock:"Τεμάχιο", buy:"Κιλό",    f:20,   note:"τεμάχιο = φέτα"},
+  {cat:"oil",   icon:"🫒", name:"Ελαιόλαδο",         stock:"Λίτρο",   buy:"Δοχείο",  f:5,    note:""},
+  {cat:"drinks",icon:"🥤", name:"Coca Cola 330ml",   stock:"Τεμάχιο", buy:"Κιβώτιο", f:24,   note:""},
+  {cat:"drinks",icon:"🥤", name:"Νερό 500ml",        stock:"Τεμάχιο", buy:"Κιβώτιο", f:12,   note:""},
+  {cat:"pack",  icon:"📦", name:"Χαρτοπετσέτα",      stock:"Τεμάχιο", buy:"Πακέτο",  f:750,  note:""},
+  {cat:"pack",  icon:"📦", name:"Πίτα",              stock:"Τεμάχιο", buy:"Πακέτο",  f:10,   note:""},
+];
+const CATS = {meat:"🥩 Κρέατα", frozen:"🧊 Κατεψυγμένα (νέα κατηγορία)", veg:"🥬 Λαχανικά", dairy:"🧀 Γαλακτοκομικά", oil:"🫒 Λάδια", drinks:"🥤 Αναψυκτικά", pack:"📦 Αναλώσιμα & Συσκευασίες"};
+
+// live κατάσταση = αντίγραφο των saved
+let cur = MATS.map(m => ({...m}));
+let activeCat = "all";
+
+function selHtml(i, field, val){
+  const opts = UNITS.map(u => `<option ${u===val?"selected":""}>${u}</option>`).join("");
+  return `<div class="select-wrap"><select onchange="chg(${i},'${field}',this.value)">${opts}</select></div>`;
+}
+
+function liveHtml(m, saved){
+  if(m.stock === m.buy){
+    return `<div class="live same">Ίδια μονάδα — καμία μετατροπή. Ό,τι γράφει το τιμολόγιο μπαίνει όπως είναι.</div>`;
+  }
+  if(!m.f || m.f <= 0){
+    return `<div class="live warn">⏳ <b>Εκκρεμεί το νούμερο ③.</b> Μέχρι να το γράψεις, το υλικό μένει όπως είναι — δεν θα εφαρμοστεί τίποτα.</div>`;
+  }
+  const fTxt = String(m.f).replace(".", ",");
+  let s = `<div class="live ok">✔ 1 <b>${m.buy}</b> = <b>${fTxt} ${m.stock}</b>.
+    Τιμολόγιο σε €/${m.buy} → το σύστημα βγάζει μόνο του το κόστος ανά ${m.stock} (÷${fTxt}) και γεμίζει την αποθήκη σε ${m.stock} (×${fTxt}).`;
+  if(m.stock !== saved.stock){
+    s += `<span class="conv-note">🔄 Άλλαξες τη μονάδα μαγαζιού (${saved.stock} → ${m.stock}): συνταγές, απόθεμα &amp; ιστορικό θα μετατραπούν ΑΥΤΟΜΑΤΑ με ασφάλεια.</span>`;
+  }
+  s += `</div>`;
+  return s;
+}
+
+function isChanged(i){
+  const a = cur[i], b = MATS[i];
+  return a.stock!==b.stock || a.buy!==b.buy || String(a.f||"")!==String(b.f||"");
+}
+
+function render(){
+  const q = (document.getElementById("q").value||"").toLowerCase();
+  const box = document.getElementById("cats");
+  let html = "";
+  for(const key of Object.keys(CATS)){
+    if(activeCat!=="all" && activeCat!==key) continue;
+    const rows = cur.map((m,i)=>({m,i})).filter(x => x.m.cat===key && x.m.name.toLowerCase().includes(q));
+    if(!rows.length) continue;
+    html += `<div class="cat-card"><div class="cat-head">${CATS[key]}<span class="cnt">${rows.length} υλικά</span></div>`;
+    for(const {m,i} of rows){
+      const saved = MATS[i];
+      html += `<div class="row ${isChanged(i)?"changed":""}">
+        <div class="mat">${m.icon} ${m.name}${m.note?`<span class="cur">(${m.note})</span>`:""}
+          <span class="cur">τώρα: ${saved.stock}${saved.stock!==saved.buy?` · αγορά ${saved.buy}`:""}</span></div>
+        <div class="fld"><label>① στο μαγαζί</label>${selHtml(i,"stock",m.stock)}</div>
+        <div class="fld"><label>② στο τιμολόγιο</label>${selHtml(i,"buy",m.buy)}</div>
+        <div class="fld live-cell"><label>③ αντιστοιχία</label>
+          ${m.stock===m.buy ? "" : `<div class="factor" style="margin-bottom:6px">
+            <input type="text" class="${(!m.f||m.f<=0)?"miss":""}" placeholder="1 ${m.buy} = ; ${m.stock}"
+                   value="${m.f?String(m.f).replace(".",","):""}" oninput="chgF(${i},this.value)"></div>`}
+          ${liveHtml(m, saved)}
+        </div>
+      </div>`;
+    }
+    html += `</div>`;
+  }
+  box.innerHTML = html || `<div class="cat-card" style="padding:24px;text-align:center;color:var(--muted)">Δεν βρέθηκε υλικό.</div>`;
+  const n = cur.filter((_,i)=>isChanged(i)).length;
+  document.getElementById("nchg").textContent = n;
+  document.getElementById("savebar").classList.toggle("show", n>0);
+}
+
+function chg(i, field, val){ cur[i][field]=val; render(); }
+function chgF(i, val){
+  const f = parseFloat(String(val).replace(",","."));
+  cur[i].f = (isNaN(f)||f<=0) ? null : f;
+  // ξαναζωγράφισε ΜΟΝΟ το live κείμενο για να μη χάσει το focus το input
+  const inp = document.activeElement;
+  render();
+  if(inp && inp.tagName==="INPUT"){
+    const inputs = document.querySelectorAll(".factor input");
+    for(const el of inputs){ if(el.placeholder===inp.placeholder){ el.focus(); const v=el.value; el.value=""; el.value=v; break; } }
+  }
+}
+
+function pickCat(btn){
+  document.querySelectorAll(".pill").forEach(p=>p.classList.remove("on"));
+  btn.classList.add("on");
+  activeCat = btn.dataset.cat;
+  render();
+}
+function applyFilter(){ render(); }
+
+function resetAll(){ cur = MATS.map(m=>({...m})); render(); }
+
+function openModal(){
+  const list = document.getElementById("chglist");
+  let html = "";
+  cur.forEach((m,i)=>{
+    if(!isChanged(i)) return;
+    const s = MATS[i];
+    if(m.stock!==m.buy && (!m.f||m.f<=0)){
+      html += `<div class="chg pend">⏳ <b>${m.name}</b>: λείπει το νούμερο ③ — <u>δεν θα εφαρμοστεί</u>, μένει όπως είναι. Το συμπληρώνεις όποτε θες.</div>`;
+      return;
+    }
+    let what = [];
+    if(m.stock!==s.stock) what.push(`μονάδα μαγαζιού <b>${s.stock} → ${m.stock}</b>`);
+    if(m.buy!==s.buy) what.push(`μονάδα τιμολογίου <b>${s.buy} → ${m.buy}</b>`);
+    if(String(m.f)!==String(s.f)) what.push(`αντιστοιχία <b>1 ${m.buy} = ${String(m.f).replace(".",",")} ${m.stock}</b>`);
+    html += `<div class="chg">✔ <b>${m.name}</b>: ${what.join(" · ")}
+      ${m.stock!==s.stock?`<span class="auto">→ Συνταγές, απόθεμα, ιστορικό κινήσεων &amp; ανοιχτή απογραφή μετατρέπονται αυτόματα. Οι τιμές προμηθευτών ΔΕΝ πειράζονται (μένουν €/${m.buy}).</span>`:""}
+    </div>`;
+  });
+  document.getElementById("chglist").innerHTML = html;
+  document.getElementById("ovl").classList.add("show");
+}
+function closeModal(){ document.getElementById("ovl").classList.remove("show"); }
+function applySave(){
+  cur.forEach((m,i)=>{
+    if(!isChanged(i)) return;
+    if(m.stock!==m.buy && (!m.f||m.f<=0)) return; // εκκρεμή μένουν
+    MATS[i] = {...m};
+  });
+  cur = MATS.map(m=>({...m}));
+  closeModal();
+  render();
+  const t = document.getElementById("toast");
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"), 2600);
+}
+
+// ── Section 2: invoice mini-converter demo ──────────────────────────────
+function invUnit(){
+  const u = document.getElementById("inv-unit").value;
+  document.getElementById("inv-warn").classList.toggle("show", u!=="Κιλό");
+  document.getElementById("inv-done").style.display = "none";
+  invCalc();
+}
+function invNum(id){ return parseFloat(String(document.getElementById(id).value).replace(",",".")) || 0; }
+function invCalc(){
+  const f = invNum("inv-f"), q = invNum("inv-qty"), p = invNum("inv-price");
+  const res = document.getElementById("inv-res");
+  if(f>0 && q>0 && p>0){
+    const kg = q*f, ppk = p/f;
+    res.innerHTML = `→ ${String(q).replace(".",",")} Κιβώτια × ${p.toFixed(2).replace(".",",")} € θα καταχωρηθούν ως:
+      <u>${String(kg).replace(".",",")} Κιλά × ${ppk.toFixed(2).replace(".",",")} €/Κιλό</u> (ίδια αξία, σωστή μονάδα)`;
+    res.classList.add("show");
+  } else { res.classList.remove("show"); }
+}
+function invApply(){
+  const f = invNum("inv-f"), q = invNum("inv-qty"), p = invNum("inv-price");
+  if(!(f>0&&q>0&&p>0)) return;
+  document.getElementById("inv-qty").value = String(q*f).replace(".",",");
+  document.getElementById("inv-price").value = (p/f).toFixed(2).replace(".",",");
+  document.getElementById("inv-unit").value = "Κιλό";
+  document.getElementById("inv-warn").classList.remove("show");
+  const done = document.getElementById("inv-done");
+  done.style.display = "block";
+  done.innerHTML = "✅ Μετατράπηκε: η γραμμή γράφτηκε σε Κιλά με τη σωστή τιμή — η αξία του τιμολογίου δεν άλλαξε ούτε λεπτό.";
+}
+
+render();
+</script>
+</body>
+</html>
