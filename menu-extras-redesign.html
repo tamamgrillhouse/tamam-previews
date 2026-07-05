@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Τιμές & Μενού — Επανασχεδιασμός Έξτρα</title>
+<style>
+  :root{
+    --accent:#f59e0b; --accent-dark:#b45309; --accent-soft:#fffbeb;
+    --text:#1f2937; --text-muted:#6b7280; --border:#e5e7eb; --bg:#f7f7f8;
+    --green:#166534; --green-bg:#dcfce7; --amber:#92400e; --amber-bg:#fef3c7;
+    --red:#991b1b; --red-bg:#fee2e2; --indigo:#3730a3; --indigo-bg:#e0e7ff;
+    --blue:#1e40af; --blue-bg:#eff6ff;
+  }
+  *{box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       margin:0;background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1120px;margin:0 auto;padding:26px 20px 90px}
+  h1{font-size:26px;font-weight:800;margin:0 0 4px}
+  .lead{color:var(--text-muted);font-size:15px;margin:0 0 22px;max-width:760px}
+  .warn{background:var(--accent-soft);border:1px solid #fde68a;border-radius:12px;padding:14px 18px;
+        font-size:13.5px;color:#78350f;margin-bottom:26px}
+
+  /* Tabs */
+  .tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;position:sticky;top:0;background:var(--bg);
+        padding:10px 0;z-index:50;border-bottom:1px solid var(--border)}
+  .tab{padding:10px 18px;border-radius:10px;border:1.5px solid var(--border);background:#fff;
+       font-weight:800;font-size:14px;cursor:pointer;color:var(--text-muted)}
+  .tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+  .part{display:none}
+  .part.show{display:block}
+
+  .part-h{font-size:20px;font-weight:800;margin:6px 0 4px;display:flex;align-items:center;gap:9px}
+  .part-sub{color:var(--text-muted);font-size:14px;margin:0 0 22px}
+
+  /* Proposal shell */
+  .prop{background:#fff;border:1px solid var(--border);border-radius:16px;padding:0;margin-bottom:26px;
+        overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+  .prop-h{display:flex;align-items:flex-start;gap:14px;padding:16px 20px;border-bottom:1px solid var(--border);
+          background:linear-gradient(180deg,#fff, #fcfcfd)}
+  .prop-num{flex:none;width:40px;height:40px;border-radius:11px;background:var(--accent);color:#fff;
+            font-weight:800;font-size:19px;display:flex;align-items:center;justify-content:center}
+  .prop-t{font-size:17px;font-weight:800;margin:0}
+  .prop-why{font-size:12.5px;color:var(--accent-dark);font-weight:700;margin:3px 0 0}
+  .prop-solves{font-size:12px;color:var(--text-muted);margin:5px 0 0}
+  .prop-solves b{color:var(--text)}
+  .prop-body{padding:20px}
+  .demo-note{font-size:11.5px;color:var(--text-muted);font-style:italic;margin:14px 0 0;padding-top:10px;
+             border-top:1px dashed var(--border)}
+
+  /* shared bits */
+  .pinp{display:inline-flex;align-items:center;gap:2px;border:1.5px solid var(--border);border-radius:8px;
+        background:#fff;padding:3px 7px 3px 9px}
+  .pinp input{border:none;width:58px;font-size:14px;font-weight:800;text-align:right;outline:none;
+              color:var(--text);background:transparent;font-variant-numeric:tabular-nums}
+  .pinp:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(245,158,11,.15)}
+  .pinp .eu{font-weight:700;color:var(--text-muted)}
+  .pinp.sm input{width:48px;font-size:13px}
+  .pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:800;font-variant-numeric:tabular-nums}
+  .pill.green{background:var(--green-bg);color:var(--green)}
+  .pill.amber{background:var(--amber-bg);color:var(--amber)}
+  .pill.indigo{background:var(--indigo-bg);color:var(--indigo)}
+  .pill.grey{background:#f1f1f4;color:#555}
+  .lock{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:800;color:var(--indigo);
+        background:var(--indigo-bg);border-radius:8px;padding:4px 9px}
+  .src-tag{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.3px;padding:2px 7px;border-radius:6px}
+  .src-def{background:#f1f1f4;color:#666}
+  .src-own{background:var(--amber-bg);color:var(--amber)}
+  .src-lock{background:var(--indigo-bg);color:var(--indigo)}
+  .reset{font-size:11.5px;font-weight:700;color:var(--accent-dark);cursor:pointer;border:none;background:none;
+         padding:0;text-decoration:underline}
+  .type-chip{font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:20px}
+  .tc-size{background:#ecfeff;color:#155e75}.tc-sauce{background:#f0fdf4;color:#166534}
+  .tc-top{background:#fef2f2;color:#9f1239}.tc-pita{background:var(--indigo-bg);color:var(--indigo)}
+
+  /* ===== A1 list with coverage ===== */
+  .a1-grp{margin-bottom:8px;border:1px solid var(--border);border-radius:11px;overflow:hidden}
+  .a1-grp-h{display:flex;align-items:center;gap:9px;padding:11px 14px;cursor:pointer;background:#fafafa;font-weight:800;font-size:13.5px}
+  .a1-grp-h .cnt{font-weight:400;color:var(--text-muted);font-size:12px}
+  .a1-grp-h .arrow{margin-left:auto;color:var(--accent)}
+  .a1-rows{padding:6px 14px 12px}
+  .a1-row{display:flex;align-items:center;gap:12px;padding:9px 0;border-top:1px dashed var(--border)}
+  .a1-row:first-child{border-top:none}
+  .a1-name{font-weight:700;font-size:13.5px;flex:1}
+  .a1-cov{font-size:11.5px;color:var(--text-muted);display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+
+  /* ===== A2 cards per type ===== */
+  .a2-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+  .a2-card{border:1px solid var(--border);border-radius:13px;overflow:hidden}
+  .a2-card-h{padding:10px 14px;font-weight:800;font-size:13.5px;display:flex;align-items:center;gap:8px;color:#fff}
+  .a2-size .a2-card-h{background:#0891b2}.a2-sauce .a2-card-h{background:#16a34a}
+  .a2-top .a2-card-h{background:#e11d48}
+  .a2-card-b{padding:8px 14px 12px}
+  .a2-ln{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 0;border-top:1px dashed var(--border)}
+  .a2-ln:first-child{border-top:none}
+  .a2-ln .nm{font-size:13px;font-weight:600}
+
+  /* ===== A3 table ===== */
+  .a3-tbl{width:100%;border-collapse:collapse;font-size:13px}
+  .a3-tbl th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--text-muted);
+             padding:8px 10px;border-bottom:2px solid var(--border)}
+  .a3-tbl td{padding:10px;border-bottom:1px solid var(--border);vertical-align:middle}
+  .a3-tbl tr:hover td{background:#fafafa}
+  .a3-tbl .r{text-align:right}.a3-tbl .c{text-align:center}
+
+  /* ===== A5 override-aware ===== */
+  .a5-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+  .a5-card{border:1px solid var(--border);border-radius:13px;padding:14px}
+  .a5-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}
+  .a5-nm{font-weight:800;font-size:14px}
+  .a5-bar{height:7px;border-radius:20px;background:#f1f1f4;overflow:hidden;margin:9px 0 6px}
+  .a5-bar i{display:block;height:100%;background:var(--accent)}
+  .a5-note{font-size:11.5px;color:var(--text-muted)}
+  .a5-note a{color:var(--accent-dark);font-weight:700}
+
+  /* ===== product card frame (Part B) ===== */
+  .pcard{border:1px solid var(--border);border-radius:13px;background:#fff;max-width:340px;overflow:hidden}
+  .pcard-top{padding:13px 15px}
+  .pcard-nm{font-weight:800;font-size:15px;margin-bottom:9px}
+  .pcard-price{display:flex;align-items:center;gap:9px}
+  .pcard-meta{font-size:11.5px;color:var(--text-muted);margin-top:8px}
+
+  /* B1 inline chips */
+  .b1-chips{display:flex;flex-wrap:wrap;gap:7px;padding:11px 15px;border-top:1px dashed var(--border);background:#fcfcfd}
+  .b1-chip{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--border);border-radius:20px;
+           padding:5px 6px 5px 12px;font-size:12.5px;font-weight:700;background:#fff}
+  .b1-chip .v{font-weight:800;color:var(--accent-dark)}
+  .b1-chip.own{border-color:var(--accent);background:var(--accent-soft)}
+  .b1-chip.lock{border-color:var(--indigo-bg);background:var(--indigo-bg);color:var(--indigo)}
+  .b1-chip input{width:44px;border:none;background:transparent;font-weight:800;text-align:right;outline:none;
+                 font-size:12.5px;color:var(--accent-dark)}
+
+  /* B2 mini table */
+  .b2-tbl{width:100%;border-collapse:collapse;font-size:13px;border-top:1px dashed var(--border)}
+  .b2-tbl td{padding:9px 15px;border-bottom:1px solid var(--border)}
+  .b2-tbl tr:last-child td{border-bottom:none}
+  .b2-nm{font-weight:700}
+  .b2-r{text-align:right;white-space:nowrap}
+
+  /* B3 toggle default/custom */
+  .b3-ln{padding:11px 15px;border-top:1px dashed var(--border)}
+  .b3-hd{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .b3-nm{font-weight:700;font-size:13.5px}
+  .b3-seg{display:inline-flex;border:1.5px solid var(--border);border-radius:9px;overflow:hidden;font-size:11.5px;font-weight:800}
+  .b3-seg button{border:none;background:#fff;padding:5px 10px;cursor:pointer;color:var(--text-muted)}
+  .b3-seg button.on{background:var(--accent);color:#fff}
+  .b3-detail{margin-top:9px;font-size:12px;color:var(--text-muted);display:flex;align-items:center;gap:8px}
+
+  /* B4 grouped */
+  .b4-grp{padding:10px 15px;border-top:1px dashed var(--border)}
+  .b4-grp-h{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--text-muted);margin-bottom:7px;display:flex;gap:7px;align-items:center}
+  .b4-ln{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:5px 0}
+  .b4-nm{font-size:13px;font-weight:600}
+
+  /* B5 drawer */
+  .b5-btn{margin:11px 15px 14px;display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:800;
+          color:var(--accent-dark);background:var(--accent-soft);border:1.5px solid #fde68a;border-radius:9px;
+          padding:8px 14px;cursor:pointer}
+  .b5-drawer{position:fixed;top:0;right:0;bottom:0;width:min(380px,90vw);background:#fff;box-shadow:-8px 0 30px rgba(0,0,0,.18);
+             transform:translateX(100%);transition:transform .25s;z-index:200;display:flex;flex-direction:column}
+  .b5-drawer.open{transform:none}
+  .b5-dh{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+  .b5-dh b{font-size:16px}
+  .b5-x{border:none;background:none;font-size:22px;cursor:pointer;color:var(--text-muted)}
+  .b5-body{padding:12px 20px;overflow:auto}
+  .b5-ln{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 0;border-bottom:1px solid var(--border)}
+  .b5-nm{font-weight:700;font-size:14px}
+  .b5-nm small{display:block;color:var(--text-muted);font-weight:400;font-size:11px}
+  .b5-inp input{width:66px;font-size:16px;padding:7px 9px;border:1.5px solid var(--border);border-radius:9px;text-align:right;font-weight:800}
+  .b5-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:150;display:none}
+  .b5-overlay.show{display:block}
+
+  .foot{margin-top:34px;padding:20px;background:#fff;border:1px solid var(--border);border-radius:14px;font-size:14px}
+  .foot b{color:var(--accent-dark)}
+  .btn-primary{background:var(--accent);color:#fff;border:none;border-radius:9px;padding:10px 18px;font-weight:800;font-size:14px;min-height:44px;cursor:pointer}
+  kbd{background:#f1f1f4;border-radius:5px;padding:1px 7px;font-weight:800;font-size:12px;font-family:inherit}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🍽 Τιμές & Μενού — Επανασχεδιασμός των Έξτρα</h1>
+  <p class="lead">Δύο κομμάτια, <b>5 προτάσεις το καθένα</b>. Κάθε πρόταση δεν είναι μόνο ομορφότερη —
+     λύνει και ένα λογικό πρόβλημα της αλυσίδας <i>(προεπιλογή → προϊόν → κλείδωμα)</i>. Όλα τα νούμερα είναι δείγματα.</p>
+
+  <div class="warn">
+    <b>Η αλυσίδα σε μία γραμμή:</b> Ορίζεις μία τιμή στον <b>πάνω πίνακα</b> → κατεβαίνει αυτόματα σε <b>κάθε προϊόν</b>
+    → ένα προϊόν μπορεί να τη σπάσει με <b>δική του τιμή</b>. Τα κλειδωμένα 🔒 (Διπλή Πίτα, Διπλό κρέας, μικρό μέγεθος)
+    δεν αλλάζουν εδώ — βγαίνουν από αλλού.
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showPart('A',this)">🅰️ Πάνω πίνακας — Προεπιλογές έξτρα</button>
+    <button class="tab" onclick="showPart('B',this)">🅱️ Έξτρα ανά προϊόν</button>
+  </div>
+
+  <!-- ============ PART A ============ -->
+  <div class="part show" id="partA">
+    <div class="part-h">🅰️ Ο πάνω πίνακας «Προεπιλογές έξτρα»</div>
+    <p class="part-sub">Εδώ ορίζεις <b>μία τιμή ανά έξτρα</b> που ισχύει σε όλα τα προϊόντα. Στόχος: να ξέρεις
+       <b>πού ισχύει</b> και <b>τι έχει σπάσει</b> την προεπιλογή.</p>
+
+    <!-- A1 -->
+    <div class="prop">
+      <div class="prop-h">
+        <div class="prop-num">1</div>
+        <div>
+          <p class="prop-t">Λίστα με «κάλυψη» — βλέπεις πού ισχύει η κάθε τιμή</p>
+          <p class="prop-why">Λύνει το «τυφλό»: κάθε έξτρα δείχνει σε πόσα προϊόντα ισχύει + πόσα έχουν δική τους τιμή</p>
+          <p class="prop-solves">Ομάδες που ανοιγοκλείνουν, καθαρή λίστα, μετρητής κάλυψης δίπλα σε κάθε τιμή.</p>
+        </div>
+      </div>
+      <div class="prop-body">
+        <div class="a1-grp">
+          <div class="a1-grp-h" onclick="tgl(this)"><span class="type-chip tc-size">Μεγέθη αλοιφών</span><span class="cnt">2 έξτρα</span><span class="arrow">▾</span></div>
+          <div class="a1-rows">
+            <div class="a1-row">
+              <span class="a1-name">Μεσαία</span>
+              <span class="a1-cov"><span class="pill green">ισχύει σε 6</span> <span class="pill amber">1 δική του</span></span>
+              <span class="pinp sm"><input value="0,80"><span class="eu">€</span></span>
+            </div>
+            <div class="a1-row">
+              <span class="a1-name">Μεγάλη</span>
+              <span class="a1-cov"><span class="pill green">ισχύει σε 6</span></span>
+              <span class="pinp sm"><input value="1,50"><span class="eu">€</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="a1-grp">
+          <div class="a1-grp-h" onclick="tgl(this)"><span class="type-chip tc-sauce">Επιπλέον σάλτσα</span><span class="cnt">1 έξτρα</span><span class="arrow">▾</span></div>
+          <div class="a1-rows">
+            <div class="a1-row">
+              <span class="a1-name">Τζατζίκι έξτρα</span>
+              <span class="a1-cov"><span class="pill green">ισχύει σε 9</span></span>
+              <span class="pinp sm"><input value="0,50"><span class="eu">€</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="a1-grp">
+          <div class="a1-grp-h" onclick="tgl(this)"><span class="type-chip tc-top">Πρόσθετα</span><span class="cnt">3 έξτρα</span><span class="arrow">▾</span></div>
+          <div class="a1-rows">
+            <div class="a1-row"><span class="a1-name">Τυρί</span><span class="a1-cov"><span class="pill green">ισχύει σε 11</span> <span class="pill amber">2 δικά τους</span></span><span class="pinp sm"><input value="0,50"><span class="eu">€</span></span></div>
+            <div class="a1-row"><span class="a1-name">Μπέικον</span><span class="a1-cov"><span class="pill green">ισχύει σε 4</span></span><span class="pinp sm"><input value="0,70"><span class="eu">€</span></span></div>
+            <div class="a1-row"><span class="a1-name">Πατάτα μέσα</span><span class="a1-cov"><span class="pill green">ισχύει σε 5</span></span><span class="pinp sm"><input value="0,40"><span class="eu">€</span></span></div>
+          </div>
+        </div>
+        <p class="demo-note">Το «ισχύει σε 6» / «1 δική του» βγαίνουν αυτόματα από τη βάση. Πατώντας το «1 δική του» θα εμφανίζονταν ποια προϊόντα το έσπασαν.</p>
+      </div>
+    </div>
+
+    <!-- A2 -->
+    <div class="prop">
+      <div class="prop-h">
+        <div class="prop-num">2</div>
+        <div>
+          <p class="prop-t">Χρωματιστές κάρτες ανά τύπο έξτρα</p>
+          <p class="prop-why">Λύνει το μπέρδεμα τύπων: κάθε κατηγορία (μεγέθη/σάλτσα/πρόσθετα) το δικό της χρώμα & κάρτα</p>
+          <p class="prop-solves">Οπτικός διαχωρισμός με μία ματιά — δεν μπερδεύεις «μέγεθος» με «πρόσθετο».</p>
+        </div>
+      </div>
+      <div class="prop-body">
+        <div class="a2-grid">
+          <div class="a2-card a2-size"><div class="a2-card-h">📏 Μεγέθη αλοιφών</div><div class="a2-card-b">
+            <div class="a2-ln"><span class="nm">Μεσαία</span><span class="pinp sm"><input value="0,80"><span class="eu">€</span></span></div>
+            <div class="a2-ln"><span class="nm">Μεγάλη</span><span class="pinp sm"><input value="1,50"><span class="eu">€</span></span></div>
+          </div></div>
+          <div class="a2-card a2-sauce"><div class="a2-card-h">🥣 Επιπλέον σάλτσα</div><div class="a2-card-b">
+            <div class="a2-ln"><span class="nm">Τζατζίκι έξτρα</span><span class="pinp sm"><input value="0,50"><span class="eu">€</span></span></div>
+          </div></div>
+          <div class="a2-card a2-top"><div class="a2-card-h">➕ Πρόσθετα</div><div class="a2-card-b">
+            <div class="a2-ln"><span class="nm">Τυρί</span><span class="pinp sm"><input value="0,50"><span class="eu">€</span></span></div>
+            <div class="a2-ln"><span class="nm">Μπέικον</span><span class="pinp sm"><input value="0,70"><span class="eu">€</span></span></div>
+            <div class="a2-ln"><span class="nm">Πατάτα μέσα</span><span class="pinp sm"><input value="0,40"><span class="eu">€</span></span></div>
+          </div></div>
+        </div>
+        <p class="demo-note">Καθαρό & γρήγορο. Μειονέκτημα: δεν δείχνει κάλυψη/overrides όπως η #1.</p>
+      </div>
+    </div>
+
+    <!-- A3 -->
+    <div class="prop">
+      <div class="prop-h">
+        <div class="prop-num">3</div>
+        <div>
+          <p class="prop-t">Επαγγελματικός πίνακας (table)</p>
+          <p class="prop-why">Λύνει το «τυφλό» + πυκνή εικόνα: όλα σε στήλες — τιμή, τύπος, προϊόντα, overrides μαζί</p>
+          <p class="prop-solves">Λογιστική/επαγγελματική εικόνα, όλα ταξινομήσιμα σε μία οθόνη.</p>
+        </div>
+      </div>
+      <div class="prop-body">
+        <table class="a3-tbl">
+          <thead><tr><th>Έξτρα</th><th>Τύπος</th><th class="r">Προεπιλογή</th><th class="c">Ισχύει σε</th><th class="c">Δική τους τιμή</th></tr></thead>
+          <tbody>
+            <tr><td><b>Μεσαία</b></td><td><span class="type-chip tc-size">Μέγεθος</span></td><td class="r"><span class="pinp sm"><input value="0,80"><span class="eu">€</span></span></td><td class="c">6</td><td class="c"><span class="pill amber">1</span></td></tr>
+            <tr><td><b>Μεγάλη</b></td><td><span class="type-chip tc-size">Μέγεθος</span></td><td class="r"><span class="pinp sm"><input value="1,50"><span class="eu">€</span></span></td><td class="c">6</td><td class="c"><span class="pill grey">0</span></td></tr>
+            <tr><td><b>Τζατζίκι έξτρα</b></td><td><span class="type-chip tc-sauce">Σάλτσα</span></td><td class="r"><span class="pinp sm"><input value="0,50"><span class="eu">€</span></span></td><td class="c">9</td><td class="c"><span class="pill grey">0</span></td></tr>
+            <tr><td><b>Τυρί</b></td><td><span class="type-chip tc-top">Πρόσθετο</span></td><td class="r"><span class="pinp sm"><input value="0,50"><span class="eu">€</span></span></td><td class="c">11</td><td class="c"><span class="pill amber">2</span></td></tr>
+            <tr><td><b>Μπέικον</b></td><td><span class="type-chip tc-top">Πρόσθετο</span></td><td class="r"><span class="pinp sm"><input value="0,70"><span class="eu">€</span></span></td><td class="c">4</td><td class="c"><span class="pill grey">0</span></td></tr>
+          </tbody>
+        </table>
+        <p class="demo-note">Η στήλη «Δική τους τιμή» σε προειδοποιεί: αλλάζοντας το «Τυρί» εδώ, 2 προϊόντα ΔΕΝ θα αλλάξουν (έχουν override).</p>
+      </div>
+    </div>
+
+    <!-- A4 -->
+    <div class="prop">
+      <div class="prop-h">
+        <div class="prop-num">4</div>
+        <div>
+          <p class="prop-t">Premium accordion με σύνοψη</p>
+          <p class="prop-why">Λύνει τον όγκο: κλειστές ομάδες με περίληψη «3 έξτρα · από 0,40€» — ανοίγεις μόνο ό,τι θες</p>
+          <p class="prop-solves">Ιδανικό αν πληθαίνουν τα έξτρα — μένει συμμαζεμένο.</p>
+        </div>
+      </div>
+      <div class="prop-body">
+        <div class="a1-grp" style="border-color:var(--accent)">
+          <div class="a1-grp-h" style="background:var(--accent-soft)" onclick="tgl(this)">
+            <span class="type-chip tc-top">Πρόσθετα</span>
+            <span class="cnt">3 έξτρα · από 0,40€ έως 0,70€ · 2 overrides</span>
+            <span class="arrow">▾</span>
+          </div>
+          <div class="a1-rows" style="display:none">
+            <div class="a1-row"><span class="a1-name">Τυρί</span><span class="pinp sm"><input value="0,50"><span class="eu">€</span></span></div>
+            <div class="a1-row"><span class="a1-name">Μπέικον</span><span class="pinp sm"><input value="0,70"><span class="eu">€</span></span></div>
+            <div class="a1-row"><span class="a1-name">Πατάτα μέσα</span><span class="pinp sm"><input value="0,40"><span class="eu">€</span></span></div>
+          </div>
+        </div>
+        <div class="a1-grp">
+          <div class="a1-grp-h" onclick="tgl(this)"><span class="type-chip tc-size">Μεγέθη αλοιφών</span><span class="cnt">2 έξτρα · από 0,80€ έως 1,50€</span><span class="arrow">▾</span></div>
+          <div class="a1-rows" style="display:none">
+            <div class="a1-row"><span class="a1-name">Μεσαία</span><span class="pinp sm"><input value="0,80"><span class="eu">€</span></span></div>
+            <div class="a1-row"><span class="a1-name">Μεγάλη</span><span class="pinp sm"><input value="1,50"><span class="eu">€</span></span></div>
+          </div>
+        </div>
+        <p class="demo-note">Πάτα μια ομάδα για να ανοίξει. Η περίληψη σου λέει το εύρος τιμών χωρίς να ανοίξεις.</p>
+      </div>
+    </div>
+
+    <!-- A5 -->
+    <div class="prop">
+      <div class="prop-h">
+        <div class="prop-num">5</div>
+        <div>
+          <p class="prop-t">Κάρτες «με επίγνωση override»</p>
+          <p class="prop-why">Λύνει την αόρατη κληρονομιά: κάθε έξτρα δείχνει μπάρα «πόσα ακολουθούν την προεπιλογή»</p>
+          <p class="prop-solves">Καταλαβαίνεις αμέσως αν η προεπιλογή είναι «καθολική» ή έχει σπάσει σε πολλά.</p>
+        </div>
+      </div>
+      <div class="prop-body">
+        <div class="a5-grid">
+          <div class="a5-card">
+            <div class="a5-top"><span class="a5-nm">Τυρί <span class="type-chip tc-top">Πρόσθετο</span></span><span class="pinp sm"><input value="0,50"><span class="eu">€</span></span></div>
+            <div class="a5-bar"><i style="width:82%"></i></div>
+            <div class="a5-note">9 από 11 ακολουθούν · <a href="#">2 έχουν δική τους τιμή →</a></div>
+          </div>
+          <div class="a5-card">
+            <div class="a5-top"><span class="a5-nm">Μεσαία <span class="type-chip tc-size">Μέγεθος</span></span><span class="pinp sm"><input value="0,80"><span class="eu">€</span></span></div>
+            <div class="a5-bar"><i style="width:86%"></i></div>
+            <div class="a5-note">6 από 7 ακολουθούν · <a href="#">1 έχει δική του τιμή →</a></div>
+          </div>
+          <div class="a5-card">
+            <div class="a5-top"><span class="a5-nm">Τζατζίκι έξτρα <span class="type-chip tc-sauce">Σάλτσα</span></span><span class="pinp sm"><input value="0,50"><span class="eu">€</span></span></div>
+            <div class="a5-bar"><i style="width:100%"></i></div>
+            <div class="a5-note">✅ 9 από 9 ακολουθούν — καθολική τιμή</div>
+          </div>
+        </div>
+        <p class="demo-note">Η μπάρα = «υγεία» της προεπιλογής. Γεμάτη = όλοι την ακολουθούν· μισή = έχει σπάσει σε πολλά προϊόντα.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ PART B ============ -->
+  <div class="part" id="partB">
+    <div class="part-h">🅱️ Τα έξτρα μέσα στην κάρτα του προϊόντος</div>
+    <p class="part-sub">Στόχος: να βλέπεις <b>από πού έρχεται</b> κάθε τιμή (προεπιλογή / δική του / κλειδωμένο) και να μπορείς
+       να <b>γυρίσεις πίσω στην προεπιλογή</b> με ένα κλικ (κάτι που σήμερα δεν γίνεται).</p>
+
+    <!-- B1 -->
+    <div class="prop">
+      <div class="prop-h">
+        <div class="prop-num">1</div>
+        <div>
+          <p class="prop-t">Chips «στη φόρα» (χωρίς κρυφό toggle)</p>
+          <p class="prop-why">Λύνει το «κρυμμένο»: τα έξτρα φαίνονται αμέσως ως ταμπελάκια — δεν πατάς τίποτα για να τα δεις</p>
+          <p class="prop-solves">Πορτοκαλί ταμπελάκι = δική του τιμή · μπλε 🔒 = κλειδωμένο.</p>
+        </div>
+      </div>
+      <div class="prop-body">
+        <div class="pcard">
+          <div class="pcard-top">
+            <div class="pcard-nm">Πίτα Γύρος Χοιρινό</div>
+            <div class="pcard-price"><span class="pinp"><input value="3,50"><span class="eu">€</span></span><span class="pill green">62%</span></div>
+            <div class="pcard-meta">κόστος 1,10 €</div>
+          </div>
+          <div class="b1-chips">
+            <span class="b1-chip">½ Μισή <input value="2,50"><span class="eu">€</span></span>
+            <span class="b1-chip">+ Πατάτες <input value="1,50"><span class="eu">€</span></span>
+            <span class="b1-chip own">Τυρί <input value="0,60"><span class="eu">€</span></span>
+            <span class="b1-chip">Τζατζίκι έξτρα <input value="0,50"><span class="eu">€</span></span>
+            <span class="b1-chip lock">🔒 Διπλή Πίτα · 3,50€</span>
+          </div>
+        </div>
+        <p class="demo-note">Το «Τυρί» είναι πορτοκαλί = έχει δική του τιμή (0,60€ αντί 0,50€ προεπιλογή). Το κλειδωμένο δείχνει καθαρά από πού βγαίνει.</p>
+      </div>
+    </div>
+
+    <!-- B2 -->
+    <div class="prop">
+      <div class="prop-h">
+        <div class="prop-num">2</div>
+        <div>
+          <p class="prop-t">Μίνι-πίνακας με πηγή & «↺ επαναφορά»</p>
+          <p class="prop-why">Λύνει το #2 (override για πάντα): κάθε γραμμή λέει την πηγή + κουμπί επιστροφής στην προεπιλογή</p>
+          <p class="prop-solves">Βλέπεις ΠΡΟΕΠΙΛΟΓΗ / ΔΙΚΗ ΤΟΥ / ΚΛΕΙΔΩΜΕΝΟ και γυρνάς πίσω με ένα κλικ.</p>
+        </div>
+      </div>
+      <div class="prop-body">
+        <div class="pcard">
+          <div class="pcard-top">
+            <div class="pcard-nm">Πίτα Γύρος Χοιρινό</div>
+            <div class="pcard-price"><span class="pinp"><input value="3,50"><span class="eu">€</span></span><span class="pill green">62%</span></div>
+          </div>
+          <table class="b2-tbl">
+            <tr><td class="b2-nm">Τυρί <span class="src-tag src-own">δική του</span></td><td class="b2-r"><span class="pinp sm"><input value="0,60"><span class="eu">€</span></span> <button class="reset">↺ προεπιλογή</button></td></tr>
+            <tr><td class="b2-nm">Τζατζίκι έξτρα <span class="src-tag src-def">προεπιλογή</span></td><td class="b2-r"><span class="pinp sm"><input value="0,50"><span class="eu">€</span></span></td></tr>
+            <tr><td class="b2-nm">½ Μισή μερίδα <span class="src-tag src-def">προεπιλογή</span></td><td class="b2-r"><span class="pinp sm"><input value="2,50"><span class="eu">€</span></span></td></tr>
+            <tr><td class="b2-nm">Διπλή Πίτα <span class="src-tag src-lock">κλειδωμένο</span></td><td class="b2-r"><span class="lock">🔒 3,50€</span></td></tr>
+          </table>
+        </div>
+        <p class="demo-note"><b>Η πιο «έξυπνη» για την αλυσίδα:</b> λύνει και το «γυρίζω πίσω στην προεπιλογή» που σήμερα λείπει εντελώς.</p>
+      </div>
+    </div>
+
+    <!-- B3 -->
+    <div class="prop">
+      <div class="prop-h">
+        <div class="prop-num">3</div>
+        <div>
+          <p class="prop-t">Διακόπτης «Προεπιλογή ⟷ Δική του»</p>
+          <p class="prop-why">Κάνει την αλυσίδα ολοφάνερη: επιλέγεις ρητά αν το έξτρα ακολουθεί την προεπιλογή ή έχει δική του τιμή</p>
+          <p class="prop-solves">Το πεδίο τιμής εμφανίζεται ΜΟΝΟ όταν διαλέξεις «Δική του» — καθαρή πρόθεση.</p>
+        </div>
+      </div>
+      <div class="prop-body">
+        <div class="pcard">
+          <div class="pcard-top"><div class="pcard-nm">Πίτα Γύρος Χοιρινό</div>
+            <div class="pcard-price"><span class="pinp"><input value="3,50"><span class="eu">€</span></span><span class="pill green">62%</span></div></div>
+          <div class="b3-ln">
+            <div class="b3-hd"><span class="b3-nm">Τυρί</span>
+              <span class="b3-seg"><button onclick="seg(this,0)">Προεπιλογή</button><button class="on" onclick="seg(this,1)">Δική του</button></span></div>
+            <div class="b3-detail">Τιμή: <span class="pinp sm"><input value="0,60"><span class="eu">€</span></span> <span style="color:var(--text-muted)">(προεπιλογή 0,50€)</span></div>
+          </div>
+          <div class="b3-ln">
+            <div class="b3-hd"><span class="b3-nm">Τζατζίκι έξτρα</span>
+              <span class="b3-seg"><button class="on" onclick="seg(this,0)">Προεπιλογή</button><button onclick="seg(this,1)">Δική του</button></span></div>
+            <div class="b3-detail">Ακολουθεί την προεπιλογή: <b>0,50€</b></div>
+          </div>
+        </div>
+        <p class="demo-note">Πιο «διδακτικό»: δείχνει ξεκάθαρα ότι υπάρχει προεπιλογή από πίσω. Λίγο περισσότερα κλικ.</p>
+      </div>
+    </div>
+
+    <!-- B4 -->
+    <div class="prop">
+      <div class="prop-h">
+        <div class="prop-num">4</div>
+        <div>
+          <p class="prop-t">Ομαδοποιημένα ανά τύπο μέσα στην κάρτα</p>
+          <p class="prop-why">Λύνει το μπέρδεμα σε προϊόντα με πολλά έξτρα: χωρίζει Μεγέθη / Σάλτσες / Πρόσθετα</p>
+          <p class="prop-solves">Ίδια «γλώσσα» με τον πάνω πίνακα — συνέπεια παντού.</p>
+        </div>
+      </div>
+      <div class="prop-body">
+        <div class="pcard">
+          <div class="pcard-top"><div class="pcard-nm">Τζατζίκι (αλοιφή)</div>
+            <div class="pcard-price"><span class="pinp"><input value="3,00"><span class="eu">€</span></span><span class="pill green">70%</span>
+            <span class="lock" style="font-size:11px">📏 Μικρή = βάση</span></div></div>
+          <div class="b4-grp">
+            <div class="b4-grp-h"><span class="type-chip tc-size">Μεγέθη</span></div>
+            <div class="b4-ln"><span class="b4-nm">Μεσαία <span class="src-tag src-def">προεπιλογή</span></span><span class="pinp sm"><input value="0,80"><span class="eu">€</span></span></div>
+            <div class="b4-ln"><span class="b4-nm">Μεγάλη <span class="src-tag src-own">δική του</span></span><span class="pinp sm"><input value="1,60"><span class="eu">€</span></span></div>
+          </div>
+          <div class="b4-grp">
+            <div class="b4-grp-h"><span class="type-chip tc-sauce">Σάλτσα</span></div>
+            <div class="b4-ln"><span class="b4-nm">Τζατζίκι έξτρα <span class="src-tag src-def">προεπιλογή</span></span><span class="pinp sm"><input value="0,50"><span class="eu">€</span></span></div>
+          </div>
+        </div>
+        <p class="demo-note">Δείχνει και το «📏 Μικρή = βάση» πάνω-πάνω, ώστε να καταλαβαίνεις γιατί το μικρό μέγεθος δεν είναι στη λίστα.</p>
+      </div>
+    </div>
+
+    <!-- B5 -->
+    <div class="prop">
+      <div class="prop-h">
+        <div class="prop-num">5</div>
+        <div>
+          <p class="prop-t">Καθαρή κάρτα + συρτάρι επεξεργασίας</p>
+          <p class="prop-why">Λύνει τη «φασαρία»: η κάρτα μένει καθαρή· τα έξτρα ανοίγουν σε πλαϊνό συρτάρι με μεγάλα πεδία</p>
+          <p class="prop-solves">Ιδανικό για κινητό/tablet — μεγάλα κουμπιά, ένα προϊόν τη φορά.</p>
+        </div>
+      </div>
+      <div class="prop-body">
+        <div class="pcard">
+          <div class="pcard-top">
+            <div class="pcard-nm">Πίτα Γύρος Χοιρινό</div>
+            <div class="pcard-price"><span class="pinp"><input value="3,50"><span class="eu">€</span></span><span class="pill green">62%</span></div>
+            <div class="pcard-meta">κόστος 1,10 € · 4 έξτρα</div>
+          </div>
+          <button class="b5-btn" onclick="openDrawer()">✏️ Έξτρα τιμές (4) →</button>
+        </div>
+        <p class="demo-note">Πάτα το κουμπί για να δεις το συρτάρι με μεγάλα πεδία, πηγή τιμής και «↺ επαναφορά».</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    👉 Πες μου <b>ποιον αριθμό θες για το 🅰️ (πάνω πίνακας)</b> και <b>ποιον για το 🅱️ (έξτρα προϊόντος)</b> — π.χ.
+    «<b>Α3 και Β2</b>». Μπορείς και να μιξάρεις (π.χ. «θέλω την κάλυψη της Α1 αλλά σε πίνακα σαν την Α3»).
+    <br><br>
+    <span style="color:var(--text-muted);font-size:13px">Η δική μου σύσταση για τη <b>λογική</b>: <b>Α3</b> (σε προειδοποιεί για τα overrides πριν αλλάξεις)
+    + <b>Β2</b> (δείχνει πηγή + επαναφορά στην προεπιλογή — το μοναδικό που διορθώνει το «κόλλησε για πάντα»).</span>
+  </div>
+</div>
+
+<!-- drawer for B5 -->
+<div class="b5-overlay" id="ov" onclick="closeDrawer()"></div>
+<div class="b5-drawer" id="dr">
+  <div class="b5-dh"><b>Έξτρα · Πίτα Γύρος Χοιρινό</b><button class="b5-x" onclick="closeDrawer()">×</button></div>
+  <div class="b5-body">
+    <div class="b5-ln"><span class="b5-nm">Τυρί<small><span class="src-tag src-own">δική του</span> · προεπιλογή 0,50€</small></span><span class="b5-inp"><input value="0,60"></span></div>
+    <div class="b5-ln"><span class="b5-nm">Τζατζίκι έξτρα<small><span class="src-tag src-def">προεπιλογή</span></small></span><span class="b5-inp"><input value="0,50"></span></div>
+    <div class="b5-ln"><span class="b5-nm">½ Μισή μερίδα<small><span class="src-tag src-def">προεπιλογή</span></small></span><span class="b5-inp"><input value="2,50"></span></div>
+    <div class="b5-ln"><span class="b5-nm">Διπλή Πίτα<small><span class="src-tag src-lock">κλειδωμένο · από «Πίτα παραδοσιακή»</span></small></span><span class="lock">🔒 3,50€</span></div>
+    <div style="margin-top:16px;text-align:right"><button class="reset" style="margin-right:14px">↺ Όλα στην προεπιλογή</button><button class="btn-primary">Έτοιμο</button></div>
+  </div>
+</div>
+
+<script>
+  function showPart(p,btn){
+    document.querySelectorAll('.part').forEach(e=>e.classList.remove('show'));
+    document.getElementById('part'+p).classList.add('show');
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    btn.classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  function tgl(h){
+    const b=h.nextElementSibling;
+    const open=b.style.display!=='none';
+    b.style.display=open?'none':'block';
+    const a=h.querySelector('.arrow'); if(a)a.textContent=open?'▸':'▾';
+  }
+  function seg(btn,which){
+    const seg=btn.parentElement; seg.querySelectorAll('button').forEach(b=>b.classList.remove('on'));
+    btn.classList.add('on');
+    const detail=seg.closest('.b3-ln').querySelector('.b3-detail');
+    if(which===1){ detail.innerHTML='Τιμή: <span class="pinp sm"><input value="0,60"><span class="eu">€</span></span> <span style="color:var(--text-muted)">(προεπιλογή 0,50€)</span>'; }
+    else { detail.innerHTML='Ακολουθεί την προεπιλογή: <b>0,50€</b>'; }
+  }
+  function openDrawer(){document.getElementById('dr').classList.add('open');document.getElementById('ov').classList.add('show');}
+  function closeDrawer(){document.getElementById('dr').classList.remove('open');document.getElementById('ov').classList.remove('show');}
+</script>
+</body>
+</html>
