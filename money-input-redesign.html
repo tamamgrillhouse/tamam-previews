@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Πεδία € — 5 προτάσεις</title>
+<style>
+  :root{
+    --accent:#f59e0b; --accent-dark:#d97706; --bg:#f1f5f9; --white:#fff;
+    --border:#e2e8f0; --danger:#ef4444; --text:#1e293b; --muted:#64748b;
+    --ok:#16a34a;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:var(--bg); color:var(--text); line-height:1.5;
+    padding:24px 16px 80px;
+  }
+  .wrap{max-width:640px; margin:0 auto}
+  .head{text-align:center; margin-bottom:28px}
+  .head h1{font-size:26px; margin:0 0 8px}
+  .head p{color:var(--muted); margin:0; font-size:15px}
+  .card{
+    background:var(--white); border:1px solid var(--border); border-radius:16px;
+    padding:22px 20px; margin-bottom:22px; box-shadow:0 1px 3px rgba(0,0,0,.04);
+  }
+  .card-head{display:flex; align-items:center; gap:10px; margin-bottom:6px}
+  .num{
+    width:30px; height:30px; border-radius:50%; background:var(--accent);
+    color:#fff; font-weight:700; display:flex; align-items:center; justify-content:center;
+    font-size:15px; flex:0 0 auto;
+  }
+  .card h2{font-size:19px; margin:0}
+  .desc{color:var(--muted); font-size:14px; margin:2px 0 18px}
+  .demo-label{font-size:13px; color:var(--muted); margin-bottom:8px; font-weight:600}
+  .out{font-size:13px; color:var(--muted); margin-top:12px}
+  .out b{color:var(--ok)}
+  .tags{display:flex; gap:6px; flex-wrap:wrap; margin-top:14px}
+  .tag{font-size:12px; padding:3px 10px; border-radius:20px; background:#fff7ed; color:#9a3412; border:1px solid #fed7aa}
+  .tag.con{background:#fef2f2; color:#991b1b; border-color:#fecaca}
+
+  /* base input look */
+  .fld{
+    width:100%; height:52px; border:1.5px solid var(--border); border-radius:12px;
+    font-size:20px; padding:0 16px; outline:none; transition:.15s; background:#fff;
+    font-variant-numeric:tabular-nums; color:var(--text);
+  }
+  .fld:focus{border-color:var(--accent); box-shadow:0 0 0 3px rgba(245,158,11,.15)}
+
+  /* 1 — prefix */
+  .p1{position:relative}
+  .p1 .cur{
+    position:absolute; left:16px; top:50%; transform:translateY(-50%);
+    font-size:20px; color:var(--muted); pointer-events:none; font-weight:600; z-index:1;
+  }
+  .p1 .fld{padding-left:38px; padding-right:46px; text-align:right; font-weight:600; letter-spacing:.5px}
+  .p1 .spin{
+    position:absolute; right:6px; top:50%; transform:translateY(-50%);
+    display:flex; flex-direction:column; gap:2px;
+  }
+  .p1 .spin button{
+    width:32px; height:22px; border:1px solid var(--border); background:#fafbfc;
+    border-radius:6px; cursor:pointer; color:var(--accent); font-size:11px; line-height:1;
+    display:flex; align-items:center; justify-content:center; padding:0;
+  }
+  .p1 .spin button:active{background:var(--accent); color:#fff}
+
+  /* 2 — smart stepper */
+  .p2{display:flex; gap:10px; align-items:stretch}
+  .p2 .fld{text-align:center; font-weight:700; padding:0 8px; flex:1}
+  .stepbtn{
+    width:52px; border:1.5px solid var(--border); border-radius:12px; background:#fff;
+    font-size:24px; color:var(--accent); cursor:pointer; font-weight:700; flex:0 0 auto;
+  }
+  .stepbtn:active{background:#fff7ed}
+  .p2-steps{display:flex; gap:6px; margin-top:10px; justify-content:center}
+  .chip{
+    padding:6px 12px; border:1px solid var(--border); border-radius:20px; background:#fff;
+    font-size:13px; cursor:pointer; color:var(--muted); font-weight:600;
+  }
+  .chip.on{background:var(--accent); color:#fff; border-color:var(--accent)}
+
+  /* 3 — keypad */
+  .p3 .display{
+    height:64px; border:1.5px solid var(--border); border-radius:12px; display:flex;
+    align-items:center; justify-content:flex-end; padding:0 18px; font-size:28px;
+    font-weight:700; cursor:pointer; background:#fafbfc; font-variant-numeric:tabular-nums;
+  }
+  .p3 .display.empty{color:#cbd5e1}
+  .keypad{display:none; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px}
+  .keypad.open{display:grid}
+  .key{
+    height:56px; border:1.5px solid var(--border); border-radius:12px; background:#fff;
+    font-size:22px; font-weight:600; cursor:pointer; color:var(--text);
+  }
+  .key:active{background:#fff7ed; border-color:var(--accent)}
+  .key.act{background:var(--accent); color:#fff; border-color:var(--accent)}
+  .key.del{color:var(--danger)}
+
+  /* 4 — quick values */
+  .p4 .quick{display:flex; gap:8px; flex-wrap:wrap; margin-top:12px}
+
+  /* 5 — live big */
+  .p5 .big{
+    text-align:center; font-size:40px; font-weight:800; color:var(--text);
+    padding:14px 0 4px; font-variant-numeric:tabular-nums; min-height:60px;
+  }
+  .p5 .big.empty{color:#cbd5e1}
+  .p5 .big .eur{color:var(--accent)}
+  .p5 .under{
+    width:100%; height:44px; border:none; border-bottom:2px solid var(--border);
+    text-align:center; font-size:16px; outline:none; color:var(--muted); background:transparent;
+  }
+  .p5 .under:focus{border-color:var(--accent)}
+  .note{
+    background:#fff7ed; border:1px solid #fed7aa; border-radius:10px; padding:10px 14px;
+    font-size:13px; color:#9a3412; margin-top:24px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <h1>💶 Πεδία ποσών — 5 προτάσεις</h1>
+    <p>Δοκίμασε να γράψεις σε καθεμία. Η τελεία γίνεται αυτόματα κόμμα.<br>
+    ✍️ Στην πληκτρολόγηση βάζεις <b>όσα δεκαδικά θες</b> · ▲▼ τα βελάκια πάνε <b>ανά 0,10</b>.<br>
+    Πες μου ποια σου αρέσει (ή συνδυασμό).</p>
+  </div>
+
+  <!-- 1 -->
+  <div class="card">
+    <div class="card-head"><span class="num">1</span><h2>Καθαρό & κομψό</h2></div>
+    <div class="desc">Το € μέσα στο πεδίο, ο αριθμός δεξιά όπως στα λογιστικά. Μικρά βελάκια <b>βήμα 0,10</b>, αλλά όταν γράφεις βάζεις <b>όσα δεκαδικά θες</b>.</div>
+    <div class="demo-label">Τιμή αγοράς</div>
+    <div class="p1">
+      <span class="cur">€</span>
+      <input class="fld money p1fld" inputmode="decimal" placeholder="0,00">
+      <span class="spin">
+        <button type="button" class="p1up">▲</button>
+        <button type="button" class="p1dn">▼</button>
+      </span>
+    </div>
+    <div class="tags">
+      <span class="tag">Πιο απλό απ' όλα</span>
+      <span class="tag">Βελάκια 0,10</span>
+      <span class="tag">Ελεύθερα δεκαδικά στην πληκτρολόγηση</span>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="card">
+    <div class="card-head"><span class="num">2</span><h2>Έξυπνα κουμπιά + / −</h2></div>
+    <div class="desc">Κρατάμε τα κουμπιά, αλλά με <b>λογικό βήμα</b> που διαλέγεις εσύ (π.χ. +1 €, όχι +0,0001!). Καλό για μικρές διορθώσεις με το δάχτυλο.</div>
+    <div class="demo-label">Τιμή αγοράς</div>
+    <div class="p2">
+      <button class="stepbtn" data-dir="-1">−</button>
+      <input class="fld money p2fld" inputmode="decimal" placeholder="0,00">
+      <button class="stepbtn" data-dir="1">+</button>
+    </div>
+    <div class="p2-steps">
+      <span class="chip on" data-step="0.1">βήμα 0,10</span>
+      <span class="chip" data-step="1">βήμα 1</span>
+      <span class="chip" data-step="10">βήμα 10</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Διόρθωση με το δάχτυλο</span>
+      <span class="tag con">Πιο «φορτωμένο»</span>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="card">
+    <div class="card-head"><span class="num">3</span><h2>Αριθμομηχανή (για κινητό)</h2></div>
+    <div class="desc">Πατάς το πεδίο και ανοίγει ένα μεγάλο αριθμητικό πληκτρολόγιο — σαν το ρολόι της ώρας. Ιδανικό στο κινητό, μεγάλα κουμπιά.</div>
+    <div class="demo-label">Τιμή αγοράς</div>
+    <div class="p3">
+      <div class="display empty" id="p3disp">0,00 €</div>
+      <div class="keypad" id="p3pad">
+        <button class="key">1</button><button class="key">2</button><button class="key">3</button>
+        <button class="key">4</button><button class="key">5</button><button class="key">6</button>
+        <button class="key">7</button><button class="key">8</button><button class="key">9</button>
+        <button class="key act">,</button><button class="key">0</button><button class="key del">⌫</button>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag">Τέλειο στο κινητό</span>
+      <span class="tag">Μεγάλα κουμπιά</span>
+      <span class="tag con">Ένα κλικ παραπάνω στον υπολογιστή</span>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="card">
+    <div class="card-head"><span class="num">4</span><h2>Γρήγορες τιμές</h2></div>
+    <div class="desc">Γράφεις κανονικά, αλλά έχεις και κουμπάκια με συχνές τιμές για ένα κλικ. (Οι τιμές θα προσαρμόζονται στο κάθε πεδίο.)</div>
+    <div class="demo-label">Τιμή αγοράς</div>
+    <div class="p1">
+      <span class="cur">€</span>
+      <input class="fld money p4fld" inputmode="decimal" placeholder="0,00">
+    </div>
+    <div class="quick">
+      <span class="chip" data-v="1,00">1,00</span>
+      <span class="chip" data-v="2,50">2,50</span>
+      <span class="chip" data-v="5,00">5,00</span>
+      <span class="chip" data-v="10,00">10,00</span>
+      <span class="chip" data-v="0,50">0,50</span>
+    </div>
+    <div class="tags">
+      <span class="tag">Ταχύτητα για συχνά ποσά</span>
+      <span class="tag con">Χρήσιμο μόνο σε κάποια πεδία</span>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="card">
+    <div class="card-head"><span class="num">5</span><h2>Ζωντανή μορφοποίηση</h2></div>
+    <div class="desc">Γράφεις κάτω, και πάνω εμφανίζεται μεγάλο & καθαρό με τελείες χιλιάδων: <b>1.234,56 €</b>. Δεν αφήνει περιθώριο για λάθος.</div>
+    <div class="demo-label">Τιμή αγοράς</div>
+    <div class="p5">
+      <div class="big empty" id="p5big">0,00 <span class="eur">€</span></div>
+      <input class="under money p5fld" inputmode="decimal" placeholder="γράψε εδώ…">
+    </div>
+    <div class="tags">
+      <span class="tag">Ξεκάθαρο, μηδέν λάθη</span>
+      <span class="tag">Ωραίο για μεγάλα ποσά</span>
+      <span class="tag con">Πιάνει λίγο χώρο</span>
+    </div>
+  </div>
+
+  <div class="note">💡 Και στις 5: <b>ελεύθερα δεκαδικά</b> όταν γράφεις (π.χ. 4,3789 €), τα βελάκια πάνε <b>ανά 0,10</b> (τέλος το 0,0001), η τελεία γίνεται κόμμα, και δέχονται μόνο σωστά ποσά. Διάλεξε στιλ — μπορούμε και να βάλουμε π.χ. το <b>3</b> στο κινητό και το <b>1</b> στον υπολογιστή.</div>
+</div>
+
+<script>
+// --- κοινή λογική: τελεία -> κόμμα, μόνο ψηφία + ένα κόμμα ---
+function cleanMoney(s){
+  s = s.replace(/\./g, ',');            // τελεία -> κόμμα
+  s = s.replace(/[^0-9,]/g, '');        // πέτα ό,τι δεν είναι ψηφίο/κόμμα
+  var i = s.indexOf(',');
+  if(i !== -1){                         // κράτα μόνο το πρώτο κόμμα
+    s = s.slice(0, i+1) + s.slice(i+1).replace(/,/g, '');
+  }
+  return s;
+}
+document.querySelectorAll('.money').forEach(function(inp){
+  inp.addEventListener('input', function(){
+    var p = inp.selectionStart, before = inp.value;
+    inp.value = cleanMoney(inp.value);
+    // κράτα τον κέρσορα λογικά
+    inp.setSelectionRange(p - (before.length - inp.value.length), p - (before.length - inp.value.length));
+    inp.dispatchEvent(new CustomEvent('moneychange'));
+  });
+});
+
+// helper: πρόσθεσε βήμα κρατώντας τα δεκαδικά (χωρίς float σκουπίδια)
+function bump(fld, delta){
+  var v = parseFloat((fld.value||'0').replace(',','.')) || 0;
+  v = Math.max(0, v + delta);
+  var s = (Math.round(v * 10000) / 10000).toString();  // ως 4 δεκαδικά, χωρίς 0,30000004
+  fld.value = s.replace('.', ',');
+}
+
+// 1 — βελάκια 0,10
+(function(){
+  var fld = document.querySelector('.p1fld');
+  document.querySelector('.p1up').addEventListener('click', function(){ bump(fld, 0.10); });
+  document.querySelector('.p1dn').addEventListener('click', function(){ bump(fld, -0.10); });
+})();
+
+// 2 — smart stepper
+(function(){
+  var fld = document.querySelector('.p2fld'), step = 0.1;
+  document.querySelectorAll('.p2-steps .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('.p2-steps .chip').forEach(x=>x.classList.remove('on'));
+      c.classList.add('on'); step = parseFloat(c.dataset.step);
+    });
+  });
+  document.querySelectorAll('.p2 .stepbtn').forEach(function(b){
+    b.addEventListener('click', function(){ bump(fld, step * parseInt(b.dataset.dir)); });
+  });
+})();
+
+// 3 — keypad
+(function(){
+  var disp = document.getElementById('p3disp'), pad = document.getElementById('p3pad'), val = '';
+  function render(){
+    disp.textContent = (val || '0,00') + ' €';
+    disp.classList.toggle('empty', !val);
+  }
+  disp.addEventListener('click', function(){ pad.classList.toggle('open'); });
+  pad.querySelectorAll('.key').forEach(function(k){
+    k.addEventListener('click', function(){
+      var t = k.textContent;
+      if(t === '⌫'){ val = val.slice(0,-1); }
+      else if(t === ','){ if(val.indexOf(',')===-1 && val) val += ','; }
+      else { val += t; }   // ελεύθερα δεκαδικά στην πληκτρολόγηση
+      render();
+    });
+  });
+})();
+
+// 4 — quick values
+document.querySelectorAll('.p4 .chip').forEach(function(c){
+  c.addEventListener('click', function(){ document.querySelector('.p4fld').value = c.dataset.v; });
+});
+
+// 5 — live big format
+(function(){
+  var inp = document.querySelector('.p5fld'), big = document.getElementById('p5big');
+  function fmt(){
+    var raw = inp.value.replace(/\./g,',').replace(/[^0-9,]/g,'');
+    if(!raw){ big.innerHTML = '0,00 <span class="eur">€</span>'; big.classList.add('empty'); return; }
+    var parts = raw.split(','), intp = parts[0]||'0', dec = parts[1];
+    intp = intp.replace(/\B(?=(\d{3})+(?!\d))/g, '.');   // τελείες χιλιάδων
+    var out = intp + (dec!==undefined ? ',' + dec : '');
+    big.innerHTML = out + ' <span class="eur">€</span>'; big.classList.remove('empty');
+  }
+  inp.addEventListener('input', fmt);
+})();
+</script>
+</body>
+</html>
