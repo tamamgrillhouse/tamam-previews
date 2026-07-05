@@ -54,16 +54,14 @@
     font-size:20px; color:var(--muted); pointer-events:none; font-weight:600; z-index:1;
   }
   .p1 .fld{padding-left:38px; padding-right:46px; text-align:right; font-weight:600; letter-spacing:.5px}
-  .p1 .spin{
-    position:absolute; right:6px; top:50%; transform:translateY(-50%);
-    display:flex; flex-direction:column; gap:2px;
-  }
-  .p1 .spin button{
+  .spin{display:flex; flex-direction:column; gap:2px}
+  .spin button{
     width:32px; height:22px; border:1px solid var(--border); background:#fafbfc;
     border-radius:6px; cursor:pointer; color:var(--accent); font-size:11px; line-height:1;
     display:flex; align-items:center; justify-content:center; padding:0;
   }
-  .p1 .spin button:active{background:var(--accent); color:#fff}
+  .spin button:active{background:var(--accent); color:#fff}
+  .p1 .spin{position:absolute; right:6px; top:50%; transform:translateY(-50%)}
 
   /* 2 — smart stepper */
   .p2{display:flex; gap:10px; align-items:stretch}
@@ -81,6 +79,10 @@
   .chip.on{background:var(--accent); color:#fff; border-color:var(--accent)}
 
   /* 3 — keypad */
+  .p3row{display:flex; gap:10px; align-items:stretch}
+  .p3row .display{flex:1}
+  .spin-tall{position:static; transform:none}
+  .spin-tall button{width:44px; height:31px; font-size:13px}
   .p3 .display{
     height:64px; border:1.5px solid var(--border); border-radius:12px; display:flex;
     align-items:center; justify-content:flex-end; padding:0 18px; font-size:28px;
@@ -100,6 +102,9 @@
   /* 4 — quick values */
   .p4 .quick{display:flex; gap:8px; flex-wrap:wrap; margin-top:12px}
 
+  .p5row{display:flex; gap:10px; align-items:center; margin-top:6px}
+  .p5row .under{flex:1}
+  .p5row .stepbtn{height:44px}
   /* 5 — live big */
   .p5 .big{
     text-align:center; font-size:40px; font-weight:800; color:var(--text);
@@ -123,7 +128,7 @@
   <div class="head">
     <h1>💶 Πεδία ποσών — 5 προτάσεις</h1>
     <p>Δοκίμασε να γράψεις σε καθεμία. Η τελεία γίνεται αυτόματα κόμμα.<br>
-    ✍️ Στην πληκτρολόγηση βάζεις <b>όσα δεκαδικά θες</b> · ▲▼ τα βελάκια πάνε <b>ανά 0,10</b>.<br>
+    ✍️ Στην πληκτρολόγηση βάζεις <b>όσα δεκαδικά θες</b> · <b>και οι 5 έχουν βελάκια ▲▼ βήμα 0,10</b> (για μικρά ποσά).<br>
     Πες μου ποια σου αρέσει (ή συνδυασμό).</p>
   </div>
 
@@ -174,7 +179,13 @@
     <div class="desc">Πατάς το πεδίο και ανοίγει ένα μεγάλο αριθμητικό πληκτρολόγιο — σαν το ρολόι της ώρας. Ιδανικό στο κινητό, μεγάλα κουμπιά.</div>
     <div class="demo-label">Τιμή αγοράς</div>
     <div class="p3">
-      <div class="display empty" id="p3disp">0,00 €</div>
+      <div class="p3row">
+        <div class="display empty" id="p3disp">0,00 €</div>
+        <span class="spin spin-tall">
+          <button type="button" class="p3up">▲</button>
+          <button type="button" class="p3dn">▼</button>
+        </span>
+      </div>
       <div class="keypad" id="p3pad">
         <button class="key">1</button><button class="key">2</button><button class="key">3</button>
         <button class="key">4</button><button class="key">5</button><button class="key">6</button>
@@ -197,6 +208,10 @@
     <div class="p1">
       <span class="cur">€</span>
       <input class="fld money p4fld" inputmode="decimal" placeholder="0,00">
+      <span class="spin">
+        <button type="button" class="p4up">▲</button>
+        <button type="button" class="p4dn">▼</button>
+      </span>
     </div>
     <div class="quick">
       <span class="chip" data-v="1,00">1,00</span>
@@ -218,7 +233,11 @@
     <div class="demo-label">Τιμή αγοράς</div>
     <div class="p5">
       <div class="big empty" id="p5big">0,00 <span class="eur">€</span></div>
-      <input class="under money p5fld" inputmode="decimal" placeholder="γράψε εδώ…">
+      <div class="p5row">
+        <button type="button" class="stepbtn p5dn">−</button>
+        <input class="under money p5fld" inputmode="decimal" placeholder="γράψε εδώ…">
+        <button type="button" class="stepbtn p5up">+</button>
+      </div>
     </div>
     <div class="tags">
       <span class="tag">Ξεκάθαρο, μηδέν λάθη</span>
@@ -288,6 +307,14 @@ function bump(fld, delta){
     disp.classList.toggle('empty', !val);
   }
   disp.addEventListener('click', function(){ pad.classList.toggle('open'); });
+  function step(delta){
+    var v = parseFloat((val||'0').replace(',','.')) || 0;
+    v = Math.max(0, v + delta);
+    val = (Math.round(v * 10000) / 10000).toString().replace('.', ',');
+    render();
+  }
+  document.querySelector('.p3up').addEventListener('click', function(){ step(0.10); });
+  document.querySelector('.p3dn').addEventListener('click', function(){ step(-0.10); });
   pad.querySelectorAll('.key').forEach(function(k){
     k.addEventListener('click', function(){
       var t = k.textContent;
@@ -299,10 +326,15 @@ function bump(fld, delta){
   });
 })();
 
-// 4 — quick values
+// 4 — quick values + βελάκια
 document.querySelectorAll('.p4 .chip').forEach(function(c){
   c.addEventListener('click', function(){ document.querySelector('.p4fld').value = c.dataset.v; });
 });
+(function(){
+  var fld = document.querySelector('.p4fld');
+  document.querySelector('.p4up').addEventListener('click', function(){ bump(fld, 0.10); });
+  document.querySelector('.p4dn').addEventListener('click', function(){ bump(fld, -0.10); });
+})();
 
 // 5 — live big format
 (function(){
@@ -316,6 +348,8 @@ document.querySelectorAll('.p4 .chip').forEach(function(c){
     big.innerHTML = out + ' <span class="eur">€</span>'; big.classList.remove('empty');
   }
   inp.addEventListener('input', fmt);
+  document.querySelector('.p5up').addEventListener('click', function(){ bump(inp, 0.10); fmt(); });
+  document.querySelector('.p5dn').addEventListener('click', function(){ bump(inp, -0.10); fmt(); });
 })();
 </script>
 </body>
