@@ -1,0 +1,907 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>🧾 Κάρτα Συνταγής — 5 Προτάσεις</title>
+<style>
+  :root{
+    --accent:#f59e0b; --accent-dark:#d97706; --accent-soft:#fff7ed;
+    --navy:#1e2d3d; --ink:#0f172a;
+    --bg:#eef2f6; --white:#fff; --text:#1e293b; --muted:#64748b;
+    --border:#e2e8f0; --line:#f1f5f9;
+    --green:#059669; --amber:#d97706; --red:#dc2626; --danger:#ef4444;
+    --radius:14px; --shadow:0 6px 22px rgba(15,23,42,.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans",sans-serif;
+       background:var(--bg);color:var(--text);line-height:1.5;padding-bottom:70px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 18px}
+
+  /* ── hero ── */
+  .hero{background:linear-gradient(120deg,#141d2b,#243449);color:#fff;padding:34px 0 30px}
+  .hero .tag{display:inline-block;background:var(--accent);color:#3b2600;font-weight:800;
+             font-size:11.5px;padding:4px 12px;border-radius:999px;margin-bottom:13px;letter-spacing:.4px}
+  .hero h1{font-size:29px;font-weight:800;letter-spacing:-.5px}
+  .hero p{color:#c0ccdb;font-size:14.5px;max-width:820px;margin-top:9px}
+
+  /* ── tabs ── */
+  .tabs-bar{position:sticky;top:0;z-index:40;background:var(--bg);
+            border-bottom:1px solid var(--border);padding-top:12px}
+  .tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:12px;scrollbar-width:thin}
+  .tab{flex:0 0 auto;border:1px solid var(--border);background:#fff;border-radius:12px;
+       padding:11px 15px;cursor:pointer;text-align:left;min-width:196px;transition:.14s;position:relative}
+  .tab:hover{border-color:#cbd5e1}
+  .tab.on{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 4px 14px rgba(245,158,11,.16)}
+  .tab .k{font-size:10.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--muted)}
+  .tab.on .k{color:var(--accent-dark)}
+  .tab .n{font-size:14.5px;font-weight:800;margin-top:2px;color:var(--ink)}
+  .tab .d{font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.35}
+
+  /* ── panel ── */
+  .panel{display:none;padding:26px 0 10px;animation:fade .22s ease}
+  .panel.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .why{background:#fff;border:1px solid var(--border);border-left:4px solid var(--accent);
+       border-radius:12px;padding:15px 18px;margin-bottom:22px;box-shadow:var(--shadow)}
+  .why h3{font-size:15px;font-weight:800;color:var(--ink);display:flex;align-items:center;gap:8px}
+  .why p{font-size:13.5px;color:#475569;margin-top:6px}
+  .why ul{margin:9px 0 0 2px;list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+  .why li{font-size:12px;font-weight:600;background:#f0f9ff;color:#0369a1;border:1px solid #bae6fd;
+          border-radius:999px;padding:5px 11px}
+  .why li.win{background:#ecfdf5;color:#047857;border-color:#a7f3d0}
+
+  /* ── shared modal shell ── */
+  .win{background:#fff;border-radius:18px;box-shadow:0 24px 60px rgba(15,23,42,.20);
+       overflow:hidden;border:1px solid var(--border);max-width:1040px;margin:0 auto}
+  .win-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;
+            padding:20px 26px 16px;border-bottom:1px solid var(--border)}
+  .win-head .ttl{font-size:21px;font-weight:800;letter-spacing:-.3px;color:var(--ink)}
+  .win-head .sub{font-size:12.5px;color:var(--muted);margin-top:5px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .chip-pos{background:#eef2ff;color:#3730a3;font-weight:800;font-size:11px;padding:2px 9px;border-radius:7px}
+  .win-x{background:none;border:none;font-size:26px;color:var(--muted);cursor:pointer;line-height:1}
+  .win-foot{display:flex;gap:9px;justify-content:flex-end;flex-wrap:wrap;
+            padding:15px 26px;border-top:1px solid var(--border);background:#fafbfc}
+
+  /* buttons */
+  .btn{border:none;border-radius:10px;font-weight:700;font-size:13.5px;padding:11px 17px;
+       cursor:pointer;min-height:44px;display:inline-flex;align-items:center;gap:7px;transition:.12s}
+  .btn-primary{background:var(--accent);color:#3b2600}
+  .btn-primary:hover{background:var(--accent-dark)}
+  .btn-secondary{background:#fff;border:1px solid var(--border);color:var(--text)}
+  .btn-secondary:hover{border-color:#cbd5e1}
+  .btn-danger{background:#fff;border:1px solid #fca5a5;color:var(--danger)}
+  .btn-ghost{background:transparent;color:var(--accent-dark);font-weight:800;
+             border:1.5px dashed #fcd9a0;border-radius:10px;padding:10px 15px;cursor:pointer;min-height:42px;font-size:13px}
+  .btn-ghost:hover{background:var(--accent-soft);border-color:var(--accent)}
+  .btn-sm{padding:8px 13px;min-height:38px;font-size:12.5px}
+
+  /* section shell (tables) */
+  .sec{border:1px solid var(--border);border-radius:13px;overflow:hidden;margin-bottom:14px;background:#fff}
+  .sec-h{display:flex;align-items:center;gap:9px;padding:12px 15px;background:#fcfdfe;border-bottom:1px solid var(--border)}
+  .sec-h .ico{font-size:16px}
+  .sec-h .ttl{font-size:13.5px;font-weight:800;color:var(--ink)}
+  .sec-h .cnt{margin-left:auto;font-size:11px;font-weight:800;color:var(--muted);background:#f1f5f9;border-radius:20px;padding:2px 10px}
+  .sec-h .pill-new{background:var(--accent);color:#fff;font-size:10px;padding:2px 8px;border-radius:8px;font-weight:800;letter-spacing:.3px}
+
+  /* live cost cards (right rail / footer) */
+  .tc{background:var(--ink);color:#fff;border-radius:13px;padding:13px 15px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .tc .lab{font-size:13px;font-weight:800;color:#e2e8f0}
+  .tc .mini{font-size:11.5px;color:#94a3b8;width:100%}
+  .tc .mini b{color:#fff}
+  .tc .prof{margin-left:auto;font-size:16px;font-weight:800}
+  .prof.green{color:#4ade80}.prof.amber{color:#fbbf24}.prof.red{color:#f87171}
+  .t-green{color:var(--green)}.t-amber{color:var(--amber)}.t-red{color:var(--red)}
+
+  .note{font-size:11.5px;color:#9a3412;background:var(--accent-soft);border:1px solid #fcd9a0;
+        border-radius:9px;padding:9px 12px;line-height:1.5}
+  .muted{color:var(--muted)}
+  select,input[type=text]{font-family:inherit}
+
+  /* generic select look */
+  .msel{width:100%;border:1.5px solid var(--border);border-radius:9px;background:#fff;
+        padding:10px 12px;font-size:14px;color:var(--text);appearance:none;
+        background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='3'><path d='M6 9l6 6 6-6'/></svg>");
+        background-repeat:no-repeat;background-position:right 11px center;padding-right:30px;cursor:pointer}
+  .msel:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(245,158,11,.15)}
+  .qin{width:100%;border:1.5px solid var(--border);border-radius:9px;padding:10px;font-size:14px;text-align:center;background:#fff}
+  .qin:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(245,158,11,.15)}
+  .del{background:none;border:none;color:var(--danger);font-size:17px;cursor:pointer;font-weight:700}
+
+  .foot-note{max-width:1040px;margin:16px auto 0;font-size:12px;color:var(--muted);text-align:center;line-height:1.7}
+  .backlink{display:inline-block;margin:14px 0 0;color:var(--accent-dark);font-weight:700;font-size:13px;text-decoration:none}
+
+  @media(max-width:820px){
+    .hero h1{font-size:23px}
+    .win-head{padding:16px 18px 13px}
+    .win-foot{padding:13px 16px}
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="wrap">
+    <span class="tag">🧾 ΚΑΡΤΑ ΣΥΝΤΑΓΗΣ · ΕΠΑΝΑΣΧΕΔΙΑΣΜΟΣ</span>
+    <h1>5 προτάσεις για το παράθυρο συνταγής</h1>
+    <p>Η ίδια συνταγή — <b>Γύρος Χοιρινός Πίτα</b> — σχεδιασμένη με 5 εντελώς διαφορετικούς επαγγελματικούς τρόπους.
+       Άλλαξε tab για να τη δεις σε κάθε ιδέα, δοκίμασε τα βελάκια ποσότητας και τα κουμπιά. Νούμερα δείγματος — καμία πραγματική τιμή.</p>
+  </div>
+</div>
+
+<div class="tabs-bar">
+  <div class="wrap">
+    <div class="tabs" id="tabs">
+      <button class="tab on" data-t="1"><span class="k">Ιδέα 1</span><span class="n">📊 Λογιστικό Φύλλο</span><span class="d">Τέλεια ευθυγράμμιση, σαν Excel</span></button>
+      <button class="tab" data-t="2"><span class="k">Ιδέα 2</span><span class="n">🃏 Κάρτες Αφής</span><span class="d">Μεγάλα κουμπιά, για ταμπλέτα/κινητό</span></button>
+      <button class="tab" data-t="3"><span class="k">Ιδέα 3</span><span class="n">🪜 Βήματα</span><span class="d">Ένα πράγμα τη φορά, μηδέν χάος</span></button>
+      <button class="tab" data-t="4"><span class="k">Ιδέα 4</span><span class="n">💰 Χάρτης Κόστους</span><span class="d">Δείχνει πού πάνε τα λεφτά</span></button>
+      <button class="tab" data-t="5"><span class="k">Ιδέα 5</span><span class="n">🗂 Πλαϊνή Πλοήγηση</span><span class="d">Μενού αριστερά, σαν εφαρμογή</span></button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="panel on" id="p1"></div>
+  <div class="panel" id="p2"></div>
+  <div class="panel" id="p3"></div>
+  <div class="panel" id="p4"></div>
+  <div class="panel" id="p5"></div>
+
+  <div class="foot-note">
+    TAMAM Grill House · ιδιωτικό preview · μη ευρετηριάσιμο · όλα τα ποσά είναι δείγματα<br>
+    <a class="backlink" href="index.html">← Πίσω στα previews</a>
+  </div>
+</div>
+
+<script>
+/* ─────────────────────────────────────────────────────────────
+   ΔΕΙΓΜΑ ΣΥΝΤΑΓΗΣ — κοινό για όλες τις ιδέες
+   cost = κόστος γραμμής (€) · qty με τη μονάδα της
+───────────────────────────────────────────────────────────── */
+const RECIPE = {
+  name:"Γύρος Χοιρινός Πίτα", family:"Γύρος Χοιρινός", variant:"Πίτα", price:4.00,
+  food:[
+    {name:"Γύρος Χοιρινός", qty:0.15, unit:"κιλό", perU:13.20},
+    {name:"Πίτα",           qty:1,    unit:"τεμ",  perU:0.11},
+    {name:"Ντομάτα",        qty:0.05, unit:"κιλό", perU:2.00},
+    {name:"Κέτσαπ",         qty:0.01, unit:"κιλό", perU:1.00},
+    {name:"Μουστάρδα",      qty:0.01, unit:"κιλό", perU:1.00},
+    {name:"Πατάτες",        qty:0.07, unit:"κιλό", perU:1.00},
+    {name:"Κρεμμύδι",       qty:0.01, unit:"κιλό", perU:1.00},
+  ],
+  pack:[
+    {name:"Χαρτοπετσέτα 28", qty:1, perU:0.003, types:[1,1,1]},
+    {name:"Χαρτοπετσέτα 24", qty:2, perU:0.003, types:[1,1,1]},
+    {name:"Λαδόκολλα Μικρή",  qty:1, perU:0.006, types:[0,1,1]},
+  ],
+  extras:[
+    {name:"Κασέρι",  qty:0.03, unit:"κιλό", perU:8.50, charge:0.70},
+    {name:"Μπέικον", qty:0.02, unit:"κιλό", perU:9.00, charge:0.70},
+  ],
+  extraMats:["Κασέρι","Μπέικον","Παρμεζάνα","Αυγό","Πατάτες extra"],
+};
+const FOOD_OPTS = ["Γύρος Χοιρινός","Πίτα","Ντομάτα","Κέτσαπ","Μουστάρδα","Πατάτες","Κρεμμύδι","Τζατζίκι","Μαρούλι","Σος Ταμάμ"];
+const PACK_OPTS = ["Χαρτοπετσέτα 28","Χαρτοπετσέτα 24","Λαδόκολλα Μικρή","Λαδόκολλα Μεγάλη","Σακούλα","Κουτί Delivery"];
+const VAT = 0.13;
+
+const eur = n => (n==null||isNaN(n)) ? "—" : n.toLocaleString("el-GR",{minimumFractionDigits:2,maximumFractionDigits:2})+" €";
+const eur4 = n => (n==null||isNaN(n)) ? "—" : n.toLocaleString("el-GR",{minimumFractionDigits:2,maximumFractionDigits:4})+" €";
+const lineCost = l => l.qty*l.perU;
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* κοινοί υπολογισμοί */
+function totals(){
+  const food = RECIPE.food.reduce((s,l)=>s+lineCost(l),0);
+  const pk = t => RECIPE.pack.filter(p=>p.types[t]).reduce((s,l)=>s+lineCost(l),0);
+  const types = [
+    {key:"dinein",  lab:"🍽 Τραπέζι",   pack:pk(0)},
+    {key:"takeaway",lab:"🛍 Take Away", pack:pk(1)},
+    {key:"delivery",lab:"🛵 Delivery",  pack:pk(2)},
+  ];
+  const net = RECIPE.price/(1+VAT);
+  types.forEach(t=>{ t.cost=food+t.pack; t.profit=net-t.cost;
+    t.margin = t.profit/net; t.cls = t.margin>=.55?"green":t.margin>=.30?"amber":"red"; });
+  return {food, net, types};
+}
+function selOpts(opts,sel){return opts.map(o=>`<option ${o===sel?"selected":""}>${esc(o)}</option>`).join("");}
+
+/* helper: μια γραμμή φαγητού ως <select> */
+function foodSelect(l){return `<select class="msel"><option>— διάλεξε υλικό —</option>${selOpts(FOOD_OPTS,l.name)}</select>`;}
+function packSelect(l){return `<select class="msel"><option>— διάλεξε συσκευασία —</option>${selOpts(PACK_OPTS,l.name)}</select>`;}
+function extraSelect(l){return `<select class="msel"><option>— διάλεξε extra —</option>${selOpts(RECIPE.extraMats,l?l.name:null)}</select>`;}
+</script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   ΙΔΕΑ 1 — ΛΟΓΙΣΤΙΚΟ ΦΥΛΛΟ  (spreadsheet / Airtable)
+   Στόχος: το ακριβώς αντίθετο από το «ακατάστατο» — άκαμπτη
+   ευθυγράμμιση σε στήλες, μονάδα μέσα στο κελί, 🧪 μικρό εικονίδιο,
+   πάντα μια «φανταστική» γραμμή «＋» στο τέλος.
+═══════════════════════════════════════════════════════════════ */
+function idea1(){
+  const t = totals();
+  const css = `
+  <style id="css1">
+  #p1 .s1-grid,#p1 .s1-hrow,#p1 .s1-row{display:grid;grid-template-columns:26px 1fr 132px 108px 34px;gap:0;align-items:center}
+  #p1 .s1-hrow{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);
+               padding:9px 14px;background:#f8fafc;border-bottom:1px solid var(--border)}
+  #p1 .s1-hrow .r{text-align:right}
+  #p1 .s1-row{padding:0 14px;border-bottom:1px solid var(--line);min-height:56px}
+  #p1 .s1-row:last-child{border-bottom:none}
+  #p1 .s1-row:hover{background:#fffdf7}
+  #p1 .s1-idx{color:#cbd5e1;font-size:12px;font-weight:700}
+  #p1 .s1-qty{position:relative}
+  #p1 .s1-qty .qin{padding-right:38px;text-align:left}
+  #p1 .s1-qty .u{position:absolute;right:11px;top:50%;transform:translateY(-50%);font-size:11.5px;color:var(--muted);pointer-events:none}
+  #p1 .s1-cost{text-align:right;font-weight:800;font-size:14px}
+  #p1 .s1-yt{width:24px;height:24px;border-radius:7px;border:1px solid #fcd9a0;background:var(--accent-soft);
+             cursor:pointer;font-size:12px;margin-left:6px;vertical-align:middle;line-height:1}
+  #p1 .s1-add{display:grid;grid-template-columns:26px 1fr;gap:0;align-items:center;padding:11px 14px;
+              color:var(--accent-dark);font-weight:800;font-size:13px;cursor:pointer;background:#fffbeb;border-top:1px dashed #fcd9a0}
+  #p1 .s1-add:hover{background:var(--accent-soft)}
+  #p1 .s1-tg{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;border:1.5px solid var(--border);
+             border-radius:8px;padding:5px 9px;cursor:pointer;background:#fff;color:var(--muted)}
+  #p1 .s1-tg.on{border-color:var(--accent);background:var(--accent-soft);color:#9a3412}
+  #p1 .s1-layout{display:grid;grid-template-columns:1fr 320px;align-items:start}
+  #p1 .s1-rail{background:#f8fafc;border-left:1px solid var(--border);padding:18px 18px 20px;align-self:stretch}
+  #p1 .s1-rail .rl{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:16px 0 9px}
+  #p1 .s1-rail .rl:first-child{margin-top:0}
+  #p1 .s1-photo{height:120px;border:2px dashed var(--border);border-radius:11px;display:flex;flex-direction:column;
+                align-items:center;justify-content:center;gap:5px;color:var(--muted);font-size:12px;background:#fff}
+  #p1 .s1-ta{width:100%;min-height:86px;border:1.5px solid var(--border);border-radius:10px;padding:10px;font-size:13px;font-family:inherit;resize:vertical}
+  @media(max-width:820px){#p1 .s1-layout{grid-template-columns:1fr}#p1 .s1-rail{border-left:none;border-top:1px solid var(--border)}
+    #p1 .s1-grid,#p1 .s1-hrow,#p1 .s1-row{grid-template-columns:22px 1fr 96px 80px 30px}}
+  </style>`;
+
+  const foodRows = RECIPE.food.map((l,i)=>`
+    <div class="s1-row">
+      <span class="s1-idx">${i+1}</span>
+      <span>${foodSelect(l)}<button class="s1-yt" title="Τεστ απόδοσης">🧪</button></span>
+      <span class="s1-qty"><input class="qin s1-q" data-i="${i}" value="${l.qty}"><span class="u">${l.unit}</span></span>
+      <span class="s1-cost" data-cost="${i}">${eur4(lineCost(l))}</span>
+      <span style="text-align:center"><button class="del">✕</button></span>
+    </div>`).join("");
+
+  const packRows = RECIPE.pack.map((l,i)=>`
+    <div class="s1-row" style="min-height:auto;padding-top:9px;padding-bottom:9px;align-items:start">
+      <span class="s1-idx" style="padding-top:11px">${i+1}</span>
+      <span>${packSelect(l)}
+        <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
+          ${["Τραπέζι","Take&nbsp;Away","Delivery"].map((n,k)=>`<span class="s1-tg ${l.types[k]?"on":""}">${l.types[k]?"✓":""} ${n}</span>`).join("")}
+        </div></span>
+      <span class="s1-qty" style="padding-top:1px"><input class="qin" value="${l.qty}"><span class="u"></span></span>
+      <span class="s1-cost" style="padding-top:11px">${eur4(lineCost(l))}</span>
+      <span style="text-align:center;padding-top:9px"><button class="del">✕</button></span>
+    </div>`).join("");
+
+  const extraRows = RECIPE.extras.map(l=>`
+    <div class="s1-row" style="grid-template-columns:26px 1fr 132px 108px 34px">
+      <span class="s1-idx">＋</span>
+      <span>${extraSelect(l)}</span>
+      <span class="s1-qty"><input class="qin" value="${l.qty}"><span class="u">${l.unit}</span></span>
+      <span class="s1-cost t-green">${eur(l.charge)}</span>
+      <span style="text-align:center"><button class="del">✕</button></span>
+    </div>`).join("");
+
+  const railCards = t.types.map(x=>`
+    <div class="tc" style="margin-bottom:8px">
+      <span class="lab">${x.lab}</span>
+      <span class="prof ${x.cls} tc-p" data-type="${x.key}">${eur(x.profit)}</span>
+      <span class="mini">κόστος <b class="tc-c">${eur(x.cost)}</b> · τιμή <b>${eur(RECIPE.price)}</b></span>
+    </div>`).join("");
+
+  document.getElementById("p1").innerHTML = css + `
+  <div class="why">
+    <h3>📊 Λογιστικό Φύλλο — τάξη σαν Excel</h3>
+    <p>Λύνει άμεσα το πρόβλημα «δεν είναι ευθυγραμμισμένα»: κάθε στήλη (υλικό · ποσότητα · κόστος) κλειδώνει σε <b>ίδιο πλάτος παντού</b>.
+       Η μονάδα (κιλό/τεμ) μπαίνει <b>μέσα</b> στο κουτί, το «🧪 Τεστ απόδοσης» γίνεται μικρό εικονίδιο δίπλα (δεν σπάει τη γραμμή),
+       και κάτω από κάθε πίνακα υπάρχει πάντα μια έτοιμη γραμμή <b>«＋ Προσθήκη»</b>.</p>
+    <ul><li class="win">Τέλεια ευθυγράμμιση</li><li class="win">Πυκνό & γρήγορο</li><li>Οικείο σε όποιον ξέρει Excel</li><li>Ζωντανό κόστος δεξιά</li></ul>
+  </div>
+  <div class="win">
+    <div class="win-head">
+      <div><div class="ttl">${RECIPE.name}</div>
+        <div class="sub">🍢 ${RECIPE.family} · ${RECIPE.variant} · 🔗 POS τιμή <b>${eur(RECIPE.price)}</b></div></div>
+      <button class="win-x">×</button>
+    </div>
+    <div class="s1-layout">
+      <div style="padding:18px 22px 20px">
+        <div class="sec">
+          <div class="sec-h"><span class="ico">🍽</span><span class="ttl">Υλικά Φαγητού</span><span class="cnt">${RECIPE.food.length}</span></div>
+          <div class="s1-hrow"><span></span><span>Υλικό</span><span class="r">Ποσότητα</span><span class="r">Κόστος</span><span></span></div>
+          ${foodRows}
+          <div class="s1-add"><span>＋</span><span>Προσθήκη υλικού</span></div>
+        </div>
+        <div class="sec">
+          <div class="sec-h"><span class="ico">📦</span><span class="ttl">Συσκευασία</span><span class="pill-new">ανά τύπο</span><span class="cnt">${RECIPE.pack.length}</span></div>
+          <div class="s1-hrow"><span></span><span>Υλικό &amp; τύποι</span><span class="r">Ποσ.</span><span class="r">Κόστος</span><span></span></div>
+          ${packRows}
+          <div class="s1-add"><span>＋</span><span>Προσθήκη συσκευασίας</span></div>
+        </div>
+        <div class="sec">
+          <div class="sec-h"><span class="ico">➕</span><span class="ttl">Extras / Πρόσθετα</span><span class="cnt">${RECIPE.extras.length}</span></div>
+          <div class="s1-hrow"><span></span><span>Υλικό</span><span class="r">Ποσ.</span><span class="r">Χρέωση</span><span></span></div>
+          ${extraRows}
+          <div class="s1-add"><span>＋</span><span>Προσθήκη extra</span></div>
+        </div>
+        <p class="muted" style="font-size:11.5px;margin-top:4px">Τα extras χρεώνονται μόνο όταν τα διαλέξει ο πελάτης — δεν μπαίνουν στο βασικό κόστος.</p>
+      </div>
+      <div class="s1-rail">
+        <div class="rl">📷 Φωτογραφία</div>
+        <div class="s1-photo"><span style="font-size:28px">📷</span>Χωρίς φωτογραφία ακόμη</div>
+        <button class="btn btn-secondary btn-sm" style="margin-top:9px;width:100%">Επιλογή αρχείου</button>
+        <div class="rl">📝 Οδηγίες Παρασκευής</div>
+        <textarea class="s1-ta" placeholder="Γράψε βήμα-βήμα πώς φτιάχνεται…"></textarea>
+        <div class="rl">💶 Κόστος &amp; Κέρδος ανά τύπο · χωρίς ΦΠΑ</div>
+        ${railCards}
+      </div>
+    </div>
+    <div class="win-foot">
+      <button class="btn btn-secondary">Κλείσιμο</button>
+      <button class="btn btn-secondary">📄 Αντιγραφή</button>
+      <button class="btn btn-danger">Διαγραφή</button>
+      <button class="btn btn-primary">💾 Αποθήκευση</button>
+    </div>
+  </div>`;
+
+  // ζωντανός επανυπολογισμός στις ποσότητες φαγητού
+  document.querySelectorAll("#p1 .s1-q").forEach(inp=>inp.addEventListener("input",()=>{
+    const i=+inp.dataset.i; RECIPE.food[i].qty=parseFloat(inp.value.replace(",","."))||0;
+    document.querySelector(`#p1 [data-cost="${i}"]`).textContent=eur4(lineCost(RECIPE.food[i]));
+    const nt=totals();
+    document.querySelectorAll("#p1 .tc-p").forEach((el)=>{const x=nt.types.find(y=>y.key===el.dataset.type);
+      el.textContent=eur(x.profit);el.className="prof "+x.cls+" tc-p";
+      el.parentElement.querySelector(".tc-c").textContent=eur(x.cost);});
+  }));
+}
+</script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   ΙΔΕΑ 2 — ΚΑΡΤΕΣ ΑΦΗΣ (touch cards)
+   Κάθε υλικό = κάρτα με 3 ζώνες: όνομα | −[ ]+ ποσότητα | κόστος.
+   Μεγάλα κουμπιά 48px, ιδανικό για ταμπλέτα στην κουζίνα.
+═══════════════════════════════════════════════════════════════ */
+function idea2(){
+  const t=totals();
+  const css=`
+  <style id="css2">
+  #p2 .s2-card{display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid var(--border);
+               border-radius:13px;padding:12px 14px;margin-bottom:10px;transition:.12s}
+  #p2 .s2-card:hover{border-color:#cbd5e1;box-shadow:0 3px 10px rgba(15,23,42,.05)}
+  #p2 .s2-ic{width:42px;height:42px;border-radius:11px;background:var(--accent-soft);display:flex;align-items:center;
+             justify-content:center;font-size:20px;flex:none}
+  #p2 .s2-nm{font-weight:800;font-size:14.5px;color:var(--ink)}
+  #p2 .s2-meta{font-size:12px;color:var(--muted);margin-top:1px}
+  #p2 .s2-step{display:flex;align-items:center;gap:0;border:1.5px solid var(--border);border-radius:11px;overflow:hidden;flex:none}
+  #p2 .s2-step button{width:40px;height:44px;border:none;background:#f8fafc;font-size:20px;font-weight:700;color:var(--ink);cursor:pointer}
+  #p2 .s2-step button:hover{background:var(--accent-soft);color:var(--accent-dark)}
+  #p2 .s2-step input{width:70px;height:44px;border:none;border-left:1px solid var(--border);border-right:1px solid var(--border);
+                     text-align:center;font-size:15px;font-weight:700}
+  #p2 .s2-step .u{padding:0 11px;font-size:12px;color:var(--muted);font-weight:600;background:#f8fafc;height:44px;display:flex;align-items:center}
+  #p2 .s2-cost{min-width:78px;text-align:right;font-weight:800;font-size:15px;color:var(--ink)}
+  #p2 .s2-x{width:40px;height:40px;border-radius:10px;border:1px solid #fca5a5;background:#fff;color:var(--danger);
+            font-size:16px;cursor:pointer;flex:none}
+  #p2 .s2-add{width:100%;border:1.5px dashed #fcd9a0;background:var(--accent-soft);color:var(--accent-dark);
+              border-radius:12px;padding:14px;font-weight:800;font-size:14px;cursor:pointer;margin-top:2px}
+  #p2 .s2-tgs{display:flex;gap:7px;margin-top:8px;flex-wrap:wrap}
+  #p2 .s2-tg{font-size:12px;font-weight:700;border:1.5px solid var(--border);border-radius:9px;padding:7px 12px;
+             background:#fff;color:var(--muted);cursor:pointer;min-height:38px;display:inline-flex;align-items:center;gap:5px}
+  #p2 .s2-tg.on{border-color:var(--accent);background:var(--accent-soft);color:#9a3412}
+  #p2 .s2-grid{display:grid;grid-template-columns:1fr 300px;gap:18px;align-items:start}
+  #p2 .s2-photo{height:130px;border:2px dashed var(--border);border-radius:12px;display:flex;flex-direction:column;
+                align-items:center;justify-content:center;gap:5px;color:var(--muted);font-size:12.5px;background:#fff}
+  #p2 .s2-ta{width:100%;min-height:88px;border:1.5px solid var(--border);border-radius:11px;padding:11px;font-size:13.5px;font-family:inherit;resize:vertical}
+  #p2 .s2-rl{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:0 0 9px}
+  @media(max-width:820px){#p2 .s2-grid{grid-template-columns:1fr}
+    #p2 .s2-card{flex-wrap:wrap}#p2 .s2-cost{min-width:auto}}
+  </style>`;
+
+  const foodCards=RECIPE.food.map((l,i)=>`
+    <div class="s2-card">
+      <div class="s2-ic">🥩</div>
+      <div style="flex:1;min-width:130px"><div class="s2-nm">${esc(l.name)}</div><div class="s2-meta">${eur4(l.perU)}/${l.unit}</div></div>
+      <div class="s2-step">
+        <button data-i="${i}" data-d="-1">−</button>
+        <input class="s2-q" data-i="${i}" value="${l.qty}">
+        <span class="u">${l.unit}</span>
+        <button data-i="${i}" data-d="1">+</button>
+      </div>
+      <div class="s2-cost" data-cost="${i}">${eur(lineCost(l))}</div>
+      <button class="s2-x">✕</button>
+    </div>`).join("");
+
+  const packCards=RECIPE.pack.map(l=>`
+    <div class="s2-card" style="flex-wrap:wrap">
+      <div class="s2-ic">📦</div>
+      <div style="flex:1;min-width:130px"><div class="s2-nm">${esc(l.name)}</div>
+        <div class="s2-tgs">${["Τραπέζι","Take Away","Delivery"].map((n,k)=>`<span class="s2-tg ${l.types[k]?"on":""}">${l.types[k]?"✓":"＋"} ${n}</span>`).join("")}</div>
+      </div>
+      <div class="s2-step">
+        <button>−</button><input value="${l.qty}"><button>+</button>
+      </div>
+      <div class="s2-cost">${eur(lineCost(l))}</div>
+      <button class="s2-x">✕</button>
+    </div>`).join("");
+
+  const extraCards=RECIPE.extras.map(l=>`
+    <div class="s2-card">
+      <div class="s2-ic">➕</div>
+      <div style="flex:1;min-width:120px"><div class="s2-nm">${esc(l.name)}</div><div class="s2-meta">κόστος ${eur(lineCost(l))} · χρέωση <b class="t-green">${eur(l.charge)}</b></div></div>
+      <div class="s2-step"><button>−</button><input value="${l.qty}"><span class="u">${l.unit}</span><button>+</button></div>
+      <button class="s2-x">✕</button>
+    </div>`).join("");
+
+  const railCards=t.types.map(x=>`
+    <div class="tc" style="margin-bottom:8px">
+      <span class="lab">${x.lab}</span><span class="prof ${x.cls} tc-p" data-type="${x.key}">${eur(x.profit)}</span>
+      <span class="mini">κόστος <b class="tc-c">${eur(x.cost)}</b> · τιμή <b>${eur(RECIPE.price)}</b></span></div>`).join("");
+
+  document.getElementById("p2").innerHTML=css+`
+  <div class="why">
+    <h3>🃏 Κάρτες Αφής — φτιαγμένο για δάχτυλα</h3>
+    <p>Κάθε υλικό γίνεται μια καθαρή κάρτα με <b>μεγάλα κουμπιά −/＋</b> για την ποσότητα (δεν χρειάζεται πληκτρολόγιο) και το κόστος του να φαίνεται καθαρά δεξιά.
+       Ιδανικό αν συμπληρώνεις τη συνταγή από <b>ταμπλέτα ή κινητό μέσα στην κουζίνα</b>, με λαδωμένα χέρια.</p>
+    <ul><li class="win">Μεγάλα κουμπιά 44px</li><li class="win">Χωρίς πληκτρολόγιο</li><li>Καθαρές κάρτες</li><li>Ιδανικό για ταμπλέτα</li></ul>
+  </div>
+  <div class="win">
+    <div class="win-head">
+      <div><div class="ttl">${RECIPE.name}</div>
+        <div class="sub">🍢 ${RECIPE.family} · ${RECIPE.variant} · 🔗 POS τιμή <b>${eur(RECIPE.price)}</b></div></div>
+      <button class="win-x">×</button>
+    </div>
+    <div style="padding:20px 24px">
+      <div class="s2-grid">
+        <div>
+          <div class="sec-h" style="background:none;border:none;padding:0 0 10px"><span class="ico">🍽</span><span class="ttl">Υλικά Φαγητού</span><span class="cnt">${RECIPE.food.length}</span></div>
+          ${foodCards}
+          <button class="s2-add">＋ Προσθήκη υλικού</button>
+          <div class="sec-h" style="background:none;border:none;padding:18px 0 10px"><span class="ico">📦</span><span class="ttl">Συσκευασία</span><span class="pill-new">ανά τύπο</span><span class="cnt">${RECIPE.pack.length}</span></div>
+          ${packCards}
+          <button class="s2-add">＋ Προσθήκη συσκευασίας</button>
+          <div class="sec-h" style="background:none;border:none;padding:18px 0 10px"><span class="ico">➕</span><span class="ttl">Extras / Πρόσθετα</span><span class="cnt">${RECIPE.extras.length}</span></div>
+          ${extraCards}
+          <button class="s2-add">＋ Προσθήκη extra</button>
+        </div>
+        <div>
+          <div class="s2-rl">📷 Φωτογραφία</div>
+          <div class="s2-photo"><span style="font-size:28px">📷</span>Χωρίς φωτογραφία ακόμη</div>
+          <button class="btn btn-secondary btn-sm" style="margin:9px 0 16px;width:100%">Επιλογή αρχείου</button>
+          <div class="s2-rl">📝 Οδηγίες Παρασκευής</div>
+          <textarea class="s2-ta" placeholder="Γράψε βήμα-βήμα πώς φτιάχνεται…"></textarea>
+          <div class="s2-rl" style="margin-top:16px">💶 Κόστος &amp; Κέρδος · χωρίς ΦΠΑ</div>
+          ${railCards}
+        </div>
+      </div>
+    </div>
+    <div class="win-foot">
+      <button class="btn btn-secondary">Κλείσιμο</button>
+      <button class="btn btn-secondary">📄 Αντιγραφή</button>
+      <button class="btn btn-danger">Διαγραφή</button>
+      <button class="btn btn-primary">💾 Αποθήκευση</button>
+    </div>
+  </div>`;
+
+  // steppers
+  document.querySelectorAll("#p2 .s2-step button[data-d]").forEach(b=>b.addEventListener("click",()=>{
+    const i=+b.dataset.i, d=+b.dataset.d, l=RECIPE.food[i];
+    const step = l.qty>=1?1:0.01;
+    l.qty=Math.max(0,Math.round((l.qty+d*step)*100)/100);
+    document.querySelector(`#p2 .s2-q[data-i="${i}"]`).value=l.qty;
+    document.querySelector(`#p2 [data-cost="${i}"]`).textContent=eur(lineCost(l));
+    refreshP2();
+  }));
+  document.querySelectorAll("#p2 .s2-q").forEach(inp=>inp.addEventListener("input",()=>{
+    const i=+inp.dataset.i;RECIPE.food[i].qty=parseFloat(inp.value.replace(",","."))||0;
+    document.querySelector(`#p2 [data-cost="${i}"]`).textContent=eur(lineCost(RECIPE.food[i]));refreshP2();
+  }));
+  function refreshP2(){const nt=totals();document.querySelectorAll("#p2 .tc-p").forEach(el=>{
+    const x=nt.types.find(y=>y.key===el.dataset.type);el.textContent=eur(x.profit);el.className="prof "+x.cls+" tc-p";
+    el.parentElement.querySelector(".tc-c").textContent=eur(x.cost);});}
+}
+</script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   ΙΔΕΑ 3 — ΒΗΜΑΤΑ (wizard / segmented)
+   Ένα τμήμα τη φορά: Υλικά → Συσκευασία → Extras → Φωτο/Οδηγίες.
+   Κάτω πάντα μια μπάρα με ζωντανό κόστος + Αποθήκευση.
+═══════════════════════════════════════════════════════════════ */
+function idea3(){
+  const t=totals();
+  const css=`
+  <style id="css3">
+  #p3 .s3-seg{display:flex;gap:6px;padding:14px 22px 0;flex-wrap:wrap}
+  #p3 .s3-tab{flex:1;min-width:120px;border:1.5px solid var(--border);background:#fff;border-radius:11px;padding:11px 12px;
+              cursor:pointer;text-align:center;transition:.12s}
+  #p3 .s3-tab .st-ic{font-size:18px}
+  #p3 .s3-tab .st-n{font-size:12.5px;font-weight:800;margin-top:3px;color:var(--ink)}
+  #p3 .s3-tab .st-c{font-size:11px;color:var(--muted);margin-top:1px}
+  #p3 .s3-tab.on{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 3px 10px rgba(245,158,11,.14)}
+  #p3 .s3-tab.done .st-ic::after{content:" ✓";color:var(--green)}
+  #p3 .s3-body{padding:20px 22px;min-height:320px}
+  #p3 .s3-pane{display:none;animation:fade .2s}
+  #p3 .s3-pane.on{display:block}
+  #p3 .s3-hint{font-size:13px;color:#475569;background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:11px 14px;margin-bottom:14px}
+  #p3 .s3-row{display:grid;grid-template-columns:1fr 128px 100px 34px;gap:10px;align-items:center;
+              padding:10px 0;border-bottom:1px solid var(--line)}
+  #p3 .s3-row .c{text-align:right;font-weight:800}
+  #p3 .s3-hrow{display:grid;grid-template-columns:1fr 128px 100px 34px;gap:10px;font-size:10.5px;font-weight:800;
+               text-transform:uppercase;letter-spacing:.4px;color:var(--muted);padding-bottom:7px}
+  #p3 .s3-hrow .r{text-align:right}
+  #p3 .s3-bar{display:flex;align-items:center;gap:14px;padding:14px 22px;border-top:1px solid var(--border);
+              background:var(--ink);color:#fff;flex-wrap:wrap}
+  #p3 .s3-bar .bl{font-size:12px;color:#94a3b8}
+  #p3 .s3-bar .bv{font-size:16px;font-weight:800}
+  #p3 .s3-bar .nav{margin-left:auto;display:flex;gap:8px}
+  #p3 .s3-tg{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;border:1.5px solid var(--border);
+             border-radius:8px;padding:6px 11px;cursor:pointer;background:#fff;color:var(--muted)}
+  #p3 .s3-tg.on{border-color:var(--accent);background:var(--accent-soft);color:#9a3412}
+  #p3 .s3-photo{height:130px;border:2px dashed var(--border);border-radius:12px;display:flex;flex-direction:column;
+                align-items:center;justify-content:center;gap:5px;color:var(--muted);font-size:12.5px}
+  #p3 .s3-ta{width:100%;min-height:110px;border:1.5px solid var(--border);border-radius:11px;padding:12px;font-size:13.5px;font-family:inherit;resize:vertical}
+  #p3 .s3-tc-wrap{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+  #p3 .s3-tc-wrap .tc{flex:1;min-width:190px}
+  </style>`;
+
+  const foodRows=RECIPE.food.map(l=>`
+    <div class="s3-row"><span>${foodSelect(l)}</span>
+      <span><input class="qin" value="${l.qty}"></span>
+      <span class="c">${eur4(lineCost(l))}</span><span style="text-align:center"><button class="del">✕</button></span></div>`).join("");
+  const packRows=RECIPE.pack.map(l=>`
+    <div class="s3-row" style="grid-template-columns:1fr auto;border:none;padding:8px 0 4px">
+      <span>${packSelect(l)}</span><span style="width:120px"><input class="qin" value="${l.qty}"></span></div>
+    <div style="display:flex;gap:7px;padding:0 0 12px;border-bottom:1px solid var(--line);margin-bottom:8px;flex-wrap:wrap">
+      ${["Τραπέζι","Take Away","Delivery"].map((n,k)=>`<span class="s3-tg ${l.types[k]?"on":""}">${l.types[k]?"✓":"＋"} ${n}</span>`).join("")}
+      <span style="margin-left:auto;font-weight:800;align-self:center">${eur4(lineCost(l))}</span></div>`).join("");
+  const extraRows=RECIPE.extras.map(l=>`
+    <div class="s3-row"><span>${extraSelect(l)}</span><span><input class="qin" value="${l.qty}"></span>
+      <span class="c t-green">${eur(l.charge)}</span><span style="text-align:center"><button class="del">✕</button></span></div>`).join("");
+  const railCards=t.types.map(x=>`<div class="tc"><span class="lab">${x.lab}</span>
+      <span class="prof ${x.cls}">${eur(x.profit)}</span><span class="mini">κόστος <b>${eur(x.cost)}</b> · τιμή <b>${eur(RECIPE.price)}</b></span></div>`).join("");
+
+  document.getElementById("p3").innerHTML=css+`
+  <div class="why">
+    <h3>🪜 Βήματα — ένα πράγμα τη φορά</h3>
+    <p>Αντί να βλέπεις όλα μαζί και να «πνίγεσαι», η φόρμα χωρίζεται σε <b>4 απλά βήματα</b>: Υλικά → Συσκευασία → Extras → Φωτο &amp; Οδηγίες.
+       Βλέπεις μόνο ένα κάθε φορά, καθαρά. Κάτω, μια <b>σταθερή μπάρα</b> δείχνει πάντα το ζωντανό κέρδος και το κουμπί Αποθήκευση.</p>
+    <ul><li class="win">Μηδέν χάος</li><li class="win">Καθοδήγηση βήμα-βήμα</li><li>Ιδανικό για αρχάριο υπάλληλο</li><li>Σταθερό κέρδος κάτω</li></ul>
+  </div>
+  <div class="win">
+    <div class="win-head">
+      <div><div class="ttl">${RECIPE.name}</div>
+        <div class="sub">🍢 ${RECIPE.family} · ${RECIPE.variant} · 🔗 POS τιμή <b>${eur(RECIPE.price)}</b></div></div>
+      <button class="win-x">×</button>
+    </div>
+    <div class="s3-seg" id="s3seg">
+      <div class="s3-tab on" data-p="a"><div class="st-ic">🍽</div><div class="st-n">Υλικά</div><div class="st-c">${RECIPE.food.length} υλικά</div></div>
+      <div class="s3-tab" data-p="b"><div class="st-ic">📦</div><div class="st-n">Συσκευασία</div><div class="st-c">${RECIPE.pack.length} είδη</div></div>
+      <div class="s3-tab" data-p="c"><div class="st-ic">➕</div><div class="st-n">Extras</div><div class="st-c">${RECIPE.extras.length} πρόσθετα</div></div>
+      <div class="s3-tab" data-p="d"><div class="st-ic">📷</div><div class="st-n">Φωτο &amp; Οδηγίες</div><div class="st-c">προαιρετικά</div></div>
+    </div>
+    <div class="s3-body">
+      <div class="s3-pane on" data-p="a">
+        <div class="s3-hint">Βάλε τα υλικά και την ποσότητα του καθενός (στη μονάδα του — κιλά ή τεμάχια). Το κόστος υπολογίζεται μόνο του.</div>
+        <div class="s3-hrow"><span>Υλικό</span><span class="r">Ποσότητα</span><span class="r">Κόστος</span><span></span></div>
+        ${foodRows}
+        <button class="btn-ghost" style="margin-top:14px">＋ Προσθήκη υλικού</button>
+      </div>
+      <div class="s3-pane" data-p="b">
+        <div class="s3-hint">Ποια συσκευασία μπαίνει — και σε <b>ποιον τύπο παραγγελίας</b> (Τραπέζι / Take Away / Delivery). Π.χ. η λαδόκολλα μόνο στο πακέτο.</div>
+        ${packRows}
+        <button class="btn-ghost" style="margin-top:8px">＋ Προσθήκη συσκευασίας</button>
+      </div>
+      <div class="s3-pane" data-p="c">
+        <div class="s3-hint">Τα extras που μπορεί να ζητήσει ο πελάτης (κασέρι, μπέικον…). Χρεώνονται ξεχωριστά — <b>δεν</b> μπαίνουν στο βασικό κόστος.</div>
+        <div class="s3-hrow"><span>Υλικό</span><span class="r">Ποσότητα</span><span class="r">Χρέωση</span><span></span></div>
+        ${extraRows}
+        <button class="btn-ghost" style="margin-top:14px">＋ Προσθήκη extra</button>
+      </div>
+      <div class="s3-pane" data-p="d">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+          <div><div class="s2-rl" style="font-size:11px;font-weight:800;text-transform:uppercase;color:var(--muted);margin-bottom:9px">📷 Φωτογραφία πιάτου</div>
+            <div class="s3-photo"><span style="font-size:28px">📷</span>Χωρίς φωτογραφία ακόμη</div>
+            <button class="btn btn-secondary btn-sm" style="margin-top:9px;width:100%">Επιλογή αρχείου</button></div>
+          <div><div class="s2-rl" style="font-size:11px;font-weight:800;text-transform:uppercase;color:var(--muted);margin-bottom:9px">📝 Οδηγίες Παρασκευής</div>
+            <textarea class="s3-ta" placeholder="Γράψε βήμα-βήμα πώς φτιάχνεται το πιάτο…"></textarea></div>
+        </div>
+        <div class="s2-rl" style="font-size:11px;font-weight:800;text-transform:uppercase;color:var(--muted);margin:18px 0 4px">💶 Τελικό κόστος &amp; κέρδος ανά τύπο · χωρίς ΦΠΑ</div>
+        <div class="s3-tc-wrap">${railCards}</div>
+      </div>
+    </div>
+    <div class="s3-bar">
+      <div><span class="bl">🛍 Take Away κέρδος</span><br><span class="bv prof ${t.types[1].cls}">${eur(t.types[1].profit)}</span></div>
+      <div><span class="bl">κόστος υλικών</span><br><span class="bv">${eur(t.types[1].cost)}</span></div>
+      <div class="nav">
+        <button class="btn btn-secondary" id="s3prev">← Προηγούμενο</button>
+        <button class="btn btn-primary" id="s3next">Επόμενο →</button>
+      </div>
+    </div>
+  </div>`;
+
+  const order=["a","b","c","d"];let cur=0;
+  const seg=document.querySelectorAll("#p3 .s3-tab"),panes=document.querySelectorAll("#p3 .s3-pane");
+  function show(i){cur=Math.max(0,Math.min(3,i));
+    seg.forEach((s,k)=>{s.classList.toggle("on",k===cur);s.classList.toggle("done",k<cur);});
+    panes.forEach(p=>p.classList.toggle("on",p.dataset.p===order[cur]));
+    document.getElementById("s3prev").style.visibility=cur===0?"hidden":"visible";
+    document.getElementById("s3next").textContent=cur===3?"✓ Τέλος":"Επόμενο →";}
+  seg.forEach((s,k)=>s.addEventListener("click",()=>show(k)));
+  document.getElementById("s3prev").addEventListener("click",()=>show(cur-1));
+  document.getElementById("s3next").addEventListener("click",()=>show(cur+1));
+  show(0);
+}
+</script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   ΙΔΕΑ 4 — ΧΑΡΤΗΣ ΚΟΣΤΟΥΣ (cost insight)
+   Κάθε γραμμή έχει μπάρα με το μερίδιό της στο συνολικό κόστος.
+   Πάνω: «πού πάνε τα λεφτά». Η φόρμα γίνεται εργαλείο απόφασης.
+═══════════════════════════════════════════════════════════════ */
+function idea4(){
+  const t=totals();
+  const foodTotal=t.food;
+  const css=`
+  <style id="css4">
+  #p4 .s4-row{display:grid;grid-template-columns:1fr 118px 96px 30px;gap:10px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+  #p4 .s4-bar{grid-column:1/-1;height:6px;border-radius:4px;background:#f1f5f9;overflow:hidden;margin-top:-4px;margin-bottom:2px}
+  #p4 .s4-bar i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,#f59e0b,#f97316)}
+  #p4 .s4-share{font-size:11px;color:var(--muted);grid-column:1/-1;margin-top:-2px}
+  #p4 .s4-c{text-align:right;font-weight:800}
+  #p4 .s4-hrow{display:grid;grid-template-columns:1fr 118px 96px 30px;gap:10px;font-size:10.5px;font-weight:800;
+               text-transform:uppercase;letter-spacing:.4px;color:var(--muted);padding-bottom:8px}
+  #p4 .s4-hrow .r{text-align:right}
+  #p4 .s4-money{background:#fff;border:1px solid var(--border);border-radius:13px;padding:16px 18px;margin-bottom:16px}
+  #p4 .s4-money h4{font-size:13px;font-weight:800;color:var(--ink);display:flex;align-items:center;gap:7px;margin-bottom:12px}
+  #p4 .s4-drv{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+  #p4 .s4-drv .nm{width:120px;font-size:13px;font-weight:700;flex:none}
+  #p4 .s4-drv .track{flex:1;height:22px;background:#f1f5f9;border-radius:7px;overflow:hidden;position:relative}
+  #p4 .s4-drv .track i{display:block;height:100%;border-radius:7px}
+  #p4 .s4-drv .vv{width:118px;text-align:right;font-weight:800;font-size:13px;flex:none}
+  #p4 .s4-grid{display:grid;grid-template-columns:1fr 300px;gap:18px;align-items:start}
+  #p4 .s4-tg{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;border:1.5px solid var(--border);
+             border-radius:8px;padding:5px 10px;background:#fff;color:var(--muted)}
+  #p4 .s4-tg.on{border-color:var(--accent);background:var(--accent-soft);color:#9a3412}
+  #p4 .s4-donut{width:150px;height:150px;border-radius:50%;margin:4px auto 10px;position:relative}
+  #p4 .s4-donut::after{content:"";position:absolute;inset:26px;background:#fff;border-radius:50%}
+  #p4 .s4-donut .mid{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:2}
+  #p4 .s4-donut .mid b{font-size:19px;color:var(--ink)}
+  #p4 .s4-donut .mid span{font-size:10.5px;color:var(--muted)}
+  #p4 .s4-photo{height:120px;border:2px dashed var(--border);border-radius:12px;display:flex;flex-direction:column;
+                align-items:center;justify-content:center;gap:5px;color:var(--muted);font-size:12px;background:#fff}
+  #p4 .s4-rl{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:16px 0 9px}
+  @media(max-width:820px){#p4 .s4-grid{grid-template-columns:1fr}}
+  </style>`;
+
+  const sorted=[...RECIPE.food].map((l,i)=>({...l,c:lineCost(l)})).sort((a,b)=>b.c-a.c);
+  const maxc=Math.max(...RECIPE.food.map(lineCost));
+  const foodRows=RECIPE.food.map(l=>{const c=lineCost(l),pct=Math.round(c/foodTotal*100);
+    return `<div class="s4-row"><span>${foodSelect(l)}</span><span><input class="qin" value="${l.qty}"></span>
+      <span class="s4-c">${eur4(c)}</span><span style="text-align:center"><button class="del">✕</button></span>
+      <div class="s4-bar"><i style="width:${Math.max(3,c/maxc*100)}%"></i></div>
+      <div class="s4-share">${pct}% του κόστους φαγητού · ${eur4(l.perU)}/${l.unit}</div></div>`;}).join("");
+
+  // top-3 drivers
+  const drivers=sorted.slice(0,3).map(d=>{const pct=Math.round(d.c/foodTotal*100);
+    return `<div class="s4-drv"><span class="nm">${esc(d.name)}</span>
+      <span class="track"><i style="width:${d.c/maxc*100}%;background:${pct>50?"#dc2626":pct>25?"#f59e0b":"#10b981"}"></i></span>
+      <span class="vv">${eur4(d.c)} · ${pct}%</span></div>`;}).join("");
+
+  const gyros=Math.round(sorted[0].c/foodTotal*100);
+  const donutGrad=`conic-gradient(#f59e0b 0 ${gyros}%, #fbbf24 ${gyros}% ${gyros+18}%, #cbd5e1 ${gyros+18}% 100%)`;
+
+  const packRows=RECIPE.pack.map(l=>`
+    <div class="s4-row" style="grid-template-columns:1fr auto"><span>${packSelect(l)}</span>
+      <span style="display:flex;gap:6px;align-items:center"><input class="qin" style="width:80px" value="${l.qty}">
+      <b style="width:70px;text-align:right">${eur4(lineCost(l))}</b></span>
+      <div style="grid-column:1/-1;display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">
+        ${["Τραπέζι","Take Away","Delivery"].map((n,k)=>`<span class="s4-tg ${l.types[k]?"on":""}">${l.types[k]?"✓":"＋"} ${n}</span>`).join("")}</div></div>`).join("");
+
+  document.getElementById("p4").innerHTML=css+`
+  <div class="why">
+    <h3>💰 Χάρτης Κόστους — δες πού πάνε τα λεφτά</h3>
+    <p>Πέρα από συμπλήρωση, η φόρμα γίνεται <b>εργαλείο απόφασης</b>. Κάθε υλικό δείχνει με μπάρα <b>πόσο μερίδιο του κόστους</b> «τρώει».
+       Πάνω, ένα σύνοψη «Πού πάνε τα λεφτά» δείχνει τα 3 πιο ακριβά υλικά — καταλαβαίνεις αμέσως ότι π.χ. ο <b>γύρος</b> είναι το ${gyros}% του κόστους,
+       οπότε εκεί αξίζει να προσέξεις μερίδα &amp; προμηθευτή.</p>
+    <ul><li class="win">Βλέπεις τον «ένοχο»</li><li class="win">Έξυπνες αποφάσεις τιμής</li><li>Οπτικές μπάρες</li><li>Καθαρά ευθυγραμμισμένο</li></ul>
+  </div>
+  <div class="win">
+    <div class="win-head">
+      <div><div class="ttl">${RECIPE.name}</div>
+        <div class="sub">🍢 ${RECIPE.family} · ${RECIPE.variant} · 🔗 POS τιμή <b>${eur(RECIPE.price)}</b></div></div>
+      <button class="win-x">×</button>
+    </div>
+    <div style="padding:20px 24px">
+      <div class="s4-grid">
+        <div>
+          <div class="s4-money">
+            <h4>🔎 Πού πάνε τα λεφτά — κόστος φαγητού <span style="margin-left:auto;color:var(--accent-dark)">${eur(foodTotal)}</span></h4>
+            ${drivers}
+          </div>
+          <div class="sec-h" style="background:none;border:none;padding:6px 0 10px"><span class="ico">🍽</span><span class="ttl">Υλικά Φαγητού</span><span class="cnt">${RECIPE.food.length}</span></div>
+          <div class="s4-hrow"><span>Υλικό</span><span class="r">Ποσότητα</span><span class="r">Κόστος</span><span></span></div>
+          ${foodRows}
+          <button class="btn-ghost" style="margin-top:14px">＋ Προσθήκη υλικού</button>
+          <div class="sec-h" style="background:none;border:none;padding:18px 0 10px"><span class="ico">📦</span><span class="ttl">Συσκευασία</span><span class="pill-new">ανά τύπο</span></div>
+          ${packRows}
+        </div>
+        <div>
+          <div class="s4-rl" style="margin-top:0">🍩 Ανάλυση κόστους</div>
+          <div class="s4-donut" style="background:${donutGrad}">
+            <div class="mid"><b>${eur(foodTotal)}</b><span>κόστος φαγητού</span></div></div>
+          <div style="font-size:12px;color:var(--muted);text-align:center;line-height:1.7">
+            <span style="color:#f59e0b">●</span> Γύρος ${gyros}% &nbsp;
+            <span style="color:#fbbf24">●</span> Πίτα/σος &nbsp;
+            <span style="color:#cbd5e1">●</span> Υπόλοιπα</div>
+          <div class="s4-rl">💶 Κέρδος ανά τύπο · χωρίς ΦΠΑ</div>
+          ${t.types.map(x=>`<div class="tc" style="margin-bottom:8px"><span class="lab">${x.lab}</span>
+            <span class="prof ${x.cls}">${eur(x.profit)}</span><span class="mini">κόστος <b>${eur(x.cost)}</b> · τιμή <b>${eur(RECIPE.price)}</b></span></div>`).join("")}
+          <div class="s4-rl">📷 Φωτογραφία</div>
+          <div class="s4-photo"><span style="font-size:26px">📷</span>Χωρίς φωτογραφία</div>
+        </div>
+      </div>
+    </div>
+    <div class="win-foot">
+      <button class="btn btn-secondary">Κλείσιμο</button>
+      <button class="btn btn-secondary">📄 Αντιγραφή</button>
+      <button class="btn btn-danger">Διαγραφή</button>
+      <button class="btn btn-primary">💾 Αποθήκευση</button>
+    </div>
+  </div>`;
+}
+</script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   ΙΔΕΑ 5 — ΠΛΑΪΝΗ ΠΛΟΗΓΗΣΗ (two-pane app)
+   Αριστερά λεπτό μενού ενοτήτων με μετρητές· δεξιά το ενεργό
+   τμήμα, τέλεια ευθυγραμμισμένο. Σαν σύγχρονη εφαρμογή.
+═══════════════════════════════════════════════════════════════ */
+function idea5(){
+  const t=totals();
+  const css=`
+  <style id="css5">
+  #p5 .s5-split{display:grid;grid-template-columns:220px 1fr;align-items:stretch;min-height:440px}
+  #p5 .s5-nav{background:#f8fafc;border-right:1px solid var(--border);padding:16px 12px}
+  #p5 .s5-nav .g{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#94a3b8;padding:0 10px;margin:14px 0 6px}
+  #p5 .s5-nav .g:first-child{margin-top:0}
+  #p5 .s5-link{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:10px;cursor:pointer;
+               font-size:13.5px;font-weight:700;color:var(--text);transition:.1s}
+  #p5 .s5-link:hover{background:#eef2f6}
+  #p5 .s5-link.on{background:var(--accent-soft);color:#9a3412;box-shadow:inset 3px 0 0 var(--accent)}
+  #p5 .s5-link .ic{font-size:16px}
+  #p5 .s5-link .cnt{margin-left:auto;font-size:11px;font-weight:800;color:var(--muted);background:#e2e8f0;border-radius:20px;padding:1px 8px}
+  #p5 .s5-link.on .cnt{background:#fff;color:var(--accent-dark)}
+  #p5 .s5-cost{margin-top:18px;background:var(--ink);border-radius:12px;padding:12px;color:#fff}
+  #p5 .s5-cost .cl{font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;color:#94a3b8}
+  #p5 .s5-cost .cv{font-size:20px;font-weight:800;margin-top:2px}
+  #p5 .s5-cost .cs{font-size:11px;color:#94a3b8;margin-top:2px}
+  #p5 .s5-pane-wrap{padding:22px 24px}
+  #p5 .s5-pane{display:none;animation:fade .18s}
+  #p5 .s5-pane.on{display:block}
+  #p5 .s5-h{font-size:16px;font-weight:800;color:var(--ink);display:flex;align-items:center;gap:8px;margin-bottom:4px}
+  #p5 .s5-sub{font-size:12.5px;color:var(--muted);margin-bottom:16px}
+  #p5 .s5-row{display:grid;grid-template-columns:1fr 128px 104px 32px;gap:11px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+  #p5 .s5-row .c{text-align:right;font-weight:800}
+  #p5 .s5-hrow{display:grid;grid-template-columns:1fr 128px 104px 32px;gap:11px;font-size:10.5px;font-weight:800;
+               text-transform:uppercase;letter-spacing:.4px;color:var(--muted);padding-bottom:7px}
+  #p5 .s5-hrow .r{text-align:right}
+  #p5 .s5-tg{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;border:1.5px solid var(--border);
+             border-radius:8px;padding:6px 11px;background:#fff;color:var(--muted)}
+  #p5 .s5-tg.on{border-color:var(--accent);background:var(--accent-soft);color:#9a3412}
+  #p5 .s5-photo{height:150px;border:2px dashed var(--border);border-radius:12px;display:flex;flex-direction:column;
+                align-items:center;justify-content:center;gap:6px;color:var(--muted);font-size:13px;max-width:360px}
+  #p5 .s5-ta{width:100%;max-width:520px;min-height:120px;border:1.5px solid var(--border);border-radius:11px;padding:12px;font-size:13.5px;font-family:inherit;resize:vertical}
+  @media(max-width:820px){#p5 .s5-split{grid-template-columns:1fr}#p5 .s5-nav{border-right:none;border-bottom:1px solid var(--border);
+    display:flex;gap:6px;overflow-x:auto}#p5 .s5-nav .g,#p5 .s5-cost{display:none}#p5 .s5-link{flex:0 0 auto;min-width:auto}#p5 .s5-link .cnt{display:none}}
+  </style>`;
+
+  const foodRows=RECIPE.food.map(l=>`
+    <div class="s5-row"><span>${foodSelect(l)}</span><span><input class="qin" value="${l.qty}"></span>
+      <span class="c">${eur4(lineCost(l))}</span><span style="text-align:center"><button class="del">✕</button></span></div>`).join("");
+  const packRows=RECIPE.pack.map(l=>`
+    <div style="padding:12px 0;border-bottom:1px solid var(--line)">
+      <div class="s5-row" style="border:none;padding:0"><span>${packSelect(l)}</span><span><input class="qin" value="${l.qty}"></span>
+        <span class="c">${eur4(lineCost(l))}</span><span style="text-align:center"><button class="del">✕</button></span></div>
+      <div style="display:flex;gap:7px;margin-top:9px;flex-wrap:wrap">
+        ${["Τραπέζι","Take Away","Delivery"].map((n,k)=>`<span class="s5-tg ${l.types[k]?"on":""}">${l.types[k]?"✓":"＋"} ${n}</span>`).join("")}</div></div>`).join("");
+  const extraRows=RECIPE.extras.map(l=>`
+    <div class="s5-row"><span>${extraSelect(l)}</span><span><input class="qin" value="${l.qty}"></span>
+      <span class="c t-green">${eur(l.charge)}</span><span style="text-align:center"><button class="del">✕</button></span></div>`).join("");
+  const costCards=t.types.map(x=>`<div class="tc" style="margin-bottom:9px"><span class="lab">${x.lab}</span>
+      <span class="prof ${x.cls}">${eur(x.profit)}</span><span class="mini">κόστος <b>${eur(x.cost)}</b> · τιμή <b>${eur(RECIPE.price)}</b></span></div>`).join("");
+
+  document.getElementById("p5").innerHTML=css+`
+  <div class="why">
+    <h3>🗂 Πλαϊνή Πλοήγηση — σαν σύγχρονη εφαρμογή</h3>
+    <p>Αριστερά ένα λεπτό μενού με τις ενότητες (Υλικά · Συσκευασία · Extras · Φωτο &amp; Οδηγίες · Κόστος), το καθένα με μετρητή.
+       Πατάς και δεξιά ανοίγει <b>μόνο</b> εκείνο το κομμάτι, τέλεια ευθυγραμμισμένο. Κάτω αριστερά, το <b>ζωντανό κέρδος</b> είναι πάντα μπροστά σου.
+       Καθαρό ακόμα κι όταν η συνταγή έχει πολλά υλικά.</p>
+    <ul><li class="win">Πάντα οργανωμένο</li><li class="win">Σκαλώνει σε μεγάλες συνταγές</li><li>Ζωντανό κέρδος μπροστά</li><li>Επαγγελματικό look</li></ul>
+  </div>
+  <div class="win">
+    <div class="win-head">
+      <div><div class="ttl">${RECIPE.name}</div>
+        <div class="sub">🍢 ${RECIPE.family} · ${RECIPE.variant} · 🔗 POS τιμή <b>${eur(RECIPE.price)}</b></div></div>
+      <button class="win-x">×</button>
+    </div>
+    <div class="s5-split">
+      <div class="s5-nav" id="s5nav">
+        <div class="g">Συνταγή</div>
+        <div class="s5-link on" data-p="a"><span class="ic">🍽</span> Υλικά <span class="cnt">${RECIPE.food.length}</span></div>
+        <div class="s5-link" data-p="b"><span class="ic">📦</span> Συσκευασία <span class="cnt">${RECIPE.pack.length}</span></div>
+        <div class="s5-link" data-p="c"><span class="ic">➕</span> Extras <span class="cnt">${RECIPE.extras.length}</span></div>
+        <div class="g">Επιπλέον</div>
+        <div class="s5-link" data-p="d"><span class="ic">📷</span> Φωτο &amp; Οδηγίες</div>
+        <div class="s5-link" data-p="e"><span class="ic">💶</span> Κόστος &amp; Κέρδος</div>
+        <div class="s5-cost">
+          <div class="cl">🛍 Take Away κέρδος</div>
+          <div class="cv prof ${t.types[1].cls}">${eur(t.types[1].profit)}</div>
+          <div class="cs">κόστος ${eur(t.types[1].cost)} · χωρίς ΦΠΑ</div>
+        </div>
+      </div>
+      <div class="s5-pane-wrap">
+        <div class="s5-pane on" data-p="a">
+          <div class="s5-h">🍽 Υλικά Φαγητού</div><div class="s5-sub">Τι μπαίνει στο πιάτο και πόσο — η μονάδα (κιλά/τεμ) φαίνεται στο κόστος.</div>
+          <div class="s5-hrow"><span>Υλικό</span><span class="r">Ποσότητα</span><span class="r">Κόστος</span><span></span></div>
+          ${foodRows}
+          <button class="btn-ghost" style="margin-top:14px">＋ Προσθήκη υλικού · 🧪 Τεστ απόδοσης</button>
+        </div>
+        <div class="s5-pane" data-p="b">
+          <div class="s5-h">📦 Συσκευασία <span class="sec-h" style="padding:0"><span class="pill-new">ανά τύπο</span></span></div>
+          <div class="s5-sub">Ποια συσκευασία και σε ποιον τύπο παραγγελίας μπαίνει.</div>
+          ${packRows}
+          <button class="btn-ghost" style="margin-top:14px">＋ Προσθήκη συσκευασίας</button>
+        </div>
+        <div class="s5-pane" data-p="c">
+          <div class="s5-h">➕ Extras / Πρόσθετα</div><div class="s5-sub">Χρεώνονται μόνο όταν τα διαλέξει ο πελάτης — εκτός βασικού κόστους.</div>
+          <div class="s5-hrow"><span>Υλικό</span><span class="r">Ποσότητα</span><span class="r">Χρέωση</span><span></span></div>
+          ${extraRows}
+          <button class="btn-ghost" style="margin-top:14px">＋ Προσθήκη extra</button>
+        </div>
+        <div class="s5-pane" data-p="d">
+          <div class="s5-h">📷 Φωτογραφία &amp; 📝 Οδηγίες</div><div class="s5-sub">Βοηθούν έναν νέο υπάλληλο να το φτιάξει σωστά — σταθερή μερίδα.</div>
+          <div class="s5-photo"><span style="font-size:30px">📷</span>Χωρίς φωτογραφία ακόμη</div>
+          <button class="btn btn-secondary btn-sm" style="margin:10px 0 18px">Επιλογή αρχείου</button>
+          <textarea class="s5-ta" placeholder="Γράψε βήμα-βήμα πώς φτιάχνεται το πιάτο…"></textarea>
+        </div>
+        <div class="s5-pane" data-p="e">
+          <div class="s5-h">💶 Κόστος &amp; Κέρδος ανά τύπο</div><div class="s5-sub">Κέρδος σε καθαρό έσοδο (τιμή χωρίς ΦΠΑ ${Math.round(VAT*100)}%).</div>
+          ${costCards}
+        </div>
+      </div>
+    </div>
+    <div class="win-foot">
+      <button class="btn btn-secondary">Κλείσιμο</button>
+      <button class="btn btn-secondary">📄 Αντιγραφή</button>
+      <button class="btn btn-danger">Διαγραφή</button>
+      <button class="btn btn-primary">💾 Αποθήκευση</button>
+    </div>
+  </div>`;
+
+  const links=document.querySelectorAll("#p5 .s5-link"),panes=document.querySelectorAll("#p5 .s5-pane");
+  links.forEach(a=>a.addEventListener("click",()=>{
+    links.forEach(x=>x.classList.remove("on"));a.classList.add("on");
+    panes.forEach(p=>p.classList.toggle("on",p.dataset.p===a.dataset.p));}));
+}
+</script>
+
+<script>
+/* ── tabs + init ── */
+const built={};
+const builders={1:idea1,2:idea2,3:idea3,4:idea4,5:idea5};
+function openTab(n){
+  document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("on",t.dataset.t==n));
+  document.querySelectorAll(".panel").forEach(p=>p.classList.remove("on"));
+  document.getElementById("p"+n).classList.add("on");
+  if(!built[n]){builders[n]();built[n]=true;}
+  // κάθε ιδέα αλλάζει το RECIPE.food.qty ζωντανά — ξαναχτίζουμε όταν αλλάζεις tab για σωστά νούμερα
+}
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>openTab(t.dataset.t)));
+idea1();built[1]=true;
+</script>
+</body>
+</html>
