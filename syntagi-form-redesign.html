@@ -775,10 +775,15 @@ function idea5(){
   #p5 .s5-link .ic{font-size:16px}
   #p5 .s5-link .cnt{margin-left:auto;font-size:11px;font-weight:800;color:var(--muted);background:#e2e8f0;border-radius:20px;padding:1px 8px}
   #p5 .s5-link.on .cnt{background:#fff;color:var(--accent-dark)}
-  #p5 .s5-cost{margin-top:18px;background:var(--ink);border-radius:12px;padding:12px;color:#fff}
-  #p5 .s5-cost .cl{font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;color:#94a3b8}
-  #p5 .s5-cost .cv{font-size:20px;font-weight:800;margin-top:2px}
-  #p5 .s5-cost .cs{font-size:11px;color:#94a3b8;margin-top:2px}
+  #p5 .s5-costbar{border-top:1px solid var(--border);background:var(--ink);padding:13px 24px}
+  #p5 .s5-costbar .lb{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#94a3b8;margin-bottom:10px;display:flex;align-items:center;gap:7px}
+  #p5 .s5-costbar .lb span{font-weight:600;text-transform:none;letter-spacing:0}
+  #p5 .s5-costbar .cards{display:flex;gap:10px;flex-wrap:wrap}
+  #p5 .s5-costbar .cc{flex:1;min-width:180px;background:#1e293b;border-radius:11px;padding:11px 13px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  #p5 .s5-costbar .cc .lab{font-size:12.5px;font-weight:800;color:#e2e8f0}
+  #p5 .s5-costbar .cc .prof{margin-left:auto;font-size:16px;font-weight:800}
+  #p5 .s5-costbar .cc .mini{font-size:11px;color:#94a3b8;width:100%}
+  #p5 .s5-costbar .cc .mini b{color:#fff}
   #p5 .s5-pane-wrap{padding:22px 24px}
   #p5 .s5-pane{display:none;animation:fade .18s}
   #p5 .s5-pane.on{display:block}
@@ -811,7 +816,7 @@ function idea5(){
   const extraRows=RECIPE.extras.map(l=>`
     <div class="s5-row"><span>${extraSelect(l)}</span><span><input class="qin" value="${l.qty}"></span>
       <span class="c t-green">${eur(l.charge)}</span><span style="text-align:center"><button class="del">✕</button></span></div>`).join("");
-  const costCards=t.types.map(x=>`<div class="tc" style="margin-bottom:9px"><span class="lab">${x.lab}</span>
+  const costBar=t.types.map(x=>`<div class="cc"><span class="lab">${x.lab}</span>
       <span class="prof ${x.cls}">${eur(x.profit)}</span><span class="mini">κόστος <b>${eur(x.cost)}</b> · τιμή <b>${eur(RECIPE.price)}</b></span></div>`).join("");
 
   document.getElementById("p5").innerHTML=css+`
@@ -836,12 +841,6 @@ function idea5(){
         <div class="s5-link" data-p="c"><span class="ic">➕</span> Extras <span class="cnt">${RECIPE.extras.length}</span></div>
         <div class="g">Επιπλέον</div>
         <div class="s5-link" data-p="d"><span class="ic">📷</span> Φωτο &amp; Οδηγίες</div>
-        <div class="s5-link" data-p="e"><span class="ic">💶</span> Κόστος &amp; Κέρδος</div>
-        <div class="s5-cost">
-          <div class="cl">🛍 Take Away κέρδος</div>
-          <div class="cv prof ${t.types[1].cls}">${eur(t.types[1].profit)}</div>
-          <div class="cs">κόστος ${eur(t.types[1].cost)} · χωρίς ΦΠΑ</div>
-        </div>
       </div>
       <div class="s5-pane-wrap">
         <div class="s5-pane on" data-p="a">
@@ -868,11 +867,11 @@ function idea5(){
           <button class="btn btn-secondary btn-sm" style="margin:10px 0 18px">Επιλογή αρχείου</button>
           <textarea class="s5-ta" placeholder="Γράψε βήμα-βήμα πώς φτιάχνεται το πιάτο…"></textarea>
         </div>
-        <div class="s5-pane" data-p="e">
-          <div class="s5-h">💶 Κόστος &amp; Κέρδος ανά τύπο</div><div class="s5-sub">Κέρδος σε καθαρό έσοδο (τιμή χωρίς ΦΠΑ ${Math.round(VAT*100)}%).</div>
-          ${costCards}
-        </div>
       </div>
+    </div>
+    <div class="s5-costbar">
+      <div class="lb">💶 Κόστος &amp; Κέρδος ανά τύπο <span>· χωρίς ΦΠΑ ${Math.round(VAT*100)}% · ενημερώνεται ζωντανά</span></div>
+      <div class="cards">${costBar}</div>
     </div>
     <div class="win-foot">
       <button class="btn btn-secondary">Κλείσιμο</button>
