@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Κερδοφορία — Συνολική Συνεισφορά · TAMAM</title>
+<style>
+  :root{
+    --bg:#f4f5f7; --card:#ffffff; --text:#1b2230; --text-muted:#69707d;
+    --border:#e4e7ec; --accent:#e8622c; --accent-dark:#c14e1f;
+    --success:#16a34a; --danger:#dc2626; --purple:#7e22ce;
+    --amber-bg:#fff8ec; --amber-bd:#f4d492;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Segoe UI','Noto Sans',system-ui,sans-serif;
+    background:var(--bg); color:var(--text); line-height:1.5;
+    padding:18px 12px 60px;
+  }
+  .wrap{max-width:820px;margin:0 auto}
+  .top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .top .logo{font-weight:800;font-size:20px}
+  .top .tag{font-size:10.5px;background:var(--accent);color:#fff;padding:3px 9px;border-radius:20px;font-weight:800}
+  h1{font-size:22px;margin-top:14px}
+  .lead{color:var(--text-muted);font-size:14px;margin-top:8px}
+
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;margin-top:16px}
+  .card h2{font-size:15px;margin-bottom:4px}
+  .card .csub{font-size:12.5px;color:var(--text-muted);margin-bottom:12px}
+
+  /* KPI */
+  .kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+  .kpi .card{margin-top:0;padding:14px}
+  .kpi .lbl{font-size:12px;color:var(--text-muted)}
+  .kpi .val{font-size:22px;font-weight:800;margin-top:4px}
+  .kpi .foot{font-size:11.5px;color:var(--text-muted);margin-top:2px}
+
+  /* explainer box */
+  .amber{background:var(--amber-bg);border:1px solid var(--amber-bd);border-radius:12px;padding:13px 15px;font-size:13px;line-height:1.7;margin-top:12px}
+
+  /* table */
+  .tscroll{overflow-x:auto;margin-top:10px}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:560px}
+  th,td{padding:10px 8px;border-bottom:1px solid var(--border);text-align:right;white-space:nowrap}
+  th:first-child,td:first-child{text-align:left}
+  th{font-size:11.5px;color:var(--text-muted);font-weight:700;text-transform:none;background:#fafbfc}
+  tbody tr:hover{background:#fbfcfd}
+  .pname{font-weight:600}
+  .pos{color:var(--success)}
+  .neg{color:var(--danger)}
+  .pur{color:var(--purple)}
+  .muted{color:var(--text-muted)}
+  .newcol{background:#fff6f2}
+  th.newcol{background:#ffe9df;color:var(--accent-dark)}
+  .barcell{position:relative}
+  .bar{position:absolute;left:8px;top:50%;transform:translateY(-50%);height:6px;border-radius:4px;background:var(--accent);opacity:.18;z-index:0}
+  .barcell span{position:relative;z-index:1;font-weight:700}
+  tr.danger td{background:#fef2f2}
+  tr.danger td:first-child{border-left:3px solid var(--danger)}
+
+  .tagpill{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:20px;margin-left:6px;vertical-align:middle}
+  .t-hero{background:#dcfce7;color:#166534}
+  .t-safe{background:#e0e7ff;color:#3730a3}
+  .t-warn{background:#fee2e2;color:#991b1b}
+
+  /* sort toggle */
+  .sortrow{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+  .sortbtn{border:1px solid var(--border);background:#fff;color:var(--text);border-radius:9px;padding:8px 12px;font-size:12.5px;font-weight:600;cursor:pointer;min-height:40px}
+  .sortbtn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+  .legend{display:flex;flex-direction:column;gap:8px;margin-top:14px;font-size:12.5px}
+  .legend .row{display:flex;gap:9px;align-items:flex-start}
+  .legend .dot{flex:0 0 auto;margin-top:2px}
+
+  .note{font-size:11.5px;color:var(--text-muted);margin-top:10px;border-top:1px dashed var(--border);padding-top:10px;line-height:1.7}
+  .backlink{display:inline-block;margin-top:22px;color:var(--accent-dark);font-size:13px;text-decoration:none;font-weight:600}
+  .divider{text-align:center;color:var(--text-muted);font-size:12px;margin:26px 0 4px;font-weight:700;letter-spacing:.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><span class="logo">🏆 TAMAM</span><span class="tag">PREVIEW</span></div>
+  <h1>Κερδοφορία ανά προϊόν — η νέα στήλη «Συνολική Συνεισφορά»</h1>
+  <p class="lead">Δείχνει <b>πόσο κρατάει πραγματικά το μαγαζί</b> κάθε προϊόν = κέρδος ανά μερίδα × πόσα πούλησες τον μήνα.
+  Έτσι βλέπεις με μια ματιά ποιά προϊόντα σε σηκώνουν, ποιά χάνουν αβλαβώς, και ποιά είναι κρυφός κίνδυνος.
+  <br><b style="color:var(--danger)">Προσοχή:</b> όλα τα νούμερα εδώ είναι <b>ψεύτικα (παράδειγμα)</b> — μόνο για να καταλάβεις τη μορφή.</p>
+
+  <!-- KPI ίδια με τη σελίδα σου -->
+  <div class="kpi">
+    <div class="card"><div class="lbl">💵 Τζίρος (POS)</div><div class="val" style="color:var(--success)">8.940,00 €</div><div class="foot">1.240 παραγγελίες</div></div>
+    <div class="card"><div class="lbl">💸 Έξοδα</div><div class="val" style="color:var(--danger)">6.180,00 €</div></div>
+    <div class="card"><div class="lbl">✅ Κέρδος</div><div class="val">2.760,00 €</div><div class="foot">περιθώριο 30,9%</div></div>
+  </div>
+
+  <!-- ============ ΤΩΡΑ ============ -->
+  <div class="divider">— ΤΩΡΑ (όπως είναι σήμερα η σελίδα) —</div>
+  <div class="card">
+    <h2>🏆 Κερδοφορία ανά προϊόν</h2>
+    <div class="csub">Ταξινόμηση κατά <b>κέρδος ανά μερίδα</b> · τιμές χωρίς ΦΠΑ.</div>
+    <div class="tscroll">
+      <table>
+        <thead><tr>
+          <th>Προϊόν</th><th>Κόστος</th><th>+Γενικά</th><th>Πλήρες</th><th>Τιμή</th><th>Κέρδος/μερ.</th>
+        </tr></thead>
+        <tbody>
+          <tr><td class="pname">Μπιφτέκι μερίδα</td><td>3,10</td><td class="pur">1,50</td><td>4,60</td><td>9,00</td><td class="pos">2,40 (30%)</td></tr>
+          <tr><td class="pname">Αλοιφή τζατζίκι</td><td>0,60</td><td>0,60</td><td>1,20</td><td>3,00</td><td class="pos">1,80 (68%)</td></tr>
+          <tr><td class="pname">Γύρος πίτα</td><td>1,45</td><td>0,60</td><td>2,05</td><td>3,50</td><td class="pos">0,95 (30%)</td></tr>
+          <tr><td class="pname">Αναψυκτικό 330ml</td><td>0,45</td><td>0,25</td><td>0,70</td><td>1,50</td><td class="pos">0,80 (57%)</td></tr>
+          <tr><td class="pname">Πατάτες μερίδα</td><td>1,90</td><td>0,50</td><td>2,40</td><td>3,00</td><td class="pos">0,15 (5%)</td></tr>
+          <tr><td class="pname">Αναψ. οικογεν. 1,5L</td><td>1,35</td><td>0,25</td><td>1,60</td><td>1,50</td><td class="neg">−0,10 (−7%)</td></tr>
+          <tr><td class="pname">Σαλάτα χωριάτικη</td><td>4,20</td><td>1,00</td><td>5,20</td><td>6,00</td><td class="neg">−0,30 (−6%)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">👉 Το πρόβλημα: βλέπεις μόνο το κέρδος <b>ανά κομμάτι</b>. Δεν φαίνεται <b>πόσα πούλησες</b> — άρα δεν ξέρεις ποιό προϊόν <i>πραγματικά</i> σε κρατάει, ούτε ποιό χαμένο είναι επικίνδυνο.</div>
+  </div>
+
+  <!-- ============ ΜΕΤΑ ============ -->
+  <div class="divider">— ΜΕΤΑ (με τη νέα στήλη) —</div>
+  <div class="card">
+    <h2>🏆 Κερδοφορία ανά προϊόν <span style="font-size:12px;color:var(--accent-dark)">+ Συνολική συνεισφορά</span></h2>
+    <div class="csub">Δύο νέες στήλες: <b>Πουλήθηκαν</b> (τεμάχια τον μήνα) και <b>Συνολική συνεισφορά</b> (κέρδος/μερ. × τεμάχια).</div>
+
+    <div class="sortrow">
+      <button class="sortbtn active" onclick="sortTbl('contrib',this)">Ταξινόμηση: Συνολική συνεισφορά ▼</button>
+      <button class="sortbtn" onclick="sortTbl('per',this)">κατά Κέρδος/μερίδα</button>
+    </div>
+
+    <div class="tscroll">
+      <table id="mainT">
+        <thead><tr>
+          <th>Προϊόν</th><th>Τιμή</th><th>Κέρδος/μερ.</th>
+          <th class="newcol">Πουλήθηκαν</th><th class="newcol">Συνολική συνεισφορά</th>
+        </tr></thead>
+        <tbody id="mainB"></tbody>
+      </table>
+    </div>
+
+    <div class="legend">
+      <div class="row"><span class="dot">🟢</span><div><b>Ο κρυφός ήρωας — Γύρος πίτα.</b> Μικρό κέρδος/μερίδα (0,95 €) αλλά τεράστιος όγκος → <b>φέρνει τα περισσότερα λεφτά απ' όλα</b>. Στην παλιά λίστα ήταν 3ος· εδώ είναι 1ος.</div></div>
+      <div class="row"><span class="dot">🔵</span><div><b>Αβλαβές χαμένο — Σαλάτα χωριάτικη.</b> Χάνει −0,30 €/μερίδα, αλλά πουλάς λίγες → −7,50 € συνολικά. Ασήμαντο, το «σκεπάζουν» τα άλλα. Δεν σε νοιάζει.</div></div>
+      <div class="row"><span class="dot">🔴</span><div><b>Ο κρυφός κίνδυνος — Αναψ. οικογεν. 1,5L.</b> Χάνει μόνο −0,10 €/κομμάτι <b>αλλά πουλάς πολλά</b> → σου τρώει <b>−30,00 €</b> κάθε μήνα χωρίς να το καταλαβαίνεις. <b>Αυτό θέλει διόρθωση</b> (λίγο πάνω η τιμή ή φθηνότερη αγορά).</div></div>
+    </div>
+
+    <div class="note">Η «ένωση» στο κάτω μέρος: <b>Σύνολο συνεισφοράς = 2.760,00 €</b> — ισούται ακριβώς με το συνολικό κέρδος πάνω. Δηλαδή η νέα στήλη απλώς <b>σπάει το συνολικό κέρδος στα κομμάτια του</b>: ποιό προϊόν έβαλε πόσα. Καμία αλλαγή στα δεδομένα — μόνο ένας νέος τρόπος να τα βλέπεις.</div>
+  </div>
+
+  <div class="card" style="background:var(--amber-bg);border-color:var(--amber-bd)">
+    <h2>💡 Τι κερδίζεις μ' αυτό</h2>
+    <div class="amber" style="background:#fff;border-color:var(--border)">
+      1️⃣ Σταματάς να ανησυχείς για προϊόντα που «φαίνονται» χαμένα αλλά πουλάνε λίγα — <b>το σύστημα σου το επιβεβαιώνει με νούμερο</b>.<br>
+      2️⃣ Πιάνεις τους <b>κρυφούς κινδύνους</b>: μικρή ζημιά × μεγάλος όγκος = μεγάλη τρύπα.<br>
+      3️⃣ Ξέρεις ποιά είναι τα <b>«ιερά» προϊόντα</b> σου — αυτά που κρατάνε το μαγαζί και δεν τα πειράζεις ποτέ.
+    </div>
+  </div>
+
+  <a class="backlink" href="index.html">‹ Πίσω στη λίστα</a>
+</div>
+
+<script>
+  const DATA=[
+    {n:'Γύρος πίτα',        price:'3,50', per:0.95, perTxt:'0,95 (30%)', qty:620, tag:'t-hero',  tagTxt:'κρυφός ήρωας'},
+    {n:'Μπιφτέκι μερίδα',   price:'9,00', per:2.40, perTxt:'2,40 (30%)', qty:140, tag:'',        tagTxt:''},
+    {n:'Αναψυκτικό 330ml',  price:'1,50', per:0.80, perTxt:'0,80 (57%)', qty:310, tag:'',        tagTxt:''},
+    {n:'Αλοιφή τζατζίκι',   price:'3,00', per:1.80, perTxt:'1,80 (68%)', qty:95,  tag:'',        tagTxt:''},
+    {n:'Πατάτες μερίδα',    price:'3,00', per:0.15, perTxt:'0,15 (5%)',  qty:540, tag:'',        tagTxt:''},
+    {n:'Σαλάτα χωριάτικη',  price:'6,00', per:-0.30,perTxt:'−0,30 (−6%)',qty:25,  tag:'t-safe',  tagTxt:'αβλαβές'},
+    {n:'Αναψ. οικογεν. 1,5L',price:'1,50',per:-0.10,perTxt:'−0,10 (−7%)',qty:300, tag:'t-warn',  tagTxt:'κίνδυνος'},
+  ];
+  const euro=v=>{const s=(Math.abs(v)).toFixed(2).replace('.',',');return (v<0?'−':'')+s+' €';};
+  function render(mode){
+    const rows=[...DATA];
+    rows.forEach(r=>r.contrib=r.per*r.qty);
+    if(mode==='contrib') rows.sort((a,b)=>b.contrib-a.contrib);
+    else rows.sort((a,b)=>b.per-a.per);
+    const maxC=Math.max(...rows.map(r=>Math.abs(r.contrib)));
+    const b=document.getElementById('mainB'); b.innerHTML='';
+    rows.forEach(r=>{
+      const danger=r.tag==='t-warn';
+      const pcls=r.per>0?'pos':'neg';
+      const ccls=r.contrib>0?'pos':'neg';
+      const barw=Math.round(Math.abs(r.contrib)/maxC*100);
+      const pill=r.tag?`<span class="tagpill ${r.tag}">${r.tagTxt}</span>`:'';
+      b.insertAdjacentHTML('beforeend',
+        `<tr class="${danger?'danger':''}">
+          <td class="pname">${r.n}${pill}</td>
+          <td>${r.price}</td>
+          <td class="${pcls}">${r.perTxt}</td>
+          <td class="newcol">${r.qty}</td>
+          <td class="newcol barcell"><div class="bar" style="width:${barw}%"></div><span class="${ccls}">${euro(r.contrib)}</span></td>
+        </tr>`);
+    });
+    // σύνολο
+    const tot=rows.reduce((s,r)=>s+r.contrib,0);
+    b.insertAdjacentHTML('beforeend',
+      `<tr style="font-weight:800;background:#fafbfc">
+        <td>Σύνολο συνεισφοράς</td><td></td><td></td><td class="newcol"></td>
+        <td class="newcol pos">${euro(tot)}</td>
+      </tr>`);
+  }
+  function sortTbl(mode,btn){
+    document.querySelectorAll('.sortbtn').forEach(x=>x.classList.remove('active'));
+    btn.classList.add('active');
+    render(mode);
+  }
+  render('contrib');
+</script>
+</body>
+</html>
