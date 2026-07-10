@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preview — Ρυθμίσεις Εκτυπωτή (Admin → Εκτύπωση)</title>
+<style>
+  :root{
+    --black:#0d0f14; --dark:#13172a; --card:#1c2554; --card2:#161d40;
+    --yellow:#f5c842; --white:#f2f4f8; --muted:#8b95b5;
+    --red:#e05a5a; --green:#38d97a; --blue:#4a9ef0; --orange:#e8923a;
+    --border:#2a3580; --radius-card:8px; --radius-btn:6px; --radius:16px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--black);color:var(--white);font-family:'Noto Sans','Segoe UI',sans-serif;padding:24px;min-height:100vh}
+  .wrap{max-width:760px;margin:0 auto}
+  h1{font-size:18px;color:var(--yellow);margin-bottom:4px}
+  .sub{color:var(--muted);font-size:12.5px;margin-bottom:22px}
+  .breadcrumb{font-size:11px;color:var(--muted);background:var(--card2);border:1px solid var(--border);border-radius:var(--radius-btn);display:inline-block;padding:5px 12px;margin-bottom:18px}
+  .breadcrumb b{color:var(--yellow)}
+
+  /* ===== settings card (sp-card style) ===== */
+  .sp-card{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);border-left:3px solid var(--yellow);border-radius:var(--radius-card);padding:16px;margin-bottom:16px}
+  .sp-card.orange{border-left-color:var(--orange)}
+  .sp-card.blue{border-left-color:var(--blue)}
+  .sp-title{font-size:14px;font-weight:700;margin-bottom:2px}
+  .sp-desc{font-size:11.5px;color:var(--muted);margin-bottom:14px;line-height:1.5}
+
+  /* toggle row */
+  .tog-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0}
+  .tog-label{font-size:13px;font-weight:600}
+  .tog-hint{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.45}
+  .str-sw{width:44px;height:24px;min-width:44px;border-radius:50px;background:rgba(255,255,255,.1);border:1px solid var(--border);position:relative;cursor:pointer;transition:.2s}
+  .str-sw::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:var(--muted);transition:.2s}
+  .str-sw.on{background:rgba(56,217,122,.25);border-color:var(--green)}
+  .str-sw.on::after{left:22px;background:var(--green)}
+  .restart-note{display:none;align-items:center;gap:8px;background:rgba(245,200,66,.08);border:1px solid rgba(245,200,66,.25);border-radius:var(--radius-btn);padding:8px 12px;font-size:11.5px;color:var(--yellow);margin-top:8px}
+  .restart-note.show{display:flex}
+
+  /* segmented paper width */
+  .seg-row{display:flex;align-items:center;gap:14px;margin-top:10px;flex-wrap:wrap}
+  .seg{display:flex;background:var(--card2);border:1px solid var(--border);border-radius:var(--radius-btn);overflow:hidden}
+  .seg button{background:none;border:none;color:var(--muted);font-family:inherit;font-size:12.5px;font-weight:700;padding:9px 20px;cursor:pointer;transition:.15s}
+  .seg button.active{background:rgba(245,200,66,.12);color:var(--yellow);box-shadow:inset 0 -2px 0 var(--yellow)}
+
+  /* mock receipt preview */
+  .paper-demo{display:flex;align-items:flex-end;gap:18px;margin-top:16px}
+  .paper{background:#fdfdf8;color:#111;border-radius:3px 3px 0 0;padding:10px 8px 14px;font-family:'Courier New',monospace;font-size:8.5px;line-height:1.5;transition:width .3s;box-shadow:0 4px 18px rgba(0,0,0,.5);position:relative}
+  .paper.w80{width:210px}
+  .paper.w58{width:150px;font-size:7.5px}
+  .paper .pc{text-align:center}.paper .pb{font-weight:700}
+  .paper hr{border:none;border-top:1px dashed #999;margin:5px 0}
+  .paper .row{display:flex;justify-content:space-between}
+  .paper::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:8px;background:linear-gradient(-45deg,transparent 33%,#fdfdf8 33%,#fdfdf8 66%,transparent 66%),linear-gradient(45deg,transparent 33%,#fdfdf8 33%,#fdfdf8 66%,transparent 66%);background-size:10px 8px}
+  .paper-tag{font-size:10px;color:var(--muted)}
+
+  /* asl-style button (simplified) */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);border-radius:var(--radius-btn);color:var(--white);font-family:inherit;font-size:12.5px;font-weight:700;padding:11px 18px;cursor:pointer;transition:.15s;min-height:44px}
+  .btn:hover{border-color:rgba(245,200,66,.5);color:var(--yellow);box-shadow:0 0 0 3px rgba(245,200,66,.12)}
+  .btn.t3{color:var(--muted)}
+  .btn.t3:hover{color:var(--white);border-color:rgba(255,255,255,.35)}
+  .btn.sm{min-height:36px;padding:7px 12px;font-size:11.5px}
+
+  /* select mock (csel style) */
+  .sel{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--card2);border:1.5px solid var(--border);border-radius:var(--radius-card);padding:10px 14px;font-size:12.5px;cursor:pointer;min-width:260px;transition:.15s}
+  .sel:hover{border-color:rgba(245,200,66,.4)}
+  .sel svg{width:14px;height:14px;stroke:var(--muted);fill:none;stroke-width:2;flex-shrink:0}
+  .sel .val{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+  .field-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+  .field-lbl{font-size:12px;font-weight:600;min-width:170px;display:flex;align-items:center;gap:8px}
+  .field-lbl .ico{font-size:15px}
+
+  /* routing section dim state */
+  .routing-body{transition:.2s}
+  .routing-body.off{opacity:.32;pointer-events:none;filter:saturate(.5)}
+
+  /* status chip */
+  .chip{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;border-radius:50px;padding:5px 12px;border:1px solid}
+  .chip.ok{color:var(--green);background:rgba(56,217,122,.08);border-color:rgba(56,217,122,.35)}
+  .chip.err{color:var(--red);background:rgba(224,90,90,.08);border-color:rgba(224,90,90,.35)}
+  .chip .dot{width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 6px currentColor}
+
+  /* info card */
+  .info-steps{list-style:none;margin-top:10px}
+  .info-steps li{display:flex;gap:10px;font-size:12px;color:var(--muted);padding:7px 0;border-bottom:1px dashed rgba(255,255,255,.06);line-height:1.5}
+  .info-steps li:last-child{border-bottom:none}
+  .info-steps .n{width:22px;height:22px;min-width:22px;border-radius:50%;background:rgba(74,158,240,.12);border:1px solid rgba(74,158,240,.4);color:var(--blue);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;line-height:1}
+
+  .divider-label{display:flex;align-items:center;gap:12px;margin:26px 0 16px;color:var(--muted);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+  .divider-label::before,.divider-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.08)}
+
+  .badge{font-size:9.5px;font-weight:700;letter-spacing:.05em;border-radius:4px;padding:3px 7px;vertical-align:middle}
+  .badge.a{background:rgba(56,217,122,.12);color:var(--green);border:1px solid rgba(56,217,122,.35)}
+  .badge.b{background:rgba(232,146,58,.12);color:var(--orange);border:1px solid rgba(232,146,58,.35)}
+
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--card);border:1px solid rgba(56,217,122,.5);color:var(--green);font-size:12.5px;font-weight:600;padding:12px 22px;border-radius:var(--radius-card);transition:.3s;opacity:0;box-shadow:0 8px 30px rgba(0,0,0,.5)}
+  .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+  @media(max-width:600px){
+    body{padding:14px}
+    .field-lbl{min-width:100%}
+    .sel{min-width:100%;width:100%}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="breadcrumb">⚙️ Ρυθμίσεις → <b>Εκτύπωση</b> → νέα ενότητα (θα μπει μετά τα υπάρχοντα: Λογότυπο / Στοιχεία / QR)</div>
+  <h1>🖨️ Ρυθμίσεις Εκτυπωτή — Preview</h1>
+  <div class="sub">Διαδραστικό δείγμα: οι διακόπτες, τα κουμπιά και η επιλογή χαρτιού λειτουργούν για να δεις τη συμπεριφορά. Έτσι ΑΚΡΙΒΩΣ θα εμφανιστεί στο admin panel.</div>
+
+  <!-- ═══════════════ ΕΠΙΛΟΓΗ Α ═══════════════ -->
+  <div class="divider-label">Επιλογη Α — Βασικα (παντα διαθεσιμα)</div>
+
+  <div class="sp-card">
+    <div class="sp-title">🤫 Αθόρυβη Εκτύπωση <span class="badge a">ΕΠΙΛΟΓΗ Α</span></div>
+    <div class="sp-desc">Εκτύπωση με ένα πάτημα, χωρίς το παράθυρο εκτύπωσης του Chrome. Τυπώνει στον προεπιλεγμένο εκτυπωτή των Windows.</div>
+    <div class="tog-row">
+      <div>
+        <div class="tog-label">Εκτύπωση χωρίς παράθυρο επιβεβαίωσης</div>
+        <div class="tog-hint">OFF = εμφανίζεται το κλασικό παράθυρο του Chrome σε κάθε εκτύπωση (2 extra κλικ).</div>
+      </div>
+      <div class="str-sw on" id="silent-sw" onclick="togSilent(this)"></div>
+    </div>
+    <div class="restart-note" id="restart-note">⚠️ Η αλλαγή θα ισχύσει στην <b>&nbsp;επόμενη εκκίνηση&nbsp;</b> του POS.</div>
+  </div>
+
+  <div class="sp-card">
+    <div class="sp-title">📏 Πλάτος Χαρτιού</div>
+    <div class="sp-desc">Το μέγεθος του θερμικού ρολού. Όλες οι εκτυπώσεις (αποδείξεις, λογαριασμοί, δελτία, Z-report) προσαρμόζονται αυτόματα. Ισχύει άμεσα — χωρίς επανεκκίνηση.</div>
+    <div class="seg-row">
+      <div class="seg">
+        <button class="active" id="w80btn" onclick="setPaper(80)">80mm (στάνταρ)</button>
+        <button id="w58btn" onclick="setPaper(58)">58mm</button>
+      </div>
+    </div>
+    <div class="paper-demo">
+      <div class="paper w80" id="paper">
+        <div class="pc pb">TAMAM GRILL HOUSE</div>
+        <div class="pc">Λ. Δημοκρατίας 12 · 210 0000000</div>
+        <hr>
+        <div class="row"><span class="pb">D-14</span><span>21:35</span></div>
+        <div class="pc pb">DELIVERY</div>
+        <hr>
+        <div class="row"><span><b>2×</b> Πίτα Γύρος Χοιρινός</span><span>7,60</span></div>
+        <div>&nbsp;&nbsp;Απ'Όλα Κ (Πατάτες,Ντομάτα…)</div>
+        <div class="row"><span><b>1×</b> Coca Cola 330ml</span><span>1,50</span></div>
+        <hr>
+        <div class="row pb"><span>ΤΕΛΙΚΟ</span><span>9,10 €</span></div>
+        <div class="pc">💶 Μετρητά</div>
+      </div>
+      <div class="paper-tag" id="paper-tag">↑ ζωντανή προεπισκόπηση 80mm</div>
+    </div>
+  </div>
+
+  <div class="sp-card">
+    <div class="sp-title">🧪 Δοκιμαστική Εκτύπωση</div>
+    <div class="sp-desc">Τυπώνει ένα δείγμα απόδειξης με ψεύτικα στοιχεία — για έλεγχο εκτυπωτή, χαρτιού και κοψίματος, χωρίς να «λερώσεις» πραγματική παραγγελία ή το ιστορικό.</div>
+    <button class="btn" onclick="toast('🖨️ Στάλθηκε δοκιμαστική εκτύπωση στον εκτυπωτή')">🖨️ Εκτύπωση δείγματος</button>
+  </div>
+
+  <!-- ═══════════════ ΕΠΙΛΟΓΗ Β ═══════════════ -->
+  <div class="divider-label">Επιλογη Β — Δρομολογηση σε πολλους εκτυπωτες</div>
+
+  <div class="sp-card orange">
+    <div class="sp-title">🔀 Πολλαπλοί Εκτυπωτές (μέσω τοπικού server) <span class="badge b">ΕΠΙΛΟΓΗ Β</span></div>
+    <div class="sp-desc">Όταν ενεργοποιηθεί, τις εκτυπώσεις τις αναλαμβάνει ο τοπικός server του POS αντί για τον Chrome — έτσι κάθε είδος χαρτιού πάει σε <b>δικό του</b> εκτυπωτή (αποδείξεις στο ταμείο, δελτία στην κουζίνα). Όταν είναι OFF, ισχύει η απλή λειτουργία της Επιλογής Α.</div>
+
+    <div class="tog-row">
+      <div>
+        <div class="tog-label">Ενεργοποίηση δρομολόγησης εκτυπώσεων</div>
+        <div class="tog-hint">Προτεινόμενο: OFF όσο έχεις έναν εκτυπωτή. ON μόνο αν βάλεις δεύτερο εκτυπωτή (π.χ. κουζίνα).</div>
+      </div>
+      <div class="str-sw" id="routing-sw" onclick="togRouting(this)"></div>
+    </div>
+
+    <div class="routing-body off" id="routing-body">
+      <div style="display:flex;align-items:center;gap:10px;margin:6px 0 16px;flex-wrap:wrap">
+        <span class="chip ok"><span class="dot"></span> Server συνδεδεμένος — βρέθηκαν 3 εκτυπωτές</span>
+        <button class="btn t3 sm" onclick="toast('🔄 Η λίστα εκτυπωτών ανανεώθηκε')">🔄 Ανανέωση λίστας</button>
+      </div>
+
+      <div class="field-row">
+        <div class="field-lbl"><span class="ico">🧾</span> Εκτυπωτής Αποδείξεων</div>
+        <div class="sel" onclick="toast('▾ Εδώ ανοίγει λίστα με τους εκτυπωτές των Windows')">
+          <span class="val">EPSON TM-T20III (ταμείο)</span>
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <button class="btn t3 sm" onclick="toast('🖨️ Δοκιμή στον εκτυπωτή αποδείξεων')">▶ δοκιμή</button>
+      </div>
+
+      <div class="field-row">
+        <div class="field-lbl"><span class="ico">🍳</span> Εκτυπωτής Κουζίνας</div>
+        <div class="sel" onclick="toast('▾ Επιλογές: εκτυπωτές Windows + «Ίδιος με αποδείξεις» + «Μόνο KDS (χωρίς χαρτί)»')">
+          <span class="val">— Μόνο KDS (χωρίς χαρτί) —</span>
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <button class="btn t3 sm" onclick="toast('🖨️ Δοκιμή στον εκτυπωτή κουζίνας')">▶ δοκιμή</button>
+      </div>
+
+      <div class="tog-hint" style="margin-top:6px">💡 Το «δελτίο κουζίνας» = ό,τι αφορά την κουζίνα (νέες παραγγελίες, αλλαγές, διορθώσεις). Οι αποδείξεις πελάτη, οι λογαριασμοί τραπεζιών και τα Z-report πάνε πάντα στον εκτυπωτή αποδείξεων.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ INFO ═══════════════ -->
+  <div class="sp-card blue" id="info-card">
+    <div class="sp-title">ℹ️ Ποιος εκτυπωτής χρησιμοποιείται τώρα;</div>
+    <div class="sp-desc">Με απλή λειτουργία (δρομολόγηση OFF), το POS τυπώνει στον <b>προεπιλεγμένο εκτυπωτή των Windows</b>. Για να τον αλλάξεις:</div>
+    <ul class="info-steps">
+      <li><span class="n">1</span> Windows → Ρυθμίσεις → Bluetooth &amp; συσκευές → Εκτυπωτές &amp; σαρωτές</li>
+      <li><span class="n">2</span> Κλείσε το «Να επιτρέπεται στα Windows να διαχειρίζονται τον προεπιλεγμένο εκτυπωτή»</li>
+      <li><span class="n">3</span> Διάλεξε τον θερμικό εκτυπωτή → «Ορισμός ως προεπιλογή»</li>
+    </ul>
+  </div>
+
+</div>
+<div class="toast" id="toast"></div>
+<script>
+  let _tt;
+  function toast(msg){
+    const t=document.getElementById('toast');
+    t.textContent=msg; t.classList.add('show');
+    clearTimeout(_tt); _tt=setTimeout(()=>t.classList.remove('show'),2600);
+  }
+  function togSilent(el){
+    el.classList.toggle('on');
+    document.getElementById('restart-note').classList.add('show');
+  }
+  function togRouting(el){
+    el.classList.toggle('on');
+    document.getElementById('routing-body').classList.toggle('off', !el.classList.contains('on'));
+    toast(el.classList.contains('on') ? '🔀 Δρομολόγηση ΕΝΕΡΓΗ — οι εκτυπώσεις περνούν από τον server' : 'Απλή λειτουργία — προεπιλεγμένος εκτυπωτής Windows');
+  }
+  function setPaper(w){
+    document.getElementById('paper').className='paper w'+w;
+    document.getElementById('w80btn').classList.toggle('active',w===80);
+    document.getElementById('w58btn').classList.toggle('active',w===58);
+    document.getElementById('paper-tag').textContent='↑ ζωντανή προεπισκόπηση '+w+'mm';
+  }
+</script>
+</body>
+</html>

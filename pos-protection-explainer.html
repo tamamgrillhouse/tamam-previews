@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Πώς προστατεύονται οι ιστότοποι</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: #f4f1ea;
+    color: #2a2724;
+    line-height: 1.6;
+    padding: 20px 14px 60px;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; }
+  header {
+    text-align:center;
+    margin-bottom: 28px;
+  }
+  header h1 { font-size: 1.7rem; color:#c0392b; margin-bottom:6px; }
+  header p { color:#6b6459; font-size:1rem; }
+
+  .card {
+    background:#fff;
+    border-radius: 18px;
+    padding: 22px 20px;
+    margin-bottom: 22px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.06);
+    border: 1px solid #eae4d8;
+  }
+  .card h2 {
+    font-size: 1.25rem;
+    display:flex; align-items:center; gap:10px;
+    margin-bottom: 4px;
+  }
+  .badge {
+    font-size:.72rem; font-weight:700; letter-spacing:.5px;
+    padding:3px 9px; border-radius:20px; text-transform:uppercase;
+  }
+  .b-strong { background:#fdeaea; color:#c0392b; }
+  .b-mid { background:#fef5e7; color:#c47f17; }
+  .b-tech { background:#eaf2fb; color:#2b6cb0; }
+
+  .analogy {
+    background:#faf7f0;
+    border-left: 4px solid #e0b84c;
+    padding: 12px 14px;
+    border-radius: 8px;
+    margin: 14px 0;
+    font-size:.98rem;
+  }
+  .analogy b { color:#b8860b; }
+
+  .demo {
+    background:#2a2724;
+    color:#f4f1ea;
+    border-radius: 12px;
+    padding: 18px;
+    margin-top: 14px;
+  }
+  .demo-title {
+    font-size:.78rem; text-transform:uppercase; letter-spacing:1px;
+    color:#a89f8f; margin-bottom:12px; font-weight:700;
+  }
+  button {
+    font-family:inherit; font-size:.95rem; font-weight:600;
+    border:none; border-radius:10px; padding:11px 16px;
+    cursor:pointer; min-height:44px; transition:.15s;
+  }
+  .btn-main { background:#e0b84c; color:#2a2724; }
+  .btn-main:hover { background:#eac668; }
+  .btn-main:active { transform:scale(.97); }
+  select {
+    font-family:inherit; font-size:.95rem; padding:11px 12px;
+    border-radius:10px; border:none; width:100%; min-height:44px;
+    background:#f4f1ea; color:#2a2724;
+  }
+  .result {
+    margin-top:14px; padding:14px; border-radius:10px;
+    font-size:.95rem; font-weight:600;
+    min-height: 20px;
+  }
+  .ok { background:#1e3a2b; color:#7ee2a8; border:1px solid #2f5c42; }
+  .bad { background:#3a1e1e; color:#f39b9b; border:1px solid #5c2f2f; }
+  .neutral { background:#3a352e; color:#cbc3b4; }
+
+  .counter-lights { display:flex; gap:8px; margin:12px 0; }
+  .light {
+    flex:1; height:10px; border-radius:5px; background:#4a453d;
+    transition:.2s;
+  }
+  .light.on { background:#7ee2a8; }
+  .light.warn { background:#e0b84c; }
+  .light.danger { background:#f39b9b; }
+
+  .page-mock {
+    background:#f4f1ea; color:#2a2724;
+    border-radius:10px; padding:16px; margin-top:12px; min-height:120px;
+    transition:.3s;
+  }
+  .page-mock.empty { display:flex; align-items:center; justify-content:center; color:#b0a894; font-style:italic; }
+  .page-mock h4 { color:#c0392b; margin-bottom:6px; }
+  .page-mock .row { padding:6px 0; border-bottom:1px dashed #ddd5c5; }
+
+  .note {
+    font-size:.88rem; color:#6b6459; margin-top:12px;
+    background:#faf7f0; padding:10px 12px; border-radius:8px;
+  }
+  .use {
+    margin-top:14px; font-size:.95rem;
+    background:#eef7f0; border:1px solid #cce8d5; border-radius:10px; padding:12px 14px;
+  }
+  .use b { color:#2e7d4f; }
+  footer { text-align:center; color:#9b9384; font-size:.85rem; margin-top:30px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>🛡️ Πώς οι ιστότοποι κρατούν έξω τα «ρομπότ»</h1>
+    <p>4 «πορτιέρηδες» — εξήγηση + μικρό ζωντανό παράδειγμα στον καθένα</p>
+  </header>
+
+  <!-- 1. CLOUDFLARE -->
+  <div class="card">
+    <h2>☁️ Cloudflare <span class="badge b-strong">Πιο δυνατό</span></h2>
+    <p>Ένας «φύλακας» που στέκεται <b>μπροστά</b> από τη σελίδα σου. Κάθε επισκέπτης περνάει πρώτα από αυτόν. Αυτός αποφασίζει: άνθρωπος ή μηχανή;</p>
+
+    <div class="analogy">
+      🏪 <b>Σαν τον πορτιέρη στην είσοδο:</b> κοιτάει πώς κινείσαι, πόσο γρήγορα ήρθες, αν «μυρίζεις» άνθρωπος. Αν κάτι δεν κολλάει, σε βάζει να περιμένεις («Ελέγχω αν είσαι άνθρωπος…») ή σε γυρνάει πίσω.
+    </div>
+
+    <div class="demo">
+      <div class="demo-title">Δοκίμασε — ποιος περνάει τον φύλακα;</div>
+      <select id="cf-select">
+        <option value="human">🧑 Άνθρωπος με κανονικό browser</option>
+        <option value="goodbot">🤖 Καλό ρομπότ (π.χ. Google)</option>
+        <option value="badbot">😈 Ύποπτο ρομπότ (χτυπάει χιλιάδες φορές)</option>
+      </select>
+      <div style="margin-top:12px"><button class="btn-main" onclick="cfCheck()">Πέρνα από τον φύλακα ☁️</button></div>
+      <div class="result neutral" id="cf-result">Διάλεξε ποιος είσαι και πάτα το κουμπί.</div>
+    </div>
+
+    <div class="use">💡 <b>Για σένα:</b> Το στήνεις <b>μία φορά</b> (έχει και δωρεάν πλάνο) και προστατεύει τη σελίδα αυτόματα — δε χρειάζεται να ξέρεις προγραμματισμό.</div>
+  </div>
+
+  <!-- 2. RATE LIMITING -->
+  <div class="card">
+    <h2>⏱️ Rate limiting <span class="badge b-mid">Μεσαίο</span></h2>
+    <p>Βάζει <b>όριο ταχύτητας</b>: πόσες φορές μπορείς να «χτυπήσεις» τη σελίδα σε λίγα δευτερόλεπτα. Ένας άνθρωπος κάνει κλικ κάθε λίγα δευτερόλεπτα· μια μηχανή 100 φορές στο δευτερόλεπτο.</p>
+
+    <div class="analogy">
+      🎢 <b>Σαν το λούνα παρκ:</b> «ένας-ένας παρακαλώ». Αν ορμήσεις 10 φορές στη σειρά μέσα σε 3 δευτερόλεπτα, ο υπάλληλος σε σταματάει: «ηρέμησε, περίμενε λίγο».
+    </div>
+
+    <div class="demo">
+      <div class="demo-title">Πάτα γρήγορα-γρήγορα το κουμπί (όριο: 5 σε λίγο χρόνο)</div>
+      <div class="counter-lights" id="rl-lights">
+        <div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div><div class="light"></div>
+      </div>
+      <button class="btn-main" id="rl-btn" onclick="rlHit()">Χτύπα τη σελίδα 👊</button>
+      <div class="result neutral" id="rl-result">Χτυπήματα: 0 / 5</div>
+    </div>
+
+    <div class="note">Μετά από λίγη ώρα «ηρεμίας» το όριο μηδενίζει και ξαναμπαίνεις κανονικά — δεν είναι μόνιμο μπλόκο.</div>
+  </div>
+
+  <!-- 3. USER-AGENT -->
+  <div class="card">
+    <h2>🪪 User-Agent <span class="badge b-tech">Απλό</span></h2>
+    <p>Κάθε πρόγραμμα που ζητάει μια σελίδα δηλώνει «ποιος είμαι» — σαν να δείχνει <b>ταυτότητα</b>. Ένας κανονικός browser λέει «είμαι Chrome / Safari». Ένα ρομπότ συχνά λέει καθαρά «είμαι bot».</p>
+
+    <div class="analogy">
+      🛂 <b>Σαν το διαβατήριο στο αεροδρόμιο:</b> ο έλεγχος διαβάζει την ταυτότητά σου. Αν γράφει «ΡΟΜΠΟΤ», μπορεί ευγενικά να σου πει «όχι από εδώ». (Προσοχή: η ταυτότητα «γράφεται» εύκολα — γι' αυτό δεν είναι από μόνη της δυνατή προστασία.)
+    </div>
+
+    <div class="demo">
+      <div class="demo-title">Δείξε την «ταυτότητά» σου στην πόρτα</div>
+      <select id="ua-select">
+        <option value="chrome">Mozilla/5.0 … Chrome/120 (κανονικός browser)</option>
+        <option value="safari">Mozilla/5.0 … Safari (iPhone)</option>
+        <option value="bot">python-requests/2.31 (πρόγραμμα-ρομπότ)</option>
+        <option value="scraper">MyScraperBot/1.0 (λέει ανοιχτά «είμαι bot»)</option>
+      </select>
+      <div style="margin-top:12px"><button class="btn-main" onclick="uaCheck()">Δείξε ταυτότητα 🪪</button></div>
+      <div class="result neutral" id="ua-result">Διάλεξε ταυτότητα και πάτα το κουμπί.</div>
+    </div>
+  </div>
+
+  <!-- 4. JAVASCRIPT CHALLENGE -->
+  <div class="card">
+    <h2>⚙️ JavaScript «πρόκληση» <span class="badge b-tech">Έξυπνο</span></h2>
+    <p>Η σελίδα έρχεται στην αρχή <b>άδεια</b>. Το πραγματικό περιεχόμενο «χτίζεται» μόνο αφού τρέξει ένας μικρός κώδικας μέσα σε κανονικό browser. Τα απλά ρομπότ δεν «τρέχουν» τον κώδικα → βλέπουν κενή σελίδα.</p>
+
+    <div class="analogy">
+      📦 <b>Σαν έπιπλο IKEA:</b> στον άνθρωπο (browser) δίνεις τα κομμάτια + οδηγίες και το συναρμολογεί μόνος του. Το απλό ρομπότ ανοίγει το κουτί, βλέπει σκόρπια κομμάτια και φεύγει — δεν κατάλαβε τίποτα.
+    </div>
+
+    <div class="demo">
+      <div class="demo-title">Δες τι βλέπει ο καθένας</div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap">
+        <button class="btn-main" onclick="jsView('human')">🧑 Άνθρωπος (τρέχει τον κώδικα)</button>
+        <button class="btn-main" onclick="jsView('bot')" style="background:#8a8377;color:#fff">🤖 Απλό ρομπότ (δεν τον τρέχει)</button>
+      </div>
+      <div class="page-mock empty" id="js-mock">— (η σελίδα δεν έχει «χτιστεί» ακόμα) —</div>
+    </div>
+  </div>
+
+  <footer>Εκπαιδευτικό demo · μόνο για τον ιδιοκτήτη · καμία πραγματική σύνδεση με ιστότοπο</footer>
+
+</div>
+
+<script>
+// 1. Cloudflare
+function cfCheck(){
+  var v = document.getElementById('cf-select').value;
+  var r = document.getElementById('cf-result');
+  if(v==='human'){ r.className='result ok'; r.textContent='✅ Πέρασες. Ο φύλακας είδε ανθρώπινη συμπεριφορά.'; }
+  else if(v==='goodbot'){ r.className='result ok'; r.textContent='✅ Πέρασε — είναι γνωστό «καλό» ρομπότ (η Google που καταγράφει τη σελίδα). Επιτρέπεται.'; }
+  else { r.className='result bad'; r.textContent='🚫 Μπλόκο! «Ελέγχω αν είσαι άνθρωπος…» → το ρομπότ κόλλησε και δεν μπήκε.'; }
+}
+
+// 2. Rate limiting
+var rlCount = 0, rlLocked = false, rlTimer = null;
+function rlHit(){
+  if(rlLocked) return;
+  rlCount++;
+  var lights = document.querySelectorAll('#rl-lights .light');
+  var r = document.getElementById('rl-result');
+  for(var i=0;i<lights.length;i++){
+    lights[i].className = 'light' + (i < rlCount ? (rlCount>=5?' danger':(rlCount>=4?' warn':' on')) : '');
+  }
+  if(rlCount>=5){
+    rlLocked = true;
+    r.className='result bad';
+    r.textContent='🚫 ΜΠΛΟΚΟ! Χτύπησες πολύ γρήγορα. Περίμενε 3 δευτερόλεπτα…';
+    document.getElementById('rl-btn').style.opacity='.4';
+    setTimeout(rlReset, 3000);
+  } else {
+    r.className='result neutral';
+    r.textContent='Χτυπήματα: '+rlCount+' / 5';
+  }
+  clearTimeout(rlTimer);
+  rlTimer = setTimeout(function(){ if(!rlLocked) rlReset(); }, 4000);
+}
+function rlReset(){
+  rlCount=0; rlLocked=false;
+  document.querySelectorAll('#rl-lights .light').forEach(function(l){l.className='light';});
+  document.getElementById('rl-btn').style.opacity='1';
+  var r=document.getElementById('rl-result');
+  r.className='result neutral'; r.textContent='Χτυπήματα: 0 / 5 (το όριο μηδένισε — ξαναδοκίμασε)';
+}
+
+// 3. User-Agent
+function uaCheck(){
+  var v=document.getElementById('ua-select').value;
+  var r=document.getElementById('ua-result');
+  if(v==='chrome'||v==='safari'){ r.className='result ok'; r.textContent='✅ Πέρασες — η ταυτότητα δείχνει κανονικό browser.'; }
+  else if(v==='bot'){ r.className='result bad'; r.textContent='🚫 Ύποπτο — η ταυτότητα «python-requests» φανερώνει πρόγραμμα, όχι browser.'; }
+  else { r.className='result bad'; r.textContent='🚫 Μπλόκο — δήλωσε ανοιχτά «είμαι bot». Ο φύλακας το κόβει αμέσως.'; }
+}
+
+// 4. JavaScript challenge
+function jsView(who){
+  var m=document.getElementById('js-mock');
+  if(who==='human'){
+    m.className='page-mock';
+    m.innerHTML='<h4>🍖 TAMAM — Μενού</h4>'+
+      '<div class="row">Γύρος χοιρινός — 3,50 €</div>'+
+      '<div class="row">Σουβλάκι κοτόπουλο — 2,80 €</div>'+
+      '<div class="row">Μερίδα πατάτες — 2,00 €</div>'+
+      '<div style="margin-top:8px;color:#2e7d4f;font-weight:600">✅ Ο browser «έχτισε» τη σελίδα — όλα φαίνονται.</div>';
+  } else {
+    m.className='page-mock empty';
+    m.innerHTML='😕 &lt;άδειο&gt; — το ρομπότ δεν έτρεξε τον κώδικα, οπότε δεν είδε ούτε μενού ούτε τιμές.';
+  }
+}
+</script>
+</body>
+</html>

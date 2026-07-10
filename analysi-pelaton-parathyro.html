@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Πρόταση — Ανάλυση Πελατών: Χρονικό Παράθυρο & Ταχύτητα</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Segoe UI', system-ui, sans-serif; background:#f4f1ec; color:#2b2b2b; padding:20px 14px 60px; }
+  .wrap { max-width:960px; margin:0 auto; }
+  h1 { font-size:1.35rem; margin:10px 0 4px; }
+  .sub { color:#777; font-size:.92rem; margin-bottom:22px; }
+  .note { background:#fff8e6; border:1px solid #f0d9a0; border-radius:10px; padding:12px 14px; font-size:.9rem; margin-bottom:26px; }
+  .card { background:#fff; border:1px solid #e5ded2; border-radius:14px; padding:20px 18px; margin-bottom:26px; box-shadow:0 1px 4px rgba(0,0,0,.04); }
+  .card h2 { font-size:1.08rem; margin-bottom:6px; display:flex; align-items:center; gap:8px; }
+  .card .desc { color:#666; font-size:.9rem; margin-bottom:16px; line-height:1.5; }
+  .badge { display:inline-block; background:#e8630a; color:#fff; font-size:.72rem; padding:3px 9px; border-radius:20px; font-weight:600; vertical-align:middle; }
+  .badge.gray { background:#9a9a9a; }
+
+  /* Timeline */
+  .timeline { position:relative; height:74px; margin:18px 6px 8px; }
+  .tl-bar { position:absolute; top:30px; left:0; right:0; height:14px; background:#e3ddd2; border-radius:8px; }
+  .tl-window { position:absolute; top:26px; right:0; width:20%; height:22px; background:linear-gradient(90deg,#f5a24b,#e8630a); border-radius:8px; box-shadow:0 2px 8px rgba(232,99,10,.35); }
+  .tl-label { position:absolute; top:0; font-size:.78rem; color:#888; }
+  .tl-label.now { right:0; color:#e8630a; font-weight:700; }
+  .tl-caption { position:absolute; bottom:0; font-size:.78rem; }
+  .tl-caption.old { left:0; color:#999; }
+  .tl-caption.win { right:0; color:#e8630a; font-weight:600; }
+
+  /* Settings row mock */
+  .set-row { display:flex; align-items:center; gap:14px; padding:14px 12px; border:1px solid #eee5d6; border-radius:10px; background:#fdfcfa; margin-bottom:10px; flex-wrap:wrap; }
+  .set-ico { font-size:1.5rem; }
+  .set-txt { flex:1; min-width:220px; }
+  .set-txt b { display:block; font-size:.95rem; }
+  .set-txt span { font-size:.82rem; color:#888; }
+  .select-mock { border:1.5px solid #d8cfc0; border-radius:8px; padding:9px 34px 9px 12px; background:#fff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="6"><path d="M0 0l5 6 5-6z" fill="%23e8630a"/></svg>') no-repeat right 12px center; font-size:.92rem; min-height:44px; display:inline-flex; align-items:center; cursor:default; }
+  .toggle { width:46px; height:26px; border-radius:20px; background:#e8630a; position:relative; flex-shrink:0; }
+  .toggle::after { content:''; position:absolute; top:3px; right:3px; width:20px; height:20px; background:#fff; border-radius:50%; }
+
+  /* CRM page mock */
+  .page-mock { border:1px solid #e0d8ca; border-radius:12px; overflow:hidden; background:#faf8f5; }
+  .pm-top { background:#fff; padding:14px 16px; border-bottom:1px solid #eee3d2; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
+  .pm-top h3 { font-size:1rem; }
+  .pill { background:#fdeedd; color:#c05408; border:1px solid #f3cfa8; font-size:.78rem; padding:5px 12px; border-radius:20px; font-weight:600; }
+  .pm-table { width:100%; border-collapse:collapse; font-size:.88rem; }
+  .pm-table th { text-align:left; padding:10px 14px; color:#977; font-size:.78rem; background:#fdf9f3; border-bottom:1px solid #eee3d2; }
+  .pm-table td { padding:11px 14px; border-bottom:1px solid #f2ece0; }
+  .pm-table tr:hover td { background:#fdf4e9; }
+  .risk { color:#c0392b; font-weight:600; font-size:.82rem; }
+  .ok-tag { color:#1d8348; font-weight:600; font-size:.82rem; }
+
+  /* speed compare */
+  .speed { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:6px; }
+  @media (max-width:640px){ .speed{ grid-template-columns:1fr; } }
+  .sp-box { border-radius:12px; padding:16px; border:1px solid; }
+  .sp-box.bad { background:#fdf0ee; border-color:#eec5bf; }
+  .sp-box.good { background:#eef8f0; border-color:#bfe3c8; }
+  .sp-box h4 { font-size:.9rem; margin-bottom:8px; }
+  .sp-time { font-size:1.7rem; font-weight:800; margin-bottom:6px; }
+  .sp-box.bad .sp-time { color:#c0392b; }
+  .sp-box.good .sp-time { color:#1d8348; }
+  .sp-box p { font-size:.83rem; color:#666; line-height:1.5; }
+  .bar-anim { height:10px; border-radius:6px; background:#e8e2d6; margin:10px 0 4px; overflow:hidden; }
+  .bar-anim i { display:block; height:100%; border-radius:6px; }
+  .bad .bar-anim i { width:96%; background:#d98277; }
+  .good .bar-anim i { width:4%; background:#58b273; }
+
+  .drawer { background:#f6f2ea; border:1px dashed #cfc4ae; border-radius:10px; padding:14px; font-size:.87rem; line-height:1.6; margin-top:14px; }
+  .drawer b { color:#b4560a; }
+  .footnote { color:#999; font-size:.8rem; text-align:center; margin-top:30px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🔮 Πρόταση: Ανάλυση Πελατών — Χρονικό Παράθυρο & Ταχύτητα</h1>
+  <div class="sub">Τι ακριβώς θα αλλάξει ώστε οι αναλύσεις να μένουν γρήγορες και σε 10 χρόνια</div>
+  <div class="note">⚠️ <b>Δείγμα — δεν είναι η πραγματική εφαρμογή.</b> Όλα τα ονόματα, τηλέφωνα και ποσά είναι ψεύτικα, μόνο για να δεις πώς θα φαίνεται.</div>
+
+  <!-- ΜΕΡΟΣ 1: το χρονικό παράθυρο -->
+  <div class="card">
+    <h2>1️⃣ Το «χρονικό παράθυρο» <span class="badge">ΝΕΑ ΡΥΘΜΙΣΗ</span></h2>
+    <div class="desc">
+      Σήμερα οι αναλύσεις πελατών (CRM, «πελάτες σε κίνδυνο», προτάσεις combo) διαβάζουν
+      <b>όλες τις παραγγελίες που έγιναν ποτέ</b> — και του 2027 και του 2035. Με το παράθυρο,
+      θα κοιτάζουν μόνο το πρόσφατο κομμάτι του ιστορικού που έχει πραγματική αξία:
+    </div>
+
+    <div class="timeline">
+      <div class="tl-label" style="left:0">2027 — πρώτη μέρα λειτουργίας</div>
+      <div class="tl-label now">Σήμερα</div>
+      <div class="tl-bar"></div>
+      <div class="tl-window"></div>
+      <div class="tl-caption old">παλιό ιστορικό — μένει φυλαγμένο, απλώς δεν σαρώνεται</div>
+      <div class="tl-caption win">τελευταίοι 24 μήνες</div>
+    </div>
+
+    <div class="desc" style="margin-top:14px;">
+      Έτσι θα φαίνεται η νέα ρύθμιση (στη σελίδα Ρυθμίσεων):
+    </div>
+    <div class="set-row">
+      <div class="set-ico">👥</div>
+      <div class="set-txt">
+        <b>Παράθυρο ανάλυσης πελατών</b>
+        <span>Πόσο πίσω κοιτάζουν το CRM, οι «πελάτες σε κίνδυνο» και οι προτάσεις combo</span>
+      </div>
+      <div class="select-mock">Τελευταίοι 24 μήνες ▾&nbsp;&nbsp;<small style="color:#aaa">(12 / 24 / 36 / Όλο το ιστορικό)</small></div>
+    </div>
+
+    <div class="drawer">
+      💡 <b>Γιατί είναι και επιχειρηματικά σωστό:</b> πελάτης που παράγγειλε μία φορά πριν 6 χρόνια
+      δεν είναι «πελάτης σε κίνδυνο» — είναι παρελθόν. Και οι συνήθειες παραγγελιών του 2027
+      δεν λένε τίποτα για τα combo του 2033. Το παράθυρο δεν κρύβει απλώς δεδομένα για ταχύτητα —
+      κάνει τις αναλύσεις <b>πιο αληθινές</b>. Τα παλιά δεδομένα <b>δεν σβήνονται ποτέ</b>·
+      μένουν στη βάση και στις οικονομικές αναφορές (τζίρος, ΦΠΑ κ.λπ. δεν αλλάζουν καθόλου).
+    </div>
+  </div>
+
+  <!-- ΜΕΡΟΣ 2: πώς θα φαίνεται στη σελίδα -->
+  <div class="card">
+    <h2>2️⃣ Πώς θα φαίνεται στη σελίδα «Πελάτες»</h2>
+    <div class="desc">Η μόνη ορατή αλλαγή: ένα σήμα που σου θυμίζει τι περίοδο βλέπεις (δείγμα):</div>
+
+    <div class="page-mock">
+      <div class="pm-top">
+        <h3>⚠️ Πελάτες σε κίνδυνο</h3>
+        <span class="pill">📅 Ανάλυση: τελευταίοι 24 μήνες</span>
+      </div>
+      <table class="pm-table">
+        <tr><th>Τηλέφωνο</th><th>Παραγγελίες</th><th>Τελευταία</th><th>Κατάσταση</th></tr>
+        <tr><td>69XXXXXX101</td><td>14</td><td>πριν 47 μέρες</td><td class="risk">Σε κίνδυνο</td></tr>
+        <tr><td>69XXXXXX102</td><td>9</td><td>πριν 38 μέρες</td><td class="risk">Σε κίνδυνο</td></tr>
+        <tr><td>69XXXXXX103</td><td>22</td><td>πριν 5 μέρες</td><td class="ok-tag">Ενεργός</td></tr>
+        <tr><td>69XXXXXX104</td><td>6</td><td>πριν 12 μέρες</td><td class="ok-tag">Ενεργός</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ΜΕΡΟΣ 3: η αόρατη αλλαγή -->
+  <div class="card">
+    <h2>3️⃣ Η «καρτελοθήκη τηλεφώνων» <span class="badge gray">ΑΟΡΑΤΗ ΑΛΛΑΓΗ</span></h2>
+    <div class="desc">
+      Σήμερα το τηλέφωνο του πελάτη είναι <b>θαμμένο μέσα στο πλήρες κείμενο</b> κάθε παραγγελίας —
+      για να το βρει το σύστημα, «ξεφυλλίζει» όλες τις παραγγελίες μία-μία. Η αλλαγή: όταν φτάνει
+      παραγγελία από το POS, το τηλέφωνο θα γράφεται <b>και σε δική του στήλη με ευρετήριο</b> —
+      σαν καρτελοθήκη ταξινομημένη ανά τηλέφωνο. Δεν θα δεις τίποτα διαφορετικό στην οθόνη —
+      θα το νιώσεις μόνο στην ταχύτητα:
+    </div>
+
+    <div class="speed">
+      <div class="sp-box bad">
+        <h4>❌ Χωρίς την αλλαγή — έτος 10 (~400.000 παραγγελίες)</h4>
+        <div class="sp-time">≈ 30–60+ δευτ.</div>
+        <div class="bar-anim"><i></i></div>
+        <p>Η σελίδα «Πελάτες» ξεφυλλίζει ΟΛΕΣ τις παραγγελίες 10 ετών κάθε φορά που την ανοίγεις. Σαν να ψάχνεις πελάτη διαβάζοντας όλα τα μπλοκάκια της δεκαετίας.</p>
+      </div>
+      <div class="sp-box good">
+        <h4>✅ Με παράθυρο + καρτελοθήκη — έτος 10</h4>
+        <div class="sp-time">&lt; 1 δευτ.</div>
+        <div class="bar-anim"><i></i></div>
+        <p>Η βάση απαντά κατευθείαν από το ευρετήριο, μόνο για το πρόσφατο διάστημα. Σαν να τραβάς τη σωστή καρτέλα από την καρτελοθήκη.</p>
+      </div>
+    </div>
+
+    <div class="drawer">
+      🕐 <b>Γιατί τώρα;</b> Είμαστε πριν το άνοιγμα, με μηδέν πραγματικές παραγγελίες — η «καρτελοθήκη»
+      στήνεται ανώδυνα σε άδειο σύστημα. Σε 5 χρόνια, το ίδιο έργο θα σήμαινε ξαναδιάβασμα
+      εκατοντάδων χιλιάδων παραγγελιών για να γεμίσει.
+    </div>
+  </div>
+
+  <!-- ΜΕΡΟΣ 4: bonus - ρυθμίσεις αντιγράφων -->
+  <div class="card">
+    <h2>💾 Και οι νέες ρυθμίσεις αντιγράφων (Βόμβα 1)</h2>
+    <div class="desc">Στη σελίδα «💾 Αντίγραφα», δίπλα στα υπάρχοντα. Ο πίνακας ωρών για τα τοπικά <b>υπάρχει ήδη</b> — προσθέτουμε μόνο τη συχνότητα του cloud:</div>
+
+    <div class="set-row">
+      <div class="set-ico">☁️</div>
+      <div class="set-txt">
+        <b>Συχνότητα αντιγράφου στο cloud (GitHub)</b>
+        <span>Πόσο συχνά ανεβαίνει κρυπτογραφημένο αντίγραφο εκτός μαγαζιού</span>
+      </div>
+      <div class="select-mock">1 φορά την εβδομάδα ▾&nbsp;&nbsp;<small style="color:#aaa">(Κάθε αντίγραφο / 1×/μέρα / 1×/εβδομάδα / 1×/μήνα)</small></div>
+    </div>
+
+    <div class="set-row">
+      <div class="set-ico">🗜️</div>
+      <div class="set-txt">
+        <b>Συμπίεση cloud αντιγράφου</b>
+        <span>Το αρχείο μικραίνει ~80% πριν ανέβει — το όριο του GitHub αργεί χρόνια</span>
+      </div>
+      <div class="toggle"></div>
+    </div>
+
+    <div class="set-row" style="border-style:dashed; opacity:.85;">
+      <div class="set-ico">🕐</div>
+      <div class="set-txt">
+        <b>Ώρες τοπικών αντιγράφων</b>
+        <span>ΥΠΑΡΧΕΙ ΗΔΗ — πίνακας ωρών (τώρα: 14:00, 18:00, 22:00) + αντίγραφο στο άνοιγμα. Προσθέτεις/αφαιρείς όσες ώρες θες.</span>
+      </div>
+      <div class="select-mock" style="border-style:dashed;">14:00 · 18:00 · 22:00 &nbsp;➕</div>
+    </div>
+  </div>
+
+  <div class="footnote">TAMAM Back-Office — πρόταση για έγκριση · όλα τα δεδομένα είναι δείγματα</div>
+</div>
+</body>
+</html>
