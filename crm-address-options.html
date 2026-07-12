@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Διευθύνσεις πελάτη — 3 προτάσεις</title>
+<style>
+  :root{
+    --orange:#f59e0b; --orange-d:#d97706;
+    --text:#1f2937; --muted:#6b7280; --border:#e5e7eb;
+    --amber-bg:#fef3c7; --amber-tx:#92400e; --bg:#f3f4f6; --white:#fff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font-family:'Manrope',-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+    padding:24px 14px 60px;line-height:1.55}
+  .wrap{max-width:620px;margin:0 auto}
+  h1{font-size:20px;margin:0 0 4px}
+  .sub{color:var(--muted);font-size:14px;margin:0 0 26px}
+  .opt{background:var(--white);border-radius:14px;box-shadow:0 6px 22px rgba(0,0,0,.08);
+    padding:18px 18px 20px;margin-bottom:22px}
+  .opt-h{display:flex;align-items:center;gap:9px;margin:0 0 4px}
+  .opt-h .n{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--orange-d));
+    color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex:none}
+  .opt-h b{font-size:15.5px}
+  .opt-note{color:var(--muted);font-size:12.5px;margin:2px 0 16px 35px}
+  .lbl{font-weight:800;font-size:13.5px;margin:0 0 10px;display:flex;align-items:center;gap:6px}
+  .badge{font-size:11px;background:var(--amber-bg);color:var(--amber-tx);border-radius:6px;
+    padding:1px 7px;font-weight:800;letter-spacing:.2px}
+  .now{background:#fff7ed;border:1px dashed #fdba74}
+  .now .lbl{color:#9a3412}
+
+  /* ---------- CURRENT (μονοκόματο) ---------- */
+  .cur{font-size:13.5px;line-height:1.9}
+  .cur .a{margin-left:22px}
+  .cur .meta{color:var(--muted);font-size:12px}
+
+  /* ---------- A: Κάρτες ---------- */
+  .a-card{display:flex;gap:12px;border:1px solid var(--border);border-radius:12px;
+    padding:12px 14px;margin-bottom:10px;background:#fff}
+  .a-card.primary{border-color:var(--orange);background:#fffdf7}
+  .a-ic{width:38px;height:38px;border-radius:10px;background:#fff4e0;flex:none;
+    display:flex;align-items:center;justify-content:center;font-size:19px}
+  .a-card.primary .a-ic{background:var(--orange);}
+  .a-body{flex:1;min-width:0}
+  .a-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .a-str{font-weight:800;font-size:14.5px}
+  .a-sub{color:var(--muted);font-size:12.5px;margin-top:1px}
+  .a-stat{margin-top:7px;display:inline-flex;align-items:center;gap:6px;
+    background:#ecfdf5;color:#047857;border-radius:20px;padding:3px 10px;font-size:12px;font-weight:700}
+  .a-last{color:var(--muted);font-size:12px;margin-left:8px;font-weight:500}
+
+  /* ---------- B: Γραμμή με μπάρα + πίλλς ---------- */
+  .b-row{position:relative;padding:10px 12px 10px 16px;border-radius:10px;margin-bottom:8px;background:#fafafa}
+  .b-row.primary{background:#fffbeb}
+  .b-row::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:4px;border-radius:4px;background:var(--border)}
+  .b-row.primary::before{background:var(--orange)}
+  .b-line{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .b-str{font-weight:700;font-size:14px}
+  .b-sub{color:var(--muted);font-size:12.5px;margin-top:1px}
+  .b-pill{flex:none;text-align:right}
+  .b-count{display:inline-block;background:var(--orange);color:#fff;border-radius:20px;
+    padding:2px 10px;font-size:12px;font-weight:800}
+  .b-count.dim{background:#e5e7eb;color:#6b7280}
+  .b-last{color:var(--muted);font-size:11px;margin-top:3px}
+
+  /* ---------- C: Δύο στήλες / στατιστικό ---------- */
+  .c-row{display:flex;align-items:center;gap:14px;padding:12px 4px;border-bottom:1px solid var(--border)}
+  .c-row:last-child{border-bottom:0}
+  .c-left{flex:1;min-width:0}
+  .c-str{font-weight:800;font-size:14.5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .c-sub{color:var(--muted);font-size:12.5px;margin-top:2px}
+  .c-right{flex:none;text-align:center;min-width:74px}
+  .c-num{font-size:22px;font-weight:800;line-height:1;color:var(--orange-d)}
+  .c-num.dim{color:#9ca3af}
+  .c-cap{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-top:2px}
+  .c-last{font-size:11px;color:var(--muted);margin-top:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🏠 Διευθύνσεις πελάτη — 3 προτάσεις</h1>
+  <p class="sub">Ίδια δεδομένα, 3 τρόποι εμφάνισης. Διάλεξε ποιος διαβάζεται πιο εύκολα.</p>
+
+  <!-- CURRENT -->
+  <div class="opt now">
+    <div class="lbl">Τώρα (μονοκόματο)</div>
+    <div class="cur">
+      <div class="a">ΑΓΙΟΥ ΚΟΣΜΑ 25, όροφος 5ος (κουδ. Δεύτερο από αριστερά) <span class="badge">συνήθης</span>
+        <div class="meta">✓ 7 παραδόσεις · τελευταία 18-06-2026</div></div>
+      <div class="a">ΠΙΝΔΟΥ 12, όροφος 1ος (κουδ. Μασμανίδης)
+        <div class="meta">✓ 1 παράδοση · τελευταία 17-06-2026</div></div>
+    </div>
+  </div>
+
+  <!-- OPTION A -->
+  <div class="opt">
+    <div class="opt-h"><span class="n">Α</span><b>Κάρτες με εικονίδιο</b></div>
+    <div class="opt-note">Κάθε διεύθυνση σε ξεχωριστό «πλαίσιο». Η συνήθης ξεχωρίζει με πορτοκαλί.</div>
+    <div class="lbl">🏠 Διευθύνσεις</div>
+    <div class="a-card primary">
+      <div class="a-ic">🏠</div>
+      <div class="a-body">
+        <div class="a-top"><span class="a-str">ΑΓΙΟΥ ΚΟΣΜΑ 25</span><span class="badge">συνήθης</span></div>
+        <div class="a-sub">όροφος 5ος · κουδ. Δεύτερο από αριστερά</div>
+        <div><span class="a-stat">✓ 7 παραδόσεις</span><span class="a-last">τελευταία 18-06-2026</span></div>
+      </div>
+    </div>
+    <div class="a-card">
+      <div class="a-ic">🏠</div>
+      <div class="a-body">
+        <div class="a-top"><span class="a-str">ΠΙΝΔΟΥ 12</span></div>
+        <div class="a-sub">όροφος 1ος · κουδ. Μασμανίδης</div>
+        <div><span class="a-stat" style="background:#f3f4f6;color:#6b7280">✓ 1 παράδοση</span><span class="a-last">τελευταία 17-06-2026</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPTION B -->
+  <div class="opt">
+    <div class="opt-h"><span class="n">Β</span><b>Γραμμές με μπάρα &amp; «σήμα» παραδόσεων</b></div>
+    <div class="opt-note">Πιο συμπαγές. Αριστερά πορτοκαλί μπάρα στη συνήθη· δεξιά ο αριθμός παραδόσεων σε κύκλο.</div>
+    <div class="lbl">🏠 Διευθύνσεις</div>
+    <div class="b-row primary">
+      <div class="b-line">
+        <div><div class="b-str">ΑΓΙΟΥ ΚΟΣΜΑ 25 <span class="badge">συνήθης</span></div>
+          <div class="b-sub">όροφος 5ος · κουδ. Δεύτερο από αριστερά</div></div>
+        <div class="b-pill"><span class="b-count">7×</span><div class="b-last">18-06-2026</div></div>
+      </div>
+    </div>
+    <div class="b-row">
+      <div class="b-line">
+        <div><div class="b-str">ΠΙΝΔΟΥ 12</div>
+          <div class="b-sub">όροφος 1ος · κουδ. Μασμανίδης</div></div>
+        <div class="b-pill"><span class="b-count dim">1×</span><div class="b-last">17-06-2026</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPTION C -->
+  <div class="opt">
+    <div class="opt-h"><span class="n">Γ</span><b>Δύο στήλες (διεύθυνση + μετρητής)</b></div>
+    <div class="opt-note">Αριστερά η διεύθυνση, δεξιά μεγάλος αριθμός «πόσες φορές». Γρήγορη ματιά στη διανομή.</div>
+    <div class="lbl">🏠 Διευθύνσεις</div>
+    <div class="c-row">
+      <div class="c-left">
+        <div class="c-str">ΑΓΙΟΥ ΚΟΣΜΑ 25 <span class="badge">συνήθης</span></div>
+        <div class="c-sub">όροφος 5ος · κουδ. Δεύτερο από αριστερά</div>
+        <div class="c-last">τελευταία 18-06-2026</div>
+      </div>
+      <div class="c-right"><div class="c-num">7</div><div class="c-cap">παραδόσεις</div></div>
+    </div>
+    <div class="c-row">
+      <div class="c-left">
+        <div class="c-str">ΠΙΝΔΟΥ 12</div>
+        <div class="c-sub">όροφος 1ος · κουδ. Μασμανίδης</div>
+        <div class="c-last">τελευταία 17-06-2026</div>
+      </div>
+      <div class="c-right"><div class="c-num dim">1</div><div class="c-cap">παράδοση</div></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

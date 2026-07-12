@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Σήμανση προβληματικού πελάτη — Preview</title>
+<style>
+  :root{
+    --white:#fff; --border:#e5e7eb; --text:#1f2937; --text-muted:#6b7280;
+    --accent:#f59e0b; --shadow-sm:0 1px 3px rgba(0,0,0,.06);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Manrope,sans-serif;background:#f4f5f7;color:var(--text);padding:22px}
+  .wrap{max-width:1060px;margin:0 auto}
+  h1{font-size:22px;margin:0 0 4px}
+  .note{background:#fffbeb;border:1px solid #f3cfa8;color:#92400e;border-radius:10px;padding:10px 14px;font-size:13px;margin:14px 0 22px}
+  .page-title{font-size:20px;font-weight:800;margin:26px 0 14px}
+
+  /* ---- KPI ---- */
+  .crm-kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:18px}
+  .crm-kpi{background:var(--white);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow-sm);padding:14px 16px}
+  .crm-kpi .lab{font-size:12px;color:var(--text-muted);font-weight:600;display:flex;align-items:center;gap:6px}
+  .crm-kpi .val{font-size:22px;font-weight:800;margin-top:6px;color:var(--text)}
+  .crm-kpi.flagbox{border-color:#fecaca;background:#fff7f7}
+  .crm-kpi.flagbox .val{color:#b91c1c}
+  @media(max-width:820px){.crm-kpis{grid-template-columns:repeat(2,1fr)}}
+
+  /* ---- tools ---- */
+  .crm-tools{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+  .crm-search{flex:1;min-width:220px;padding:10px 13px;border:1px solid var(--border);border-radius:9px;font-size:14px}
+  .crm-pills{display:flex;gap:7px;flex-wrap:wrap}
+  .crm-pill{border:1px solid var(--border);background:var(--white);color:var(--text-muted);border-radius:999px;padding:7px 13px;font-size:13px;font-weight:600;cursor:pointer;min-height:38px}
+  .crm-pill.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .crm-pill.flagpill.on{background:#dc2626;border-color:#dc2626}
+  .crm-count{color:var(--text-muted);font-size:12.5px;margin-left:auto;white-space:nowrap}
+
+  /* ---- table ---- */
+  .crm-card{background:var(--white);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow-sm);overflow:hidden}
+  .crm-tblwrap{overflow-x:auto}
+  table.crm-tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+  .crm-tbl th{background:#f8fafc;text-align:left;padding:11px 12px;font-size:12px;color:var(--text-muted);font-weight:700;white-space:nowrap;border-bottom:1px solid var(--border)}
+  .crm-tbl td{padding:11px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
+  .crm-tbl tbody tr{cursor:pointer}
+  .crm-tbl tbody tr:hover{background:rgba(245,158,11,.06)}
+  .crm-nm{font-weight:700;color:var(--text)}
+  .crm-fav{font-size:11.5px;color:var(--text-muted);margin-top:2px}
+  .crm-pillst{display:inline-block;border-radius:999px;padding:3px 10px;font-size:11.5px;font-weight:700;white-space:nowrap}
+  .crm-st-vip{background:rgba(245,158,11,.14);color:#b45309}
+  .crm-st-loyal{background:rgba(22,163,74,.13);color:#15803d}
+  .crm-st-risk{background:rgba(239,68,68,.12);color:#b91c1c}
+  .crm-st-new{background:rgba(59,130,246,.12);color:#1d4ed8}
+
+  /* ---- flag chips (list) ---- */
+  .flag-chip{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:3px 10px;font-size:11.5px;font-weight:800;white-space:nowrap}
+  .flag-red{background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5}
+  .flag-yellow{background:#fef3c7;color:#92400e;border:1px solid #fcd34d}
+  .flag-paused{background:#f3f4f6;color:#9ca3af;border:1px solid #e5e7eb}
+  .flag-none{color:#cbd5e1}
+  .paused-tag{font-size:10px;font-weight:700;color:#9ca3af;margin-left:4px}
+
+  /* ---- modal ---- */
+  .crm-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:50;display:none;align-items:center;justify-content:center;padding:16px}
+  .crm-ov.on{display:flex}
+  .cardbox{background:var(--white);border-radius:14px;max-width:560px;width:100%;max-height:88vh;overflow:auto;box-shadow:0 12px 40px rgba(0,0,0,.22)}
+  .card-head{display:flex;align-items:center;gap:14px;padding:20px 22px;border-bottom:1px solid var(--border)}
+  .avatar{width:52px;height:52px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:22px;background:linear-gradient(135deg,#f59e0b,#d97706)}
+
+  /* ---- flag banner (card) ---- */
+  .flag-banner{margin:16px 22px;border-radius:12px;padding:13px 15px;border:1.5px solid}
+  .fb-red{background:#fff5f5;border-color:#f87171}
+  .fb-yellow{background:#fffbeb;border-color:#fbbf24}
+  .fb-paused{background:#f9fafb;border-color:#e5e7eb;opacity:.75}
+  .fb-title{display:flex;align-items:center;gap:8px;font-weight:800;font-size:14.5px;margin-bottom:9px}
+  .fb-red .fb-title{color:#b91c1c}
+  .fb-yellow .fb-title{color:#92400e}
+  .fb-paused .fb-title{color:#6b7280}
+  .fb-reason{display:flex;align-items:center;gap:8px;font-size:13.5px;padding:3px 0}
+  .dot{width:9px;height:9px;border-radius:50%;flex:none}
+  .dot-red{background:#dc2626}.dot-yellow{background:#f59e0b}
+  .fb-note{margin-top:9px;font-size:13px;font-style:italic;color:#4b5563;background:rgba(255,255,255,.6);border-radius:8px;padding:8px 10px}
+  .fb-meta{margin-top:9px;font-size:11.5px;color:#9ca3af}
+  .fb-pausebadge{font-size:10.5px;font-weight:800;color:#6b7280;background:#e5e7eb;border-radius:6px;padding:2px 8px;margin-left:auto}
+
+  .card-body{padding:16px 22px;border-bottom:1px solid var(--border);font-size:13.5px;line-height:1.9}
+  .card-foot{display:flex;gap:10px;justify-content:flex-end;padding:16px 22px}
+  .btn{min-height:44px;padding:0 16px;border-radius:9px;font-weight:700;font-size:14px;cursor:pointer;display:inline-flex;align-items:center}
+  .btn-secondary{background:#fff;border:1px solid var(--border);color:var(--text)}
+  .btn-primary{background:var(--accent);border:1px solid var(--accent);color:#fff}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>👥 Κατάλογος Πελατών — <b>Σήμανση προβληματικού πελάτη</b></h1>
+  <div class="note">🔎 <b>Preview με ψεύτικα δείγματα</b> — δείχνει ΑΚΡΙΒΩΣ τι θα προσθέσω: νέα στήλη «Σήμανση», μετρητή «Με σήμανση», φίλτρο, χρώματα επιπέδου, «σε παύση» θαμπό, και την καρτέλα. Πάτησε γραμμή για να δεις την καρτέλα.</div>
+
+  <div class="page-title">👥 Κατάλογος Πελατών</div>
+
+  <!-- KPI: added 5th tile "Με σήμανση" -->
+  <div class="crm-kpis">
+    <div class="crm-kpi"><div class="lab">👥 Σύνολο πελατών</div><div class="val">6</div></div>
+    <div class="crm-kpi"><div class="lab">🔁 Επαναλαμβανόμενοι</div><div class="val">67%</div></div>
+    <div class="crm-kpi"><div class="lab">⚠️ Σε κίνδυνο</div><div class="val">1</div></div>
+    <div class="crm-kpi flagbox"><div class="lab">⚑ Με σήμανση</div><div class="val">3</div></div>
+    <div class="crm-kpi"><div class="lab">💶 Τζίρος πελατών</div><div class="val">2.184,50 €</div></div>
+  </div>
+
+  <div class="crm-tools">
+    <input type="text" class="crm-search" value="" oninput="filterRows()" id="q" placeholder="">
+    <div class="crm-pills" id="pills">
+      <button class="crm-pill on" data-f="all" onclick="setPill(this)">Όλοι</button>
+      <button class="crm-pill" data-f="vip" onclick="setPill(this)">⭐ VIP</button>
+      <button class="crm-pill" data-f="risk" onclick="setPill(this)">⚠️ Σε κίνδυνο</button>
+      <button class="crm-pill flagpill" data-f="flag" onclick="setPill(this)">⚑ Με σήμανση</button>
+    </div>
+    <span class="crm-count" id="cnt"></span>
+  </div>
+
+  <div class="crm-card">
+    <div class="crm-tblwrap">
+      <table class="crm-tbl">
+        <thead><tr>
+          <th>Επώνυμο</th><th>Όνομα</th><th>Τηλέφωνο</th><th>Γειτονιά</th>
+          <th>Παραγγελίες</th><th>Σύνολο</th><th>Σήμανση</th><th>Κατάσταση</th>
+        </tr></thead>
+        <tbody id="tb">
+          <!-- red active -->
+          <tr data-flag="red" data-status="loyal" onclick="openCard('red')">
+            <td><div class="crm-nm">Παπαδόπουλος</div><div class="crm-fav">❤️ Γύρος χοιρινός</div></td>
+            <td>Γιώργος</td><td>694 123 4567</td><td>Κέντρο</td><td>18</td><td>612,40 €</td>
+            <td><span class="flag-chip flag-red" title="Δεν πλήρωσε παλαιότερα · Παραπονιάρης">⚑ Σοβαρό</span></td>
+            <td><span class="crm-pillst crm-st-loyal">💚 Πιστός</span></td>
+          </tr>
+          <!-- yellow active -->
+          <tr data-flag="yellow" data-status="loyal" onclick="openCard('yellow')">
+            <td><div class="crm-nm">Κωνσταντίνου</div><div class="crm-fav">❤️ Σουβλάκι κοτόπουλο</div></td>
+            <td>Μαρία</td><td>697 555 1212</td><td>Άνω Πόλη</td><td>9</td><td>318,00 €</td>
+            <td><span class="flag-chip flag-yellow" title="Ζητάει πάντα έκπτωση">⚑ Προσοχή</span></td>
+            <td><span class="crm-pillst crm-st-loyal">💚 Πιστός</span></td>
+          </tr>
+          <!-- paused (was red, frozen) -->
+          <tr data-flag="paused" data-status="risk" onclick="openCard('paused')">
+            <td><div class="crm-nm">Δημητρίου</div></td>
+            <td>Νίκος</td><td>693 888 4400</td><td>Κέντρο</td><td>4</td><td>121,10 €</td>
+            <td><span class="flag-chip flag-paused" title="Σήμανση σε παύση">⚑ σε παύση</span></td>
+            <td><span class="crm-pillst crm-st-risk">⚠️ Σε κίνδυνο</span></td>
+          </tr>
+          <!-- no flag -->
+          <tr data-flag="none" data-status="vip" onclick="openCard('none')">
+            <td><div class="crm-nm">Αντωνίου</div><div class="crm-fav">❤️ Μπιφτέκι</div></td>
+            <td>Ελένη</td><td>698 222 7788</td><td>Παραλία</td><td>22</td><td>745,00 €</td>
+            <td><span class="flag-none">—</span></td>
+            <td><span class="crm-pillst crm-st-vip">⭐ VIP</span></td>
+          </tr>
+          <tr data-flag="none" data-status="loyal" onclick="openCard('none')">
+            <td><div class="crm-nm">Βασιλείου</div></td>
+            <td>Κώστας</td><td>691 300 9090</td><td>Άνω Πόλη</td><td>7</td><td>210,00 €</td>
+            <td><span class="flag-none">—</span></td>
+            <td><span class="crm-pillst crm-st-loyal">💚 Πιστός</span></td>
+          </tr>
+          <tr data-flag="none" data-status="new" onclick="openCard('none')">
+            <td><div class="crm-nm">Γεωργίου</div></td>
+            <td>Σοφία</td><td>695 111 2233</td><td>Κέντρο</td><td>1</td><td>178,00 €</td>
+            <td><span class="flag-none">—</span></td>
+            <td><span class="crm-pillst crm-st-new">🆕 Νέος</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div style="color:var(--text-muted);font-size:12px;margin-top:14px">Τα στοιχεία πελατών (και οι σημάνσεις) έρχονται από το POS — μόνο ανάγνωση.</div>
+</div>
+
+<!-- ---- modal ---- -->
+<div class="crm-ov" id="ov" onclick="if(event.target===this)closeCard()">
+  <div class="cardbox" id="cardbox"></div>
+</div>
+
+<script>
+var DATA = {
+  red: {
+    name:'Γιώργος Παπαδόπουλος', phone:'694 123 4567', status:'💚 Πιστός', stcls:'crm-st-loyal',
+    flag:{ level:'red', active:true,
+      reasons:[{text:'Δεν πλήρωσε παλαιότερα',level:'red'},{text:'Παραπονιάρης',level:'yellow'}],
+      note:'Ζητάει πάντα έκπτωση και μετά παραπονιέται', setBy:'Admin', setAt:'11-07-2026 14:30' }
+  },
+  yellow: {
+    name:'Μαρία Κωνσταντίνου', phone:'697 555 1212', status:'💚 Πιστός', stcls:'crm-st-loyal',
+    flag:{ level:'yellow', active:true,
+      reasons:[{text:'Ζητάει πάντα έκπτωση',level:'yellow'}],
+      note:'', setBy:'Γιώργος', setAt:'09-07-2026 20:10' }
+  },
+  paused: {
+    name:'Νίκος Δημητρίου', phone:'693 888 4400', status:'⚠️ Σε κίνδυνο', stcls:'crm-st-risk',
+    flag:{ level:'red', active:false,
+      reasons:[{text:'Είχε παράπονο για αργοπορία',level:'red'}],
+      note:'Το λύσαμε — προς το παρόν σε παύση', setBy:'Admin', setAt:'02-07-2026 13:00' }
+  },
+  none: { name:'Πελάτης', phone:'—', status:'⭐ VIP', stcls:'crm-st-vip', flag:null }
+};
+
+function flagBanner(f){
+  if(!f) return '';
+  var cls = !f.active ? 'fb-paused' : (f.level==='red' ? 'fb-red' : 'fb-yellow');
+  var icon = !f.active ? '⚑' : (f.level==='red' ? '⛔' : '⚠️');
+  var title = !f.active ? 'Σήμανση (σε παύση)' : (f.level==='red' ? 'Προσοχή — προβληματικός πελάτης' : 'Προσοχή σε αυτόν τον πελάτη');
+  var reasons = (f.reasons||[]).map(function(r){
+    return '<div class="fb-reason"><span class="dot dot-'+r.level+'"></span>'+esc(r.text)+'</div>';
+  }).join('');
+  var note = f.note ? '<div class="fb-note">📝 '+esc(f.note)+'</div>' : '';
+  var pause = !f.active ? '<span class="fb-pausebadge">ΣΕ ΠΑΥΣΗ</span>' : '';
+  return '<div class="flag-banner '+cls+'">'+
+    '<div class="fb-title">'+icon+' '+title+pause+'</div>'+
+    reasons+note+
+    '<div class="fb-meta">✍️ από '+esc(f.setBy)+' · '+esc(f.setAt)+'</div>'+
+  '</div>';
+}
+function esc(s){return (s||'').replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
+
+function openCard(key){
+  var c = DATA[key]; if(!c) return;
+  document.getElementById('cardbox').innerHTML =
+    '<div class="card-head">'+
+      '<div class="avatar">'+c.name.charAt(0)+'</div>'+
+      '<div style="flex:1;min-width:0"><div style="font-weight:800;font-size:17px">'+esc(c.name)+'</div>'+
+      '<div style="color:var(--text-muted);font-size:13px">📞 '+esc(c.phone)+'</div></div>'+
+      '<span class="crm-pillst '+c.stcls+'">'+c.status+'</span>'+
+    '</div>'+
+    flagBanner(c.flag)+
+    '<div class="card-body">📍 <b>Γειτονιά:</b> Κέντρο<br>🧾 <b>Παραγγελίες:</b> 18 · 💶 612,40 €<br>❤️ <b>Αγαπημένο:</b> Γύρος χοιρινός</div>'+
+    '<div class="card-foot"><button class="btn btn-secondary" onclick="closeCard()">✕ Κλείσιμο</button>'+
+    '<button class="btn btn-primary" onclick="closeCard()">🎁 Προσφορά</button></div>';
+  document.getElementById('ov').classList.add('on');
+}
+function closeCard(){ document.getElementById('ov').classList.remove('on'); }
+
+var curFilter='all';
+function setPill(btn){
+  document.querySelectorAll('.crm-pill').forEach(function(p){p.classList.remove('on');});
+  btn.classList.add('on'); curFilter=btn.dataset.f; filterRows();
+}
+function filterRows(){
+  var q=(document.getElementById('q').value||'').toLowerCase(), shown=0;
+  document.querySelectorAll('#tb tr').forEach(function(tr){
+    var okF = curFilter==='all' ||
+      (curFilter==='flag' ? (tr.dataset.flag!=='none') : tr.dataset.status===curFilter);
+    var okQ = !q || tr.textContent.toLowerCase().indexOf(q)>=0;
+    var vis = okF && okQ;
+    tr.style.display = vis?'':'none'; if(vis)shown++;
+  });
+  document.getElementById('cnt').textContent = shown+' πελάτες';
+}
+filterRows();
+</script>
+</body>
+</html>
