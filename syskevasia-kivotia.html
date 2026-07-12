@@ -209,6 +209,100 @@
     </div>
   </section>
 
+  <!-- ── Panel ── -->
+  <section>
+    <div class="sec-h">📦 Το νέο panel «Κιβώτια &amp; Συσκευασίες» — η πλήρης εικόνα (χωρίς μπάνερ)</div>
+    <style>
+      .panel{padding:0;overflow:hidden}
+      .p-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+      @media(max-width:560px){.p-tiles{grid-template-columns:1fr}}
+      .p-tile{background:#fff;padding:16px 14px;text-align:center}
+      .p-tile .n{font-size:26px;font-weight:800}
+      .p-tile .l{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.35}
+      .p-sec{padding:16px 18px;border-top:1px solid var(--border)}
+      .p-sec h4{margin:0 0 6px;font-size:13.5px;color:#374151;display:flex;align-items:center;gap:7px}
+      .p-item{display:flex;align-items:center;gap:13px;padding:13px 0;border-bottom:1px solid #f0f1f3}
+      .p-item:last-child{border:none}
+      .p-item .ic{font-size:23px;flex:none}
+      .p-item .nm{font-weight:700;font-size:14px}
+      .p-item .meta{font-size:11.5px;color:var(--muted);margin-top:2px}
+      .p-item .right{margin-left:auto;text-align:right;flex:none}
+      .p-item .boxes{font-size:16px;font-weight:800}
+      .st{display:inline-block;font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:999px;margin-top:4px}
+      .st-ok{background:var(--ok-bg);color:var(--ok)}
+      .st-low{background:#fee2e2;color:#991b1b}
+      .tl{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid #f0f1f3;font-size:13px}
+      .tl:last-child{border:none}
+      .tl .dot{flex:none;font-size:16px}
+      .tl b{font-weight:700}
+      .tl .when{color:var(--muted);font-size:12px}
+      .tl .src{font-size:10px;font-weight:800;padding:1px 7px;border-radius:999px;margin-left:6px}
+      .src-pos{background:#eef2ff;color:#3730a3}
+      .src-man{background:#f1f5f9;color:#475569}
+      .tl .left{margin-left:auto;color:var(--muted);font-size:11.5px;white-space:nowrap}
+    </style>
+    <div class="card panel">
+      <div class="p-tiles">
+        <div class="p-tile"><div class="n">3</div><div class="l">είδη σε κιβώτια</div></div>
+        <div class="p-tile"><div class="n">7</div><div class="l">κλειστά κιβώτια σύνολο</div></div>
+        <div class="p-tile"><div class="n">4</div><div class="l">ανοίχτηκαν αυτόν τον μήνα</div></div>
+      </div>
+
+      <div class="p-sec">
+        <h4>📋 Τι έχουμε τώρα</h4>
+        <div class="p-item">
+          <span class="ic">🛍️</span>
+          <span>
+            <span class="nm">Χαρτοσακούλα μεσαία</span>
+            <span class="meta">~1 κιβώτιο/μήνα · φτάνει ~3 μήνες · τελευταίο άνοιγμα πριν 8 μέρες</span>
+          </span>
+          <span class="right"><span class="boxes">3</span> κιβώτια<br><span class="st st-ok">🟢 ΟΚ</span></span>
+        </div>
+        <div class="p-item">
+          <span class="ic">🧻</span>
+          <span>
+            <span class="nm">Λαδόκολλα ρολό</span>
+            <span class="meta">~2 κιβώτια/μήνα · φτάνει ~2 εβδομάδες · τελευταίο άνοιγμα σήμερα</span>
+          </span>
+          <span class="right"><span class="boxes">1</span> κιβώτιο<br><span class="st st-low">🔴 λίγα — παράγγειλε</span></span>
+        </div>
+        <div class="p-item">
+          <span class="ic">📦</span>
+          <span>
+            <span class="nm">Κουτί φαγητού Νο2</span>
+            <span class="meta">~1 κιβώτιο/μήνα · φτάνει ~3 μήνες · τελευταίο άνοιγμα πριν 4 μέρες</span>
+          </span>
+          <span class="right"><span class="boxes">3</span> κιβώτια<br><span class="st st-ok">🟢 ΟΚ</span></span>
+        </div>
+      </div>
+
+      <div class="p-sec">
+        <h4>🕓 Τι ανοίχτηκε — ποιος &amp; πότε</h4>
+        <div class="tl">
+          <span class="dot">📦</span>
+          <span><b>Λαδόκολλα ρολό</b> · <span class="when">σήμερα 14:20</span><span class="src src-pos">POS · Μαρία</span></span>
+          <span class="left">απέμεινε 1</span>
+        </div>
+        <div class="tl">
+          <span class="dot">📦</span>
+          <span><b>Χαρτοσακούλα μεσαία</b> · <span class="when">χθες 11:05</span><span class="src src-pos">POS · Γιώργος</span></span>
+          <span class="left">απέμειναν 3</span>
+        </div>
+        <div class="tl">
+          <span class="dot">📦</span>
+          <span><b>Κουτί φαγητού Νο2</b> · <span class="when">26-06 19:40</span><span class="src src-pos">POS · Μαρία</span></span>
+          <span class="left">απέμειναν 3</span>
+        </div>
+        <div class="tl">
+          <span class="dot">📦</span>
+          <span><b>Χαρτοσακούλα μεσαία</b> · <span class="when">20-06 09:15</span><span class="src src-man">χειροκίνητα · Εσύ</span></span>
+          <span class="left">απέμειναν 4</span>
+        </div>
+      </div>
+    </div>
+    <div class="flip-hint">Δείγμα δεδομένων. Τα ονόματα υπαλλήλων έρχονται αυτόματα από τη βάρδια του ταμείου.</div>
+  </section>
+
   <!-- ── Legend ── -->
   <section>
     <div class="sec-h">📑 Τι αλλάζει · τι μένει ίδιο</div>
@@ -235,10 +329,12 @@
   </section>
 
   <div class="qbox">
-    <h3>❓ Μένουν 2 μικρές αποφάσεις για να το κλειδώσω</h3>
+    <h3>✅ Τι έχει κλειδώσει</h3>
     <ol>
-      <li><b>Μισάνοιχτα κιβώτια:</b> να επιτρέπω δεκαδικά στην απογραφή (π.χ. «2,5 κιβώτια» = δύο κλειστά + ένα μισό); Το προτείνω — δίνει ρεαλιστική εικόνα.</li>
-      <li><b>Ζημιά:</b> όταν χαλάει/λερώνεται συσκευασία, να τη δηλώνεις σε κιβώτια ή σε κομμάτια; Προτείνω σε <b>κιβώτια</b> (ίδια μονάδα με το απόθεμα).</li>
+      <li><b>Κουμπί στο ταμείο:</b> ο υπάλληλος (με ανοιχτή βάρδια + ξεχωριστό δικαίωμα «Άνοιγμα κιβωτίου») πατάει «📦 Άνοιξα κιβώτιο» → +1.</li>
+      <li><b>Χωρίς μπάνερ:</b> όλα φαίνονται στο νέο panel «Κιβώτια &amp; Συσκευασίες» — τι έχεις, τι ανοίχτηκε, ποιος, πότε.</li>
+      <li><b>Απόθεμα:</b> κλειστά κιβώτια (ακέραια). Το ανοιχτό δεν μετριέται. Ζημιά = χαλασμένο κλειστό κιβώτιο (−1).</li>
+      <li><b>Κόστος:</b> τιμή κιβωτίου ÷ κομμάτια = ~€/τεμ (εκτίμηση), μπαίνει κανονικά στη συνταγή.</li>
     </ol>
   </div>
 
