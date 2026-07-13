@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Μεταφορά Τραπεζιών — Σημειώσεις (πρόταση)</title>
+<style>
+  :root{
+    --black:#0d0f14; --dark:#13172a; --card:#1c2554; --card2:#222c63;
+    --yellow:#f5c842; --white:#eef1fb; --muted:#8a93b8; --border:#2a3580;
+    --green:#38d97a; --blue:#4a9ef0; --red:#e05a5a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(160deg,#0d0f14,#13172a);
+    color:var(--white);min-height:100vh;padding:24px 16px 60px;line-height:1.5;
+  }
+  .wrap{max-width:1000px;margin:0 auto}
+  h1{font-size:22px;font-weight:800;margin-bottom:4px;letter-spacing:.5px}
+  .sub{color:var(--muted);font-size:14px;margin-bottom:26px}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:760px){.cols{grid-template-columns:1fr}}
+  .col-h{display:flex;align-items:center;gap:8px;font-weight:800;font-size:14px;
+    text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+  .col-h.now{color:var(--muted)}
+  .col-h.new{color:var(--yellow)}
+  .panel{background:var(--dark);border:1px solid var(--border);border-radius:16px;padding:16px}
+  .panel-title{text-align:center;font-size:15px;font-weight:800;color:var(--white);
+    padding-bottom:12px;margin-bottom:14px;border-bottom:1px solid var(--border);letter-spacing:.5px}
+  .grid{display:flex;flex-direction:column;gap:12px}
+  .tcard{background:var(--card);border:1px solid var(--border);border-radius:12px;
+    padding:16px 14px;display:flex;flex-direction:column;align-items:center;gap:6px;
+    cursor:default;transition:.15s}
+  .tcard:hover{border-color:rgba(245,200,66,.5);background:var(--card2)}
+  .tc-icon{font-size:30px;line-height:1}
+  .tc-label{font-size:16px;font-weight:800}
+  .tc-sub{font-size:12px;color:var(--muted)}
+  .tc-desc{font-size:12px;color:var(--yellow);opacity:.92;text-align:center;
+    background:rgba(245,200,66,.08);border-radius:8px;padding:6px 10px;margin-top:4px;
+    line-height:1.35}
+  .badge-new{display:inline-block;font-size:10px;font-weight:800;color:var(--black);
+    background:var(--yellow);border-radius:20px;padding:2px 8px;margin-left:6px;vertical-align:middle}
+  .note{margin-top:28px;background:var(--card);border-left:3px solid var(--yellow);
+    border-radius:10px;padding:14px 16px;font-size:13.5px;color:var(--white)}
+  .note b{color:var(--yellow)}
+  .arrow{color:var(--muted);font-size:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Μεταφορά Τραπεζιών — πού μπαίνουν οι σημειώσεις</h1>
+  <div class="sub">Η οθόνη «Επιλογή τύπου μεταφοράς» (1ο βήμα). Αριστερά όπως είναι τώρα, δεξιά με μία επεξηγηματική γραμμή κάτω από κάθε επιλογή (κίτρινο πλαίσιο). Δείγμα δεδομένα.</div>
+
+  <div class="cols">
+    <!-- NOW -->
+    <div>
+      <div class="col-h now">◄ Τώρα</div>
+      <div class="panel">
+        <div class="panel-title">Πού θέλεις να μεταφερθεί;</div>
+        <div class="grid">
+          <div class="tcard">
+            <span class="tc-icon">🏠</span>
+            <span class="tc-label">Ολόκληρο Τραπέζι</span>
+            <span class="tc-sub">6 items · 24,50 €</span>
+          </div>
+          <div class="tcard">
+            <span class="tc-icon">🪑</span>
+            <span class="tc-label">Καρέκλα 2</span>
+            <span class="tc-sub">2 items · 8,00 €</span>
+          </div>
+          <div class="tcard">
+            <span class="tc-icon">📦</span>
+            <span class="tc-label">Συγκεκριμένα Προϊόντα</span>
+            <span class="tc-sub">Επιλέξτε ένα ή περισσότερα</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROPOSED -->
+    <div>
+      <div class="col-h new">Πρόταση ►</div>
+      <div class="panel">
+        <div class="panel-title">Πού θέλεις να μεταφερθεί;</div>
+        <div class="grid">
+          <div class="tcard">
+            <span class="tc-icon">🏠</span>
+            <span class="tc-label">Ολόκληρο Τραπέζι</span>
+            <span class="tc-sub">6 items · 24,50 €</span>
+            <span class="tc-desc">Μετακινεί <b>όλα</b> τα προϊόντα σε άλλο <b>άδειο</b> τραπέζι</span>
+          </div>
+          <div class="tcard">
+            <span class="tc-icon">🪑</span>
+            <span class="tc-label">Καρέκλα 2</span>
+            <span class="tc-sub">2 items · 8,00 €</span>
+            <span class="tc-desc">Μετακινεί μόνο τα προϊόντα <b>αυτής της καρέκλας</b> σε άλλη καρέκλα/τραπέζι</span>
+          </div>
+          <div class="tcard">
+            <span class="tc-icon">📦</span>
+            <span class="tc-label">Συγκεκριμένα Προϊόντα</span>
+            <span class="tc-sub">Επιλέξτε ένα ή περισσότερα</span>
+            <span class="tc-desc"><b>Διάλεξε εσύ</b> ποια προϊόντα θα μετακινηθούν οπουδήποτε</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>Τι αλλάζει:</b> μία μικρή κίτρινη γραμμή κάτω από κάθε επιλογή, που εξηγεί με απλά λόγια τι κάνει.
+    Τίποτα άλλο δεν αλλάζει στη ροή — τα κουμπιά, τα βήματα και οι τιμές μένουν ίδια.
+    <span class="tc-desc" style="display:inline-block;margin-top:8px">Το κείμενο κάθε γραμμής είναι δείγμα — μπορείς να μου πεις ακριβώς πώς να το διατυπώσω.</span>
+  </div>
+</div>
+</body>
+</html>

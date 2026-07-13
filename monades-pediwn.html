@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ξεκάθαρες μονάδες στα πεδία — TAMAM</title>
+<style>
+  :root{
+    --accent:#f59e0b; --accent-dark:#d97706; --content-bg:#f1f5f9; --white:#fff;
+    --text:#1e293b; --text-muted:#64748b; --border:#e2e8f0; --success:#10b981; --danger:#ef4444;
+    --radius:10px; --shadow:0 4px 12px rgba(0,0,0,.10);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    color:var(--text);background:var(--content-bg);line-height:1.5;padding:20px 14px 60px}
+  .wrap{max-width:760px;margin:0 auto}
+  h1{font-size:22px;margin:6px 0 4px}
+  .sub{color:var(--text-muted);font-size:14px;margin-bottom:22px}
+  .card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:18px 18px 20px;margin-bottom:20px}
+  .card h2{font-size:15px;display:flex;align-items:center;gap:8px;margin-bottom:4px}
+  .card .note{color:var(--text-muted);font-size:12.5px;margin-bottom:16px}
+  .tag{display:inline-block;font-size:10.5px;font-weight:800;text-transform:uppercase;
+    letter-spacing:.4px;padding:2px 8px;border-radius:20px;vertical-align:middle}
+  .tag.new{background:#ecfdf5;color:#047857}
+  .tag.old{background:#fef2f2;color:#b91c1c}
+  /* recipe-like line */
+  .line{display:grid;grid-template-columns:1fr 130px;gap:12px;align-items:center;margin:8px 0}
+  .line.ex{grid-template-columns:1fr 110px 120px}
+  .colhead{display:grid;grid-template-columns:1fr 130px;gap:12px;font-size:10.5px;font-weight:800;
+    text-transform:uppercase;letter-spacing:.4px;color:var(--text-muted);margin-bottom:2px}
+  .colhead.ex{grid-template-columns:1fr 110px 120px}
+  select,input{font:inherit;font-size:14px;color:var(--text);background:var(--white);
+    border:1px solid var(--border);border-radius:8px;padding:9px 11px;width:100%;outline:none}
+  select:focus,input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(245,158,11,.18)}
+  /* THE unit-suffix pattern */
+  .u-field{position:relative}
+  .u-field input{padding-right:44px;text-align:center}
+  .u-field .u{position:absolute;right:11px;top:50%;transform:translateY(-50%);
+    color:var(--text-muted);font-size:13px;font-weight:600;pointer-events:none;
+    background:var(--white);padding-left:4px}
+  /* left € prefix variant */
+  .u-field.lead input{padding-right:11px;padding-left:30px;text-align:left}
+  .u-field.lead .u{left:11px;right:auto;padding-left:0}
+  /* old (bad) */
+  .bad input{text-align:center;background:#fffdf7}
+  .lbl{font-size:13px;font-weight:600;margin-bottom:5px;display:block}
+  .demo-hint{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px 12px;
+    font-size:12.5px;color:#92400e;margin-bottom:14px}
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:560px){.split{grid-template-columns:1fr}}
+  .mini-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;
+    color:var(--text-muted);margin-bottom:8px}
+  .foot{color:var(--text-muted);font-size:12px;text-align:center;margin-top:10px}
+  code{background:#f1f5f9;padding:1px 6px;border-radius:4px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🎯 Ξεκάθαρες μονάδες σε κάθε πεδίο</h1>
+  <p class="sub">Δείγμα του τι θα αλλάξει σε όλη την εφαρμογή. Τα νούμερα εδώ είναι <b>δείγμα</b>, όχι πραγματικά.</p>
+
+  <div class="demo-hint">👉 Δοκίμασέ το: άλλαξε το υλικό στο πρώτο κουτί και δες τη μονάδα δεξιά να <b>αλλάζει μόνη της</b>.</div>
+
+  <!-- 1. RECIPE food line -->
+  <div class="card">
+    <h2>🍽 Συνταγές — ποσότητα υλικού <span class="tag new">Νέο</span></h2>
+    <p class="note">Το σύστημα ξέρει ήδη τη μονάδα κάθε υλικού. Τώρα θα τη δείχνει δίπλα στο κουτί — και θα αλλάζει μόλις διαλέγεις υλικό.</p>
+    <div class="colhead"><span>Υλικό</span><span style="text-align:center">Ποσότητα</span></div>
+    <div class="line">
+      <select id="mat" onchange="syncUnit()">
+        <option data-unit="γρ" selected>Γύρος χοιρινός</option>
+        <option data-unit="τεμ">Πίτα</option>
+        <option data-unit="γρ">Τζατζίκι</option>
+        <option data-unit="τεμ">Αυγό</option>
+        <option data-unit="ml">Λάδι</option>
+      </select>
+      <div class="u-field"><input id="qty" value="150" inputmode="decimal"><span class="u" id="qtyU">γρ</span></div>
+    </div>
+
+    <div class="split" style="margin-top:20px">
+      <div>
+        <div class="mini-title">❌ Πριν</div>
+        <div class="bad"><input value="150" style="text-align:center"></div>
+        <div class="foot" style="margin-top:6px">«150 τι;»</div>
+      </div>
+      <div>
+        <div class="mini-title">✅ Μετά</div>
+        <div class="u-field"><input value="150" style="text-align:center"><span class="u">γρ</span></div>
+        <div class="foot" style="margin-top:6px">Ξεκάθαρο: 150 γραμμάρια</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Extras -->
+  <div class="card">
+    <h2>➕ Extras συνταγής — ποσότητα + χρέωση <span class="tag new">Νέο</span></h2>
+    <p class="note">Μονάδα στην ποσότητα, και <b>€</b> στη χρέωση ώστε να ξέρεις ότι βάζεις ευρώ.</p>
+    <div class="colhead ex"><span>Υλικό</span><span style="text-align:center">Ποσότητα</span><span style="text-align:center">Χρέωση</span></div>
+    <div class="line ex">
+      <select><option>Κασέρι</option><option>Μπέικον</option><option>Παρμεζάνα</option></select>
+      <div class="u-field"><input value="30" inputmode="decimal"><span class="u">γρ</span></div>
+      <div class="u-field lead"><input value="0,70" inputmode="decimal"><span class="u">€</span></div>
+    </div>
+  </div>
+
+  <!-- 3. Sizes + yield -->
+  <div class="card">
+    <h2>📏 Μεγέθη &amp; 🧪 Τεστ απόδοσης <span class="tag new">Νέο</span></h2>
+    <p class="note">Ίδια λογική στα μεγέθη μερίδας και στο ζύγισμα του τεστ απόδοσης.</p>
+    <div class="split">
+      <div>
+        <label class="lbl">Ποσότητα (μεγάλη μερίδα)</label>
+        <div class="u-field"><input value="220" inputmode="decimal"><span class="u">γρ</span></div>
+      </div>
+      <div>
+        <label class="lbl">Συνολικό βάρος (τεστ)</label>
+        <div class="u-field"><input value="1500" inputmode="decimal"><span class="u">γρ</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Materials -->
+  <div class="card">
+    <h2>📦 Αποθήκη — όρια &amp; παρτίδες <span class="tag new">Νέο</span></h2>
+    <p class="note">Το «ελάχιστο απόθεμα» και τα συστατικά παρτίδας θα δείχνουν τη μονάδα του υλικού.</p>
+    <div class="split">
+      <div>
+        <label class="lbl">Ελάχιστο απόθεμα (όριο ειδοποίησης)</label>
+        <div class="u-field"><input value="5" inputmode="decimal"><span class="u">κιλά</span></div>
+      </div>
+      <div>
+        <label class="lbl">Ποσότητα συστατικού (παρτίδα)</label>
+        <div class="u-field"><input value="2" inputmode="decimal"><span class="u">κιλά</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Money -->
+  <div class="card">
+    <h2>💶 Ποσά που έλειπε το € <span class="tag new">Νέο</span></h2>
+    <p class="note">Σε τιμολόγια/OCR (υπόλοιπα, σύνολα) και όπου αλλού λείπει, θα μπαίνει σταθερά το <b>€</b> — όπως ήδη γίνεται στο Ταμείο και στο Εργατικό.</p>
+    <div class="split">
+      <div>
+        <label class="lbl">Σύνολο στο χαρτί</label>
+        <div class="u-field lead"><input value="248,60" inputmode="decimal"><span class="u">€</span></div>
+      </div>
+      <div>
+        <label class="lbl">Τιμή / μονάδα</label>
+        <div class="u-field lead"><input value="8,90" inputmode="decimal"><span class="u">€</span></div>
+      </div>
+    </div>
+  </div>
+
+  <p class="foot">Ίδιο, διακριτικό στιλ παντού — γκρι μονάδα μέσα στο κουτί (δεξιά για μονάδες, αριστερά για €).<br>Δεν είναι «παράδειγμα τιμής» (που βγάλαμε), είναι <b>μόνιμη ένδειξη μονάδας</b>.</p>
+</div>
+
+<script>
+  function syncUnit(){
+    var s=document.getElementById('mat');
+    var u=s.options[s.selectedIndex].getAttribute('data-unit');
+    document.getElementById('qtyU').textContent=u;
+  }
+</script>
+</body>
+</html>
