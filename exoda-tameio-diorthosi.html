@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Έξοδα & Ταμείο — Πριν / Μετά — TAMAM Grill House</title>
+<style>
+:root{
+  --accent:#f59e0b; --accent-dark:#d97706; --accent-text:#9c6406;
+  --danger:#dc2626; --danger-text:#b91c1c;
+  --success:#10b981; --success-text:#15803d;
+  --text:#111827; --muted:#6b7280; --line:#e5e7eb; --bg:#f9fafb; --card:#fff;
+  --read-max:900px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
+.wrap{max-width:1500px;margin:0 auto;padding:28px 22px 80px}
+h1{font-size:26px;margin:0 0 6px}
+.sub{color:var(--muted);font-size:14.5px;max-width:var(--read-max);margin:0 0 26px}
+.note{background:#fff7ed;border:1px solid #fde3b8;border-radius:12px;padding:12px 16px;font-size:13.5px;max-width:var(--read-max);margin:0 0 26px}
+
+/* tabs */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 22px;border-bottom:2px solid var(--line);padding-bottom:0}
+.tab{background:none;border:none;border-bottom:3px solid transparent;padding:11px 15px;font-size:14.5px;font-weight:600;color:var(--muted);cursor:pointer;font-family:inherit;margin-bottom:-2px}
+.tab.on{color:var(--accent-text);border-bottom-color:var(--accent)}
+.panel{display:none}
+.panel.on{display:block}
+.panel-t{font-size:19px;margin:0 0 4px}
+.panel-d{color:var(--muted);font-size:14px;max-width:var(--read-max);margin:0 0 20px}
+
+/* before/after */
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+@media(max-width:1150px){.ba{grid-template-columns:1fr}}
+.col{min-width:0}
+.col-h{display:flex;align-items:center;gap:9px;margin:0 0 10px;font-size:14px;font-weight:700}
+.chip{font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:999px;letter-spacing:.02em}
+.chip-b{background:#fef2f2;color:var(--danger-text);border:1px solid #fecaca}
+.chip-a{background:#f0fdf4;color:var(--success-text);border:1px solid #bbf7d0}
+.screen{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.screen-bar{background:#f3f4f6;border-bottom:1px solid var(--line);padding:7px 13px;font-size:11.5px;color:var(--muted);font-family:"JetBrains Mono",Consolas,monospace}
+.screen-in{padding:17px}
+
+/* table */
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);padding:0 8px 8px;border-bottom:1px solid var(--line);font-weight:700}
+td{padding:10px 8px;border-bottom:1px solid #f3f4f6;vertical-align:middle}
+tr.click{cursor:pointer}
+tr.click:hover td{background:#fffbeb}
+.amt{text-align:right;font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+.date{white-space:nowrap;color:var(--muted);font-size:12.5px}
+.tag{display:inline-block;font-size:11.5px;background:#f3f4f6;border:1px solid var(--line);border-radius:6px;padding:2px 8px;white-space:nowrap}
+.src{display:inline-block;font-size:11.5px;font-weight:700;border-radius:6px;padding:2px 8px;white-space:nowrap;margin-right:6px}
+.src-cash{background:#fef3c7;color:#92400e;border:1px solid #fde68a}
+.src-inv{background:#dbeafe;color:#1e40af;border:1px solid #bfdbfe}
+.src-pos{background:#ede9fe;color:#5b21b6;border:1px solid #ddd6fe}
+.src-rec{background:#e0f2fe;color:#075985;border:1px solid #bae6fd}
+.src-man{background:#f3f4f6;color:#374151;border:1px solid var(--line)}
+.muted{color:var(--muted)}
+
+/* form bits */
+.fld{margin-bottom:14px}
+.lbl{display:block;font-size:12.5px;font-weight:700;margin-bottom:5px}
+.inp{width:100%;padding:9px 11px;border:1px solid #d1d5db;border-radius:9px;font-size:14px;font-family:inherit;background:#fff}
+.inp[disabled]{background:#f9fafb;color:var(--muted)}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.segb{padding:8px 13px;border:1px solid #d1d5db;background:#fff;border-radius:9px;font-size:13px;cursor:pointer;font-family:inherit}
+.segb.on{background:var(--accent);border-color:var(--accent);color:var(--text);font-weight:700}
+.radio{display:flex;flex-direction:column;gap:7px}
+.radio label{display:flex;align-items:center;gap:8px;font-size:13.5px;padding:8px 11px;border:1px solid #d1d5db;border-radius:9px;cursor:pointer}
+.radio label.on{border-color:var(--accent);background:#fffbeb}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:40px;padding:0 16px;border-radius:9px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit;border:1px solid transparent;text-decoration:none}
+.btn-primary{background:var(--accent);color:var(--text);font-weight:700}
+.btn-secondary{background:#fff;color:var(--text);border-color:#d1d5db}
+.btn-danger{background:#fff;color:var(--danger-text);border-color:#fca5a5}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.row-btn{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+
+/* callouts */
+.warn{border-radius:10px;padding:11px 14px;font-size:13px;margin:14px 0}
+.warn-bad{background:#fef2f2;border:1px solid #fecaca;color:#7f1d1d}
+.warn-good{background:#f0fdf4;border:1px solid #bbf7d0;color:#14532d}
+.warn-info{background:#fffbeb;border:1px solid #fde68a;color:#78350f}
+.lock{background:#f9fafb;border:1px dashed #d1d5db;border-radius:10px;padding:13px 15px;font-size:13px;color:#374151;margin:14px 0}
+
+/* verdict */
+.verdict{margin-top:16px;border-radius:10px;padding:12px 15px;font-size:13.5px}
+.v-bad{background:#fef2f2;border-left:4px solid var(--danger);color:#7f1d1d}
+.v-good{background:#f0fdf4;border-left:4px solid var(--success);color:#14532d}
+.verdict b{display:block;margin-bottom:3px}
+
+/* filters */
+.fbar{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:15px}
+.fp{padding:6px 13px;border:1px solid #d1d5db;background:#fff;border-radius:999px;font-size:12.5px;cursor:pointer;font-family:inherit}
+.fp.on{background:var(--accent);border-color:var(--accent);color:var(--text);font-weight:700}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:11px;padding:12px 14px}
+.kpi .k{font-size:11.5px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.03em}
+.kpi .v{font-size:21px;font-weight:800;margin-top:3px;font-variant-numeric:tabular-nums}
+.full{grid-column:1/-1}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:14px;padding-top:13px;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Έξοδα &amp; Ταμείο — η διόρθωση που προτείνω</h1>
+<p class="sub">Πριν και μετά, οθόνη προς οθόνη. Τα δύο βιβλία <b>μένουν χωριστά</b> από κάτω (όπως αποφασίσαμε στις 25/6) — αλλάζει μόνο τι βλέπεις και τι σε αφήνει να πατήσεις.</p>
+
+<div class="note">⚠️ <b>Όλα τα νούμερα και τα ονόματα εδώ είναι ψεύτικα</b> — δείγμα για να δεις τη μορφή, όχι τα δικά σου δεδομένα.</div>
+
+<div class="tabs">
+  <button class="tab on" data-p="p1">1 · Η λίστα Εξόδων</button>
+  <button class="tab" data-p="p2">2 · Άνοιγμα εξόδου του Ταμείου</button>
+  <button class="tab" data-p="p3">3 · Νέο έξοδο με μετρητά</button>
+  <button class="tab" data-p="p4">4 · Νέα οθόνη «Πού πάνε τα λεφτά»</button>
+</div>
+
+<!-- ============ 1 ============ -->
+<div class="panel on" id="p1">
+  <h2 class="panel-t">Η λίστα Εξόδων</h2>
+  <p class="panel-d">Σήμερα δεν ξεχωρίζεις ποιο έξοδο ήρθε από πού. Μετά, κάθε γραμμή λέει την προέλευσή της.</p>
+  <div class="ba">
+
+    <div class="col">
+      <div class="col-h"><span class="chip chip-b">ΠΡΙΝ</span> όλα μοιάζουν ίδια</div>
+      <div class="screen"><div class="screen-bar">/expenses</div><div class="screen-in">
+        <table>
+          <tr><th>Ημ/νία</th><th>Περιγραφή</th><th>Κατηγορία</th><th>Πληρωμή</th><th class="amt">Ποσό</th></tr>
+          <tr class="click"><td class="date">18-07-2026</td><td>🧾 Κρεοπωλείο Γεωργίου</td><td><span class="tag">🥩 Προμήθειες</span></td><td class="muted">Μεταφορά</td><td class="amt">412,80 €</td></tr>
+          <tr class="click"><td class="date">18-07-2026</td><td>Λαμπτήρες κουζίνας</td><td><span class="tag">👜 Έξοδα Ταμείου (μετρητά)</span></td><td class="muted">Μετρητά</td><td class="amt">23,50 €</td></tr>
+          <tr class="click"><td class="date">17-07-2026</td><td>ΔΕΗ 🔁</td><td><span class="tag">⚡ Πάγια</span></td><td class="muted">Μεταφορά</td><td class="amt">318,00 €</td></tr>
+          <tr class="click"><td class="date">17-07-2026</td><td>Χαρτικά</td><td><span class="tag">🖥️ Μικροέξοδα POS</span></td><td class="muted">Μετρητά</td><td class="amt">14,20 €</td></tr>
+          <tr class="click"><td class="date">16-07-2026</td><td>Επισκευή ψυγείου</td><td><span class="tag">🔧 Συντήρηση</span></td><td class="muted">Μετρητά</td><td class="amt">80,00 €</td></tr>
+          <tr class="click"><td class="date">16-07-2026</td><td>🧾 ΑΦΟΙ Δημητρίου</td><td><span class="tag">🥫 Προμήθειες</span></td><td class="muted">Επιταγή</td><td class="amt">265,40 €</td></tr>
+        </table>
+        <div class="verdict v-bad"><b>Το πρόβλημα</b>Μόνο τα τιμολόγια έχουν σήμα (🧾). Για να καταλάβεις ότι οι «Λαμπτήρες» ήρθαν από το Ταμείο, πρέπει να διαβάσεις το όνομα της κατηγορίας. Τα «Χαρτικά» ήρθαν από το POS — πουθενά δεν το λέει.</div>
+      </div></div>
+    </div>
+
+    <div class="col">
+      <div class="col-h"><span class="chip chip-a">ΜΕΤΑ</span> κάθε γραμμή λέει από πού ήρθε</div>
+      <div class="screen"><div class="screen-bar">/expenses</div><div class="screen-in">
+        <table>
+          <tr><th>Ημ/νία</th><th>Προέλευση &amp; περιγραφή</th><th>Κατηγορία</th><th>Πληρωμή</th><th class="amt">Ποσό</th></tr>
+          <tr class="click"><td class="date">18-07-2026</td><td><span class="src src-inv">🧾 Τιμολόγιο</span>Κρεοπωλείο Γεωργίου</td><td><span class="tag">🥩 Προμήθειες</span></td><td class="muted">Μεταφορά</td><td class="amt">412,80 €</td></tr>
+          <tr class="click"><td class="date">18-07-2026</td><td><span class="src src-cash">👜 Ταμείο</span>Λαμπτήρες κουζίνας</td><td><span class="tag">🔧 Συντήρηση</span></td><td class="muted">Μετρητά</td><td class="amt">23,50 €</td></tr>
+          <tr class="click"><td class="date">17-07-2026</td><td><span class="src src-rec">🔁 Πάγιο</span>ΔΕΗ</td><td><span class="tag">⚡ Πάγια</span></td><td class="muted">Μεταφορά</td><td class="amt">318,00 €</td></tr>
+          <tr class="click"><td class="date">17-07-2026</td><td><span class="src src-pos">🖥️ POS</span>Χαρτικά</td><td><span class="tag">📦 Αναλώσιμα</span></td><td class="muted">Μετρητά</td><td class="amt">14,20 €</td></tr>
+          <tr class="click"><td class="date">16-07-2026</td><td><span class="src src-man">✍️ Χειροκίνητο</span>Επισκευή ψυγείου</td><td><span class="tag">🔧 Συντήρηση</span></td><td class="muted">Μετρητά</td><td class="amt">80,00 €</td></tr>
+          <tr class="click"><td class="date">16-07-2026</td><td><span class="src src-inv">🧾 Τιμολόγιο</span>ΑΦΟΙ Δημητρίου</td><td><span class="tag">🥫 Προμήθειες</span></td><td class="muted">Επιταγή</td><td class="amt">265,40 €</td></tr>
+        </table>
+        <div class="legend"><span><b class="src src-inv">🧾 Τιμολόγιο</b></span><span><b class="src src-cash">👜 Ταμείο</b></span><span><b class="src src-rec">🔁 Πάγιο</b></span><span><b class="src src-pos">🖥️ POS</b></span><span><b class="src src-man">✍️ Χειροκίνητο</b></span></div>
+        <div class="verdict v-good"><b>Τι κερδίζεις</b>Με μια ματιά ξέρεις ποιο έξοδο μπορείς να πειράξεις εδώ (μόνο τα ✍️) και ποιο ζει αλλού. Και η κατηγορία ελευθερώνεται — τα έξοδα του Ταμείου μπαίνουν πια στη <b>σωστή</b> κατηγορία («Συντήρηση»), όχι σε ένα σακί «Έξοδα Ταμείου».</div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ 2 ============ -->
+<div class="panel" id="p2">
+  <h2 class="panel-t">Όταν ανοίγεις έξοδο που ήρθε από το Ταμείο</h2>
+  <p class="panel-d">Εδώ είναι το πραγματικό σφάλμα. Σήμερα σε αφήνει να το αλλάξεις και να το σβήσεις — και το Ταμείο δεν το μαθαίνει ποτέ.</p>
+  <div class="ba">
+
+    <div class="col">
+      <div class="col-h"><span class="chip chip-b">ΠΡΙΝ</span> ανοιχτό για επεξεργασία</div>
+      <div class="screen"><div class="screen-bar">/expenses/482/card</div><div class="screen-in">
+        <div class="fld"><span class="lbl">Ποσό (μικτό, με ΦΠΑ)</span><input class="inp" value="23,50"></div>
+        <div class="fld"><span class="lbl">Περιγραφή</span><input class="inp" value="Λαμπτήρες κουζίνας"></div>
+        <div class="fld"><span class="lbl">Τρόπος πληρωμής</span>
+          <div class="seg"><span class="segb on">Μετρητά</span><span class="segb">Κάρτα</span><span class="segb">Μεταφορά</span><span class="segb">Επιταγή</span></div>
+        </div>
+        <div class="fld"><span class="lbl">Έχει παραστατικό;</span>
+          <div class="radio">
+            <label>🧾 Ναι (τιμολόγιο/απόδειξη)</label>
+            <label class="on">✋ Όχι (μετρητά χωρίς χαρτί)</label>
+          </div>
+        </div>
+        <div class="warn warn-bad">☠️ <b>Δύο τρόποι να σπάσει:</b><br>
+          • Πατάς «🧾 Ναι» → ένα έξοδο <b>χωρίς χαρτί</b> φεύγει στον λογιστή σαν επίσημο.<br>
+          • Πατάς «Διαγραφή» → το έξοδο σβήνει, αλλά η εγγραφή στο Ταμείο μένει και <b>νομίζει ότι μετρήθηκε</b>. Το έξοδο εξαφανίζεται από το κέρδος σου.
+        </div>
+        <div class="row-btn"><span class="btn btn-primary">💾 Αποθήκευση</span><span class="btn btn-danger">🗑 Διαγραφή</span></div>
+        <div class="verdict v-bad"><b>Η ασυνέπεια</b>Τα έξοδα από <b>τιμολόγιο</b> είναι ήδη κλειδωμένα εδώ (σε στέλνει στα Τιμολόγια). Του Ταμείου ξεχάστηκαν.</div>
+      </div></div>
+    </div>
+
+    <div class="col">
+      <div class="col-h"><span class="chip chip-a">ΜΕΤΑ</span> κλειδωμένο, με πόρτα προς το σπίτι του</div>
+      <div class="screen"><div class="screen-bar">/expenses/482/card</div><div class="screen-in">
+        <div class="lock">👜 <b>Αυτό το έξοδο ζει στο Ταμείο.</b><br><span class="muted">Καταχωρήθηκε ως πληρωμή μετρητών από το ταμείο της <b>18-07-2026</b>. Ό,τι αλλάξεις εκεί, ενημερώνεται αυτόματα κι εδώ.</span></div>
+        <div class="fld"><span class="lbl">Ποσό (μικτό, με ΦΠΑ)</span><input class="inp" value="23,50 €" disabled></div>
+        <div class="fld"><span class="lbl">Περιγραφή</span><input class="inp" value="Λαμπτήρες κουζίνας" disabled></div>
+        <div class="fld"><span class="lbl">Τρόπος πληρωμής</span><input class="inp" value="Μετρητά" disabled></div>
+        <div class="fld"><span class="lbl">Έχει παραστατικό;</span><input class="inp" value="✋ Όχι — μετρητά χωρίς χαρτί" disabled></div>
+        <div class="warn warn-good">✅ Δεν μπορεί να γίνει «επίσημο» κατά λάθος, και δεν μπορεί να σβηστεί από εδώ αφήνοντας το Ταμείο να δείχνει στο πουθενά.</div>
+        <div class="row-btn"><a class="btn btn-primary" href="#">👜 Άνοιγμα στο Ταμείο →</a><span class="btn btn-secondary">Κλείσιμο</span></div>
+        <div class="verdict v-good"><b>Ίδια λογική με τα τιμολόγια</b>Ένα έξοδο έχει <b>ένα</b> σπίτι. Το κουμπί σε πάει εκεί με ένα κλικ — δεν σου κρύβει τίποτα, σε πάει στο σωστό μέρος.</div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ 3 ============ -->
+<div class="panel" id="p3">
+  <h2 class="panel-t">Νέο έξοδο, όταν διαλέγεις «Μετρητά»</h2>
+  <p class="panel-d">Εδώ γεννιέται η διπλομέτρηση. Σήμερα τίποτα δεν σε σταματάει.</p>
+  <div class="ba">
+
+    <div class="col">
+      <div class="col-h"><span class="chip chip-b">ΠΡΙΝ</span> καμία ένδειξη</div>
+      <div class="screen"><div class="screen-bar">/expenses → Νέο έξοδο</div><div class="screen-in">
+        <div class="fld"><span class="lbl">Ποσό (μικτό, με ΦΠΑ)</span><input class="inp" value="80,00"></div>
+        <div class="fld"><span class="lbl">Περιγραφή</span><input class="inp" value="Επισκευή ψυγείου"></div>
+        <div class="fld"><span class="lbl">Τρόπος πληρωμής</span>
+          <div class="seg"><span class="segb on">Μετρητά</span><span class="segb">Κάρτα</span><span class="segb">Μεταφορά</span><span class="segb">Επιταγή</span></div>
+        </div>
+        <div class="row-btn"><span class="btn btn-primary">💾 Αποθήκευση</span></div>
+        <div class="verdict v-bad"><b>Τι γίνεται μετά</b>Το γράφεις κι εδώ κι στο Ταμείο (γιατί όντως βγήκαν μετρητά από το συρτάρι) → <b>μετριέται δύο φορές</b> στο κέρδος. Ο κανόνας υπάρχει μόνο στα αρχεία μας, όχι μπροστά σου.</div>
+      </div></div>
+    </div>
+
+    <div class="col">
+      <div class="col-h"><span class="chip chip-a">ΜΕΤΑ</span> σε γυρίζει στο σωστό μέρος</div>
+      <div class="screen"><div class="screen-bar">/expenses → Νέο έξοδο</div><div class="screen-in">
+        <div class="fld"><span class="lbl">Ποσό (μικτό, με ΦΠΑ)</span><input class="inp" value="80,00"></div>
+        <div class="fld"><span class="lbl">Περιγραφή</span><input class="inp" value="Επισκευή ψυγείου"></div>
+        <div class="fld"><span class="lbl">Τρόπος πληρωμής</span>
+          <div class="seg"><span class="segb on">Μετρητά</span><span class="segb">Κάρτα</span><span class="segb">Μεταφορά</span><span class="segb">Επιταγή</span></div>
+        </div>
+        <div class="warn warn-info">👜 <b>Πλήρωσες με μετρητά από το ταμείο;</b><br>
+          Γράψ' το στο <b>Ταμείο</b> — θα έρθει μόνο του εδώ, και θα φύγει και από το συρτάρι.<br>
+          <span class="muted">Αν τα μετρητά ήταν από αλλού (π.χ. από την τσέπη σου), συνέχισε κανονικά εδώ.</span>
+          <div class="row-btn"><a class="btn btn-primary" href="#">👜 Καταχώρηση στο Ταμείο →</a><span class="btn btn-secondary">Συνεχίζω εδώ</span></div>
+        </div>
+        <div class="row-btn"><span class="btn btn-primary">💾 Αποθήκευση</span></div>
+        <div class="verdict v-good"><b>Δεν σε μπλοκάρει</b>Σε <b>ρωτάει</b> τη σωστή στιγμή. Το «Συνεχίζω εδώ» υπάρχει γιατί υπάρχουν και μετρητά εκτός ταμείου. Το λάθος σταματάει πριν γίνει, χωρίς να σου κλείνει δρόμο.</div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ 4 ============ -->
+<div class="panel" id="p4">
+  <h2 class="panel-t">Νέα οθόνη: «Πού πάνε τα λεφτά»</h2>
+  <p class="panel-d">Αυτό ζήτησες όταν ρώτησες «γιατί δύο πράγματα». Μία οθόνη που τα δείχνει <b>όλα</b> μαζί — με τα δύο βιβλία να μένουν σωστά από κάτω.</p>
+  <div class="ba" style="grid-template-columns:1fr">
+
+    <div class="col">
+      <div class="col-h"><span class="chip chip-a">ΜΕΤΑ</span> μία λίστα, όλες οι πόρτες</div>
+      <div class="screen"><div class="screen-bar">/reports/money-out — Ιούλιος 2026</div><div class="screen-in">
+
+        <div class="kpis">
+          <div class="kpi"><div class="k">Σύνολο που βγήκε</div><div class="v">1.114,10 €</div></div>
+          <div class="kpi"><div class="k">🧾 Επίσημα (λογιστής)</div><div class="v" style="color:var(--success-text)">996,20 €</div></div>
+          <div class="kpi"><div class="k">✋ Εσωτερικά (χωρίς χαρτί)</div><div class="v" style="color:var(--accent-text)">117,90 €</div></div>
+          <div class="kpi"><div class="k">⚪ Προσωπικά (εκτός κέρδους)</div><div class="v" style="color:var(--muted)">240,00 €</div></div>
+        </div>
+
+        <div class="fbar">
+          <span class="fp on">Όλα</span>
+          <span class="fp">🧾 Μόνο επίσημα</span>
+          <span class="fp">✋ Μόνο εσωτερικά</span>
+          <span class="fp">💵 Μόνο μετρητά</span>
+          <span class="fp">⚪ Προσωπικά μου</span>
+        </div>
+
+        <table>
+          <tr><th>Ημ/νία</th><th>Προέλευση &amp; περιγραφή</th><th>Κατηγορία</th><th>Πληρωμή</th><th>Λογιστής</th><th class="amt">Ποσό</th></tr>
+          <tr class="click"><td class="date">18-07-2026</td><td><span class="src src-inv">🧾 Τιμολόγιο</span>Κρεοπωλείο Γεωργίου</td><td><span class="tag">🥩 Προμήθειες</span></td><td class="muted">Μεταφορά</td><td><span style="color:var(--success-text)">🧾 Ναι</span></td><td class="amt">412,80 €</td></tr>
+          <tr class="click"><td class="date">18-07-2026</td><td><span class="src src-cash">👜 Ταμείο</span>Λαμπτήρες κουζίνας</td><td><span class="tag">🔧 Συντήρηση</span></td><td class="muted">Μετρητά</td><td><span class="muted">✋ Όχι</span></td><td class="amt">23,50 €</td></tr>
+          <tr class="click"><td class="date">17-07-2026</td><td><span class="src src-rec">🔁 Πάγιο</span>ΔΕΗ</td><td><span class="tag">⚡ Πάγια</span></td><td class="muted">Μεταφορά</td><td><span style="color:var(--success-text)">🧾 Ναι</span></td><td class="amt">318,00 €</td></tr>
+          <tr class="click"><td class="date">17-07-2026</td><td><span class="src src-pos">🖥️ POS</span>Χαρτικά</td><td><span class="tag">📦 Αναλώσιμα</span></td><td class="muted">Μετρητά</td><td><span class="muted">✋ Όχι</span></td><td class="amt">14,20 €</td></tr>
+          <tr class="click"><td class="date">16-07-2026</td><td><span class="src src-man">✍️ Χειροκίνητο</span>Επισκευή ψυγείου</td><td><span class="tag">🔧 Συντήρηση</span></td><td class="muted">Μετρητά</td><td><span class="muted">✋ Όχι</span></td><td class="amt">80,00 €</td></tr>
+          <tr class="click"><td class="date">16-07-2026</td><td><span class="src src-inv">🧾 Τιμολόγιο</span>ΑΦΟΙ Δημητρίου</td><td><span class="tag">🥫 Προμήθειες</span></td><td class="muted">Επιταγή</td><td><span style="color:var(--success-text)">🧾 Ναι</span></td><td class="amt">265,40 €</td></tr>
+          <tr class="click" style="background:#fafafa"><td class="date">15-07-2026</td><td><span class="src src-cash">👜 Ταμείο</span><span class="muted">Τσιγάρα</span> <span class="tag">⚪ προσωπικό</span></td><td><span class="tag">⚪ Προσωπικά</span></td><td class="muted">Μετρητά</td><td class="muted">—</td><td class="amt muted">40,00 €</td></tr>
+          <tr class="click" style="background:#fafafa"><td class="date">14-07-2026</td><td><span class="src src-cash">👜 Ταμείο</span><span class="muted">Πήρα μετρητά</span> <span class="tag">💸 ανάληψη</span></td><td><span class="tag">⚪ Προσωπικά</span></td><td class="muted">Μετρητά</td><td class="muted">—</td><td class="amt muted">200,00 €</td></tr>
+        </table>
+
+        <div class="warn warn-info" style="margin-top:16px">💡 Οι <b>γκρίζες</b> γραμμές (⚪ προσωπικά και 💸 αναλήψεις) βγήκαν από το συρτάρι αλλά <b>δεν είναι έξοδα του μαγαζιού</b> — δεν μετράνε στο κέρδος και δεν φτάνουν ποτέ στον λογιστή. Φαίνονται εδώ μόνο για να βγαίνει το ταμείο σου.</div>
+
+        <div class="verdict v-good"><b>Γιατί αυτό λύνει το αρχικό σου παράπονο</b>Δεν χρειάζεται πια να θυμάσαι «πού είναι τι». Ανοίγεις μία οθόνη και βλέπεις κάθε ευρώ που βγήκε, από όποια πόρτα κι αν ήρθε. Πατάς μια γραμμή και σε πάει στο σπίτι της. Και τα δύο βιβλία από κάτω μένουν σωστά — το ένα για τον λογιστή, το άλλο για το συρτάρι.</div>
+
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+<script>
+document.querySelectorAll('.tab').forEach(function(t){
+  t.addEventListener('click',function(){
+    document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on')});
+    document.querySelectorAll('.panel').forEach(function(x){x.classList.remove('on')});
+    t.classList.add('on');
+    document.getElementById(t.dataset.p).classList.add('on');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+document.querySelectorAll('.fp').forEach(function(f){
+  f.addEventListener('click',function(){
+    document.querySelectorAll('.fp').forEach(function(x){x.classList.remove('on')});
+    f.classList.add('on');
+  });
+});
+</script>
+</body>
+</html>

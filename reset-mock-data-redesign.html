@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Μηδενισμός εικονικών δεδομένων — 3 προτάσεις</title>
+<style>
+  :root{
+    --ink:#1f2430; --muted:#6b7280; --line:#e5e7eb; --bg:#f6f7f9;
+    --red:#b91c1c; --red-bg:#fef2f2; --red-line:#fca5a5; --red-soft:#fee2e2;
+    --grn:#15803d; --grn-bg:#f0fdf4; --grn-line:#86efac; --grn-soft:#dcfce7;
+    --amber:#92400e; --amber-bg:#fffbeb; --amber-line:#fcd34d;
+    --blue:#1e40af; --blue-bg:#eff6ff; --blue-line:#bfdbfe;
+    --orange:#e8590c;
+    --radius:12px; --shadow:0 1px 3px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.05);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+       background:var(--bg);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1040px;margin:0 auto;padding:24px 20px 80px}
+  h1{font-size:26px;margin:0 0 4px}
+  .sub{color:var(--muted);font-size:14.5px;margin:0 0 22px}
+  .navbar{position:sticky;top:0;z-index:20;background:rgba(246,247,249,.9);backdrop-filter:blur(8px);
+          border-bottom:1px solid var(--line);margin:0 -20px 26px;padding:12px 20px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .navbar b{font-size:13px;color:var(--muted);margin-right:6px}
+  .navbar a{font-size:13px;text-decoration:none;color:var(--ink);background:#fff;border:1px solid var(--line);
+            padding:6px 12px;border-radius:999px;font-weight:600}
+  .navbar a:hover{border-color:var(--orange);color:var(--orange)}
+  .prop{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
+        padding:22px 22px 26px;margin-bottom:34px;scroll-margin-top:74px}
+  .prop-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+  .prop-head .tag{background:var(--orange);color:#fff;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px}
+  .prop-head h2{font-size:20px;margin:0}
+  .prop-note{color:var(--muted);font-size:13.5px;margin:2px 0 18px}
+  .demo{border:1px dashed var(--line);border-radius:10px;padding:20px;background:#fcfcfd}
+
+  /* shared bits */
+  .panel-title{font-weight:800;font-size:17px;display:flex;align-items:center;gap:8px;margin:0 0 12px}
+  .lead{font-size:13.5px;color:var(--muted);margin:0 0 16px;line-height:1.65}
+  .pill{display:inline-block;font-weight:800;border-radius:999px;padding:2px 9px;font-size:12.5px}
+  .pill.red{background:var(--red-soft);color:var(--red)}
+  .pill.grn{background:var(--grn-soft);color:var(--grn)}
+  ul.clean{list-style:none;margin:0;padding:0}
+  .zero-note{margin-top:10px;font-size:12.5px;background:var(--amber-bg);border:1px solid var(--amber-line);
+             color:var(--amber);border-radius:8px;padding:8px 11px;line-height:1.55}
+  .safety{margin-top:16px;font-size:12.5px;background:var(--blue-bg);border:1px solid var(--blue-line);
+          color:var(--blue);border-radius:10px;padding:11px 14px;line-height:1.65}
+  .btn-danger{background:#fff;border:1.5px solid var(--red-line);color:var(--red);font-weight:700;font-size:14px;
+              padding:11px 18px;border-radius:9px;cursor:pointer;min-height:44px}
+  .btn-danger:hover{background:var(--red-bg)}
+  .actions{margin-top:18px;display:flex;justify-content:flex-end}
+
+  /* ===== Proposal A : two columns ===== */
+  .a-summary{display:flex;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+  .a-chip{flex:1;min-width:200px;border-radius:10px;padding:12px 15px}
+  .a-chip.red{background:var(--red-bg);border:1px solid var(--red-line)}
+  .a-chip.grn{background:var(--grn-bg);border:1px solid var(--grn-line)}
+  .a-chip .n{font-size:26px;font-weight:800;line-height:1}
+  .a-chip.red .n{color:var(--red)} .a-chip.grn .n{color:var(--grn)}
+  .a-chip .t{font-size:13px;font-weight:600;margin-top:3px}
+  .a-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .a-col{border-radius:10px;overflow:hidden;border:1px solid}
+  .a-col.red{border-color:var(--red-line)} .a-col.grn{border-color:var(--grn-line)}
+  .a-col h4{margin:0;padding:11px 15px;font-size:14.5px;display:flex;justify-content:space-between;align-items:center}
+  .a-col.red h4{background:var(--red-bg);color:var(--red)} .a-col.grn h4{background:var(--grn-bg);color:var(--grn)}
+  .a-col ul{list-style:none;margin:0;padding:6px 0}
+  .a-col li{display:flex;justify-content:space-between;gap:10px;padding:7px 15px;font-size:13px;border-top:1px solid #f1f2f4}
+  .a-col li:first-child{border-top:none}
+  .a-col li .lab{color:var(--ink)}
+  .a-col li .cnt{font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .a-col.red .cnt{color:var(--red)} .a-col.grn .cnt{color:var(--grn)}
+  .a-col li.keep .cnt{color:var(--grn);opacity:.85}
+
+  /* ===== Proposal B : domain cards ===== */
+  .b-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .b-card{border:1px solid var(--line);border-radius:11px;padding:14px 15px;background:#fff}
+  .b-card h5{margin:0 0 10px;font-size:14.5px;display:flex;align-items:center;gap:7px}
+  .b-row{font-size:12.5px;display:flex;gap:8px;margin-bottom:7px;align-items:flex-start}
+  .b-row:last-child{margin-bottom:0}
+  .b-ico{width:20px;flex:0 0 20px;text-align:center;font-size:13px}
+  .b-row.del .txt{color:#7f1d1d} .b-row.keep .txt{color:#14532d}
+  .b-cnt{margin-left:auto;font-weight:800;white-space:nowrap}
+  .b-row.del .b-cnt{color:var(--red)} .b-row.keep .b-cnt{color:var(--grn)}
+
+  /* ===== Proposal C : the scale ===== */
+  .c-scale{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:6px}
+  .c-pan{border-radius:14px;padding:20px 18px;text-align:center;position:relative}
+  .c-pan.red{background:linear-gradient(180deg,#fff,var(--red-bg));border:1px solid var(--red-line)}
+  .c-pan.grn{background:linear-gradient(180deg,#fff,var(--grn-bg));border:1px solid var(--grn-line)}
+  .c-pan .cap{font-size:13px;font-weight:700;letter-spacing:.02em;text-transform:uppercase}
+  .c-pan.red .cap{color:var(--red)} .c-pan.grn .cap{color:var(--grn)}
+  .c-pan .big{font-size:46px;font-weight:800;line-height:1;margin:8px 0 2px}
+  .c-pan.red .big{color:var(--red)} .c-pan.grn .big{color:var(--grn)}
+  .c-pan .cap2{font-size:12.5px;color:var(--muted)}
+  details.c-det{margin-top:14px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+  details.c-det>summary{cursor:pointer;list-style:none;padding:12px 15px;font-weight:700;font-size:13.5px;
+                        display:flex;justify-content:space-between;align-items:center}
+  details.c-det>summary::-webkit-details-marker{display:none}
+  details.c-det>summary::after{content:"▾";color:var(--muted)}
+  details.c-det[open]>summary::after{content:"▴"}
+  .c-body{padding:2px 15px 14px}
+  .c-body .cols{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .c-body h6{margin:6px 0 8px;font-size:13px}
+  .c-body ul{list-style:none;margin:0;padding:0}
+  .c-body li{font-size:12.5px;padding:4px 0;border-bottom:1px dashed #eee;display:flex;justify-content:space-between;gap:8px}
+  .c-body .red-h{color:var(--red)} .c-body .grn-h{color:var(--grn)}
+
+  .foot{font-size:12px;color:var(--muted);text-align:center;margin-top:30px}
+  @media(max-width:720px){
+    .a-cols,.b-grid,.c-scale,.c-body .cols{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🧹 Μηδενισμός εικονικών δεδομένων — 3 προτάσεις</h1>
+  <p class="sub">Νέο: <b>δύο στήλες</b> — «Τι σβήνεται» &amp; «Τι μένει» — που καλύπτουν <b>ΟΛΟ</b> το σύστημα (79 είδη δεδομένων), σε απλά ελληνικά χωρίς όρους κώδικα. Τα νούμερα εδώ είναι <b>δείγμα</b>.</p>
+
+  <div class="navbar">
+    <b>Πήγαινε σε:</b>
+    <a href="#a">Α · Δύο στήλες</a>
+    <a href="#b">Β · Κάρτες ανά τομέα</a>
+    <a href="#c">Γ · Η ζυγαριά</a>
+  </div>
+
+  <!-- ================= PROPOSAL A ================= -->
+  <section class="prop" id="a">
+    <div class="prop-head"><span class="tag">Πρόταση Α</span><h2>Δύο στήλες, καθαρός πίνακας</h2></div>
+    <p class="prop-note">Αριστερά κόκκινα = τι φεύγει · δεξιά πράσινα = τι μένει. Επάνω δύο μεγάλα σύνολα. Το πιο γρήγορο στο μάτι.</p>
+    <div class="demo">
+      <div class="panel-title">🧹 Μηδενισμός εικονικών δεδομένων</div>
+      <p class="lead">Χρησιμοποίησέ το <b>μία φορά</b>, όταν περνάς από τις δοκιμές στην πραγματική λειτουργία. Σβήνει μόνο όσα «γεμίζουν με την κίνηση» — ο σκελετός του μαγαζιού μένει άθικτος.</p>
+
+      <div class="a-summary">
+        <div class="a-chip red"><div class="n">1.248</div><div class="t">🗑️ εγγραφές θα σβηστούν οριστικά</div></div>
+        <div class="a-chip grn"><div class="n">Άθικτα</div><div class="t">✅ όλα τα «στημένα» σου μένουν όπως είναι</div></div>
+      </div>
+
+      <div class="a-cols">
+        <div class="a-col red">
+          <h4><span>🗑️ Θα διαγραφούν οριστικά</span><span class="pill red">σβήνεται</span></h4>
+          <ul>
+            <li><span class="lab">Παραγγελίες &amp; ακυρώσεις (POS)</span><span class="cnt">312</span></li>
+            <li><span class="lab">Ανάλωση υλικών από πωλήσεις</span><span class="cnt">846</span></li>
+            <li><span class="lab">Πληρωμές &amp; μικροέξοδα συρταριού</span><span class="cnt">28</span></li>
+            <li><span class="lab">Πελάτες (καρτέλες) &amp; ιστορικά τους</span><span class="cnt">54</span></li>
+            <li><span class="lab">Κινήσεις αποθήκης (παραλαβές/ζημιές)</span><span class="cnt">73</span></li>
+            <li><span class="lab">Απογραφές &amp; ανοίγματα κιβωτίων</span><span class="cnt">11</span></li>
+            <li><span class="lab">Τιμολόγια &amp; σαρώσεις OCR</span><span class="cnt">19</span></li>
+            <li><span class="lab">Έξοδα &amp; πάγια έξοδα</span><span class="cnt">40</span></li>
+            <li><span class="lab">Κινήσεις Ταμείου, τράπεζας &amp; e-food</span><span class="cnt">62</span></li>
+            <li><span class="lab">Άδειες/ρεπό &amp; μισθός ιδιοκτήτη</span><span class="cnt">9</span></li>
+            <li><span class="lab">Καταγραφές θερμοκρασιών/καθαρισμού</span><span class="cnt">31</span></li>
+            <li><span class="lab">Ιστορικό ενεργειών &amp; συνδέσεων</span><span class="cnt">120</span></li>
+          </ul>
+        </div>
+        <div class="a-col grn">
+          <h4><span>✅ ΔΕΝ θα αγγιχτούν — παραμένουν</span><span class="pill grn">μένει</span></h4>
+          <ul>
+            <li class="keep"><span class="lab">Προμηθευτές, κατηγορίες &amp; τηλέφωνα</span><span class="cnt">✓</span></li>
+            <li class="keep"><span class="lab">Πρότυπα ανάγνωσης τιμολογίων</span><span class="cnt">✓</span></li>
+            <li class="keep"><span class="lab">Κατάλογος υλικών &amp; χώροι αποθήκης</span><span class="cnt">✓</span></li>
+            <li class="keep"><span class="lab">Όλες οι συνταγές, μεγέθη &amp; έξτρα</span><span class="cnt">✓</span></li>
+            <li class="keep"><span class="lab">Κατάλογος προϊόντων POS</span><span class="cnt">✓</span></li>
+            <li class="keep"><span class="lab">Υπάλληλοι &amp; εβδομαδιαίο ωράριο</span><span class="cnt">✓</span></li>
+            <li class="keep"><span class="lab">Είδη φύρας &amp; πρόγραμμα γύρου</span><span class="cnt">✓</span></li>
+            <li class="keep"><span class="lab">Κατηγορίες εξόδων/ταμείου &amp; αργίες</span><span class="cnt">✓</span></li>
+            <li class="keep"><span class="lab">Αλλεργιογόνα, ψυγεία &amp; έγγραφα</span><span class="cnt">✓</span></li>
+            <li class="keep"><span class="lab">Πρότυπα μηνυμάτων marketing</span><span class="cnt">✓</span></li>
+            <li class="keep"><span class="lab">Λογαριασμοί, 2FA &amp; εφεδρικοί κωδικοί</span><span class="cnt">✓</span></li>
+            <li class="keep"><span class="lab">Όλες οι ρυθμίσεις &amp; προτιμήσεις σου</span><span class="cnt">✓</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="zero-note">♻️ <b>Μένουν, αλλά μηδενίζονται:</b> οι <b>ποσότητες αποθήκης</b> των υλικών (η λίστα υλικών μένει, τα κιλά πάνε στο 0) και μερικοί <b>μετρητές δοκιμών</b> στις ρυθμίσεις (π.χ. κόστος AI του μήνα, σημείο συμφωνίας τράπεζας).</div>
+
+      <div class="safety">🔐 <b>Τριπλή ασφάλεια:</b> (1) ο κωδικός σύνδεσής σου · (2) 6ψήφιος κωδικός στο email σου · (3) κρατάμε αυτόματα <b>αντίγραφο ασφαλείας</b> πριν σβήσουμε (🛟 «δίχτυ» στα Αντίγραφα).</div>
+
+      <div class="actions"><button class="btn-danger">🧹 Μηδενισμός εικονικών δεδομένων</button></div>
+    </div>
+  </section>
+
+  <!-- ================= PROPOSAL B ================= -->
+  <section class="prop" id="b">
+    <div class="prop-head"><span class="tag">Πρόταση Β</span><h2>Κάρτες ανά τομέα</h2></div>
+    <p class="prop-note">Μία κάρτα για κάθε περιοχή της δουλειάς (Πωλήσεις, Αποθήκη, Συνταγές…). Μέσα σε κάθε κάρτα βλέπεις ξεχωριστά «τι σβήνει» και «τι μένει». Πιο καθησυχαστικό — βλέπεις ανά τομέα.</p>
+    <div class="demo">
+      <div class="panel-title">🧹 Μηδενισμός εικονικών δεδομένων</div>
+      <p class="lead">Ανά τομέα του μαγαζιού: με κόκκινο 🗑️ ό,τι φεύγει, με πράσινο ✅ ό,τι μένει άθικτο.</p>
+
+      <div class="b-grid">
+        <div class="b-card">
+          <h5>🛒 Πωλήσεις &amp; Πελάτες</h5>
+          <div class="b-row del"><span class="b-ico">🗑️</span><span class="txt">Παραγγελίες, ακυρώσεις &amp; ανάλωση υλικών</span><span class="b-cnt">1.158</span></div>
+          <div class="b-row del"><span class="b-ico">🗑️</span><span class="txt">Καρτέλες πελατών &amp; ιστορικά τους</span><span class="b-cnt">54</span></div>
+          <div class="b-row keep"><span class="b-ico">✅</span><span class="txt">Ο κατάλογος προϊόντων POS μένει</span><span class="b-cnt">μένει</span></div>
+        </div>
+
+        <div class="b-card">
+          <h5>📦 Αποθήκη &amp; Υλικά</h5>
+          <div class="b-row del"><span class="b-ico">🗑️</span><span class="txt">Κινήσεις, απογραφές, αιτήματα, φύρα</span><span class="b-cnt">96</span></div>
+          <div class="b-row keep"><span class="b-ico">✅</span><span class="txt">Κατάλογος υλικών, χώροι &amp; είδη φύρας</span><span class="b-cnt">μένει</span></div>
+          <div class="b-row keep"><span class="b-ico">♻️</span><span class="txt">Οι ποσότητες (κιλά) μηδενίζονται</span><span class="b-cnt">→ 0</span></div>
+        </div>
+
+        <div class="b-card">
+          <h5>🧾 Τιμολόγια &amp; Έξοδα</h5>
+          <div class="b-row del"><span class="b-ico">🗑️</span><span class="txt">Τιμολόγια, σαρώσεις OCR &amp; έξοδα</span><span class="b-cnt">59</span></div>
+          <div class="b-row keep"><span class="b-ico">✅</span><span class="txt">Προμηθευτές &amp; πρότυπα ανάγνωσης</span><span class="b-cnt">μένει</span></div>
+          <div class="b-row keep"><span class="b-ico">✅</span><span class="txt">Κατηγορίες εξόδων μένουν</span><span class="b-cnt">μένει</span></div>
+        </div>
+
+        <div class="b-card">
+          <h5>🍽️ Συνταγές &amp; Τιμές</h5>
+          <div class="b-row del"><span class="b-ico">🗑️</span><span class="txt">Ιστορικό αλλαγών τιμής &amp; δοκιμές απόδοσης</span><span class="b-cnt">23</span></div>
+          <div class="b-row keep"><span class="b-ico">✅</span><span class="txt">Όλες οι συνταγές, μεγέθη, έξτρα &amp; combo</span><span class="b-cnt">μένει</span></div>
+        </div>
+
+        <div class="b-card">
+          <h5>👜 Ταμείο &amp; Χρήματα</h5>
+          <div class="b-row del"><span class="b-ico">🗑️</span><span class="txt">Κινήσεις ταμείου, τράπεζας, e-food</span><span class="b-cnt">62</span></div>
+          <div class="b-row del"><span class="b-ico">🗑️</span><span class="txt">Μισθός ιδιοκτήτη &amp; άδειες/ρεπό</span><span class="b-cnt">9</span></div>
+          <div class="b-row keep"><span class="b-ico">✅</span><span class="txt">Υπάλληλοι &amp; ωράριο μένουν</span><span class="b-cnt">μένει</span></div>
+        </div>
+
+        <div class="b-card">
+          <h5>🛡️ Ασφάλεια &amp; Συμμόρφωση</h5>
+          <div class="b-row del"><span class="b-ico">🗑️</span><span class="txt">Θερμοκρασίες, καθαρισμοί, ιστορικά συνδέσεων</span><span class="b-cnt">151</span></div>
+          <div class="b-row keep"><span class="b-ico">✅</span><span class="txt">Λογαριασμοί, 2FA &amp; ρυθμίσεις μένουν</span><span class="b-cnt">μένει</span></div>
+        </div>
+      </div>
+
+      <div class="safety">🔐 <b>Τριπλή ασφάλεια:</b> κωδικός σύνδεσης · 6ψήφιος κωδικός email · αυτόματο <b>αντίγραφο ασφαλείας</b> πριν σβήσουμε.</div>
+      <div class="actions"><button class="btn-danger">🧹 Μηδενισμός εικονικών δεδομένων</button></div>
+    </div>
+  </section>
+
+  <!-- ================= PROPOSAL C ================= -->
+  <section class="prop" id="c">
+    <div class="prop-head"><span class="tag">Πρόταση Γ</span><h2>Η ζυγαριά — «τι φεύγει / τι κρατάμε»</h2></div>
+    <p class="prop-note">Μια απλή εικόνα-αναλογία: αριστερή πλευρά ό,τι φεύγει, δεξιά ό,τι κρατάμε (ο «σκελετός» του μαγαζιού). Μεγάλα καθαρά νούμερα· η πλήρης λίστα ανοίγει μόνο αν τη θέλεις.</p>
+    <div class="demo">
+      <div class="panel-title">🧹 Μηδενισμός εικονικών δεδομένων</div>
+      <p class="lead">Σκέψου το σαν ζυγαριά: από τη μία πέφτει ό,τι μάζεψες στις δοκιμές, από την άλλη μένει ό,τι έστησες με κόπο.</p>
+
+      <div class="c-scale">
+        <div class="c-pan red">
+          <div class="cap">🗑️ Φεύγει</div>
+          <div class="big">1.248</div>
+          <div class="cap2">εικονικές εγγραφές από τις δοκιμές<br>(παραγγελίες, τιμολόγια, έξοδα, κινήσεις…)</div>
+        </div>
+        <div class="c-pan grn">
+          <div class="cap">✅ Κρατάμε</div>
+          <div class="big">Ο σκελετός</div>
+          <div class="cap2">συνταγές · υλικά · προμηθευτές · υπάλληλοι<br>· ρυθμίσεις · λογαριασμοί — άθικτα</div>
+        </div>
+      </div>
+
+      <details class="c-det">
+        <summary>Δες αναλυτικά τι ακριβώς φεύγει και τι μένει</summary>
+        <div class="c-body">
+          <div class="cols">
+            <div>
+              <h6 class="red-h">🗑️ Φεύγει οριστικά</h6>
+              <ul>
+                <li><span>Παραγγελίες &amp; ανάλωση υλικών (POS)</span><b>1.158</b></li>
+                <li><span>Πελάτες &amp; ιστορικά τους</span><b>54</b></li>
+                <li><span>Κινήσεις &amp; απογραφές αποθήκης</span><b>84</b></li>
+                <li><span>Τιμολόγια, OCR &amp; έξοδα</span><b>59</b></li>
+                <li><span>Ταμείο, τράπεζα &amp; e-food</span><b>62</b></li>
+                <li><span>Μισθός ιδιοκτήτη &amp; άδειες</span><b>9</b></li>
+                <li><span>Καταγραφές HACCP &amp; ιστορικά</span><b>151</b></li>
+              </ul>
+            </div>
+            <div>
+              <h6 class="grn-h">✅ Μένει άθικτο</h6>
+              <ul>
+                <li><span>Προμηθευτές &amp; πρότυπα τιμολογίων</span><b>✓</b></li>
+                <li><span>Κατάλογος υλικών &amp; αποθήκες</span><b>✓</b></li>
+                <li><span>Συνταγές, μεγέθη &amp; έξτρα</span><b>✓</b></li>
+                <li><span>Κατάλογος POS</span><b>✓</b></li>
+                <li><span>Υπάλληλοι &amp; ωράριο</span><b>✓</b></li>
+                <li><span>Κατηγορίες, αργίες &amp; συμμόρφωση</span><b>✓</b></li>
+                <li><span>Λογαριασμοί, 2FA &amp; ρυθμίσεις</span><b>✓</b></li>
+              </ul>
+            </div>
+          </div>
+          <div class="zero-note">♻️ <b>Μένουν αλλά μηδενίζονται:</b> οι ποσότητες αποθήκης (κιλά → 0) &amp; μερικοί μετρητές δοκιμών στις ρυθμίσεις.</div>
+        </div>
+      </details>
+
+      <div class="safety">🔐 <b>Τριπλή ασφάλεια:</b> κωδικός σύνδεσης · 6ψήφιος κωδικός email · αυτόματο <b>αντίγραφο ασφαλείας</b> πριν σβήσουμε (🛟 «δίχτυ» στα Αντίγραφα).</div>
+      <div class="actions"><button class="btn-danger">🧹 Μηδενισμός εικονικών δεδομένων</button></div>
+    </div>
+  </section>
+
+  <p class="foot">Δείγμα σχεδίασης — τα νούμερα είναι ενδεικτικά. Οι λίστες καλύπτουν και τα 79 είδη δεδομένων του συστήματος, ομαδοποιημένα σε απλά ελληνικά.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Προσφορές & Marketing — TAMAM Grill House</title>
+<style>
+:root{
+  --ink:#16202e; --navy:#1e2d3d; --navy-2:#26384c;
+  --gold:#f5c842; --amber:#f59e0b; --amber-dk:#d97706;
+  --ember:#e2603a;
+  --bg:#eef1f6; --surface:#ffffff; --surface-2:#f7f9fc;
+  --text:#1e293b; --muted:#64748b; --faint:#94a3b8;
+  --line:#e6e9ef; --line-2:#eef1f5;
+  --ok:#10b981; --ok-bg:#e7f8f0; --danger:#ef4444;
+  --r:14px; --r-sm:10px;
+  --sh-sm:0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.08);
+  --sh-md:0 6px 20px rgba(16,24,40,.10);
+  --sh-lg:0 18px 50px rgba(16,24,40,.16);
+  --font:"Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+
+/* brand band */
+.brandbar{background:linear-gradient(100deg,var(--ink),var(--navy) 55%,var(--navy-2));color:#fff;position:relative;overflow:hidden}
+.brandbar::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(600px 200px at 88% -40%,rgba(245,200,66,.22),transparent 60%),
+             radial-gradient(400px 160px at 10% 130%,rgba(226,96,58,.18),transparent 60%)}
+.brandbar .inner{max-width:1180px;margin:0 auto;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:relative;z-index:1}
+.logo{font-weight:800;letter-spacing:2px;font-size:19px}.logo b{color:var(--gold)}
+.chip-crumb{font-size:12.5px;color:#b9c6d6;display:flex;align-items:center;gap:8px}
+.chip-crumb .dot{width:5px;height:5px;border-radius:50%;background:var(--amber)}
+
+.wrap{max-width:1180px;margin:0 auto;padding:26px 22px 90px}
+
+/* hero */
+.hero{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:20px}
+.hero h1{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.05}
+.hero .eyebrow{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--amber-dk);margin-bottom:8px}
+.hero p{color:var(--muted);font-size:14.5px;margin-top:7px;max-width:48ch}
+.stats{display:flex;gap:10px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:11px 15px;box-shadow:var(--sh-sm);display:flex;align-items:center;gap:11px;min-width:132px}
+.stat .ic{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-size:17px}
+.stat.e .ic{background:#eef4ff;color:#2f6bd8}.stat.s .ic{background:#fdf1e6;color:var(--amber-dk)}
+.stat .n{font-size:20px;font-weight:800;line-height:1}.stat .l{font-size:11.5px;color:var(--muted);margin-top:2px}
+
+/* switch */
+.switch{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:5px;gap:4px;box-shadow:var(--sh-sm);margin-bottom:22px}
+.switch button{border:0;background:transparent;font:inherit;font-weight:700;font-size:13.5px;color:var(--muted);padding:9px 17px;border-radius:9px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:.18s;white-space:nowrap}
+.switch button .em{font-size:15px}.switch button:hover{color:var(--text)}
+.switch button.on{background:linear-gradient(180deg,var(--navy),var(--ink));color:#fff;box-shadow:0 4px 12px rgba(30,45,61,.28)}
+.switch button.on .badge{background:rgba(255,255,255,.18);color:#fff}
+.badge{background:var(--surface-2);color:var(--muted);font-size:11px;font-weight:800;padding:2px 8px;border-radius:20px}
+
+.pane{display:grid;grid-template-columns:1.15fr .85fr;gap:22px;align-items:start}
+.tabpanel{display:none;animation:fade .28s ease}.tabpanel.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh-sm)}
+.card .hd{padding:16px 20px;border-bottom:1px solid var(--line-2);display:flex;align-items:center;gap:11px}
+.card .hd .ic{width:34px;height:34px;border-radius:9px;background:var(--surface-2);display:grid;place-items:center;font-size:17px}
+.card .hd h3{font-size:15.5px;font-weight:800;letter-spacing:-.01em}
+.card .hd .sub{font-size:12px;color:var(--muted);margin-top:1px}
+.card .bd{padding:18px 20px}
+
+.field{margin-bottom:16px}.field:last-child{margin-bottom:0}
+.field label{display:block;font-size:12.5px;font-weight:700;color:#42506a;margin-bottom:7px}
+.field label .hint{font-weight:500;color:var(--faint)}
+.control{width:100%;font:inherit;font-size:14px;color:var(--text);background:var(--surface);border:1.5px solid var(--line);border-radius:var(--r-sm);padding:11px 13px;transition:.16s;outline:none}
+.control:focus{border-color:var(--amber);box-shadow:0 0 0 4px rgba(245,158,11,.14)}
+textarea.control{min-height:132px;resize:vertical;line-height:1.55}
+
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+.chip{border:1px solid var(--line);background:var(--surface-2);color:#3f4b63;font-size:12px;font-weight:600;padding:6px 11px;border-radius:20px;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:6px}
+.chip:hover{border-color:var(--amber);color:var(--amber-dk);background:#fff}
+.chip .k{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:11px;color:var(--amber-dk)}
+.chips-label{font-size:11.5px;font-weight:700;color:var(--faint);letter-spacing:.04em;text-transform:uppercase;margin:2px 0 8px}
+
+.meter{display:flex;gap:10px;margin-top:12px}
+.meter .m{flex:1;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-sm);padding:11px 13px;text-align:center}
+.meter .m .v{font-size:19px;font-weight:800;letter-spacing:-.02em}.meter .m .k{font-size:11px;color:var(--muted);margin-top:2px}
+.meter .m.cost .v{color:var(--amber-dk)}
+.warnline{font-size:12px;color:var(--amber-dk);background:#fff8ec;border:1px solid #f6e4bf;border-radius:var(--r-sm);padding:9px 12px;margin-top:12px;display:flex;gap:8px}
+
+/* preview */
+.preview{position:sticky;top:18px}
+.preview .frame-hd{display:flex;align-items:center;gap:8px;margin:0 2px 12px;font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+.preview .frame-hd .ln{flex:1;height:1px;background:var(--line)}
+.mail{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh-md)}
+.mail .bar{background:var(--surface-2);border-bottom:1px solid var(--line);padding:11px 15px;display:flex;align-items:center;gap:10px}
+.mail .bar .av{width:30px;height:30px;border-radius:50%;background:var(--navy);color:var(--gold);font-weight:800;display:grid;place-items:center;font-size:12px}
+.mail .bar .meta{font-size:11.5px;line-height:1.35}.mail .bar .meta b{font-size:12.5px}.mail .bar .meta span{color:var(--muted)}
+.mail .subj{padding:14px 18px 4px;font-size:15px;font-weight:800;letter-spacing:-.01em}
+.mail-body{padding:6px 18px 18px}
+.mail-hero{background:linear-gradient(120deg,var(--ink),var(--navy));border-radius:12px;padding:20px;text-align:center;position:relative;overflow:hidden}
+.mail-hero::after{content:"";position:absolute;inset:0;background:radial-gradient(300px 120px at 80% -30%,rgba(245,200,66,.25),transparent 60%)}
+.mail-hero .m{font-weight:800;letter-spacing:2px;color:#fff;font-size:18px;position:relative}.mail-hero .m b{color:var(--gold)}
+.mail-txt{font-size:13.5px;line-height:1.6;color:#33405a;padding:16px 4px 4px;white-space:pre-wrap}
+.mail-foot{border-top:1px solid var(--line-2);margin-top:12px;padding-top:11px;font-size:10.5px;color:var(--faint);line-height:1.6}.mail-foot a{color:var(--amber-dk);font-weight:700}
+.phone{max-width:290px;margin:0 auto;background:var(--ink);border-radius:34px;padding:12px;box-shadow:var(--sh-lg)}
+.phone .scr{background:#0f1622;border-radius:24px;overflow:hidden;min-height:380px;display:flex;flex-direction:column}
+.phone .top{padding:14px 16px 10px;text-align:center;border-bottom:1px solid rgba(255,255,255,.06)}
+.phone .top .nm{color:#fff;font-weight:700;font-size:13px}.phone .top .sub{color:#6b7787;font-size:10.5px;margin-top:1px}
+.phone .msgs{padding:16px 14px;flex:1;display:flex;flex-direction:column;gap:8px;background:linear-gradient(180deg,#0f1622,#131c2b)}
+.bubble{align-self:flex-start;max-width:82%;background:#e9edf3;color:#1c2530;font-size:13px;line-height:1.45;padding:10px 13px;border-radius:16px 16px 16px 5px;white-space:pre-wrap;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.bubble.empty{color:#8a94a3;font-style:italic}
+.stamp{align-self:flex-start;font-size:10px;color:#5c6675;margin:-3px 0 4px 4px}
+
+/* ── recipients picker ── */
+.recip{margin-top:22px}
+.recip .hd{justify-content:space-between}
+.recip .hd .cnt{font-size:13px;color:var(--muted);font-weight:600}
+.recip .hd .cnt b{color:var(--amber-dk);font-weight:800}
+.recip-tools{display:flex;gap:10px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line-2);flex-wrap:wrap}
+.search{flex:1;min-width:180px;position:relative}
+.search input{width:100%;font:inherit;font-size:13.5px;border:1.5px solid var(--line);border-radius:var(--r-sm);padding:9px 12px 9px 34px;outline:none}
+.search input:focus{border-color:var(--amber);box-shadow:0 0 0 4px rgba(245,158,11,.12)}
+.search .mag{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--faint);font-size:14px}
+.tool-btn{font:inherit;font-weight:700;font-size:12.5px;border:1.5px solid var(--line);background:var(--surface);color:#3f4b63;border-radius:var(--r-sm);padding:8px 13px;cursor:pointer;transition:.15s;white-space:nowrap}
+.tool-btn:hover{border-color:var(--amber);color:var(--amber-dk)}
+.recip-list{max-height:340px;overflow-y:auto}
+.rcp-row{display:flex;align-items:center;gap:13px;padding:11px 20px;border-bottom:1px solid var(--line-2);cursor:pointer;transition:.12s}
+.rcp-row:hover{background:var(--surface-2)}
+.rcp-row:last-child{border-bottom:0}
+.rcp-row.off{opacity:.5}
+.rcp-cb{width:22px;height:22px;border-radius:7px;border:2px solid #cdd5e0;flex-shrink:0;display:grid;place-items:center;transition:.15s;color:#fff;font-size:13px;font-weight:800}
+.rcp-row.on .rcp-cb{background:var(--ok);border-color:var(--ok)}
+.rcp-av{width:38px;height:38px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;color:#fff;font-weight:800;font-size:14px}
+.rcp-info{flex:1;min-width:0}
+.rcp-info .nm{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rcp-info .sub{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rcp-ch{display:flex;gap:5px;flex-shrink:0}
+.pill{font-size:10.5px;font-weight:800;padding:3px 8px;border-radius:20px}
+.pill.e{background:#eef4ff;color:#2f6bd8}.pill.s{background:#fdf1e6;color:var(--amber-dk)}
+.rcp-empty{padding:30px 20px;text-align:center;color:var(--faint);font-size:13.5px}
+.optline{font-size:12px;background:#f0faf3;border:1px solid #cdeed8;color:#1e6b3a;border-radius:var(--r-sm);padding:9px 12px;margin-top:12px;display:flex;gap:8px;line-height:1.5}
+.optline b{font-weight:800}
+
+/* send bar */
+.sendbar{display:flex;align-items:center;gap:13px;padding:15px 20px;border-top:1px solid var(--line-2);background:var(--surface-2);border-radius:0 0 var(--r) var(--r);flex-wrap:wrap}
+.sendbar .selinfo{font-size:13.5px;color:var(--muted)}
+.sendbar .selinfo b{color:var(--text);font-weight:800;font-size:15px}
+.sendbar .spacer{flex:1}
+.btn{font:inherit;font-weight:700;font-size:14px;border-radius:var(--r-sm);padding:12px 20px;cursor:pointer;border:1.5px solid transparent;display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:46px;transition:.16s}
+.btn-primary{background:linear-gradient(180deg,var(--amber),var(--amber-dk));color:#fff;box-shadow:0 6px 16px rgba(217,119,6,.28)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 9px 22px rgba(217,119,6,.34)}
+.btn-ghost{background:var(--surface);border-color:var(--line);color:#3f4b63}
+.btn-ghost:hover{border-color:var(--faint);background:#fff}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+
+/* birthday */
+.bday-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.toggle{display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none}
+.toggle input{display:none}
+.track{width:46px;height:27px;border-radius:20px;background:#d7dde6;position:relative;transition:.2s;flex-shrink:0}
+.track::after{content:"";position:absolute;top:3px;left:3px;width:21px;height:21px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:.2s}
+.toggle input:checked + .track{background:var(--ok)}
+.toggle input:checked + .track::after{transform:translateX(19px)}
+.toggle .lab b{font-size:14px}.toggle .lab span{display:block;font-size:12px;color:var(--muted)}
+.mini{display:flex;gap:12px;margin-top:14px}.mini .field{flex:1;margin:0}
+.note{font-size:12.5px;color:var(--muted);background:var(--surface-2);border:1px dashed var(--line);border-radius:var(--r-sm);padding:11px 13px;line-height:1.55}
+
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(30px);background:var(--ink);color:#fff;padding:14px 20px;border-radius:13px;box-shadow:var(--sh-lg);font-size:14px;font-weight:600;display:flex;align-items:center;gap:11px;opacity:0;pointer-events:none;transition:.3s;z-index:50;max-width:90vw}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast .tk{width:26px;height:26px;border-radius:50%;background:var(--ok);display:grid;place-items:center;font-size:14px;flex-shrink:0}
+
+@media (max-width:900px){
+  .pane{grid-template-columns:1fr}.preview{position:static;order:-1}
+  .bday-grid{grid-template-columns:1fr}.hero h1{font-size:25px}.stats{width:100%}.stat{flex:1}
+}
+</style>
+</head>
+<body>
+
+<div class="brandbar"><div class="inner">
+  <div class="logo">TA<b>M</b>AM · Grill House</div>
+  <div class="chip-crumb"><span class="dot"></span> Πελάτες <span class="dot"></span> Προσφορές & Marketing</div>
+</div></div>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div>
+      <div class="eyebrow">Καμπάνια προσφορών</div>
+      <h1>Γράψε, διάλεξε, στείλε.</h1>
+      <p>Δες ποιοι θα λάβουν το μήνυμα και ξε-τσέκαρε όποιον δεν θέλεις — μόνο γι' αυτή την προσφορά. Η λίστα δείχνει μόνο όσους έχουν πει «ναι».</p>
+    </div>
+    <div class="stats">
+      <div class="stat e"><div class="ic">✉️</div><div><div class="n">34</div><div class="l">δέχονται email</div></div></div>
+      <div class="stat s"><div class="ic">📱</div><div><div class="n">28</div><div class="l">δέχονται SMS</div></div></div>
+    </div>
+  </div>
+
+  <div class="switch" role="tablist">
+    <button class="on" data-tab="email"><span class="em">✉️</span> Email <span class="badge">34</span></button>
+    <button data-tab="sms"><span class="em">📱</span> SMS <span class="badge">28</span></button>
+    <button data-tab="bday"><span class="em">🎂</span> Γενέθλια <span class="badge">αυτόματα</span></button>
+  </div>
+
+  <!-- ══ EMAIL ══ -->
+  <section class="tabpanel on" id="tab-email">
+    <div class="pane">
+      <div class="card">
+        <div class="hd"><div class="ic">✍️</div><div><h3>Σύνθεση email προσφοράς</h3><div class="sub">Γράψε ό,τι θέλεις — αλλάζεις το κείμενο όποτε θες.</div></div></div>
+        <div class="bd">
+          <div class="field"><label>Θέμα</label><input class="control" id="e-subj" value="Σαββατοκύριακο -20% σε όλα τα σουβλάκια! 🔥"></div>
+          <div class="field">
+            <label>Κείμενο <span class="hint">— πάτα «Όνομα πελάτη» για προσωποποίηση</span></label>
+            <textarea class="control" id="e-body">Γεια σου {name}! 🎉
+
+Αυτό το Σαββατοκύριακο έχουμε -20% σε όλα τα σουβλάκια & τις μερίδες γύρου.
+
+Σε περιμένουμε στο TAMAM — φέρε και παρέα!</textarea>
+            <div class="chips"><span class="chip" data-ins="e-body" data-tok="{name}"><span class="k">{name}</span> Όνομα πελάτη</span></div>
+            <div class="optline">✓ Στο τέλος του email μπαίνει <b>αυτόματα</b> σύνδεσμος «Σταμάτα τις προσφορές» — υποχρεωτικό από τον νόμο.</div>
+            <div class="chips-label" style="margin-top:14px">Έτοιμα μηνύματα</div>
+            <div class="chips" id="e-templates">
+              <span class="chip">🔥 Σαββατοκύριακο -20%</span>
+              <span class="chip">🆕 Νέο πιάτο στο μενού</span>
+              <span class="chip">🎁 Δώρο στην επόμενη παραγγελία</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="preview">
+        <div class="frame-hd">Ζωντανή προεπισκόπηση <span class="ln"></span> έτσι θα το δει ο πελάτης</div>
+        <div class="mail">
+          <div class="bar"><div class="av">T<span style="color:#f5c842">M</span></div><div class="meta"><b>TAMAM Grill House</b><br><span>προς Νίκο · τώρα</span></div></div>
+          <div class="subj" id="pv-subj">—</div>
+          <div class="mail-body">
+            <div class="mail-hero"><div class="m">TA<b>M</b>AM</div></div>
+            <div class="mail-txt" id="pv-body">—</div>
+            <div class="mail-foot">Λαμβάνεις αυτό το email γιατί δέχτηκες προσφορές από το TAMAM.<br><a href="#">Σταμάτα τις προσφορές / προτιμήσεις</a><br>Υπεύθυνος: TAMAM Grill House · ΑΦΜ ••••••••• · tamam@example.gr</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- recipients -->
+    <div class="card recip">
+      <div class="hd"><div style="display:flex;align-items:center;gap:11px"><div class="ic">👥</div><div><h3>Ποιοι θα λάβουν το email</h3><div class="sub">Ξε-τσέκαρε όποιον δεν θέλεις — μόνο γι' αυτό το μήνυμα.</div></div></div><div class="cnt"><b id="e-sel">0</b> από <span id="e-tot">0</span> επιλεγμένοι</div></div>
+      <div class="recip-tools">
+        <div class="search"><span class="mag">🔍</span><input id="e-search" placeholder="Αναζήτηση με όνομα…"></div>
+        <button class="tool-btn" data-all="email">Όλοι</button>
+        <button class="tool-btn" data-none="email">Κανένας</button>
+      </div>
+      <div class="recip-list" id="e-list"></div>
+      <div class="sendbar">
+        <div class="selinfo">Επιλεγμένοι: <b id="e-sel2">0</b> πελάτες</div>
+        <div class="spacer"></div>
+        <button class="btn btn-ghost" onclick="toast('📨 Δοκιμαστικό στάλθηκε στο δικό σου email')">📨 Δοκιμή σε μένα</button>
+        <button class="btn btn-primary" id="e-send" onclick="send('email')">Αποστολή σε 0 →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SMS ══ -->
+  <section class="tabpanel" id="tab-sms">
+    <div class="pane">
+      <div class="card">
+        <div class="hd"><div class="ic">💬</div><div><h3>Σύνθεση SMS προσφοράς</h3><div class="sub">Σύντομο μήνυμα. Τα ελληνικά χωράνε ~70 χαρακτήρες ανά κομμάτι.</div></div></div>
+        <div class="bd">
+          <div class="field">
+            <label>Κείμενο SMS <span class="hint">— πάτα «Όνομα πελάτη» για προσωποποίηση</span></label>
+            <textarea class="control" id="s-body">TAMAM: {name}, το Σ/Κ -20% σε ολα τα σουβλακια! Σε περιμενουμε 🔥</textarea>
+            <div class="chips"><span class="chip" data-ins="s-body" data-tok="{name}"><span class="k">{name}</span> Όνομα πελάτη</span></div>
+            <div class="meter">
+              <div class="m"><div class="v" id="s-chars">0</div><div class="k">χαρακτήρες</div></div>
+              <div class="m"><div class="v" id="s-seg">0</div><div class="k">κομμάτια</div></div>
+              <div class="m cost"><div class="v" id="s-cost">0,00 €</div><div class="k">εκτίμηση</div></div>
+            </div>
+            <div class="warnline" id="s-warn" style="display:none">⚠️ <span></span></div>
+            <div class="optline">✓ Στο τέλος κάθε SMS μπαίνει <b>αυτόματα</b> σύνδεσμος διαγραφής «Διαγραφη: tamam.gr/stop» (με ένα κλικ, όχι απάντηση «ΣΤΟΠ») — υποχρεωτικό. Μετριέται στα κομμάτια/κόστος.</div>
+          </div>
+        </div>
+      </div>
+      <div class="preview">
+        <div class="frame-hd">Ζωντανή προεπισκόπηση <span class="ln"></span> στο κινητό του πελάτη</div>
+        <div class="phone"><div class="scr">
+          <div class="top"><div class="nm">TAMAM</div><div class="sub">Μήνυμα κειμένου · τώρα</div></div>
+          <div class="msgs"><div class="bubble" id="pv-sms">—</div><div class="stamp">Παραδόθηκε</div></div>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="card recip">
+      <div class="hd"><div style="display:flex;align-items:center;gap:11px"><div class="ic">👥</div><div><h3>Ποιοι θα λάβουν το SMS</h3><div class="sub">Ξε-τσέκαρε όποιον δεν θέλεις — μόνο γι' αυτό το μήνυμα.</div></div></div><div class="cnt"><b id="s-sel">0</b> από <span id="s-tot">0</span> επιλεγμένοι</div></div>
+      <div class="recip-tools">
+        <div class="search"><span class="mag">🔍</span><input id="s-search" placeholder="Αναζήτηση με όνομα…"></div>
+        <button class="tool-btn" data-all="sms">Όλοι</button>
+        <button class="tool-btn" data-none="sms">Κανένας</button>
+      </div>
+      <div class="recip-list" id="s-list"></div>
+      <div class="sendbar">
+        <div class="selinfo">Επιλεγμένοι: <b id="s-sel2">0</b> πελάτες</div>
+        <div class="spacer"></div>
+        <button class="btn btn-ghost" onclick="toast('📲 Δοκιμαστικό SMS στάλθηκε στο κινητό σου')">📲 Δοκιμή σε μένα</button>
+        <button class="btn btn-primary" id="s-send" onclick="send('sms')">Αποστολή SMS σε 0 →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ BIRTHDAY ══ -->
+  <section class="tabpanel" id="tab-bday">
+    <div class="card" style="margin-bottom:18px"><div class="hd"><div class="ic">🎂</div><div><h3>Αυτόματες ευχές γενεθλίων</h3><div class="sub">Γράφεις μία φορά — στέλνεται μόνο του το πρωί των γενεθλίων. Το κλείνεις όποτε θες.</div></div></div></div>
+    <div class="bday-grid">
+      <div class="card"><div class="hd"><div class="ic">✉️</div><div><h3>Email γενεθλίων</h3></div></div>
+        <div class="bd">
+          <label class="toggle" style="margin-bottom:16px"><input type="checkbox" checked><span class="track"></span><span class="lab"><b>Ενεργό</b><span>στέλνεται αυτόματα</span></span></label>
+          <div class="mini"><div class="field"><label>Ώρα</label><input class="control" value="09:00"></div><div class="field"><label>Αποστολέας</label><input class="control" value="TAMAM Grill House"></div></div>
+          <div class="field"><label>Θέμα</label><input class="control" value="🎂 Χρόνια πολλά από το TAMAM!"></div>
+          <div class="field"><label>Κείμενο</label><textarea class="control" style="min-height:96px">Γεια σου {name}! 🎉 Όλη η ομάδα του TAMAM σου εύχεται χρόνια πολλά! Πέρνα σήμερα να σε κεράσουμε. 🥳</textarea></div>
+          <button class="btn btn-primary" style="width:100%" onclick="toast('✅ Αποθηκεύτηκε')">Αποθήκευση</button>
+        </div>
+      </div>
+      <div class="card"><div class="hd"><div class="ic">📱</div><div><h3>SMS γενεθλίων</h3></div></div>
+        <div class="bd">
+          <label class="toggle" style="margin-bottom:16px"><input type="checkbox"><span class="track"></span><span class="lab"><b>Ενεργό</b><span>μαζί με το email</span></span></label>
+          <div class="field"><label>Κείμενο SMS</label><textarea class="control" style="min-height:96px" id="bs-body">Χρονια πολλα {name} απο το TAMAM! 🎂 Περνα σημερα να σε κερασουμε.</textarea><div class="meter"><div class="m"><div class="v" id="bs-seg">1</div><div class="k">κομμάτια</div></div></div></div>
+          <div class="note" style="margin-bottom:16px">📱 Χρειάζεται ρυθμισμένος πάροχος SMS (Ρυθμίσεις → SMS προσφορών).</div>
+          <button class="btn btn-primary" style="width:100%" onclick="toast('✅ Αποθηκεύτηκε')">Αποθήκευση</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card recip">
+      <div class="hd"><div style="display:flex;align-items:center;gap:11px"><div class="ic">👥</div><div><h3>Ποιοι λαμβάνουν ευχές γενεθλίων</h3><div class="sub">Ξε-τσέκαρε όποιον δεν θέλεις — ισχύει <b>μόνιμα</b> για τις αυτόματες ευχές (email & SMS).</div></div></div><div class="cnt"><b id="b-sel">0</b> από <span id="b-tot">0</span> επιλεγμένοι</div></div>
+      <div class="recip-tools">
+        <div class="search"><span class="mag">🔍</span><input id="b-search" placeholder="Αναζήτηση με όνομα…"></div>
+        <button class="tool-btn" data-all="bday">Όλοι</button>
+        <button class="tool-btn" data-none="bday">Κανένας</button>
+      </div>
+      <div class="recip-list" id="b-list"></div>
+      <div class="sendbar">
+        <div class="selinfo">Λαμβάνουν ευχές: <b id="b-sel2">0</b> πελάτες</div>
+        <div class="spacer"></div>
+        <button class="btn btn-primary" id="b-send" onclick="toast('✅ Αποθηκεύτηκε — ποιοι λαμβάνουν ευχές')">💾 Αποθήκευση επιλογής</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="toast" id="toast"><span class="tk">✓</span> <span id="toast-msg"></span></div>
+
+<script>
+// ── sample customers (ΔΕΙΓΜΑ) ──
+var AV=['#2f6bd8','#e2603a','#10b981','#8b5cf6','#d97706','#0ea5e9','#ec4899','#14b8a6','#f43f5e','#6366f1','#84cc16','#f59e0b'];
+var CUST=[
+ {n:'Νίκος Παπαδόπουλος',e:1,s:1},{n:'Μαρία Ιωάννου',e:1,s:1},{n:'Γιώργος Κ.',e:1,s:0},
+ {n:'Ελένη Δημητρίου',e:1,s:1},{n:'Δημήτρης Α.',e:0,s:1},{n:'Σοφία Μαυρίδου',e:1,s:1},
+ {n:'Κώστας Βλάχος',e:1,s:0},{n:'Άννα Τσιώλη',e:1,s:1},{n:'Θανάσης Ρίζος',e:1,s:1},
+ {n:'Βασιλική Λαμπρου',e:1,s:0},{n:'Παναγιώτης Σ.',e:0,s:1},{n:'Χριστίνα Νάκου',e:1,s:1}
+].map(function(c,i){return{id:i,n:c.n,e:!!c.e,s:!!c.s,sel:{email:true,sms:true,bday:true},
+   contact:{email:(c.n.split(' ')[0].toLowerCase()+'@example.gr'),sms:'69'+String(70000000+i*111111)}};});
+
+function initial(n){return n.trim()[0]||'?';}
+function grNorm(x){return (x||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/ς/g,'σ');}
+
+// κανάλια: ίδια μηχανή λίστας για email / sms / γενέθλια
+var CH={
+  email:{pool:function(c){return c.e;}, contact:function(c){return c.contact.email;}, label:function(n){return 'Αποστολή σε '+n+' →';}, lockZero:true},
+  sms:{pool:function(c){return c.s;}, contact:function(c){return c.contact.sms;}, label:function(n){return 'Αποστολή SMS σε '+n+' →';}, lockZero:true},
+  bday:{pool:function(c){return true;}, contact:function(c){return c.contact.email+' · '+c.contact.sms;}, label:function(n){return '💾 Αποθήκευση επιλογής';}, lockZero:false}
+};
+function render(ch){
+  var cf=CH[ch];var pool=CUST.filter(cf.pool);
+  var q=grNorm(document.getElementById(ch[0]+'-search').value);
+  var host=document.getElementById(ch[0]+'-list');host.innerHTML='';
+  var shown=pool.filter(function(c){return !q||grNorm(c.n).includes(q);});
+  if(!shown.length){host.innerHTML='<div class="rcp-empty">Κανένας πελάτης δεν ταιριάζει.</div>';}
+  shown.forEach(function(c){
+    var on=c.sel[ch];
+    var row=document.createElement('div');row.className='rcp-row'+(on?' on':' off');
+    row.innerHTML='<div class="rcp-cb">'+(on?'✓':'')+'</div>'+
+      '<div class="rcp-av" style="background:'+AV[c.id%AV.length]+'">'+initial(c.n)+'</div>'+
+      '<div class="rcp-info"><div class="nm">'+c.n+'</div><div class="sub">'+cf.contact(c)+'</div></div>'+
+      '<div class="rcp-ch">'+(c.e?'<span class="pill e">✉</span>':'')+(c.s?'<span class="pill s">📱</span>':'')+'</div>';
+    row.addEventListener('click',function(){c.sel[ch]=!c.sel[ch];render(ch);updCount(ch);});
+    host.appendChild(row);
+  });
+}
+function updCount(ch){
+  var cf=CH[ch];var pool=CUST.filter(cf.pool);
+  var sel=pool.filter(function(c){return c.sel[ch];}).length;
+  document.getElementById(ch[0]+'-sel').textContent=sel;
+  document.getElementById(ch[0]+'-sel2').textContent=sel;
+  document.getElementById(ch[0]+'-tot').textContent=pool.length;
+  var btn=document.getElementById(ch[0]+'-send');
+  btn.textContent=cf.label(sel);
+  btn.disabled=cf.lockZero&&sel===0;
+  if(ch==='sms')upSms();
+}
+['email','sms','bday'].forEach(function(ch){
+  document.getElementById(ch[0]+'-search').addEventListener('input',function(){render(ch);});
+  document.querySelector('[data-all="'+ch+'"]').addEventListener('click',function(){CUST.forEach(function(c){if(CH[ch].pool(c))c.sel[ch]=true;});render(ch);updCount(ch);});
+  document.querySelector('[data-none="'+ch+'"]').addEventListener('click',function(){CUST.forEach(function(c){c.sel[ch]=false;});render(ch);updCount(ch);});
+});
+function send(ch){var pool=CUST.filter(CH[ch].pool);var n=pool.filter(function(c){return c.sel[ch];}).length;
+  toast('✅ '+(ch==='email'?'Η προσφορά στάλθηκε με email σε ':'Το SMS στάλθηκε σε ')+n+' πελάτες');}
+
+// ── tabs ──
+document.querySelectorAll('.switch button').forEach(function(b){b.addEventListener('click',function(){
+  document.querySelectorAll('.switch button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  document.querySelectorAll('.tabpanel').forEach(p=>p.classList.remove('on'));
+  document.getElementById('tab-'+b.dataset.tab).classList.add('on');});});
+
+// ── token insert ──
+document.querySelectorAll('.chip[data-ins]').forEach(function(c){c.addEventListener('click',function(){
+  var ta=document.getElementById(c.dataset.ins);var s=ta.selectionStart||ta.value.length;
+  ta.value=ta.value.slice(0,s)+c.dataset.tok+ta.value.slice(ta.selectionEnd||s);
+  ta.dispatchEvent(new Event('input'));ta.focus();});});
+
+// ── email templates ──
+var eTpl=[{s:'Σαββατοκύριακο -20% σε όλα τα σουβλάκια! 🔥',b:'Γεια σου {name}! 🎉\n\nΑυτό το Σαββατοκύριακο έχουμε -20% σε όλα τα σουβλάκια & τις μερίδες γύρου.\n\nΣε περιμένουμε στο TAMAM — φέρε και παρέα!'},
+  {s:'Νέο πιάτο στο μενού μας! 😋',b:'Γεια σου {name}!\n\nΦτιάξαμε κάτι νέο και θέλουμε να το δοκιμάσεις πρώτος. Πέρνα από το TAMAM να μας πεις γνώμη!'},
+  {s:'Ένα δώρο για σένα 🎁',b:'Γεια σου {name}!\n\nΣτην επόμενη παραγγελία σου έχουμε μια έκπτωση-έκπληξη. Πες μας το όνομά σου στο ταμείο!'}];
+document.querySelectorAll('#e-templates .chip').forEach(function(c,i){c.addEventListener('click',function(){
+  document.getElementById('e-subj').value=eTpl[i].s;var b=document.getElementById('e-body');b.value=eTpl[i].b;
+  b.dispatchEvent(new Event('input'));document.getElementById('e-subj').dispatchEvent(new Event('input'));});});
+
+// ── email preview ──
+function upEmail(){var s=document.getElementById('e-subj').value.trim();
+  var b=document.getElementById('e-body').value.replace(/\{name\}/g,'Νίκο');
+  document.getElementById('pv-subj').textContent=s||'(χωρίς θέμα)';
+  document.getElementById('pv-body').textContent=b||'(γράψε το μήνυμα…)';}
+document.getElementById('e-subj').addEventListener('input',upEmail);
+document.getElementById('e-body').addEventListener('input',upEmail);
+
+// ── sms ──
+function isUni(t){return /[^\x00-\x7F]/.test(t);}
+function segs(t){if(!t)return 0;var p1=isUni(t)?70:160,pn=isUni(t)?67:153;return t.length<=p1?1:Math.ceil(t.length/pn);}
+function eur(v){return v.toFixed(2).replace('.',',')+' €';}
+var OPTOUT_SMS='\nΔιαγραφη: tamam.gr/stop';   // υποχρεωτικό opt-out — μπαίνει αυτόματα σε κάθε SMS
+function upSms(){var t=document.getElementById('s-body').value;var pv=t.replace(/\{name\}/g,'Νίκο');
+  var full=pv?(pv+OPTOUT_SMS):'';var n=segs(full);
+  var sel=CUST.filter(function(c){return c.s&&c.sel.sms;}).length;
+  document.getElementById('s-chars').textContent=full.length;document.getElementById('s-seg').textContent=n;
+  document.getElementById('s-cost').textContent=eur(n*sel*0.05);
+  var bub=document.getElementById('pv-sms');bub.textContent=full||'(γράψε το μήνυμα…)';bub.classList.toggle('empty',!full);
+  var w=document.getElementById('s-warn');
+  if(n>=2){w.style.display='flex';w.querySelector('span').textContent='Το μήνυμα (μαζί με τη γραμμή διαγραφής) πιάνει '+n+' κομμάτια — κάθε πελάτης χρεώνεται '+n+'×. Κόψε το πιο σύντομο για οικονομία.';}else{w.style.display='none';}}
+document.getElementById('s-body').addEventListener('input',upSms);
+var bs=document.getElementById('bs-body');if(bs){bs.addEventListener('input',function(){document.getElementById('bs-seg').textContent=segs(bs.value.replace(/\{name\}/g,'Νίκο')+OPTOUT_SMS);});}
+
+var tT;function toast(msg){var t=document.getElementById('toast');document.getElementById('toast-msg').textContent=msg;
+  t.classList.add('show');clearTimeout(tT);tT=setTimeout(()=>t.classList.remove('show'),2600);}
+
+// init
+render('email');updCount('email');render('sms');updCount('sms');render('bday');updCount('bday');upEmail();upSms();bs&&bs.dispatchEvent(new Event('input'));
+</script>
+</body>
+</html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Αυτόματη αποθήκευση — πρόχειρο φόρμας — TAMAM Grill House</title>
+<style>
+:root{
+  --sidebar-bg:#1e2d3d; --accent:#f59e0b; --accent-dark:#d97706; --accent-text:#9c6406;
+  --content-bg:#f1f5f9; --white:#fff; --text:#1e293b; --text-muted:#5d6b7f;
+  --danger:#ef4444; --danger-text:#b91c1c; --success:#10b981; --success-text:#15803d;
+  --border:#e2e8f0; --shadow-sm:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 30px rgba(15,23,42,.18);
+  --read-max:900px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--content-bg);color:var(--text);
+  font-family:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55}
+.wrap{max-width:1180px;margin:0 auto;padding:32px 24px 80px}
+h1{font-size:28px;margin:0 0 6px}
+.sub{color:var(--text-muted);max-width:var(--read-max);margin:0 0 28px}
+h2{font-size:20px;margin:44px 0 4px;padding-top:22px;border-top:2px solid var(--border)}
+h2:first-of-type{border-top:0;padding-top:0}
+.h2sub{color:var(--text-muted);margin:0 0 18px;max-width:var(--read-max)}
+.opt{background:var(--white);border:1px solid var(--border);border-radius:14px;
+  box-shadow:var(--shadow-sm);margin:0 0 20px;overflow:hidden}
+.opt-h{display:flex;align-items:center;gap:10px;padding:12px 18px;border-bottom:1px solid var(--border);
+  background:#f8fafc}
+.tag{background:var(--sidebar-bg);color:#fff;font-weight:800;font-size:13px;
+  padding:3px 11px;border-radius:999px;letter-spacing:.4px}
+.opt-t{font-weight:800;font-size:16px}
+.opt-n{color:var(--text-muted);font-size:14px;margin-left:auto;text-align:right;max-width:46%}
+.stage{padding:26px 18px;background:
+  repeating-linear-gradient(45deg,#f8fafc,#f8fafc 12px,#f4f7fb 12px,#f4f7fb 24px);
+  position:relative;min-height:150px}
+.verdict{padding:12px 18px;border-top:1px solid var(--border);font-size:14px;display:flex;gap:22px;flex-wrap:wrap}
+.pro,.con{display:flex;gap:7px;align-items:flex-start;max-width:460px}
+.pro b{color:var(--success-text)} .con b{color:var(--danger-text)}
+
+/* ── κουμπιά (ίδια με την εφαρμογή) ───────────────────────────── */
+.btn{min-height:44px;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:0 20px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;
+  border:1px solid transparent;font-family:inherit}
+.btn-primary{background:var(--accent);color:var(--text);border-color:var(--accent-dark)}
+.btn-secondary{background:#fff;color:var(--text);border-color:var(--border)}
+.btn-danger{background:#fff;color:var(--danger-text);border-color:#fecaca}
+
+/* ── Α: παράθυρο ──────────────────────────────────────────────── */
+.modal{background:#fff;border-radius:16px;box-shadow:var(--shadow-lg);max-width:520px;margin:0 auto;
+  overflow:hidden;border:1px solid var(--border)}
+.modal-top{padding:22px 26px 0;text-align:center}
+.modal-ic{font-size:38px;line-height:1}
+.modal-t{font-size:19px;font-weight:800;margin:10px 0 6px}
+.modal-b{color:var(--text-muted);font-size:15px;padding:0 26px 4px;text-align:center}
+.recap{margin:16px 26px 0;background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;
+  padding:12px 14px;text-align:left}
+.recap-r{display:flex;justify-content:space-between;font-size:14px;padding:3px 0}
+.recap-r b{font-variant-numeric:tabular-nums}
+.modal-acts{display:flex;gap:10px;padding:20px 26px 24px}
+.modal-acts .btn{flex:1}
+
+/* ── Β: λωρίδα ────────────────────────────────────────────────── */
+.strip{background:#fff7ed;border:1px solid #fed7aa;border-left:5px solid var(--accent);
+  border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.strip-tx{flex:1;min-width:240px}
+.strip-t{font-weight:800;margin-bottom:2px}
+.strip-s{color:var(--text-muted);font-size:14px}
+.strip .btn{min-height:38px;padding:0 15px;font-size:14px}
+.ghostform{margin-top:16px;opacity:.45;pointer-events:none}
+
+/* ── Γ: κάρτα-πύλη ────────────────────────────────────────────── */
+.gate{background:#fff;border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow-sm);
+  max-width:620px;margin:0 auto;padding:26px}
+.gate-h{display:flex;align-items:center;gap:12px;margin-bottom:4px}
+.gate-h .ic{font-size:28px}
+.gate-t{font-weight:800;font-size:18px}
+.gate-s{color:var(--text-muted);font-size:14px;margin:0 0 18px}
+.gate-choice{display:grid;gap:12px}
+.choice{display:flex;align-items:center;gap:14px;border:2px solid var(--border);border-radius:12px;
+  padding:14px 16px;cursor:pointer;background:#fff;text-align:left;font-family:inherit;width:100%}
+.choice:hover{border-color:var(--accent)}
+.choice.rec{border-color:var(--accent);background:#fffbf5}
+.choice .ic{font-size:24px;flex-shrink:0}
+.choice .t{font-weight:800;font-size:15px}
+.choice .d{color:var(--text-muted);font-size:13.5px}
+
+/* ── ενδείξεις αποθήκευσης ────────────────────────────────────── */
+.formbar{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--border);
+  border-radius:12px;padding:14px 18px;box-shadow:var(--shadow-sm)}
+.formbar .ttl{font-weight:800;font-size:16px}
+.formbar .sp{margin-left:auto}
+.sv{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:700;
+  padding:5px 12px;border-radius:999px;white-space:nowrap}
+.sv-ok{background:#f0fdf4;color:var(--success-text);border:1px solid #bbf7d0}
+.sv-go{background:#fff7ed;color:var(--accent-text);border:1px solid #fed7aa}
+.sv-plain{color:var(--text-muted);font-size:13.5px;font-weight:600}
+.dot{width:8px;height:8px;border-radius:50%;background:currentColor;flex-shrink:0}
+.pulse{animation:pl 1.1s ease-in-out infinite}
+@keyframes pl{0%,100%{opacity:1}50%{opacity:.25}}
+
+.fields{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+.fld{background:#fff;border:1px solid var(--border);border-radius:9px;padding:9px 12px}
+.fld .l{font-size:11.5px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.fld .v{font-size:14.5px;font-weight:600;margin-top:2px}
+.note{background:#fff;border:1px solid var(--border);border-left:5px solid var(--accent);
+  border-radius:10px;padding:16px 20px;margin:26px 0 0;max-width:var(--read-max)}
+.note > b:first-child{display:block;margin-bottom:4px}
+@media (max-width:760px){.fields{grid-template-columns:1fr}.modal-acts{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>📝 Αυτόματη αποθήκευση — «πρόχειρο φόρμας»</h1>
+<p class="sub">Ο μηχανισμός είναι αόρατος. Αυτά τα τρία είναι όλη η εμπειρία σου. Διάλεξε ένα από κάθε
+ομάδα και τα χτίζω. <b>Τα νούμερα εδώ είναι ψεύτικα δείγματα.</b></p>
+
+<h2>1. Το μήνυμα επαναφοράς</h2>
+<p class="h2sub">Ανοίγεις «Νέο τιμολόγιο» και υπάρχει ημιτελές από πριν. Και στις τρεις εκδοχές
+<b>δεν μπορείς να έχεις δύο ημιτελή</b> — πρέπει να αποφασίσεις.</p>
+
+<div class="opt">
+  <div class="opt-h"><span class="tag">Α</span><span class="opt-t">Παράθυρο στη μέση</span>
+    <span class="opt-n">Σε σταματάει. Δεν προσπερνιέται κατά λάθος.</span></div>
+  <div class="stage">
+    <div class="modal">
+      <div class="modal-top">
+        <div class="modal-ic">📝</div>
+        <div class="modal-t">Βρέθηκε ημιτελές τιμολόγιο</div>
+      </div>
+      <div class="modal-b">Είχες αρχίσει να το γράφεις και δεν ολοκληρώθηκε.</div>
+      <div class="recap">
+        <div class="recap-r"><span>Προμηθευτής</span><b>Κρεοπωλείο Γεωργίου</b></div>
+        <div class="recap-r"><span>Γραμμές</span><b>12</b></div>
+        <div class="recap-r"><span>Τελευταία αλλαγή</span><b>χθες, 14:32</b></div>
+      </div>
+      <div class="modal-acts">
+        <button class="btn btn-secondary">🗑 Πέτα το</button>
+        <button class="btn btn-primary">Συνέχισε →</button>
+      </div>
+    </div>
+  </div>
+  <div class="verdict">
+    <div class="pro"><b>+</b><span>Αδύνατο να το προσπεράσεις. Βλέπεις αμέσως τι περιέχει.</span></div>
+    <div class="con"><b>−</b><span>Ένα παράθυρο κάθε φορά που ανοίγεις τη φόρμα με ημιτελές.</span></div>
+  </div>
+</div>
+
+<div class="opt">
+  <div class="opt-h"><span class="tag">Β</span><span class="opt-t">Λωρίδα πάνω από τη φόρμα</span>
+    <span class="opt-n">Διακριτικό — αλλά η φόρμα από κάτω είναι κιόλας λευκή.</span></div>
+  <div class="stage">
+    <div class="strip">
+      <div style="font-size:26px">📝</div>
+      <div class="strip-tx">
+        <div class="strip-t">Έχεις ημιτελές τιμολόγιο — Κρεοπωλείο Γεωργίου, 12 γραμμές</div>
+        <div class="strip-s">Τελευταία αλλαγή χθες στις 14:32</div>
+      </div>
+      <button class="btn btn-secondary">🗑 Πέτα το</button>
+      <button class="btn btn-primary">Συνέχισε</button>
+    </div>
+    <div class="ghostform">
+      <div class="fields">
+        <div class="fld"><div class="l">Προμηθευτής</div><div class="v">—</div></div>
+        <div class="fld"><div class="l">Αριθμός</div><div class="v">—</div></div>
+        <div class="fld"><div class="l">Ημερομηνία</div><div class="v">—</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="verdict">
+    <div class="pro"><b>+</b><span>Δεν σε διακόπτει.</span></div>
+    <div class="con"><b>−</b><span>Μπορείς να αρχίσεις να γράφεις σε λευκή φόρμα χωρίς να το προσέξεις — και μετά «ποιο είναι το σωστό;».</span></div>
+  </div>
+</div>
+
+<div class="opt">
+  <div class="opt-h"><span class="tag">Γ</span><span class="opt-t">Κάρτα-πύλη πριν τη φόρμα</span>
+    <span class="opt-n">Η φόρμα δεν εμφανίζεται καν πριν αποφασίσεις.</span></div>
+  <div class="stage">
+    <div class="gate">
+      <div class="gate-h"><span class="ic">📝</span><span class="gate-t">Έχεις ένα ημιτελές τιμολόγιο</span></div>
+      <p class="gate-s">Κρεοπωλείο Γεωργίου · 12 γραμμές · τελευταία αλλαγή χθες 14:32</p>
+      <div class="gate-choice">
+        <button class="choice rec"><span class="ic">▶️</span><span>
+          <div class="t">Συνέχισε από εκεί που έμεινα</div>
+          <div class="d">Η φόρμα ανοίγει συμπληρωμένη όπως την άφησες</div></span></button>
+        <button class="choice"><span class="ic">🗑</span><span>
+          <div class="t">Πέτα το και ξεκίνα καθαρό</div>
+          <div class="d">Το ημιτελές σβήνεται οριστικά</div></span></button>
+      </div>
+    </div>
+  </div>
+  <div class="verdict">
+    <div class="pro"><b>+</b><span>Απόλυτα ξεκάθαρο τι θα γίνει σε κάθε επιλογή. Καμία λευκή φόρμα από πίσω.</span></div>
+    <div class="con"><b>−</b><span>Ένα κλικ παραπάνω πριν φτάσεις στη φόρμα.</span></div>
+  </div>
+</div>
+
+<h2>2. Η ένδειξη «σώζεται»</h2>
+<p class="h2sub">Ενώ γράφεις, πρέπει να ξέρεις ότι δουλεύει — αλλιώς δεν θα το εμπιστευτείς.
+Εμφανίζεται στην κορυφή της φόρμας.</p>
+
+<div class="opt">
+  <div class="opt-h"><span class="tag">1</span><span class="opt-t">Σημαδάκι με ώρα</span>
+    <span class="opt-n">Πράσινο όταν έχει σωθεί, πορτοκαλί τη στιγμή που γράφει.</span></div>
+  <div class="stage">
+    <div class="formbar" style="margin-bottom:12px">
+      <span class="ttl">🧾 Νέο τιμολόγιο</span>
+      <span class="sp"></span>
+      <span class="sv sv-ok"><span class="dot"></span>Αποθηκεύτηκε 14:32</span>
+    </div>
+    <div class="formbar">
+      <span class="ttl">🧾 Νέο τιμολόγιο</span>
+      <span class="sp"></span>
+      <span class="sv sv-go"><span class="dot pulse"></span>Αποθήκευση…</span>
+    </div>
+  </div>
+  <div class="verdict">
+    <div class="pro"><b>+</b><span>Βλέπεις την ώρα — ξέρεις ακριβώς τι έχει σωθεί.</span></div>
+    <div class="con"><b>−</b><span>Ένα ακόμα χρωματιστό στοιχείο στην κορυφή.</span></div>
+  </div>
+</div>
+
+<div class="opt">
+  <div class="opt-h"><span class="tag">2</span><span class="opt-t">Λιτό γκρι κείμενο</span>
+    <span class="opt-n">Χωρίς χρώμα, χωρίς πλαίσιο.</span></div>
+  <div class="stage">
+    <div class="formbar" style="margin-bottom:12px">
+      <span class="ttl">🧾 Νέο τιμολόγιο</span>
+      <span class="sp"></span>
+      <span class="sv-plain">✓ Αποθηκεύτηκε 14:32</span>
+    </div>
+    <div class="formbar">
+      <span class="ttl">🧾 Νέο τιμολόγιο</span>
+      <span class="sp"></span>
+      <span class="sv-plain">Αποθήκευση…</span>
+    </div>
+  </div>
+  <div class="verdict">
+    <div class="pro"><b>+</b><span>Δεν τραβάει καθόλου το μάτι — ούτε κουράζει σε μεγάλες φόρμες.</span></div>
+    <div class="con"><b>−</b><span>Μπορεί να μην το προσέξεις ποτέ, άρα να μην εμπιστευτείς ότι δουλεύει.</span></div>
+  </div>
+</div>
+
+<h2>3. Η επιβεβαίωση απόρριψης</h2>
+<p class="h2sub">Το «Πέτα το» σβήνει οριστικά. Μία ερώτηση πριν — με το ίδιο παράθυρο που
+χρησιμοποιεί ήδη όλη η εφαρμογή στις διαγραφές.</p>
+
+<div class="opt">
+  <div class="opt-h"><span class="tag">✓</span><span class="opt-t">Ίδιο με τις υπόλοιπες διαγραφές</span>
+    <span class="opt-n">Ονομάζει τι ακριβώς χάνεται.</span></div>
+  <div class="stage">
+    <div class="modal" style="max-width:470px">
+      <div class="modal-top">
+        <div class="modal-ic">🗑</div>
+        <div class="modal-t">Πέταμα ημιτελούς</div>
+      </div>
+      <div class="modal-b">Θα χαθεί οριστικά το ημιτελές τιμολόγιο
+        <b>Κρεοπωλείο Γεωργίου</b> με τις <b>12 γραμμές</b>. Δεν επαναφέρεται.</div>
+      <div class="modal-acts">
+        <button class="btn btn-secondary">Άκυρο</button>
+        <button class="btn btn-danger">🗑 Πέτα το</button>
+      </div>
+    </div>
+  </div>
+  <div class="verdict">
+    <div class="pro"><b>+</b><span>Δεν σβήνεις 12 γραμμές με ένα άστοχο κλικ.</span></div>
+  </div>
+</div>
+
+<div class="note">
+  <b>⚠️ Ένα πράγμα που δεν λύνεται με τίποτα</b>
+  Αν είχες <b>ανεβάσει φωτογραφία</b> τιμολογίου, ο browser δεν επιτρέπει να ξαναμπεί μόνη της σε πεδίο
+  αρχείου. Γι' αυτό η φωτογραφία θα <b>ανεβαίνει αμέσως μόλις τη διαλέγεις</b> — όπως ήδη κάνει το OCR —
+  ώστε να είναι κιόλας φυλαγμένη και να επανέρχεται κανονικά. Αν πετάξεις το πρόχειρο, σβήνεται κι αυτή.
+</div>
+
+<div class="note">
+  <b>📍 Πού αποθηκεύεται</b>
+  Σε <b>ξεχωριστό πίνακα της βάσης</b> που καμία αναφορά δεν διαβάζει ποτέ — τα λογιστικά σου νούμερα
+  δεν το βλέπουν καν να υπάρχει. Μπαίνει στο νυχτερινό αντίγραφο και το καλύπτει η Κατάσταση Πανικού.
+  Σβήνεται στη στιγμή όταν πατήσεις «Πέτα το» ή όταν αποθηκεύσεις κανονικά τη φόρμα.
+</div>
+
+</div>
+</body>
+</html>

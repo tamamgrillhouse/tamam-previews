@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAMAM · Πελάτες — 5 προτάσεις σχεδίασης</title>
+<style>
+:root{
+  --accent:#f59e0b; --accent-dark:#d97706; --content-bg:#f1f5f9; --white:#fff;
+  --text:#1e293b; --text-muted:#64748b; --border:#e2e8f0; --success:#10b981; --danger:#ef4444;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 12px rgba(0,0,0,.10);
+  --shadow-lg:0 18px 50px rgba(15,23,42,.18);
+  --dark:#1e2d3d;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--content-bg);color:var(--text);
+  font-family:'Manrope','Segoe UI',system-ui,-apple-system,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;
+  height:100vh;overflow:hidden;display:flex;flex-direction:column}
+h1,h2,h3,h4{margin:0}
+button{font-family:inherit;cursor:pointer}
+a{color:inherit;text-decoration:none}
+
+/* ── chrome ── */
+.topbar{flex:none;z-index:50;background:var(--dark);color:#fff;
+  padding:14px 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;box-shadow:0 2px 10px rgba(0,0,0,.15)}
+.topbar .brand{font-weight:800;font-size:17px;letter-spacing:.3px;display:flex;align-items:center;gap:9px}
+.topbar .brand .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(245,158,11,.25)}
+.topbar .sub{color:#94a3b8;font-size:12.5px}
+.maintabs{display:flex;gap:8px;margin-left:auto}
+.maintab{background:rgba(255,255,255,.08);color:#cbd5e1;border:1px solid transparent;border-radius:10px;
+  padding:9px 15px;font-size:13.5px;font-weight:700}
+.maintab.on{background:var(--accent);color:#fff}
+
+.subnav{flex:none;z-index:40;background:var(--white);border-bottom:1px solid var(--border);
+  padding:12px 22px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.subnav .lbl{font-size:12px;color:var(--text-muted);font-weight:700;margin-right:4px}
+.pill{border:1px solid var(--border);background:var(--white);color:var(--text-muted);border-radius:999px;
+  padding:8px 14px;font-size:13px;font-weight:700}
+.pill.on{background:var(--dark);border-color:var(--dark);color:#fff}
+.pill .n{display:inline-block;width:19px;height:19px;line-height:19px;text-align:center;border-radius:50%;
+  background:rgba(0,0,0,.08);font-size:11px;margin-right:6px}
+.pill.on .n{background:var(--accent);color:#fff}
+
+.stage{max-width:1080px;margin:0 auto;padding:26px 22px 90px}
+.concept{background:linear-gradient(120deg,#fff,#fbf6ee);border:1px solid #f1e2c8;border-left:4px solid var(--accent);
+  border-radius:12px;padding:15px 18px;margin-bottom:22px}
+.concept h2{font-size:16px;display:flex;align-items:center;gap:8px}
+.concept p{margin:6px 0 0;color:var(--text-muted);font-size:13.5px}
+.concept .tag{display:inline-block;background:#fff;border:1px solid var(--border);border-radius:6px;
+  padding:2px 8px;font-size:11px;font-weight:700;color:var(--accent-dark);margin-right:6px;margin-top:8px}
+
+.view,.edit{display:none}
+.view.on{display:flex;flex-direction:column;flex:1;min-height:0}
+.edit.on{display:block;flex:1;min-height:0;overflow:auto}
+.pane{display:none}
+.pane.on{display:block}
+
+/* real modal frame for the VIEW proposals */
+.mcap-bar{flex:none;display:flex;justify-content:center;padding:12px 16px 0}
+.mcap{background:#eef6ff;border:1px solid #cfe3ff;color:#1d4ed8;border-radius:10px;
+  padding:8px 15px;font-size:12.5px;font-weight:600;max-width:1000px;text-align:center}
+.mbackdrop{flex:1;min-height:0;background:rgba(15,23,42,.42);display:flex;align-items:center;justify-content:center;padding:18px}
+.mbackdrop .pane{display:none}
+.mbackdrop .pane.on{display:contents}
+.mbackdrop .v1-card,.mbackdrop .v2-card,.mbackdrop .v3-card,.mbackdrop .v4-wrap,.mbackdrop .v5-card{max-height:100%;width:100%}
+
+/* shared mock atoms */
+.avatar{border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;
+  background:linear-gradient(135deg,var(--accent),var(--accent-dark))}
+.stpill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:800;white-space:nowrap}
+.st-vip{background:rgba(245,158,11,.15);color:#b45309}
+.st-loyal{background:rgba(22,163,74,.14);color:#15803d}
+.chip{display:inline-flex;align-items:center;gap:6px;background:#f1f5f9;border-radius:8px;padding:6px 11px;font-size:13px;font-weight:600}
+.btn{border-radius:10px;padding:11px 18px;font-size:14px;font-weight:700;border:1px solid transparent;min-height:44px;display:inline-flex;align-items:center;justify-content:center;gap:7px}
+.btn-p{background:var(--accent);color:#fff}
+.btn-s{background:#fff;border-color:var(--border);color:var(--text)}
+.btn-d{background:#fff;border:1px solid #fca5a5;color:#b91c1c}
+.muted{color:var(--text-muted)}
+.divider{height:1px;background:var(--border);margin:0}
+
+/* ============ VIEW 1 — Hero header + stat strip ============ */
+.v1-card{background:#fff;border-radius:18px;box-shadow:var(--shadow-lg);overflow:hidden;max-width:1000px;margin:0 auto;max-height:88vh;display:flex;flex-direction:column}
+.v1-hero,.v1-foot{flex:none}
+.v1-strip{flex:none}
+.v1-hero{position:relative;background:linear-gradient(135deg,#f59e0b,#d97706);padding:26px 26px 60px;color:#fff}
+.v1-hero::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 85% 15%,rgba(255,255,255,.22),transparent 45%);pointer-events:none}
+.v1-hero .row{display:flex;align-items:center;gap:16px;position:relative}
+.v1-hero .avatar{width:64px;height:64px;font-size:26px;background:rgba(255,255,255,.22);border:2px solid rgba(255,255,255,.5)}
+.v1-hero h2{font-size:22px}
+.v1-hero .ph{opacity:.9;font-size:13.5px;margin-top:2px}
+.v1-hero .stpill{background:rgba(255,255,255,.92);color:#b45309}
+.v1-strip{display:grid;grid-template-columns:repeat(4,1fr);margin:-40px 22px 0;position:relative;
+  background:#fff;border-radius:14px;box-shadow:var(--shadow-md);overflow:hidden}
+.v1-strip div{padding:14px 8px;text-align:center;border-right:1px solid var(--border)}
+.v1-strip div:last-child{border-right:none}
+.v1-strip .k{font-size:11px;color:var(--text-muted);font-weight:600}
+.v1-strip .val{font-size:19px;font-weight:800;margin-top:3px}
+.v1-body{padding:22px 26px;flex:1;overflow:auto}
+.v1-line{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px}
+.v1-line:last-child{border-bottom:none}
+.v1-line .ico{width:26px;flex:none;text-align:center}
+.v1-line b{font-weight:700}
+.v1-foot{display:flex;gap:10px;justify-content:flex-end;padding:16px 26px;background:#f8fafc;border-top:1px solid var(--border)}
+
+/* ============ VIEW 2 — Two-column dossier ============ */
+.v2-card{background:#fff;border-radius:16px;box-shadow:var(--shadow-lg);overflow:hidden;display:grid;grid-template-columns:300px 1fr;max-width:1000px;margin:0 auto;max-height:88vh}
+.v2-rail{overflow:auto}
+.v2-main{display:flex;flex-direction:column;min-height:0}
+.v2-scroll{flex:1;overflow:auto}
+.v2-foot{flex:none;margin-top:14px;display:flex;gap:10px;justify-content:flex-end;padding-top:14px;border-top:1px solid var(--border)}
+.v2-rail{background:linear-gradient(180deg,#1e2d3d,#243547);color:#fff;padding:26px 22px}
+.v2-rail .avatar{width:74px;height:74px;font-size:30px;margin:0 auto 14px;background:linear-gradient(135deg,#f59e0b,#d97706)}
+.v2-rail h2{text-align:center;font-size:19px}
+.v2-rail .ph{text-align:center;color:#94a3b8;font-size:13px;margin-top:3px}
+.v2-rail .stpill{display:flex;justify-content:center;margin:14px auto 0;width:fit-content}
+.v2-sec{margin-top:20px}
+.v2-sec .h{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:#94a3b8;font-weight:800;margin-bottom:8px}
+.v2-sec .it{font-size:13.5px;padding:3px 0;color:#e2e8f0}
+.v2-main{padding:24px 26px}
+.v2-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.v2-kpi{background:#f8fafc;border:1px solid var(--border);border-radius:12px;padding:14px}
+.v2-kpi .k{font-size:11.5px;color:var(--text-muted);font-weight:600}
+.v2-kpi .val{font-size:21px;font-weight:800;margin-top:4px}
+.v2-h3{font-size:13px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin:18px 0 10px}
+.v2-ord{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);font-size:13.5px}
+
+/* ============ VIEW 3 — Timeline focus ============ */
+.v3-card{background:#fff;border-radius:16px;box-shadow:var(--shadow-lg);overflow:hidden;max-width:1000px;margin:0 auto;max-height:88vh;display:flex;flex-direction:column}
+.v3-top,.v3-metrics{flex:none}
+.v3-top{padding:22px 26px;display:flex;align-items:center;gap:15px;border-bottom:1px solid var(--border)}
+.v3-top .avatar{width:56px;height:56px;font-size:23px}
+.v3-top h2{font-size:20px}
+.v3-metrics{display:flex;gap:8px;flex-wrap:wrap;padding:16px 26px;background:#f8fafc;border-bottom:1px solid var(--border)}
+.v3-m{background:#fff;border:1px solid var(--border);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:700}
+.v3-m span{color:var(--text-muted);font-weight:600}
+.v3-body{padding:22px 26px;display:grid;grid-template-columns:1fr 1fr;gap:22px;flex:1;overflow:auto;align-items:start}
+.v3-info div{font-size:13.5px;padding:5px 0;border-bottom:1px dashed var(--border)}
+.v3-tl{position:relative;padding-left:22px}
+.v3-tl::before{content:"";position:absolute;left:6px;top:4px;bottom:4px;width:2px;background:var(--border)}
+.v3-ev{position:relative;padding:0 0 15px}
+.v3-ev::before{content:"";position:absolute;left:-19px;top:4px;width:11px;height:11px;border-radius:50%;background:var(--accent);border:2px solid #fff;box-shadow:0 0 0 2px var(--accent)}
+.v3-ev .d{font-weight:800;font-size:13.5px}
+.v3-ev .it{color:var(--text-muted);font-size:12.5px}
+.v3-ev .tot{font-weight:700;font-size:13px;color:var(--accent-dark)}
+@media(max-width:620px){.v3-body{grid-template-columns:1fr}}
+
+/* ============ VIEW 4 — Bento tiles ============ */
+.v4-wrap{max-width:1000px;margin:0 auto;max-height:88vh;display:flex;flex-direction:column}
+.v4-head{flex:none}
+.v4-grid{flex:1;overflow:auto;padding:2px 4px 2px 2px}
+.v4-head{display:flex;align-items:center;gap:15px;background:#fff;border-radius:16px;box-shadow:var(--shadow-md);padding:18px 22px;margin-bottom:14px}
+.v4-head .avatar{width:58px;height:58px;font-size:24px}
+.v4-head h2{font-size:21px}
+.v4-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.tile{background:#fff;border-radius:16px;box-shadow:var(--shadow-sm);padding:18px;border:1px solid var(--border)}
+.tile .th{font-size:11.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);font-weight:800;display:flex;align-items:center;gap:6px;margin-bottom:10px}
+.tile.big{grid-column:span 2}
+.tile.money{background:linear-gradient(135deg,#fff7ed,#ffedd5);border-color:#fed7aa}
+.tile.money .big-n{font-size:30px;font-weight:800;color:var(--accent-dark)}
+.tile .sub{font-size:12.5px;color:var(--text-muted)}
+.tile .contact-row{font-size:13.5px;padding:4px 0}
+.tile.loyal{background:linear-gradient(135deg,#ecfdf5,#d1fae5);border-color:#a7f3d0}
+@media(max-width:720px){.v4-grid{grid-template-columns:repeat(2,1fr)}.tile.big{grid-column:span 2}}
+
+/* ============ VIEW 5 — Minimal editorial ============ */
+.v5-card{background:#fff;border-radius:14px;box-shadow:var(--shadow-md);max-width:1000px;margin:0 auto;padding:34px 56px;max-height:88vh;display:flex;flex-direction:column}
+.v5-head,.v5-actions{flex:none}
+.v5-scroll{flex:1;overflow:auto;margin:0 -8px;padding:0 8px}
+.v5-eyebrow{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);font-weight:800}
+.v5-name{font-size:30px;font-weight:800;margin:6px 0 4px;letter-spacing:-.5px}
+.v5-meta{color:var(--text-muted);font-size:14px}
+.v5-nums{display:flex;gap:34px;margin:26px 0;padding:20px 0;border-top:2px solid var(--text);border-bottom:1px solid var(--border)}
+.v5-nums .val{font-size:24px;font-weight:800}
+.v5-nums .k{font-size:11.5px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.v5-dl{display:grid;grid-template-columns:120px 1fr;gap:2px 16px;font-size:14px}
+.v5-dl dt{color:var(--text-muted);padding:8px 0;font-weight:600}
+.v5-dl dd{margin:0;padding:8px 0;font-weight:600;border-bottom:1px solid var(--border)}
+.v5-actions{margin-top:26px;display:flex;gap:10px;justify-content:flex-end}
+
+/* ============ EDIT shared ============ */
+.e-shell{max-width:860px;margin:0 auto}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:12.5px;font-weight:700;color:var(--text-muted)}
+.field .inp,.field input,.field select,.field textarea{padding:11px 13px;border:1px solid var(--border);border-radius:10px;font-size:14px;background:#fff;width:100%;font-family:inherit}
+.field .inp{color:var(--text);min-height:44px;display:flex;align-items:center;color:#334155}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.card{background:#fff;border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow-sm);padding:20px 22px}
+.card h3{font-size:15px;display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.rowline{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px}
+.rowline:last-of-type{border-bottom:none}
+.rowline .v{flex:1}
+.mini{width:34px;height:34px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center}
+.mini.d{background:#fff;border:1px solid #fca5a5;color:#b91c1c}
+.addrow{display:flex;gap:10px;align-items:flex-end;margin-top:12px;flex-wrap:wrap}
+.tipbox{background:#fffbeb;border:1px solid #fde68a;border-radius:9px;padding:10px 12px;font-size:12.5px;color:#92400e;margin-bottom:14px}
+.danger-card{border-color:#fecaca;background:#fff8f8}
+
+/* EDIT 1 — Tabbed */
+.e1-tabs{display:flex;gap:6px;background:#fff;border:1px solid var(--border);border-radius:12px;padding:6px;margin-bottom:16px;flex-wrap:wrap}
+.e1-tab{flex:1;min-width:110px;border-radius:9px;padding:11px 10px;font-size:13.5px;font-weight:700;background:transparent;border:none;color:var(--text-muted);display:flex;align-items:center;justify-content:center;gap:7px}
+.e1-tab.on{background:var(--accent);color:#fff}
+.e1-panel{display:none}
+.e1-panel.on{display:block}
+.e1-head{display:flex;align-items:center;gap:14px;background:#fff;border-radius:14px;box-shadow:var(--shadow-sm);padding:16px 20px;margin-bottom:14px;border:1px solid var(--border)}
+.e1-head .avatar{width:50px;height:50px;font-size:21px}
+
+/* EDIT 2 — Sticky section nav */
+.e2-layout{display:grid;grid-template-columns:210px 1fr;gap:20px;align-items:start}
+.e2-nav{position:sticky;top:120px;background:#fff;border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow-sm);padding:10px;display:flex;flex-direction:column;gap:2px}
+.e2-nav a{padding:11px 13px;border-radius:9px;font-size:13.5px;font-weight:700;color:var(--text-muted);display:flex;align-items:center;gap:9px}
+.e2-nav a.on{background:#fff7ed;color:var(--accent-dark)}
+.e2-nav a:hover{background:#f8fafc}
+.e2-col{display:flex;flex-direction:column;gap:16px}
+@media(max-width:720px){.e2-layout{grid-template-columns:1fr}.e2-nav{position:static;flex-direction:row;overflow-x:auto}}
+
+/* EDIT 3 — Two-pane live preview */
+.e3-layout{display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:start}
+.e3-preview{position:sticky;top:120px;background:#fff;border-radius:16px;box-shadow:var(--shadow-md);overflow:hidden;border:1px solid var(--border)}
+.e3-pv-hero{background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;padding:20px;text-align:center}
+.e3-pv-hero .avatar{width:56px;height:56px;font-size:23px;margin:0 auto 10px;background:rgba(255,255,255,.22);border:2px solid rgba(255,255,255,.5)}
+.e3-pv-body{padding:16px 18px;font-size:13px}
+.e3-pv-body .r{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border)}
+.e3-pv-note{background:#eff6ff;color:#1d4ed8;font-size:11.5px;text-align:center;padding:8px}
+@media(max-width:820px){.e3-layout{grid-template-columns:1fr}.e3-preview{position:static}}
+
+/* EDIT 4 — Compact single card fieldsets */
+.e4-card{background:#fff;border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow-md);overflow:hidden;max-width:760px;margin:0 auto}
+.e4-band{display:flex;align-items:center;gap:14px;padding:20px 24px;background:linear-gradient(120deg,#fff,#fbf6ee);border-bottom:1px solid var(--border)}
+.e4-band .avatar{width:52px;height:52px;font-size:22px}
+.fset{padding:20px 24px;border-bottom:1px solid var(--border)}
+.fset:last-child{border-bottom:none}
+.fset legend{font-size:12px;text-transform:uppercase;letter-spacing:.6px;color:var(--accent-dark);font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:7px}
+
+/* EDIT 5 — Guided cards with left accent */
+.e5-card{background:#fff;border-radius:14px;box-shadow:var(--shadow-sm);border:1px solid var(--border);border-left:4px solid var(--accent);padding:20px 24px;margin-bottom:16px}
+.e5-card.grey{border-left-color:#94a3b8}
+.e5-card.red{border-left-color:#ef4444;background:#fff8f8}
+.e5-card h3{font-size:15px;margin-bottom:4px}
+.e5-card .hint{font-size:12.5px;color:var(--text-muted);margin-bottom:16px}
+.e5-steps{counter-reset:s;list-style:none;padding:0;margin:0 0 18px}
+.togglebox{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;background:#f8fafc;border:1px solid var(--border);border-radius:10px;margin-bottom:9px;font-size:14px}
+.switch{width:44px;height:26px;border-radius:999px;background:var(--success);position:relative;flex:none}
+.switch.off{background:#cbd5e1}
+.switch::after{content:"";position:absolute;top:3px;left:21px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}
+.switch.off::after{left:3px}
+
+.footnote{text-align:center;color:var(--text-muted);font-size:12.5px;margin-top:40px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand"><span class="dot"></span> TAMAM · Πελάτες</div>
+  <div class="sub">5 προτάσεις σχεδίασης — δείγμα δεδομένων</div>
+  <div class="maintabs">
+    <button class="maintab on" data-main="view">👁 Προβολή</button>
+    <button class="maintab" data-main="edit">✏️ Επεξεργασία</button>
+  </div>
+</div>
+
+<!-- ══════════════ VIEW SUBNAV ══════════════ -->
+<div class="subnav" data-for="view">
+  <span class="lbl">Πρόταση:</span>
+  <button class="pill on" data-v="1"><span class="n">1</span>Καρτέλα Hero</button>
+  <button class="pill" data-v="2"><span class="n">2</span>Ντοσιέ 2 στηλών</button>
+  <button class="pill" data-v="3"><span class="n">3</span>Ιστορικό/Timeline</button>
+  <button class="pill" data-v="4"><span class="n">4</span>Πλακίδια (Bento)</button>
+  <button class="pill" data-v="5"><span class="n">5</span>Μινιμαλ</button>
+</div>
+
+<!-- ══════════════ EDIT SUBNAV ══════════════ -->
+<div class="subnav" data-for="edit" style="display:none">
+  <span class="lbl">Πρόταση:</span>
+  <button class="pill on" data-e="1"><span class="n">1</span>Καρτέλες (Tabs)</button>
+  <button class="pill" data-e="2"><span class="n">2</span>Πλαϊνό μενού</button>
+  <button class="pill" data-e="3"><span class="n">3</span>Ζωντανή προεπισκόπηση</button>
+  <button class="pill" data-e="4"><span class="n">4</span>Ενιαία καρτέλα</button>
+  <button class="pill" data-e="5"><span class="n">5</span>Καθοδηγούμενη</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ VIEW ═══ -->
+<div class="view on" id="view">
+  <div class="mcap-bar"><div class="mcap" id="vcap"></div></div>
+  <div class="mbackdrop">
+
+  <!-- ─────────── VIEW 1 ─────────── -->
+  <div class="pane on" data-vpane="1">
+    <div class="v1-card">
+      <div class="v1-hero">
+        <div class="row">
+          <div class="avatar">Π</div>
+          <div style="flex:1">
+            <h2>Γιώργος Παπαδόπουλος</h2>
+            <div class="ph">📞 697 1234567 · 📍 Κέντρο</div>
+          </div>
+          <span class="stpill st-vip">⭐ VIP</span>
+        </div>
+      </div>
+      <div class="v1-strip">
+        <div><div class="k">🧾 Παραγγελίες</div><div class="val">47</div></div>
+        <div><div class="k">💶 Σύνολο</div><div class="val">612,40&nbsp;€</div></div>
+        <div><div class="k">📊 Μ.Ο.</div><div class="val">13,03&nbsp;€</div></div>
+        <div><div class="k">🕒 Τελευταία</div><div class="val" style="font-size:14px;padding-top:3px">Χθες</div></div>
+      </div>
+      <div class="v1-body">
+        <div class="v1-line"><span class="ico">🏠</span><div><b>Αγ. Κοσμά 14</b> · όροφος 2 · κουδ. Παπαδ. <span class="muted">(12×)</span><br><span class="muted" style="font-size:12.5px">+ Εργατικές Κατοικίες 3 (3×)</span></div></div>
+        <div class="v1-line"><span class="ico">🎂</span><div>Γενέθλια: <b>14 Μαρτίου</b> <span class="muted">(1985)</span></div></div>
+        <div class="v1-line"><span class="ico">❤️</span><div>Αγαπημένο: <b>Γύρος χοιρινός μερίδα</b></div></div>
+        <div class="v1-line"><span class="ico">🏷️</span><div>Αυτόματη έκπτωση: <b>10%</b> &nbsp;·&nbsp; ⭐ Πόντοι: <b>240</b></div></div>
+        <div class="v1-line"><span class="ico">🔐</span><div>Μέλος <b style="color:var(--success)">✓</b> · Email <b style="color:var(--success)">✓</b> · SMS <span class="muted">✗</span></div></div>
+        <div class="v1-line"><span class="ico">📝</span><div class="muted">«Πάντα χωρίς κρεμμύδι»</div></div>
+        <div style="font-weight:800;font-size:13.5px;margin:18px 0 8px">🧾 Ιστορικό παραγγελιών</div>
+        <div class="v1-line"><span class="ico">📅</span><div style="flex:1">13-07-2026 · Γύρος χοιρ., πατάτες, τζατζίκι</div><b>14,20 €</b></div>
+        <div class="v1-line"><span class="ico">📅</span><div style="flex:1">09-07-2026 · 2× σουβλάκι, αναψυκτικό</div><b>11,50 €</b></div>
+        <div class="v1-line"><span class="ico">📅</span><div style="flex:1">02-07-2026 · Μερίδα γύρο, μπύρα</div><b>12,00 €</b></div>
+        <div class="v1-line"><span class="ico">📅</span><div style="flex:1">28-06-2026 · Πίτα γύρο ×3</div><b>10,50 €</b></div>
+        <div class="v1-line"><span class="ico">📅</span><div style="flex:1">21-06-2026 · Μπιφτέκι μερίδα, πατάτες</div><b>13,80 €</b></div>
+        <div class="v1-line"><span class="ico">📅</span><div style="flex:1">15-06-2026 · Κοτόπουλο σχάρας, σαλάτα</div><b>15,20 €</b></div>
+        <div class="v1-line"><span class="ico">📅</span><div style="flex:1">08-06-2026 · Γύρος χοιρ., τζατζίκι</div><b>9,40 €</b></div>
+        <div class="v1-line"><span class="ico">📅</span><div style="flex:1">01-06-2026 · 4× πίτα, αναψυκτικά</div><b>16,00 €</b></div>
+        <div class="v1-line"><span class="ico">📅</span><div style="flex:1">24-05-2026 · Μερίδα κοτόπουλο</div><b>11,90 €</b></div>
+        <div class="v1-line"><span class="ico">📅</span><div style="flex:1">17-05-2026 · Σουβλάκι καλαμάκι ×6</div><b>13,20 €</b></div>
+      </div>
+      <div class="v1-foot">
+        <button class="btn btn-s">✕ Κλείσιμο</button>
+        <button class="btn btn-p">✏️ Επεξεργασία</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────── VIEW 2 ─────────── -->
+  <div class="pane" data-vpane="2">
+    <div class="v2-card">
+      <div class="v2-rail">
+        <div class="avatar" style="width:74px;height:74px;font-size:30px">Π</div>
+        <h2>Γιώργος<br>Παπαδόπουλος</h2>
+        <div class="ph">📞 697 1234567</div>
+        <span class="stpill st-vip" style="display:flex;justify-content:center;margin:14px auto 0;width:fit-content">⭐ VIP</span>
+        <div class="v2-sec"><div class="h">Επικοινωνία</div>
+          <div class="it">📞 697 1234567 · κύριο</div>
+          <div class="it">📞 24620 55123</div>
+          <div class="it">✉️ giorgos@example.gr</div>
+        </div>
+        <div class="v2-sec"><div class="h">Διεύθυνση</div>
+          <div class="it">🏠 Αγ. Κοσμά 14, ορ. 2</div>
+          <div class="it" style="color:#94a3b8">κουδούνι: Παπαδ.</div>
+        </div>
+        <div class="v2-sec"><div class="h">Συναινέσεις</div>
+          <div class="it">👤 Μέλος ✓ · 📧 Email ✓</div>
+          <div class="it" style="color:#94a3b8">📱 SMS ✗</div>
+        </div>
+      </div>
+      <div class="v2-main">
+        <div class="v2-scroll">
+          <div class="v2-kpis">
+            <div class="v2-kpi"><div class="k">🧾 Παραγγελίες</div><div class="val">47</div></div>
+            <div class="v2-kpi"><div class="k">💶 Σύνολο</div><div class="val">612€</div></div>
+            <div class="v2-kpi"><div class="k">📊 Μ.Ο.</div><div class="val">13,03€</div></div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <span class="chip">🎂 14 Μαρτίου</span>
+            <span class="chip">❤️ Γύρος χοιρ. μερίδα</span>
+            <span class="chip">🏷️ −10%</span>
+            <span class="chip">⭐ 240 πόντοι</span>
+          </div>
+          <div class="v2-h3">🧾 Ιστορικό παραγγελιών</div>
+          <div class="v2-ord"><div><b>13-07-2026</b><div class="muted" style="font-size:12px">Γύρος χοιρ., πατάτες, τζατζίκι</div></div><b>14,20&nbsp;€</b></div>
+          <div class="v2-ord"><div><b>09-07-2026</b><div class="muted" style="font-size:12px">2× σουβλάκι, αναψυκτικό</div></div><b>11,50&nbsp;€</b></div>
+          <div class="v2-ord"><div><b>02-07-2026</b><div class="muted" style="font-size:12px">Μερίδα γύρο, μπύρα</div></div><b>12,00&nbsp;€</b></div>
+          <div class="v2-ord"><div><b>28-06-2026</b><div class="muted" style="font-size:12px">Πίτα γύρο ×3</div></div><b>10,50&nbsp;€</b></div>
+          <div class="v2-ord"><div><b>21-06-2026</b><div class="muted" style="font-size:12px">Μπιφτέκι μερίδα, πατάτες</div></div><b>13,80&nbsp;€</b></div>
+          <div class="v2-ord"><div><b>15-06-2026</b><div class="muted" style="font-size:12px">Κοτόπουλο σχάρας, σαλάτα</div></div><b>15,20&nbsp;€</b></div>
+          <div class="v2-ord"><div><b>08-06-2026</b><div class="muted" style="font-size:12px">Γύρος χοιρ., τζατζίκι</div></div><b>9,40&nbsp;€</b></div>
+          <div class="v2-ord"><div><b>01-06-2026</b><div class="muted" style="font-size:12px">4× πίτα, αναψυκτικά</div></div><b>16,00&nbsp;€</b></div>
+          <div class="v2-ord"><div><b>24-05-2026</b><div class="muted" style="font-size:12px">Μερίδα κοτόπουλο</div></div><b>11,90&nbsp;€</b></div>
+          <div class="v2-ord"><div><b>17-05-2026</b><div class="muted" style="font-size:12px">Σουβλάκι καλαμάκι ×6</div></div><b>13,20&nbsp;€</b></div>
+        </div>
+        <div class="v2-foot">
+          <button class="btn btn-s">✕ Κλείσιμο</button>
+          <button class="btn btn-p">✏️ Επεξεργασία</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────── VIEW 3 ─────────── -->
+  <div class="pane" data-vpane="3">
+    <div class="v3-card">
+      <div class="v3-top">
+        <div class="avatar">Π</div>
+        <div style="flex:1"><h2>Γιώργος Παπαδόπουλος</h2><div class="muted">📞 697 1234567 · 📍 Κέντρο</div></div>
+        <span class="stpill st-vip">⭐ VIP</span>
+      </div>
+      <div class="v3-metrics">
+        <div class="v3-m">🧾 <span>Παραγγελίες</span> 47</div>
+        <div class="v3-m">💶 <span>Σύνολο</span> 612,40 €</div>
+        <div class="v3-m">📊 <span>Μ.Ο.</span> 13,03 €</div>
+        <div class="v3-m">🕒 <span>Τελευταία</span> Χθες</div>
+      </div>
+      <div class="v3-body">
+        <div class="v3-info">
+          <div>🏠 <b>Αγ. Κοσμά 14</b>, ορ. 2, κουδ. Παπαδ.</div>
+          <div>🎂 Γενέθλια <b>14 Μαρτίου</b></div>
+          <div>❤️ <b>Γύρος χοιρινός μερίδα</b></div>
+          <div>🏷️ Έκπτωση <b>10%</b> · ⭐ <b>240</b> πόντοι</div>
+          <div>🔐 Μέλος ✓ · Email ✓ · SMS ✗</div>
+          <div style="border:none">📝 <span class="muted">«Πάντα χωρίς κρεμμύδι»</span></div>
+        </div>
+        <div>
+          <div class="v2-h3" style="margin-top:0">🧾 Ιστορικό</div>
+          <div class="v3-tl">
+            <div class="v3-ev"><div class="d">13 Ιουλ</div><div class="it">Γύρος χοιρ., πατάτες, τζατζίκι</div><div class="tot">14,20 €</div></div>
+            <div class="v3-ev"><div class="d">9 Ιουλ</div><div class="it">2× σουβλάκι, αναψυκτικό</div><div class="tot">11,50 €</div></div>
+            <div class="v3-ev"><div class="d">2 Ιουλ</div><div class="it">Μερίδα γύρο, μπύρα</div><div class="tot">12,00 €</div></div>
+            <div class="v3-ev"><div class="d">28 Ιουν</div><div class="it">Πίτα γύρο ×3</div><div class="tot">10,50 €</div></div>
+            <div class="v3-ev"><div class="d">21 Ιουν</div><div class="it">Μπιφτέκι μερίδα, πατάτες</div><div class="tot">13,80 €</div></div>
+            <div class="v3-ev"><div class="d">15 Ιουν</div><div class="it">Κοτόπουλο σχάρας, σαλάτα</div><div class="tot">15,20 €</div></div>
+            <div class="v3-ev"><div class="d">8 Ιουν</div><div class="it">Γύρος χοιρ., τζατζίκι</div><div class="tot">9,40 €</div></div>
+            <div class="v3-ev"><div class="d">1 Ιουν</div><div class="it">4× πίτα, αναψυκτικά</div><div class="tot">16,00 €</div></div>
+            <div class="v3-ev"><div class="d">24 Μαΐ</div><div class="it">Μερίδα κοτόπουλο</div><div class="tot">11,90 €</div></div>
+            <div class="v3-ev"><div class="d">17 Μαΐ</div><div class="it">Σουβλάκι καλαμάκι ×6</div><div class="tot">13,20 €</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="v1-foot" style="border-radius:0"><button class="btn btn-s">✕ Κλείσιμο</button><button class="btn btn-p">✏️ Επεξεργασία</button></div>
+    </div>
+  </div>
+
+  <!-- ─────────── VIEW 4 ─────────── -->
+  <div class="pane" data-vpane="4">
+    <div class="v4-wrap">
+      <div class="v4-head">
+        <div class="avatar">Π</div>
+        <div style="flex:1"><h2>Γιώργος Παπαδόπουλος</h2><div class="muted">📍 Κέντρο · πελάτης από 2024</div></div>
+        <span class="stpill st-vip">⭐ VIP</span>
+        <button class="btn btn-p">✏️ Επεξεργασία</button>
+      </div>
+      <div class="v4-grid">
+        <div class="tile money big">
+          <div class="th">💶 Σύνολο αγορών</div>
+          <div class="big-n">612,40 €</div>
+          <div class="sub">47 παραγγελίες · Μ.Ο. 13,03 € · τελευταία χθες</div>
+        </div>
+        <div class="tile">
+          <div class="th">📞 Επικοινωνία</div>
+          <div class="contact-row"><b>697 1234567</b> <span class="muted">κύριο</span></div>
+          <div class="contact-row">24620 55123</div>
+          <div class="contact-row muted" style="font-size:12.5px">✉️ giorgos@example.gr</div>
+        </div>
+        <div class="tile loyal">
+          <div class="th">⭐ Πιστότητα</div>
+          <div style="font-size:26px;font-weight:800;color:#15803d">240</div>
+          <div class="sub">πόντοι · έκπτωση 10%</div>
+        </div>
+        <div class="tile big">
+          <div class="th">🏠 Διευθύνσεις</div>
+          <div class="contact-row"><b>Αγ. Κοσμά 14</b> · ορ. 2 · κουδ. Παπαδ. <span class="muted">(12×)</span></div>
+          <div class="contact-row muted">Εργατικές Κατοικίες 3 <span>(3×)</span></div>
+        </div>
+        <div class="tile">
+          <div class="th">🎂 Γενέθλια</div>
+          <div style="font-size:17px;font-weight:800">14 Μαρτίου</div>
+          <div class="sub">1985</div>
+        </div>
+        <div class="tile">
+          <div class="th">🔐 Συναινέσεις</div>
+          <div class="contact-row">👤 Μέλος <b style="color:var(--success)">✓</b></div>
+          <div class="contact-row">📧 Email <b style="color:var(--success)">✓</b> · 📱 SMS <span class="muted">✗</span></div>
+        </div>
+        <div class="tile big">
+          <div class="th">❤️ Αγαπημένο & σημείωση</div>
+          <div class="contact-row"><b>Γύρος χοιρινός μερίδα</b></div>
+          <div class="contact-row muted">📝 «Πάντα χωρίς κρεμμύδι»</div>
+        </div>
+        <div class="tile" style="grid-column:span 4">
+          <div class="th">🧾 Ιστορικό παραγγελιών</div>
+          <div class="contact-row" style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border)"><span>13-07-2026 · Γύρος χοιρ., πατάτες, τζατζίκι</span><b>14,20 €</b></div>
+          <div class="contact-row" style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border)"><span>09-07-2026 · 2× σουβλάκι, αναψυκτικό</span><b>11,50 €</b></div>
+          <div class="contact-row" style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border)"><span>02-07-2026 · Μερίδα γύρο, μπύρα</span><b>12,00 €</b></div>
+          <div class="contact-row" style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border)"><span>28-06-2026 · Πίτα γύρο ×3</span><b>10,50 €</b></div>
+          <div class="contact-row" style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border)"><span>21-06-2026 · Μπιφτέκι μερίδα, πατάτες</span><b>13,80 €</b></div>
+          <div class="contact-row" style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border)"><span>15-06-2026 · Κοτόπουλο σχάρας, σαλάτα</span><b>15,20 €</b></div>
+          <div class="contact-row" style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border)"><span>08-06-2026 · Γύρος χοιρ., τζατζίκι</span><b>9,40 €</b></div>
+          <div class="contact-row" style="display:flex;justify-content:space-between"><span>01-06-2026 · 4× πίτα, αναψυκτικά</span><b>16,00 €</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────── VIEW 5 ─────────── -->
+  <div class="pane" data-vpane="5">
+    <div class="v5-card">
+      <div class="v5-head">
+        <div class="v5-eyebrow">⭐ VIP Πελάτης</div>
+        <div class="v5-name">Γιώργος Παπαδόπουλος</div>
+        <div class="v5-meta">📞 697 1234567 &nbsp;·&nbsp; 📍 Κέντρο</div>
+      </div>
+      <div class="v5-scroll">
+      <div class="v5-nums">
+        <div><div class="val">47</div><div class="k">Παραγγελίες</div></div>
+        <div><div class="val">612,40 €</div><div class="k">Σύνολο</div></div>
+        <div><div class="val">13,03 €</div><div class="k">Μ.Ο.</div></div>
+        <div><div class="val">Χθες</div><div class="k">Τελευταία</div></div>
+      </div>
+      <dl class="v5-dl">
+        <dt>Διεύθυνση</dt><dd>Αγ. Κοσμά 14, όροφος 2, κουδ. Παπαδ.</dd>
+        <dt>Γενέθλια</dt><dd>14 Μαρτίου 1985</dd>
+        <dt>Αγαπημένο</dt><dd>Γύρος χοιρινός μερίδα</dd>
+        <dt>Πιστότητα</dt><dd>240 πόντοι · έκπτωση 10%</dd>
+        <dt>Συναινέσεις</dt><dd>Μέλος ✓ · Email ✓ · SMS ✗</dd>
+        <dt>Σημείωση</dt><dd style="border:none">«Πάντα χωρίς κρεμμύδι»</dd>
+      </dl>
+      <div style="font-size:11.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-muted);font-weight:800;margin:22px 0 10px">Ιστορικό παραγγελιών</div>
+      <div class="v5-dl" style="grid-template-columns:130px 1fr">
+        <dt>13-07-2026</dt><dd>Γύρος χοιρ., πατάτες, τζατζίκι — <b>14,20 €</b></dd>
+        <dt>09-07-2026</dt><dd>2× σουβλάκι, αναψυκτικό — <b>11,50 €</b></dd>
+        <dt>02-07-2026</dt><dd>Μερίδα γύρο, μπύρα — <b>12,00 €</b></dd>
+        <dt>28-06-2026</dt><dd>Πίτα γύρο ×3 — <b>10,50 €</b></dd>
+        <dt>21-06-2026</dt><dd>Μπιφτέκι μερίδα, πατάτες — <b>13,80 €</b></dd>
+        <dt>15-06-2026</dt><dd>Κοτόπουλο σχάρας, σαλάτα — <b>15,20 €</b></dd>
+        <dt>08-06-2026</dt><dd>Γύρος χοιρ., τζατζίκι — <b>9,40 €</b></dd>
+        <dt>01-06-2026</dt><dd style="border:none">4× πίτα, αναψυκτικά — <b>16,00 €</b></dd>
+      </div>
+      </div>
+      <div class="v5-actions">
+        <button class="btn btn-s">✕ Κλείσιμο</button>
+        <button class="btn btn-p">✏️ Επεξεργασία</button>
+      </div>
+    </div>
+  </div>
+
+  </div><!-- /mbackdrop -->
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ EDIT ═══ -->
+<div class="edit" id="edit">
+
+  <!-- ─────────── EDIT 1 — Tabs ─────────── -->
+  <div class="pane on stage" data-epane="1">
+    <div class="concept">
+      <h2>1 · Επεξεργασία σε καρτέλες (Tabs)</h2>
+      <p>Χωρίζει τα πάντα σε 4 «καρτέλες»: Στοιχεία · Επικοινωνία · Σήμανση &amp; Απόρρητο · Διαγραφή. Βλέπεις μόνο ένα πράγμα τη φορά — καθαρό, χωρίς ατέλειωτο scroll. Το «επικίνδυνο» (διαγραφή) μακριά, σε δική του καρτέλα.</p>
+      <span class="tag">Έμφαση: τάξη, τίποτα να μη μπερδεύει</span>
+    </div>
+    <div class="e-shell">
+      <div class="e1-head">
+        <div class="avatar">Π</div>
+        <div style="flex:1"><h3>Γιώργος Παπαδόπουλος</h3><div class="muted" style="font-size:13px">Εσύ είσαι το αφεντικό — όλες οι αλλαγές πάνε στο ταμείο.</div></div>
+        <button class="btn btn-s">← Πίσω</button>
+      </div>
+      <div class="e1-tabs">
+        <button class="e1-tab on" data-t="1">👤 Στοιχεία</button>
+        <button class="e1-tab" data-t="2">📞 Επικοινωνία</button>
+        <button class="e1-tab" data-t="3">🚩 Σήμανση & Απόρρητο</button>
+        <button class="e1-tab" data-t="4">🗑️ Διαγραφή</button>
+      </div>
+
+      <div class="e1-panel on" data-tp="1">
+        <div class="card">
+          <h3>👤 Βασικά στοιχεία</h3>
+          <div class="grid2">
+            <div class="field"><label>Επώνυμο</label><input value="Παπαδόπουλος"></div>
+            <div class="field"><label>Όνομα</label><input value="Γιώργος"></div>
+            <div class="field"><label>Γενέθλια (ΗΗ/ΜΜ/ΕΕΕΕ)</label><input value="14/03/1985"></div>
+            <div class="field"><label>Email</label><input value="giorgos@example.gr"></div>
+            <div class="field"><label>Αυτόματη έκπτωση (%)</label><input value="10" type="number"></div>
+            <div class="field" style="grid-column:1/-1"><label>Σημειώσεις</label><textarea rows="2">Πάντα χωρίς κρεμμύδι</textarea></div>
+          </div>
+          <div style="text-align:right;margin-top:16px"><button class="btn btn-p">💾 Αποθήκευση</button></div>
+        </div>
+      </div>
+
+      <div class="e1-panel" data-tp="2">
+        <div class="card" style="margin-bottom:16px">
+          <h3>📞 Τηλέφωνα</h3>
+          <div class="rowline"><div class="v">697 1234567 <span class="muted">· κύριο</span></div><button class="mini d">🗑</button></div>
+          <div class="rowline"><div class="v">24620 55123</div><button class="mini d">🗑</button></div>
+          <div class="addrow"><div class="field" style="flex:1"><label>Νέο τηλέφωνο</label><input></div><button class="btn btn-s">➕ Προσθήκη</button></div>
+        </div>
+        <div class="card">
+          <h3>📍 Διευθύνσεις</h3>
+          <div class="rowline"><div class="v">Αγ. Κοσμά 14 <span class="muted">· όροφος 2 · κουδ. Παπαδ.</span></div><button class="mini d">🗑</button></div>
+          <div class="rowline"><div class="v">Εργατικές Κατοικίες 3</div><button class="mini d">🗑</button></div>
+          <div class="addrow">
+            <div class="field" style="flex:2"><label>Διεύθυνση</label><input></div>
+            <div class="field" style="max-width:90px"><label>Όροφος</label><input></div>
+            <div class="field" style="max-width:110px"><label>Κουδούνι</label><input></div>
+            <button class="btn btn-s">➕</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="e1-panel" data-tp="3">
+        <div class="card" style="margin-bottom:16px">
+          <h3>🚩 Σήμανση προβληματικού πελάτη</h3>
+          <div class="grid2">
+            <div class="field"><label>Επίπεδο</label><select><option>Καμία σήμανση</option><option>⚑ Προσοχή</option><option>⚑ Σοβαρό</option></select></div>
+            <div class="field"><label>Λόγος / σημείωση</label><input></div>
+          </div>
+          <div style="text-align:right;margin-top:14px"><button class="btn btn-p">💾 Αποθήκευση σήμανσης</button></div>
+        </div>
+        <div class="card">
+          <h3>🔐 Συναινέσεις & προσφορές</h3>
+          <div class="rowline"><div class="v">👤 Μέλος <span class="muted">(πόντοι + γενέθλια)</span></div><b style="color:var(--success)">✓ Ναι</b></div>
+          <div class="rowline"><div class="v">📧 Προσφορές Email <span class="muted">· από 12-05-2026</span></div><div style="display:flex;gap:10px;align-items:center"><b style="color:var(--success)">✓ Δέχεται</b><button class="mini d">🚫</button></div></div>
+          <div class="rowline"><div class="v">📱 Προσφορές SMS</div><span class="muted">✗ Όχι</span></div>
+          <div class="tipbox" style="margin:14px 0 0">ℹ️ Από εδώ μπορείς μόνο να <b>σταματήσεις</b> προσφορές. Το «ναι» το δίνει μόνο ο πελάτης (νόμος).</div>
+        </div>
+      </div>
+
+      <div class="e1-panel" data-tp="4">
+        <div class="card danger-card">
+          <h3>🗑️ Διαγραφή πελάτη (GDPR)</h3>
+          <p class="muted" style="font-size:13px;margin:0 0 14px">Οι παλιές πωλήσεις μένουν <b>ανώνυμες</b> — ο τζίρος σου δεν χαλάει. Δεν αναιρείται.</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-s">→ Στην ουρά έγκρισης</button>
+            <button class="btn btn-d">🗑️ Οριστική διαγραφή ΤΩΡΑ</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────── EDIT 2 — Sticky nav ─────────── -->
+  <div class="pane stage" data-epane="2">
+    <div class="concept">
+      <h2>2 · Πλαϊνό μενού ενοτήτων</h2>
+      <p>Αριστερά ένα μικρό μενού που «κολλάει» καθώς κατεβαίνεις· δεξιά όλες οι ενότητες η μία κάτω από την άλλη. Πατάς π.χ. «Διευθύνσεις» και πηδάς κατευθείαν εκεί. Όλα σε μία σελίδα, αλλά με γρήγορη πλοήγηση.</p>
+      <span class="tag">Έμφαση: όλα μπροστά + γρήγορο πήδημα</span>
+    </div>
+    <div class="e-shell">
+      <div class="e2-layout">
+        <nav class="e2-nav">
+          <a class="on">👤 Στοιχεία</a>
+          <a>📞 Τηλέφωνα</a>
+          <a>📍 Διευθύνσεις</a>
+          <a>🚩 Σήμανση</a>
+          <a>🔐 Απόρρητο</a>
+          <a style="color:#b91c1c">🗑️ Διαγραφή</a>
+        </nav>
+        <div class="e2-col">
+          <div class="card">
+            <h3>👤 Στοιχεία</h3>
+            <div class="grid2">
+              <div class="field"><label>Επώνυμο</label><input value="Παπαδόπουλος"></div>
+              <div class="field"><label>Όνομα</label><input value="Γιώργος"></div>
+              <div class="field"><label>Γενέθλια</label><input value="14/03/1985"></div>
+              <div class="field"><label>Email</label><input value="giorgos@example.gr"></div>
+              <div class="field"><label>Έκπτωση (%)</label><input value="10" type="number"></div>
+              <div class="field"><label>Σημειώσεις</label><input value="Πάντα χωρίς κρεμμύδι"></div>
+            </div>
+            <div style="text-align:right;margin-top:14px"><button class="btn btn-p">💾 Αποθήκευση</button></div>
+          </div>
+          <div class="card">
+            <h3>📞 Τηλέφωνα</h3>
+            <div class="rowline"><div class="v">697 1234567 <span class="muted">· κύριο</span></div><button class="mini d">🗑</button></div>
+            <div class="rowline"><div class="v">24620 55123</div><button class="mini d">🗑</button></div>
+            <div class="addrow"><div class="field" style="flex:1"><label>Νέο τηλέφωνο</label><input></div><button class="btn btn-s">➕ Προσθήκη</button></div>
+          </div>
+          <div class="card">
+            <h3>📍 Διευθύνσεις</h3>
+            <div class="rowline"><div class="v">Αγ. Κοσμά 14 <span class="muted">· ορ. 2 · κουδ. Παπαδ.</span></div><button class="mini d">🗑</button></div>
+            <div class="addrow"><div class="field" style="flex:2"><label>Διεύθυνση</label><input></div><div class="field" style="max-width:90px"><label>Όροφος</label><input></div><button class="btn btn-s">➕</button></div>
+          </div>
+          <div class="card danger-card">
+            <h3>🗑️ Διαγραφή (GDPR)</h3>
+            <div style="display:flex;gap:10px"><button class="btn btn-s">→ Ουρά έγκρισης</button><button class="btn btn-d">🗑️ Διαγραφή τώρα</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────── EDIT 3 — Live preview ─────────── -->
+  <div class="pane stage" data-epane="3">
+    <div class="concept">
+      <h2>3 · Ζωντανή προεπισκόπηση</h2>
+      <p>Αριστερά γράφεις, δεξιά βλέπεις <b>ζωντανά</b> πώς θα φαίνεται η καρτέλα του πελάτη όπως αλλάζεις τα πεδία. «Ό,τι βλέπεις, αυτό αποθηκεύεις» — μηδέν εκπλήξεις. (Στο preview τα πεδία είναι δείγμα.)</p>
+      <span class="tag">Έμφαση: σιγουριά — βλέπεις το αποτέλεσμα</span>
+    </div>
+    <div class="e-shell">
+      <div class="e3-layout">
+        <div class="e2-col">
+          <div class="card">
+            <h3>👤 Στοιχεία</h3>
+            <div class="grid2">
+              <div class="field"><label>Επώνυμο</label><input value="Παπαδόπουλος"></div>
+              <div class="field"><label>Όνομα</label><input value="Γιώργος"></div>
+              <div class="field"><label>Γενέθλια</label><input value="14/03/1985"></div>
+              <div class="field"><label>Έκπτωση (%)</label><input value="10" type="number"></div>
+              <div class="field" style="grid-column:1/-1"><label>Σημειώσεις</label><input value="Πάντα χωρίς κρεμμύδι"></div>
+            </div>
+          </div>
+          <div class="card">
+            <h3>📞 Τηλέφωνα & διευθύνσεις</h3>
+            <div class="rowline"><div class="v">697 1234567 <span class="muted">· κύριο</span></div><button class="mini d">🗑</button></div>
+            <div class="rowline"><div class="v">🏠 Αγ. Κοσμά 14, ορ. 2</div><button class="mini d">🗑</button></div>
+          </div>
+          <div style="text-align:right"><button class="btn btn-p">💾 Αποθήκευση όλων</button></div>
+        </div>
+        <div class="e3-preview">
+          <div class="e3-pv-note">👁 Προεπισκόπηση — έτσι θα το βλέπεις</div>
+          <div class="e3-pv-hero">
+            <div class="avatar">Π</div>
+            <div style="font-weight:800;font-size:16px">Γιώργος Παπαδόπουλος</div>
+            <span class="stpill" style="background:rgba(255,255,255,.9);color:#b45309;margin-top:8px">⭐ VIP</span>
+          </div>
+          <div class="e3-pv-body">
+            <div class="r"><span class="muted">📞 Τηλέφωνο</span><b>697 1234567</b></div>
+            <div class="r"><span class="muted">🏠 Διεύθυνση</span><b>Αγ. Κοσμά 14</b></div>
+            <div class="r"><span class="muted">🎂 Γενέθλια</span><b>14/03/1985</b></div>
+            <div class="r"><span class="muted">🏷️ Έκπτωση</span><b>10%</b></div>
+            <div class="r" style="border:none"><span class="muted">📝 Σημείωση</span><b>χωρίς κρεμμύδι</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────── EDIT 4 — Single card fieldsets ─────────── -->
+  <div class="pane stage" data-epane="4">
+    <div class="concept">
+      <h2>4 · Ενιαία κομψή καρτέλα</h2>
+      <p>Μία όμορφη καρτέλα με «ζώνες» (fieldsets) μέσα της: κάθε ενότητα χωρισμένη με λεπτή γραμμή &amp; μικρό τίτλο. Βελτιωμένη &amp; πιο «σφιχτή» εκδοχή του σημερινού, αλλά πολύ πιο επαγγελματική &amp; καθαρή.</p>
+      <span class="tag">Έμφαση: οικείο αλλά κομψό</span><span class="tag">Λιγότερη αλλαγή συνήθειας</span>
+    </div>
+    <div class="e4-card">
+      <div class="e4-band">
+        <div class="avatar">Π</div>
+        <div style="flex:1"><h3 style="font-size:18px">Γιώργος Παπαδόπουλος</h3><div class="muted" style="font-size:13px">✏️ Επεξεργασία πελάτη</div></div>
+        <button class="btn btn-p">💾 Αποθήκευση</button>
+      </div>
+      <fieldset class="fset" style="border:none;margin:0">
+        <legend>👤 Βασικά στοιχεία</legend>
+        <div class="grid2">
+          <div class="field"><label>Επώνυμο</label><input value="Παπαδόπουλος"></div>
+          <div class="field"><label>Όνομα</label><input value="Γιώργος"></div>
+          <div class="field"><label>Γενέθλια</label><input value="14/03/1985"></div>
+          <div class="field"><label>Email</label><input value="giorgos@example.gr"></div>
+          <div class="field"><label>Έκπτωση (%)</label><input value="10" type="number"></div>
+          <div class="field"><label>Σημειώσεις</label><input value="Πάντα χωρίς κρεμμύδι"></div>
+        </div>
+      </fieldset>
+      <fieldset class="fset" style="border:none;margin:0">
+        <legend>📞 Τηλέφωνα</legend>
+        <div class="rowline"><div class="v">697 1234567 <span class="muted">· κύριο</span></div><button class="mini d">🗑</button></div>
+        <div class="rowline"><div class="v">24620 55123</div><button class="mini d">🗑</button></div>
+        <div class="addrow"><div class="field" style="flex:1"><label>Νέο τηλέφωνο</label><input></div><button class="btn btn-s">➕ Προσθήκη</button></div>
+      </fieldset>
+      <fieldset class="fset" style="border:none;margin:0">
+        <legend>📍 Διευθύνσεις</legend>
+        <div class="rowline"><div class="v">Αγ. Κοσμά 14 <span class="muted">· ορ. 2 · κουδ. Παπαδ.</span></div><button class="mini d">🗑</button></div>
+        <div class="addrow"><div class="field" style="flex:2"><label>Διεύθυνση</label><input></div><div class="field" style="max-width:90px"><label>Όροφος</label><input></div><button class="btn btn-s">➕</button></div>
+      </fieldset>
+      <fieldset class="fset" style="border:none;margin:0">
+        <legend>🚩 Σήμανση & 🔐 Απόρρητο</legend>
+        <div class="grid2">
+          <div class="field"><label>Επίπεδο σήμανσης</label><select><option>Καμία</option><option>⚑ Προσοχή</option><option>⚑ Σοβαρό</option></select></div>
+          <div class="field"><label>Λόγος</label><input></div>
+        </div>
+        <div class="rowline" style="margin-top:12px"><div class="v">📧 Προσφορές Email</div><div style="display:flex;gap:10px;align-items:center"><b style="color:var(--success)">✓ Δέχεται</b><button class="mini d">🚫</button></div></div>
+      </fieldset>
+      <fieldset class="fset danger-card" style="border:none;margin:0">
+        <legend style="color:#b91c1c">🗑️ Διαγραφή (GDPR)</legend>
+        <div style="display:flex;gap:10px"><button class="btn btn-s">→ Ουρά έγκρισης</button><button class="btn btn-d">🗑️ Διαγραφή τώρα</button></div>
+      </fieldset>
+    </div>
+  </div>
+
+  <!-- ─────────── EDIT 5 — Guided ─────────── -->
+  <div class="pane stage" data-epane="5">
+    <div class="concept">
+      <h2>5 · Καθοδηγούμενη (φιλική)</h2>
+      <p>Κάθε ενότητα σε δική της κάρτα με χρωματιστή γραμμή στα αριστερά &amp; μικρή εξήγηση από κάτω. Οι διακόπτες (on/off) αντί για μπερδεμένα κουμπάκια. Ζεστό &amp; ξεκάθαρο — ιδανικό όταν δεν θες να σκέφτεσαι «τι κάνει αυτό».</p>
+      <span class="tag">Έμφαση: απλότητα &amp; εξηγήσεις</span>
+    </div>
+    <div class="e-shell">
+      <div class="e5-card">
+        <h3>👤 Ποιος είναι</h3>
+        <div class="hint">Το όνομα &amp; τα βασικά του πελάτη.</div>
+        <div class="grid2">
+          <div class="field"><label>Επώνυμο</label><input value="Παπαδόπουλος"></div>
+          <div class="field"><label>Όνομα</label><input value="Γιώργος"></div>
+          <div class="field"><label>Γενέθλια</label><input value="14/03/1985"></div>
+          <div class="field"><label>Αυτόματη έκπτωση (%)</label><input value="10" type="number"></div>
+        </div>
+      </div>
+      <div class="e5-card">
+        <h3>📞 Πώς τον βρίσκεις</h3>
+        <div class="hint">Τηλέφωνα &amp; διευθύνσεις παράδοσης.</div>
+        <div class="rowline"><div class="v">697 1234567 <span class="muted">· κύριο</span></div><button class="mini d">🗑</button></div>
+        <div class="rowline"><div class="v">🏠 Αγ. Κοσμά 14, ορ. 2, κουδ. Παπαδ.</div><button class="mini d">🗑</button></div>
+        <div class="addrow"><div class="field" style="flex:1"><label>Προσθήκη τηλεφώνου ή διεύθυνσης</label><input></div><button class="btn btn-s">➕ Προσθήκη</button></div>
+      </div>
+      <div class="e5-card">
+        <h3>🔐 Τι δέχεται να λαμβάνει</h3>
+        <div class="hint">Μπορείς μόνο να <b>κλείσεις</b> τις προσφορές (το «ναι» το δίνει ο πελάτης — έτσι λέει ο νόμος).</div>
+        <div class="togglebox">👤 Μέλος (πόντοι + γενέθλια) <span class="switch"></span></div>
+        <div class="togglebox">📧 Προσφορές Email <span class="switch"></span></div>
+        <div class="togglebox">📱 Προσφορές SMS <span class="switch off"></span></div>
+      </div>
+      <div class="e5-card grey">
+        <h3>🚩 Προσοχή σε αυτόν;</h3>
+        <div class="hint">Βάλε σήμανση αν σου έχει δημιουργήσει πρόβλημα (π.χ. ακυρώνει παραγγελίες).</div>
+        <div class="grid2">
+          <div class="field"><label>Επίπεδο</label><select><option>Καμία σήμανση</option><option>⚑ Προσοχή</option><option>⚑ Σοβαρό</option></select></div>
+          <div class="field"><label>Λόγος</label><input></div>
+        </div>
+      </div>
+      <div class="e5-card red">
+        <h3>🗑️ Διαγραφή πελάτη</h3>
+        <div class="hint">Οι παλιές πωλήσεις μένουν ανώνυμες — ο τζίρος δεν χαλάει. Δεν αναιρείται.</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-s">→ Ουρά έγκρισης</button><button class="btn btn-d">🗑️ Οριστική διαγραφή τώρα</button></div>
+      </div>
+      <div style="text-align:right"><button class="btn btn-p">💾 Αποθήκευση όλων</button></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footnote">TAMAM Grill House · Πρόχειρο σχεδίασης — τα στοιχεία είναι φανταστικό δείγμα (όχι πραγματικός πελάτης).</div>
+
+<script>
+// main tabs
+document.querySelectorAll('.maintab').forEach(function(t){
+  t.addEventListener('click',function(){
+    var m=t.dataset.main;
+    document.querySelectorAll('.maintab').forEach(function(x){x.classList.toggle('on',x===t);});
+    document.getElementById('view').classList.toggle('on',m==='view');
+    document.getElementById('edit').classList.toggle('on',m==='edit');
+    document.querySelector('.subnav[data-for="view"]').style.display=m==='view'?'':'none';
+    document.querySelector('.subnav[data-for="edit"]').style.display=m==='edit'?'':'none';
+    window.scrollTo(0,0);
+  });
+});
+// view subnav
+var VCAP={
+  '1':'🪟 <b>Πρόταση 1 · Καρτέλα «Hero»</b> — ζεστό, με μεγάλη πορτοκαλί κορυφή. Το κουτί σκρολάρει <b>μόνο μέσα του</b>.',
+  '2':'🪟 <b>Πρόταση 2 · Ντοσιέ 2 στηλών</b> — επαφή/συναινέσεις αριστερά, αριθμοί/παραγγελίες δεξιά. Σκρολ μέσα στη δεξιά στήλη.',
+  '3':'🪟 <b>Πρόταση 3 · Ιστορικό/Timeline</b> — έμφαση στο «τι &amp; πότε αγόρασε». Σκρολ στο κάτω μέρος.',
+  '4':'🪟 <b>Πρόταση 4 · Πλακίδια (Bento)</b> — κάθε πληροφορία σε χρωματιστό κουτάκι, ύφος dashboard.',
+  '5':'🪟 <b>Πρόταση 5 · Μινιμαλ</b> — λιτό, μεγάλα γράμματα, ήρεμο. Κεφαλή &amp; κουμπιά σταθερά.'
+};
+var vcapEl=document.getElementById('vcap');
+function setCap(v){ vcapEl.innerHTML=VCAP[v]||''; }
+setCap('1');
+document.querySelectorAll('.subnav[data-for="view"] .pill').forEach(function(p){
+  p.addEventListener('click',function(){
+    var v=p.dataset.v;
+    document.querySelectorAll('.subnav[data-for="view"] .pill').forEach(function(x){x.classList.toggle('on',x===p);});
+    document.querySelectorAll('[data-vpane]').forEach(function(pn){pn.classList.toggle('on',pn.dataset.vpane===v);});
+    setCap(v);
+  });
+});
+// edit subnav
+document.querySelectorAll('.subnav[data-for="edit"] .pill').forEach(function(p){
+  p.addEventListener('click',function(){
+    var e=p.dataset.e;
+    document.querySelectorAll('.subnav[data-for="edit"] .pill').forEach(function(x){x.classList.toggle('on',x===p);});
+    document.querySelectorAll('[data-epane]').forEach(function(pn){pn.classList.toggle('on',pn.dataset.epane===e);});
+    window.scrollTo(0,120);
+  });
+});
+// edit-1 inner tabs
+document.querySelectorAll('.e1-tab').forEach(function(t){
+  t.addEventListener('click',function(){
+    var n=t.dataset.t;
+    document.querySelectorAll('.e1-tab').forEach(function(x){x.classList.toggle('on',x===t);});
+    document.querySelectorAll('[data-tp]').forEach(function(pn){pn.classList.toggle('on',pn.dataset.tp===n);});
+  });
+});
+</script>
+</body>
+</html>
