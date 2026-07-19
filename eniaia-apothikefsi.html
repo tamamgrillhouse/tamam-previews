@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Ενιαία Αποθήκευση — πριν / μετά — TAMAM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════════════
+   1) ΑΥΤΟΥΣΙΟ CSS ΤΟΥ POS — εξαγωγή από styles/variables.css,
+      components.css, modals.css. Καμία χειροκίνητη αναπαραγωγή:
+      ό,τι βλέπεις στα σκούρα πάνελ αποδίδεται με τους ΙΔΙΟΥΣ κανόνες
+      που τρέχουν στο πρόγραμμα.
+   ═══════════════════════════════════════════════════════════════════ */
+/* ══ variables.css ══ */
+:root { --black: #0e1330; --dark: #12183a; --card: #1c2554; --card2: #243068; --yellow: #f5c400; --yellow2: #d4a900; --white: #e8eaf6; --muted: #93a0dd; --red: #ef5350; --green: #26c281; --border: #2a3580; --ydim: rgba(245,196,0,.12); --rdim: rgba(229,62,62,.15); --glow-yellow-sm: rgba(245,200,66,.12); --glow-yellow-md: rgba(245,200,66,.18); --glow-yellow-ring: rgba(245,200,66,.55); --glow-red-sm: rgba(224,90,90,.12); --glow-red-ring: rgba(224,90,90,.5); --glow-blue-sm: rgba(74,158,240,.12); --nav-bg: #090d22; --sidebar: 360px; --nav-w: 90px; --radius: 16px; --radius-sm: 10px; --radius-pill: 50px; --radius-xs: 4px; --radius-card: 8px; --radius-btn: 6px; --fp-portrait-w: 97px; --fp-portrait-h: 146px; --fp-portrait-fs: 18px; --fp-landscape-w: 166px; --fp-landscape-h: 83px; --fp-landscape-fs: 18px; --fp-chair-size: 41px; --fp-chair-fs: 12px; --fp-gap-chairs: 12px; --fp-gap-front: 32px; --fp-gap-plan: 26px; }
+@media (max-width: 960px) {
+:root { --sidebar: 300px; --nav-w: 80px; }
+}
+@media (min-width: 1400px) {
+:root { --sidebar: 420px; }
+}
+
+/* ══ components.css ══ */
+@keyframes gold-pulse { 
+  0%, 100% { transform: scale(1); color: var(--yellow); filter: drop-shadow(rgba(245, 196, 0, 0) 0px 0px 0px); }
+  50% { transform: scale(1.15); color: rgb(255, 248, 224); filter: drop-shadow(rgba(255, 240, 180, 0.85) 0px 0px 7px); }
+}
+@keyframes gold-pulse-dim { 
+  0%, 100% { transform: scale(1); color: rgb(138, 112, 32); filter: none; }
+  50% { transform: scale(1.08); color: rgb(200, 160, 48); filter: drop-shadow(rgba(200, 160, 48, 0.35) 0px 0px 4px); }
+}
+@keyframes busyPulse { 
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+@keyframes ntab-scan { 
+  0% { top: 0px; opacity: 0.7; }
+  85% { opacity: 0.2; }
+  100% { top: 100%; opacity: 0; }
+}
+@keyframes catSepPulse { 
+  0%, 100% { opacity: 0.62; transform: scaleY(1); box-shadow: rgba(245, 196, 0, 0.38) 0px 0px 5px; }
+  50% { opacity: 1; transform: scaleY(1.55); box-shadow: rgba(245, 196, 0, 0.99) 0px 0px 12px, rgba(245, 196, 0, 0.5) 0px 0px 26px; }
+}
+@keyframes bp-spin { 
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.modal-actions .asl-btn { flex: 1 1 0%; }
+.disc-reason-footer .asl-btn { min-height: 44px; }
+.footer-btns .asl-btn { flex: 1 1 0%; }
+#sidebar[data-type="delivery"] #print-btn .asl-l1, #sidebar[data-type="delivery"] #print-btn .asl-l2 { color: rgb(255, 255, 255); font-weight: 800; }
+#sidebar[data-type="takeaway"] #print-btn .asl-l1, #sidebar[data-type="takeaway"] #print-btn .asl-l2 { color: rgb(10, 26, 15); font-weight: 800; }
+#sidebar[data-type="table"] #print-btn .asl-l1, #sidebar[data-type="table"] #print-btn .asl-l2 { color: rgb(26, 18, 0); font-weight: 800; }
+#floor-picker-modal .asl-btn { min-height: 52px; padding: 8px 4px; font-size: 13px; }
+.cev-ph-add .field-input { flex: 1 1 0%; }
+.cev-ph-add .asl-btn { flex: 0 0 auto; min-width: 96px; }
+@keyframes dq-pulse-late { 
+  0%, 100% { box-shadow: rgba(239, 83, 80, 0) 0px 0px 0px 0px; }
+  50% { box-shadow: rgba(239, 83, 80, 0.4) 0px 0px 0px 3px; }
+}
+.str-sw { position: relative; width: 34px; height: 18px; border-radius: 9px; background: rgba(255, 255, 255, 0.1); border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; cursor: pointer; transition: background 0.2s; padding: 0px; flex-shrink: 0; }
+.str-sw::after { content: ""; position: absolute; top: 3px; left: 3px; width: 12px; height: 12px; border-radius: 50%; background: var(--muted); transition: transform 0.2s, background 0.2s; }
+.str-sw.on { background: rgba(52, 199, 89, 0.2); }
+.str-sw.on::after { transform: translateX(16px); background: var(--green); }
+@media (max-width: 700px) {
+.str-sw { order: 2; }
+}
+.str-seg-btn { flex: 1 1 0%; padding: 7px 4px; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; background: transparent; color: var(--muted); font-size: 12.5px; font-weight: 600; cursor: pointer; border-radius: 7px; transition: 0.18s; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 4px; white-space: nowrap; }
+.str-seg-btn:not(.active):hover { color: var(--white); background: rgba(255, 255, 255, 0.05); }
+.str-seg-btn.active { background: var(--yellow); color: var(--black); box-shadow: rgba(245, 197, 24, 0.28) 0px 2px 8px; }
+@keyframes strSegExpand { 
+  0% { opacity: 0; transform: translateY(-6px); }
+  100% { opacity: 1; transform: translateY(0px); }
+}
+.admin-save-slide .asl-l1, .admin-save-slide .asl-l2, .admin-save-slide .asl-l3 { position: absolute; inset: 0px; display: flex; align-items: center; justify-content: center; transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), filter 0.35s, opacity 0.3s; gap: 6px; pointer-events: none; }
+.admin-save-slide .asl-l1 { color: var(--muted); }
+.admin-save-slide .asl-l2 { transform: translateY(20px); color: var(--yellow); filter: blur(6px); opacity: 0; }
+.admin-save-slide .asl-l3 { transform: translateY(20px); color: var(--green); filter: blur(6px); opacity: 0; }
+.admin-save-slide:not(.done):hover .asl-l1 { transform: translateY(-20px); filter: blur(6px); opacity: 0; }
+.admin-save-slide:not(.done):hover .asl-l2 { transform: translateY(0px); filter: blur(0px); opacity: 1; }
+.admin-save-slide.done .asl-l1 { transform: translateY(-20px); filter: blur(6px); opacity: 0; }
+.admin-save-slide.done .asl-l2 { transform: translateY(-20px); filter: blur(6px); opacity: 0; }
+.admin-save-slide.done .asl-l3 { transform: translateY(0px); filter: blur(0px); opacity: 1; }
+.asl-btn { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-card); cursor: pointer; font-family: "Noto Sans Greek", sans-serif; font-weight: 700; font-size: 13px; overflow: hidden; position: relative; height: 44px; min-width: 80px; padding: 0px; transition: border-color 0.3s, background 0.3s, box-shadow 0.3s; }
+.asl-btn[disabled] { opacity: 0.38; cursor: not-allowed; pointer-events: none; }
+.asl-btn .asl-l1, .asl-btn .asl-l2, .asl-btn .asl-l3 { position: absolute; inset: 0px; display: flex; align-items: center; justify-content: center; transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), filter 0.35s, opacity 0.3s; gap: 6px; pointer-events: none; white-space: nowrap; }
+.asl-btn .asl-l2 { transform: translateY(20px); filter: blur(6px); opacity: 0; }
+.asl-btn .btn-ico { width: 14px; height: 14px; stroke: currentcolor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+.asl-btn .asl-l3 { transform: translateY(20px); filter: blur(6px); opacity: 0; }
+.asl-btn:not(.done):hover .asl-l1 { transform: translateY(-20px); filter: blur(6px); opacity: 0; }
+.asl-btn:not(.done):hover .asl-l2 { transform: translateY(0px); filter: blur(0px); opacity: 1; }
+.asl-btn.done .asl-l1 { transform: translateY(-20px); filter: blur(6px); opacity: 0; }
+.asl-btn.done .asl-l2 { transform: translateY(-20px); filter: blur(6px); opacity: 0; }
+.asl-btn.done .asl-l3 { transform: translateY(0px); filter: blur(0px); opacity: 1; }
+.asl-btn.done { cursor: default; }
+.asl-t1 { border-color: rgba(255, 255, 255, 0.2); }
+.asl-t1 .asl-l1 { color: var(--white); font-weight: 900; font-size: 14px; }
+.asl-t1 .asl-l2 { color: var(--white); font-weight: 900; font-size: 14px; }
+.asl-t1 .asl-l3 { color: var(--green); }
+.asl-t1:not(.done):hover { border-color: rgba(255, 255, 255, 0.42); background: rgba(255, 255, 255, 0.06); }
+.asl-t1.done { border-color: rgba(62, 207, 142, 0.3) !important; background: rgba(62, 207, 142, 0.06) !important; }
+.asl-t2 .asl-l1 { color: var(--muted); }
+.asl-t2 .asl-l2 { color: var(--yellow); }
+.asl-t2 .asl-l3 { color: var(--green); }
+.asl-t2:not(.done):hover { border-color: rgba(245, 200, 66, 0.35); background: rgba(245, 200, 66, 0.04); }
+.asl-t2.done { border-color: rgba(62, 207, 142, 0.3) !important; background: rgba(62, 207, 142, 0.06) !important; }
+.asl-t3 .asl-l1 { color: var(--muted); }
+.asl-t3 .asl-l2 { color: var(--white); }
+.asl-t3 .asl-l3 { color: var(--green); }
+.asl-t3:not(.done):hover { border-color: rgba(255, 255, 255, 0.18); background: rgba(255, 255, 255, 0.04); }
+.asl-t3.done { border-color: rgba(62, 207, 142, 0.3) !important; background: rgba(62, 207, 142, 0.06) !important; }
+.asl-t4 { border-color: rgba(224, 69, 69, 0.18); }
+.asl-t4::before { content: ""; position: absolute; inset: 0px; background: var(--red); transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 0; }
+.asl-t4:not(.done):hover::before { transform: translateY(0px); }
+.asl-t4:not(.done):hover { border-color: var(--red); }
+.asl-t4 .asl-l1 { color: rgba(224, 69, 69, 0.4); z-index: 1; }
+.asl-t4 .asl-l2 { color: rgb(255, 255, 255); font-weight: 800; z-index: 1; }
+.asl-t4 .asl-l3 { color: var(--green); z-index: 1; }
+.asl-t4.done { border-color: rgba(62, 207, 142, 0.3) !important; background: rgba(62, 207, 142, 0.06) !important; }
+.asl-t4.done::before { display: none; }
+.asl-t5 { background: transparent; border-color: rgba(255, 255, 255, 0.07); }
+.asl-t5 .asl-l1 { color: rgba(255, 255, 255, 0.55); }
+.asl-t5 .asl-l2 { color: rgba(255, 255, 255, 0.6); }
+.asl-t5:not(.done):hover { border-color: rgba(255, 255, 255, 0.14); background: rgba(255, 255, 255, 0.03); }
+.tmap-back-btn .asl-l1 { color: var(--muted); font-size: 12px; font-weight: 700; }
+.tmap-back-btn .asl-l2 { color: var(--white); font-size: 12px; font-weight: 700; }
+.health-pill { cursor: pointer; display: inline-flex; align-items: center; gap: 7px; padding: 5px 10px; border-radius: var(--radius-pill); background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); flex-shrink: 0; white-space: nowrap; transition: border-color 0.2s, background 0.2s; }
+.health-pill:hover { border-color: rgba(255, 255, 255, 0.28); background: rgba(255, 255, 255, 0.09); }
+.hp-seg { display: inline-flex; align-items: center; gap: 5px; }
+.hp-ico { font-size: 13px; line-height: 1; opacity: 0.8; }
+.hp-div { width: 1px; height: 14px; background: var(--border); }
+.hp-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; background: var(--muted); transition: background 0.2s; }
+.hp-dot.hp-ok { background: var(--green); box-shadow: rgba(56, 217, 122, 0.55) 0px 0px 6px; }
+.hp-dot.hp-warn { background: var(--yellow); box-shadow: 0 0 6px var(--glow-yellow-ring); }
+.hp-dot.hp-red { background: var(--red); box-shadow: 0 0 6px var(--glow-red-ring); }
+.hp-dot.hp-none { background: var(--muted); opacity: 0.55; box-shadow: none; }
+#backup-banner { position: fixed; bottom: 0px; left: 0px; right: 0px; z-index: 800; background: rgb(26, 32, 80); border-top: 2px solid var(--yellow); padding: 10px 16px; display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--white); }
+#backup-banner span { flex: 1 1 0%; }
+#backup-banner button { background: none; border: 1.5px solid var(--yellow); color: var(--yellow); border-radius: var(--radius-btn); padding: 4px 12px; cursor: pointer; font-size: 12px; font-family: "Noto Sans Greek", sans-serif; white-space: nowrap; }
+#backup-banner .backup-banner-close { border-color: var(--muted); color: var(--muted); padding: 4px 8px; }
+#backup-banner button:hover { opacity: 0.8; }
+@media (max-width: 700px) {
+#backup-banner { bottom: calc(56px + env(safe-area-inset-bottom, 0px)); }
+}
+@keyframes bb-slide-in { 
+  0% { transform: translateY(100%); opacity: 0; }
+  100% { transform: translateY(0px); opacity: 1; }
+}
+@keyframes bb-slide-out { 
+  0% { transform: translateY(0px); opacity: 1; }
+  100% { transform: translateY(110%); opacity: 0; }
+}
+#backup-banner { animation: 0.35s ease-out 0s 1 normal none running bb-slide-in; }
+#backup-banner.hiding { animation: 0.35s ease-in 0s 1 normal forwards running bb-slide-out; }
+#backup-reminder { position: fixed; inset: 0px; z-index: 800; display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(3px); }
+#backup-reminder-box { background: var(--dark); border: 1.5px solid rgba(245, 200, 66, 0.45); border-radius: var(--radius); padding: 28px 24px 20px; max-width: min(400px, 92vw); width: 100%; display: flex; flex-direction: column; gap: 16px; box-shadow: rgba(0, 0, 0, 0.65) 0px 12px 48px, rgba(245, 200, 66, 0.08) 0px 0px 0px 1px; animation: 0.22s ease-out 0s 1 normal none running bkp-rem-in; }
+@keyframes bkp-rem-in { 
+  0% { opacity: 0; transform: scale(0.93) translateY(12px); }
+  100% { opacity: 1; transform: scale(1) translateY(0px); }
+}
+.bkp-rem-header { display: flex; align-items: flex-start; gap: 14px; }
+.bkp-rem-icon { font-size: 30px; flex-shrink: 0; line-height: 1; margin-top: 2px; }
+.bkp-rem-body { flex: 1 1 0%; }
+.bkp-rem-body strong { display: block; font-size: 14px; color: var(--yellow); margin-bottom: 6px; font-family: "Noto Sans Greek", sans-serif; }
+.bkp-rem-body span { font-size: 12px; color: var(--muted); line-height: 1.55; }
+.bkp-rem-footer { display: flex; gap: 8px; }
+@keyframes folderCursorBlink { 
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.folder-btn-cursor { display: none; width: 2px; height: 0.85em; background: currentcolor; margin-left: 2px; vertical-align: text-bottom; border-radius: 1px; }
+.folder-btn-cursor.folder-btn-cursor-on { display: inline-block; animation: 0.5s step-end 0s infinite normal none running folderCursorBlink; }
+.folder-btn-label-warn { color: var(--yellow); }
+@media print {
+#backup-banner, #backup-reminder { display: none !important; }
+}
+@media (any-pointer: coarse) {
+.asl-btn:not(.done):active { transform: scale(0.97); opacity: 0.9; }
+}
+.efn-left .asl-btn, .efn-right .asl-btn { flex: 0 0 auto; }
+.efn-right .asl-btn { min-width: 120px; }
+.efn-left .asl-btn { min-width: 120px; }
+.cme-footer .asl-btn { flex: 1 1 0%; }
+.sp-section-title { font-size: 15px; font-weight: 800; color: var(--white); margin: 0px 0px 4px; }
+.sp-section-desc { font-size: 11px; color: var(--muted); margin: 0px 0px 18px; line-height: 1.5; }
+.sp-field-group { display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+.sp-field { display: flex; flex-direction: column; gap: 5px; }
+.sp-label { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; }
+.sp-msg { font-size: 12px; min-height: 18px; margin-top: 8px; text-align: center; color: var(--green); }
+.sp-divider { height: 1px; background: var(--border); margin: 16px 0px; }
+.sp-pin-row .asl-btn { flex-shrink: 0; min-width: 90px; }
+.sp-status-card { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: var(--radius-sm); margin-bottom: 14px; border: 1.5px solid; }
+.sp-status-card.ok { background: rgba(0, 200, 100, 0.07); border-color: rgba(0, 200, 100, 0.3); }
+.sp-status-card.none { background: rgba(220, 50, 50, 0.07); border-color: rgba(220, 50, 50, 0.3); }
+.sp-status-dot { font-size: 22px; line-height: 1; }
+.sp-status-label { font-size: 13px; font-weight: 700; color: var(--white); }
+.sp-status-sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.sp-btn-pair { display: flex; gap: 8px; }
+.sp-outline-btn { flex: 1 1 0%; background: transparent; border: 1.5px solid var(--border); border-radius: var(--radius-card); color: var(--white); font-size: 12px; font-weight: 700; padding: 10px; cursor: pointer; font-family: "Noto Sans Greek", sans-serif; transition: 0.15s; }
+.sp-outline-btn:hover { border-color: var(--yellow); color: var(--yellow); }
+#dlg-no:not(.asl-btn) { background: var(--card); color: var(--white); border: 1.5px solid var(--border); padding: 11px 26px; border-radius: var(--radius-pill); cursor: pointer; font-size: 0.9rem; font-weight: 600; font-family: "Noto Sans Greek", sans-serif; transition: 0.15s; }
+#dlg-no:not(.asl-btn):hover { border-color: var(--muted); color: var(--white); }
+#dlg-yes:not(.asl-btn) { background: var(--yellow); color: var(--nav-bg); font-weight: 900; padding: 11px 26px; border-radius: var(--radius-pill); cursor: pointer; font-size: 0.9rem; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; font-family: "Noto Sans Greek", sans-serif; transition: 0.15s; }
+#dlg-yes:not(.asl-btn):hover { background: var(--yellow2); }
+@keyframes insightSlideIn { 
+  0% { opacity: 0; transform: translateY(-6px); }
+  100% { opacity: 1; transform: translateY(0px); }
+}
+.shift-modal-footer .asl-btn { flex: 1 1 0%; }
+@keyframes rdr-ping { 
+  0%, 100% { box-shadow: rgba(245, 200, 66, 0.7) 0px 0px 0px 0px; }
+  50% { box-shadow: rgba(245, 200, 66, 0) 0px 0px 0px 7px; }
+}
+@keyframes rdr-sweep { 
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+@keyframes shift-dot-pulse { 
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+.po-field .field-input { width: 100%; }
+@media (max-width: 700px) {
+.po-field .field-input { font-size: 16px; }
+.field-input { font-size: 16px; }
+}
+.asl-btn-row { display: flex; align-items: center; gap: 8px; }
+.asl-btn-row .asl-btn { flex: 1 1 0%; }
+.asl-btn-row.gap-sm { gap: 6px; }
+.asl-btn-row.gap-lg { gap: 12px; }
+.field-input { background: var(--card); border: 1.5px solid var(--border); border-radius: var(--radius-card); color: var(--white); font-size: 13px; padding: 8px 10px; font-family: "Noto Sans Greek", sans-serif; outline: none; transition: border-color 0.2s; width: 100%; box-sizing: border-box; }
+.field-input:focus { border-color: var(--yellow); }
+.field-input::placeholder { color: var(--muted); }
+.field-input.compact { background: var(--card2); border-width: 1px; font-size: 12px; padding: 5px 8px; border-radius: var(--radius-btn); }
+@keyframes cselFadeIn { 
+  0% { opacity: 0; transform: translateY(-4px); }
+  100% { opacity: 1; transform: translateY(0px); }
+}
+.field-input.compact:focus { border-color: var(--yellow); }
+.pcm-email-btns .asl-btn { min-width: 0px; font-size: 12px; }
+.cmed-charged-row > .field-input { flex: 1 1 0%; min-width: 0px; }
+@keyframes cmed-pulse { 
+  50% { opacity: 0.3; }
+}
+.sp-card { background: rgba(255, 255, 255, 0.02); border-width: 1px 1px 1px 3px; border-style: solid; border-color: rgba(255, 255, 255, 0.08) rgba(255, 255, 255, 0.08) rgba(255, 255, 255, 0.08) rgba(255, 255, 255, 0.22); border-image: initial; border-radius: var(--radius-card); padding: 14px; }
+.sp-card + .sp-card { margin-top: 12px; }
+.sp-content > :is(.sp-card, .nd-card, .cw-card, .fp-scale-card, .cour-card, .qr-card) + :is(.sp-card, .nd-card, .cw-card, .fp-scale-card, .cour-card, .qr-card) { margin-top: 12px; }
+@keyframes nameday-pulse { 
+  0%, 100% { box-shadow: rgba(245, 200, 66, 0) 0px 0px 0px 0px; }
+  50% { box-shadow: rgba(245, 200, 66, 0.18) 0px 0px 0px 5px; }
+}
+.cpk-open-btn.asl-btn { height: 36px; min-height: 36px; font-size: 12px; flex: 0 0 calc(50% - 3px); }
+#delivery-fields .asl-btn-row, #takeaway-fields .asl-btn-row { margin-bottom: 5px; }
+@keyframes lp-in { 
+  0% { transform: scale(0.88) translateY(12px); opacity: 0; }
+  100% { transform: scale(1) translateY(0px); opacity: 1; }
+}
+.prt-active-box .sp-outline-btn { flex-shrink: 0; }
+.cko-footer-btns .asl-btn-row { margin: 0px; }
+.qa-other-card .field-input { font-size: 14px; padding: 11px 13px; }
+.qa-other-card.hot .field-input { border-color: rgba(245, 200, 66, 0.5); }
+@keyframes cfsPulse { 
+  0%, 100% { box-shadow: rgba(224, 90, 90, 0) 0px 0px 0px 0px; }
+  50% { box-shadow: rgba(224, 90, 90, 0.18) 0px 0px 0px 3px; }
+}
+
+/* ══ modals.css ══ */
+@keyframes splashIn { 
+  0% { opacity: 0; transform: scale(0.82) translateY(14px); }
+  100% { opacity: 1; transform: scale(1) translateY(0px); }
+}
+@keyframes splashTagIn { 
+  0% { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0px); }
+}
+@keyframes splashPulse { 
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.9; }
+}
+@keyframes splashFadeOut { 
+  100% { opacity: 0; pointer-events: none; }
+}
+.modal-btn:not(.asl-btn) { flex: 1 1 0%; background: var(--card); border: 1.5px solid var(--border); border-radius: 9px; color: var(--muted); font-size: 14px; font-weight: 700; padding: 11px; cursor: pointer; font-family: "Noto Sans Greek", sans-serif; transition: border-color 0.15s, color 0.15s; }
+.modal-btn:not(.asl-btn):hover { border-color: rgb(102, 102, 102); color: var(--white); }
+.modal-btn-ok:not(.asl-btn) { background: var(--yellow); border-color: var(--yellow); color: var(--black); }
+.modal-btn-ok:not(.asl-btn):hover { background: var(--yellow2); border-color: var(--yellow2); color: var(--black); }
+.tdv4-act .asl-l1, .tdv4-act .asl-l2, .tdv4-act .asl-l3 { padding-left: 14px; justify-content: flex-start !important; }
+.tdv4-act.supplement:not(.done):hover .asl-l2 { color: var(--green) !important; }
+.tdv4-act.correction:not(.done):hover .asl-l2 { color: var(--red) !important; }
+.tdv4-act.partial:not(.done):hover .asl-l2 { color: rgb(155, 123, 224) !important; }
+.tdv4-act.transfer:not(.done):hover .asl-l2 { color: var(--blue) !important; }
+.tdv4-checkout .asl-l1, .tdv4-checkout .asl-l2, .tdv4-checkout .asl-l3 { justify-content: center !important; font-size: 15px !important; font-weight: 900 !important; }
+@keyframes ppcmFadeIn { 
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes ppcmPop { 
+  0% { transform: scale(0.88); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   2) Πλαίσιο του preview (μόνο για αυτή τη σελίδα, πρόθεμα pv-)
+   ═══════════════════════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;}
+body{
+  margin:0; padding:26px 18px 90px;
+  font-family:'Noto Sans',-apple-system,'Segoe UI',sans-serif;
+  background:radial-gradient(ellipse at top,#1a1f3a,#0d0f14 70%);
+  color:#eef1f8; -webkit-font-smoothing:antialiased;
+}
+.pv-wrap{max-width:1080px;margin:0 auto;}
+
+.pv-head{background:linear-gradient(135deg,#182046,#0f1430);border:1px solid #2a3580;border-radius:16px;padding:26px 28px;margin-bottom:26px;}
+.pv-tag{display:inline-block;background:rgba(245,200,66,.16);color:#f5c842;border:1px solid rgba(245,200,66,.45);font-size:11px;font-weight:700;padding:3px 11px;border-radius:20px;margin-bottom:12px;letter-spacing:.4px;}
+.pv-head h1{font-size:24px;font-weight:800;margin:0 0 9px;line-height:1.3;}
+.pv-head p{font-size:14px;color:#a8b2d8;line-height:1.7;margin:0;max-width:74ch;}
+
+.pv-sec{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#93a0dd;font-weight:800;margin:38px 0 14px;display:flex;align-items:center;gap:10px;}
+.pv-sec::before{content:'';width:7px;height:7px;border-radius:50%;background:#f5c842;flex-shrink:0;}
+.pv-sec::after{content:'';flex:1;height:1px;background:#2a3580;}
+
+.pv-note{background:rgba(255,255,255,.03);border:1px solid #2a3580;border-left:3px solid #f5c842;border-radius:10px;padding:15px 18px;font-size:13.5px;line-height:1.75;color:#c3cbe8;margin-bottom:18px;}
+.pv-note strong{color:#eef1f8;}
+
+/* πριν / μετά */
+.pv-ba{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start;}
+@media(max-width:900px){.pv-ba{grid-template-columns:1fr;}}
+.pv-col{min-width:0;}
+.pv-colh{font-size:12.5px;font-weight:800;padding:11px 15px;border-radius:11px 11px 0 0;display:flex;align-items:center;gap:8px;letter-spacing:.3px;}
+.pv-before .pv-colh{background:rgba(224,90,90,.14);color:#ff9d9d;border:1px solid rgba(224,90,90,.4);border-bottom:none;}
+.pv-after  .pv-colh{background:rgba(56,217,122,.13);color:#7ee6a6;border:1px solid rgba(56,217,122,.4);border-bottom:none;}
+.pv-colb{padding:18px 16px;border-radius:0 0 11px 11px;background:#0f1330;}
+.pv-before .pv-colb{border:1px solid rgba(224,90,90,.4);border-top:none;}
+.pv-after  .pv-colb{border:1px solid rgba(56,217,122,.4);border-top:none;}
+.pv-cap{font-size:11.5px;color:#93a0dd;margin:0 0 11px;line-height:1.6;}
+.pv-gone{margin-top:14px;padding:13px 15px;border:1px dashed rgba(56,217,122,.45);border-radius:10px;color:#7ee6a6;font-size:12.5px;line-height:1.7;background:rgba(56,217,122,.05);}
+.pv-gone b{color:#a8f0c4;}
+
+/* πίνακας — ο ίδιος σκρολάρει, ΠΟΤΕ το body (κανόνας responsive) */
+.pv-tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:10px;}
+.pv-tbl{width:100%;min-width:460px;border-collapse:collapse;font-size:13px;background:rgba(255,255,255,.02);border:1px solid #2a3580;border-radius:10px;overflow:hidden;}
+.pv-tbl code{word-break:break-word;}
+.pv-tbl th{background:rgba(255,255,255,.04);color:#93a0dd;font-size:11px;text-transform:uppercase;letter-spacing:.6px;padding:10px 13px;text-align:left;font-weight:800;}
+.pv-tbl td{padding:11px 13px;border-top:1px solid #232c66;color:#c3cbe8;line-height:1.6;vertical-align:top;}
+.pv-tbl code{background:rgba(0,0,0,.35);padding:2px 6px;border-radius:4px;font-size:11.5px;color:#f5c842;font-family:'JetBrains Mono',monospace;}
+.pv-tbl .no{color:#ff9d9d;font-weight:700;}
+.pv-tbl .yes{color:#7ee6a6;font-weight:700;}
+
+/* ροή δύο μηχανημάτων */
+.pv-flow{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:900px){.pv-flow{grid-template-columns:1fr;}}
+.pv-box{background:rgba(255,255,255,.025);border:1px solid #2a3580;border-radius:12px;padding:17px 19px;min-width:0;}
+/* τα grid items δεν πρέπει να διογκώνονται από το <pre> περιεχόμενο (min-width:auto) */
+.pv-flow > *,.pv-ba > *{min-width:0;}
+.pv-tblwrap{max-width:100%;}
+.pv-box h4{margin:0 0 6px;font-size:14.5px;color:#eef1f8;display:flex;align-items:center;gap:8px;}
+.pv-box .pv-sub{font-size:11.5px;color:#93a0dd;margin-bottom:12px;}
+.pv-cmd{background:#080b1c;border:1px solid #232c66;border-radius:8px;padding:11px 13px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#7ee6a6;line-height:1.9;overflow-x:auto;white-space:pre;}
+.pv-cmd .c{color:#5f6a9e;}
+
+.pv-pillrow{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:6px;}
+.pv-pilllbl{font-size:12px;color:#93a0dd;}
+
+.pv-foot{margin-top:42px;padding-top:18px;border-top:1px solid #2a3580;font-size:11.5px;color:#6f7aa8;text-align:center;line-height:1.8;}
+</style>
+</head>
+<body>
+<div class="pv-wrap">
+
+  <div class="pv-head">
+    <span class="pv-tag">ΠΡΟΤΑΣΗ ΑΛΛΑΓΗΣ</span>
+    <h1>Ενιαία αποθήκευση — μία διαδρομή, σπίτι και μαγαζί</h1>
+    <p>Σήμερα ο POS έχει <strong>δύο</strong> τρόπους να αποθηκεύει: μέσω του τοπικού server (αυτό τρέχει στο μαγαζί) και μέσω «επιλογής φακέλου» του Chrome (αυτό τρέχει μόνο στο σπίτι). Η πρόταση είναι να μείνει <strong>μόνο ο πρώτος</strong> — ίδια λογική με το back-office. Η σελίδα δείχνει τι ακριβώς αλλάζει στην οθόνη.</p>
+  </div>
+
+  <div class="pv-note">
+    <strong>Τα σκούρα πάνελ παρακάτω δεν είναι σχέδια.</strong> Αποδίδονται με το ίδιο CSS και το ίδιο markup που τρέχει στο πρόγραμμα — γι' αυτό δείχνουν ακριβώς όπως θα τα δεις.
+  </div>
+
+  <!-- ═══ 1. Η κάρτα των ρυθμίσεων ═══ -->
+  <div class="pv-sec">Ρυθμίσεις → Σύστημα → Backup</div>
+  <div class="pv-ba">
+    <div class="pv-col pv-before">
+      <div class="pv-colh">✕ ΠΡΙΝ</div>
+      <div class="pv-colb">
+        <p class="pv-cap">Ζητά επιλογή φακέλου. Στο μαγαζί το κουμπί αυτό <em>δεν εμφανίζεται ποτέ</em> — υπάρχει μόνο για το μηχάνημα ανάπτυξης.</p>
+        
+<div class="sp-card">
+  <div class="sp-section-title">🗄 Αποθήκευση &amp; Backup</div>
+  <div class="sp-status-card none">
+    <span class="sp-status-dot">🔴</span>
+    <div>
+      <div class="sp-status-label">Δεν έχει ρυθμιστεί</div>
+      <div class="sp-status-sub">Τοπικός φάκελος · Chrome / Edge μόνο</div>
+    </div>
+  </div>
+  <button id="folder-pick-btn" class="asl-btn asl-t2" style="width:100%;"><span class="asl-l1"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px;flex-shrink:0;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg><span id="folder-btn-label">Επιλογή / Αλλαγή Φακέλου</span><span class="folder-btn-cursor"></span></span><span class="asl-l2">→ Επιλογή</span><span class="asl-l3">✓ Ρυθμίστηκε</span></button>
+  <div class="sp-msg"></div>
+  <div class="sp-divider"></div>
+  <div class="sp-btn-pair">
+    <button class="sp-outline-btn">⬇ Εξαγωγή</button>
+    <label class="sp-outline-btn" style="cursor:pointer;text-align:center;display:flex;align-items:center;justify-content:center;">⬆ Φόρτωση</label>
+  </div>
+</div>
+      </div>
+    </div>
+    <div class="pv-col pv-after">
+      <div class="pv-colh">✓ ΜΕΤΑ</div>
+      <div class="pv-colb">
+        <p class="pv-cap">Η αποθήκευση είναι ήδη ενεργή. Το κουμπί γίνεται δευτερεύον — χρησιμεύει μόνο για να ξαναγραφτούν όλα στον δίσκο με το χέρι.</p>
+        
+<div class="sp-card">
+  <div class="sp-section-title">🗄 Αποθήκευση &amp; Backup</div>
+  <div class="sp-status-card ok">
+    <span class="sp-status-dot">🟢</span>
+    <div>
+      <div class="sp-status-label">Ενεργή</div>
+      <div class="sp-status-sub">Κάθε αλλαγή γράφεται αμέσως στον δίσκο του υπολογιστή</div>
+    </div>
+  </div>
+  <button class="asl-btn asl-t3" style="width:100%;"><span class="asl-l1">Πλήρης εγγραφή στον δίσκο τώρα</span><span class="asl-l2">→ Εγγραφή</span><span class="asl-l3">✓ Γράφτηκαν</span></button>
+  <div class="sp-msg"></div>
+  <div class="sp-divider"></div>
+  <div class="sp-btn-pair">
+    <button class="sp-outline-btn">⬇ Εξαγωγή</button>
+    <label class="sp-outline-btn" style="cursor:pointer;text-align:center;display:flex;align-items:center;justify-content:center;">⬆ Φόρτωση</label>
+  </div>
+</div>
+        <div class="pv-gone">✓ Φεύγει το «Επιλογή / Αλλαγή Φακέλου», η άδεια του Chrome και το εφέ γραφομηχανής.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 2. Banner ═══ -->
+  <div class="pv-sec">Κίτρινη μπάρα στο κάτω μέρος</div>
+  <div class="pv-ba">
+    <div class="pv-col pv-before">
+      <div class="pv-colh">✕ ΠΡΙΝ</div>
+      <div class="pv-colb">
+        <p class="pv-cap">Εμφανίζεται σε κάθε είσοδο όσο δεν έχει οριστεί φάκελος.</p>
+        
+<div id="backup-banner" style="position:static;display:flex;">
+  <span class="backup-banner-text">🗄 Δεν έχεις ρυθμίσει φάκελο αντιγράφων ασφαλείας.</span>
+  <button>&#8594; Ρύθμιση</button>
+  <button class="backup-banner-close">&#x2715;</button>
+</div>
+      </div>
+    </div>
+    <div class="pv-col pv-after">
+      <div class="pv-colh">✓ ΜΕΤΑ</div>
+      <div class="pv-colb">
+        <p class="pv-cap">Δεν υπάρχει τίποτα να ρυθμιστεί, άρα δεν υπάρχει λόγος να ρωτηθεί κανείς.</p>
+        <div class="pv-gone" style="margin-top:0;">✓ Η μπάρα <b>διαγράφεται εντελώς</b> — markup, CSS και κώδικας.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 3. Reminder ═══ -->
+  <div class="pv-sec">Παράθυρο υπενθύμισης στα 30 λεπτά</div>
+  <div class="pv-ba">
+    <div class="pv-col pv-before">
+      <div class="pv-colh">✕ ΠΡΙΝ</div>
+      <div class="pv-colb">
+        <p class="pv-cap">Διακόπτει τη δουλειά μισή ώρα μετά την είσοδο.</p>
+        
+<div id="backup-reminder" style="position:static;display:block;background:none;">
+  <div id="backup-reminder-box" style="position:static;transform:none;margin:0 auto;">
+    <div class="bkp-rem-header">
+      <div class="bkp-rem-icon">🗄</div>
+      <div class="bkp-rem-body">
+        <strong>Δεν έχεις ρυθμίσει φάκελο αντιγράφων ασφαλείας</strong>
+        <span>Τα δεδομένα αποθηκεύονται μόνο στον browser. Σε περίπτωση προβλήματος, δεν υπάρχει backup.</span>
+      </div>
+    </div>
+    <div class="bkp-rem-footer asl-btn-row gap-sm">
+      <button class="asl-btn asl-t5"><span class="asl-l1">Αργότερα</span><span class="asl-l2">Αργότερα</span><span class="asl-l3">OK</span></button>
+      <button class="asl-btn asl-t2"><span class="asl-l1">&#8594; Ρύθμιση</span><span class="asl-l2">&#8594; Ρύθμιση</span><span class="asl-l3">✓</span></button>
+    </div>
+  </div>
+</div>
+      </div>
+    </div>
+    <div class="pv-col pv-after">
+      <div class="pv-colh">✓ ΜΕΤΑ</div>
+      <div class="pv-colb">
+        <p class="pv-cap">Το backup δεν μπορεί να είναι «αρύθμιστο» — γράφεται από την πρώτη στιγμή.</p>
+        <div class="pv-gone" style="margin-top:0;">✓ Το παράθυρο <b>διαγράφεται εντελώς</b> μαζί με τον χρονομετρητή του.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 4. Ένδειξη υγείας ═══ -->
+  <div class="pv-sec">Ένδειξη υγείας στην κεφαλίδα — παραμένει</div>
+  <div class="pv-box">
+    <h4>📁 ☁ Δύο κουκκίδες, ίδιες όπως σήμερα</h4>
+    <div class="pv-sub">Δεν αλλάζει τίποτα οπτικά. Αλλάζει μόνο τι <em>σημαίνει</em> η πρώτη κουκκίδα: από «διάλεξες φάκελο;» γίνεται «απαντάει ο δίσκος;» — που είναι και το χρήσιμο.</div>
+    <div class="pv-pillrow">
+      
+<span class="health-pill" style="cursor:default;">
+  <span class="hp-seg" title="Τοπικό backup"><span class="hp-ico">📁</span><span class="hp-dot hp-ok"></span></span>
+  <span class="hp-div"></span>
+  <span class="hp-seg" title="Συγχρονισμός back-office"><span class="hp-ico">☁</span><span class="hp-dot hp-ok"></span></span>
+</span>      <span class="pv-pilllbl">όλα καλά</span>
+      
+<span class="health-pill" style="cursor:default;">
+  <span class="hp-seg" title="Τοπικό backup"><span class="hp-ico">📁</span><span class="hp-dot hp-warn"></span></span>
+  <span class="hp-div"></span>
+  <span class="hp-seg" title="Συγχρονισμός back-office"><span class="hp-ico">☁</span><span class="hp-dot hp-ok"></span></span>
+</span>    <span class="pv-pilllbl">ο δίσκος δεν απάντησε στην τελευταία εγγραφή</span>
+      
+<span class="health-pill" style="cursor:default;">
+  <span class="hp-seg" title="Τοπικό backup"><span class="hp-ico">📁</span><span class="hp-dot hp-ok"></span></span>
+  <span class="hp-div"></span>
+  <span class="hp-seg" title="Συγχρονισμός back-office"><span class="hp-ico">☁</span><span class="hp-dot hp-none"></span></span>
+</span>    <span class="pv-pilllbl">το back-office είναι κλειστό (φυσιολογικό)</span>
+    </div>
+  </div>
+
+  <!-- ═══ 5. Πώς δουλεύει μετά ═══ -->
+  <div class="pv-sec">Πώς τρέχει μετά την αλλαγή</div>
+  <div class="pv-flow">
+    <div class="pv-box">
+      <h4>🏠 Σπίτι — ανάπτυξη</h4>
+      <div class="pv-sub">Δύο τερματικά, ακριβώς όπως δουλεύεις το back-office.</div>
+      <div class="pv-cmd"><span class="c"># τερματικό 1 — η αποθήκευση</span>
+python deploy/server.py --port 5199
+
+<span class="c"># τερματικό 2 — η εφαρμογή (με ζωντανή ανανέωση)</span>
+npm run dev</div>
+    </div>
+    <div class="pv-box">
+      <h4>🏪 Μαγαζί — πραγματικό POS</h4>
+      <div class="pv-sub">Καμία αλλαγή. Ξεκινά μόνο του στο άναμμα.</div>
+      <div class="pv-cmd"><span class="c"># ο φύλακας το κάνει αυτόματα στο boot</span>
+python server.py
+
+<span class="c"># ο ιδιοκτήτης πατάει μόνο το εικονίδιο</span></div>
+    </div>
+  </div>
+
+  <!-- ═══ 6. Τι διαγράφεται ═══ -->
+  <div class="pv-sec">Τι φεύγει από τον κώδικα</div>
+  <div class="pv-tblwrap"><table class="pv-tbl">
+    <thead><tr><th style="width:38%">Κομμάτι</th><th style="width:30%">Πού ζούσε</th><th>Γιατί φεύγει</th></tr></thead>
+    <tbody>
+      <tr><td>Επιλογή φακέλου</td><td><code>showDirectoryPicker</code></td><td>Στο μαγαζί δεν καλείται ποτέ</td></tr>
+      <tr><td>Αποθήκευση «χειρολαβής» φακέλου</td><td><code>tamam_pos_db</code></td><td>Χωρίς picker δεν υπάρχει χειρολαβή</td></tr>
+      <tr><td>Κίτρινη μπάρα backup</td><td><code>#backup-banner</code></td><td>Δεν υπάρχει τίποτα να ρυθμιστεί</td></tr>
+      <tr><td>Υπενθύμιση 30 λεπτών</td><td><code>#backup-reminder</code></td><td>Ίδιος λόγος</td></tr>
+      <tr><td>Εφέ γραφομηχανής στο κουμπί</td><td><code>_folderBtnTypewriter</code></td><td>Το κουμπί αλλάζει ρόλο</td></tr>
+      <tr><td>Διπλή διακλάδωση σε κάθε εγγραφή</td><td><code>if (!_serverStorage)</code></td><td>Μένει μία διαδρομή</td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- ═══ 7. Τι κερδίζουμε / τι χάνουμε ═══ -->
+  <div class="pv-sec">Ισολογισμός</div>
+  <div class="pv-tblwrap"><table class="pv-tbl">
+    <thead><tr><th style="width:34%">Θέμα</th><th style="width:33%">Πριν</th><th>Μετά</th></tr></thead>
+    <tbody>
+      <tr><td>Διαδρομές αποθήκευσης</td><td class="no">2 (μία μόνο για dev)</td><td class="yes">1 (ίδια παντού)</td></tr>
+      <tr><td>Αναπτύσσεις πάνω στη διαδρομή του μαγαζιού</td><td class="no">Όχι</td><td class="yes">Ναι</td></tr>
+      <tr><td>Άδειες Chrome</td><td class="no">Ναι — μπορούν να ανακληθούν σιωπηλά</td><td class="yes">Καμία</td></tr>
+      <tr><td>Ενοχλήσεις στο σπίτι</td><td class="no">Μπάρα + popup 30′</td><td class="yes">Καμία</td></tr>
+      <tr><td>Επιλογή θέσης δεδομένων</td><td class="yes">Οποιοσδήποτε φάκελος</td><td>Ρύθμιση στον server (<code>--data-dir</code>)</td></tr>
+      <tr><td>Χρειάζεται η Python για ανάπτυξη</td><td class="yes">Όχι</td><td>Ναι — δεύτερο τερματικό</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="pv-note" style="margin-top:20px;">
+    <strong>Οι δύο τελευταίες γραμμές είναι το πραγματικό κόστος.</strong> Η θέση των δεδομένων γίνεται ρύθμιση του server αντί για επιλογή στην οθόνη — πιο σταθερό, αλλά αν θελήσεις άλλον δίσκο χρειάζεται να αλλάξει μια γραμμή. Και στο σπίτι πρέπει να τρέχει και η Python, όχι μόνο το <code style="background:rgba(0,0,0,.35);padding:2px 6px;border-radius:4px;color:#f5c842;">npm run dev</code>.
+  </div>
+
+  <div class="pv-foot">TAMAM Grill House · preview · μη ευρετηριάσιμο<br>Τα σκούρα πάνελ αποδίδονται με το αυθεντικό CSS του POS</div>
+
+</div>
+</body>
+</html>
