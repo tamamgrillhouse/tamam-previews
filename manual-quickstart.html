@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>⚡ Ξεκίνα εδώ — Δείγμα (TAMAM)</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #1e293b; background: #f6f7f9; margin: 0; padding: 0;
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 28px 22px 60px; }
+
+  /* explainer banner (μόνο για το preview — δεν θα υπάρχει στο πραγματικό) */
+  .demo-note {
+    background: #eef2ff; border: 1.5px dashed #6366f1; border-radius: 12px;
+    padding: 12px 16px; margin: 0 0 26px; font-size: 13.5px; color: #3730a3; line-height: 1.55;
+  }
+  .demo-note strong { color: #312e81; }
+
+  h1.man-title { font-size: 27px; margin: 0 0 6px; display: flex; align-items: center; gap: 12px; }
+  .man-sub { color: #5d6b7f; font-size: 15px; margin: 0 0 28px; line-height: 1.6; max-width: 760px; }
+
+  /* cards grid */
+  .qs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+  .qs-card {
+    background: #fff; border: 1.5px solid #eef0f2; border-radius: 16px; padding: 18px 18px 16px;
+    display: flex; flex-direction: column; transition: box-shadow .15s, border-color .15s;
+  }
+  .qs-card:hover { border-color: #f97316; box-shadow: 0 6px 20px rgba(249,115,22,.10); }
+  .qs-head { display: flex; align-items: center; gap: 12px; margin: 0 0 12px; }
+  .qs-emoji {
+    flex: 0 0 auto; width: 44px; height: 44px; border-radius: 12px; background: #fff3ea;
+    display: inline-flex; align-items: center; justify-content: center; font-size: 22px;
+  }
+  .qs-head h3 { margin: 0; font-size: 16.5px; color: #1f2937; line-height: 1.3; }
+
+  .qs-steps { list-style: none; counter-reset: s; margin: 0 0 12px; padding: 0; }
+  .qs-steps li {
+    position: relative; padding: 4px 0 4px 30px; font-size: 14px; color: #374151; line-height: 1.5;
+  }
+  .qs-steps li::before {
+    counter-increment: s; content: counter(s);
+    position: absolute; left: 0; top: 4px; width: 21px; height: 21px;
+    background: #fff3ea; color: #ea580c; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 12px;
+  }
+
+  .qs-ref { margin-top: auto; font-size: 12.5px; color: #9ca3af; padding-top: 8px; border-top: 1px dashed #f1f2f4; }
+  .qs-ref b { color: #ea580c; font-weight: 600; }
+
+  /* bottom link to full manual */
+  .qs-full {
+    margin-top: 26px; text-align: center; background: #fff; border: 1.5px solid #eef0f2;
+    border-radius: 14px; padding: 18px; font-size: 14.5px; color: #374151;
+  }
+  .qs-full a { color: #ea580c; font-weight: 700; text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="demo-note">
+    👁️ <strong>Αυτό είναι ΔΕΙΓΜΑ</strong> — έτσι θα έμοιαζε μια νέα σελίδα «⚡ Ξεκίνα εδώ» που θα μπει
+    <strong>στην αρχή του Οδηγού Χρήσης</strong>. Δεν άλλαξε τίποτα στην κανονική εφαρμογή.
+    Οι πλήρεις 200 σελίδες μένουν ακριβώς όπως είναι, από κάτω. Αυτό είναι απλά μια <strong>γρήγορη είσοδος</strong>.
+  </div>
+
+  <h1 class="man-title">⚡ Ξεκίνα εδώ</h1>
+  <p class="man-sub">
+    Τα πράγματα που θα κάνεις σχεδόν κάθε μέρα — μαζεμένα σε μία οθόνη.
+    Δεν χρειάζεται να διαβάσεις όλο τον οδηγό: βρες εδώ αυτό που θες, κάνε τα βήματα, τελείωσες.
+    Για τα ψιλά γράμματα, κάθε κάρτα σου λέει σε ποιο κεφάλαιο να πας.
+  </p>
+
+  <div class="qs-grid">
+
+    <div class="qs-card">
+      <div class="qs-head"><span class="qs-emoji">🧾</span><h3>Καταχώρησα ένα τιμολόγιο</h3></div>
+      <ol class="qs-steps">
+        <li>Μενού → <b>Τιμολόγια</b> → «Νέο τιμολόγιο».</li>
+        <li>Διάλεξε προμηθευτή, βάλε ημερομηνία &amp; ποσό.</li>
+        <li>«Αποθήκευση». Μπαίνει αυτόματα στα έξοδα.</li>
+      </ol>
+      <div class="qs-ref">Αναλυτικά → <b>Κεφ. 4 · Τιμολόγια</b></div>
+    </div>
+
+    <div class="qs-card">
+      <div class="qs-head"><span class="qs-emoji">💰</span><h3>Πλήρωσα ένα έξοδο</h3></div>
+      <ol class="qs-steps">
+        <li>Μενού → <b>Έξοδα &amp; Κέρδος</b> → «Νέο έξοδο».</li>
+        <li>Κατηγορία (π.χ. ρεύμα, νερό), ποσό, ημερομηνία.</li>
+        <li>«Αποθήκευση».</li>
+      </ol>
+      <div class="qs-ref">Αναλυτικά → <b>Κεφ. 7 · Έξοδα &amp; Κέρδος</b></div>
+    </div>
+
+    <div class="qs-card">
+      <div class="qs-head"><span class="qs-emoji">📈</span><h3>Πόσο έβγαλα αυτόν τον μήνα;</h3></div>
+      <ol class="qs-steps">
+        <li>Μενού → <b>Επισκόπηση</b> (η πρώτη οθόνη).</li>
+        <li>Δες την κάρτα «Κέρδος μήνα».</li>
+        <li>Για ανάλυση → <b>Αναφορές</b>.</li>
+      </ol>
+      <div class="qs-ref">Αναλυτικά → <b>Κεφ. 12 · Αναφορές</b></div>
+    </div>
+
+    <div class="qs-card">
+      <div class="qs-head"><span class="qs-emoji">👜</span><h3>Έκλεισα το ταμείο της ημέρας</h3></div>
+      <ol class="qs-steps">
+        <li>Μενού → <b>Ταμείο</b>.</li>
+        <li>Βάλε μετρητά μέσα / έξω όπως έγιναν.</li>
+        <li>Το υπόλοιπο βγαίνει μόνο του.</li>
+      </ol>
+      <div class="qs-ref">Αναλυτικά → <b>Κεφ. 14 · Ταμείο</b></div>
+    </div>
+
+    <div class="qs-card">
+      <div class="qs-head"><span class="qs-emoji">📸</span><h3>Τράβηξα φωτό ένα τιμολόγιο</h3></div>
+      <ol class="qs-steps">
+        <li>Μενού → <b>Σάρωση OCR</b>.</li>
+        <li>Ανέβασε τη φωτογραφία.</li>
+        <li>Το πρόγραμμα διαβάζει τα ποσά· εσύ τσεκάρεις.</li>
+      </ol>
+      <div class="qs-ref">Αναλυτικά → <b>Κεφ. 9 · Σάρωση OCR</b></div>
+    </div>
+
+    <div class="qs-card">
+      <div class="qs-head"><span class="qs-emoji">📦</span><h3>Τι υλικά τελειώνουν;</h3></div>
+      <ol class="qs-steps">
+        <li>Μενού → <b>Πρώτες Ύλες</b>.</li>
+        <li>Τα υλικά που σώνονται είναι σημαδεμένα.</li>
+        <li>Παράγγειλε πριν μείνεις από απόθεμα.</li>
+      </ol>
+      <div class="qs-ref">Αναλυτικά → <b>Κεφ. 5 · Πρώτες Ύλες</b></div>
+    </div>
+
+    <div class="qs-card">
+      <div class="qs-head"><span class="qs-emoji">💲</span><h3>Θέλω να αλλάξω μια τιμή στο μενού</h3></div>
+      <ol class="qs-steps">
+        <li>Μενού → <b>Τιμές &amp; Μενού</b>.</li>
+        <li>Βρες το προϊόν, βάλε νέα τιμή.</li>
+        <li>Ενημερώνεται και στο ταμείο (POS).</li>
+      </ol>
+      <div class="qs-ref">Αναλυτικά → <b>Κεφ. 8 · Τιμές &amp; Μενού</b></div>
+    </div>
+
+    <div class="qs-card">
+      <div class="qs-head"><span class="qs-emoji">💾</span><h3>Θέλω αντίγραφο ασφαλείας τώρα</h3></div>
+      <ol class="qs-steps">
+        <li>Μενού → <b>Αντίγραφα</b>.</li>
+        <li>«Κράτα αντίγραφο τώρα».</li>
+        <li>Γίνεται και μόνο του κάθε βράδυ.</li>
+      </ol>
+      <div class="qs-ref">Αναλυτικά → <b>Κεφ. 18 · Αντίγραφα</b></div>
+    </div>
+
+    <div class="qs-card">
+      <div class="qs-head"><span class="qs-emoji">🔑</span><h3>Ξέχασα τον κωδικό μου</h3></div>
+      <ol class="qs-steps">
+        <li>Στην οθόνη σύνδεσης → «Ξέχασα τον κωδικό».</li>
+        <li>Έρχεται 6ψήφιος κωδικός στο email.</li>
+        <li>Βάλε καινούριο κωδικό.</li>
+      </ol>
+      <div class="qs-ref">Αναλυτικά → <b>Κεφ. 17 · Ασφάλεια</b></div>
+    </div>
+
+  </div>
+
+  <div class="qs-full">
+    Ψάχνεις κάτι πιο ειδικό; 👉 <a href="#">Άνοιξε τον πλήρη Οδηγό Χρήσης (και τα 27 κεφάλαια, με αναζήτηση)</a>
+  </div>
+
+</div>
+</body>
+</html>

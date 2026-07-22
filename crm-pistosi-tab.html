@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>👛 Πίστωση — 4 προτάσεις για νέα καρτέλα στους Πελάτες</title>
+<style>
+:root{
+  --accent:#f59e0b; --accent-text:#9c6406;
+  --text:#1e293b; --text-muted:#64748b; --white:#fff;
+  --border:#e2e8f0; --bg:#f1f5f9;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.06);
+  --danger-text:#b91c1c; --success-text:#15803d;
+  --read-max:900px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
+.wrap{max-width:1500px;margin:0 auto;padding:26px 30px 70px}
+
+/* ── κεφαλίδα preview ───────────────────────────────────────── */
+.pv-head{background:linear-gradient(135deg,#1e293b,#334155);color:#fff;border-radius:16px;padding:26px 30px;margin-bottom:22px}
+.pv-head h1{margin:0 0 8px;font-size:25px;font-weight:800}
+.pv-head p{margin:0;opacity:.85;font-size:14.5px;max-width:var(--read-max)}
+.pv-note{background:#fff7ed;border:1px solid #fed7aa;border-radius:11px;padding:13px 17px;font-size:13.5px;margin-bottom:22px;max-width:var(--read-max)}
+
+/* ── επιλογέας πρότασης ─────────────────────────────────────── */
+.pv-switch{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px}
+.pv-btn{background:var(--white);border:1px solid var(--border);border-radius:11px;padding:13px 19px;font-size:14px;font-weight:700;cursor:pointer;min-height:52px;text-align:left;box-shadow:var(--shadow-sm);font-family:inherit;color:var(--text);display:flex;flex-direction:column;justify-content:center;gap:2px}
+.pv-btn small{font-weight:600;color:var(--text-muted);font-size:11.5px}
+.pv-btn.on{background:var(--accent);border-color:var(--accent);color:var(--text)}
+.pv-btn.on small{color:#7c4a03}
+.pane{display:none}
+.pane.on{display:block}
+
+/* ── πλαίσιο «μέσα στην εφαρμογή» ───────────────────────────── */
+.app{background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,.05)}
+.app-bar{background:#f8fafc;border-bottom:1px solid var(--border);padding:13px 20px;font-size:13px;color:var(--text-muted);font-weight:600}
+.app-body{padding:22px 24px 26px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin:-4px -24px 20px;padding:0 24px}
+.tabs a{padding:12px 17px;font-size:13.5px;font-weight:700;color:var(--text-muted);text-decoration:none;border-bottom:3px solid transparent;white-space:nowrap}
+.tabs a.on{color:var(--text);border-bottom-color:var(--accent)}
+
+/* ── κοινά στοιχεία ─────────────────────────────────────────── */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.kpi{background:var(--white);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow-sm);padding:14px 16px}
+.kpi .lab{font-size:12px;color:var(--text-muted);font-weight:600;display:flex;align-items:center;gap:6px}
+.kpi .val{font-size:23px;font-weight:800;margin-top:6px}
+.kpi .dsc{font-size:11.5px;color:var(--text-muted);margin-top:3px}
+.kpi.hero{background:#fffbeb;border-color:#fcd34d}
+.kpi.hero .val{color:var(--accent-text)}
+
+.card{background:var(--white);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:16px}
+.card-h{background:#f8fafc;border-bottom:1px solid var(--border);padding:12px 16px;font-size:13.5px;font-weight:800;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.badge{background:var(--white);border:1px solid var(--border);border-radius:999px;padding:3px 11px;font-size:12px;font-weight:700;color:var(--text-muted)}
+
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{background:#f8fafc;text-align:left;padding:11px 13px;font-size:12px;color:var(--text-muted);font-weight:700;white-space:nowrap;border-bottom:1px solid var(--border)}
+td{padding:11px 13px;border-bottom:1px solid var(--border);vertical-align:middle}
+tbody tr:hover{background:rgba(245,158,11,.06)}
+.right{text-align:right}
+.nm{font-weight:700}
+.sub{font-size:11.5px;color:var(--text-muted);margin-top:2px}
+.money{font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap}
+
+.pill{display:inline-block;border-radius:999px;padding:3px 11px;font-size:11.5px;font-weight:700;white-space:nowrap}
+.p-green{background:rgba(22,163,74,.13);color:var(--success-text)}
+.p-amber{background:#fef3c7;color:#92400e}
+.p-red{background:#fee2e2;color:var(--danger-text)}
+.p-grey{background:#f1f5f9;color:var(--text-muted)}
+
+.ro{color:var(--text-muted);font-size:12px;display:inline-flex;align-items:center;gap:6px;background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:6px 11px}
+.foot{color:var(--text-muted);font-size:12px;margin-top:16px;max-width:var(--read-max)}
+.verdict{background:#f8fafc;border-left:4px solid var(--accent);border-radius:0 10px 10px 0;padding:14px 18px;margin-top:20px;font-size:13.5px;max-width:var(--read-max)}
+.verdict b{display:block;margin-bottom:5px}
+.pros{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px;font-size:13px;max-width:var(--read-max)}
+.pros div{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:12px 15px}
+.pros ul{margin:6px 0 0;padding-left:19px}
+.pros li{margin-bottom:4px}
+
+/* ── Α: αναπτυσσόμενη γραμμή ────────────────────────────────── */
+.exp{background:#fafbfc}
+.exp td{padding:0}
+.expin{padding:14px 18px 18px 46px}
+.mini{width:100%;border-collapse:collapse;font-size:12.5px;background:var(--white);border:1px solid var(--border);border-radius:9px;overflow:hidden}
+.mini th{background:#f8fafc;padding:8px 11px;font-size:11px}
+.mini td{padding:8px 11px}
+.chev{display:inline-block;transition:transform .15s;color:var(--text-muted);font-size:11px;width:14px}
+tr.open .chev{transform:rotate(90deg)}
+
+/* ── Β: κάρτες ──────────────────────────────────────────────── */
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:15px}
+.ccard{background:var(--white);border:1px solid var(--border);border-radius:13px;box-shadow:var(--shadow-sm);padding:17px 19px;border-left:5px solid var(--border)}
+.ccard.g{border-left-color:#16a34a}.ccard.a{border-left-color:var(--accent)}.ccard.r{border-left-color:#dc2626}
+.ccard .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:13px}
+.ccard .amt{font-size:27px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.ccard .who{font-weight:800;font-size:15px}
+.bar{height:7px;background:#f1f5f9;border-radius:99px;overflow:hidden;margin:13px 0 9px;display:flex}
+.bar i{display:block;height:100%}
+.mrow{display:flex;justify-content:space-between;font-size:12.5px;padding:4px 0;border-top:1px dashed var(--border)}
+.mrow:first-of-type{border-top:0}
+
+/* ── Γ: χρονολόγιο ──────────────────────────────────────────── */
+.tl{position:relative;padding-left:34px}
+.tl:before{content:'';position:absolute;left:11px;top:6px;bottom:6px;width:2px;background:var(--border)}
+.ev{position:relative;margin-bottom:13px;background:var(--white);border:1px solid var(--border);border-radius:11px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:14px}
+.ev:before{content:'';position:absolute;left:-28px;top:19px;width:11px;height:11px;border-radius:50%;background:var(--white);border:3px solid var(--border)}
+.ev.deb:before{border-color:#dc2626}.ev.pay:before{border-color:#16a34a}
+.ev .lbl{font-weight:700;font-size:13.5px}
+.daylabel{font-size:12px;font-weight:800;color:var(--text-muted);margin:20px 0 10px;text-transform:uppercase;letter-spacing:.4px}
+.bal{font-size:12px;color:var(--text-muted);white-space:nowrap}
+
+/* ── Δ: στήλες ηλικίας ──────────────────────────────────────── */
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.col{background:#f8fafc;border:1px solid var(--border);border-radius:13px;overflow:hidden}
+.col-h{padding:13px 16px;font-weight:800;font-size:13.5px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
+.col.g .col-h{background:rgba(22,163,74,.11);color:var(--success-text)}
+.col.a .col-h{background:#fef3c7;color:#92400e}
+.col.r .col-h{background:#fee2e2;color:var(--danger-text)}
+.col-b{padding:12px}
+.item{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.item:last-child{margin-bottom:0}
+.col-f{padding:11px 16px;border-top:1px solid var(--border);font-size:12.5px;display:flex;justify-content:space-between;font-weight:700}
+
+@media(max-width:1100px){.kpis{grid-template-columns:repeat(2,1fr)}.cols{grid-template-columns:1fr}.pros{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="pv-head">
+  <h1>👛 Πίστωση — 4 προτάσεις για νέα καρτέλα στους Πελάτες</h1>
+  <p>Πού θα βλέπεις ποιος σου χρωστάει και πόσο. Και οι 4 μπαίνουν σαν νέα καρτέλα δίπλα στον «Κατάλογο Πελατών» — δεν χαλάει τίποτα από όσα ήδη έχεις. Διάλεξε μία (ή πες μου «την Α αλλά με το κομμάτι Χ της Γ»).</p>
+</div>
+
+<div class="pv-note">
+  ⚠️ <b>Δείγμα, όχι αληθινά στοιχεία.</b> Τα ονόματα και τα ποσά είναι φανταστικά.
+  Σε κάθε πρόταση θα δεις το σήμα <span class="ro">🔒 Μόνο προβολή</span> — οι διορθώσεις γίνονται στο POS, εδώ μόνο βλέπεις, ώστε να μη διαφωνήσουν ποτέ τα δύο συστήματα.
+</div>
+
+<div class="pv-switch">
+  <button class="pv-btn on" data-p="a">Α · Λίστα οφειλετών<small>Πίνακας που ανοίγει ανά πελάτη</small></button>
+  <button class="pv-btn" data-p="b">Β · Κάρτες<small>Μία κάρτα ανά πελάτη που χρωστάει</small></button>
+  <button class="pv-btn" data-p="c">Γ · Βιβλίο κινήσεων<small>Χρονολογικά, χρεώσεις &amp; εισπράξεις μαζί</small></button>
+  <button class="pv-btn" data-p="d">Δ · Στήλες καθυστέρησης<small>Φρέσκα / Προσοχή / Καθυστερημένα</small></button>
+</div>
+
+<!-- ══════════════════════════ Α ══════════════════════════ -->
+<div class="pane on" id="p-a">
+<div class="app">
+  <div class="app-bar">👥 Κατάλογος Πελατών</div>
+  <div class="app-body">
+    <div class="tabs"><a href="#">📋 Όλοι οι πελάτες</a><a href="#" class="on">👛 Πίστωση</a><a href="#">🔀 Διπλοεγγραφές</a><a href="#">🗑️ Διαγραφές</a></div>
+
+    <div class="kpis">
+      <div class="kpi hero"><div class="lab">👛 Σύνολο ανείσπρακτων</div><div class="val">1.247,80 €</div><div class="dsc">χρήματα που κυκλοφορούν έξω</div></div>
+      <div class="kpi"><div class="lab">👤 Πελάτες με οφειλή</div><div class="val">9</div><div class="dsc">από 214 συνολικά</div></div>
+      <div class="kpi"><div class="lab">🔴 Καθυστερημένα</div><div class="val" style="color:var(--danger-text)">412,50 €</div><div class="dsc">πάνω από 14 μέρες</div></div>
+      <div class="kpi"><div class="lab">💵 Εισπράχθηκαν σήμερα</div><div class="val" style="color:var(--success-text)">185,00 €</div><div class="dsc">120,00 μετρητά · 65,00 κάρτα</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-h"><span>👛 Ανοιχτές οφειλές</span><span style="display:flex;gap:10px;align-items:center"><span class="ro">🔒 Μόνο προβολή</span><span class="badge">9 πελάτες</span></span></div>
+      <table>
+        <thead><tr><th style="width:32px"></th><th>Πελάτης</th><th>Παλαιότερη χρέωση</th><th class="right">Χρεώσεις</th><th class="right">Εισπράξεις</th><th class="right">Υπόλοιπο</th></tr></thead>
+        <tbody>
+          <tr class="open" onclick="tgl(this)"><td><span class="chev">▶</span></td>
+            <td><div class="nm">Νίκος Α.</div><div class="sub">📞 694 000 0001</div></td>
+            <td><span class="pill p-red">🔴 23 μέρες</span></td>
+            <td class="right money">312,40 €</td><td class="right money" style="color:var(--success-text)">−100,00 €</td>
+            <td class="right money" style="font-size:15px">212,40 €</td></tr>
+          <tr class="exp"><td colspan="6"><div class="expin">
+            <table class="mini"><thead><tr><th>Ημ/νία</th><th>Κίνηση</th><th class="right">Ποσό</th><th class="right">Υπόλοιπο μετά</th></tr></thead><tbody>
+              <tr><td>26-06-2026</td><td>🧾 Χρέωση — παραγγελία D-42</td><td class="right money">148,40 €</td><td class="right money">148,40 €</td></tr>
+              <tr><td>04-07-2026</td><td>🧾 Χρέωση — παραγγελία D-58</td><td class="right money">164,00 €</td><td class="right money">312,40 €</td></tr>
+              <tr><td>11-07-2026</td><td>💵 Είσπραξη — μετρητά</td><td class="right money" style="color:var(--success-text)">−100,00 €</td><td class="right money">212,40 €</td></tr>
+            </tbody></table>
+          </div></td></tr>
+
+          <tr onclick="tgl(this)"><td><span class="chev">▶</span></td>
+            <td><div class="nm">Ελένη Π.</div><div class="sub">📞 694 000 0002</div></td>
+            <td><span class="pill p-red">🔴 18 μέρες</span></td>
+            <td class="right money">200,10 €</td><td class="right money">—</td><td class="right money" style="font-size:15px">200,10 €</td></tr>
+          <tr class="exp"><td colspan="6"><div class="expin"><div style="color:var(--text-muted);font-size:12.5px">Μία χρέωση, καμία είσπραξη ακόμη.</div></div></td></tr>
+
+          <tr onclick="tgl(this)"><td><span class="chev">▶</span></td>
+            <td><div class="nm">Γιώργος Κ.</div><div class="sub">📞 694 000 0003</div></td>
+            <td><span class="pill p-amber">🟡 9 μέρες</span></td>
+            <td class="right money">340,00 €</td><td class="right money" style="color:var(--success-text)">−180,00 €</td>
+            <td class="right money" style="font-size:15px">160,00 €</td></tr>
+          <tr class="exp"><td colspan="6"><div class="expin"><div style="color:var(--text-muted);font-size:12.5px">2 χρεώσεις · 1 είσπραξη</div></div></td></tr>
+
+          <tr onclick="tgl(this)"><td><span class="chev">▶</span></td>
+            <td><div class="nm">Δημήτρης Μ.</div><div class="sub">📞 694 000 0004</div></td>
+            <td><span class="pill p-green">🟢 2 μέρες</span></td>
+            <td class="right money">86,30 €</td><td class="right money">—</td><td class="right money" style="font-size:15px">86,30 €</td></tr>
+          <tr class="exp"><td colspan="6"><div class="expin"><div style="color:var(--text-muted);font-size:12.5px">Χθεσινή παραγγελία.</div></div></td></tr>
+        </tbody>
+        <tfoot><tr style="background:#fffbeb;font-weight:800"><td></td><td>Σύνολο</td><td></td><td class="right money">938,80 €</td><td class="right money">−280,00 €</td><td class="right money" style="font-size:15px;color:var(--accent-text)">658,80 €</td></tr></tfoot>
+      </table>
+    </div>
+    <div class="foot">Πατάς μια γραμμή και ανοίγει από κάτω όλη η ιστορία του πελάτη — χωρίς να φύγεις από τη σελίδα.</div>
+  </div>
+</div>
+<div class="verdict"><b>Τι σου δίνει η Α</b>Είναι η «λογιστική» ματιά: όλα σε έναν πίνακα με σύνολα από κάτω, και ανοίγεις μόνο όποιον σε ενδιαφέρει. Ταιριάζει με το ύφος που ήδη έχει ο Κατάλογος Πελατών, οπότε δεν μαθαίνεις κάτι καινούριο.</div>
+<div class="pros">
+  <div><b style="color:var(--success-text)">✓ Δυνατά</b><ul><li>Βλέπεις 15–20 πελάτες μαζί χωρίς scroll</li><li>Σύνολα στο τέλος = συμφωνία με μια ματιά</li><li>Ταξινόμηση ανά στήλη (ποιος χρωστάει πιο πολύ / πιο παλιά)</li></ul></div>
+  <div><b style="color:var(--danger-text)">✗ Αδύνατα</b><ul><li>Πιο «λογιστικό» ύφος, λιγότερο οπτικό</li><li>Η καθυστέρηση φαίνεται μόνο από το χρωματιστό σήμα</li></ul></div>
+</div>
+</div>
+
+<!-- ══════════════════════════ Β ══════════════════════════ -->
+<div class="pane" id="p-b">
+<div class="app">
+  <div class="app-bar">👥 Κατάλογος Πελατών</div>
+  <div class="app-body">
+    <div class="tabs"><a href="#">📋 Όλοι οι πελάτες</a><a href="#" class="on">👛 Πίστωση</a><a href="#">🔀 Διπλοεγγραφές</a><a href="#">🗑️ Διαγραφές</a></div>
+
+    <div class="kpis">
+      <div class="kpi hero"><div class="lab">👛 Σύνολο ανείσπρακτων</div><div class="val">1.247,80 €</div><div class="dsc">σε 9 πελάτες</div></div>
+      <div class="kpi"><div class="lab">📈 Άνοιξε αυτόν τον μήνα</div><div class="val" style="color:var(--danger-text)">+310,20 €</div><div class="dsc">χρέωσες πιο πολλά απ' όσα εισέπραξες</div></div>
+      <div class="kpi"><div class="lab">⏳ Μέση ηλικία οφειλής</div><div class="val">11 μέρες</div><div class="dsc">παλαιότερη: 23 μέρες</div></div>
+      <div class="kpi"><div class="lab">💵 Εισπράχθηκαν σήμερα</div><div class="val" style="color:var(--success-text)">185,00 €</div><div class="dsc">120,00 μετρητά · 65,00 κάρτα</div></div>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:12px;flex-wrap:wrap">
+      <div style="display:flex;gap:7px;flex-wrap:wrap">
+        <span class="pill" style="background:var(--accent);color:var(--text);padding:7px 14px;font-size:13px">Όλοι (9)</span>
+        <span class="pill p-red" style="padding:7px 14px;font-size:13px">🔴 Καθυστερημένοι (3)</span>
+        <span class="pill p-amber" style="padding:7px 14px;font-size:13px">🟡 Προσοχή (2)</span>
+        <span class="pill p-green" style="padding:7px 14px;font-size:13px">🟢 Φρέσκα (4)</span>
+      </div>
+      <span class="ro">🔒 Μόνο προβολή</span>
+    </div>
+
+    <div class="cgrid">
+      <div class="ccard r">
+        <div class="top"><div><div class="who">Νίκος Α.</div><div class="sub">📞 694 000 0001</div></div><span class="pill p-red">🔴 23 μέρες</span></div>
+        <div class="amt" style="color:var(--danger-text)">212,40 €</div>
+        <div class="bar"><i style="width:68%;background:#dc2626"></i><i style="width:32%;background:#16a34a"></i></div>
+        <div class="mrow"><span>🧾 Χρεώθηκε</span><span class="money">312,40 €</span></div>
+        <div class="mrow"><span>💵 Πλήρωσε</span><span class="money" style="color:var(--success-text)">100,00 €</span></div>
+        <div class="mrow"><span>📅 Παλαιότερη</span><span>26-06-2026 · D-42</span></div>
+      </div>
+      <div class="ccard r">
+        <div class="top"><div><div class="who">Ελένη Π.</div><div class="sub">📞 694 000 0002</div></div><span class="pill p-red">🔴 18 μέρες</span></div>
+        <div class="amt" style="color:var(--danger-text)">200,10 €</div>
+        <div class="bar"><i style="width:100%;background:#dc2626"></i></div>
+        <div class="mrow"><span>🧾 Χρεώθηκε</span><span class="money">200,10 €</span></div>
+        <div class="mrow"><span>💵 Πλήρωσε</span><span class="money">—</span></div>
+        <div class="mrow"><span>📅 Παλαιότερη</span><span>01-07-2026 · D-51</span></div>
+      </div>
+      <div class="ccard a">
+        <div class="top"><div><div class="who">Γιώργος Κ.</div><div class="sub">📞 694 000 0003</div></div><span class="pill p-amber">🟡 9 μέρες</span></div>
+        <div class="amt" style="color:#92400e">160,00 €</div>
+        <div class="bar"><i style="width:47%;background:var(--accent)"></i><i style="width:53%;background:#16a34a"></i></div>
+        <div class="mrow"><span>🧾 Χρεώθηκε</span><span class="money">340,00 €</span></div>
+        <div class="mrow"><span>💵 Πλήρωσε</span><span class="money" style="color:var(--success-text)">180,00 €</span></div>
+        <div class="mrow"><span>📅 Παλαιότερη</span><span>10-07-2026 · D-63</span></div>
+      </div>
+      <div class="ccard g">
+        <div class="top"><div><div class="who">Δημήτρης Μ.</div><div class="sub">📞 694 000 0004</div></div><span class="pill p-green">🟢 2 μέρες</span></div>
+        <div class="amt" style="color:var(--success-text)">86,30 €</div>
+        <div class="bar"><i style="width:100%;background:#16a34a"></i></div>
+        <div class="mrow"><span>🧾 Χρεώθηκε</span><span class="money">86,30 €</span></div>
+        <div class="mrow"><span>💵 Πλήρωσε</span><span class="money">—</span></div>
+        <div class="mrow"><span>📅 Παλαιότερη</span><span>17-07-2026 · D-88</span></div>
+      </div>
+    </div>
+    <div class="foot">Η μπάρα δείχνει πόσο του χρέους έχει ήδη πληρωθεί (πράσινο) και πόσο μένει.</div>
+  </div>
+</div>
+<div class="verdict"><b>Τι σου δίνει η Β</b>Η πιο «ανθρώπινη» ματιά: κάθε πελάτης είναι μια κάρτα με μεγάλο νούμερο, και το χρώμα στο αριστερό πλαϊνό σου λέει αμέσως ποιος σε καίει. Καλή όταν οι οφειλέτες είναι λίγοι (5–15) — αν γίνουν 40, θέλει πολύ scroll.</div>
+<div class="pros">
+  <div><b style="color:var(--success-text)">✓ Δυνατά</b><ul><li>Το ποσό διαβάζεται από απόσταση</li><li>Η μπάρα δείχνει «πόσο μου έχει ξεπληρώσει»</li><li>Πολύ εύκολο σε κινητό</li></ul></div>
+  <div><b style="color:var(--danger-text)">✗ Αδύνατα</b><ul><li>Με πολλούς οφειλέτες γίνεται μακρύ</li><li>Δεν έχει σύνολα-στήλες όπως ο πίνακας</li></ul></div>
+</div>
+</div>
+
+<!-- ══════════════════════════ Γ ══════════════════════════ -->
+<div class="pane" id="p-c">
+<div class="app">
+  <div class="app-bar">👥 Κατάλογος Πελατών</div>
+  <div class="app-body">
+    <div class="tabs"><a href="#">📋 Όλοι οι πελάτες</a><a href="#" class="on">👛 Πίστωση</a><a href="#">🔀 Διπλοεγγραφές</a><a href="#">🗑️ Διαγραφές</a></div>
+
+    <div class="kpis">
+      <div class="kpi hero"><div class="lab">👛 Υπόλοιπο τώρα</div><div class="val">1.247,80 €</div><div class="dsc">σου χρωστάνε συνολικά</div></div>
+      <div class="kpi"><div class="lab">🧾 Χρεώσεις μήνα</div><div class="val">1.910,40 €</div><div class="dsc">42 παραγγελίες επί πιστώσει</div></div>
+      <div class="kpi"><div class="lab">💵 Εισπράξεις μήνα</div><div class="val" style="color:var(--success-text)">1.600,20 €</div><div class="dsc">1.140,20 μετρητά · 460,00 κάρτα</div></div>
+      <div class="kpi"><div class="lab">📊 Διαφορά</div><div class="val" style="color:var(--danger-text)">+310,20 €</div><div class="dsc">τόσο «άνοιξε» η έκθεσή σου</div></div>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:12px;flex-wrap:wrap">
+      <div style="display:flex;gap:7px;flex-wrap:wrap">
+        <span class="pill" style="background:var(--accent);color:var(--text);padding:7px 14px;font-size:13px">Όλες</span>
+        <span class="pill p-grey" style="padding:7px 14px;font-size:13px">🧾 Μόνο χρεώσεις</span>
+        <span class="pill p-grey" style="padding:7px 14px;font-size:13px">💵 Μόνο εισπράξεις</span>
+        <span class="pill p-grey" style="padding:7px 14px;font-size:13px">↩️ Διορθώσεις</span>
+      </div>
+      <span class="ro">🔒 Μόνο προβολή</span>
+    </div>
+
+    <div class="daylabel">Σήμερα · Κυριακή 19 Ιουλίου</div>
+    <div class="tl">
+      <div class="ev pay"><div><div class="lbl">💵 Είσπραξη — Γιώργος Κ.</div><div class="sub">19:56 · μετρητά 12,00 € + κάρτα 8,00 € · κάλυψε D-42 και D-58 · Μαρία</div></div>
+        <div style="text-align:right"><div class="money" style="color:var(--success-text);font-size:15px">+20,00 €</div><div class="bal">υπόλοιπο: 160,00 €</div></div></div>
+      <div class="ev deb"><div><div class="lbl">🧾 Χρέωση — Δημήτρης Μ.</div><div class="sub">20:14 · παραγγελία D-88 · delivery</div></div>
+        <div style="text-align:right"><div class="money" style="font-size:15px">86,30 €</div><div class="bal">υπόλοιπο: 86,30 €</div></div></div>
+    </div>
+
+    <div class="daylabel">Παρασκευή 17 Ιουλίου</div>
+    <div class="tl">
+      <div class="ev pay"><div><div class="lbl">💵 Είσπραξη — Νίκος Α.</div><div class="sub">13:20 · μετρητά · κάλυψε D-42 (μερικώς) · Μαρία</div></div>
+        <div style="text-align:right"><div class="money" style="color:var(--success-text);font-size:15px">+100,00 €</div><div class="bal">υπόλοιπο: 212,40 €</div></div></div>
+      <div class="ev"><div><div class="lbl">↩️ Διόρθωση — ακύρωση είσπραξης</div><div class="sub">13:24 · λάθος καταχώριση, ακυρώθηκε από τον υπεύθυνο · η αρχική μένει στο βιβλίο</div></div>
+        <div style="text-align:right"><div class="money" style="color:var(--text-muted);font-size:15px">−15,00 €</div><div class="bal">υπόλοιπο: 227,40 €</div></div></div>
+      <div class="ev deb"><div><div class="lbl">🧾 Χρέωση — Ελένη Π.</div><div class="sub">21:05 · παραγγελία D-79</div></div>
+        <div style="text-align:right"><div class="money" style="font-size:15px">64,50 €</div><div class="bal">υπόλοιπο: 200,10 €</div></div></div>
+    </div>
+    <div class="foot">Ένα βιβλίο, χρονολογικά — όπως θα το έγραφες σε τετράδιο. Οι διορθώσεις φαίνονται σαν ξεχωριστή γραμμή, τίποτα δεν σβήνεται ποτέ.</div>
+  </div>
+</div>
+<div class="verdict"><b>Τι σου δίνει η Γ</b>Απαντά στο «τι έγινε», όχι στο «ποιος χρωστάει». Είναι το βιβλίο κινήσεων: κάθε χρέωση και κάθε είσπραξη με τη σειρά που έγιναν. Ιδανικό όταν θες να ελέγξεις τη μέρα ή να βρεις τι πήγε στραβά — αλλά για «ποιος μου χρωστάει;» πρέπει να διαβάσεις πολλά.</div>
+<div class="pros">
+  <div><b style="color:var(--success-text)">✓ Δυνατά</b><ul><li>Βλέπεις τις διορθώσεις και ποιος τις έκανε</li><li>Ταιριάζει με το κλείσιμο βάρδιας</li><li>Δείχνει μετρητά/κάρτα ανά είσπραξη</li></ul></div>
+  <div><b style="color:var(--danger-text)">✗ Αδύνατα</b><ul><li>Δεν βλέπεις εύκολα το σύνολο ανά πελάτη</li><li>Μεγαλώνει γρήγορα</li></ul></div>
+</div>
+</div>
+
+<!-- ══════════════════════════ Δ ══════════════════════════ -->
+<div class="pane" id="p-d">
+<div class="app">
+  <div class="app-bar">👥 Κατάλογος Πελατών</div>
+  <div class="app-body">
+    <div class="tabs"><a href="#">📋 Όλοι οι πελάτες</a><a href="#" class="on">👛 Πίστωση</a><a href="#">🔀 Διπλοεγγραφές</a><a href="#">🗑️ Διαγραφές</a></div>
+
+    <div class="kpis">
+      <div class="kpi hero"><div class="lab">👛 Σύνολο ανείσπρακτων</div><div class="val">1.247,80 €</div><div class="dsc">9 πελάτες</div></div>
+      <div class="kpi"><div class="lab">🟢 Φρέσκα (≤3 μέρες)</div><div class="val" style="color:var(--success-text)">245,30 €</div><div class="dsc">4 πελάτες</div></div>
+      <div class="kpi"><div class="lab">🟡 Προσοχή (4–14)</div><div class="val" style="color:#92400e">590,00 €</div><div class="dsc">2 πελάτες</div></div>
+      <div class="kpi"><div class="lab">🔴 Καθυστερημένα (15+)</div><div class="val" style="color:var(--danger-text)">412,50 €</div><div class="dsc">3 πελάτες</div></div>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;gap:12px;flex-wrap:wrap">
+      <div style="font-size:12.5px;color:var(--text-muted)">Τα όρια (3 / 14 μέρες) έρχονται από τις ρυθμίσεις του POS — αλλάζεις εκεί, αλλάζει κι εδώ.</div>
+      <span class="ro">🔒 Μόνο προβολή</span>
+    </div>
+
+    <div class="cols">
+      <div class="col g">
+        <div class="col-h"><span>🟢 Φρέσκα</span><span class="badge">≤ 3 μέρες</span></div>
+        <div class="col-b">
+          <div class="item"><div><div class="nm">Δημήτρης Μ.</div><div class="sub">2 μέρες · D-88</div></div><span class="money">86,30 €</span></div>
+          <div class="item"><div><div class="nm">Σοφία Ρ.</div><div class="sub">1 μέρα · D-91</div></div><span class="money">64,00 €</span></div>
+          <div class="item"><div><div class="nm">Παύλος Ν.</div><div class="sub">σήμερα · D-93</div></div><span class="money">52,00 €</span></div>
+          <div class="item"><div><div class="nm">Άννα Β.</div><div class="sub">3 μέρες · D-84</div></div><span class="money">43,00 €</span></div>
+        </div>
+        <div class="col-f"><span>Σύνολο</span><span class="money" style="color:var(--success-text)">245,30 €</span></div>
+      </div>
+
+      <div class="col a">
+        <div class="col-h"><span>🟡 Προσοχή</span><span class="badge">4 – 14 μέρες</span></div>
+        <div class="col-b">
+          <div class="item"><div><div class="nm">Γιώργος Κ.</div><div class="sub">9 μέρες · D-63 · έχει πληρώσει 180,00</div></div><span class="money">160,00 €</span></div>
+          <div class="item"><div><div class="nm">Κώστας Λ.</div><div class="sub">12 μέρες · D-55</div></div><span class="money">430,00 €</span></div>
+        </div>
+        <div class="col-f"><span>Σύνολο</span><span class="money" style="color:#92400e">590,00 €</span></div>
+      </div>
+
+      <div class="col r">
+        <div class="col-h"><span>🔴 Καθυστερημένα</span><span class="badge">15+ μέρες</span></div>
+        <div class="col-b">
+          <div class="item"><div><div class="nm">Νίκος Α.</div><div class="sub">23 μέρες · D-42 · έχει πληρώσει 100,00</div></div><span class="money">212,40 €</span></div>
+          <div class="item"><div><div class="nm">Ελένη Π.</div><div class="sub">18 μέρες · D-51</div></div><span class="money">200,10 €</span></div>
+        </div>
+        <div class="col-f"><span>Σύνολο</span><span class="money" style="color:var(--danger-text)">412,50 €</span></div>
+      </div>
+    </div>
+    <div class="foot">Ό,τι είναι στη δεξιά στήλη θέλει τηλέφωνο. Πατάς έναν πελάτη και ανοίγει η καρτέλα του με όλη την ιστορία.</div>
+  </div>
+</div>
+<div class="verdict"><b>Τι σου δίνει η Δ</b>Απαντά σε μία ερώτηση, γρήγορα: <b>ποιον πρέπει να πάρω τηλέφωνο σήμερα;</b> Χωρίζει τους οφειλέτες σε τρεις στήλες ανάλογα με το πόσο καιρό χρωστάνε, με σύνολο σε κάθε στήλη. Χρησιμοποιεί ακριβώς τα όρια που έχεις βάλει στο POS.</div>
+<div class="pros">
+  <div><b style="color:var(--success-text)">✓ Δυνατά</b><ul><li>Η προτεραιότητα φαίνεται χωρίς σκέψη</li><li>Σύνολο ανά στήλη = «πόσα κινδυνεύουν»</li><li>Μιλάει την ίδια γλώσσα με το POS</li></ul></div>
+  <div><b style="color:var(--danger-text)">✗ Αδύνατα</b><ul><li>Δεν έχει ενιαία ταξινόμηση κατά ποσό</li><li>Αν μια στήλη γεμίσει, γίνεται άνιση</li></ul></div>
+</div>
+</div>
+
+<div class="verdict" style="border-left-color:#334155;margin-top:34px">
+  <b>Η πρότασή μου</b>
+  Η <b>Δ</b> για κύρια όψη (απαντά στο «ποιον παίρνω τηλέφωνο») με το <b>άνοιγμα γραμμής της Α</b> όταν πατάς πελάτη, και το <b>βιβλίο της Γ</b> σαν δεύτερη μικρή καρτέλα «Κινήσεις» για όταν θες να ελέγξεις μια μέρα. Η Β είναι η πιο όμορφη αλλά χάνει όταν μεγαλώσει η λίστα. Πες μου τι προτιμάς.
+</div>
+
+</div>
+<script>
+document.querySelectorAll('.pv-btn').forEach(function(b){
+  b.addEventListener('click', function(){
+    document.querySelectorAll('.pv-btn').forEach(function(x){x.classList.remove('on')});
+    document.querySelectorAll('.pane').forEach(function(x){x.classList.remove('on')});
+    b.classList.add('on');
+    var el = document.getElementById('p-' + b.dataset.p);
+    if (el) el.classList.add('on');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+function tgl(tr){
+  var next = tr.nextElementSibling;
+  if (!next || !next.classList.contains('exp')) return;
+  var open = tr.classList.toggle('open');
+  next.style.display = open ? 'table-row' : 'none';
+}
+document.querySelectorAll('tr.exp').forEach(function(r){
+  var prev = r.previousElementSibling;
+  r.style.display = (prev && prev.classList.contains('open')) ? 'table-row' : 'none';
+});
+</script>
+</body>
+</html>
