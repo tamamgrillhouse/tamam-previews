@@ -125,6 +125,40 @@
   .reco ol{margin:10px 0 0 20px;font-size:13.5px;line-height:1.9;color:#dfe4f6}
   .reco ol b{color:var(--white)}
 
+  /* inventory */
+  .inv{margin-top:16px;display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));max-width:960px}
+  .inv-col{background:var(--card);border:1px solid var(--border);border-radius:13px;overflow:hidden}
+  .inv-col h4{font-size:13px;padding:12px 15px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+  .inv-col.qr h4{background:linear-gradient(90deg,rgba(74,158,240,.12),transparent 70%);color:var(--blue)}
+  .inv-col.tx h4{background:linear-gradient(90deg,rgba(139,147,184,.14),transparent 70%);color:var(--white)}
+  .inv-row{display:flex;align-items:flex-start;gap:10px;padding:9px 15px;border-bottom:1px solid rgba(42,53,128,.5);font-size:12.5px}
+  .inv-row:last-child{border-bottom:none}
+  .inv-row .ii{font-size:15px;width:22px;text-align:center;flex-shrink:0}
+  .inv-row .it{flex:1;line-height:1.4}
+  .inv-row .it b{color:var(--white)}
+  .inv-row .id{color:var(--muted);font-size:11px}
+  .inv-row .ok{color:var(--green);font-weight:800;font-size:11px;flex-shrink:0;white-space:nowrap}
+  .inv-note{margin-top:12px;max-width:960px;font-size:12px;color:var(--muted);line-height:1.6;background:rgba(56,217,122,.07);border:1px solid rgba(56,217,122,.22);border-radius:9px;padding:11px 13px}
+
+  /* attraction ideas */
+  .ideas{margin-top:16px;display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+  .icat{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+  .icat-h{padding:13px 16px;font-weight:800;font-size:14px;display:flex;align-items:center;gap:9px;border-bottom:1px solid var(--border)}
+  .icat.rep .icat-h{background:linear-gradient(90deg,rgba(245,200,66,.12),transparent 70%);color:var(--yellow)}
+  .icat.ret .icat-h{background:linear-gradient(90deg,rgba(56,217,122,.12),transparent 70%);color:var(--green)}
+  .icat.dir .icat-h{background:linear-gradient(90deg,rgba(74,158,240,.12),transparent 70%);color:var(--blue)}
+  .icat.soc .icat-h{background:linear-gradient(90deg,rgba(155,123,224,.14),transparent 70%);color:var(--purple)}
+  .icat-b{padding:8px 16px 14px}
+  .idea{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid rgba(42,53,128,.5)}
+  .idea:last-child{border-bottom:none}
+  .idea .di{font-size:17px;width:24px;text-align:center;flex-shrink:0}
+  .idea .dm{flex:1}
+  .idea .dt{font-size:13px;font-weight:700}
+  .idea .dd{font-size:11.5px;color:var(--muted);line-height:1.5;margin-top:2px}
+  .st{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:3px 8px;border-radius:20px;flex-shrink:0;white-space:nowrap;margin-top:2px}
+  .st.ok{background:rgba(56,217,122,.14);color:var(--green)}
+  .st.new{background:rgba(245,200,66,.16);color:var(--yellow)}
+
   .foot{margin-top:38px;font-size:11px;color:var(--muted);text-align:center;line-height:1.7;border-top:1px solid var(--border);padding-top:16px}
 </style>
 </head>
@@ -138,6 +172,33 @@
   <div class="callout">
     <span class="k">Η αρχή σχεδίασης:</span> τα QR <b>ΠΟΤΕ δεν μπαίνουν δίπλα-δίπλα</b> — σε θερμικό χαρτί η κάμερα μπερδεύεται και σκανάρει λάθος. Κάθε QR μπαίνει σε <b>δικό του πλαισιωμένο κουτί</b>, με σαφή τίτλο, <b>κάθετη στοίβαξη</b> και διαχωριστική γραμμή ανάμεσα — ώστε ο σαρωτής να «κλειδώνει» πάντα ένα. Και πάνω από όλα, ένα <b>όριο πλήθους QR</b> ώστε να μη βγαίνουν ποτέ 3–4.
   </div>
+
+  <!-- ===== INVENTORY ===== -->
+  <div class="section-h"><span class="num">✓</span><span class="txt">Πλήρης κατάλογος «θεμάτων» απόδειξης</span></div>
+  <p class="section-sub">Όλα όσα μπορούν να εμφανιστούν στην απόδειξη σήμερα — χωρισμένα σε <b>QR</b> και <b>απλό κείμενο</b>. Όλα υπάρχουν ήδη στο σύστημα.</p>
+  <div class="inv">
+    <div class="inv-col qr">
+      <h4>🔳 Θέματα με QR (4)</h4>
+      <div class="inv-row"><span class="ii">📞</span><span class="it"><b>QR κλήσης πελάτη</b><div class="id">Delivery · λειτουργικό, για τον διανομέα</div></span><span class="ok">✓ υπάρχει</span></div>
+      <div class="inv-row"><span class="ii">⭐</span><span class="it"><b>QR Marketing</b><div class="id">Κριτικές / κουπόνι / loyalty / custom · Del+Ta</div></span><span class="ok">✓ υπάρχει</span></div>
+      <div class="inv-row"><span class="ii">✉️</span><span class="it"><b>QR εγγραφής μέλους</b><div class="id">Μόνο μη-μέλη · Del+Ta</div></span><span class="ok">✓ υπάρχει</span></div>
+      <div class="inv-row"><span class="ii">🧾</span><span class="it"><b>QR ψηφιακό αντίγραφο</b><div class="id">Όλη η απόδειξη · όλες οι παραγγελίες</div></span><span class="ok">✓ υπάρχει</span></div>
+    </div>
+    <div class="inv-col tx">
+      <h4>📝 Θέματα κειμένου — χωρίς QR (10)</h4>
+      <div class="inv-row"><span class="ii">🏷️</span><span class="it"><b>Κεφαλίδα</b><div class="id">Προαιρετικό μήνυμα πάνω-πάνω</div></span><span class="ok">✓</span></div>
+      <div class="inv-row"><span class="ii">🏪</span><span class="it"><b>Στοιχεία καταστήματος</b><div class="id">Διεύθυνση · τηλέφωνο · ΑΦΜ</div></span><span class="ok">✓</span></div>
+      <div class="inv-row"><span class="ii">🎁</span><span class="it"><b>Πόντοι μέλους</b><div class="id">Αριθμός μέλους · πόντοι · υπόλοιπο</div></span><span class="ok">✓</span></div>
+      <div class="inv-row"><span class="ii">✉️</span><span class="it"><b>Πρόσκληση μέλους (κείμενο)</b><div class="id">Κάλεσμα μη-μελών «γίνε μέλος»</div></span><span class="ok">✓</span></div>
+      <div class="inv-row"><span class="ii">💬</span><span class="it"><b>Ευχαριστήριο μήνυμα</b><div class="id">π.χ. «Ευχαριστούμε! Ελάτε ξανά!»</div></span><span class="ok">✓</span></div>
+      <div class="inv-row"><span class="ii">📱</span><span class="it"><b>Social handle</b><div class="id">π.χ. @tamam_grill_house</div></span><span class="ok">✓</span></div>
+      <div class="inv-row"><span class="ii">➕</span><span class="it"><b>2η γραμμή footer</b><div class="id">Επιπλέον ελεύθερο κείμενο</div></span><span class="ok">✓</span></div>
+      <div class="inv-row"><span class="ii">🧾</span><span class="it"><b>Μη φορολογικό παραστατικό</b><div class="id">Notice compliance (default κλειστό)</div></span><span class="ok">✓</span></div>
+      <div class="inv-row"><span class="ii">💳</span><span class="it"><b>Σφραγίδα «Επί Πιστώσει»</b><div class="id">Πελάτης + συνολική οφειλή</div></span><span class="ok">✓</span></div>
+      <div class="inv-row"><span class="ii">🛵</span><span class="it"><b>Κωδικός διανομέα</b><div class="id">Delivery + προμήθεια · διακριτικό</div></span><span class="ok">✓</span></div>
+    </div>
+  </div>
+  <div class="inv-note">✅ <b>Και τα 14 υπάρχουν ήδη</b> στο σύστημα. Το preview τα καλύπτει τώρα και στα σενάρια (δες παρακάτω τη «λιτή» απόδειξη με όλα τα κείμενα). Τα κείμενα δεν έχουν πρόβλημα σάρωσης — πιάνουν όμως χώρο, γι' αυτό μπαίνουν κι αυτά στο ίδιο κέντρο διαχείρισης.</div>
 
   <!-- ===== SECTION 1: RULES ===== -->
   <div class="section-h"><span class="num">1</span><span class="txt">Οι κανόνες σωστής προβολής</span></div>
@@ -196,12 +257,19 @@
 
       <div class="blk">
         <span class="grip">⠿</span><span class="bi">💬</span>
-        <div class="binfo"><div class="bt">Social / Ελεύθερο κείμενο <span class="qr-flag txt-flag">κείμενο</span></div><div class="bd">Instagram · μήνυμα καταστήματος</div></div>
+        <div class="binfo"><div class="bt">Ευχαριστήριο + Social <span class="qr-flag txt-flag">κείμενο</span></div><div class="bd">«Ευχαριστούμε!» · @instagram · 2η γραμμή</div></div>
         <div class="types"><span class="tc on">D</span><span class="tc on">T</span><span class="tc on">Τρ</span></div>
         <span class="sw on"></span>
       </div>
 
-      <div class="adm-note">📞 Το <b>QR κλήσης πελάτη</b> (delivery) ρυθμίζεται χωριστά — είναι για τον διανομέα, μπαίνει δίπλα στη διεύθυνση και δεν μετράει στο όριο.</div>
+      <div class="blk">
+        <span class="grip">⠿</span><span class="bi">🧾</span>
+        <div class="binfo"><div class="bt">Μη φορολογικό παραστατικό <span class="qr-flag txt-flag">κείμενο</span></div><div class="bd">Notice compliance στο κάτω μέρος</div></div>
+        <div class="types"><span class="tc off">D</span><span class="tc off">T</span><span class="tc off">Τρ</span></div>
+        <span class="sw off"></span>
+      </div>
+
+      <div class="adm-note">📞 Το <b>QR κλήσης πελάτη</b> (delivery), η <b>σφραγίδα πίστωσης</b> και ο <b>κωδικός διανομέα</b> είναι αυτόματα/λειτουργικά — εμφανίζονται μόνοι τους όταν χρειάζεται και δεν μετρούν στο όριο QR.</div>
     </div>
   </div>
 
@@ -345,6 +413,31 @@
       </div>
     </div>
 
+    <!-- TEXT stack: all non-QR themes -->
+    <div class="rcard good">
+      <div class="rc-head"><span class="rc-badge t">TAKE AWAY</span><span class="rc-title">Όλα τα κείμενα</span></div>
+      <div class="rc-scen">Κεφαλίδα + μέλος + ευχαριστίες + social + 2η γραμμή + notice. Χωρίς κανένα QR.</div>
+      <div class="verdict good">✓ 0 QR · μόνο κείμενο</div>
+      <div class="rcpt">
+        <div class="r-line" style="font-weight:800;margin-bottom:2px">🏷️ Καλωσορίσατε στο TAMAM!</div>
+        <div class="r-logo">TAMAM</div>
+        <div class="r-sub">Εγνατίας 100 · 2310 000 000 · ΑΦΜ 000000000</div>
+        <div class="r-meta">#TA-61 · Take Away · 20:48</div>
+        <div class="r-sep"></div>
+        <div class="r-item"><span class="n">1× Κεμπάπ Πίτα</span><span>3,50</span></div>
+        <div class="r-item"><span class="n">1× Αναψυκτικό</span><span>1,50</span></div>
+        <div class="r-sep"></div>
+        <div class="r-tot"><span>ΣΥΝΟΛΟ</span><span>5,00 €</span></div>
+        <div class="r-pay">💵 Μετρητά</div>
+        <div class="r-line">🎁 Μέλος <b>TAM-202677</b> · +5 πόντοι (σύνολο <b>62</b>)</div>
+        <div class="r-thanks">Ευχαριστούμε! Ελάτε ξανά! 😊</div>
+        <div class="r-line">📱 @tamam_grill_house</div>
+        <div class="r-line" style="color:#555">Δευτ–Κυρ 12:00–01:00</div>
+        <div class="r-sep"></div>
+        <div class="r-line" style="font-size:8.5px;color:#777">Μη φορολογικό παραστατικό —<br>Αποδείξεις εκδίδονται κατόπιν αιτήματος</div>
+      </div>
+    </div>
+
     <!-- H: Reprint -->
     <div class="rcard">
       <div class="rc-head"><span class="rc-badge t">ΑΝΤΙΓΡΑΦΟ</span><span class="rc-title">Reprint</span></div>
@@ -365,6 +458,51 @@
     </div>
 
   </div>
+
+  <!-- ===== SECTION 4: ATTRACTION IDEAS ===== -->
+  <div class="section-h"><span class="num">4</span><span class="txt">Ιδέες προσέλκυσης πελατών</span></div>
+  <p class="section-sub">Οργανωμένες ανά στόχο. Η απόδειξη είναι δωρεάν διαφημιστικός χώρος — ο ταμίας δεν κάνει τίποτα, ο πελάτης το κρατά στο χέρι. <span style="color:var(--green);font-weight:700">✓ υπάρχει</span> = δουλεύει ήδη (ίσως ως τύπος «custom»). <span style="color:var(--yellow);font-weight:700">🆕 νέο</span> = πρόταση προσθήκης.</p>
+  <div class="ideas">
+
+    <div class="icat rep">
+      <div class="icat-h">🌟 Φήμη & Αξιολογήσεις</div>
+      <div class="icat-b">
+        <div class="idea"><span class="di">⭐</span><span class="dm"><div class="dt">Google κριτικές QR</div><div class="dd">Το κλασικό — ανεβάζει το προφίλ στους χάρτες.</div></span><span class="st ok">✓ υπάρχει</span></div>
+        <div class="idea"><span class="di">💬</span><span class="dm"><div class="dt">Ιδιωτική ανατροφοδότηση QR</div><div class="dd">«Πες μας πρώτα εσένα» — πιάνεις τον δυσαρεστημένο <b>πριν</b> γράψει δημόσια κακή κριτική.</div></span><span class="st new">🆕 νέο</span></div>
+        <div class="idea"><span class="di">👍</span><span class="dm"><div class="dt">Facebook / TripAdvisor</div><div class="dd">Εναλλακτικές πλατφόρμες κριτικής.</div></span><span class="st ok">✓ (custom)</span></div>
+      </div>
+    </div>
+
+    <div class="icat ret">
+      <div class="icat-h">🔁 Επιστροφή & Πιστότητα</div>
+      <div class="icat-b">
+        <div class="idea"><span class="di">🎟️</span><span class="dm"><div class="dt">Κουπόνι «−X% στην επόμενη»</div><div class="dd">Άμεσο κίνητρο για δεύτερη επίσκεψη.</div></span><span class="st ok">✓ υπάρχει</span></div>
+        <div class="idea"><span class="di">🎁</span><span class="dm"><div class="dt">Πόντοι / εγγραφή μέλους</div><div class="dd">Το loyalty πρόγραμμα — ήδη πλήρες.</div></span><span class="st ok">✓ υπάρχει</span></div>
+        <div class="idea"><span class="di">🔢</span><span class="dm"><div class="dt">Κάρτα σφραγίδων «Κάθε 10η δωρεάν»</div><div class="dd">Απλό punch-card — δουλεύει πολύ σε takeaway/delivery.</div></span><span class="st new">🆕 νέο</span></div>
+        <div class="idea"><span class="di">⏰</span><span class="dm"><div class="dt">Χρονικό κίνητρο</div><div class="dd">«Επίστρεψε σε 7 μέρες & πάρε δωρεάν αναψυκτικό».</div></span><span class="st new">🆕 νέο</span></div>
+      </div>
+    </div>
+
+    <div class="icat dir">
+      <div class="icat-h">📱 Άμεση παραγγελία</div>
+      <div class="icat-b">
+        <div class="idea"><span class="di">🛒</span><span class="dm"><div class="dt">QR «Παράγγειλε ξανά κατευθείαν»</div><div class="dd">Δικό σου site / τηλέφωνο — <b>χωρίς προμήθεια πλατφόρμας</b> (μεγάλη οικονομία).</div></span><span class="st new">🆕 νέο</span></div>
+        <div class="idea"><span class="di">💚</span><span class="dm"><div class="dt">WhatsApp / Viber παραγγελία</div><div class="dd">«Παράγγειλε με ένα μήνυμα» — σκανάρει & γράφει.</div></span><span class="st new">🆕 νέο</span></div>
+        <div class="idea"><span class="di">📖</span><span class="dm"><div class="dt">QR πλήρους μενού</div><div class="dd">Ο πελάτης βλέπει όλο το μενού ψηφιακά.</div></span><span class="st ok">✓ (custom)</span></div>
+      </div>
+    </div>
+
+    <div class="icat soc">
+      <div class="icat-h">📸 Κοινότητα & Σύσταση</div>
+      <div class="icat-b">
+        <div class="idea"><span class="di">📷</span><span class="dm"><div class="dt">«Βγάλε φωτό & κάνε tag»</div><div class="dd">Hashtag campaign + Instagram/TikTok — δωρεάν διαφήμιση.</div></span><span class="st new">🆕 νέο</span></div>
+        <div class="idea"><span class="di">👥</span><span class="dm"><div class="dt">Σύσταση «Φέρε φίλο»</div><div class="dd">«Πάρτε & οι δύο −X%» με κωδικό/QR.</div></span><span class="st new">🆕 νέο</span></div>
+        <div class="idea"><span class="di">📬</span><span class="dm"><div class="dt">Εγγραφή σε προσφορές (SMS/email)</div><div class="dd">Δένει με το σύστημα συγκατάθεσης που ήδη έχουμε.</div></span><span class="st new">🆕 νέο</span></div>
+      </div>
+    </div>
+
+  </div>
+  <div class="inv-note" style="border-color:rgba(245,200,66,.28);background:rgba(245,200,66,.06)">💡 Λόγω του κανόνα «1 QR ανά απόδειξη», δεν μπαίνουν όλα μαζί — <b>διαλέγεις 1 ενεργή καμπάνια</b> και την αλλάζεις όποτε θες (π.χ. κριτικές τον έναν μήνα, κουπόνι τον άλλον). Οι έτοιμες καμπάνιες γίνονται λίστα επιλογής στο marketing QR.</div>
 
   <!-- ===== RECOMMENDATION ===== -->
   <div class="reco">
