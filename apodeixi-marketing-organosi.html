@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>TAMAM · Οργάνωση Marketing Απόδειξης</title>
+<title>TAMAM · Απόδειξη — Πλήρης Διαχείριση & Σωστές Προβολές</title>
 <style>
   :root{
     --black:#0d0f14; --card:#1c2554; --card2:#141a3a; --yellow:#f5c842;
@@ -15,371 +15,372 @@
   body{
     font-family:'Segoe UI','Noto Sans',system-ui,sans-serif;
     background:radial-gradient(ellipse at top,#1a1f3a,var(--black) 70%);
-    color:var(--white); min-height:100vh; padding:24px 16px 60px;
+    color:var(--white); min-height:100vh; padding:24px 18px 70px;
     -webkit-font-smoothing:antialiased;
   }
-  .wrap{max-width:1120px;margin:0 auto}
-  .pgrid{display:grid;gap:18px;margin-top:16px;grid-template-columns:repeat(auto-fit,minmax(440px,1fr))}
-  .pgrid .prop{margin-top:0}
-  @media (max-width:520px){ .pgrid{grid-template-columns:1fr} }
+  .wrap{max-width:1160px;margin:0 auto}
   .back{display:inline-flex;align-items:center;gap:6px;color:var(--muted);text-decoration:none;font-size:13px;margin-bottom:18px}
   .logo{font-size:26px;font-weight:800;letter-spacing:.5px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
   .logo .tag{font-size:10.5px;background:var(--yellow);color:#1a1206;padding:3px 9px;border-radius:20px;font-weight:800}
-  h1{font-size:22px;margin-top:18px;line-height:1.3}
-  .lead{color:var(--muted);margin-top:12px;font-size:14.5px;line-height:1.7;max-width:840px}
+  h1{font-size:23px;margin-top:18px;line-height:1.3;max-width:900px}
+  .lead{color:var(--muted);margin-top:12px;font-size:14.5px;line-height:1.7;max-width:880px}
   .lead b{color:var(--white)}
 
-  .callout{
-    margin-top:20px;background:linear-gradient(135deg,rgba(56,217,122,.12),transparent 70%);
-    border:1px solid rgba(56,217,122,.3);border-left:3px solid var(--green);
-    border-radius:12px;padding:16px 18px;font-size:14px;line-height:1.7;max-width:840px;
-  }
-  .callout .k{color:var(--green);font-weight:800}
+  .callout{margin-top:20px;max-width:900px;background:linear-gradient(135deg,rgba(224,90,90,.12),transparent 70%);border:1px solid rgba(224,90,90,.3);border-left:3px solid var(--red);border-radius:12px;padding:16px 18px;font-size:14px;line-height:1.75}
+  .callout.g{background:linear-gradient(135deg,rgba(56,217,122,.12),transparent 70%);border-color:rgba(56,217,122,.3);border-left-color:var(--green)}
+  .callout .k{font-weight:800;color:var(--red)}
+  .callout.g .k{color:var(--green)}
 
-  .section-h{margin-top:40px;display:flex;align-items:center;gap:10px}
-  .section-h .num{width:30px;height:30px;border-radius:9px;background:var(--yellow);color:#1a1206;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
-  .section-h .txt{font-size:18px;font-weight:800}
-  .section-sub{color:var(--muted);font-size:13.5px;line-height:1.6;margin:8px 0 4px}
+  .section-h{margin-top:44px;display:flex;align-items:center;gap:11px}
+  .section-h .num{width:32px;height:32px;border-radius:9px;background:var(--yellow);color:#1a1206;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+  .section-h .txt{font-size:19px;font-weight:800}
+  .section-sub{color:var(--muted);font-size:13.5px;line-height:1.65;margin:9px 0 4px;max-width:880px}
 
-  /* module chips */
-  .modules{margin-top:16px;display:flex;flex-direction:column;gap:8px;max-width:840px}
-  .mod{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:11px;padding:11px 14px}
-  .mod .mi{font-size:20px;width:32px;text-align:center;flex-shrink:0}
-  .mod .mt{font-weight:700;font-size:14px}
-  .mod .md{font-size:12px;color:var(--muted);margin-top:1px}
-  .mod .scope{margin-left:auto;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;padding:3px 8px;border-radius:20px;white-space:nowrap}
-  .scope.all{background:rgba(139,147,184,.16);color:var(--muted)}
-  .scope.mem{background:rgba(56,217,122,.14);color:var(--green)}
-  .scope.non{background:rgba(155,123,224,.16);color:var(--purple)}
+  .rules{margin-top:14px;max-width:880px;display:grid;gap:9px}
+  .rule{display:flex;gap:11px;align-items:flex-start;background:var(--card);border:1px solid var(--border);border-radius:11px;padding:12px 15px;font-size:13.5px;line-height:1.6}
+  .rule .rk{color:var(--green);font-weight:800;flex-shrink:0}
+  .rule b{color:var(--white)}
 
-  /* proposal cards */
-  .prop{margin-top:16px;background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden}
-  .prop-head{display:flex;align-items:center;gap:12px;padding:14px 16px;background:linear-gradient(90deg,rgba(245,200,66,.08),transparent 70%);border-bottom:1px solid var(--border)}
-  .prop-badge{font-size:12px;font-weight:800;background:var(--yellow);color:#1a1206;width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-  .prop.b .prop-badge{background:var(--blue);color:#04122a}
-  .prop-title{font-weight:800;font-size:15.5px}
-  .prop-tagline{font-size:12px;color:var(--muted);margin-top:2px}
-  .prop-body{padding:14px 16px}
-  .prop-desc{font-size:13.5px;line-height:1.7;color:#c9d0ee}
-  .prop-desc b{color:var(--white)}
-  .pros{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px}
-  .pro{font-size:11.5px;background:rgba(56,217,122,.1);border:1px solid rgba(56,217,122,.28);color:#a8f0c8;padding:4px 10px;border-radius:20px}
-  .con{font-size:11.5px;background:rgba(224,90,90,.09);border:1px solid rgba(224,90,90,.26);color:#f0b5b5;padding:4px 10px;border-radius:20px}
+  /* ===== ADMIN management panel ===== */
+  .adminwrap{margin-top:16px;max-width:760px;background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+  .adm-head{padding:15px 18px;background:linear-gradient(90deg,rgba(245,200,66,.1),transparent 70%);border-bottom:1px solid var(--border)}
+  .adm-head .t{font-weight:800;font-size:16px}
+  .adm-head .s{font-size:12px;color:var(--muted);margin-top:3px}
+  .adm-body{padding:16px 18px}
+  .cap-row{display:flex;align-items:center;gap:12px;background:rgba(245,200,66,.07);border:1px solid rgba(245,200,66,.35);border-radius:11px;padding:12px 14px;margin-bottom:16px}
+  .cap-row .ci{font-size:20px}
+  .cap-row .ct{font-size:13.5px;font-weight:700;flex:1}
+  .cap-stepper{display:flex;align-items:center;gap:0;border:1px solid var(--border);border-radius:9px;overflow:hidden;background:var(--card2)}
+  .cap-stepper .cb{width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--muted);background:var(--card)}
+  .cap-stepper .cv{width:38px;text-align:center;font-weight:800;font-size:15px;color:var(--yellow)}
 
-  /* mini admin mockup */
-  .mock{margin-top:14px;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px}
-  .mock-lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:9px;font-weight:700}
-  .row-tog{display:flex;align-items:center;gap:10px;padding:9px 11px;background:var(--card);border:1px solid var(--border);border-radius:9px;margin-bottom:7px}
-  .row-tog:last-child{margin-bottom:0}
-  .grip{color:var(--muted);font-size:15px;cursor:grab}
-  .row-tog .ri{font-size:16px}
-  .row-tog .rt{font-size:13px;font-weight:600;flex:1}
-  .sw{width:38px;height:22px;border-radius:20px;flex-shrink:0;position:relative;transition:.15s}
-  .sw.on{background:var(--green)}
-  .sw.off{background:#3a4166}
-  .sw::after{content:'';position:absolute;top:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.15s}
-  .sw.on::after{left:18px}
-  .sw.off::after{left:2px}
+  .blk-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:700;margin:4px 0 10px;display:flex;align-items:center;gap:8px}
+  .blk-lbl .hint{font-weight:500;text-transform:none;letter-spacing:0;font-size:11px}
 
-  /* matrix */
-  .matrix{width:100%;border-collapse:collapse;font-size:12.5px}
-  .matrix th,.matrix td{padding:8px 6px;text-align:center;border-bottom:1px solid var(--border)}
-  .matrix th{color:var(--muted);font-size:11px;font-weight:700}
-  .matrix td:first-child,.matrix th:first-child{text-align:left;font-weight:600}
-  .cell-on{color:var(--green);font-weight:800}
-  .cell-off{color:#3a4166}
+  .blk{display:flex;align-items:center;gap:11px;background:var(--card2);border:1px solid var(--border);border-radius:11px;padding:11px 13px;margin-bottom:8px}
+  .blk .grip{color:var(--muted);font-size:15px;cursor:grab}
+  .blk .bi{font-size:18px;width:26px;text-align:center;flex-shrink:0}
+  .blk .binfo{flex:1;min-width:0}
+  .blk .bt{font-size:13.5px;font-weight:700}
+  .blk .bd{font-size:11px;color:var(--muted);margin-top:1px}
+  .qr-flag{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--blue);background:rgba(74,158,240,.14);padding:2px 7px;border-radius:20px;margin-left:6px;vertical-align:middle}
+  .txt-flag{color:var(--muted);background:rgba(139,147,184,.14)}
+  /* per-type chips */
+  .types{display:flex;gap:4px;flex-shrink:0}
+  .tc{width:26px;height:26px;border-radius:7px;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;border:1px solid var(--border)}
+  .tc.on{background:var(--green);color:#04160b;border-color:var(--green)}
+  .tc.off{background:var(--card);color:#3a4166}
+  .sw{width:40px;height:23px;border-radius:20px;flex-shrink:0;position:relative;transition:.15s}
+  .sw.on{background:var(--green)} .sw.off{background:#3a4166}
+  .sw::after{content:'';position:absolute;top:2px;width:19px;height:19px;border-radius:50%;background:#fff;transition:.15s}
+  .sw.on::after{left:19px} .sw.off::after{left:2px}
+  .adm-note{margin-top:12px;font-size:11.5px;color:var(--muted);line-height:1.6;background:rgba(74,158,240,.07);border:1px solid rgba(74,158,240,.2);border-radius:9px;padding:10px 12px}
 
-  /* presets */
-  .presets{display:flex;flex-wrap:wrap;gap:8px}
-  .preset{font-size:12.5px;font-weight:700;padding:9px 14px;border-radius:10px;border:1px solid var(--border);background:var(--card)}
-  .preset.active{border-color:var(--yellow);color:var(--yellow);background:rgba(245,200,66,.08)}
+  /* ===== RECEIPTS ===== */
+  .rgrid{margin-top:16px;display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));align-items:start}
+  .rcard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;flex-direction:column}
+  .rcard .rc-head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+  .rcard .rc-badge{font-size:11px;font-weight:800;padding:4px 9px;border-radius:8px;background:var(--card2);border:1px solid var(--border)}
+  .rcard .rc-badge.d{color:var(--blue);border-color:rgba(74,158,240,.4)}
+  .rcard .rc-badge.t{color:var(--green);border-color:rgba(56,217,122,.4)}
+  .rcard .rc-badge.tr{color:var(--yellow);border-color:rgba(245,200,66,.4)}
+  .rcard .rc-title{font-weight:800;font-size:14.5px}
+  .rcard .rc-scen{font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.5}
+  .rcard.bad{border-color:rgba(224,90,90,.4)}
+  .rcard.good{border-color:rgba(56,217,122,.45)}
+  .verdict{font-size:12px;font-weight:800;padding:5px 10px;border-radius:8px;margin-bottom:10px;text-align:center}
+  .verdict.bad{background:rgba(224,90,90,.14);color:#f0a5a5}
+  .verdict.good{background:rgba(56,217,122,.14);color:#a8f0c8}
 
-  /* priority list */
-  .prio{counter-reset:p}
-  .prio .pitem{display:flex;align-items:center;gap:10px;padding:8px 11px;background:var(--card);border:1px solid var(--border);border-radius:9px;margin-bottom:6px}
-  .prio .pn{counter-increment:p;width:22px;height:22px;border-radius:6px;background:var(--yellow);color:#1a1206;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center}
-  .prio .pn::before{content:counter(p)}
-
-  /* ===== RECEIPT MOCKUPS (80mm thermal) ===== */
-  .rcpt-scroll{margin-top:14px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px}
-  .rcpt{
-    width:300px;min-width:300px;background:#fdfdfb;color:#161616;
-    font-family:'Courier New',monospace;font-size:12px;line-height:1.45;
-    padding:16px 18px;border-radius:6px;margin:0 auto;
-    box-shadow:0 6px 24px rgba(0,0,0,.45);
-  }
-  .rcpt .r-logo{text-align:center;font-weight:800;font-size:19px;letter-spacing:2px}
-  .rcpt .r-sub{text-align:center;font-size:9.5px;color:#555;margin-top:2px}
-  .rcpt .r-meta{text-align:center;font-size:10px;color:#333;margin-top:6px}
-  .rcpt .r-sep{border-top:1px dashed #999;margin:9px 0}
+  .rcpt{width:290px;max-width:100%;background:#fdfdfb;color:#161616;font-family:'Courier New',monospace;font-size:11.5px;line-height:1.45;padding:15px 17px;border-radius:6px;margin:0 auto;box-shadow:0 6px 22px rgba(0,0,0,.4)}
+  .rcpt .r-logo{text-align:center;font-weight:800;font-size:18px;letter-spacing:2px}
+  .rcpt .r-sub{text-align:center;font-size:9px;color:#555;margin-top:2px}
+  .rcpt .r-meta{text-align:center;font-size:9.5px;color:#333;margin-top:5px}
+  .rcpt .r-cust{font-size:10px;color:#222;margin-top:6px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+  .rcpt .r-sep{border-top:1px dashed #999;margin:8px 0}
+  .rcpt .r-sep.bold{border-top:2px solid #333}
   .rcpt .r-item{display:flex;justify-content:space-between}
   .rcpt .r-item .n{padding-right:8px}
-  .rcpt .r-tot{display:flex;justify-content:space-between;font-weight:800;font-size:13px}
-  .rcpt .r-pay{font-size:10.5px;color:#333;margin-top:3px}
-  .rcpt .r-thanks{text-align:center;font-weight:700;margin:8px 0}
+  .rcpt .r-tot{display:flex;justify-content:space-between;font-weight:800;font-size:12.5px}
+  .rcpt .r-pay{font-size:10px;color:#333;margin-top:3px}
+  .rcpt .r-line{font-size:10px;text-align:center;margin:3px 0}
+  .rcpt .r-line b{font-weight:800}
+  .rcpt .r-thanks{text-align:center;font-weight:700;margin:7px 0 2px}
+  .rcpt .r-credit{text-align:center;border:1.5px solid #161616;border-radius:5px;padding:5px;margin:8px 0;font-size:10px}
+  .rcpt .r-credit .cs{font-weight:800;letter-spacing:1px}
 
-  /* promo block variants inside receipt */
-  .promo-box{border:1.5px dashed #bbb;border-radius:7px;padding:9px;margin-top:9px}
-  .promo-head{text-align:center;font-size:9px;letter-spacing:1px;color:#888;font-weight:700;text-transform:uppercase;margin-bottom:7px}
-  .mem-line{text-align:center;font-size:11px;margin:2px 0}
-  .mem-line b{font-weight:800}
-  .qr{width:74px;height:74px;display:block;margin:0 auto}
-  .qr.sm{width:58px;height:58px}
-  .qr-lbl{text-align:center;font-size:9.5px;color:#333;margin-top:4px;font-weight:700}
-  .qr-row{display:flex;justify-content:center;gap:18px;align-items:flex-start}
-  .qr-col{display:flex;flex-direction:column;align-items:center}
-  .divider-lite{border-top:1px solid #ddd;margin:8px 0}
-  .badge-hook{text-align:center;font-weight:800;font-size:12px;margin-bottom:6px}
+  /* QR SLOT — one framed box, clear heading, generous gap */
+  .qr-slot{border:1.5px solid #333;border-radius:7px;padding:9px 8px 8px;margin-top:10px;text-align:center}
+  .qr-slot .qs-head{font-size:9.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#161616;margin-bottom:6px}
+  .qr-slot svg{width:76px;height:76px;display:block;margin:0 auto}
+  .qr-slot .qs-lbl{font-size:9px;color:#333;margin-top:5px}
+  .qr-gap{height:9px;border-top:1px dashed #bbb;margin:9px -2px 0}
+  .tel-mini{width:40px;height:40px;flex-shrink:0}
+  .tel-cap{font-size:7.5px;color:#666;text-align:center;margin-top:1px}
 
-  .rec-note{margin-top:11px;font-size:11.5px;color:var(--muted);line-height:1.6;font-style:italic;max-width:840px}
-
-  /* recommendation */
-  .reco{margin-top:40px;background:linear-gradient(135deg,rgba(245,200,66,.1),transparent 70%);border:1px solid rgba(245,200,66,.32);border-left:3px solid var(--yellow);border-radius:14px;padding:18px 20px;max-width:900px}
+  .reco{margin-top:44px;max-width:940px;background:linear-gradient(135deg,rgba(245,200,66,.1),transparent 70%);border:1px solid rgba(245,200,66,.32);border-left:3px solid var(--yellow);border-radius:14px;padding:20px 22px}
   .reco h3{font-size:16px;display:flex;align-items:center;gap:8px}
   .reco p{font-size:13.5px;line-height:1.75;color:#dfe4f6;margin-top:10px}
   .reco b{color:var(--yellow)}
-  .reco .combo{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px}
-  .reco .cchip{font-size:12px;font-weight:700;background:var(--card);border:1px solid var(--border);padding:7px 12px;border-radius:9px}
+  .reco ol{margin:10px 0 0 20px;font-size:13.5px;line-height:1.9;color:#dfe4f6}
+  .reco ol b{color:var(--white)}
 
-  .foot{margin-top:36px;font-size:11px;color:var(--muted);text-align:center;line-height:1.7;border-top:1px solid var(--border);padding-top:16px}
-  .q{font-size:12px;color:var(--muted);margin-top:6px}
+  .foot{margin-top:38px;font-size:11px;color:var(--muted);text-align:center;line-height:1.7;border-top:1px solid var(--border);padding-top:16px}
 </style>
 </head>
 <body>
 <div class="wrap">
   <a class="back" href="index.html">‹ Πίσω στα previews</a>
   <div class="logo">🧾 TAMAM <span class="tag">PREVIEWS</span></div>
-  <h1>Οργάνωση «θεμάτων» στο τέλος της απόδειξης</h1>
-  <p class="lead">Μπλοκ μελών, QR για Google κριτικές, κουπόνια, social, ψηφιακό αντίγραφο — όλα κάθονται στο κάτω μέρος της απόδειξης. Εδώ βλέπεις <b>4 τρόπους οργάνωσης στο admin</b> και <b>4 τρόπους εμφάνισης στην εκτύπωση</b>, με πραγματικά mockups. Μόνο σχέδια — κανένα πραγματικό στοιχείο.</p>
+  <h1>Απόδειξη — Πλήρης διαχείριση & σωστές προβολές</h1>
+  <p class="lead">Ένα ενιαίο κέντρο ελέγχου για ό,τι εμφανίζεται στο κάτω μέρος της απόδειξης (μέλη, Google κριτικές, κουπόνια, ψηφιακό αντίγραφο, social) — με <b>σωστό, ξεκάθαρο στήσιμο για κάθε σενάριο</b>. Μόνο σχέδια· καμία λειτουργία δεν έχει αλλάξει.</p>
 
   <div class="callout">
-    <span class="k">Το κλειδί:</span> μια απόδειξη <b>ήδη μπορεί</b> να δείχνει δύο θέματα ταυτόχρονα — π.χ. πόντους μέλους <b>και</b> QR κριτικών — γιατί είναι ανεξάρτητα μπλοκ. Το ζητούμενο δεν είναι «να μπορεί», αλλά <b>να το ελέγχεις</b> και να <b>φαίνεται καθαρό</b> χωρίς να γεμίζει το χαρτί με 2–3 QR.
+    <span class="k">Η αρχή σχεδίασης:</span> τα QR <b>ΠΟΤΕ δεν μπαίνουν δίπλα-δίπλα</b> — σε θερμικό χαρτί η κάμερα μπερδεύεται και σκανάρει λάθος. Κάθε QR μπαίνει σε <b>δικό του πλαισιωμένο κουτί</b>, με σαφή τίτλο, <b>κάθετη στοίβαξη</b> και διαχωριστική γραμμή ανάμεσα — ώστε ο σαρωτής να «κλειδώνει» πάντα ένα. Και πάνω από όλα, ένα <b>όριο πλήθους QR</b> ώστε να μη βγαίνουν ποτέ 3–4.
   </div>
 
-  <!-- The modules -->
-  <div class="section-h"><span class="num">·</span><span class="txt">Τα «θέματα» που υπάρχουν σήμερα</span></div>
-  <p class="section-sub">Αυτά είναι τα διαθέσιμα μπλοκ στο κάτω μέρος κάθε απόδειξης:</p>
-  <div class="modules">
-    <div class="mod"><span class="mi">🎁</span><span><div class="mt">Μπλοκ Μελών</div><div class="md">Αριθμός μέλους, πόντοι, υπόλοιπο, επόμενο βραβείο</div></span><span class="scope mem">Μόνο μέλη</span></div>
-    <div class="mod"><span class="mi">✉️</span><span><div class="mt">Πρόσκληση Μέλους + QR εγγραφής</div><div class="md">Κάλεσμα να γίνει μέλος + QR self-enroll</div></span><span class="scope non">Μη-μέλη</span></div>
-    <div class="mod"><span class="mi">⭐</span><span><div class="mt">QR Marketing</div><div class="md">Google κριτικές / κουπόνι / loyalty / δικό σου link</div></span><span class="scope all">Del + Ta</span></div>
-    <div class="mod"><span class="mi">🧾</span><span><div class="mt">QR Ψηφιακού Αντιγράφου</div><div class="md">Όλη η απόδειξη σε ψηφιακή μορφή</div></span><span class="scope all">Όλες</span></div>
-    <div class="mod"><span class="mi">💬</span><span><div class="mt">Social / Ελεύθερο κείμενο</div><div class="md">Ευχαριστίες, Instagram, μήνυμα καταστήματος</div></span><span class="scope all">Όλες</span></div>
+  <!-- ===== SECTION 1: RULES ===== -->
+  <div class="section-h"><span class="num">1</span><span class="txt">Οι κανόνες σωστής προβολής</span></div>
+  <div class="rules">
+    <div class="rule"><span class="rk">1.</span><div><b>Ένα QR ανά κουτί.</b> Πλαίσιο + τίτλος από πάνω + ετικέτα από κάτω. Ο σαρωτής βλέπει μόνο αυτό.</div></div>
+    <div class="rule"><span class="rk">2.</span><div><b>Ποτέ δίπλα-δίπλα — μόνο κάθετα,</b> με διαχωριστική γραμμή και κενό ανάμεσα σε δύο QR.</div></div>
+    <div class="rule"><span class="rk">3.</span><div><b>Όριο QR ανά απόδειξη</b> (προτείνω <b>1</b>). Αν ενεργά μπλοκ > όριο → κρατά τα υψηλότερης προτεραιότητας, τα υπόλοιπα γίνονται <b>απλή γραμμή κειμένου με link</b> (όχι QR).</div></div>
+    <div class="rule"><span class="rk">4.</span><div><b>Το QR κλήσης πελάτη (delivery)</b> είναι λειτουργικό — για τον διανομέα, δίπλα στη διεύθυνση. Μένει ξεχωριστά πάνω και <b>δεν μετράει</b> στο όριο των promo QR.</div></div>
+    <div class="rule"><span class="rk">5.</span><div><b>Οι πόντοι μέλους είναι κείμενο,</b> όχι QR — δεν πιάνουν χώρο ούτε μπερδεύουν σάρωση.</div></div>
   </div>
-  <p class="rec-note">Το πρόβλημα: σε μια takeaway απόδειξη προς μέλος με ενεργό QR κριτικών → μπλοκ μελών + QR κριτικών + QR αντιγράφου = <b>δύο QR + κείμενο</b> → μακρύ και ακατάστατο. Χρειάζεται έλεγχος + οπτική τάξη.</p>
 
-  <!-- ============ PART A: ADMIN ============ -->
-  <div class="section-h"><span class="num">A</span><span class="txt">Οργάνωση στο Admin — 4 προτάσεις</span></div>
-
-  <div class="pgrid">
-  <!-- A1 -->
-  <div class="prop">
-    <div class="prop-head"><span class="prop-badge">A1</span><div><div class="prop-title">Κέντρο Marketing Απόδειξης</div><div class="prop-tagline">Μία λίστα · σειρά με σύρσιμο · όριο QR</div></div></div>
-    <div class="prop-body">
-      <div class="prop-desc">Μία νέα ενότητα με <b>όλα τα μπλοκ σε λίστα</b>: ON/OFF το καθένα, σύρσιμο για τη σειρά εμφάνισης, και ένας διακόπτης <b>«Μέγιστο 1 QR ανά απόδειξη»</b> ώστε να μη γεμίζει ποτέ. Βλέπεις με μια ματιά τι ακριβώς τυπώνεται.</div>
-      <div class="mock">
-        <div class="mock-lbl">📋 Μπλοκ απόδειξης — σύρε για σειρά</div>
-        <div class="row-tog"><span class="grip">⠿</span><span class="ri">🎁</span><span class="rt">Μπλοκ Μελών</span><span class="sw on"></span></div>
-        <div class="row-tog"><span class="grip">⠿</span><span class="ri">⭐</span><span class="rt">QR Google Κριτικές</span><span class="sw on"></span></div>
-        <div class="row-tog"><span class="grip">⠿</span><span class="ri">🧾</span><span class="rt">QR Ψηφιακό Αντίγραφο</span><span class="sw off"></span></div>
-        <div class="row-tog"><span class="grip">⠿</span><span class="ri">💬</span><span class="rt">Social / Κείμενο</span><span class="sw on"></span></div>
-        <div class="row-tog" style="border-color:rgba(245,200,66,.4);background:rgba(245,200,66,.06)"><span class="ri">🚦</span><span class="rt">Μέγιστο QR ανά απόδειξη: <b>1</b></span><span class="sw on"></span></div>
+  <!-- ===== SECTION 2: ADMIN ===== -->
+  <div class="section-h"><span class="num">2</span><span class="txt">Το κέντρο διαχείρισης (Admin)</span></div>
+  <p class="section-sub">Μία οθόνη. Κάθε μπλοκ: ON/OFF, ορατότητα ανά τύπο παραγγελίας (<b>D</b>elivery / <b>T</b>ake Away / <b>Τρ</b>απέζι), και σειρά προτεραιότητας με σύρσιμο. Πάνω-πάνω, το όριο QR.</p>
+  <div class="adminwrap">
+    <div class="adm-head">
+      <div class="t">📱 Κέντρο QR & Απόδειξης</div>
+      <div class="s">Έλεγξε τι εμφανίζεται στο κάτω μέρος κάθε απόδειξης</div>
+    </div>
+    <div class="adm-body">
+      <div class="cap-row">
+        <span class="ci">🚦</span>
+        <span class="ct">Μέγιστο QR ανά απόδειξη</span>
+        <div class="cap-stepper"><span class="cb">–</span><span class="cv">1</span><span class="cb">+</span></div>
       </div>
-      <div class="pros"><span class="pro">✓ Μία αλήθεια</span><span class="pro">✓ Ποτέ ακαταστασία</span><span class="pro">✓ Ελεύθερη σειρά</span><span class="con">– Λίγο πιο σύνθετο UI</span></div>
+
+      <div class="blk-lbl">Σειρά προτεραιότητας <span class="hint">— σύρε· ό,τι είναι ψηλότερα κερδίζει το όριο</span></div>
+
+      <div class="blk">
+        <span class="grip">⠿</span><span class="bi">🎁</span>
+        <div class="binfo"><div class="bt">Πόντοι μέλους <span class="qr-flag txt-flag">κείμενο</span></div><div class="bd">Αριθμός μέλους · πόντοι · υπόλοιπο</div></div>
+        <div class="types"><span class="tc on">D</span><span class="tc on">T</span><span class="tc on">Τρ</span></div>
+        <span class="sw on"></span>
+      </div>
+
+      <div class="blk">
+        <span class="grip">⠿</span><span class="bi">⭐</span>
+        <div class="binfo"><div class="bt">QR Google Κριτικές <span class="qr-flag">QR</span></div><div class="bd">Marketing · κριτικές / κουπόνι / loyalty</div></div>
+        <div class="types"><span class="tc on">D</span><span class="tc on">T</span><span class="tc off">Τρ</span></div>
+        <span class="sw on"></span>
+      </div>
+
+      <div class="blk">
+        <span class="grip">⠿</span><span class="bi">✉️</span>
+        <div class="binfo"><div class="bt">QR εγγραφής μέλους <span class="qr-flag">QR</span></div><div class="bd">Μόνο μη-μέλη · «γίνε μέλος»</div></div>
+        <div class="types"><span class="tc on">D</span><span class="tc on">T</span><span class="tc off">Τρ</span></div>
+        <span class="sw on"></span>
+      </div>
+
+      <div class="blk">
+        <span class="grip">⠿</span><span class="bi">🧾</span>
+        <div class="binfo"><div class="bt">QR ψηφιακό αντίγραφο <span class="qr-flag">QR</span></div><div class="bd">Όλη η απόδειξη σε ψηφιακή μορφή</div></div>
+        <div class="types"><span class="tc off">D</span><span class="tc off">T</span><span class="tc off">Τρ</span></div>
+        <span class="sw off"></span>
+      </div>
+
+      <div class="blk">
+        <span class="grip">⠿</span><span class="bi">💬</span>
+        <div class="binfo"><div class="bt">Social / Ελεύθερο κείμενο <span class="qr-flag txt-flag">κείμενο</span></div><div class="bd">Instagram · μήνυμα καταστήματος</div></div>
+        <div class="types"><span class="tc on">D</span><span class="tc on">T</span><span class="tc on">Τρ</span></div>
+        <span class="sw on"></span>
+      </div>
+
+      <div class="adm-note">📞 Το <b>QR κλήσης πελάτη</b> (delivery) ρυθμίζεται χωριστά — είναι για τον διανομέα, μπαίνει δίπλα στη διεύθυνση και δεν μετράει στο όριο.</div>
     </div>
   </div>
 
-  <!-- A2 -->
-  <div class="prop">
-    <div class="prop-head"><span class="prop-badge">A2</span><div><div class="prop-title">Πίνακας ανά τύπο παραγγελίας</div><div class="prop-tagline">Πλέγμα: μπλοκ × Delivery / Take Away / Τραπέζι</div></div></div>
-    <div class="prop-body">
-      <div class="prop-desc">Απόλυτος έλεγχος <b>ανά περιβάλλον</b>: κριτικές μόνο σε delivery, κουπόνι μόνο σε takeaway, μέλη παντού. Ένα κλικ σε κάθε κελί.</div>
-      <div class="mock">
-        <table class="matrix">
-          <tr><th>Μπλοκ</th><th>Delivery</th><th>Take&nbsp;Away</th><th>Τραπέζι</th></tr>
-          <tr><td>🎁 Μέλη</td><td class="cell-on">●</td><td class="cell-on">●</td><td class="cell-on">●</td></tr>
-          <tr><td>⭐ Κριτικές</td><td class="cell-on">●</td><td class="cell-off">○</td><td class="cell-off">○</td></tr>
-          <tr><td>🎟️ Κουπόνι</td><td class="cell-off">○</td><td class="cell-on">●</td><td class="cell-off">○</td></tr>
-          <tr><td>💬 Social</td><td class="cell-on">●</td><td class="cell-on">●</td><td class="cell-off">○</td></tr>
-        </table>
-      </div>
-      <div class="pros"><span class="pro">✓ Μέγιστος έλεγχος</span><span class="pro">✓ Στοχευμένο ανά τύπο</span><span class="con">– Πολλά κλικ</span><span class="con">– Θέλει σκέψη</span></div>
-    </div>
-  </div>
+  <!-- ===== SECTION 3: SCENARIOS ===== -->
+  <div class="section-h"><span class="num">3</span><span class="txt">Σωστές προβολές ανά σενάριο</span></div>
+  <p class="section-sub">Πραγματικά σενάρια με το παραπάνω setup (όριο = 1 QR, προτεραιότητα: Κριτικές &gt; Εγγραφή). Δες πώς μένει καθαρή η απόδειξη ακόμα και στη χειρότερη περίπτωση.</p>
 
-  <!-- A3 -->
-  <div class="prop">
-    <div class="prop-head"><span class="prop-badge">A3</span><div><div class="prop-title">Έξυπνη προτεραιότητα</div><div class="prop-tagline">Λίγες επιλογές — ο κανόνας αποφασίζει</div></div></div>
-    <div class="prop-body">
-      <div class="prop-desc">Δεν διαλέγεις συνδυασμούς. Βάζεις μόνο <b>σειρά προτεραιότητας</b> + «Μέγιστο 1 QR». Το σύστημα αποφασίζει: μέλος → μπλοκ μελών, μη-μέλος → πρόσκληση, +1 promo QR αν χωράει. Οι λιγότερες αποφάσεις, ποτέ λάθος.</div>
-      <div class="mock">
-        <div class="mock-lbl">🎯 Σειρά προτεραιότητας (σύρε)</div>
-        <div class="prio">
-          <div class="pitem"><span class="pn"></span><span class="ri">🎁</span><span class="rt">Πόντοι μέλους</span><span class="grip">⠿</span></div>
-          <div class="pitem"><span class="pn"></span><span class="ri">⭐</span><span class="rt">Google κριτικές</span><span class="grip">⠿</span></div>
-          <div class="pitem"><span class="pn"></span><span class="ri">🎟️</span><span class="rt">Κουπόνι επόμενης</span><span class="grip">⠿</span></div>
-        </div>
-      </div>
-      <div class="pros"><span class="pro">✓ Πανεύκολο</span><span class="pro">✓ Ιδανικό για μη-τεχνικό</span><span class="pro">✓ Αυτο-καθαρό</span><span class="con">– Λιγότερη «χειροκίνητη» ελευθερία</span></div>
-    </div>
-  </div>
+  <div class="rgrid">
 
-  <!-- A4 -->
-  <div class="prop">
-    <div class="prop-head"><span class="prop-badge">A4</span><div><div class="prop-title">Έτοιμα Πακέτα (Presets)</div><div class="prop-tagline">Ένα κλικ · με προαιρετική προσαρμογή</div></div></div>
-    <div class="prop-body">
-      <div class="prop-desc">Έτοιμοι συνδυασμοί με ένα κλικ. Ο προχωρημένος πατάει «Προσαρμογή» για λεπτομέρειες. Το πιο γρήγορο ξεκίνημα.</div>
-      <div class="mock">
-        <div class="mock-lbl">📦 Διάλεξε πακέτο</div>
-        <div class="presets">
-          <span class="preset">Μόνο ουσία</span>
-          <span class="preset active">Έμφαση Κριτικές</span>
-          <span class="preset">Έμφαση Loyalty</span>
-          <span class="preset">Όλα</span>
-        </div>
-      </div>
-      <div class="pros"><span class="pro">✓ 5 δευτερόλεπτα</span><span class="pro">✓ Καλό default</span><span class="con">– Λιγότερο ακριβές μόνο του</span></div>
-    </div>
-  </div>
-  </div><!-- /pgrid A -->
-
-  <!-- ============ PART B: RECEIPT ============ -->
-  <div class="section-h"><span class="num">B</span><span class="txt">Εμφάνιση στην απόδειξη — 4 προτάσεις</span></div>
-  <p class="section-sub">Ίδιο σενάριο σε όλες: <b>πελάτης-μέλος</b> σε take away, με ενεργό QR Google κριτικών.</p>
-
-  <div class="pgrid">
-  <!-- B1 -->
-  <div class="prop b">
-    <div class="prop-head"><span class="prop-badge">B1</span><div><div class="prop-title">Ενιαίο πλαίσιο Promo</div><div class="prop-tagline">Όλα μαζεμένα σε ένα κάδρο με μικρό τίτλο</div></div></div>
-    <div class="prop-body">
-      <div class="prop-desc">Τα promo μπλοκ μπαίνουν σε <b>ένα πλαίσιο</b> με λεπτή γραμμή και μικρό τίτλο — οπτικά ξεχωρίζουν από τα σύνολα/πληρωμή. Καθαρό, οργανωμένο.</div>
-      <div class="rcpt-scroll"><div class="rcpt">
+    <!-- A: Takeaway member -->
+    <div class="rcard good">
+      <div class="rc-head"><span class="rc-badge t">TAKE AWAY</span><span class="rc-title">Μέλος</span></div>
+      <div class="rc-scen">Πόντοι μέλους (κείμενο) + 1 QR κριτικών. Καθαρό.</div>
+      <div class="verdict good">✓ 1 QR · σωστό</div>
+      <div class="rcpt">
         <div class="r-logo">TAMAM</div>
         <div class="r-sub">GRILL HOUSE · 2310 000 000</div>
-        <div class="r-meta">#TA-58 · Take Away · 22-07-2026 20:14</div>
+        <div class="r-meta">#TA-58 · Take Away · 20:14</div>
         <div class="r-sep"></div>
-        <div class="r-item"><span class="n">2× Σουβλάκι Χοιρινό</span><span>7,00</span></div>
+        <div class="r-item"><span class="n">2× Σουβλάκι Χοιρ.</span><span>7,00</span></div>
         <div class="r-item"><span class="n">1× Πατάτες</span><span>2,50</span></div>
         <div class="r-sep"></div>
         <div class="r-tot"><span>ΣΥΝΟΛΟ</span><span>9,50 €</span></div>
-        <div class="r-pay">Τρόπος πληρωμής: 💵 Μετρητά</div>
+        <div class="r-pay">💵 Μετρητά</div>
+        <div class="r-line">🎁 Μέλος <b>TAM-202658</b> · +9 πόντοι (σύνολο <b>148</b>)</div>
         <div class="r-thanks">Ευχαριστούμε! 😊</div>
-        <div class="promo-box">
-          <div class="promo-head">— TAMAM Club & Προσφορές —</div>
-          <div class="mem-line">🎁 Μέλος <b>TAM-202658</b></div>
-          <div class="mem-line">Πόντοι: <b>+9</b> · Υπόλοιπο: <b>148</b></div>
-          <div class="divider-lite"></div>
-          <svg class="qr" viewBox="0 0 25 25" shape-rendering="crispEdges"><rect width="25" height="25" fill="#fff"/><g fill="#161616"><rect x="0" y="0" width="7" height="7"/><rect x="1" y="1" width="5" height="5" fill="#fff"/><rect x="2" y="2" width="3" height="3"/><rect x="18" y="0" width="7" height="7"/><rect x="19" y="1" width="5" height="5" fill="#fff"/><rect x="20" y="2" width="3" height="3"/><rect x="0" y="18" width="7" height="7"/><rect x="1" y="19" width="5" height="5" fill="#fff"/><rect x="2" y="20" width="3" height="3"/><rect x="9" y="1" width="1" height="1"/><rect x="11" y="0" width="1" height="1"/><rect x="13" y="2" width="1" height="1"/><rect x="15" y="1" width="1" height="1"/><rect x="9" y="4" width="1" height="1"/><rect x="12" y="5" width="1" height="1"/><rect x="14" y="4" width="1" height="1"/><rect x="0" y="9" width="1" height="1"/><rect x="3" y="10" width="1" height="1"/><rect x="5" y="12" width="1" height="1"/><rect x="1" y="14" width="1" height="1"/><rect x="9" y="9" width="2" height="2"/><rect x="13" y="10" width="1" height="1"/><rect x="16" y="9" width="1" height="1"/><rect x="19" y="11" width="1" height="1"/><rect x="22" y="10" width="1" height="1"/><rect x="10" y="13" width="1" height="1"/><rect x="12" y="15" width="1" height="1"/><rect x="15" y="14" width="1" height="1"/><rect x="18" y="16" width="1" height="1"/><rect x="21" y="14" width="1" height="1"/><rect x="23" y="17" width="1" height="1"/><rect x="9" y="18" width="1" height="1"/><rect x="11" y="20" width="1" height="1"/><rect x="13" y="22" width="1" height="1"/><rect x="16" y="19" width="1" height="1"/><rect x="19" y="21" width="1" height="1"/><rect x="22" y="23" width="1" height="1"/><rect x="9" y="23" width="1" height="1"/><rect x="17" y="12" width="1" height="1"/></g></svg>
-          <div class="qr-lbl">⭐ Άφησέ μας κριτική στο Google!</div>
+        <div class="qr-slot">
+          <div class="qs-head">⭐ Google Κριτική</div>
+          <svg viewBox="0 0 25 25" shape-rendering="crispEdges"><rect width="25" height="25" fill="#fff"/><g fill="#161616"><rect x="0" y="0" width="7" height="7"/><rect x="1" y="1" width="5" height="5" fill="#fff"/><rect x="2" y="2" width="3" height="3"/><rect x="18" y="0" width="7" height="7"/><rect x="19" y="1" width="5" height="5" fill="#fff"/><rect x="20" y="2" width="3" height="3"/><rect x="0" y="18" width="7" height="7"/><rect x="1" y="19" width="5" height="5" fill="#fff"/><rect x="2" y="20" width="3" height="3"/><rect x="9" y="1" width="1" height="1"/><rect x="11" y="0" width="1" height="1"/><rect x="13" y="2" width="1" height="1"/><rect x="15" y="1" width="1" height="1"/><rect x="9" y="4" width="1" height="1"/><rect x="12" y="5" width="1" height="1"/><rect x="0" y="9" width="1" height="1"/><rect x="3" y="10" width="1" height="1"/><rect x="5" y="12" width="1" height="1"/><rect x="9" y="9" width="2" height="2"/><rect x="13" y="10" width="1" height="1"/><rect x="16" y="9" width="1" height="1"/><rect x="19" y="11" width="1" height="1"/><rect x="22" y="10" width="1" height="1"/><rect x="10" y="13" width="1" height="1"/><rect x="12" y="15" width="1" height="1"/><rect x="15" y="14" width="1" height="1"/><rect x="18" y="16" width="1" height="1"/><rect x="21" y="14" width="1" height="1"/><rect x="9" y="18" width="1" height="1"/><rect x="11" y="20" width="1" height="1"/><rect x="13" y="22" width="1" height="1"/><rect x="16" y="19" width="1" height="1"/><rect x="19" y="21" width="1" height="1"/><rect x="22" y="23" width="1" height="1"/></g></svg>
+          <div class="qs-lbl">Σκάναρε & άφησε ⭐⭐⭐⭐⭐</div>
         </div>
-      </div></div>
-      <div class="pros"><span class="pro">✓ Τακτοποιημένο</span><span class="pro">✓ Ξεχωρίζει από τα σύνολα</span><span class="pro">✓ Μπλοκ + 1 QR χωρίς σύγχυση</span></div>
+      </div>
     </div>
-  </div>
 
-  <!-- B2 -->
-  <div class="prop b">
-    <div class="prop-head"><span class="prop-badge">B2</span><div><div class="prop-title">QR δίπλα-δίπλα</div><div class="prop-tagline">Δύο QR σε μία σειρά — εξοικονόμηση χαρτιού</div></div></div>
-    <div class="prop-body">
-      <div class="prop-desc">Αν θέλεις <b>δύο QR</b> (π.χ. κριτικές + ψηφιακό αντίγραφο), μπαίνουν <b>δίπλα-δίπλα</b> σε μία σειρά με μικρό label το καθένα. Συμμετρικό, σύντομο, καθαρό.</div>
-      <div class="rcpt-scroll"><div class="rcpt">
+    <!-- D-bad: Delivery non-member WITHOUT rule -->
+    <div class="rcard bad">
+      <div class="rc-head"><span class="rc-badge d">DELIVERY</span><span class="rc-title">Μη-μέλος</span></div>
+      <div class="rc-scen">Χωρίς κανόνα: κλήση + εγγραφή + κριτικές + αντίγραφο.</div>
+      <div class="verdict bad">✗ 4 QR · μπερδεύει τη σάρωση</div>
+      <div class="rcpt">
+        <div class="r-logo">TAMAM</div>
+        <div class="r-meta">#D-42 · Delivery · 20:31</div>
+        <div class="r-cust"><span>📞 6971234567<br>📍 Αγγελάκη 12, 2ος</span>
+          <span><svg class="tel-mini" viewBox="0 0 25 25" shape-rendering="crispEdges"><rect width="25" height="25" fill="#fff"/><g fill="#161616"><rect x="0" y="0" width="7" height="7"/><rect x="1" y="1" width="5" height="5" fill="#fff"/><rect x="2" y="2" width="3" height="3"/><rect x="18" y="0" width="7" height="7"/><rect x="19" y="1" width="5" height="5" fill="#fff"/><rect x="20" y="2" width="3" height="3"/><rect x="0" y="18" width="7" height="7"/><rect x="1" y="19" width="5" height="5" fill="#fff"/><rect x="2" y="20" width="3" height="3"/><rect x="10" y="2" width="1" height="1"/><rect x="13" y="1" width="1" height="1"/><rect x="9" y="9" width="2" height="2"/><rect x="14" y="10" width="1" height="1"/><rect x="20" y="11" width="1" height="1"/><rect x="12" y="14" width="1" height="1"/><rect x="17" y="16" width="1" height="1"/><rect x="10" y="20" width="1" height="1"/><rect x="15" y="22" width="1" height="1"/><rect x="21" y="20" width="1" height="1"/></g></svg><div class="tel-cap">κλήση</div></span>
+        </div>
+        <div class="r-sep"></div>
+        <div class="r-item"><span class="n">1× Γύρος Μερίδα</span><span>9,00</span></div>
+        <div class="r-sep"></div>
+        <div class="r-tot"><span>ΣΥΝΟΛΟ</span><span>9,00 €</span></div>
+        <div class="r-pay">💵 Μετρητά</div>
+        <div class="r-thanks">Ευχαριστούμε! 😊</div>
+        <div class="qr-slot" style="border-color:#c88">
+          <div class="qs-head" style="color:#a33">✉️ Εγγραφή</div>
+          <svg viewBox="0 0 25 25" shape-rendering="crispEdges"><rect width="25" height="25" fill="#fff"/><g fill="#161616"><rect x="0" y="0" width="7" height="7"/><rect x="1" y="1" width="5" height="5" fill="#fff"/><rect x="2" y="2" width="3" height="3"/><rect x="18" y="0" width="7" height="7"/><rect x="19" y="1" width="5" height="5" fill="#fff"/><rect x="20" y="2" width="3" height="3"/><rect x="0" y="18" width="7" height="7"/><rect x="1" y="19" width="5" height="5" fill="#fff"/><rect x="2" y="20" width="3" height="3"/><rect x="10" y="1" width="1" height="1"/><rect x="13" y="3" width="1" height="1"/><rect x="9" y="9" width="2" height="2"/><rect x="15" y="11" width="1" height="1"/><rect x="20" y="10" width="1" height="1"/><rect x="12" y="15" width="1" height="1"/><rect x="17" y="13" width="1" height="1"/><rect x="10" y="21" width="1" height="1"/><rect x="14" y="19" width="1" height="1"/><rect x="21" y="21" width="1" height="1"/></g></svg>
+        </div>
+        <div class="qr-gap"></div>
+        <div class="qr-slot" style="border-color:#c88">
+          <div class="qs-head" style="color:#a33">⭐ Κριτικές</div>
+          <svg viewBox="0 0 25 25" shape-rendering="crispEdges"><rect width="25" height="25" fill="#fff"/><g fill="#161616"><rect x="0" y="0" width="7" height="7"/><rect x="1" y="1" width="5" height="5" fill="#fff"/><rect x="2" y="2" width="3" height="3"/><rect x="18" y="0" width="7" height="7"/><rect x="19" y="1" width="5" height="5" fill="#fff"/><rect x="20" y="2" width="3" height="3"/><rect x="0" y="18" width="7" height="7"/><rect x="1" y="19" width="5" height="5" fill="#fff"/><rect x="2" y="20" width="3" height="3"/><rect x="11" y="2" width="1" height="1"/><rect x="14" y="1" width="1" height="1"/><rect x="9" y="10" width="2" height="2"/><rect x="16" y="10" width="1" height="1"/><rect x="21" y="12" width="1" height="1"/><rect x="13" y="14" width="1" height="1"/><rect x="18" y="17" width="1" height="1"/><rect x="11" y="19" width="1" height="1"/><rect x="15" y="21" width="1" height="1"/><rect x="20" y="22" width="1" height="1"/></g></svg>
+        </div>
+        <div class="qr-gap"></div>
+        <div class="qr-slot" style="border-color:#c88">
+          <div class="qs-head" style="color:#a33">🧾 Αντίγραφο</div>
+          <svg viewBox="0 0 25 25" shape-rendering="crispEdges"><rect width="25" height="25" fill="#fff"/><g fill="#161616"><rect x="0" y="0" width="7" height="7"/><rect x="1" y="1" width="5" height="5" fill="#fff"/><rect x="2" y="2" width="3" height="3"/><rect x="18" y="0" width="7" height="7"/><rect x="19" y="1" width="5" height="5" fill="#fff"/><rect x="20" y="2" width="3" height="3"/><rect x="0" y="18" width="7" height="7"/><rect x="1" y="19" width="5" height="5" fill="#fff"/><rect x="2" y="20" width="3" height="3"/><rect x="10" y="3" width="1" height="1"/><rect x="13" y="1" width="1" height="1"/><rect x="9" y="9" width="2" height="2"/><rect x="14" y="12" width="1" height="1"/><rect x="19" y="10" width="1" height="1"/><rect x="12" y="16" width="1" height="1"/><rect x="17" y="14" width="1" height="1"/><rect x="10" y="19" width="1" height="1"/><rect x="15" y="20" width="1" height="1"/><rect x="21" y="19" width="1" height="1"/></g></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- D-good: Delivery non-member WITH rule -->
+    <div class="rcard good">
+      <div class="rc-head"><span class="rc-badge d">DELIVERY</span><span class="rc-title">Μη-μέλος</span></div>
+      <div class="rc-scen">Ίδιο σενάριο, με τον κανόνα: κλήση (πάνω) + <b>1</b> promo QR. Η εγγραφή γίνεται γραμμή με link.</div>
+      <div class="verdict good">✓ 1 promo QR · καθαρό</div>
+      <div class="rcpt">
+        <div class="r-logo">TAMAM</div>
+        <div class="r-meta">#D-42 · Delivery · 20:31</div>
+        <div class="r-cust"><span>📞 6971234567<br>📍 Αγγελάκη 12, 2ος</span>
+          <span><svg class="tel-mini" viewBox="0 0 25 25" shape-rendering="crispEdges"><rect width="25" height="25" fill="#fff"/><g fill="#161616"><rect x="0" y="0" width="7" height="7"/><rect x="1" y="1" width="5" height="5" fill="#fff"/><rect x="2" y="2" width="3" height="3"/><rect x="18" y="0" width="7" height="7"/><rect x="19" y="1" width="5" height="5" fill="#fff"/><rect x="20" y="2" width="3" height="3"/><rect x="0" y="18" width="7" height="7"/><rect x="1" y="19" width="5" height="5" fill="#fff"/><rect x="2" y="20" width="3" height="3"/><rect x="10" y="2" width="1" height="1"/><rect x="13" y="1" width="1" height="1"/><rect x="9" y="9" width="2" height="2"/><rect x="14" y="10" width="1" height="1"/><rect x="20" y="11" width="1" height="1"/><rect x="12" y="14" width="1" height="1"/><rect x="17" y="16" width="1" height="1"/><rect x="10" y="20" width="1" height="1"/><rect x="15" y="22" width="1" height="1"/><rect x="21" y="20" width="1" height="1"/></g></svg><div class="tel-cap">κλήση</div></span>
+        </div>
+        <div class="r-sep"></div>
+        <div class="r-item"><span class="n">1× Γύρος Μερίδα</span><span>9,00</span></div>
+        <div class="r-sep"></div>
+        <div class="r-tot"><span>ΣΥΝΟΛΟ</span><span>9,00 €</span></div>
+        <div class="r-pay">💵 Μετρητά</div>
+        <div class="r-line" style="margin-top:6px">✉️ Γίνε μέλος: <b>tamam.gr/join</b></div>
+        <div class="r-thanks">Ευχαριστούμε! 😊</div>
+        <div class="qr-slot">
+          <div class="qs-head">⭐ Google Κριτική</div>
+          <svg viewBox="0 0 25 25" shape-rendering="crispEdges"><rect width="25" height="25" fill="#fff"/><g fill="#161616"><rect x="0" y="0" width="7" height="7"/><rect x="1" y="1" width="5" height="5" fill="#fff"/><rect x="2" y="2" width="3" height="3"/><rect x="18" y="0" width="7" height="7"/><rect x="19" y="1" width="5" height="5" fill="#fff"/><rect x="20" y="2" width="3" height="3"/><rect x="0" y="18" width="7" height="7"/><rect x="1" y="19" width="5" height="5" fill="#fff"/><rect x="2" y="20" width="3" height="3"/><rect x="9" y="1" width="1" height="1"/><rect x="11" y="0" width="1" height="1"/><rect x="13" y="2" width="1" height="1"/><rect x="15" y="1" width="1" height="1"/><rect x="9" y="4" width="1" height="1"/><rect x="12" y="5" width="1" height="1"/><rect x="0" y="9" width="1" height="1"/><rect x="3" y="10" width="1" height="1"/><rect x="5" y="12" width="1" height="1"/><rect x="9" y="9" width="2" height="2"/><rect x="13" y="10" width="1" height="1"/><rect x="16" y="9" width="1" height="1"/><rect x="19" y="11" width="1" height="1"/><rect x="22" y="10" width="1" height="1"/><rect x="10" y="13" width="1" height="1"/><rect x="12" y="15" width="1" height="1"/><rect x="15" y="14" width="1" height="1"/><rect x="18" y="16" width="1" height="1"/><rect x="21" y="14" width="1" height="1"/><rect x="9" y="18" width="1" height="1"/><rect x="11" y="20" width="1" height="1"/><rect x="13" y="22" width="1" height="1"/><rect x="16" y="19" width="1" height="1"/><rect x="19" y="21" width="1" height="1"/><rect x="22" y="23" width="1" height="1"/></g></svg>
+          <div class="qs-lbl">Σκάναρε & άφησε ⭐⭐⭐⭐⭐</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- E: Table member -->
+    <div class="rcard good">
+      <div class="rc-head"><span class="rc-badge tr">ΤΡΑΠΕΖΙ</span><span class="rc-title">Μέλος</span></div>
+      <div class="rc-scen">Στο τραπέζι, κριτικές & εγγραφή είναι κλειστά. Μόνο πόντοι + ευχαριστίες.</div>
+      <div class="verdict good">✓ 0 QR · λιτό</div>
+      <div class="rcpt">
         <div class="r-logo">TAMAM</div>
         <div class="r-sub">GRILL HOUSE · 2310 000 000</div>
-        <div class="r-meta">#TA-58 · Take Away · 22-07-2026 20:14</div>
+        <div class="r-meta">#Τ4-Λ · Τραπέζι 4 · 21:05</div>
         <div class="r-sep"></div>
-        <div class="r-item"><span class="n">2× Σουβλάκι Χοιρινό</span><span>7,00</span></div>
+        <div class="r-item"><span class="n">3× Σουβλάκι</span><span>10,50</span></div>
+        <div class="r-item"><span class="n">2× Αναψυκτικό</span><span>3,00</span></div>
+        <div class="r-item"><span class="n">1× Τζατζίκι</span><span>2,50</span></div>
+        <div class="r-sep"></div>
+        <div class="r-tot"><span>ΣΥΝΟΛΟ</span><span>16,00 €</span></div>
+        <div class="r-pay">💳 Κάρτα</div>
+        <div class="r-line">🎁 Μέλος <b>TAM-202601</b> · +16 πόντοι (σύνολο <b>320</b>)</div>
+        <div class="r-thanks">Ευχαριστούμε! Καλή συνέχεια 😊</div>
+      </div>
+    </div>
+
+    <!-- G: Credit -->
+    <div class="rcard good">
+      <div class="rc-head"><span class="rc-badge d">DELIVERY</span><span class="rc-title">Επί Πιστώσει</span></div>
+      <div class="rc-scen">Σφραγίδα πίστωσης + υπόλοιπο, και από κάτω κανονικά το promo QR (εντός ορίου).</div>
+      <div class="verdict good">✓ σφραγίδα + 1 QR</div>
+      <div class="rcpt">
+        <div class="r-logo">TAMAM</div>
+        <div class="r-meta">#D-45 · Delivery · 21:20</div>
+        <div class="r-cust"><span>📞 6970000000<br>📍 Εθνικής 8</span>
+          <span><svg class="tel-mini" viewBox="0 0 25 25" shape-rendering="crispEdges"><rect width="25" height="25" fill="#fff"/><g fill="#161616"><rect x="0" y="0" width="7" height="7"/><rect x="1" y="1" width="5" height="5" fill="#fff"/><rect x="2" y="2" width="3" height="3"/><rect x="18" y="0" width="7" height="7"/><rect x="19" y="1" width="5" height="5" fill="#fff"/><rect x="20" y="2" width="3" height="3"/><rect x="0" y="18" width="7" height="7"/><rect x="1" y="19" width="5" height="5" fill="#fff"/><rect x="2" y="20" width="3" height="3"/><rect x="11" y="2" width="1" height="1"/><rect x="9" y="9" width="2" height="2"/><rect x="15" y="11" width="1" height="1"/><rect x="13" y="15" width="1" height="1"/><rect x="18" y="14" width="1" height="1"/><rect x="11" y="20" width="1" height="1"/><rect x="16" y="21" width="1" height="1"/></g></svg><div class="tel-cap">κλήση</div></span>
+        </div>
+        <div class="r-sep"></div>
+        <div class="r-item"><span class="n">2× Πίτα Γύρος</span><span>6,00</span></div>
+        <div class="r-sep"></div>
+        <div class="r-tot"><span>ΣΥΝΟΛΟ</span><span>6,00 €</span></div>
+        <div class="r-credit">
+          <div class="cs">ΕΠΙ ΠΙΣΤΩΣΕΙ</div>
+          Γ. Παπαδόπουλος · Συνολική οφειλή: <b>28,00 €</b>
+        </div>
+        <div class="r-thanks">Ευχαριστούμε! 😊</div>
+        <div class="qr-slot">
+          <div class="qs-head">⭐ Google Κριτική</div>
+          <svg viewBox="0 0 25 25" shape-rendering="crispEdges"><rect width="25" height="25" fill="#fff"/><g fill="#161616"><rect x="0" y="0" width="7" height="7"/><rect x="1" y="1" width="5" height="5" fill="#fff"/><rect x="2" y="2" width="3" height="3"/><rect x="18" y="0" width="7" height="7"/><rect x="19" y="1" width="5" height="5" fill="#fff"/><rect x="20" y="2" width="3" height="3"/><rect x="0" y="18" width="7" height="7"/><rect x="1" y="19" width="5" height="5" fill="#fff"/><rect x="2" y="20" width="3" height="3"/><rect x="9" y="1" width="1" height="1"/><rect x="13" y="2" width="1" height="1"/><rect x="15" y="0" width="1" height="1"/><rect x="9" y="4" width="1" height="1"/><rect x="12" y="5" width="1" height="1"/><rect x="3" y="10" width="1" height="1"/><rect x="9" y="9" width="2" height="2"/><rect x="14" y="10" width="1" height="1"/><rect x="17" y="12" width="1" height="1"/><rect x="21" y="10" width="1" height="1"/><rect x="12" y="14" width="1" height="1"/><rect x="16" y="15" width="1" height="1"/><rect x="19" y="17" width="1" height="1"/><rect x="10" y="19" width="1" height="1"/><rect x="14" y="21" width="1" height="1"/><rect x="18" y="20" width="1" height="1"/><rect x="21" y="22" width="1" height="1"/></g></svg>
+          <div class="qs-lbl">Σκάναρε & άφησε ⭐⭐⭐⭐⭐</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- H: Reprint -->
+    <div class="rcard">
+      <div class="rc-head"><span class="rc-badge t">ΑΝΤΙΓΡΑΦΟ</span><span class="rc-title">Reprint</span></div>
+      <div class="rc-scen">Στα αντίγραφα, το promo QR κρύβεται (δεν είναι νέα παραγγελία). Μένει μόνο ό,τι είναι λειτουργικό.</div>
+      <div class="verdict good">✓ χωρίς promo</div>
+      <div class="rcpt">
+        <div class="r-logo">TAMAM</div>
+        <div class="r-sub">GRILL HOUSE · 2310 000 000</div>
+        <div class="r-meta">#TA-58 · Take Away · ΑΝΤΙΓΡΑΦΟ</div>
+        <div class="r-sep"></div>
+        <div class="r-item"><span class="n">2× Σουβλάκι Χοιρ.</span><span>7,00</span></div>
         <div class="r-item"><span class="n">1× Πατάτες</span><span>2,50</span></div>
         <div class="r-sep"></div>
         <div class="r-tot"><span>ΣΥΝΟΛΟ</span><span>9,50 €</span></div>
-        <div class="r-pay">Τρόπος πληρωμής: 💵 Μετρητά</div>
-        <div class="mem-line" style="margin-top:7px">🎁 Μέλος <b>TAM-202658</b> · Πόντοι <b>+9</b> (σύνολο <b>148</b>)</div>
+        <div class="r-pay">💵 Μετρητά</div>
         <div class="r-thanks">Ευχαριστούμε! 😊</div>
-        <div class="promo-box">
-          <div class="qr-row">
-            <div class="qr-col">
-              <svg class="qr sm" viewBox="0 0 25 25" shape-rendering="crispEdges"><rect width="25" height="25" fill="#fff"/><g fill="#161616"><rect x="0" y="0" width="7" height="7"/><rect x="1" y="1" width="5" height="5" fill="#fff"/><rect x="2" y="2" width="3" height="3"/><rect x="18" y="0" width="7" height="7"/><rect x="19" y="1" width="5" height="5" fill="#fff"/><rect x="20" y="2" width="3" height="3"/><rect x="0" y="18" width="7" height="7"/><rect x="1" y="19" width="5" height="5" fill="#fff"/><rect x="2" y="20" width="3" height="3"/><rect x="10" y="2" width="1" height="1"/><rect x="13" y="1" width="1" height="1"/><rect x="9" y="5" width="1" height="1"/><rect x="14" y="3" width="1" height="1"/><rect x="3" y="10" width="1" height="1"/><rect x="1" y="13" width="1" height="1"/><rect x="9" y="9" width="2" height="2"/><rect x="14" y="10" width="1" height="1"/><rect x="17" y="12" width="1" height="1"/><rect x="21" y="10" width="1" height="1"/><rect x="11" y="14" width="1" height="1"/><rect x="15" y="16" width="1" height="1"/><rect x="19" y="14" width="1" height="1"/><rect x="22" y="17" width="1" height="1"/><rect x="10" y="20" width="1" height="1"/><rect x="14" y="22" width="1" height="1"/><rect x="18" y="20" width="1" height="1"/><rect x="21" y="22" width="1" height="1"/></g></svg>
-              <div class="qr-lbl">⭐ Κριτική</div>
-            </div>
-            <div class="qr-col">
-              <svg class="qr sm" viewBox="0 0 25 25" shape-rendering="crispEdges"><rect width="25" height="25" fill="#fff"/><g fill="#161616"><rect x="0" y="0" width="7" height="7"/><rect x="1" y="1" width="5" height="5" fill="#fff"/><rect x="2" y="2" width="3" height="3"/><rect x="18" y="0" width="7" height="7"/><rect x="19" y="1" width="5" height="5" fill="#fff"/><rect x="20" y="2" width="3" height="3"/><rect x="0" y="18" width="7" height="7"/><rect x="1" y="19" width="5" height="5" fill="#fff"/><rect x="2" y="20" width="3" height="3"/><rect x="9" y="1" width="1" height="1"/><rect x="12" y="2" width="1" height="1"/><rect x="15" y="1" width="1" height="1"/><rect x="10" y="4" width="1" height="1"/><rect x="13" y="5" width="1" height="1"/><rect x="2" y="11" width="1" height="1"/><rect x="4" y="13" width="1" height="1"/><rect x="9" y="10" width="1" height="1"/><rect x="11" y="9" width="2" height="2"/><rect x="16" y="11" width="1" height="1"/><rect x="20" y="12" width="1" height="1"/><rect x="12" y="13" width="1" height="1"/><rect x="14" y="15" width="1" height="1"/><rect x="17" y="17" width="1" height="1"/><rect x="21" y="15" width="1" height="1"/><rect x="9" y="21" width="1" height="1"/><rect x="12" y="19" width="1" height="1"/><rect x="15" y="22" width="1" height="1"/><rect x="19" y="20" width="1" height="1"/><rect x="22" y="22" width="1" height="1"/></g></svg>
-              <div class="qr-lbl">🧾 Απόδειξη</div>
-            </div>
-          </div>
-        </div>
-      </div></div>
-      <div class="pros"><span class="pro">✓ Λιγότερο χαρτί</span><span class="pro">✓ Συμμετρικό</span><span class="pro">✓ Μέλος σε 1 γραμμή</span><span class="con">– QR λίγο μικρότερα</span></div>
+      </div>
     </div>
+
   </div>
 
-  <!-- B3 -->
-  <div class="prop b">
-    <div class="prop-head"><span class="prop-badge">B3</span><div><div class="prop-title">Ένα QR, ποτέ δύο</div><div class="prop-tagline">Πάντα ένα — προτεραιότητα αποφασίζει</div></div></div>
-    <div class="prop-body">
-      <div class="prop-desc">Η πιο «καθαρή» απόδειξη: <b>ποτέ 2 QR</b>. Μέλος → πόντοι + το QR υψηλότερης προτεραιότητας (κριτικές). Το QR αντιγράφου κρύβεται όταν υπάρχει promo QR. Ελάχιστο, κομψό.</div>
-      <div class="rcpt-scroll"><div class="rcpt">
-        <div class="r-logo">TAMAM</div>
-        <div class="r-sub">GRILL HOUSE · 2310 000 000</div>
-        <div class="r-meta">#TA-58 · Take Away · 22-07-2026 20:14</div>
-        <div class="r-sep"></div>
-        <div class="r-item"><span class="n">2× Σουβλάκι Χοιρινό</span><span>7,00</span></div>
-        <div class="r-item"><span class="n">1× Πατάτες</span><span>2,50</span></div>
-        <div class="r-sep"></div>
-        <div class="r-tot"><span>ΣΥΝΟΛΟ</span><span>9,50 €</span></div>
-        <div class="r-pay">Τρόπος πληρωμής: 💵 Μετρητά</div>
-        <div class="mem-line" style="margin-top:7px">🎁 <b>TAM-202658</b> · +9 πόντοι · υπόλοιπο 148</div>
-        <div class="r-thanks">Ευχαριστούμε! 😊</div>
-        <div style="margin-top:8px">
-          <svg class="qr" viewBox="0 0 25 25" shape-rendering="crispEdges"><rect width="25" height="25" fill="#fff"/><g fill="#161616"><rect x="0" y="0" width="7" height="7"/><rect x="1" y="1" width="5" height="5" fill="#fff"/><rect x="2" y="2" width="3" height="3"/><rect x="18" y="0" width="7" height="7"/><rect x="19" y="1" width="5" height="5" fill="#fff"/><rect x="20" y="2" width="3" height="3"/><rect x="0" y="18" width="7" height="7"/><rect x="1" y="19" width="5" height="5" fill="#fff"/><rect x="2" y="20" width="3" height="3"/><rect x="10" y="1" width="1" height="1"/><rect x="13" y="2" width="1" height="1"/><rect x="15" y="0" width="1" height="1"/><rect x="9" y="4" width="1" height="1"/><rect x="14" y="5" width="1" height="1"/><rect x="2" y="10" width="1" height="1"/><rect x="4" y="12" width="1" height="1"/><rect x="0" y="14" width="1" height="1"/><rect x="9" y="9" width="2" height="2"/><rect x="13" y="11" width="1" height="1"/><rect x="16" y="10" width="1" height="1"/><rect x="20" y="11" width="1" height="1"/><rect x="23" y="9" width="1" height="1"/><rect x="11" y="13" width="1" height="1"/><rect x="14" y="14" width="1" height="1"/><rect x="17" y="16" width="1" height="1"/><rect x="21" y="14" width="1" height="1"/><rect x="10" y="19" width="1" height="1"/><rect x="13" y="21" width="1" height="1"/><rect x="16" y="23" width="1" height="1"/><rect x="19" y="20" width="1" height="1"/><rect x="22" y="22" width="1" height="1"/><rect x="17" y="19" width="1" height="1"/></g></svg>
-          <div class="qr-lbl">⭐ Σκάναρε & άφησε κριτική στο Google</div>
-        </div>
-      </div></div>
-      <div class="pros"><span class="pro">✓ Πιο κομψό</span><span class="pro">✓ Λιγότερο χαρτί</span><span class="pro">✓ Ξεκάθαρο κάλεσμα</span><span class="con">– Θυσιάζεις το 2ο QR</span></div>
-    </div>
-  </div>
-
-  <!-- B4 -->
-  <div class="prop b">
-    <div class="prop-head"><span class="prop-badge">B4</span><div><div class="prop-title">Κάρτα καλέσματος</div><div class="prop-tagline">Σαν διαφημιστική κάρτα — ξεχωρίζει</div></div></div>
-    <div class="prop-body">
-      <div class="prop-desc">Ένα κομψό promo block: <b>1 γραμμή hook</b> (έντονη) + QR + micro-label, μέσα σε διακριτικό πλαίσιο σαν κάρτα. Ξεχωρίζει από τη «λογιστική» πάνω πλευρά — τραβάει το μάτι.</div>
-      <div class="rcpt-scroll"><div class="rcpt">
-        <div class="r-logo">TAMAM</div>
-        <div class="r-sub">GRILL HOUSE · 2310 000 000</div>
-        <div class="r-meta">#TA-58 · Take Away · 22-07-2026 20:14</div>
-        <div class="r-sep"></div>
-        <div class="r-item"><span class="n">2× Σουβλάκι Χοιρινό</span><span>7,00</span></div>
-        <div class="r-item"><span class="n">1× Πατάτες</span><span>2,50</span></div>
-        <div class="r-sep"></div>
-        <div class="r-tot"><span>ΣΥΝΟΛΟ</span><span>9,50 €</span></div>
-        <div class="r-pay">Τρόπος πληρωμής: 💵 Μετρητά · 🎁 +9 πόντοι</div>
-        <div class="r-thanks">Ευχαριστούμε! 😊</div>
-        <div class="promo-box" style="border:2px solid #161616;border-style:solid;background:#f4f4ee">
-          <div class="badge-hook">★ ΣΟΥ ΑΡΕΣΕ; ★</div>
-          <svg class="qr" viewBox="0 0 25 25" shape-rendering="crispEdges"><rect width="25" height="25" fill="#fff"/><g fill="#161616"><rect x="0" y="0" width="7" height="7"/><rect x="1" y="1" width="5" height="5" fill="#fff"/><rect x="2" y="2" width="3" height="3"/><rect x="18" y="0" width="7" height="7"/><rect x="19" y="1" width="5" height="5" fill="#fff"/><rect x="20" y="2" width="3" height="3"/><rect x="0" y="18" width="7" height="7"/><rect x="1" y="19" width="5" height="5" fill="#fff"/><rect x="2" y="20" width="3" height="3"/><rect x="9" y="2" width="1" height="1"/><rect x="12" y="1" width="1" height="1"/><rect x="14" y="3" width="1" height="1"/><rect x="10" y="5" width="1" height="1"/><rect x="3" y="9" width="1" height="1"/><rect x="1" y="12" width="1" height="1"/><rect x="5" y="14" width="1" height="1"/><rect x="9" y="10" width="2" height="2"/><rect x="14" y="9" width="1" height="1"/><rect x="17" y="11" width="1" height="1"/><rect x="21" y="10" width="1" height="1"/><rect x="12" y="14" width="1" height="1"/><rect x="15" y="13" width="1" height="1"/><rect x="18" y="15" width="1" height="1"/><rect x="22" y="16" width="1" height="1"/><rect x="10" y="18" width="1" height="1"/><rect x="13" y="20" width="1" height="1"/><rect x="16" y="22" width="1" height="1"/><rect x="20" y="19" width="1" height="1"/><rect x="23" y="21" width="1" height="1"/><rect x="16" y="17" width="1" height="1"/></g></svg>
-          <div class="qr-lbl" style="font-size:10.5px">Άφησέ μας ⭐⭐⭐⭐⭐ στο Google σε 10&#39;&#39;</div>
-        </div>
-      </div></div>
-      <div class="pros"><span class="pro">✓ Τραβάει το μάτι</span><span class="pro">✓ Καλύτερη ανταπόκριση</span><span class="con">– Πιο «διαφημιστικό» ύφος</span></div>
-    </div>
-  </div>
-  </div><!-- /pgrid B -->
-
-  <!-- RECOMMENDATION -->
+  <!-- ===== RECOMMENDATION ===== -->
   <div class="reco">
     <h3>💡 Η πρότασή μου ως ειδικός</h3>
-    <p>Ο συνδυασμός που δίνει <b>έλεγχο χωρίς ρίσκο ακαταστασίας</b> και δουλεύει τέλεια για μη-τεχνικό χρήστη:</p>
-    <div class="combo">
-      <span class="cchip">Admin → <b style="color:var(--yellow)">A1</b> Κέντρο Marketing</span>
-      <span class="cchip">+ <b style="color:var(--yellow)">A4</b> Presets από πάνω</span>
-      <span class="cchip">Εκτύπωση → <b style="color:var(--blue)">B1</b> Ενιαίο πλαίσιο</span>
-      <span class="cchip">+ <b style="color:var(--blue)">B2</b> όταν βγαίνουν 2 QR</span>
-    </div>
-    <p>Δηλαδή: <b>μία λίστα</b> με ON/OFF + σειρά + όριο QR (A1), με <b>3 έτοιμα πακέτα</b> για γρήγορο ξεκίνημα (A4). Στην απόδειξη, όλα σε <b>ένα κομψό πλαίσιο</b> (B1)· αν τύχει να θες 2 QR, μπαίνουν αυτόματα <b>δίπλα-δίπλα</b> (B2). Έτσι ό,τι κι αν επιλέξεις, η απόδειξη δεν γίνεται ποτέ ακανόνιστη.</p>
+    <p>Η καθαρή, «αλάνθαστη» λύση στηρίζεται σε <b>3 κανόνες</b> που δουλεύουν αυτόματα:</p>
+    <ol>
+      <li><b>Ένα κέντρο διαχείρισης</b> — όλα τα μπλοκ σε μία λίστα: ON/OFF, ανά τύπο παραγγελίας, με σειρά προτεραιότητας.</li>
+      <li><b>Όριο «Μέγιστο 1 QR ανά απόδειξη»</b> — ό,τι δεν χωράει γίνεται γραμμή κειμένου με link, ποτέ 2ο QR στοιβαγμένο.</li>
+      <li><b>Πάντα κάθετα & πλαισιωμένα</b> — κάθε QR σε δικό του κουτί με τίτλο· το QR κλήσης (delivery) μένει ξεχωριστά πάνω και δεν μετράει.</li>
+    </ol>
+    <p>Έτσι κάθε απόδειξη — takeaway, delivery, τραπέζι, πίστωση, αντίγραφο — βγαίνει <b>καθαρή και σωστά σαρώσιμη</b>, χωρίς να χρειάζεται να το σκέφτεσαι κάθε φορά.</p>
   </div>
 
   <div class="foot">
-    TAMAM POS · Preview οργάνωσης marketing απόδειξης<br>
-    <span class="q">Διάλεξε συνδυασμό (π.χ. «A1 + B2») και το υλοποιώ. Όλα εδώ είναι σχέδια — καμία λειτουργία δεν έχει αλλάξει ακόμα.</span>
+    TAMAM POS · Πλήρης διαχείριση & σωστές προβολές απόδειξης<br>
+    Πες μου «προχώρα» για να το υλοποιήσω, ή τι θέλεις να αλλάξω. Όλα εδώ είναι σχέδια.
   </div>
 </div>
 </body>
