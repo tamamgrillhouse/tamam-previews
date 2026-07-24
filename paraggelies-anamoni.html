@@ -62,6 +62,11 @@
   .efmini-items{font-size:13px;color:#cdd4f2;margin-bottom:11px}
   .efmini-btns{display:flex;gap:8px;flex-wrap:wrap}
   .efmini-hint{font-size:11.5px;color:var(--muted);margin-top:9px;line-height:1.5}
+  .efmini-cust{font-size:12.5px;color:var(--muted);margin-bottom:8px}
+  .efmini-list{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:6px 10px;margin-bottom:9px}
+  .efmini-list>div{display:flex;justify-content:space-between;font-size:13px;padding:3px 0;color:#dfe4f7}
+  .efmini-total{display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:11px;border-top:1px dashed var(--border);padding-top:8px}
+  .efmini-total b{font-size:15px}
 
   /* Decisions */
   .dcard{background:var(--dark);border:1px solid var(--border);border-radius:var(--radius);margin:12px 0;overflow:hidden}
@@ -173,14 +178,14 @@
 /* ---------------- DEMO ENGINE ---------------- */
 let cart = [], cartType = null, held = [], seq = 1;
 const FOODS = ['Σουβλάκι χοιρινό','Μπιφτέκι Λαχ.','Πατάτες','Τζατζίκι','Coca-Cola','Γύρος πίτα','Club σάντουιτς'];
-const EFOODS = [['Ντόνερ αραβική',1],['Πατάτες',1],['Coca-Cola 330ml',2]];
+const EFOODS = [{name:'Ντόνερ αραβική',qty:1,price:6.50},{name:'Πατάτες',qty:1,price:3.00},{name:'Coca-Cola 330ml',qty:2,price:1.50}];
 
 function toast(msg,color){const t=document.getElementById('toast');t.textContent=msg;t.style.borderColor=color||'var(--green)';t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2600);}
 function renderCart(){
   const b=document.getElementById('cartBox');
   document.getElementById('cartType').textContent = cartType? (cartType==='efood'?'📦 e-food':'✍️ χειροκίνητη') : '—';
   if(!cart.length){b.innerHTML='<div class="empty">Άδειο καλάθι</div>';return;}
-  b.innerHTML=cart.map(i=>`<div class="cart-item ${i.ef?'ef':''}"><span>${i.qty}× ${i.name}</span><span>${(i.qty*3.5).toFixed(2)}€</span></div>`).join('');
+  b.innerHTML=cart.map(i=>`<div class="cart-item ${i.ef?'ef':''}"><span>${i.qty}× ${i.name}</span><span>${((i.price??3.5)*i.qty).toFixed(2)}€</span></div>`).join('');
 }
 function renderHeld(){
   const b=document.getElementById('heldBox'), badge=document.getElementById('heldBadge');
@@ -192,7 +197,7 @@ function renderHeld(){
    </div>`).join('');
 }
 function addItem(){ if(!cartType)cartType='manual'; const n=FOODS[Math.floor(Math.random()*FOODS.length)]; const ex=cart.find(i=>i.name===n&&!i.ef); if(ex)ex.qty++; else cart.push({name:n,qty:1}); renderCart(); }
-function total(arr){return arr.reduce((s,i)=>s+i.qty*3.5,0);}
+function total(arr){return arr.reduce((s,i)=>s+(i.price??3.5)*i.qty,0);}
 function snapshot(type){ return {id:seq++, type:type||cartType||'manual', label:(type==='efood'?'e-food #'+(1000+seq):'Πρόχειρη '+new Date().toLocaleTimeString('el',{hour:'2-digit',minute:'2-digit'})), items:cart.slice(), total:total(cart), time:new Date().toLocaleTimeString('el',{hour:'2-digit',minute:'2-digit'})}; }
 function holdCurrent(silent){
   if(!cart.length){ if(!silent)toast('Το καλάθι είναι άδειο','var(--muted)'); return false; }
@@ -200,17 +205,20 @@ function holdCurrent(silent){
   if(!silent)toast('⏸ Μπήκε σε Αναμονή — δεν χάθηκε τίποτα'); return true;
 }
 function clearCart(){ cart=[]; cartType=null; renderCart(); }
-function efMiniSnap(){ return {id:seq++, type:'efood', label:'e-food #1042', items:EFOODS.map(([name,qty])=>({name,qty,ef:true})), total:18.40, time:new Date().toLocaleTimeString('el',{hour:'2-digit',minute:'2-digit'})}; }
+function efItems(){ return EFOODS.map(i=>({...i,ef:true})); }
+function efMiniSnap(){ return {id:seq++, type:'efood', label:'e-food #1042 · Μαρία Π.', items:efItems(), total:total(EFOODS), time:new Date().toLocaleTimeString('el',{hour:'2-digit',minute:'2-digit'})}; }
 function efoodArrives(){
   document.getElementById('efMini').innerHTML=`<div class="efmini">
-    <div class="efmini-h">📦 Νέα παραγγελία e-food <span class="pill">#1042 · 💳 προπληρωμένη</span></div>
-    <div class="efmini-items">${EFOODS.map(([n,q])=>q+'× '+n).join(' · ')} — <b>18,40€</b></div>
+    <div class="efmini-h">📦 Νέα e-food — ΕΠΙΒΕΒΑΙΩΣΗ <span class="pill">#1042</span></div>
+    <div class="efmini-cust">👤 Μαρία Π. · 📞 697 1234567 · 📍 Αναπαύσεως 12</div>
+    <div class="efmini-list">${EFOODS.map(i=>`<div><span>${i.qty}× ${i.name}</span><span>${(i.price*i.qty).toFixed(2)}€</span></div>`).join('')}</div>
+    <div class="efmini-total"><span>💵 ΜΕΤΡΗΤΑ — πληρωμή στην παράδοση</span><b>${total(EFOODS).toFixed(2)}€</b></div>
     <div class="efmini-btns">
       <button class="sm" onclick="rejectEfood()">❌ Απόρριψη</button>
       <button class="sm pri" onclick="acceptEfood('anamoni')">✅ Αποδοχή &amp; Αναμονή</button>
       <button class="sm blue" onclick="acceptEfood('emfanisi')">✅ Αποδοχή &amp; Εμφάνιση</button>
     </div>
-    <div class="efmini-hint"><b>Αναμονή</b> = μπαίνει στη λίστα με πλήρη εικόνα για να ελέγξεις αν μπορείς να την εξυπηρετήσεις — δεν αγγίζει τη δουλειά σου · <b>Εμφάνιση</b> = φορτώνεται τώρα (η τρέχουσα μπαίνει μόνη της σε Αναμονή)</div>
+    <div class="efmini-hint">Βλέπεις ΟΛΗ την παραγγελία (πελάτη, είδη, πληρωμή, σύνολο) ΠΡΙΝ αποφασίσεις. <b>Αναμονή</b> = την αναλαμβάνεις &amp; τη βάζεις στη λίστα · <b>Εμφάνιση</b> = τη φορτώνεις τώρα (η τρέχουσα μπαίνει μόνη της σε Αναμονή).</div>
   </div>`;
 }
 function rejectEfood(){ document.getElementById('efMini').innerHTML=''; toast('❌ Απορρίφθηκε','var(--red)'); }
@@ -221,7 +229,7 @@ function acceptEfood(mode){
     toast('📦 Μπήκε σε Αναμονή με πλήρη εικόνα — η δουλειά σου δεν πειράχτηκε','var(--blue)');
   } else {
     const parked=holdCurrent(true);
-    cart=EFOODS.map(([name,qty])=>({name,qty,ef:true})); cartType='efood'; renderCart();
+    cart=efItems(); cartType='efood'; renderCart();
     toast(parked?'📦 Φορτώθηκε · η δουλειά σου μπήκε σε Αναμονή':'📦 Φορτώθηκε στο καθαρό καλάθι','var(--blue)');
   }
 }
