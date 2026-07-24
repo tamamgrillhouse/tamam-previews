@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Παραγγελίες σε Αναμονή — Επιλογές & Σενάρια</title>
+<style>
+  :root{
+    --black:#0b0f1f; --dark:#12172b; --card:#1a2140; --card2:#222b52;
+    --yellow:#f5c842; --white:#eef1fb; --muted:#93a0dd; --border:#2c3566;
+    --green:#38d97a; --red:#e05a5a; --blue:#4a9ef0; --purple:#9b7be0;
+    --radius:16px; --radius-card:10px; --radius-btn:8px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:linear-gradient(160deg,#0a0e1c,#10152a 60%);color:var(--white);
+    font-family:'Noto Sans',system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.5;padding:0 0 80px}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+  h1{font-size:26px;margin:0 0 6px;font-weight:800}
+  h2{font-size:19px;margin:34px 0 12px;display:flex;align-items:center;gap:9px;border-bottom:1px solid var(--border);padding-bottom:8px}
+  h2 .n{background:var(--yellow);color:#1a1500;font-size:13px;font-weight:800;border-radius:50%;width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+  h3{font-size:15px;margin:0 0 4px}
+  p{margin:0 0 10px;color:#d6dcf5}
+  .sub{color:var(--muted);font-size:14px}
+  header{background:radial-gradient(ellipse at top left,#1c2450,#0d1226 70%);border-bottom:1px solid var(--border);padding:26px 0 22px;margin-bottom:8px}
+  .tag{display:inline-block;background:rgba(245,200,66,.12);color:var(--yellow);border:1px solid rgba(245,200,66,.3);
+    border-radius:50px;padding:3px 12px;font-size:12px;font-weight:700;margin-bottom:12px;letter-spacing:.03em}
+  .lead{font-size:15px;max-width:760px}
+  .lead b{color:var(--yellow)}
+
+  /* Demo */
+  .demo{background:var(--dark);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin:14px 0 8px}
+  .demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:720px){.demo-grid{grid-template-columns:1fr}}
+  .panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-card);padding:14px;min-height:190px}
+  .panel-h{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:10px;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+  .pill{background:var(--card2);border:1px solid var(--border);border-radius:50px;font-size:11px;padding:2px 9px;color:var(--muted)}
+  .cart-item{display:flex;justify-content:space-between;padding:7px 10px;background:var(--card2);border-radius:8px;margin-bottom:6px;font-size:14px;border-left:3px solid var(--yellow)}
+  .cart-item.ef{border-left-color:var(--blue)}
+  .empty{color:var(--muted);font-size:13px;font-style:italic;text-align:center;padding:26px 0}
+  .btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  button{font-family:inherit;cursor:pointer;border-radius:var(--radius-btn);border:1px solid var(--border);
+    background:var(--card2);color:var(--white);padding:9px 13px;font-size:13px;font-weight:600;transition:.15s}
+  button:hover{border-color:var(--yellow);color:var(--yellow)}
+  button.pri{background:var(--yellow);color:#1a1500;border-color:var(--yellow)}
+  button.pri:hover{filter:brightness(1.08)}
+  button.blue{border-color:var(--blue);color:var(--blue)}
+  button.blue:hover{background:rgba(74,158,240,.12)}
+  button.sm{padding:5px 9px;font-size:12px}
+  .held-chip{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--card2);
+    border:1px solid var(--border);border-left:3px solid var(--green);border-radius:8px;padding:8px 10px;margin-bottom:7px;font-size:13px}
+  .held-chip.ef{border-left-color:var(--blue)}
+  .held-chip .meta{color:var(--muted);font-size:11px}
+  .held-chip .acts{display:flex;gap:6px}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);opacity:0;
+    background:#0a1024;border:1px solid var(--green);color:var(--white);padding:12px 18px;border-radius:12px;
+    font-size:14px;box-shadow:0 8px 30px rgba(0,0,0,.5);transition:.3s;z-index:100;pointer-events:none;max-width:90vw}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .badge{background:var(--green);color:#04160c;border-radius:50px;font-size:11px;font-weight:800;padding:1px 8px;margin-left:6px}
+
+  /* Decisions */
+  .dcard{background:var(--dark);border:1px solid var(--border);border-radius:var(--radius);margin:12px 0;overflow:hidden}
+  .dhead{padding:14px 16px;cursor:pointer;display:flex;align-items:center;gap:10px;user-select:none}
+  .dhead:hover{background:rgba(255,255,255,.02)}
+  .dhead .q{flex:1;font-weight:700;font-size:15px}
+  .dhead .chev{color:var(--muted);transition:.2s;font-size:13px}
+  .dcard.open .chev{transform:rotate(90deg)}
+  .dhead .picked{font-size:12px;color:var(--green);background:rgba(56,217,122,.1);border:1px solid rgba(56,217,122,.3);
+    border-radius:50px;padding:2px 10px;max-width:230px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .dbody{display:none;padding:0 16px 16px}
+  .dcard.open .dbody{display:block}
+  .opt{display:flex;gap:11px;padding:11px 13px;border:1px solid var(--border);border-radius:var(--radius-card);
+    margin-bottom:8px;cursor:pointer;transition:.12s;align-items:flex-start;background:var(--card)}
+  .opt:hover{border-color:var(--muted)}
+  .opt.sel{border-color:var(--yellow);background:rgba(245,200,66,.06);box-shadow:inset 3px 0 0 var(--yellow)}
+  .opt .radio{width:18px;height:18px;border-radius:50%;border:2px solid var(--muted);flex-shrink:0;margin-top:2px;position:relative}
+  .opt.sel .radio{border-color:var(--yellow)}
+  .opt.sel .radio::after{content:'';position:absolute;inset:3px;border-radius:50%;background:var(--yellow)}
+  .opt .txt{flex:1}
+  .opt .lbl{font-weight:700;font-size:14px;margin-bottom:2px}
+  .opt .rec{font-size:10px;font-weight:800;color:#1a1500;background:var(--yellow);border-radius:50px;padding:1px 7px;margin-left:7px;vertical-align:middle}
+  .opt .extra{font-size:10px;font-weight:800;color:var(--blue);background:rgba(74,158,240,.14);border:1px solid rgba(74,158,240,.3);border-radius:50px;padding:1px 7px;margin-left:7px}
+  .opt .desc{font-size:12.5px;color:var(--muted)}
+  .opt .pc{font-size:11.5px;margin-top:5px;display:flex;gap:14px;flex-wrap:wrap}
+  .opt .pc .p{color:var(--green)} .opt .pc .c{color:#e8968f}
+
+  /* Future scenarios */
+  .fs{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--purple);border-radius:var(--radius-card);padding:13px 15px;margin-bottom:10px}
+  .fs .t{font-weight:700;font-size:14px;margin-bottom:3px;display:flex;gap:8px;align-items:center}
+  .fs .why{font-size:13px;color:#cdd4f2;margin-bottom:6px}
+  .fs .plan{font-size:12.5px;color:var(--muted);background:var(--card2);border-radius:8px;padding:7px 10px}
+  .fs .plan b{color:var(--green)}
+  .fs.decide{border-left-color:var(--yellow)}
+  .fs.decide .t .k{font-size:10px;font-weight:800;color:#1a1500;background:var(--yellow);border-radius:50px;padding:1px 8px}
+  .fs.info .t .k{font-size:10px;font-weight:800;color:var(--purple);background:rgba(155,123,224,.15);border:1px solid rgba(155,123,224,.35);border-radius:50px;padding:1px 8px}
+
+  /* Summary */
+  .summary{position:sticky;bottom:0;background:linear-gradient(0deg,#0a0e1c,#0d1226);border-top:1px solid var(--yellow);
+    padding:14px 16px;margin-top:30px;box-shadow:0 -8px 30px rgba(0,0,0,.4)}
+  .summary .in{max-width:1040px;margin:0 auto;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  .summary .cnt{font-size:13px;color:var(--muted)}
+  .summary .cnt b{color:var(--yellow)}
+  #copyBtn{margin-left:auto}
+  #sumBox{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;
+    font-size:12.5px;color:#cdd4f2;white-space:pre-wrap;margin-top:10px;display:none;font-family:ui-monospace,monospace}
+  .note{background:rgba(74,158,240,.08);border:1px solid rgba(74,158,240,.25);border-radius:10px;padding:11px 14px;font-size:13px;color:#cfe0fb;margin:10px 0}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <span class="tag">TAMAM POS · Σχεδιασμός Λειτουργίας</span>
+    <h1>🅿️ Παραγγελίες σε Αναμονή</h1>
+    <p class="lead">Ένας μηχανισμός που λύνει <b>δύο</b> προβλήματα: (1) ο ταμίας κρατά <b>πολλές μισοτελειωμένες</b> παραγγελίες και τις επαναφέρει με ένα άγγιγμα, και (2) όταν μπαίνει <b>e-food</b>, η τρέχουσα δουλειά μπαίνει αυτόματα σε αναμονή — <b>χωρίς να χαθεί τίποτα</b>. Διάλεξε παρακάτω πώς θέλεις να δουλεύει. Κάθε ερώτηση έχει και <b>επιπλέον επιλογές</b> + τη δική μου πρόταση.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- DEMO -->
+  <h2><span class="n">▶</span> Δες πώς θα δουλεύει (δοκίμασέ το)</h2>
+  <p class="sub">Πρόσθεσε προϊόντα, βάλε τα σε αναμονή, ή προσομοίωσε μια e-food που μπαίνει ενώ δουλεύεις. Δες πώς τίποτα δεν χάνεται.</p>
+  <div class="demo">
+    <div class="demo-grid">
+      <div class="panel">
+        <div class="panel-h"><span>🛒 Τρέχον καλάθι</span><span class="pill" id="cartType">—</span></div>
+        <div id="cartBox"><div class="empty">Άδειο καλάθι</div></div>
+        <div class="btnrow">
+          <button class="sm" onclick="addItem()">+ Προϊόν</button>
+          <button class="sm" onclick="holdCurrent()">⏸ Αναμονή</button>
+          <button class="sm blue" onclick="efoodArrives()">📦 Έρχεται e-food!</button>
+          <button class="sm" onclick="clearCart()">🗑 Καθαρισμός</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-h"><span>🅿️ Σε Αναμονή <span class="badge" id="heldBadge" style="display:none">0</span></span></div>
+        <div id="heldBox"><div class="empty">Καμία σε αναμονή</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="note">💡 Πρόσεξε: όταν μπαίνει e-food ενώ έχεις γεμάτο καλάθι, η δική σου παραγγελία <b>δεν σβήνεται</b> — πάει μόνη της στην «Αναμονή» και η e-food φορτώνεται καθαρή. Ένα άγγιγμα «Επαναφορά» και συνεχίζεις από εκεί που έμεινες.</div>
+
+  <!-- DECISIONS -->
+  <h2><span class="n">1</span> Οι αποφάσεις σου</h2>
+  <p class="sub">Πάτα σε κάθε κάρτα για να ανοίξει. <span class="rec" style="font-size:10px;font-weight:800;color:#1a1500;background:var(--yellow);border-radius:50px;padding:1px 7px">ΠΡΟΤΑΣΗ</span> = η δική μου σύσταση · <span class="extra" style="font-size:10px;font-weight:800;color:var(--blue);background:rgba(74,158,240,.14);border:1px solid rgba(74,158,240,.3);border-radius:50px;padding:1px 7px">ΕΠΙΠΛΕΟΝ</span> = επιλογή που πρόσθεσα για σένα.</p>
+  <div id="decisions"></div>
+
+  <!-- FUTURE -->
+  <h2><span class="n">2</span> Μελλοντικά σενάρια (δεν πονάνε τώρα — θα πονέσουν)</h2>
+  <p class="sub">Τα σκέφτηκα από τώρα ώστε ο σχεδιασμός να τα αντέχει. <span style="color:var(--yellow)">◆ ΑΠΟΦΑΣΗ</span> = θέλει επιλογή σου (είναι και στις κάρτες πάνω) · <span style="color:var(--purple)">● ΕΤΟΙΜΟ</span> = το χειρίζομαι αυτόματα στον κώδικα.</p>
+  <div id="futures"></div>
+
+</div>
+
+<!-- SUMMARY -->
+<div class="summary">
+  <div class="in">
+    <div class="cnt">Επιλέχθηκαν <b id="pickedCount">0</b>/<span id="totalCount">0</span> αποφάσεις</div>
+    <button class="pri" id="copyBtn" onclick="buildSummary()">📋 Δες & αντίγραψε τις επιλογές μου</button>
+  </div>
+  <div class="wrap"><div id="sumBox"></div></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------------- DEMO ENGINE ---------------- */
+let cart = [], cartType = null, held = [], seq = 1;
+const FOODS = ['Σουβλάκι χοιρινό','Μπιφτέκι Λαχ.','Πατάτες','Τζατζίκι','Coca-Cola','Γύρος πίτα','Club σάντουιτς'];
+const EFOODS = [['Ντόνερ αραβική',1],['Πατάτες',1],['Coca-Cola 330ml',2]];
+
+function toast(msg,color){const t=document.getElementById('toast');t.textContent=msg;t.style.borderColor=color||'var(--green)';t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2600);}
+function renderCart(){
+  const b=document.getElementById('cartBox');
+  document.getElementById('cartType').textContent = cartType? (cartType==='efood'?'📦 e-food':'✍️ χειροκίνητη') : '—';
+  if(!cart.length){b.innerHTML='<div class="empty">Άδειο καλάθι</div>';return;}
+  b.innerHTML=cart.map(i=>`<div class="cart-item ${i.ef?'ef':''}"><span>${i.qty}× ${i.name}</span><span>${(i.qty*3.5).toFixed(2)}€</span></div>`).join('');
+}
+function renderHeld(){
+  const b=document.getElementById('heldBox'), badge=document.getElementById('heldBadge');
+  badge.style.display = held.length? 'inline-block':'none'; badge.textContent=held.length;
+  if(!held.length){b.innerHTML='<div class="empty">Καμία σε αναμονή</div>';return;}
+  b.innerHTML=held.map(h=>`<div class="held-chip ${h.type==='efood'?'ef':''}">
+     <div><div>${h.type==='efood'?'📦 ':'✍️ '}${h.label}</div><div class="meta">${h.items.length} είδη · ${h.total.toFixed(2)}€ · ${h.time}</div></div>
+     <div class="acts"><button class="sm pri" onclick="resume(${h.id})">↩ Επαναφορά</button><button class="sm" onclick="delHeld(${h.id})">✕</button></div>
+   </div>`).join('');
+}
+function addItem(){ if(!cartType)cartType='manual'; const n=FOODS[Math.floor(Math.random()*FOODS.length)]; const ex=cart.find(i=>i.name===n&&!i.ef); if(ex)ex.qty++; else cart.push({name:n,qty:1}); renderCart(); }
+function total(arr){return arr.reduce((s,i)=>s+i.qty*3.5,0);}
+function snapshot(type){ return {id:seq++, type:type||cartType||'manual', label:(type==='efood'?'e-food #'+(1000+seq):'Πρόχειρη '+new Date().toLocaleTimeString('el',{hour:'2-digit',minute:'2-digit'})), items:cart.slice(), total:total(cart), time:new Date().toLocaleTimeString('el',{hour:'2-digit',minute:'2-digit'})}; }
+function holdCurrent(silent){
+  if(!cart.length){ if(!silent)toast('Το καλάθι είναι άδειο','var(--muted)'); return false; }
+  held.unshift(snapshot()); cart=[]; cartType=null; renderCart(); renderHeld();
+  if(!silent)toast('⏸ Μπήκε σε Αναμονή — δεν χάθηκε τίποτα'); return true;
+}
+function clearCart(){ cart=[]; cartType=null; renderCart(); }
+function efoodArrives(){
+  const parked = holdCurrent(true);
+  cart = EFOODS.map(([name,qty])=>({name,qty,ef:true})); cartType='efood'; renderCart();
+  if(parked) toast('📦 e-food φορτώθηκε · η δουλειά σου μπήκε σε Αναμονή','var(--blue)');
+  else toast('📦 e-food φορτώθηκε στο καθαρό καλάθι','var(--blue)');
+}
+function resume(id){
+  const idx=held.findIndex(h=>h.id===id); if(idx<0)return;
+  if(cart.length){ held.unshift(snapshot()); } // auto-park τρέχον
+  const h=held.splice(cart.length?idx+1:idx,1)[0]; cart=h.items.slice(); cartType=h.type; renderCart(); renderHeld();
+  toast('↩ Επαναφορά: '+h.label);
+}
+function delHeld(id){ held=held.filter(h=>h.id!==id); renderHeld(); }
+renderCart(); renderHeld();
+
+/* ---------------- DECISIONS ---------------- */
+const DECISIONS=[
+ {id:'autopark', q:'Όταν μπαίνει e-food ενώ έχεις γεμάτο καλάθι, τι γίνεται;',
+  opts:[
+   {v:'silent', l:'Σιωπηλά + ειδοποίηση (toast)', rec:1, d:'Η τρέχουσα μπαίνει μόνη της σε Αναμονή, βλέπεις ένα διακριτικό μήνυμα, η e-food φορτώνεται.', p:'Μηδέν τριβή στη φούρια', c:'Αλλάζει η οθόνη ενώ ίσως μιλάς σε πελάτη'},
+   {v:'confirm', l:'Γρήγορη ερώτηση πρώτα', d:'«Έχεις παραγγελία — να μπει σε Αναμονή και να φορτωθεί η e-food;» Ναι/Όχι.', p:'Πλήρης έλεγχος', c:'Ένα extra tap σε κάθε e-food'},
+   {v:'choice', l:'Επιλογή μέσα στο e-food παράθυρο', extra:1, d:'Στο «Αποδοχή» προσθέτω 2 κουμπιά: «Τώρα» (αλλάζει οθόνη) ή «Σε Αναμονή» (η e-food πάει κατευθείαν στη λίστα, δεν σε ενοχλεί).', p:'Ο ταμίας αποφασίζει ανά περίπτωση', c:'Λίγο πιο σύνθετο παράθυρο'},
+  ]},
+ {id:'trigger', q:'Από πού βάζει ο ταμίας μια παραγγελία σε Αναμονή (χειροκίνητα);',
+  opts:[
+   {v:'footer', l:'Κουμπί «⏸ Αναμονή» στο πλάι (δίπλα στο Καθαρισμός)', rec:1, d:'Ορατό όταν το καλάθι έχει προϊόντα.', p:'Πάντα μπροστά στα μάτια', c:'—'},
+   {v:'footer_mob', l:'Κουμπί πλάι + στο κινητό (bottom bar)', extra:1, d:'Ίδιο, αλλά και πρόσβαση/λίστα από την κάτω μπάρα στο κινητό.', p:'Δουλεύει και σε ταμπλέτα/κινητό', c:'—'},
+   {v:'longpress', l:'+ Παρατεταμένο πάτημα στο «Καθαρισμός» = Αναμονή', extra:1, d:'Το tap καθαρίζει, το κράτημα βάζει σε αναμονή (2-σε-1).', p:'Λιγότερα κουμπιά', c:'Χρειάζεται εκμάθηση'},
+  ]},
+ {id:'label', q:'Πώς ονομάζονται οι παραγγελίες στη λίστα Αναμονής;',
+  opts:[
+   {v:'auto', l:'Αυτόματα (όνομα/τηλέφωνο πελάτη, αλλιώς ώρα)', d:'π.χ. «Νίκος 69…» ή «Πρόχειρη 21:34».', p:'Μηδέν δουλειά', c:'Δύσκολο να ξεχωρίσεις 2 ανώνυμες'},
+   {v:'auto_rename', l:'Αυτόματα + δυνατότητα μετονομασίας', rec:1, d:'Όπως πάνω, αλλά με ένα ✏️ βάζεις «Κος με το μπλε», «Τραπέζι έξω» κ.λπ.', p:'Ευέλικτο, γρήγορο', c:'—'},
+   {v:'prompt', l:'Ρωτάει όνομα κάθε φορά', extra:1, d:'Σε κάθε Αναμονή ζητά ετικέτα.', p:'Πάντα ξεκάθαρο', c:'Extra tap πάντα — αργό στη φούρια'},
+   {v:'colors', l:'Αυτόματα + χρωματικές ετικέτες', extra:1, d:'Καρτέλες με χρώμα (π.χ. κόκκινο=βιαστικό) πέρα από το όνομα.', p:'Οπτική προτεραιότητα με μια ματιά', c:'Λίγο πιο πολύ UI'},
+  ]},
+ {id:'cap', q:'Πόσες παραγγελίες μπορούν να είναι ταυτόχρονα σε Αναμονή;',
+  opts:[
+   {v:'block30', l:'Έως ~30, μετά μπλοκάρει με μήνυμα', d:'Πρακτικό όριο· σε προτρέπει να καθαρίσεις παλιές.', p:'Προστασία από «ξεχασμένες»', c:'Σπάνια μπορεί να ενοχλήσει'},
+   {v:'warn', l:'Χωρίς σκληρό όριο, αλλά προειδοποίηση στις πολλές', rec:1, d:'Δουλεύει απεριόριστα· στις ~30+ σου λέει «έχεις πολλές ανοιχτές».', p:'Ποτέ δεν σε κόβει', c:'Θέλει πειθαρχία'},
+   {v:'nolimit', l:'Εντελώς απεριόριστες', extra:1, d:'Καμία προειδοποίηση.', p:'Απλό', c:'Μπορεί να μαζευτούν σιωπηλά'},
+  ]},
+ {id:'persist', q:'Αν κλείσει/κρασάρει ο υπολογιστής, τι γίνεται με τις παραγγελίες σε Αναμονή;',
+  opts:[
+   {v:'local', l:'Επιβιώνουν restart στο ίδιο μηχάνημα', rec:1, d:'Αποθηκεύονται τοπικά — ανοίγεις ξανά τον POS και είναι εκεί.', p:'Καλύπτει το 99% (κράσαρε ο browser)', c:'Χάνονται αν σβηστεί όλος ο δίσκος'},
+   {v:'folder', l:'+ Αντίγραφο ασφαλείας στον φάκελο δεδομένων', extra:1, d:'Όπως πάνω + backup στον δίσκο (σαν τις πραγματικές παραγγελίες).', p:'Επιβιώνουν ακόμα και reinstall', c:'Λίγο περισσότερη πολυπλοκότητα (είναι ακαταχώρητες)'},
+  ]},
+ {id:'scope', q:'Σε ποιες παραγγελίες ισχύει η Αναμονή;',
+  opts:[
+   {v:'delta', l:'Delivery & Take Away μόνο', rec:1, d:'Τα τραπέζια είναι ΗΔΗ «σε αναμονή» — μένουν ανοιχτά στον χάρτη τραπεζιών.', p:'Καθαρός διαχωρισμός', c:'—'},
+   {v:'all', l:'+ Και ημιτελής γύρος τραπεζιού', extra:1, d:'Αν χτίζεις γύρο για τραπέζι και θες να τον «παγώσεις» χωρίς να τον στείλεις.', p:'Καλύπτει και σπάνιες περιπτώσεις τραπεζιού', c:'Επικαλύπτεται με τη λογική τραπεζιών — ρίσκο σύγχυσης'},
+  ]},
+ {id:'ef_direct', q:'Να μπορεί ο ταμίας να αποδεχτεί e-food ΚΑΤΕΥΘΕΙΑΝ σε Αναμονή (χωρίς να αλλάξει οθόνη);',
+  opts:[
+   {v:'yes', l:'Ναι — «Αποδοχή σε Αναμονή»', rec:1, d:'Όταν είναι απασχολημένος με πελάτη, αποδέχεται την e-food αλλά μένει στη δουλειά του· την ανοίγει μετά.', p:'Δεν διακόπτεται η εξυπηρέτηση πελάτη', c:'Πρέπει να θυμηθεί να την ανοίξει (βλ. σενάριο e-food χρόνου)'},
+   {v:'no', l:'Όχι — πάντα φορτώνεται τώρα', d:'Η αποδοχή πάντα φέρνει την e-food στην οθόνη (με auto-park της τρέχουσας).', p:'Πιο απλό, δεν ξεχνιέται', c:'Διακόπτει ό,τι κάνεις'},
+  ]},
+ {id:'stale', q:'Παραγγελία σε Αναμονή για ώρες — στο μεταξύ άλλαξε τιμή/έγινε sold-out. Στην Επαναφορά;',
+  fut:1,
+  opts:[
+   {v:'freeze', l:'Κρατά τις τιμές που είχε όταν την πάρκαρες', d:'Σαν την «επανάληψη από ιστορικό».', p:'Σταθερό, ό,τι είπες στον πελάτη', c:'Μπορεί να πουλήσεις σε παλιά τιμή'},
+   {v:'reprice', l:'Ενημερώνει στις τρέχουσες τιμές', d:'Ξαναϋπολογίζει με το σημερινό μενού.', p:'Πάντα σωστή τιμή', c:'Αλλάζει το σύνολο που ίσως είπες'},
+   {v:'warn', l:'Σε προειδοποιεί αν κάτι άλλαξε & επιλέγεις', rec:1, extra:1, d:'«2 προϊόντα άλλαξαν τιμή / 1 εξαντλήθηκε — κράτα παλιές ή ενημέρωση;»', p:'Ο ταμίας αποφασίζει με πλήρη εικόνα', c:'Ένα extra βήμα μόνο όταν όντως άλλαξε κάτι'},
+  ]},
+ {id:'abandoned', q:'Παραγγελία σε Αναμονή που ξεχάστηκε (καμία επαναφορά για ώρες);',
+  fut:1,
+  opts:[
+   {v:'shiftclose', l:'Προειδοποίηση στο κλείσιμο βάρδιας', rec:1, d:'«Έχεις 3 παραγγελίες σε Αναμονή — να τις κρατήσεις/σβήσεις;» (όπως τα ανοιχτά τραπέζια).', p:'Δεν χάνονται από αμέλεια', c:'—'},
+   {v:'expire', l:'Αυτόματη λήξη μετά από X ώρες', extra:1, d:'Σβήνονται μόνες τους (π.χ. 6h) με ειδοποίηση.', p:'Καθαρή λίστα', c:'Ρίσκο να σβηστεί κάτι που χρειαζόσουν'},
+   {v:'both', l:'Και τα δύο (ηλικία ορατή + προειδοποίηση βάρδιας)', extra:1, rec:1, d:'Δείχνει πόση ώρα κάθεται + προειδοποιεί στη βάρδια, χωρίς αυτόματη διαγραφή.', p:'Ασφαλές + ενημερωτικό', c:'—'},
+  ]},
+ {id:'ef_urgency', q:'Μια e-food σε Αναμονή είναι πιο επείγουσα (έχει προθεσμία παράδοσης). Πώς φαίνεται;',
+  fut:1,
+  opts:[
+   {v:'alarm', l:'Οπτικός συναγερμός με την ηλικία', rec:1, d:'Οι e-food σε Αναμονή κοκκινίζουν όσο περνά η ώρα (σε αντίθεση με τις χειροκίνητες).', p:'Δεν ξεχνιέται μια πληρωμένη παραγγελία', c:'—'},
+   {v:'normal', l:'Ίδια εμφάνιση με τις χειροκίνητες', d:'Απλά με σήμα 📦.', p:'Απλό', c:'Ρίσκο να αργήσει η παράδοση'},
+   {v:'noef', l:'Οι e-food να ΜΗΝ μπαίνουν καθόλου σε αναμονή', extra:1, d:'Η e-food πάντα φορτώνεται τώρα, ποτέ δεν παρκάρεται.', p:'Καμία ξεχασμένη e-food', c:'Αναιρεί εν μέρει τον σκοπό — διακόπτει πάντα'},
+  ]},
+ {id:'shiftclose_hold', q:'Κλείσιμο βάρδιας ενώ υπάρχουν παραγγελίες σε Αναμονή;',
+  fut:1,
+  opts:[
+   {v:'warn', l:'Προειδοποίηση (σαν τα ανοιχτά τραπέζια)', rec:1, d:'Δεν μπλοκάρει, αλλά σε ρωτά αν θες να τις μεταφέρεις στην επόμενη βάρδια.', p:'Καμία απώλεια', c:'—'},
+   {v:'carry', l:'Μεταφέρονται σιωπηλά στην επόμενη βάρδια', extra:1, d:'Απλά παραμένουν.', p:'Μηδέν τριβή', c:'Ο νέος υπάλληλος βρίσκει ξένες παραγγελίες χωρίς εξήγηση'},
+   {v:'block', l:'Πρέπει να αδειάσουν πριν κλείσει η βάρδια', extra:1, d:'Σαν να μη μπορείς να κλείσεις με ανοιχτό τραπέζι.', p:'Καθαρό κλείσιμο', c:'Πιο αυστηρό'},
+  ]},
+ {id:'clearbtn', q:'Το κουμπί «Καθαρισμός» (σβήνει το καλάθι) — να προσφέρει «Αναμονή» αντί για σβήσιμο;',
+  fut:1,
+  opts:[
+   {v:'offer', l:'Ναι — ρωτά «Σβήσιμο ή Αναμονή;»', extra:1, d:'Προστασία από κατά λάθος σβήσιμο μισοτελειωμένης.', p:'Λιγότερες χαμένες παραγγελίες', c:'Ένα extra tap στο σβήσιμο'},
+   {v:'plain', l:'Όχι — καθαρίζει κατευθείαν (όπως τώρα)', rec:1, d:'Η Αναμονή είναι ξεχωριστό κουμπί.', p:'Ξεκάθαρος διαχωρισμός ενεργειών', c:'Μπορεί κατά λάθος να σβήσει (αλλά υπάρχει επιβεβαίωση)'},
+  ]},
+];
+
+const FUTURES=[
+ {k:'decide', ref:'stale', t:'Παλιές τιμές / sold-out σε παραγγελία που έμεινε ώρες', why:'Η τιμή ή η διαθεσιμότητα μπορεί να αλλάξει (back-office auto-sync, 86) όσο η παραγγελία κάθεται.', plan:'Απόφαση #8 πάνω. <b>Προτείνω: προειδοποίηση + επιλογή</b> στην επαναφορά.'},
+ {k:'decide', ref:'abandoned', t:'Ξεχασμένες παραγγελίες που μαζεύονται', why:'Σε φούρια, ο ταμίας μπορεί να πάρκαρε 5 και να θυμάται 3.', plan:'Απόφαση #9. <b>Προτείνω: ορατή ηλικία + προειδοποίηση στο κλείσιμο βάρδιας.</b>'},
+ {k:'decide', ref:'ef_urgency', t:'e-food σε Αναμονή που αργεί (πληρωμένη, με προθεσμία)', why:'Μια ξεχασμένη e-food = αργοπορημένη παράδοση = παράπονο/πρόστιμο.', plan:'Απόφαση #10. <b>Προτείνω: οπτικός συναγερμός με την ηλικία.</b>'},
+ {k:'decide', ref:'shiftclose_hold', t:'Αλλαγή/κλείσιμο βάρδιας με παραγγελίες σε Αναμονή', why:'Ποιος «κατέχει» μια παρκαρισμένη παραγγελία όταν αλλάζει υπάλληλος;', plan:'Απόφαση #11. <b>Προτείνω: προειδοποίηση σαν τα ανοιχτά τραπέζια.</b>'},
+ {k:'info', t:'e-food μπαίνει ενώ είσαι σε ΤΡΑΠΕΖΙ (χτίζεις γύρο)', why:'Ο τύπος είναι «τραπέζι», το καλάθι κρατά έναν γύρο. Auto-park δεν πρέπει να πατήσει τον γύρο τραπεζιού.', plan:'<b>Ετοιμο:</b> αν είσαι σε τραπέζι, η e-food δεν κλέβει το καλάθι — ο γύρος τραπεζιού προστατεύεται (η e-food περιμένει/μπαίνει σε αναμονή ξεχωριστά). Καλύπτεται από το «scope = del/ta».'},
+ {k:'info', t:'e-food μπαίνει ενώ είσαι μέσα σε παράθυρο (checkout/πληρωμή/customization)', why:'Το e-food παράθυρο εμφανίζεται πάνω απ\' όλα. Auto-park με ανοιχτό modal θα ήταν χάος.', plan:'<b>Ετοιμο:</b> η αποδοχή κλείνει με ασφάλεια τυχόν ανοιχτό modal πριν το park, ή περιμένει να το κλείσεις.'},
+ {k:'info', t:'Ενημέρωση εφαρμογής ενώ υπάρχουν παρκαρισμένες', why:'Μετά από update, το «σχήμα» μιας παλιάς παρκαρισμένης μπορεί να μην ταιριάζει.', plan:'<b>Ετοιμο:</b> κάθε snapshot έχει έκδοση· σε ασυμφωνία, φορτώνει ό,τι μπορεί με ασφάλεια (ποτέ crash).'},
+ {k:'info', t:'Πελάτης της παρκαρισμένης διαγράφηκε/συγχωνεύτηκε στο CRM στο μεταξύ', why:'Η παραγγελία «θυμάται» έναν πελάτη που ίσως άλλαξε.', plan:'<b>Ετοιμο:</b> στην επαναφορά επανα-επικυρώνεται ο πελάτης· αν χάθηκε, κρατά τα στοιχεία ως απλό κείμενο.'},
+ {k:'info', t:'Εξαργύρωση πόντων / έκπτωση υπαλλήλου μέσα στην παρκαρισμένη', why:'Δεν πρέπει να «ξοδευτούν» πόντοι όσο η παραγγελία απλώς περιμένει.', plan:'<b>Ετοιμο:</b> η εξαργύρωση ταξιδεύει μαζί αλλά ξοδεύεται ΜΟΝΟ στο τελικό «Παραγγελία», ποτέ στο park.'},
+ {k:'info', t:'2η ταμειακή στο μέλλον', why:'Αν βάλεις 2ο μηχάνημα, οι παρκαρισμένες είναι ανά μηχάνημα.', plan:'<b>Ετοιμο (by design):</b> η Αναμονή είναι «η δική σου οθόνη» — δεν μοιράζεται μεταξύ μηχανημάτων (σωστό & απλό). Κοινή Αναμονή σε πολλά ταμεία = μεγάλο έργο, μόνο αν ποτέ χρειαστεί.'},
+ {k:'info', t:'Σύγχυση με την «Επανάληψη από Ιστορικό»', why:'Υπάρχει ήδη «επανάληψη παλιάς παραγγελίας». Η «Αναμονή» είναι διαφορετική (μισοτελειωμένη τώρα).', plan:'<b>Ετοιμο:</b> ξεχωριστό όνομα/εικονίδιο/σημείο — «🅿️ Αναμονή» (τώρα) vs «🕐 Ιστορικό» (παλιά).'},
+ {k:'info', t:'Δεν πάνε ποτέ στο back-office', why:'Μια παρκαρισμένη είναι ακαταχώρητη — δεν είναι πώληση.', plan:'<b>Ετοιμο:</b> τίποτα δεν φεύγει στο back-office μέχρι το τελικό «Παραγγελία». Μηδέν επίδραση σε τζίρο/απόθεμα.'},
+];
+
+/* render decisions */
+const picks={};
+const dc=document.getElementById('decisions');
+DECISIONS.forEach((D,di)=>{
+  const card=document.createElement('div'); card.className='dcard'; card.id='card-'+D.id;
+  const num = di+1;
+  card.innerHTML=`<div class="dhead" onclick="toggleCard('${D.id}')">
+      <span style="color:var(--yellow);font-weight:800">${num}.</span>
+      <span class="q">${D.q}</span>
+      <span class="picked" id="pick-${D.id}" style="display:none"></span>
+      <span class="chev">▶</span>
+    </div>
+    <div class="dbody">${D.opts.map(o=>`
+      <div class="opt" onclick="choose('${D.id}','${o.v}',this)" data-v="${o.v}">
+        <div class="radio"></div>
+        <div class="txt">
+          <div class="lbl">${o.l}${o.rec?'<span class="rec">ΠΡΟΤΑΣΗ</span>':''}${o.extra?'<span class="extra">ΕΠΙΠΛΕΟΝ</span>':''}</div>
+          <div class="desc">${o.d}</div>
+          <div class="pc"><span class="p">✔ ${o.p}</span>${o.c&&o.c!=='—'?`<span class="c">△ ${o.c}</span>`:''}</div>
+        </div>
+      </div>`).join('')}</div>`;
+  dc.appendChild(card);
+});
+document.getElementById('totalCount').textContent=DECISIONS.length;
+
+function toggleCard(id){document.getElementById('card-'+id).classList.toggle('open');}
+function choose(did,val,el){
+  picks[did]=val;
+  const body=el.closest('.dbody');
+  body.querySelectorAll('.opt').forEach(o=>o.classList.toggle('sel',o.dataset.v===val));
+  const D=DECISIONS.find(x=>x.id===did), o=D.opts.find(x=>x.v===val);
+  const pk=document.getElementById('pick-'+did); pk.style.display='inline-block'; pk.textContent='✓ '+o.l.replace(/<[^>]+>/g,'');
+  document.getElementById('pickedCount').textContent=Object.keys(picks).length;
+}
+
+/* render futures */
+const fc=document.getElementById('futures');
+FUTURES.forEach(F=>{
+  const d=document.createElement('div'); d.className='fs '+(F.k==='decide'?'decide':'info');
+  d.innerHTML=`<div class="t">${F.k==='decide'?'<span class="k">◆ ΑΠΟΦΑΣΗ</span>':'<span class="k">● ΕΤΟΙΜΟ</span>'} ${F.t}</div>
+     <div class="why">${F.why}</div><div class="plan">${F.plan}</div>`;
+  fc.appendChild(d);
+});
+
+function buildSummary(){
+  let out='ΟΙ ΕΠΙΛΟΓΕΣ ΜΟΥ ΓΙΑ ΤΗΝ «ΑΝΑΜΟΝΗ»:\n\n';
+  DECISIONS.forEach((D,i)=>{
+    const v=picks[D.id]; const o=v&&D.opts.find(x=>x.v===v);
+    out+=`${i+1}. ${D.q}\n   → ${o? o.l.replace(/<[^>]+>/g,'') : '⚠️ (δεν επέλεξα)'}\n\n`;
+  });
+  const box=document.getElementById('sumBox'); box.style.display='block'; box.textContent=out;
+  box.scrollIntoView({behavior:'smooth',block:'center'});
+  navigator.clipboard&&navigator.clipboard.writeText(out).then(()=>toast('📋 Αντιγράφηκε — στείλ\' το στον Claude'),()=>{});
+}
+/* open first card */
+toggleCard('autopark');
+</script>
+</body>
+</html>
