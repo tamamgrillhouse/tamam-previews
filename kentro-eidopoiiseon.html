@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Κέντρο Ειδοποιήσεων — TAMAM Grill House</title>
+<style>
+  :root{
+    --accent:#f59e0b; --accent-text:#9c6406; --text:#1f2937; --muted:#6b7280;
+    --line:#e5e7eb; --bg:#f3f4f6; --card:#ffffff;
+    --danger:#dc2626; --danger-bg:#fee2e2; --danger-text:#b91c1c;
+    --warn:#f59e0b; --warn-bg:#fef3c7; --warn-text:#92400e;
+    --info:#2563eb; --info-bg:#dbeafe; --info-text:#1d4ed8;
+    --ok:#16a34a; --ok-bg:#dcfce7; --ok-text:#15803d;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Manrope','Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;}
+
+  /* ---- explainer top ---- */
+  .intro{max-width:900px;margin:0 auto;padding:28px 20px 8px;}
+  .intro h1{font-size:26px;margin:0 0 6px;letter-spacing:-.5px;}
+  .intro .sub{color:var(--muted);font-size:15px;margin:0 0 18px;}
+  .toggle-wrap{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:6px;}
+  .tbtn{border:1px solid var(--line);background:#fff;padding:9px 18px;border-radius:10px;font-size:14px;
+    font-weight:700;cursor:pointer;color:var(--muted);transition:all .15s;font-family:inherit;}
+  .tbtn.on{background:var(--accent);border-color:var(--accent);color:#1f2937;box-shadow:0 2px 8px rgba(245,158,11,.35);}
+  .hint{color:var(--muted);font-size:13px;margin-left:6px;}
+
+  /* ---- app frame mock ---- */
+  .frame{max-width:1180px;margin:18px auto 40px;background:var(--card);border:1px solid var(--line);
+    border-radius:16px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.10);display:flex;min-height:620px;position:relative;}
+  .side{width:210px;background:#fffaf2;border-right:1px solid var(--line);padding:16px 0;flex-shrink:0;}
+  .brand{font-weight:800;font-size:17px;padding:4px 18px 14px;letter-spacing:-.3px;}
+  .brand .dot{color:var(--accent);}
+  .navgrp{font-size:10.5px;text-transform:uppercase;letter-spacing:.8px;color:var(--accent-text);
+    font-weight:800;padding:12px 18px 4px;display:flex;align-items:center;gap:6px;}
+  .navgrp::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--accent);}
+  .nav a{display:block;padding:7px 18px;font-size:13.5px;color:#374151;text-decoration:none;}
+  .nav a.active{background:#fff3df;color:var(--accent-text);font-weight:700;border-right:3px solid var(--accent);}
+
+  .body{flex:1;display:flex;flex-direction:column;min-width:0;}
+  .topbar{height:56px;border-bottom:1px solid var(--line);display:flex;align-items:center;
+    padding:0 18px;gap:14px;background:#fff;position:relative;z-index:5;}
+  .navsearch{flex:1;max-width:340px;height:36px;border:1px solid var(--line);border-radius:9px;
+    display:flex;align-items:center;padding:0 12px;color:#9ca3af;font-size:13px;gap:8px;}
+  .spacer{flex:1;}
+  .bell{position:relative;width:42px;height:42px;border:1px solid var(--line);border-radius:11px;
+    background:#fff;cursor:pointer;font-size:19px;display:flex;align-items:center;justify-content:center;
+    transition:all .15s;}
+  .bell:hover{background:#fffaf2;border-color:var(--accent);}
+  .bell .badge{position:absolute;top:-6px;right:-6px;min-width:20px;height:20px;padding:0 5px;
+    background:var(--danger);color:#fff;border-radius:11px;font-size:11.5px;font-weight:800;
+    display:flex;align-items:center;justify-content:center;border:2px solid #fff;}
+  .exit{border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 14px;font-size:13px;
+    font-weight:600;color:#374151;cursor:pointer;font-family:inherit;}
+
+  .content{flex:1;padding:22px 26px;overflow:auto;position:relative;}
+  .page-title{font-size:21px;font-weight:800;margin:0 0 3px;letter-spacing:-.4px;}
+  .page-sub{color:var(--muted);font-size:14px;margin:0 0 20px;}
+  .skeleton{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+  .sk-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px;}
+  .sk-card .k{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+  .sk-card .v{font-size:26px;font-weight:800;margin-top:8px;color:#111827;}
+  .sk-card .v.blur{filter:blur(6px);user-select:none;}
+  .sk-bar{height:12px;background:#f1f5f9;border-radius:6px;margin-top:22px;}
+  .sk-bar.w70{width:70%;} .sk-bar.w50{width:50%;} .sk-bar.w85{width:85%;}
+
+  /* ===== BEFORE: banner stack ===== */
+  .banner{border-radius:8px;padding:10px 15px;margin-bottom:11px;display:flex;align-items:center;gap:10px;
+    font-size:13.5px;}
+  .banner .ic{font-size:19px;flex-shrink:0;}
+  .banner .x{margin-left:auto;font-weight:800;cursor:pointer;opacity:.65;white-space:nowrap;}
+  .b-red{background:var(--danger-bg);border:1px solid var(--danger);color:var(--danger-text);}
+  .b-warn{background:var(--warn-bg);border:1px solid var(--warn);color:var(--warn-text);}
+  .b-info{background:var(--info-bg);border:1px solid #93c5fd;color:var(--info-text);}
+  .b-ok{background:var(--ok-bg);border:1px solid #86efac;color:var(--ok-text);}
+  .banner a{color:inherit;font-weight:700;}
+  .before-note{background:#111827;color:#fca5a5;font-size:12.5px;padding:7px 14px;border-radius:8px;
+    margin-bottom:14px;display:flex;align-items:center;gap:8px;font-weight:600;}
+
+  /* ===== AFTER: thin urgent bar ===== */
+  .urgent-bar{background:var(--danger);color:#fff;border-radius:9px;padding:8px 15px;margin-bottom:18px;
+    display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:700;cursor:pointer;
+    box-shadow:0 3px 10px rgba(220,38,38,.30);}
+  .urgent-bar .go{margin-left:auto;font-weight:800;}
+  .urgent-bar:hover{filter:brightness(1.05);}
+
+  /* ===== notification drawer ===== */
+  .overlay{position:absolute;inset:0;background:rgba(15,23,42,.28);z-index:20;opacity:0;pointer-events:none;
+    transition:opacity .2s;}
+  .overlay.open{opacity:1;pointer-events:auto;}
+  .drawer{position:absolute;top:0;right:0;bottom:0;width:396px;max-width:92%;background:#fff;z-index:21;
+    box-shadow:-14px 0 44px rgba(0,0,0,.18);transform:translateX(100%);transition:transform .24s cubic-bezier(.4,0,.2,1);
+    display:flex;flex-direction:column;}
+  .drawer.open{transform:translateX(0);}
+  .dw-head{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;}
+  .dw-head h3{margin:0;font-size:17px;font-weight:800;}
+  .dw-head .cnt{background:var(--danger);color:#fff;font-size:12px;font-weight:800;border-radius:11px;
+    padding:1px 8px;}
+  .dw-head .close{margin-left:auto;border:none;background:none;font-size:22px;cursor:pointer;color:var(--muted);
+    line-height:1;padding:2px 6px;}
+  .dw-actions{padding:8px 18px;border-bottom:1px solid var(--line);display:flex;gap:14px;}
+  .dw-actions button{border:none;background:none;color:var(--info-text);font-size:12.5px;font-weight:700;
+    cursor:pointer;font-family:inherit;padding:0;}
+  .dw-body{flex:1;overflow:auto;padding:6px 14px 20px;}
+  .grp-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;
+    padding:16px 6px 7px;display:flex;align-items:center;gap:7px;}
+  .grp-label.red{color:var(--danger-text);}
+  .grp-label.warn{color:var(--warn-text);}
+  .grp-label.info{color:var(--info-text);}
+  .grp-label .n{background:#f1f5f9;color:var(--muted);border-radius:9px;font-size:10.5px;padding:0 7px;font-weight:800;}
+
+  .note{border:1px solid var(--line);border-left-width:4px;border-radius:10px;padding:11px 13px;margin-bottom:9px;
+    display:flex;gap:11px;position:relative;background:#fff;transition:background .15s;}
+  .note:hover{background:#fbfbfb;}
+  .note.red{border-left-color:var(--danger);}
+  .note.warn{border-left-color:var(--warn);}
+  .note.info{border-left-color:var(--info);}
+  .note.ok{border-left-color:var(--ok);}
+  .note .ni{font-size:20px;flex-shrink:0;line-height:1.2;}
+  .note .nc{flex:1;min-width:0;}
+  .note .nt{font-weight:800;font-size:13.5px;margin-bottom:2px;}
+  .note .nm{font-size:12.5px;color:#4b5563;}
+  .note .nrow{display:flex;gap:12px;align-items:center;margin-top:8px;}
+  .note .go{font-size:12.5px;font-weight:800;color:var(--info-text);text-decoration:none;}
+  .note .ack{font-size:12px;font-weight:700;color:var(--muted);background:none;border:none;cursor:pointer;
+    font-family:inherit;padding:0;}
+  .note .unread{position:absolute;top:13px;right:12px;width:8px;height:8px;border-radius:50%;background:var(--danger);}
+  .note .time{font-size:11px;color:#9ca3af;margin-top:6px;}
+
+  .empty{text-align:center;color:var(--muted);padding:40px 20px;font-size:14px;}
+  .empty .big{font-size:40px;margin-bottom:8px;}
+
+  /* ===== settings view ===== */
+  .set-legend{display:flex;flex-wrap:wrap;gap:8px 20px;background:#fff;border:1px solid var(--line);
+    border-radius:12px;padding:12px 16px;margin-bottom:18px;font-size:12.5px;color:#4b5563;}
+  .set-legend b.sw{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px;}
+  .sw.red{background:var(--danger);} .sw.warn{background:var(--warn);}
+  .sw.info{background:var(--info);} .sw.off{background:#cbd5e1;}
+  .set-group{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--accent-text);
+    margin:22px 0 8px;display:flex;align-items:center;gap:7px;}
+  .set-group::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);}
+  .set-row{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);
+    border-radius:12px;padding:12px 15px;margin-bottom:9px;}
+  .set-row .rl{display:flex;align-items:center;gap:11px;flex:1;min-width:0;}
+  .set-row .re{font-size:21px;flex-shrink:0;}
+  .set-row .rt{font-weight:700;font-size:14px;}
+  .set-row .rd{font-size:12px;color:var(--muted);margin-top:1px;}
+  .set-row .lock{font-size:11px;color:var(--danger-text);font-weight:700;margin-top:3px;display:inline-flex;align-items:center;gap:4px;}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;flex-shrink:0;}
+  .seg button{border:none;background:#fff;padding:8px 12px;font-size:16px;cursor:pointer;font-family:inherit;
+    border-right:1px solid var(--line);transition:all .12s;line-height:1;color:#9ca3af;filter:grayscale(1);opacity:.5;}
+  .seg button:last-child{border-right:none;}
+  .seg button:hover{background:#f9fafb;}
+  .seg button.on{filter:none;opacity:1;color:#fff;}
+  .seg button.on.red{background:var(--danger);}
+  .seg button.on.warn{background:var(--warn);}
+  .seg button.on.info{background:var(--info);}
+  .seg button.on.off{background:#64748b;}
+  @media(max-width:620px){.set-row{flex-direction:column;align-items:stretch;}.seg{align-self:flex-end;}}
+
+  /* legend / summary under frame */
+  .why{max-width:1180px;margin:0 auto 60px;padding:0 20px;}
+  .why h2{font-size:19px;margin:26px 0 14px;}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;}
+  .wc{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;}
+  .wc .e{font-size:26px;}
+  .wc h4{margin:8px 0 5px;font-size:15px;}
+  .wc p{margin:0;font-size:13px;color:var(--muted);line-height:1.55;}
+  .foot{max-width:1180px;margin:0 auto 50px;padding:16px 20px;color:#9ca3af;font-size:12px;text-align:center;}
+  @media(max-width:760px){.side{display:none;}.skeleton{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<div class="intro">
+  <h1>🔔 Κέντρο Ειδοποιήσεων</h1>
+  <p class="sub">Αντί για μια στοίβα από banners που «τρώνε» το πάνω μέρος κάθε σελίδας — όλες οι ειδοποιήσεις σε ΕΝΑ μέρος, καθαρά και ταξινομημένα.</p>
+  <div class="toggle-wrap">
+    <button class="tbtn" id="btnBefore" onclick="setMode('before')">😖 Πριν (όπως είναι τώρα)</button>
+    <button class="tbtn on" id="btnAfter" onclick="setMode('after')">✨ Μετά (η πρόταση)</button>
+    <button class="tbtn" id="btnSettings" onclick="setMode('settings')">⚙️ Ρυθμίσεις σοβαρότητας</button>
+    <span class="hint" id="modeHint">Πάτα το 🔔 πάνω δεξιά για να ανοίξει το κέντρο ειδοποιήσεων.</span>
+  </div>
+</div>
+
+<div class="frame">
+  <!-- sidebar -->
+  <div class="side">
+    <div class="brand">TAMAM<span class="dot">.</span></div>
+    <div class="navgrp">Επισκόπηση</div>
+    <div class="nav"><a href="#" class="active">🏠 Πίνακας</a></div>
+    <div class="navgrp">Αγορές &amp; Απόθεμα</div>
+    <div class="nav">
+      <a href="#">🚚 Προμηθευτές</a>
+      <a href="#">📦 Πρώτες Ύλες</a>
+      <a href="#">🧾 Τιμολόγια</a>
+    </div>
+    <div class="navgrp">Χρήματα</div>
+    <div class="nav">
+      <a href="#">💰 Έξοδα</a>
+      <a href="#">👜 Ταμείο</a>
+    </div>
+    <div class="navgrp">Σύστημα</div>
+    <div class="nav"><a href="#">⚙️ Ρυθμίσεις</a></div>
+  </div>
+
+  <!-- body -->
+  <div class="body">
+    <div class="topbar">
+      <div class="navsearch">🔍 Αναζήτηση…</div>
+      <div class="spacer"></div>
+      <div class="bell" id="bell" onclick="openDrawer()" style="display:none;">
+        🔔<span class="badge" id="badge">6</span>
+      </div>
+      <button class="exit">Έξοδος</button>
+    </div>
+
+    <div class="content" id="content">
+     <div id="dashView">
+      <div class="page-title">Πίνακας Ελέγχου</div>
+      <div class="page-sub">Καλημέρα! Δες με μια ματιά την κατάσταση του μαγαζιού.</div>
+
+      <!-- BEFORE banners -->
+      <div id="beforeStack" style="display:none;">
+        <div class="before-note">⚠️ Έτσι είναι σήμερα — 6 banners στοιβαγμένα σπρώχνουν το περιεχόμενο κάτω. Και τα ξαναβλέπεις σε ΚΑΘΕ σελίδα.</div>
+        <div class="banner b-red"><span class="ic">📡</span><div><strong>2</strong> κινήσεις POS δεν αποθηκεύτηκαν λόγω σφάλματος (οι υπόλοιπες σώθηκαν).</div><span class="x">Κατάλαβα ✓</span></div>
+        <div class="banner b-red"><span class="ic">🔔</span><div>Έχουν περάσει 9 μέρες χωρίς αντίγραφο ασφαλείας — <a href="#">φτιάξε ένα τώρα →</a></div></div>
+        <div class="banner b-warn"><span class="ic">⚠️</span><div><strong>3 ληξιπρόθεσμα</strong> (1.240,00 €) · 2 λήγουν σε &lt;7 μέρες — <a href="#">δες τα τιμολόγια →</a></div></div>
+        <div class="banner b-warn"><span class="ic">⚡</span><div>Το συμβόλαιο ρεύματος λήγει σε 12 μέρες — <a href="#">δες προγράμματα →</a></div></div>
+        <div class="banner b-info"><span class="ic">🚚</span><div><strong>Παραδόσεις αύριο (Πέμπτη):</strong> Κρεοπωλείο Γεωργίου · ΑΦΟΙ Δημητρίου</div></div>
+        <div class="banner b-info"><span class="ic">📥</span><div>2 νέα τιμολόγια κατέβηκαν από email &amp; περιμένουν έγκριση — <a href="#">δες τα →</a></div></div>
+      </div>
+
+      <!-- AFTER thin urgent bar -->
+      <div id="afterUrgent" class="urgent-bar" onclick="openDrawer()">
+        <span>⚠️</span><span>2 επείγοντα θέματα χρειάζονται προσοχή</span><span class="go">Δες τα →</span>
+      </div>
+
+      <div class="skeleton">
+        <div class="sk-card"><div class="k">Τζίρος σήμερα</div><div class="v">742,50 €</div><div class="sk-bar w70"></div></div>
+        <div class="sk-card"><div class="k">Παραγγελίες</div><div class="v">38</div><div class="sk-bar w50"></div></div>
+        <div class="sk-card"><div class="k">Μικτό κέρδος</div><div class="v">61%</div><div class="sk-bar w85"></div></div>
+      </div>
+      <div style="margin-top:16px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px;">
+        <div style="font-weight:700;margin-bottom:14px;">Πωλήσεις εβδομάδας</div>
+        <div class="sk-bar w85"></div><div class="sk-bar w70"></div><div class="sk-bar w50"></div>
+      </div>
+     </div><!-- /dashView -->
+
+     <!-- ===== SETTINGS VIEW ===== -->
+     <div id="settingsView" style="display:none;">
+       <div class="page-title">⚙️ Ειδοποιήσεις — πόσο σημαντική είναι η καθεμιά</div>
+       <div class="page-sub">Εσύ αποφασίζεις. Για κάθε ειδοποίηση διάλεξε πού θέλεις να εμφανίζεται.</div>
+
+       <div class="set-legend">
+         <span><b class="sw red"></b> 🔴 Επείγον — καμπανάκι + κόκκινη γραμμή πάνω</span>
+         <span><b class="sw warn"></b> 🟠 Προσοχή — μόνο στο καμπανάκι</span>
+         <span><b class="sw info"></b> 🔵 Ενημέρωση — μόνο στο καμπανάκι</span>
+         <span><b class="sw off"></b> 🔕 Σβηστό — πουθενά</span>
+       </div>
+
+       <div id="setRows"></div>
+     </div>
+
+    </div>
+  </div>
+
+  <!-- drawer -->
+  <div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+  <div class="drawer" id="drawer">
+    <div class="dw-head">
+      <h3>🔔 Ειδοποιήσεις</h3><span class="cnt" id="dwCnt">6</span>
+      <button class="close" onclick="closeDrawer()">×</button>
+    </div>
+    <div class="dw-actions">
+      <button onclick="markAll()">✓ Όλα ως διαβασμένα</button>
+      <button onclick="alert('Θα άνοιγε η σελίδα Ρυθμίσεις → Ειδοποιήσεις')">⚙️ Ρυθμίσεις</button>
+    </div>
+    <div class="dw-body" id="dwBody">
+
+      <div class="grp-label red">🔴 Επείγοντα <span class="n">2</span></div>
+      <div class="note red">
+        <span class="ni">📡</span>
+        <div class="nc">
+          <div class="nt">2 κινήσεις POS χάθηκαν</div>
+          <div class="nm">Δεν αποθηκεύτηκαν λόγω σφάλματος δεδομένων. Οι υπόλοιπες σώθηκαν κανονικά.</div>
+          <div class="nrow"><a href="#" class="go">Δες λεπτομέρειες →</a><button class="ack" onclick="ackNote(this)">Κατάλαβα</button></div>
+          <div class="time">Πριν 20 λεπτά</div>
+        </div>
+        <span class="unread"></span>
+      </div>
+      <div class="note red">
+        <span class="ni">🛟</span>
+        <div class="nc">
+          <div class="nt">9 μέρες χωρίς αντίγραφο ασφαλείας</div>
+          <div class="nm">Αν χαλάσει ο υπολογιστής, κινδυνεύεις να χάσεις δεδομένα.</div>
+          <div class="nrow"><a href="#" class="go">Φτιάξε αντίγραφο τώρα →</a></div>
+          <div class="time">Σήμερα, 08:15</div>
+        </div>
+        <span class="unread"></span>
+      </div>
+
+      <div class="grp-label warn">🟠 Προσοχή <span class="n">2</span></div>
+      <div class="note warn">
+        <span class="ni">⚠️</span>
+        <div class="nc">
+          <div class="nt">3 ληξιπρόθεσμες πληρωμές</div>
+          <div class="nm">Σύνολο 1.240,00 € · και 2 τιμολόγια λήγουν μέσα σε 7 μέρες.</div>
+          <div class="nrow"><a href="#" class="go">Δες τα τιμολόγια →</a></div>
+          <div class="time">Σήμερα</div>
+        </div>
+        <span class="unread"></span>
+      </div>
+      <div class="note warn">
+        <span class="ni">⚡</span>
+        <div class="nc">
+          <div class="nt">Το συμβόλαιο ρεύματος λήγει σύντομα</div>
+          <div class="nm">Απομένουν 12 μέρες. Καλή στιγμή να συγκρίνεις προγράμματα.</div>
+          <div class="nrow"><a href="#" class="go">Σύγκριση προγραμμάτων →</a><button class="ack" onclick="ackNote(this)">Κατάλαβα</button></div>
+          <div class="time">Χθες</div>
+        </div>
+        <span class="unread"></span>
+      </div>
+
+      <div class="grp-label info">🔵 Ενημέρωση <span class="n">2</span></div>
+      <div class="note info">
+        <span class="ni">🚚</span>
+        <div class="nc">
+          <div class="nt">Παραδόσεις αύριο (Πέμπτη)</div>
+          <div class="nm">Κρεοπωλείο Γεωργίου · ΑΦΟΙ Δημητρίου</div>
+          <div class="nrow"><button class="ack" onclick="ackNote(this)">Κατάλαβα</button></div>
+          <div class="time">Σήμερα, 07:00</div>
+        </div>
+        <span class="unread"></span>
+      </div>
+      <div class="note info">
+        <span class="ni">📥</span>
+        <div class="nc">
+          <div class="nt">2 νέα τιμολόγια από email</div>
+          <div class="nm">Κατέβηκαν αυτόματα και περιμένουν την έγκρισή σου.</div>
+          <div class="nrow"><a href="#" class="go">Δες τα εισερχόμενα →</a></div>
+          <div class="time">Σήμερα, 06:40</div>
+        </div>
+        <span class="unread"></span>
+      </div>
+
+      <div class="empty" id="emptyState" style="display:none;">
+        <div class="big">🎉</div>
+        Όλα καθαρά! Καμία ειδοποίηση αυτή τη στιγμή.
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="why">
+  <h2>Γιατί αυτή είναι η τέλεια λύση</h2>
+  <div class="cards">
+    <div class="wc"><div class="e">🧹</div><h4>Καθαρές σελίδες</h4><p>Καμία στοίβα banners. Το περιεχόμενο ξεκινά από πάνω, σε κάθε σελίδα.</p></div>
+    <div class="wc"><div class="e">🚨</div><h4>Το επείγον δεν χάνεται</h4><p>ΜΙΑ λεπτή κόκκινη γραμμή εμφανίζεται μόνο για τα σοβαρά (χαμένες κινήσεις, σφάλμα βάσης). Όχι 16 μπάρες — μία.</p></div>
+    <div class="wc"><div class="e">🗂️</div><h4>Ταξινομημένα κατά σοβαρότητα</h4><p>🔴 Επείγοντα · 🟠 Προσοχή · 🔵 Ενημέρωση. Καταλαβαίνεις με μια ματιά τι χρειάζεται δράση.</p></div>
+    <div class="wc"><div class="e">📜</div><h4>Ιστορικό &amp; έλεγχος</h4><p>Δεν χάνεται τίποτα όταν κλείνεις κάτι. Κόκκινη τελίτσα στα αδιάβαστα, «όλα ως διαβασμένα» με ένα κλικ.</p></div>
+    <div class="wc"><div class="e">🔢</div><h4>Νούμερο στο καμπανάκι</h4><p>Βλέπεις αμέσως πόσα εκκρεμούν, χωρίς να ανοίξεις τίποτα. Το χρώμα δείχνει τη σοβαρότητα.</p></div>
+    <div class="wc"><div class="e">📱</div><h4>Ίδιο παντού</h4><p>Δουλεύει με τον ίδιο τρόπο σε όλες τις σελίδες — ένα σημείο, μία συνήθεια.</p></div>
+  </div>
+</div>
+
+<div class="foot">Πρόχειρη πρόταση (mockup) με ΨΕΥΤΙΚΑ δεδομένα — TAMAM Grill House · Κέντρο Ειδοποιήσεων</div>
+
+<script>
+  var mode='after';
+  function setMode(m){
+    mode=m;
+    document.getElementById('btnBefore').classList.toggle('on', m==='before');
+    document.getElementById('btnAfter').classList.toggle('on', m==='after');
+    document.getElementById('btnSettings').classList.toggle('on', m==='settings');
+    var before = m==='before', settings = m==='settings';
+    document.getElementById('dashView').style.display = settings ? 'none':'block';
+    document.getElementById('settingsView').style.display = settings ? 'block':'none';
+    if(!settings){
+      document.getElementById('beforeStack').style.display = before ? 'block':'none';
+      document.getElementById('afterUrgent').style.display = before ? 'none':'flex';
+    }
+    document.getElementById('bell').style.display = before ? 'none':'flex';
+    document.getElementById('modeHint').textContent = before
+      ? 'Έτσι είναι τώρα: όλα τα banners μαζί στην κορυφή.'
+      : settings
+      ? 'Δοκίμασε να αλλάξεις τη σοβαρότητα — πάτα 🔕 σε ένα κρίσιμο για να δεις τη δικλείδα ασφαλείας.'
+      : 'Πάτα το 🔔 πάνω δεξιά για να ανοίξει το κέντρο ειδοποιήσεων.';
+    if(before||settings) closeDrawer();
+  }
+
+  /* ---- settings rows ---- */
+  var SETTINGS=[
+    {g:'🛟 Ασφάλεια & Δεδομένα'},
+    {e:'📡',t:'Χάθηκαν κινήσεις POS',d:'Πωλήσεις που δεν αποθηκεύτηκαν λόγω σφάλματος',v:'red',crit:1},
+    {e:'🔎',t:'Σφάλμα στη βάση δεδομένων',d:'Ο έλεγχος υγείας βρήκε πρόβλημα',v:'red',crit:1},
+    {e:'🛟',t:'Καθυστερημένο αντίγραφο ασφαλείας',d:'Πέρασαν πολλές μέρες χωρίς backup',v:'red',crit:1},
+    {e:'🔄',t:'Πρόβλημα συγχρονισμού με το ταμείο (POS)',d:'Ο κατάλογος δεν ενημερώνεται',v:'warn'},
+    {e:'📱',t:'Πρόβλημα συγχρονισμού κινητού',d:'Το ταμείο-στο-κινητό δεν στέλνει',v:'warn'},
+    {g:'💰 Χρήματα'},
+    {e:'⚠️',t:'Ληξιπρόθεσμες πληρωμές',d:'Τιμολόγια που πέρασαν την προθεσμία',v:'warn'},
+    {e:'🔴',t:'Ληξιπρόθεσμο πάγιο έξοδο',d:'Π.χ. ενοίκιο/ΔΕΗ που δεν πληρώθηκε',v:'warn'},
+    {e:'⚡',t:'Λήγει το συμβόλαιο ρεύματος',d:'Πλησιάζει η ημερομηνία λήξης',v:'warn'},
+    {e:'💡',t:'Ευκαιρία αλλαγής ρεύματος',d:'Υπάρχει πρόγραμμα που σε συμφέρει',v:'info'},
+    {g:'📅 Καθημερινά'},
+    {e:'🚚',t:'Παραδόσεις αύριο',d:'Ποιοι προμηθευτές φέρνουν αύριο',v:'info'},
+    {e:'📥',t:'Νέα τιμολόγια από email',d:'Κατέβηκαν αυτόματα, θέλουν έγκριση',v:'info'},
+    {e:'🛡️',t:'Λήξεις εγγράφων & παρτίδων',d:'Συμμόρφωση / ασφάλεια τροφίμων',v:'warn'},
+    {e:'👥',t:'Εγγραφές μελών περιμένουν',d:'Νέοι πελάτες προς επιβεβαίωση',v:'info'},
+    {e:'📏',t:'Κενά μεγέθη σε συνταγές',d:'Το POS όρισε μέγεθος χωρίς συνταγή',v:'off'}
+  ];
+  var SEV=[['red','🔴'],['warn','🟠'],['info','🔵'],['off','🔕']];
+  function renderSettings(){
+    var h='';
+    SETTINGS.forEach(function(row,i){
+      if(row.g){ h+='<div class="set-group">'+row.g+'</div>'; return; }
+      var seg='<div class="seg" data-i="'+i+'"'+(row.crit?' data-crit="1"':'')+'>';
+      SEV.forEach(function(s){
+        var on = s[0]===row.v ? ' on '+s[0] : '';
+        seg+='<button class="'+on+'" data-v="'+s[0]+'" onclick="pickSev(this)">'+s[1]+'</button>';
+      });
+      seg+='</div>';
+      h+='<div class="set-row"><div class="rl"><span class="re">'+row.e+'</span><div><div class="rt">'+row.t
+        +'</div><div class="rd">'+row.d+'</div>'
+        +(row.crit?'<div class="lock">🔒 καμπανάκι ασφαλείας — σβήνεται μόνο με επιβεβαίωση</div>':'')
+        +'</div></div>'+seg+'</div>';
+    });
+    document.getElementById('setRows').innerHTML=h;
+  }
+  function pickSev(btn){
+    var seg=btn.closest('.seg'), v=btn.dataset.v;
+    var apply=function(){
+      seg.querySelectorAll('button').forEach(function(b){ b.className=''; });
+      btn.className='on '+v;
+    };
+    if(v==='off' && seg.dataset.crit){
+      if(confirm('⚠️ Σίγουρα;\n\nΑυτό είναι καμπανάκι ασφαλείας. Αν το σβήσεις, μπορεί μια μέρα να χάσεις δεδομένα ή χρήματα χωρίς να το πάρεις χαμπάρι.\n\nΝα το σβήσω;')) apply();
+    } else apply();
+  }
+  renderSettings();
+  function openDrawer(){
+    document.getElementById('overlay').classList.add('open');
+    document.getElementById('drawer').classList.add('open');
+  }
+  function closeDrawer(){
+    document.getElementById('overlay').classList.remove('open');
+    document.getElementById('drawer').classList.remove('open');
+  }
+  function ackNote(btn){
+    var note = btn.closest('.note');
+    note.style.transition='opacity .25s, transform .25s';
+    note.style.opacity='0'; note.style.transform='translateX(30px)';
+    setTimeout(function(){ note.remove(); recount(); }, 260);
+  }
+  function markAll(){
+    document.querySelectorAll('.note .unread').forEach(function(u){u.remove();});
+    document.querySelectorAll('.badge').forEach(function(b){b.style.background='#9ca3af';});
+  }
+  function recount(){
+    var n = document.querySelectorAll('#dwBody .note').length;
+    document.getElementById('badge').textContent=n;
+    document.getElementById('dwCnt').textContent=n;
+    // update urgent bar
+    var urgent = document.querySelectorAll('#dwBody .note.red').length;
+    var ub=document.getElementById('afterUrgent');
+    if(urgent>0){ ub.style.display=(mode==='after')?'flex':'none';
+      ub.querySelector('span:nth-child(2)').textContent = urgent+' επείγον'+(urgent>1?'τα θέματα χρειάζονται':' θέμα χρειάζεται')+' προσοχή';
+    } else { ub.style.display='none'; }
+    if(n===0){
+      document.getElementById('emptyState').style.display='block';
+      document.getElementById('badge').style.display='none';
+    }
+    // refresh group counts
+    ['red','warn','info'].forEach(function(c){
+      var cnt=document.querySelectorAll('#dwBody .note.'+c).length;
+      var lbl=document.querySelector('.grp-label.'+c);
+      if(lbl){ lbl.querySelector('.n').textContent=cnt; lbl.style.display=cnt?'flex':'none';}
+    });
+  }
+  setMode('after');
+</script>
+</body>
+</html>

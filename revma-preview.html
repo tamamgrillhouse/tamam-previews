@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>⚡ Ρεύμα — Προεπισκόπηση — TAMAM Grill House</title>
+<style>
+  :root{
+    --accent:#f59e0b; --accent-dark:#d97706; --accent-text:#9c6406;
+    --text:#1e293b; --text-muted:#5d6b7f; --border:#e2e8f0;
+    --success:#10b981; --success-text:#15803d; --danger:#ef4444; --danger-text:#b91c1c;
+    --bg:#f8fafc; --card:#fff; --radius:10px;
+    --shadow-sm:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+    --shadow-md:0 4px 12px rgba(0,0,0,.10);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:14px;color:var(--text);background:var(--bg);line-height:1.5}
+  .wrap{max-width:1180px;margin:0 auto;padding:20px 22px 80px}
+  .demo-note{background:#fff7ed;border:1px solid #fed7aa;color:#9c6406;border-radius:var(--radius);padding:10px 14px;margin-bottom:18px;font-size:13px}
+  .demo-note b{color:var(--accent-text)}
+  h1.pt{font-size:26px;margin:6px 0 2px;display:flex;align-items:center;gap:10px}
+  .psub{color:var(--text-muted);margin:0 0 18px;max-width:760px}
+  /* tabs */
+  .tabs{display:flex;gap:6px;border-bottom:2px solid var(--border);margin-bottom:22px;flex-wrap:wrap}
+  .tab{padding:11px 16px;cursor:pointer;border:none;background:none;font-size:14px;font-weight:600;color:var(--text-muted);border-bottom:3px solid transparent;margin-bottom:-2px;border-radius:8px 8px 0 0}
+  .tab:hover{background:#fff4ed;color:var(--accent-text)}
+  .tab.on{color:var(--accent-text);border-bottom-color:var(--accent)}
+  .panel{display:none} .panel.on{display:block;animation:f .2s}
+  @keyframes f{from{opacity:0;transform:translateY(4px)}to{opacity:1}}
+  /* cards */
+  .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:18px 20px;margin-bottom:18px}
+  .card h3{margin:0 0 4px;font-size:16px;display:flex;align-items:center;gap:8px}
+  .card .ch-sub{color:var(--text-muted);font-size:12.5px;margin:0 0 14px}
+  /* kpi */
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:20px}
+  .kpi{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:16px 18px}
+  .kpi .k-lbl{font-size:12px;color:var(--text-muted);margin-bottom:6px}
+  .kpi .k-val{font-size:24px;font-weight:800;letter-spacing:-.5px}
+  .kpi .k-note{font-size:11.5px;color:var(--text-muted);margin-top:4px}
+  .kpi.hl{background:linear-gradient(135deg,#fff7ed,#fff);border-color:#fed7aa}
+  /* table */
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th,td{padding:10px 10px;text-align:left;border-bottom:1px solid var(--border)}
+  th{font-size:11.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--text-muted);font-weight:700}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+  tr.click{cursor:pointer} tr.click:hover{background:#fff7ed}
+  .tag{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap}
+  .tag.warn{background:#fef2f2;color:var(--danger-text)}
+  .tag.info{background:#eff6ff;color:#1d4ed8}
+  .tag.ok{background:#f0fdf4;color:var(--success-text)}
+  .tag.gray{background:#f1f5f9;color:#5d6b7f}
+  /* buttons */
+  .btn{min-height:40px;display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:0 16px;border-radius:8px;font-size:13.5px;font-weight:700;cursor:pointer;border:1px solid transparent;text-decoration:none}
+  .btn-primary{background:var(--accent);color:var(--text);border-color:var(--accent-dark)}
+  .btn-primary:hover{background:var(--accent-dark)}
+  .btn-secondary{background:#fff;color:var(--text);border-color:var(--border)}
+  .btn-secondary:hover{background:#f8fafc}
+  .btn-ai{background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;border:none}
+  .btn-sm{min-height:34px;padding:0 12px;font-size:12.5px}
+  /* bar chart */
+  .chart{display:flex;align-items:flex-end;gap:6px;height:220px;padding:10px 4px 0;overflow-x:auto}
+  .bar-wrap{flex:1;min-width:34px;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
+  .bar{width:100%;max-width:34px;background:var(--accent);border-radius:5px 5px 0 0;position:relative;transition:.2s}
+  .bar.anom{background:repeating-linear-gradient(45deg,#cbd5e1,#cbd5e1 5px,#e2e8f0 5px,#e2e8f0 10px)}
+  .bar.hot{background:var(--danger)}
+  .bar-val{font-size:10px;color:var(--text-muted);font-variant-numeric:tabular-nums}
+  .bar-lbl{font-size:10px;color:var(--text-muted);white-space:nowrap;transform:rotate(-38deg);transform-origin:top left;height:34px;margin-top:2px}
+  /* breakdown bars */
+  .brk-row{display:flex;align-items:center;gap:12px;margin:9px 0}
+  .brk-lbl{width:200px;font-size:13px}
+  .brk-track{flex:1;background:#f1f5f9;border-radius:20px;height:20px;overflow:hidden}
+  .brk-fill{height:100%;border-radius:20px}
+  .brk-pct{width:120px;text-align:right;font-variant-numeric:tabular-nums;font-size:13px;font-weight:600}
+  /* form grid */
+  .fg{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+  .field label{display:block;font-size:12px;color:var(--text-muted);margin-bottom:4px;font-weight:600}
+  .u-field{position:relative;display:flex;align-items:center}
+  .u-field input,.field input,.field select{width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit}
+  .u-suf{position:absolute;right:11px;color:var(--text-muted);font-size:12.5px;pointer-events:none}
+  .u-field input{padding-right:52px}
+  .tip{background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:9px 12px;font-size:12.5px;color:#9c6406;margin:4px 0 14px}
+  .set-help{font-size:11.5px;color:var(--text-muted);margin-top:4px;display:block}
+  .set-help .src{color:#1d4ed8;text-decoration:none}
+  /* plan cards */
+  .plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+  .plan{border:1px solid var(--border);border-radius:var(--radius);padding:16px;position:relative;background:#fff}
+  .plan.cur{border-color:var(--accent);box-shadow:0 0 0 2px #fed7aa}
+  .plan.best{border-color:var(--success);box-shadow:0 0 0 2px #bbf7d0}
+  .plan .pbadge{position:absolute;top:-10px;left:14px;font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:20px}
+  .plan.cur .pbadge{background:var(--accent);color:#fff}
+  .plan .pbadge.b{background:var(--success);color:#fff}
+  .plan .pname{font-weight:800;font-size:15px;margin:6px 0 2px}
+  .plan .pprov{font-size:12px;color:var(--text-muted);margin-bottom:12px}
+  .plan .pbig{font-size:22px;font-weight:800}
+  .plan .pbig small{font-size:12px;color:var(--text-muted);font-weight:600}
+  .plan ul{list-style:none;padding:0;margin:12px 0 0;font-size:12.5px}
+  .plan li{display:flex;justify-content:space-between;padding:4px 0;border-top:1px dashed var(--border)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:760px){.grid2{grid-template-columns:1fr}.brk-lbl{width:120px}.brk-pct{width:80px}}
+  .terms{list-style:none;padding:0;margin:0}
+  .terms li{display:flex;justify-content:space-between;gap:14px;padding:11px 0;border-bottom:1px solid var(--border);font-size:13.5px}
+  .terms li .t-l{color:var(--text-muted)} .terms li .t-v{font-weight:700;text-align:right}
+  .count{background:linear-gradient(135deg,#fef2f2,#fff);border:1px solid #fecaca;border-radius:var(--radius);padding:16px 20px;display:flex;align-items:center;gap:16px;margin-bottom:18px}
+  .count .cbig{font-size:34px;font-weight:800;color:var(--danger-text);line-height:1}
+  .modal-mock{border:2px dashed var(--accent);border-radius:var(--radius);padding:20px;background:#fffdf9}
+  .drop{border:2px dashed #cbd5e1;border-radius:var(--radius);padding:26px;text-align:center;color:var(--text-muted);background:#fafcff;margin-bottom:16px}
+  .flow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12.5px;color:var(--text-muted);margin-bottom:14px}
+  .flow .step{background:#f0fdf4;color:var(--success-text);border:1px solid #bbf7d0;padding:5px 11px;border-radius:20px;font-weight:700}
+  .flow .arr{color:var(--accent)}
+  .ins{background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:12px 14px;font-size:13px;margin-top:8px}
+  .ins b{color:#0369a1}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="demo-note">
+    🎨 <b>Προεπισκόπηση σχεδίασης</b> — έτσι θα μοιάζει η νέα ενότητα <b>«⚡ Ρεύμα»</b>. Τα νούμερα είναι
+    <b>πραγματικά</b> από τους 18 λογαριασμούς σου (Protergia). Τα κουμπιά εδώ δεν λειτουργούν — είναι για να
+    <b>καταλάβεις τι θα φτιάξω</b>. Πες μου τι αλλάζεις πριν γράψω τον κώδικα.
+  </div>
+
+  <h1 class="pt">⚡ Ρεύμα</h1>
+  <p class="psub">Πλήρης έλεγχος του ηλεκτρικού ρεύματος: κάθε λογαριασμός αναλυτικά, πόσο σου κοστίζει
+     στ' αλήθεια, σύγκριση προγραμμάτων για το επόμενο συμβόλαιο, και οι όροι της σύμβασής σου.</p>
+
+  <div class="tabs">
+    <button class="tab on" data-t="bills">📄 Λογαριασμοί</button>
+    <button class="tab" data-t="cons">📊 Κατανάλωση &amp; Κόστος</button>
+    <button class="tab" data-t="comp">⚖️ Σύγκριση Προγραμμάτων</button>
+    <button class="tab" data-t="contract">🔔 Συμβόλαιο</button>
+    <button class="tab" data-t="tools">💡 Έξυπνα Εργαλεία</button>
+  </div>
+
+  <!-- ============ TAB 1: BILLS ============ -->
+  <div class="panel on" id="bills">
+    <div class="kpis">
+      <div class="kpi hl"><div class="k-lbl">Μέσο μηνιαίο κόστος</div><div class="k-val">~273 €</div><div class="k-note">~1.412 kWh/μήνα</div></div>
+      <div class="kpi hl"><div class="k-lbl">Ετήσιο κόστος</div><div class="k-val">~3.271 €</div><div class="k-note">~16.928 kWh/έτος</div></div>
+      <div class="kpi"><div class="k-lbl">Πραγματικό κόστος</div><div class="k-val">0,193 <small style="font-size:13px">€/kWh</small></div><div class="k-note">0,182 χωρίς ΦΠΑ (επιχείρηση)</div></div>
+      <div class="kpi"><div class="k-lbl">Τελευταίος λογαριασμός</div><div class="k-val">406,87 €</div><div class="k-note">Μάι–Ιούν 2026 · 1.970 kWh</div></div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+        <div><h3>📄 Οι λογαριασμοί σου</h3><p class="ch-sub">Κάθε γραμμή ανοίγει τον πλήρη λογαριασμό. Κάθε λογαριασμός γίνεται αυτόματα έξοδο «Ενέργεια».</p></div>
+        <button class="btn btn-primary" onclick="showAdd()">＋ Νέος λογαριασμός</button>
+      </div>
+      <table>
+        <thead><tr><th>Περίοδος</th><th class="num">kWh</th><th class="num">€/kWh</th><th>Πρόγραμμα</th><th class="num">Σύνολο</th><th></th></tr></thead>
+        <tbody id="billRows"></tbody>
+      </table>
+    </div>
+
+    <!-- add-bill mock -->
+    <div class="card modal-mock" id="addMock" style="display:none">
+      <h3>＋ Νέος λογαριασμός — όπως τα τιμολόγια</h3>
+      <p class="ch-sub">Ανεβάζεις το αρχείο, το πρόγραμμα το διαβάζει μόνο του, εσύ απλά επιβεβαιώνεις.</p>
+      <div class="flow">
+        <span class="step">1. Ανέβασμα</span><span class="arr">→</span>
+        <span class="step">2. Αυτόματο διάβασμα</span><span class="arr">→</span>
+        <span class="step">3. Έλεγχος</span><span class="arr">→</span>
+        <span class="step">4. Αποθήκευση</span>
+      </div>
+      <div class="drop">📎 Σύρε εδώ το PDF (Protergia → διαβάζεται δωρεάν) ή τη φωτογραφία (π.χ. NRG → με AI)<br><span style="font-size:12px">…ή πάτησε για επιλογή αρχείου</span></div>
+      <p class="ch-sub" style="color:var(--success-text)">✓ Διαβάστηκε αυτόματα — έλεγξε &amp; διόρθωσε αν χρειάζεται:</p>
+      <div class="fg">
+        <div class="field"><label>Περίοδος από</label><input value="08/05/2026"></div>
+        <div class="field"><label>Περίοδος έως</label><input value="17/06/2026"></div>
+        <div class="field"><label>Κατανάλωση</label><div class="u-field"><input value="1.970"><span class="u-suf">kWh</span></div></div>
+        <div class="field"><label>Ένδειξη μετρητή (προηγ.)</label><input value="—"></div>
+        <div class="field"><label>Ένδειξη μετρητή (τελευτ.)</label><input value="—"></div>
+        <div class="field"><label>Χρέωση προμήθειας</label><div class="u-field u-lead"><input value="247,62"><span class="u-suf">€</span></div></div>
+        <div class="field"><label>Ρυθμιζόμενες</label><div class="u-field"><input value="114,66"><span class="u-suf">€</span></div></div>
+        <div class="field"><label>ΕΦΚ</label><div class="u-field"><input value="9,85"><span class="u-suf">€</span></div></div>
+        <div class="field"><label>Υπέρ τρίτων (ΕΡΤ/δήμος)</label><div class="u-field"><input value="12,51"><span class="u-suf">€</span></div></div>
+        <div class="field"><label>ΦΠΑ (6%)</label><div class="u-field"><input value="22,23"><span class="u-suf">€</span></div></div>
+        <div class="field"><label>Εγγύηση (δεν είναι κόστος)</label><div class="u-field"><input value="0,00"><span class="u-suf">€</span></div></div>
+        <div class="field"><label>Σύνολο λογαριασμού</label><div class="u-field"><input value="406,87" style="font-weight:800"><span class="u-suf">€</span></div></div>
+      </div>
+      <div style="margin-top:16px;display:flex;gap:10px">
+        <button class="btn btn-primary">💾 Αποθήκευση</button>
+        <button class="btn btn-secondary" onclick="hideAdd()">Ακύρωση</button>
+      </div>
+      <p class="set-help" style="margin-top:12px">💡 Με την αποθήκευση δημιουργείται αυτόματα ένα έξοδο <b>«Ενέργεια» 406,87 €</b> (με παραστατικό, ΦΠΑ 6%) — μπαίνει μόνο του στο κόστος/κερδοφορία. Δεν το ξαναγράφεις πουθενά.</p>
+    </div>
+  </div>
+
+  <!-- ============ TAB 2: CONSUMPTION ============ -->
+  <div class="panel" id="cons">
+    <div class="card">
+      <h3>📊 Κατανάλωση ανά μήνα (kWh)</h3>
+      <p class="ch-sub">Πορτοκαλί = κανονικός μήνας · κόκκινο = καλοκαιρινή αιχμή · γκρι ριγέ = ειδικός λογαριασμός (αρχική μέτρηση/57ήμερος). Οι «Έναντι» λογαριασμοί (εκτιμώμενοι, εκκαθαρίζονται στον επόμενο) δεν μετράνε στους μέσους όρους.</p>
+      <div class="chart" id="chartKwh"></div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>💶 Πού πάνε τα λεφτά σου (18μηνο)</h3>
+        <p class="ch-sub">Μόνο η <b>Προμήθεια</b> αλλάζει αν αλλάξεις εταιρεία. Το υπόλοιπο είναι ίδιο παντού.</p>
+        <div class="brk-row"><div class="brk-lbl">🏢 Προμήθεια (Protergia)</div><div class="brk-track"><div class="brk-fill" style="width:62%;background:var(--accent)"></div></div><div class="brk-pct">3.087 € · 62%</div></div>
+        <div class="brk-row"><div class="brk-lbl">🔌 Ρυθμιζόμενες (δίκτυο)</div><div class="brk-track"><div class="brk-fill" style="width:30%;background:#60a5fa"></div></div><div class="brk-pct">1.479 € · 30%</div></div>
+        <div class="brk-row"><div class="brk-lbl">🏛️ Υπέρ τρίτων (ΕΡΤ/δήμος)</div><div class="brk-track"><div class="brk-fill" style="width:3.4%;background:#a78bfa"></div></div><div class="brk-pct">167 € · 3%</div></div>
+        <div class="brk-row"><div class="brk-lbl">🧾 ΕΦΚ (φόρος)</div><div class="brk-track"><div class="brk-fill" style="width:2.4%;background:#f472b6"></div></div><div class="brk-pct">121 € · 2%</div></div>
+        <div class="brk-row"><div class="brk-lbl">📊 ΦΠΑ (6% — εκπίπτει)</div><div class="brk-track"><div class="brk-fill" style="width:5.4%;background:#34d399"></div></div><div class="brk-pct">267 € · 5%</div></div>
+        <div class="ins">🎯 <b>Το κλειδί:</b> ψάχνοντας νέο πρόγραμμα, «παίζεις» μόνο με το <b>62%</b>. Γι' αυτό στη Σύγκριση κρατάμε τις υπόλοιπες χρεώσεις ίδιες.</div>
+      </div>
+
+      <div class="card">
+        <h3>💰 Χρέωση ανά μήνα (€)</h3>
+        <p class="ch-sub">Το τελικό ποσό κάθε λογαριασμού.</p>
+        <div class="chart" id="chartEur"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🔮 Πρόβλεψη επόμενου μήνα</h3>
+      <p class="ch-sub">Με βάση τον ίδιο μήνα πέρσι + την πρόσφατη τάση — για να ξέρεις περίπου τι έξοδο έρχεται.</p>
+      <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+        <div style="font-size:30px;font-weight:800;color:var(--accent-text)">~290–320 €</div>
+        <div style="font-size:13px;color:var(--text-muted)">Βάση: ο <b>μετρημένος</b> λογαριασμός του ίδιου μήνα πέρσι (Ιούν–Ιούλ 2025 = 311 €) + η τάση των τελευταίων μηνών. <b>Δεν μαντεύω αιτία</b> — μόνο τι έδειξαν τα δικά σου νούμερα.</div>
+      </div>
+      <div class="ins" style="margin-top:14px">💡 Αυτό το νούμερο περνάει και στις <b>«αναμενόμενες πληρωμές επόμενου μήνα»</b> των Εξόδων — να ξέρεις τι έρχεται.</div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 3: COMPARISON ============ -->
+  <div class="panel" id="comp">
+    <div class="card">
+      <h3>⚙️ Κοινές χρεώσεις — τις βάζεις μία φορά</h3>
+      <p class="ch-sub">Αυτές είναι <b>ίδιες για κάθε εταιρεία</b> (τις ορίζει το κράτος/ΡΑΑΕΥ, όχι ο προμηθευτής). Ρυθμίζεις τα ποσά, όπως στη φόρμα κόστους πρόσληψης.</p>
+      <div class="fg">
+        <div class="field"><label>ΑΔΜΗΕ (μεταφορά)</label><div class="u-field"><input value="0,00850"><span class="u-suf">€/kWh</span></div></div>
+        <div class="field"><label>ΔΕΔΔΗΕ (διανομή)</label><div class="u-field"><input value="0,00339"><span class="u-suf">€/kWh</span></div></div>
+        <div class="field"><label>ΔΕΔΔΗΕ ισχύος</label><div class="u-field"><input value="11,339"><span class="u-suf">€/kVA·έτ</span></div></div>
+        <div class="field"><label>ΥΚΩ</label><div class="u-field"><input value="0,01824"><span class="u-suf">€/kWh</span></div></div>
+        <div class="field"><label>ΕΤΜΕΑΡ</label><div class="u-field"><input value="0,01700"><span class="u-suf">€/kWh</span></div></div>
+        <div class="field"><label>ΕΦΚ</label><div class="u-field"><input value="0,00500"><span class="u-suf">€/kWh</span></div></div>
+        <div class="field"><label>ΕΡΤ</label><div class="u-field"><input value="36"><span class="u-suf">€/έτος</span></div></div>
+        <div class="field"><label>Δημοτικά τέλη</label><div class="u-field"><input value="2,95"><span class="u-suf">€/τμ</span></div></div>
+        <div class="field"><label>ΦΠΑ</label><div class="u-field"><input value="6"><span class="u-suf">%</span></div></div>
+        <div class="field"><label>Ισχύς παροχής</label><div class="u-field"><input value="15"><span class="u-suf">kVA</span></div></div>
+      </div>
+      <p class="set-help">💡 Κάθε τιμή κρατά <b>πότε ενημερώθηκε &amp; από πού</b>. Οι επίσημες πηγές:
+        <a class="src" href="https://www.energycost.gr" target="_blank">energycost.gr (ΡΑΑΕΥ)</a> ·
+        <a class="src" href="https://www.raaey.gr" target="_blank">raaey.gr</a>.
+        📍 Τελευταία ενημέρωση: <b>από τους λογαριασμούς σου, Ιούν 2026</b>.</p>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+        <div><h3>⚖️ Τα προγράμματα</h3><p class="ch-sub">Πάνω στην πραγματική σου κατανάλωση (~1.412 kWh/μήνα). Το κόστος περιλαμβάνει <b>τιμή kWh + πάγιο + έκπτωση συνέπειας</b>. Για <b>κυμαινόμενο</b> πρόγραμμα μπαίνει η τιμή που «τρέχει» <b>τώρα</b>· για σταθερό η συμβατική.</p></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-secondary btn-sm">＋ Πρόγραμμα</button>
+          <button class="btn btn-ai btn-sm">🤖 Έλεγχος τιμών με AI</button>
+          <button class="btn btn-ai btn-sm">📷 Διάβασε προσφορά από φωτογραφία</button>
+        </div>
+      </div>
+
+      <div class="plans" style="margin-top:8px">
+        <div class="plan cur">
+          <span class="pbadge">ΤΩΡΑ</span>
+          <div class="pname">Value Secure 12μ</div>
+          <div class="pprov">Protergia · Σταθερό</div>
+          <div class="pbig">~272 €<small> /μήνα</small></div>
+          <ul>
+            <li><span>Τιμή kWh</span><b>0,119 €</b></li>
+            <li><span>Πάγιο</span><b>9,90 €/μ</b></li>
+            <li><span>Έκπτωση συνέπειας</span><b>ναι (−70€/MWh)</b></li>
+            <li><span>Λήγει</span><b>9/9/2026</b></li>
+          </ul>
+        </div>
+        <div class="plan best">
+          <span class="pbadge b">ΦΘΗΝΟΤΕΡΟ</span>
+          <div class="pname">Νέο πρόγραμμα Protergia</div>
+          <div class="pprov">Protergia · <span class="tag gray">τιμή προς επιβεβαίωση</span></div>
+          <div class="pbig">~258 €<small> /μήνα</small></div>
+          <ul>
+            <li><span>Τιμή kWh</span><b>0,109 €*</b></li>
+            <li><span>Πάγιο</span><b>9,90 €/μ</b></li>
+            <li><span>Εκτ. όφελος/έτος</span><b style="color:var(--success-text)">~170 €</b></li>
+            <li><span>Τύπος</span><b>κυμαινόμενο</b></li>
+          </ul>
+        </div>
+        <div class="plan">
+          <div class="pname">NRG on business</div>
+          <div class="pprov">NRG · <span class="tag gray">τιμή προς επιβεβαίωση</span></div>
+          <div class="pbig">~266 €<small> /μήνα</small></div>
+          <ul>
+            <li><span>Τιμή kWh</span><b>0,115 €*</b></li>
+            <li><span>Πάγιο</span><b>5,00 €/μ*</b></li>
+            <li><span>Εκτ. όφελος/έτος</span><b style="color:var(--success-text)">~70 €</b></li>
+            <li><span>Τύπος</span><b>σταθερό</b></li>
+          </ul>
+        </div>
+        <div class="plan">
+          <div class="pname">ΔΕΗ Business</div>
+          <div class="pprov">ΔΕΗ · <span class="tag gray">τιμή προς επιβεβαίωση</span></div>
+          <div class="pbig">~318 €<small> /μήνα</small></div>
+          <ul>
+            <li><span>Τιμή kWh</span><b>0,160 €*</b></li>
+            <li><span>Πάγιο</span><b>5,00 €/μ*</b></li>
+            <li><span>Εκτ. διαφορά/έτος</span><b style="color:var(--danger-text)">~+550 €*</b></li>
+            <li><span>Τύπος</span><b>σταθ./κυμαιν.</b></li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="set-help" style="margin-top:16px">
+        *Ενδεικτικές τιμές — <b>δεν είναι επιβεβαιωμένες ακόμη.</b> Θα τις φέρει ο Claude από τις επίσημες πηγές, ή τις γράφεις εσύ.
+      </p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+        <a class="btn btn-secondary btn-sm" href="https://www.energycost.gr" target="_blank">🔎 Επίσημη σύγκριση ΡΑΑΕΥ (energycost.gr)</a>
+        <a class="btn btn-secondary btn-sm" href="https://www.protergia.gr" target="_blank">🌐 Protergia</a>
+        <a class="btn btn-secondary btn-sm" href="https://www.nrg.gr" target="_blank">🌐 NRG</a>
+      </div>
+
+      <div class="ins" style="margin-top:16px">
+        🤖 <b>Το «AI κουμπί» — ίδιο με το κόστος πρόσληψης:</b> ψάχνει <b>ζωντανά στο internet</b> μόνο
+        <b>επίσημες πηγές</b> (energycost.gr/ΡΑΑΕΥ, Protergia, NRG, ΦΕΚ), σου φέρνει τις τρέχουσες τιμές
+        <b>με την πηγή &amp; την ημερομηνία ισχύος</b>, και <b>ΔΕΝ αλλάζει τίποτα μόνο του</b> — σου δείχνει
+        «τώρα → βρέθηκε» κι εσύ εγκρίνεις. Ό,τι δεν στηρίζεται σε επίσημη σελίδα βγαίνει με ⚠️ «μην το εφαρμόσεις χωρίς έλεγχο».
+        <br>💡 Η <b>κυμαινόμενη</b> τιμή ανακοινώνεται κάθε <b>1η του μήνα</b> στη σελίδα του παρόχου &amp; στη ΡΑΑΕΥ — το AI την τραβάει από εκεί.
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🕵️ Ψιλά γράμματα — οι παγίδες κάθε προγράμματος</h3>
+      <p class="ch-sub">Μια φθηνή τιμή kWh μπορεί να κρύβει κόστη. Για κάθε πρόγραμμα κρατάμε &amp; σου δείχνουμε ΚΑΘΑΡΑ αυτά τα «ψιλά γράμματα» — να μη σε πιάσουν στον ύπνο.</p>
+      <table>
+        <thead><tr><th>Παγίδα</th><th>Τι σημαίνει</th><th>Στο πρόγραμμά σου τώρα</th></tr></thead>
+        <tbody>
+          <tr><td><b>Έκπτωση συνέπειας</b></td><td>Χάνεται αν αργήσεις <b>έστω 1 μέρα</b> — ο λογαριασμός μπορεί να ανέβει έως +30%.</td><td><span class="tag ok">−70€/MWh, το κερδίζεις</span></td></tr>
+          <tr><td><b>Ρήτρα αναπροσαρμογής</b></td><td>Μόνο στα <b>κυμαινόμενα</b>: η τιμή μπορεί να ανέβει πολύ όταν ανεβαίνει η αγορά.</td><td><span class="tag ok">ΟΧΙ (σταθερό)</span></td></tr>
+          <tr><td><b>Ρήτρα πρόωρης αποχώρησης</b></td><td>Πέναλτι αν φύγεις νωρίς — πληρώνεις τα πάγια μέχρι τη λήξη.</td><td><span class="tag warn">ΝΑΙ — προσοχή αν αλλάξεις πριν 9/9</span></td></tr>
+          <tr><td><b>Κρυφό όριο κατανάλωσης</b></td><td>Η φθηνή τιμή ισχύει ως ένα όριο kWh· από πάνω, ακριβότερα.</td><td><span class="tag ok">Δεν υπάρχει</span></td></tr>
+          <tr><td><b>Προσωρινή τιμή (promo)</b></td><td>Χαμηλή τιμή «γνωριμίας» που λήγει σε λίγους μήνες.</td><td><span class="tag ok">Όχι</span></td></tr>
+          <tr><td><b>Εγγύηση</b></td><td>Ποσό που «δεσμεύεται» στην αρχή (επιστρέφεται).</td><td><span class="tag gray">56€ (επιστρέφεται)</span></td></tr>
+        </tbody>
+      </table>
+      <div class="ins" style="margin-top:14px">🛡️ Στη σύγκριση, ένα πρόγραμμα με «φθηνή» τιμή αλλά με παγίδες θα <b>ξεσκεπάζεται</b> — δεν κοιτάμε μόνο το €/kWh.</div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 4: CONTRACT ============ -->
+  <div class="panel" id="contract">
+    <div class="count">
+      <div class="cbig">49</div>
+      <div>
+        <div style="font-weight:800;font-size:15px">μέρες μέχρι τη λήξη του συμβολαίου</div>
+        <div style="color:var(--text-muted);font-size:13px">Λήγει <b>9 Σεπτεμβρίου 2026</b> — καλή στιγμή να δεις τη Σύγκριση Προγραμμάτων.</div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>📋 Οι όροι του συμβολαίου σου</h3>
+        <p class="ch-sub">Ό,τι γράφει το τιμολόγιο — μαζεμένα, να τα βλέπεις όποτε θες.</p>
+        <ul class="terms">
+          <li><span class="t-l">Πρόγραμμα</span><span class="t-v">Protergia Επαγγελματικό 1<br>Value Secure 12 Μήνες</span></li>
+          <li><span class="t-l">Τύπος</span><span class="t-v">Σταθερό</span></li>
+          <li><span class="t-l">Τιμή ενέργειας</span><span class="t-v">189 €/MWh</span></li>
+          <li><span class="t-l">Έκπτωση συνέπειας</span><span class="t-v">−70 €/MWh → 0,119 €/kWh</span></li>
+          <li><span class="t-l">Πάγιο</span><span class="t-v">9,90 €/μήνα</span></li>
+          <li><span class="t-l">Ρήτρα πρόωρης αποχώρησης</span><span class="t-v"><span class="tag warn">ΝΑΙ</span></span></li>
+          <li><span class="t-l">Εγγύηση</span><span class="t-v">56,00 € (επιστρέφεται)</span></li>
+          <li><span class="t-l">Λήξη</span><span class="t-v">9/9/2026</span></li>
+          <li><span class="t-l">Παροχή</span><span class="t-v">827311210 · Τριφασική 15 kVA</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>🔔 Ειδοποίηση λήξης</h3>
+        <p class="ch-sub">Ρυθμίζεται από τις Ρυθμίσεις.</p>
+        <div class="field" style="max-width:280px"><label>Ειδοποίησέ με πριν τη λήξη</label><div class="u-field"><input value="45"><span class="u-suf">μέρες</span></div></div>
+        <div style="margin:14px 0;display:flex;gap:10px;align-items:center"><input type="checkbox" checked id="cb1"><label for="cb1" style="font-size:13.5px">Καμπανάκι στην αρχική (banner)</label></div>
+        <div style="display:flex;gap:10px;align-items:center"><input type="checkbox" checked id="cb2"><label for="cb2" style="font-size:13.5px">Email υπενθύμιση</label></div>
+        <div class="ins" style="margin-top:16px">📌 Όταν πλησιάζει η λήξη, βγαίνει κόκκινο καμπανάκι με σύνδεσμο κατευθείαν στη <b>Σύγκριση Προγραμμάτων</b>.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 5: SMART TOOLS ============ -->
+  <div class="panel" id="tools">
+    <p class="psub">Τέσσερα επιπλέον εργαλεία που ζητήσαμε — να μη «χάνεις» λεφτά χωρίς να το ξέρεις.</p>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>📊 Α. Ρεύμα ως % του τζίρου</h3>
+        <p class="ch-sub">Συνδέει το ρεύμα με τις πωλήσεις του POS — πόσο «βάρος» είναι στην τσέπη σου.</p>
+        <div style="font-size:26px;font-weight:800;color:var(--accent-text);margin-bottom:8px">ρεύμα ÷ τζίρος POS</div>
+        <div class="ins">💡 Υπολογίζεται από το <b>αληθινό</b> ρεύμα (~273€/μήνα) ÷ τον <b>πραγματικό τζίρο POS</b> του μήνα. Δεν βάζω ψεύτικο ποσοστό — ο τζίρος τώρα είναι δοκιμαστικός. Όταν ανοίξεις, δείχνει το πραγματικό % και αν ένα μήνα «πεταχτεί» χωρίς να ανέβει ο τζίρος → σημάδι ότι κάτι τρέχει.</div>
+      </div>
+
+      <div class="card">
+        <h3>🚨 Β. Καμπανάκι υπερκατανάλωσης</h3>
+        <p class="ch-sub">Τα ψυγεία/καταψύκτες είναι ~40% του ρεύματος. Πιάνουμε τη διαρροή νωρίς.</p>
+        <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:12px 14px;margin-bottom:10px">
+          <b style="color:var(--danger-text)">⚠️ Παράδειγμα ειδοποίησης:</b> «Η κατανάλωση <b>ανά μέρα</b> αυτόν τον μήνα είναι σημαντικά πάνω από το συνηθισμένο για την εποχή.»
+        </div>
+        <div class="ins">💡 Συγκρίνει <b>κατανάλωση ανά μέρα</b> (όχι το σκέτο ποσό — για να μη σε ξεγελάει ένας λογαριασμός με πολλές μέρες) με την ίδια εποχή πέρσι. Σου λέει ΜΟΝΟ το γεγονός «ανέβηκε»· το τι να ελέγξεις (λάστιχα ψυγείων, θερμοστάτες) είναι <b>προτεινόμενη λίστα</b>, όχι βεβαιότητα για την αιτία.</div>
+      </div>
+
+      <div class="card">
+        <h3>🔌 Γ. Έλεγχος ισχύος (kVA) &amp; συντελεστή</h3>
+        <p class="ch-sub">Πληρώνεις πάγιο ΔΕΔΔΗΕ ανά kVA. Μήπως έχεις παραπάνω απ' όσο χρειάζεσαι;</p>
+        <ul class="terms">
+          <li><span class="t-l">Συμφωνημένη ισχύς</span><span class="t-v">15 kVA</span></li>
+          <li><span class="t-l">Πάγιο ΔΕΔΔΗΕ ισχύος</span><span class="t-v">11,339 €/kVA·έτος</span></li>
+          <li><span class="t-l">Κόστος ισχύος/έτος (15 kVA)</span><span class="t-v">~170 €</span></li>
+          <li><span class="t-l">Συντελεστής ισχύος (συνφ)</span><span class="t-v"><span class="tag ok">1,000 — μετρημένος, τέλειος</span></span></li>
+        </ul>
+        <div class="ins">💡 Πληρώνεις <b>~170€/έτος</b> μόνο για τη συμφωνημένη ισχύ (μετρημένο από τον λογαριασμό). <b>Δεν μπορώ να ξέρω από μόνα τα kWh πόση ισχύ χρειάζεσαι στην αιχμή</b> — αυτό θέλει ηλεκτρολόγο. Αν σου περισσεύει, μειώνεις με αίτηση στη ΔΕΔΔΗΕ. Ο συντελεστής (1,000) είναι τέλειος → καμία ρήτρα.</div>
+      </div>
+
+      <div class="card">
+        <h3>📈 Δ. Παρακολούθηση τιμής &amp; «πότε να κλειδώσεις»</h3>
+        <p class="ch-sub">Κρατάω το ιστορικό της μηνιαίας τιμής (κυμαινόμενα) — για σωστή απόφαση στη λήξη.</p>
+        <div class="chart" style="height:120px" id="chartPrice"></div>
+        <div class="ins" style="margin-top:10px">💡 Όταν λήγει το συμβόλαιο ή όταν οι τιμές ανεβαίνουν απότομα, σου λέω αν συμφέρει <b>σταθερό</b> (κλείδωμα) ή <b>κυμαινόμενο</b> — με πρόσφατα, πραγματικά νούμερα.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const BILLS=[
+ {label:"Ιαν 25",kwh:990,total:255.30,price:0.115,plan:"Value Safe 6μ",first:true},
+ {label:"Φεβ 25",kwh:1512,total:302.01,price:0.115,plan:"Value Safe 6μ"},
+ {label:"Μαρ 25",kwh:1338,total:271.07,price:0.115,plan:"Value Safe 6μ"},
+ {label:"Απρ 25",kwh:1555,total:313.17,price:0.115,plan:"Value Safe 6μ"},
+ {label:"Μάι 25",kwh:1551,total:314.71,price:0.115,plan:"Value Safe 6μ"},
+ {label:"Ιούν 25",kwh:1131,total:135.99,price:0.115,plan:"Value Safe 6μ"},
+ {label:"Ιούλ 25",kwh:1582,total:311.16,price:0.115,plan:"Value Safe 6μ"},
+ {label:"Σεπ 25",kwh:2458,total:510.36,price:0.11778,plan:"Value Standard",longp:true},
+ {label:"Οκτ 25",kwh:1103,total:239.38,price:0.12662,plan:"Value Secure 12μ"},
+ {label:"Οκτ 25",kwh:1280,total:42.27,price:0.12617,plan:"Value Secure 12μ",corr:true},
+ {label:"Νοέ 25",kwh:1155,total:244.17,price:0.119,plan:"Value Secure 12μ"},
+ {label:"Δεκ 25",kwh:1188,total:250.18,price:0.119,plan:"Value Secure 12μ"},
+ {label:"Ιαν 26",kwh:1404,total:290.64,price:0.119,plan:"Value Secure 12μ"},
+ {label:"Φεβ 26",kwh:1150,total:240.91,price:0.119,plan:"Value Secure 12μ"},
+ {label:"Μαρ 26",kwh:1221,total:256.38,price:0.119,plan:"Value Secure 12μ"},
+ {label:"Απρ 26",kwh:1493,total:311.46,price:0.119,plan:"Value Secure 12μ"},
+ {label:"Μάι 26",kwh:1257,total:264.81,price:0.119,plan:"Value Secure 12μ"},
+ {label:"Ιούν 26",kwh:1970,total:406.87,price:0.119,plan:"Value Secure 12μ",hot:true}
+];
+function eur(n){return n.toLocaleString('el-GR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €';}
+
+// bill rows
+const tb=document.getElementById('billRows');
+BILLS.slice().reverse().forEach(b=>{
+  let tag='';
+  if(b.corr) tag=' <span class="tag info">έναντι · εκκαθαρίζεται στον επόμενο</span>';
+  else if(b.first) tag=' <span class="tag info">αρχική μέτρηση</span>';
+  else if(b.longp) tag=' <span class="tag info">57 μέρες</span>';
+  tb.insertAdjacentHTML('beforeend',
+   `<tr class="click"><td>${b.label}${tag}</td><td class="num">${b.kwh.toLocaleString('el-GR')}</td>
+    <td class="num">${b.price.toFixed(b.price<0.12?3:5)}</td><td>${b.plan}</td>
+    <td class="num"><b>${eur(b.total)}</b></td><td style="text-align:right;color:var(--accent-text)">›</td></tr>`);
+});
+
+// charts
+function chart(id,key,unit,fmt){
+  const el=document.getElementById(id);
+  const vals=BILLS.filter(b=>!b.corr).map(b=>b[key]);
+  const max=Math.max(...vals);
+  BILLS.filter(b=>!b.corr).forEach(b=>{
+    const v=b[key]; const h=Math.round(v/max*100);
+    let cls='bar'; if(b.first||b.longp) cls+=' anom'; else if(b.hot) cls+=' hot';
+    el.insertAdjacentHTML('beforeend',
+     `<div class="bar-wrap"><span class="bar-val">${fmt(v)}</span><div class="${cls}" style="height:${h}%"></div><span class="bar-lbl">${b.label}</span></div>`);
+  });
+}
+chart('chartKwh','kwh','kWh',v=>v.toLocaleString('el-GR'));
+chart('chartEur','total','€',v=>Math.round(v));
+
+// price mini-chart (supply €/kWh evolution)
+(function(){
+  const el=document.getElementById('chartPrice'); if(!el) return;
+  const P=[['Ιαν 25',0.115],['Μαρ',0.115],['Μάι',0.115],['Ιούλ',0.118],['Σεπ',0.127],['Νοε',0.119],['Ιαν 26',0.119],['Μαρ',0.119],['Μάι',0.119]];
+  const vs=P.map(p=>p[1]), max=Math.max(...vs), min=Math.min(...vs);
+  P.forEach(p=>{const h=Math.round((p[1]-min)/((max-min)||1)*70+25);
+    el.insertAdjacentHTML('beforeend',`<div class="bar-wrap"><span class="bar-val">${p[1].toFixed(3)}</span><div class="bar" style="height:${h}%;background:#60a5fa"></div><span class="bar-lbl">${p[0]}</span></div>`);});
+})();
+
+// tabs
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.panel').forEach(x=>x.classList.remove('on'));
+  t.classList.add('on'); document.getElementById(t.dataset.t).classList.add('on');
+  window.scrollTo(0,0);
+});
+function showAdd(){document.getElementById('addMock').style.display='block';document.getElementById('addMock').scrollIntoView({behavior:'smooth'});}
+function hideAdd(){document.getElementById('addMock').style.display='none';}
+</script>
+</body>
+</html>

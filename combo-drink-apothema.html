@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>TAMAM · Ποτό σε Combo → Αποθήκη</title>
+<style>
+  :root{
+    --black:#0d0f14; --card:#1c2554; --card2:#151b3d; --yellow:#f5c842;
+    --white:#eef1f8; --muted:#8b93b8; --border:#2a3580;
+    --green:#3ddc84; --red:#ff6b6b; --orange:#f5a742; --blue:#5b9bff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Segoe UI','Noto Sans',system-ui,sans-serif;
+    background:radial-gradient(ellipse at top,#1a1f3a,var(--black) 70%);
+    color:var(--white); min-height:100vh; padding:26px 16px; line-height:1.6;
+  }
+  .wrap{max-width:720px;margin:0 auto}
+  .top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .logo{font-size:24px;font-weight:800;letter-spacing:.5px}
+  .tag{font-size:11px;background:var(--yellow);color:#1a1206;padding:3px 9px;border-radius:20px;font-weight:800}
+  h1{font-size:26px;margin-top:22px;line-height:1.25}
+  .lead{color:var(--muted);margin-top:10px;font-size:15px}
+  .section-label{margin-top:34px;font-size:12px;letter-spacing:2px;color:var(--yellow);font-weight:800;text-transform:uppercase}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-top:14px}
+  .card.soft{background:var(--card2)}
+  .card h2{font-size:18px;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+  .card p{color:#cdd3ee;font-size:14.5px;margin-top:8px}
+  .muted{color:var(--muted)}
+
+  /* combo visual */
+  .combo{display:flex;align-items:stretch;gap:12px;margin-top:16px;flex-wrap:wrap}
+  .box{flex:1;min-width:150px;background:#10163a;border:1px solid var(--border);border-radius:14px;padding:14px}
+  .box .big{font-size:34px}
+  .box .name{font-weight:700;margin-top:6px}
+  .box .sub{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .plus{align-self:center;font-size:28px;color:var(--yellow);font-weight:800}
+  .nested{margin-top:10px;background:#0c1030;border:1px dashed var(--blue);border-radius:10px;padding:10px 12px;font-size:13px}
+  .nested .k{color:var(--blue);font-weight:700}
+
+  .flow{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+  .step{display:flex;gap:12px;align-items:flex-start;background:#10163a;border:1px solid var(--border);border-radius:12px;padding:13px 15px}
+  .step .n{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--yellow);color:#1a1206;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:14px}
+  .step .txt{font-size:14px}
+  .step .txt b{color:#fff}
+
+  .pill{display:inline-block;font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px}
+  .pill.bad{background:rgba(255,107,107,.15);color:var(--red);border:1px solid rgba(255,107,107,.4)}
+  .pill.good{background:rgba(61,220,132,.15);color:var(--green);border:1px solid rgba(61,220,132,.4)}
+  .pill.info{background:rgba(91,155,255,.15);color:var(--blue);border:1px solid rgba(91,155,255,.4)}
+
+  .cmp{display:flex;gap:12px;margin-top:14px;flex-wrap:wrap}
+  .cmp .col{flex:1;min-width:220px;border-radius:14px;padding:16px}
+  .cmp .now{background:rgba(255,107,107,.08);border:1px solid rgba(255,107,107,.3)}
+  .cmp .after{background:rgba(61,220,132,.08);border:1px solid rgba(61,220,132,.3)}
+  .cmp h3{font-size:15px;margin-bottom:8px}
+  .cmp ul{list-style:none;margin-top:6px}
+  .cmp li{font-size:13.5px;padding:5px 0 5px 22px;position:relative;color:#d6dbf3}
+  .cmp li::before{position:absolute;left:0;top:4px}
+  .now li::before{content:"✕";color:var(--red)}
+  .after li::before{content:"✓";color:var(--green)}
+
+  /* decisions */
+  .dec{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 20px;margin-top:14px}
+  .dec .head{display:flex;align-items:center;gap:10px}
+  .dec .num{width:30px;height:30px;border-radius:9px;background:var(--yellow);color:#1a1206;font-weight:800;display:flex;align-items:center;justify-content:center}
+  .dec .q{font-weight:700;font-size:15.5px}
+  .dec .body{margin-top:10px;font-size:14px;color:#cdd3ee}
+  .rec{margin-top:12px;background:rgba(61,220,132,.1);border:1px solid rgba(61,220,132,.35);border-radius:10px;padding:10px 13px;font-size:13.5px}
+  .rec b{color:var(--green)}
+
+  .note{margin-top:26px;background:#10163a;border:1px solid var(--border);border-radius:12px;padding:14px 16px;font-size:13px;color:var(--muted)}
+  .foot{margin-top:26px;font-size:11.5px;color:var(--muted);text-align:center;border-top:1px solid var(--border);padding-top:16px}
+  a.back{display:inline-block;margin-top:22px;color:var(--yellow);text-decoration:none;font-size:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <span class="logo">🥤 TAMAM</span>
+    <span class="tag">ΠΡΟΤΑΣΗ</span>
+  </div>
+
+  <h1>Το ποτό μέσα στο «combo» να φεύγει από την αποθήκη</h1>
+  <p class="lead">Όταν πουλάς combo (burger + ποτό), το ποτό «κρύβεται» μέσα στο burger.
+  Σήμερα δεν αφαιρείται από την αποθήκη. Να τι πάμε να φτιάξουμε — και οι 3 αποφάσεις που θέλω από σένα.</p>
+
+  <!-- WHAT IS A COMBO -->
+  <div class="section-label">Τι είναι το combo</div>
+  <div class="card">
+    <h2>🍔 Ένα combo = burger + ποτό, μία τιμή</h2>
+    <p>Στο ταμείο (POS) το combo <b>δεν</b> είναι δύο ξεχωριστές γραμμές. Είναι <b>ένα</b> burger,
+    και το ποτό ταξιδεύει «μέσα» του σαν σημείωση.</p>
+
+    <div class="combo">
+      <div class="box">
+        <div class="big">🍔</div>
+        <div class="name">Combo Burger</div>
+        <div class="sub">τιμή πακέτου: 6,50 € <span class="muted">(δείγμα)</span></div>
+        <div class="nested">
+          <span class="k">↳ μέσα του:</span> ποτό «Coca Cola 330ml»<br>
+          <span class="muted">productId: <b>d1</b> · τιμή: 0 € (μπαίνει δωρεάν στο πακέτο)</span>
+        </div>
+      </div>
+    </div>
+    <p class="muted" style="margin-top:14px;font-size:13px">Το ποτό έχει τιμή <b>0 €</b> γιατί η αξία του
+    είναι ήδη μέσα στα 6,50 € του πακέτου — δεν είναι δωρεάν στην πραγματικότητα, απλώς δεν χρεώνεται ξεχωριστά.</p>
+  </div>
+
+  <!-- THE PROBLEM -->
+  <div class="section-label">Το πρόβλημα σήμερα</div>
+  <div class="card">
+    <h2>❌ Το ποτό δεν μειώνεται από το απόθεμα</h2>
+    <p>Μέχρι τώρα, δύο πράγματα «κόβανε» το ποτό:</p>
+    <div class="flow">
+      <div class="step"><span class="n">1</span><span class="txt"><b>Το ταμείο (POS)</b> δεν έστελνε καν το ποτό του combo — ήταν χαμένο. <span class="pill bad">διορθώθηκε από τον POS</span></span></div>
+      <div class="step"><span class="n">2</span><span class="txt"><b>Το δικό μας πρόγραμμα</b> ακόμη κι αν το έβλεπε, έψαχνε το ποτό στα «έξτρα υλικά του burger» (μαρούλι, σάλτσα…). Το ποτό δεν είναι έξτρα του burger → το προσπερνούσε αθόρυβα. <span class="pill bad">το φτιάχνουμε τώρα</span></span></div>
+    </div>
+    <p style="margin-top:14px">Αποτέλεσμα: κάθε φορά που πουλιέται combo, το <b>burger</b> κόβεται σωστά από την αποθήκη,
+    αλλά το <b>ποτό</b> μένει «ανέγγιχτο» — τα μπουκάλια στην αποθήκη δείχνουν περισσότερα απ' όσα υπάρχουν.</p>
+  </div>
+
+  <!-- THE FIX -->
+  <div class="section-label">Τι θα φτιάξω</div>
+  <div class="card soft">
+    <h2>✅ Το ποτό να φεύγει σαν να πουλήθηκε μόνο του</h2>
+    <p>Θα προσθέσω μια νέα λογική: μόλις δω μέσα στο burger το κομμάτι του ποτού με το <b>productId</b> (π.χ. <b>d1</b>),
+    θα αφαιρώ από την αποθήκη το ίδιο το ποτό — με το ίδιο «κλειδί» (id) που χρησιμοποιούμε παντού, όχι με το όνομα.</p>
+
+    <div class="flow">
+      <div class="step"><span class="n">A</span><span class="txt">Πουλιέται 1 Combo Burger 🍔</span></div>
+      <div class="step"><span class="n">B</span><span class="txt">Κόβεται η <b>συνταγή του burger</b> (ψωμί, κρέας, λαχανικά…) — όπως πάντα</span></div>
+      <div class="step"><span class="n">Γ</span><span class="txt">Βλέπω το <span class="pill info">productId: d1</span> και κόβω <b>1 μπουκάλι Coca Cola</b> από την αποθήκη ποτών</span></div>
+    </div>
+
+    <div class="cmp">
+      <div class="col now">
+        <h3>🔴 Τώρα</h3>
+        <ul>
+          <li>Burger κόβεται</li>
+          <li>Ποτό <b>δεν</b> κόβεται</li>
+          <li>Απόθεμα ποτών λάθος (πάντα «περισσότερα»)</li>
+        </ul>
+      </div>
+      <div class="col after">
+        <h3>🟢 Μετά</h3>
+        <ul>
+          <li>Burger κόβεται</li>
+          <li>Ποτό κόβεται κι αυτό</li>
+          <li>Απόθεμα ποτών σωστό</li>
+          <li>Τζίρος <b>ίδιος</b> — δεν αλλάζει τίποτα</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note" style="margin-top:16px;color:#cdd3ee">
+      🛡️ <b>Καμία διπλομέτρηση:</b> το burger κόβει τη συνταγή του <b>μία</b> φορά, το ποτό κόβεται <b>μία</b> φορά.
+      Αν πουληθούν 2 combo → 2 ποτά. Στον τζίρο δεν αγγίζουμε τίποτα (μένει από το τελικό σύνολο της απόδειξης).
+    </div>
+  </div>
+
+  <!-- DECISIONS -->
+  <div class="section-label">Οι 3 αποφάσεις σου</div>
+
+  <div class="dec">
+    <div class="head"><span class="num">1</span><span class="q">Πού «χρεώνεται» το ποτό στις αναφορές;</span></div>
+    <div class="body">Όταν κόβεται το μπουκάλι, να φαίνεται ως κατανάλωση <b>του ποτού</b> («Coca Cola → 1 μπουκάλι»)
+    ή κάτω από το <b>burger</b> του combo;</div>
+    <div class="rec">💡 <b>Πρόταση:</b> ως το <b>ποτό</b> — βλέπεις καθαρά πόσα μπουκάλια έφυγαν.</div>
+  </div>
+
+  <div class="dec">
+    <div class="head"><span class="num">2</span><span class="q">Αν το ποτό δεν έχει σύνδεση με απόθεμα;</span></div>
+    <div class="body">Αν ένα ποτό δεν είναι συνδεδεμένο με πρώτη ύλη στη Γέφυρα (ή το ταμείο στείλει id που δεν έχει
+    συγχρονιστεί ακόμη): να το προσπερνώ αθόρυβα ή να αφήνω σημείωση <b>μόνο στο τεχνικό αρχείο</b> (χωρίς ειδοποίηση σε σένα);</div>
+    <div class="rec">💡 <b>Πρόταση:</b> σημείωση <b>μόνο στο τεχνικό αρχείο</b> — καμία ειδοποίηση (όπως ήδη κάνουμε όταν πουλιέται μέγεθος χωρίς στημένη συνταγή).</div>
+  </div>
+
+  <div class="dec">
+    <div class="head"><span class="num">3</span><span class="q">Αν έρθει ποτό ΧΩΡΙΣ id;</span></div>
+    <div class="body">Ο POS στέλνει πλέον πάντα το id. Αν όμως σπάνια έρθει ένα ποτό χωρίς αυτό:
+    να ταιριάζω με το <b>όνομα</b> ως εφεδρεία ή να το προσπερνώ;</div>
+    <div class="rec">💡 <b>Πρόταση:</b> να το <b>προσπερνώ</b>. Το ταίριασμα με όνομα σπάει σε κάθε μετονομασία,
+    και είμαστε ακόμη σε φάση σχεδιασμού (καμία πραγματική ιστορία να διορθώσουμε).</div>
+  </div>
+
+  <div class="note">
+    Αν συμφωνείς και με τα 3 (1: ως το ποτό · 2: μόνο τεχνικό αρχείο · 3: προσπέρασε χωρίς id),
+    το χτίζω αμέσως + προσθέτω και αυτόματη δοκιμή (test) που κλειδώνει ότι ο τζίρος δεν αλλάζει.
+    Αν θέλεις αλλιώς σε κάποιο, πες μου μόνο το νούμερο.
+  </div>
+
+  <a class="back" href="index.html">← Πίσω στη λίστα</a>
+  <div class="foot">TAMAM Grill House · δείγμα δεδομένων · ιδιωτικό εργαλείο</div>
+</div>
+</body>
+</html>
