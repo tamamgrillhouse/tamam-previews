@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
+<title>Preview — Μενού «Εξάντληση Προϊόντος» (3 προτάσεις)</title>
+<style>
+:root{
+  --black:#0e1330; --dark:#12183a; --card:#1c2554; --card2:#243068;
+  --yellow:#f5c400; --yellow2:#d4a900; --white:#e8eaf6; --muted:#93a0dd;
+  --red:#ef5350; --green:#26c281; --border:#2a3580;
+  --radius:16px; --radius-card:8px; --radius-btn:6px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--black);color:var(--white);
+  font-family:'Noto Sans',system-ui,-apple-system,'Segoe UI',sans-serif;padding:24px 16px 60px}
+h1{font-size:20px;margin:0 0 6px;text-align:center;letter-spacing:.3px}
+.lead{text-align:center;color:var(--muted);font-size:12.5px;max-width:720px;margin:0 auto 28px;line-height:1.55}
+.lead b{color:var(--white)}
+
+.grid{display:flex;flex-wrap:wrap;gap:22px;justify-content:center;align-items:flex-start;max-width:1300px;margin:0 auto}
+.col{flex:1 1 360px;max-width:400px;min-width:300px}
+.col-head{margin-bottom:12px}
+.col-tag{display:inline-block;font-size:10px;letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--yellow);background:rgba(245,196,0,.12);border:1px solid rgba(245,196,0,.3);
+  padding:3px 9px;border-radius:50px;margin-bottom:7px}
+.col-title{font-size:15px;font-weight:800;margin:0 0 5px}
+.col-desc{font-size:11.5px;color:var(--muted);line-height:1.5;margin:0}
+.col-desc em{color:#a8ffd0;font-style:normal}
+
+/* ── Κοινό «τηλέφωνο» / πλαίσιο σκηνής ─────────────────────────── */
+.stage{background:linear-gradient(160deg,#0b1028,#111634);border:1px solid rgba(255,255,255,.09);
+  border-radius:var(--radius);padding:18px 14px;position:relative;overflow:hidden}
+.stage::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(245,196,0,.06),transparent 60%);pointer-events:none}
+
+/* ── Κάρτα διαλόγου (κοινή βάση) ────────────────────────────────── */
+.box{width:100%;background:var(--dark);border:1px solid rgba(255,255,255,.18);
+  border-radius:var(--radius);padding:20px 18px 16px;position:relative;
+  box-shadow:0 24px 60px rgba(0,0,0,.55)}
+.prod{font-size:17px;font-weight:800;text-align:center;line-height:1.25}
+.sub{font-size:12px;color:var(--muted);text-align:center;margin:6px 0 18px;line-height:1.35}
+.sub .fam{color:#ffd76a}
+
+/* ── ΚΥΡΙΟ ΚΟΥΜΠΙ (ίδιο και στις 3) ─────────────────────────────── */
+.primary{display:flex;align-items:center;justify-content:center;gap:11px;width:100%;min-height:64px;
+  border:none;border-radius:var(--radius-card);cursor:pointer;
+  background:linear-gradient(180deg,#f5c400,#d4a900);color:#221a00;
+  font-family:inherit;font-size:16px;font-weight:800;letter-spacing:.2px;
+  box-shadow:0 6px 18px rgba(245,196,0,.28);transition:transform .12s,box-shadow .2s}
+.primary:hover{box-shadow:0 8px 24px rgba(245,196,0,.42)}
+.primary:active{transform:scale(.985)}
+.primary .pi{font-size:22px;line-height:1}
+.primary .pt{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left}
+.primary .pt small{font-size:10.5px;font-weight:600;opacity:.72;letter-spacing:0}
+
+/* ── Άκυρο (κοινό) ──────────────────────────────────────────────── */
+.cancel{width:100%;min-height:44px;margin-top:10px;background:none;border:none;cursor:pointer;
+  color:var(--muted);font-family:inherit;font-size:13px;font-weight:600;border-radius:var(--radius-btn);
+  transition:.15s}
+.cancel:hover{color:var(--white);background:rgba(255,255,255,.05)}
+
+/* ═══ ΠΡΟΤΑΣΗ Α — Διακριτικός σύνδεσμος ═══════════════════════════ */
+.a-sep{display:flex;align-items:center;gap:10px;margin:16px 0 10px}
+.a-sep::before,.a-sep::after{content:'';height:1px;flex:1;background:rgba(255,255,255,.09)}
+.a-sep span{font-size:9.5px;letter-spacing:1.3px;text-transform:uppercase;color:rgba(147,160,221,.55)}
+.a-link{width:100%;min-height:44px;background:none;border:none;cursor:pointer;font-family:inherit;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  color:rgba(239,83,80,.62);font-size:12.5px;font-weight:600;border-radius:var(--radius-btn);transition:.15s}
+.a-link:hover{color:var(--red);background:rgba(239,83,80,.08)}
+.a-link .ai{font-size:14px;opacity:.8}
+
+/* ═══ ΠΡΟΤΑΣΗ Β — Παρατεταμένο πάτημα ════════════════════════════ */
+.b-hold{position:relative;width:100%;min-height:54px;margin-top:16px;overflow:hidden;cursor:pointer;
+  background:rgba(239,83,80,.05);border:1px dashed rgba(239,83,80,.35);border-radius:var(--radius-card);
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  color:rgba(255,179,179,.85);font-family:inherit;font-size:12.5px;font-weight:700;
+  user-select:none;-webkit-user-select:none;touch-action:none;transition:border-color .2s}
+.b-hold:hover{border-color:rgba(239,83,80,.6)}
+.b-fill{position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(239,83,80,.32);
+  transition:width .05s linear;pointer-events:none}
+.b-hold span{position:relative;z-index:1;display:flex;align-items:center;gap:8px}
+.b-hold.done{border-style:solid;border-color:var(--red);background:rgba(239,83,80,.22);color:#fff}
+.b-hint{font-size:10.5px;color:rgba(147,160,221,.6);text-align:center;margin-top:7px;line-height:1.4}
+
+/* ═══ ΠΡΟΤΑΣΗ Γ — Πτυσσόμενο (2 βήματα) ═════════════════════════ */
+.c-more{width:100%;min-height:46px;margin-top:14px;background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.08);border-radius:var(--radius-card);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;
+  color:var(--muted);font-size:12px;font-weight:600;transition:.15s}
+.c-more:hover{background:rgba(255,255,255,.06);color:var(--white)}
+.c-more .chev{transition:transform .25s;font-size:10px}
+.c-more.open .chev{transform:rotate(180deg)}
+.c-panel{max-height:0;overflow:hidden;transition:max-height .28s ease}
+.c-panel.open{max-height:200px}
+.c-inner{margin-top:10px;padding:13px;background:rgba(239,83,80,.06);
+  border:1px solid rgba(239,83,80,.24);border-left:3px solid var(--red);border-radius:var(--radius-card)}
+.c-warn{font-size:11px;color:rgba(255,179,179,.9);line-height:1.45;margin:0 0 11px}
+.c-warn b{color:#ffb3b3}
+.c-btn{width:100%;min-height:46px;background:rgba(239,83,80,.14);border:1px solid rgba(239,83,80,.5);
+  border-radius:var(--radius-btn);cursor:pointer;font-family:inherit;color:#ffb3b3;
+  font-size:13px;font-weight:700;transition:.15s}
+.c-btn:hover{background:rgba(239,83,80,.26);color:#fff;border-color:var(--red)}
+
+/* ── Toast αποτελέσματος ────────────────────────────────────────── */
+.out{margin-top:12px;min-height:34px;display:flex;align-items:center;justify-content:center;
+  font-size:11.5px;font-weight:700;border-radius:var(--radius-btn);padding:8px;text-align:center;
+  opacity:0;transition:opacity .2s}
+.out.show{opacity:1}
+.out.today{background:rgba(38,194,129,.12);color:#7ff0c0;border:1px solid rgba(38,194,129,.3)}
+.out.indef{background:rgba(239,83,80,.12);color:#ffb3b3;border:1px solid rgba(239,83,80,.3)}
+
+/* ── Πίνακας σύγκρισης ─────────────────────────────────────────── */
+.cmp{max-width:900px;margin:44px auto 0;border:1px solid rgba(255,255,255,.1);
+  border-radius:var(--radius);overflow:hidden}
+.cmp table{width:100%;border-collapse:collapse;font-size:12px}
+.cmp th,.cmp td{padding:10px 12px;text-align:left;border-bottom:1px solid rgba(255,255,255,.06)}
+.cmp th{background:rgba(255,255,255,.04);font-size:10.5px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)}
+.cmp td:first-child{color:var(--muted);font-weight:600}
+.cmp tr:last-child td{border-bottom:none}
+.yes{color:#7ff0c0} .no{color:#ffb3b3} .mid{color:#ffd76a}
+
+@media(max-width:700px){body{padding:16px 10px 40px}.col{max-width:none}}
+</style>
+</head>
+<body>
+
+<h1>Μενού «Εξάντληση Προϊόντος» — 3 προτάσεις</h1>
+<p class="lead">Και στις 3 το <b>«Εξαντλήθηκε σήμερα»</b> είναι το ΜΟΝΟ κύριο κουμπί (μεγάλο, κίτρινο, στο κέντρο).
+Το <b>«Κλειστό επ' αόριστον»</b> κατεβαίνει σε δεύτερο επίπεδο — αλλάζει μόνο <em>πόσο δύσκολο</em> είναι να πατηθεί κατά λάθος.
+Δοκίμασέ τα με το ποντίκι <b>και</b> με το δάχτυλο.</p>
+
+<div class="grid">
+
+  <!-- ══════════════ Α ══════════════ -->
+  <div class="col">
+    <div class="col-head">
+      <span class="col-tag">Πρόταση Α</span>
+      <div class="col-title">Διακριτικός σύνδεσμος</div>
+      <p class="col-desc">Το μόνιμο κλείσιμο γίνεται <b>μικρό γκρι-κόκκινο link</b> κάτω από διαχωριστικό «Άλλες επιλογές».
+      Οπτικό βάρος ≈ 10% του κύριου. <em>Πιο απλή, ένα πάτημα.</em></p>
+    </div>
+    <div class="stage">
+      <div class="box">
+        <div class="prod">Σουβλάκι Χοιρινό</div>
+        <div class="sub">Θα κλείσουν <span class="fam">6 προϊόντα</span> (χοιρινό)</div>
+
+        <button class="primary" onclick="res('a','today')">
+          <span class="pi">&#128683;</span>
+          <span class="pt">Εξαντλήθηκε σήμερα<small>ανοίγει αύριο μόνο του</small></span>
+        </button>
+
+        <button class="cancel" onclick="res('a','cancel')">Άκυρο</button>
+
+        <div class="a-sep"><span>Άλλες επιλογές</span></div>
+        <button class="a-link" onclick="res('a','indef')">
+          <span class="ai">&#9940;</span> Κλείσιμο επ' αόριστον
+        </button>
+
+        <div class="out" id="out-a"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ Β ══════════════ -->
+  <div class="col">
+    <div class="col-head">
+      <span class="col-tag">Πρόταση Β</span>
+      <div class="col-title">Παρατεταμένο πάτημα</div>
+      <p class="col-desc">Το μόνιμο κλείσιμο <b>δεν ενεργοποιείται με tap</b> — θέλει κράτημα 1,2 δευτ. με μπάρα προόδου.
+      <em>Φυσικά αδύνατο το κατά λάθος πάτημα, χωρίς επιπλέον οθόνη.</em></p>
+    </div>
+    <div class="stage">
+      <div class="box">
+        <div class="prod">Σουβλάκι Χοιρινό</div>
+        <div class="sub">Θα κλείσουν <span class="fam">6 προϊόντα</span> (χοιρινό)</div>
+
+        <button class="primary" onclick="res('b','today')">
+          <span class="pi">&#128683;</span>
+          <span class="pt">Εξαντλήθηκε σήμερα<small>ανοίγει αύριο μόνο του</small></span>
+        </button>
+
+        <button class="cancel" onclick="res('b','cancel')">Άκυρο</button>
+
+        <div class="b-hold" id="hold">
+          <div class="b-fill" id="fill"></div>
+          <span><span style="font-size:15px">&#9940;</span> <span id="hold-txt">Κράτα για μόνιμο κλείσιμο</span></span>
+        </div>
+        <div class="b-hint">Το προϊόν δεν θα ξανανοίξει μόνο του αύριο</div>
+
+        <div class="out" id="out-b"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ Γ ══════════════ -->
+  <div class="col">
+    <div class="col-head">
+      <span class="col-tag">Πρόταση Γ</span>
+      <div class="col-title">Πτυσσόμενο — 2 βήματα</div>
+      <p class="col-desc">Το μόνιμο κλείσιμο είναι <b>κρυμμένο</b>. Χρειάζονται 2 συνειδητά πατήματα (άνοιγμα → κόκκινο κουμπί)
+      και βλέπεις προειδοποίηση πριν. <em>Η πιο αυστηρή· ταιριάζει σε σπάνια απόφαση.</em></p>
+    </div>
+    <div class="stage">
+      <div class="box">
+        <div class="prod">Σουβλάκι Χοιρινό</div>
+        <div class="sub">Θα κλείσουν <span class="fam">6 προϊόντα</span> (χοιρινό)</div>
+
+        <button class="primary" onclick="res('c','today')">
+          <span class="pi">&#128683;</span>
+          <span class="pt">Εξαντλήθηκε σήμερα<small>ανοίγει αύριο μόνο του</small></span>
+        </button>
+
+        <button class="cancel" onclick="res('c','cancel')">Άκυρο</button>
+
+        <button class="c-more" id="more" onclick="toggleMore()">
+          &#9881; Περισσότερες επιλογές <span class="chev">&#9660;</span>
+        </button>
+        <div class="c-panel" id="panel">
+          <div class="c-inner">
+            <p class="c-warn"><b>Προσοχή:</b> το προϊόν μένει κλειστό <b>μέχρι να το ξανανοίξεις εσύ</b> —
+            δεν επανέρχεται αύριο. Χρησιμοποίησέ το μόνο αν σταματάς να το πουλάς.</p>
+            <button class="c-btn" onclick="res('c','indef')">&#9940; Κλείσε επ' αόριστον</button>
+          </div>
+        </div>
+
+        <div class="out" id="out-c"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Σύγκριση ────────────────────────────────────────────────── -->
+<div class="cmp">
+  <table>
+    <tr><th></th><th>Α · Σύνδεσμος</th><th>Β · Κράτημα</th><th>Γ · 2 βήματα</th></tr>
+    <tr><td>Πατήματα για «σήμερα»</td><td class="yes">1</td><td class="yes">1</td><td class="yes">1</td></tr>
+    <tr><td>Ενέργειες για «μόνιμο»</td><td class="mid">1 tap</td><td class="yes">1 κράτημα 1,2″</td><td class="yes">2 taps</td></tr>
+    <tr><td>Ρίσκο κατά λάθος</td><td class="mid">Χαμηλό</td><td class="yes">Μηδενικό</td><td class="yes">Μηδενικό</td></tr>
+    <tr><td>Ύψος μενού</td><td class="yes">Μικρό</td><td class="mid">Μεσαίο</td><td class="yes">Μικρό (κλειστό)</td></tr>
+    <tr><td>Προειδοποίηση πριν</td><td class="no">Όχι</td><td class="mid">Υπότιτλος</td><td class="yes">Ναι, πλήρης</td></tr>
+    <tr><td>Καταλληλότητα touch POS</td><td class="mid">Καλή</td><td class="yes">Άριστη</td><td class="yes">Άριστη</td></tr>
+  </table>
+</div>
+
+<script>
+function res(col, what){
+  var el = document.getElementById('out-' + col);
+  var map = {
+    today : ['today','&#10003; Κλειστό ΣΗΜΕΡΑ — 6 προϊόντα (ανοίγουν αύριο)'],
+    indef : ['indef','&#9940; Κλειστό ΕΠ\' ΑΟΡΙΣΤΟΝ — 6 προϊόντα'],
+    cancel: ['today','Ακυρώθηκε — καμία αλλαγή']
+  };
+  el.className = 'out show ' + map[what][0];
+  el.innerHTML = map[what][1];
+  clearTimeout(el._t);
+  el._t = setTimeout(function(){ el.classList.remove('show'); }, 2600);
+}
+
+/* ── Β: κράτημα ── */
+(function(){
+  var hold = document.getElementById('hold'), fill = document.getElementById('fill'),
+      txt = document.getElementById('hold-txt'), DUR = 1200, t0 = 0, raf = 0, done = false;
+  function tick(){
+    var p = Math.min(1, (Date.now() - t0) / DUR);
+    fill.style.width = (p * 100) + '%';
+    if (p >= 1){ finish(); return; }
+    raf = requestAnimationFrame(tick);
+  }
+  function finish(){
+    done = true; cancelAnimationFrame(raf);
+    hold.classList.add('done'); txt.textContent = 'Έκλεισε μόνιμα';
+    if (navigator.vibrate) navigator.vibrate(40);
+    res('b','indef');
+    setTimeout(reset, 1200);
+  }
+  function reset(){
+    cancelAnimationFrame(raf); fill.style.width = '0';
+    hold.classList.remove('done'); txt.textContent = 'Κράτα για μόνιμο κλείσιμο'; done = false;
+  }
+  function start(e){ if(done) return; e.preventDefault(); t0 = Date.now(); raf = requestAnimationFrame(tick); }
+  function stop(){ if(done) return; cancelAnimationFrame(raf); fill.style.width = '0'; }
+  hold.addEventListener('pointerdown', start);
+  hold.addEventListener('pointerup', stop);
+  hold.addEventListener('pointerleave', stop);
+  hold.addEventListener('pointercancel', stop);
+})();
+
+/* ── Γ: πτυσσόμενο ── */
+function toggleMore(){
+  document.getElementById('more').classList.toggle('open');
+  document.getElementById('panel').classList.toggle('open');
+}
+</script>
+</body>
+</html>
