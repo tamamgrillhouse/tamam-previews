@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
-<title>Πρόταση v2 — Συγχρονισμός καταλόγου POS ↔ e-food</title>
+<title>Πρόταση v3 — Χάρτης Συνδέσεων POS ↔ e-food</title>
 <style>
 :root{
   --black:#0e1330; --dark:#12183a; --card:#1c2554; --card2:#243068;
@@ -15,9 +15,9 @@
 body{margin:0;background:var(--black);color:var(--white);
   font-family:'Noto Sans',system-ui,-apple-system,'Segoe UI',sans-serif;padding:24px 16px 70px;line-height:1.5}
 h1{font-size:21px;margin:0 0 8px;text-align:center;letter-spacing:.3px}
-.lead{text-align:center;color:var(--muted);font-size:13px;max-width:780px;margin:0 auto 6px;line-height:1.6}
+.lead{text-align:center;color:var(--muted);font-size:13px;max-width:800px;margin:0 auto 6px;line-height:1.6}
 .lead b{color:var(--white)}
-.wrap{max-width:920px;margin:0 auto}
+.wrap{max-width:940px;margin:0 auto}
 
 .sec{margin:40px 0 0}
 .sec-head{display:flex;align-items:center;gap:10px;margin:0 0 6px}
@@ -27,12 +27,58 @@ h1{font-size:21px;margin:0 0 8px;text-align:center;letter-spacing:.3px}
 .sec-sub{color:var(--muted);font-size:12.5px;margin:0 0 14px 37px}
 
 .stage{background:linear-gradient(160deg,#0b1028,#111634);border:1px solid rgba(255,255,255,.09);
-  border-radius:var(--radius);padding:18px;position:relative;overflow:hidden}
+  border-radius:var(--radius);padding:16px;position:relative;overflow:hidden}
 
-.card{background:var(--card);border-left:3px solid var(--yellow);border-radius:var(--radius-card);
-  padding:14px 16px}
-.card-t{font-size:13.5px;font-weight:800;margin:0 0 4px}
-.card-d{font-size:11.5px;color:var(--muted);margin:0}
+/* ── tabs ── */
+.tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:13px;border-bottom:1px solid rgba(255,255,255,.09);padding-bottom:10px}
+.tab{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);
+  border-radius:var(--radius-btn);padding:7px 12px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:6px}
+.tab.on{background:rgba(245,196,0,.14);border-color:rgba(245,196,0,.45);color:var(--yellow)}
+.tab .c{background:rgba(255,255,255,.1);border-radius:20px;padding:1px 7px;font-size:10.5px}
+.tab.on .c{background:rgba(245,196,0,.22)}
+
+/* ── γραμμή εργαλείων ── */
+.tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.search{flex:1 1 200px;background:var(--card2);border:1.5px solid rgba(255,255,255,.18);
+  border-radius:var(--radius-btn);padding:8px 12px;font-size:12px;color:var(--muted);line-height:1}
+.fil{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:var(--muted);
+  border-radius:20px;padding:5px 11px;font-size:11px;font-weight:700}
+.fil.on{background:rgba(245,196,0,.14);border-color:rgba(245,196,0,.42);color:var(--yellow)}
+
+/* ── γραμμές χάρτη ── */
+.map{background:var(--dark);border:1px solid var(--border);border-radius:var(--radius-card);overflow:hidden}
+.mrow{display:flex;align-items:center;gap:10px;padding:11px 13px;border-bottom:1px solid rgba(255,255,255,.055);flex-wrap:wrap}
+.mrow:last-child{border-bottom:0}
+.mrow.hl{background:rgba(74,158,240,.07)}
+.mrow.bad{background:rgba(245,196,0,.055)}
+.m-pos{flex:1 1 168px;min-width:0;font-size:12.5px;font-weight:700}
+.m-arr{color:var(--muted);font-size:13px;flex-shrink:0}
+.m-ef{flex:1 1 200px;min-width:0;font-size:12px;color:var(--muted)}
+.m-ef b{color:#a8ffd0;font-weight:700}
+.m-ef .none{color:#ffd9a8}
+.m-end{margin-left:auto;display:flex;gap:6px;align-items:center;flex-shrink:0}
+.bdg{font-size:9.5px;font-weight:800;letter-spacing:.5px;padding:3px 8px;border-radius:20px;white-space:nowrap}
+.bdg.ok{background:rgba(38,194,129,.16);color:#7ef0b6}
+.bdg.tw{background:rgba(155,123,224,.18);color:#d3c0ff}
+.bdg.warn{background:rgba(245,196,0,.16);color:var(--yellow)}
+.bdg.new{background:rgba(74,158,240,.18);color:#9ecdff}
+.bdg.chg{background:rgba(239,83,80,.15);color:#ffb3b1}
+.edit{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);color:var(--muted);
+  border-radius:var(--radius-btn);padding:4px 9px;font-size:11px}
+.count{color:var(--blue);font-size:11.5px;font-weight:700;text-decoration:underline dotted;text-underline-offset:3px}
+
+/* ── drill-down ── */
+.drill{background:var(--card);border:1px solid rgba(74,158,240,.3);border-radius:var(--radius-card);
+  padding:14px;margin:11px 0}
+.drill-h{font-size:13px;font-weight:800;margin:0 0 3px}
+.drill-d{font-size:11.5px;color:var(--muted);margin:0 0 11px}
+.chk{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:var(--radius-btn);
+  font-size:12px;background:rgba(255,255,255,.03);margin-bottom:5px}
+.chk .b{width:15px;height:15px;border-radius:4px;border:1.5px solid rgba(255,255,255,.28);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:10px;line-height:1}
+.chk.on .b{background:var(--green);border-color:var(--green);color:#04331f}
+.chk.off{opacity:.55}
+.chk .why{margin-left:auto;font-size:10.5px;color:var(--muted)}
 
 .btn{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.06);
   border:1px solid rgba(255,255,255,.14);color:var(--white);border-radius:var(--radius-btn);
@@ -41,47 +87,12 @@ h1{font-size:21px;margin:0 0 8px;text-align:center;letter-spacing:.3px}
 .btn.ghost{background:transparent;color:var(--muted)}
 .btn.sm{padding:6px 12px;font-size:11.5px}
 
-/* ── ομάδες αποτελέσματος ── */
-.grp{border-radius:var(--radius-card);padding:13px 15px;margin-bottom:11px;border:1px solid}
-.grp-h{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:800;margin-bottom:3px}
-.grp-h .n{margin-left:auto;font-size:11px;opacity:.85;font-weight:700}
-.grp-d{font-size:11.5px;color:var(--muted);margin:0}
-.grp.auto{background:rgba(38,194,129,.08);border-color:rgba(38,194,129,.3)}
-.grp.auto .grp-h{color:#7ef0b6}
-.grp.ask{background:rgba(74,158,240,.08);border-color:rgba(74,158,240,.32)}
-.grp.ask .grp-h{color:#9ecdff}
-.grp.warn{background:rgba(245,196,0,.08);border-color:rgba(245,196,0,.32)}
-.grp.warn .grp-h{color:var(--yellow)}
-.grp ul{margin:8px 0 0;padding-left:17px;font-size:11.5px;color:var(--muted);line-height:1.75}
-.grp ul b{color:var(--white)}
-
-/* ── κάρτα απόφασης ── */
-.dec{background:var(--dark);border:1px solid var(--border);border-radius:var(--radius-card);
-  padding:13px 14px;margin-bottom:11px}
-.dec-top{display:flex;align-items:flex-start;gap:9px;margin-bottom:9px}
-.dec-ico{font-size:16px;line-height:1.2}
-.dec-t{font-size:13px;font-weight:800;margin:0 0 2px}
-.dec-q{font-size:11.5px;color:var(--muted);margin:0}
-.dec-act{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
 .sel{background:var(--card2);border:1px solid var(--border);color:var(--white);
-  border-radius:var(--radius-btn);padding:8px 11px;font-size:12px;min-width:200px;font-family:inherit;appearance:none;
+  border-radius:var(--radius-btn);padding:7px 11px;font-size:12px;min-width:190px;font-family:inherit;appearance:none;
   background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
   background-position:calc(100% - 15px) 52%,calc(100% - 10px) 52%;background-size:5px 5px,5px 5px;
   background-repeat:no-repeat;padding-right:30px}
 .sel.done{border-color:rgba(38,194,129,.5);color:#a8ffd0}
-.mini{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:var(--muted);
-  border-radius:var(--radius-btn);padding:6px 11px;font-size:11.5px;font-weight:700}
-.mini.yes{background:rgba(38,194,129,.15);border-color:rgba(38,194,129,.45);color:#a8ffd0}
-.mini.no{background:rgba(239,83,80,.12);border-color:rgba(239,83,80,.4);color:#ffb3b1}
-
-/* ── προεπισκόπηση εφαρμογής ── */
-.plan{background:var(--dark);border:1px solid var(--border);border-radius:var(--radius-card);padding:14px}
-.plan-line{display:flex;align-items:flex-start;gap:9px;font-size:12.5px;padding:8px 0;
-  border-bottom:1px solid rgba(255,255,255,.05)}
-.plan-line:last-child{border-bottom:0}
-.plan-line .i{flex-shrink:0}
-.plan-line b{color:var(--white)}
-.plan-line span{color:var(--muted)}
 
 .box{border-radius:var(--radius-card);padding:12px 14px;font-size:12.5px;margin:14px 0;line-height:1.62}
 .box .h{font-weight:800;display:block;margin-bottom:3px}
@@ -91,7 +102,7 @@ h1{font-size:21px;margin:0 0 8px;text-align:center;letter-spacing:.3px}
 .box.note{background:rgba(74,158,240,.09);border:1px solid rgba(74,158,240,.3)} .box.note .h{color:#9ecdff}
 
 table{width:100%;border-collapse:collapse;font-size:12px;margin:10px 0}
-th,td{text-align:left;padding:9px 9px;border-bottom:1px solid rgba(255,255,255,.07);vertical-align:top}
+th,td{text-align:left;padding:9px;border-bottom:1px solid rgba(255,255,255,.07);vertical-align:top}
 th{color:var(--yellow);font-size:10.5px;text-transform:uppercase;letter-spacing:.6px}
 td b{color:var(--white)} td{color:var(--muted)}
 td .a{color:#7ef0b6;font-weight:700} td .k{color:#9ecdff;font-weight:700} td .w{color:var(--yellow);font-weight:700}
@@ -108,194 +119,257 @@ td .a{color:#7ef0b6;font-weight:700} td .k{color:#9ecdff;font-weight:700} td .w{
 .tag{display:inline-block;font-size:10px;letter-spacing:1px;text-transform:uppercase;
   color:var(--yellow);background:rgba(245,196,0,.12);border:1px solid rgba(245,196,0,.3);
   padding:3px 9px;border-radius:50px;margin-bottom:8px}
-.chg{display:inline-block;font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:#ff9d9b;
-  background:rgba(239,83,80,.12);border:1px solid rgba(239,83,80,.35);padding:3px 9px;border-radius:50px}
-@media(max-width:600px){ .sel{min-width:100%} }
+.dirn{display:flex;gap:9px;align-items:center;font-size:11.5px;color:var(--muted);
+  background:rgba(255,255,255,.04);border-radius:var(--radius-btn);padding:8px 11px;margin-bottom:9px}
+.dirn b{color:var(--white)}
+@media(max-width:620px){ .sel{min-width:100%} .m-end{margin-left:0} }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-<div style="text-align:center"><span class="tag">Πρόταση v2 — προς έγκριση</span></div>
-<h1>Συγχρονισμός καταλόγου POS ↔ e-food</h1>
-<p class="lead">Η πρώτη μου πρόταση ήταν <b>ελλιπής</b>. Έλεγε «σύνδεσε τα νέα» —
-αλλά δύο σενάρια θα σε άφηναν εκτεθειμένο.<br>Αυτή τα καλύπτει.</p>
+<div style="text-align:center"><span class="tag">Πρόταση v3 — προς έγκριση</span></div>
+<h1>Χάρτης Συνδέσεων POS ↔ e-food</h1>
+<p class="lead">Μία οθόνη με <b>όλες</b> τις συνδέσεις. Τις βλέπεις, τις αλλάζεις, τις ρυθμίζεις —
+<b>χωρίς εμένα</b>.<br>Ο «έλεγχος αλλαγών» δεν είναι πια ξεχωριστή οθόνη: είναι κουμπί <b>πάνω στον ίδιο χάρτη</b>.</p>
 
-<!-- ── ΤΙ ΑΛΛΑΞΕ ───────────────────────────────── -->
+<!-- ── ΤΑ ΝΟΥΜΕΡΑ ───────────────────────────────── -->
 <div class="sec">
-  <div class="sec-head"><div class="sec-num">!</div><h2 class="sec-title">Τι μου διέφυγε στην πρώτη πρόταση</h2></div>
-
-  <div class="box stop">
-    <span class="h">1. Κάθε νέο ΠΡΟΪΟΝ χαλάει τα ΥΛΙΚΑ.</span>
-    Το «Τζατζίκι» δεν είναι μία εγγραφή — είναι <b>72 συνδέσεις, μία για κάθε προϊόν</b> που το έχει.
-    Προσθέτεις νέο σουβλάκι με 10 υλικά; Χρειάζονται <b>10 νέες συνδέσεις</b>.
-    Αλλιώς κλείνεις το τζατζίκι και <b>στο νέο σουβλάκι μένει διαθέσιμο</b>.
-  </div>
-
-  <div class="box stop">
-    <span class="h">2. Η μετονομασία σπάει τις παραγγελίες — αλλά όχι το sold-out.</span>
-    Οι <b>παραγγελίες</b> αναγνωρίζονται με το <b>όνομα</b>· το <b>sold-out</b> με τον <b>κωδικό</b>.
-    Αλλάζεις «Λαβάς» σε «Λαβάς Special»; Το sold-out δουλεύει κανονικά, αλλά οι παραγγελίες
-    <b>σταματούν να αναγνωρίζονται</b>. Μισό σύστημα σπάει, το άλλο μισό λέει «όλα καλά».
-  </div>
-
-  <div class="box warn">
-    <span class="h">3. Οι τιμές των υλικών ταξιδεύουν μαζί.</span>
-    Ο POS θυμάται και την τιμή κάθε υλικού. Αν την αλλάξεις στο portal και μετά ο ταμίας
-    κλείσει/ανοίξει το υλικό, <b>μπορεί να επανέλθει η παλιά</b>.
-  </div>
+  <div class="sec-head"><div class="sec-num">📊</div><h2 class="sec-title">Πόσα είναι στην πραγματικότητα</h2></div>
+  <table>
+    <tr><th>Τι ρυθμίζεις</th><th>Γραμμές</th><th></th></tr>
+    <tr><td><b>Προϊόντα</b> — ποιο δικό σου = ποιο δικό τους</td><td><b>123</b> <span style="opacity:.7">(12 δίδυμα)</span></td><td><span class="a">✓ το ρυθμίζεις</span></td></tr>
+    <tr><td><b>Υλικά</b> — ποιο δικό σου = ποιο δικό τους</td><td><b>26</b></td><td><span class="a">✓ το ρυθμίζεις</span></td></tr>
+    <tr><td><b>Υλικό ανά προϊόν</b> — πού ισχύει το καθένα</td><td><b>ανά υλικό</b></td><td><span class="a">✓ το ρυθμίζεις</span></td></tr>
+    <tr><td><b>«Ίδιο πράγμα»</b> — κοινό απόθεμα</td><td><b>2</b> σήμερα</td><td><span class="a">✓ το ρυθμίζεις</span></td></tr>
+    <tr><td colspan="3" style="padding-top:14px;border:0">
+      <div class="box note" style="margin:0"><span class="h">Σύνολο: ~150 γραμμές.</span>
+      Ένας πίνακας που τον σκρολάρεις σε ένα λεπτό — με αναζήτηση και φίλτρα.</div></td></tr>
+  </table>
 </div>
 
-<!-- ── ΒΗΜΑ 1 ───────────────────────────────── -->
+<!-- ── ΚΑΡΤΕΛΑ 1 ───────────────────────────────── -->
 <div class="sec">
-  <div class="sec-head"><div class="sec-num">1</div><h2 class="sec-title">Πατάς «Έλεγχος» — και βλέπεις τι βρήκε</h2></div>
-  <p class="sec-sub">Διαβάζει ΟΛΟ το ζωντανό μενού: προϊόντα, υλικά, συνδέσεις, τιμές. Τα χωρίζει σε τρεις ομάδες.</p>
+  <div class="sec-head"><div class="sec-num">1</div><h2 class="sec-title">Καρτέλα «Προϊόντα»</h2></div>
+  <p class="sec-sub">Κάθε προϊόν σου, δίπλα στο αντίστοιχο της e-food. Πατάς ✏️ και το αλλάζεις.</p>
 
   <div class="stage">
-    <div class="card">
-      <div class="card-t">🔄 Συγχρονισμός καταλόγου με e-food</div>
-      <p class="card-d">Τελευταίος έλεγχος: 26-07, 14:12 — όλα συγχρονισμένα</p>
-      <div style="margin-top:12px"><span class="btn primary">🔍 Έλεγχος τώρα</span></div>
+    <div class="tabs">
+      <span class="tab on">📦 Προϊόντα<span class="c">123</span></span>
+      <span class="tab">🥬 Υλικά<span class="c">26</span></span>
+      <span class="tab">🔗 Ίδιο πράγμα<span class="c">2</span></span>
+      <span class="tab">⚠️ Ασύνδετα<span class="c">6</span></span>
+    </div>
+    <div class="tools">
+      <div class="search">🔍 Αναζήτηση προϊόντος…</div>
+      <span class="fil on">Όλα</span><span class="fil">✓ Συνδεδεμένα</span>
+      <span class="fil">⚠ Ασύνδετα</span><span class="fil">🔗 Δίδυμα</span>
+      <span class="btn sm primary">🔄 Έλεγχος</span>
     </div>
 
-    <div style="margin-top:14px">
-      <div class="grp auto">
-        <div class="grp-h">🤖 Διορθώνονται μόνα τους<span class="n">14</span></div>
-        <p class="grp-d">Δεν χρειάζονται απόφαση — ο POS ξέρει τι να κάνει.</p>
-        <ul>
-          <li><b>11 νέες συνδέσεις υλικών</b> — το «Σουβλάκι Γαλοπούλα» έχει τζατζίκι, κρεμμύδι, ντομάτα…</li>
-          <li><b>2 τιμές υλικών</b> άλλαξαν στο portal → ενημερώνονται</li>
-          <li><b>1 νέο δίδυμο</b> — το «Coca-Cola 330ml» μπήκε και στις «Προσφορές»</li>
-        </ul>
-      </div>
+    <div class="map">
+      <div class="mrow"><span class="m-pos">Σουβλάκι Χοιρινό Πίτα</span><span class="m-arr">→</span>
+        <span class="m-ef"><b>Σουβλάκι χοιρινό σε πίτα</b></span>
+        <span class="m-end"><span class="bdg ok">ΟΚ</span><span class="edit">✏️</span></span></div>
 
-      <div class="grp ask">
-        <div class="grp-h">🙋 Θέλουν την απόφασή σου<span class="n">3</span></div>
-        <p class="grp-d">Μόνο εσύ ξέρεις την απάντηση — ο POS δεν μαντεύει.</p>
-        <ul>
-          <li><b>1 νέο προϊόν</b> στην e-food που δεν ξέρει ο POS</li>
-          <li><b>1 μετονομασία</b> — είναι το ίδιο προϊόν ή καινούργιο;</li>
-          <li><b>1 νέο υλικό</b> — μήπως είναι το ίδιο με υπάρχον;</li>
-        </ul>
-      </div>
+      <div class="mrow"><span class="m-pos">Coca-Cola 330ml</span><span class="m-arr">→</span>
+        <span class="m-ef"><b>Coca-Cola 330ml</b> + <b>…προσφοράς</b></span>
+        <span class="m-end"><span class="bdg tw">ΔΙΔΥΜΟ 2</span><span class="edit">✏️</span></span></div>
 
-      <div class="grp warn">
-        <div class="grp-h">⚠️ Απλή ενημέρωση<span class="n">2</span></div>
-        <p class="grp-d">Δεν χαλάει κάτι — αλλά καλό είναι να το ξέρεις.</p>
-        <ul>
-          <li><b>«Αγγουροντομάτα»</b> υπάρχει στον POS αλλά όχι στην e-food (δεν την πουλάς εκεί)</li>
-          <li><b>«Χωριάτικη»</b> σβήστηκε από την e-food — καθαρίζεται η παλιά σύνδεση</li>
-        </ul>
-      </div>
+      <div class="mrow bad"><span class="m-pos">Αγγουροντομάτα</span><span class="m-arr">→</span>
+        <span class="m-ef"><span class="none">— δεν πωλείται στην e-food —</span></span>
+        <span class="m-end"><span class="bdg warn">ΜΟΝΟ POS</span><span class="edit">✏️</span></span></div>
+
+      <div class="mrow hl"><span class="m-pos">Σουβλάκι Γαλοπούλα Πίτα</span><span class="m-arr">→</span>
+        <span class="m-ef"><select class="sel"><option>— διάλεξε —</option></select></span>
+        <span class="m-end"><span class="bdg new">🆕 ΝΕΟ</span></span></div>
+
+      <div class="mrow hl"><span class="m-pos">Λαβάς Χοιρινό</span><span class="m-arr">→</span>
+        <span class="m-ef"><b>Λαβάς Special</b> <span style="opacity:.7">(ήταν «Λαβάς ζυμωτό ψωμί»)</span></span>
+        <span class="m-end"><span class="bdg chg">✏️ ΜΕΤΟΝΟΜΑΣΤΗΚΕ</span><span class="edit">✓</span></span></div>
     </div>
-  </div>
-
-  <div class="box ok">
-    <span class="h">Τίποτα δεν έχει γίνει ακόμα.</span>
-    Ο έλεγχος <b>μόνο διαβάζει</b>. Δεν αλλάζει ούτε τον POS ούτε την e-food.
-  </div>
-</div>
-
-<!-- ── ΒΗΜΑ 2 ───────────────────────────────── -->
-<div class="sec">
-  <div class="sec-head"><div class="sec-num">2</div><h2 class="sec-title">Απαντάς μόνο στα 3 — τα υπόλοιπα 14 τρέχουν μόνα τους</h2></div>
-  <p class="sec-sub">Κάθε κάρτα είναι μία ερώτηση με απλή απάντηση.</p>
-
-  <div class="stage">
-
-    <div class="dec">
-      <div class="dec-top"><span class="dec-ico">🆕</span>
-        <div><p class="dec-t">«Σουβλάκι Γαλοπούλα σε πίτα»</p>
-        <p class="dec-q">Νέο στην e-food. Σε ποιο προϊόν του POS αντιστοιχεί;</p></div></div>
-      <div class="dec-act">
-        <select class="sel done"><option>✓ Σουβλάκι Γαλοπούλα Πίτα</option></select>
-        <span class="mini">✕ Δεν το πουλάμε εδώ</span>
-      </div>
-    </div>
-
-    <div class="dec">
-      <div class="dec-top"><span class="dec-ico">✏️</span>
-        <div><p class="dec-t">«Λαβάς ζυμωτό ψωμί» → <b style="color:var(--yellow)">«Λαβάς Special»</b></p>
-        <p class="dec-q">Άλλαξε το όνομα στην e-food. Είναι το ίδιο προϊόν;</p></div></div>
-      <div class="dec-act">
-        <span class="mini yes">✓ Ναι, το ίδιο</span>
-        <span class="mini no">Όχι, είναι καινούργιο</span>
-      </div>
-      <div class="box stop" style="margin:10px 0 0;font-size:11.5px">
-        <span class="h">Γιατί ρωτάει.</span> Αν δεν απαντήσεις, οι <b>παραγγελίες γι' αυτό το προϊόν
-        δεν θα αναγνωρίζονται</b> — θα έρχονται «άγνωστο προϊόν».
-      </div>
-    </div>
-
-    <div class="dec">
-      <div class="dec-top"><span class="dec-ico">🔗</span>
-        <div><p class="dec-t">Νέο υλικό: «Ψητό μπέικον»</p>
-        <p class="dec-q">Μοιάζει με το «Μπέικον» που ήδη έχεις. Είναι το ίδιο πράγμα στο ψυγείο;</p></div></div>
-      <div class="dec-act">
-        <span class="mini yes">✓ Ίδιο με «Μπέικον»</span>
-        <span class="mini">Ξεχωριστό υλικό</span>
-      </div>
-    </div>
-
-    <div style="margin-top:14px"><span class="btn primary">→ Δες τι θα γίνει</span></div>
   </div>
 
   <div class="box note">
-    <span class="h">Οι επιλογές είναι λίστα, όχι πληκτρολόγηση.</span>
-    Τα ονόματα διαφέρουν σε <b>99 στα 113</b> προϊόντα («Λαβάς» → «Λαβάς ζυμωτό ψωμί»).
-    Αν έγραφες όνομα θα έσπαγε· διαλέγοντας από λίστα, κλειδώνει σωστά.
+    <span class="h">Τα σημάδια είναι η καθοδήγησή σου.</span>
+    <b>ΟΚ</b> = όλα καλά · <b>ΔΙΔΥΜΟ</b> = υπάρχει σε 2 σημεία της e-food · <b>ΜΟΝΟ POS</b> = δεν το πουλάς εκεί ·
+    <b>ΝΕΟ</b>/<b>ΜΕΤΟΝΟΜΑΣΤΗΚΕ</b> = εμφανίστηκαν στον τελευταίο έλεγχο.
   </div>
 </div>
 
-<!-- ── ΒΗΜΑ 3 ───────────────────────────────── -->
+<!-- ── ΚΑΡΤΕΛΑ 2 ───────────────────────────────── -->
 <div class="sec">
-  <div class="sec-head"><div class="sec-num">3</div><h2 class="sec-title">Βλέπεις τι θα γίνει — ΠΡΙΝ γίνει</h2></div>
-  <p class="sec-sub">Καμία αλλαγή δεν εφαρμόζεται χωρίς να τη δεις πρώτα γραμμένη.</p>
+  <div class="sec-head"><div class="sec-num">2</div><h2 class="sec-title">Καρτέλα «Υλικά» — με έλεγχο ανά προϊόν</h2></div>
+  <p class="sec-sub">Η μία γραμμή που ξέρεις εσύ. Και από πίσω, πλήρης έλεγχος: <b>σε ποια προϊόντα ισχύει</b>.</p>
 
   <div class="stage">
-    <div class="plan">
-      <div class="plan-line"><span class="i">➕</span><div><b>11 συνδέσεις υλικών</b><br>
-        <span>Το νέο σουβλάκι αποκτά: Τζατζίκι, Κρεμμύδι, Ντομάτα, Πατάτες, Κέτσαπ, Μουστάρδα…</span></div></div>
-      <div class="plan-line"><span class="i">🔗</span><div><b>Coca-Cola 330ml → 2 κωδικοί</b><br>
-        <span>Κανονική + Προσφορές. Κλείνοντάς την, θα κλείνουν και οι δύο.</span></div></div>
-      <div class="plan-line"><span class="i">💰</span><div><b>2 τιμές ενημερώνονται</b><br>
-        <span>Σως BBQ 0,30 → 0,40 · Παρμεζάνα 0,50 → 0,60</span></div></div>
-      <div class="plan-line"><span class="i">✏️</span><div><b>«Λαβάς Special» = το ίδιο προϊόν</b><br>
-        <span>Οι παραγγελίες θα συνεχίσουν να αναγνωρίζονται.</span></div></div>
-      <div class="plan-line"><span class="i">🔗</span><div><b>«Ψητό μπέικον» = «Μπέικον»</b><br>
-        <span>Θα κλείνουν μαζί.</span></div></div>
-      <div class="plan-line"><span class="i">🧹</span><div><b>1 παλιά σύνδεση καθαρίζεται</b><br>
-        <span>«Χωριάτικη» — δεν υπάρχει πια στην e-food.</span></div></div>
+    <div class="tabs">
+      <span class="tab">📦 Προϊόντα<span class="c">123</span></span>
+      <span class="tab on">🥬 Υλικά<span class="c">26</span></span>
+      <span class="tab">🔗 Ίδιο πράγμα<span class="c">2</span></span>
+      <span class="tab">⚠️ Ασύνδετα<span class="c">6</span></span>
     </div>
-    <div style="margin-top:14px;display:flex;gap:9px;flex-wrap:wrap">
-      <span class="btn primary">✓ Εφάρμοσε</span>
-      <span class="btn ghost">Άκυρο — τίποτα δεν αλλάζει</span>
+
+    <div class="map">
+      <div class="mrow"><span class="m-pos">Τζατζίκι</span><span class="m-arr">→</span>
+        <span class="m-ef"><b>Τζατζίκι</b> · <span class="count">σε 66 προϊόντα</span></span>
+        <span class="m-end"><span class="bdg ok">ΟΚ</span><span class="edit">✏️</span></span></div>
+      <div class="mrow"><span class="m-pos">Μπέικον</span><span class="m-arr">→</span>
+        <span class="m-ef"><b>Μπέικον</b> · <span class="count">σε 54 προϊόντα</span></span>
+        <span class="m-end"><span class="bdg tw">= Ψημένο</span><span class="edit">✏️</span></span></div>
+      <div class="mrow"><span class="m-pos">Κρουτόν</span><span class="m-arr">→</span>
+        <span class="m-ef"><b>Κρουτόν</b> · <span class="count">σε 1 προϊόν</span></span>
+        <span class="m-end"><span class="bdg ok">ΟΚ</span><span class="edit">✏️</span></span></div>
+    </div>
+
+    <div class="drill">
+      <p class="drill-h">🥬 Τζατζίκι — σε ποια προϊόντα ισχύει;</p>
+      <p class="drill-d">Το μενού της e-food λέει 66. Ξεδιάλεξε όποιο <b>δεν</b> βάζεις ποτέ — δεν θα κλείνει εκεί.</p>
+      <div class="chk on"><span class="b">✓</span>Σουβλάκι Χοιρινό Πίτα</div>
+      <div class="chk on"><span class="b">✓</span>Σουβλάκι Χοιρινό Αραβική</div>
+      <div class="chk on"><span class="b">✓</span>Μερίδα Σουβλάκι Χοιρινό</div>
+      <div class="chk off"><span class="b"></span>Tamam Burger<span class="why">το ξεδιάλεξες</span></div>
+      <div class="chk on"><span class="b">✓</span>Ντόνερ Box</div>
+      <div style="text-align:center;color:var(--muted);font-size:11px;padding:6px 0">…και 61 ακόμα</div>
+      <div style="display:flex;gap:8px;margin-top:9px;flex-wrap:wrap">
+        <span class="btn sm">✓ Όλα</span><span class="btn sm">✕ Κανένα</span>
+        <span class="btn sm primary">💾 Αποθήκευση</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="box warn">
+    <span class="h">Το ξεδιάλεγμα είναι δικό σου εργαλείο — όχι υποχρέωση.</span>
+    Από προεπιλογή <b>είναι όλα τσεκαρισμένα</b> (όπως λέει το μενού της e-food). Το πειράζεις μόνο
+    αν ξέρεις κάτι που το μενού δεν ξέρει.
+  </div>
+
+  <div class="box note">
+    <span class="h">Νέο προϊόν → μπαίνει αυτόματα τσεκαρισμένο.</span>
+    Προσθέτεις σουβλάκι με τζατζίκι; Εμφανίζεται εδώ ✓ από μόνο του. Δεν χρειάζεται να το θυμηθείς.
+  </div>
+</div>
+
+<!-- ── ΚΑΡΤΕΛΑ 3 ───────────────────────────────── -->
+<div class="sec">
+  <div class="sec-head"><div class="sec-num">3</div><h2 class="sec-title">Καρτέλα «Ίδιο πράγμα»</h2></div>
+  <p class="sec-sub">Υλικά που βγαίνουν από το ίδιο βάζο. Κλείνει το ένα → κλείνουν όλα.</p>
+
+  <div class="stage">
+    <div class="tabs">
+      <span class="tab">📦 Προϊόντα<span class="c">123</span></span>
+      <span class="tab">🥬 Υλικά<span class="c">26</span></span>
+      <span class="tab on">🔗 Ίδιο πράγμα<span class="c">2</span></span>
+      <span class="tab">⚠️ Ασύνδετα<span class="c">6</span></span>
+    </div>
+    <div class="map">
+      <div class="mrow"><span class="m-pos">Μπέικον</span><span class="m-arr">=</span>
+        <span class="m-ef"><b>Ψημένο Μπέικον</b></span>
+        <span class="m-end"><span class="bdg ok">ΕΝΕΡΓΟ</span><span class="edit">✏️</span><span class="edit">🗑</span></span></div>
+      <div class="mrow"><span class="m-pos">Πράσινη Σαλάτα</span><span class="m-arr">=</span>
+        <span class="m-ef"><b>Iceberg</b></span>
+        <span class="m-end"><span class="bdg ok">ΕΝΕΡΓΟ</span><span class="edit">✏️</span><span class="edit">🗑</span></span></div>
+      <div class="mrow hl"><span class="m-pos">Σως μουστάρδας</span><span class="m-arr">?</span>
+        <span class="m-ef"><b>Sauce μουστάρδας</b> <span style="opacity:.7">παρόμοιο όνομα</span></span>
+        <span class="m-end"><span class="bdg new">ΠΡΟΤΑΣΗ</span><span class="edit">✓ Ίδιο</span><span class="edit">✕ Όχι</span></span></div>
+    </div>
+    <div style="margin-top:12px"><span class="btn sm">➕ Πρόσθεσε ζευγάρι</span></div>
+  </div>
+
+  <div class="box stop">
+    <span class="h">Αφορά ΜΟΝΟ υλικά — ποτέ προϊόντα.</span>
+    Τελείωσε το μπέικον; Το burger <b>μένει πωλήσιμο</b> — ο πελάτης απλώς δεν μπορεί να διαλέξει μπέικον.
+  </div>
+</div>
+
+<!-- ── ΚΑΡΤΕΛΑ 4 ───────────────────────────────── -->
+<div class="sec">
+  <div class="sec-head"><div class="sec-num">4</div><h2 class="sec-title">Καρτέλα «Ασύνδετα» — και οι δύο κατευθύνσεις</h2></div>
+  <p class="sec-sub">Ό,τι υπάρχει στη μία πλευρά και όχι στην άλλη. Κάθε κατεύθυνση έχει άλλη σημασία.</p>
+
+  <div class="stage">
+    <div class="tabs">
+      <span class="tab">📦 Προϊόντα<span class="c">123</span></span>
+      <span class="tab">🥬 Υλικά<span class="c">26</span></span>
+      <span class="tab">🔗 Ίδιο πράγμα<span class="c">2</span></span>
+      <span class="tab on">⚠️ Ασύνδετα<span class="c">6</span></span>
+    </div>
+
+    <div class="dirn"><b>⬅ Μόνο στον POS</b> — το πουλάς στο κατάστημα, όχι στην e-food. <b>Φυσιολογικό.</b></div>
+    <div class="map" style="margin-bottom:14px">
+      <div class="mrow"><span class="m-pos">Αγγουροντομάτα</span>
+        <span class="m-ef" style="flex:2 1 240px">Δεν υπάρχει στην e-food</span>
+        <span class="m-end"><span class="bdg warn">ΕΝΤΑΞΕΙ</span><span class="edit">Σύνδεσέ το</span></span></div>
+      <div class="mrow"><span class="m-pos">Καλαμαράκι XXL</span>
+        <span class="m-ef" style="flex:2 1 240px">Δεν υπάρχει στην e-food</span>
+        <span class="m-end"><span class="bdg warn">ΕΝΤΑΞΕΙ</span><span class="edit">Σύνδεσέ το</span></span></div>
+      <div class="mrow"><span class="m-pos">Πατάτες τηγανητές προσφοράς</span>
+        <span class="m-ef" style="flex:2 1 240px">Το εξαίρεσες εσύ (27-07)</span>
+        <span class="m-end"><span class="bdg ok">ΣΚΟΠΙΜΟ</span><span class="edit">✏️</span></span></div>
+    </div>
+
+    <div class="dirn"><b>➡ Μόνο στην e-food</b> — πουλιέται εκεί αλλά ο POS δεν το ξέρει.
+      <b style="color:#ffb3b1">Χρειάζεται προσοχή.</b></div>
+    <div class="map">
+      <div class="mrow hl"><span class="m-pos" style="color:#ffd9a8">Σουβλάκι Γαλοπούλα Πίτα</span>
+        <span class="m-ef" style="flex:2 1 240px">Ο POS δεν μπορεί να το κλείσει ποτέ</span>
+        <span class="m-end"><span class="bdg chg">ΠΡΟΣΟΧΗ</span><span class="edit">Σύνδεσέ το</span></span></div>
+      <div class="mrow hl"><span class="m-pos" style="color:#ffd9a8">Γλυκοπατάτες</span>
+        <span class="m-ef" style="flex:2 1 240px">Ο POS δεν μπορεί να το κλείσει ποτέ</span>
+        <span class="m-end"><span class="bdg chg">ΠΡΟΣΟΧΗ</span><span class="edit">Σύνδεσέ το</span></span></div>
+    </div>
+  </div>
+
+  <div class="box stop">
+    <span class="h">Γιατί η μία κατεύθυνση είναι επικίνδυνη και η άλλη όχι.</span>
+    <b>Μόνο στον POS</b> → απλώς δεν στέλνεται τίποτα. Αβλαβές.<br>
+    <b>Μόνο στην e-food</b> → το προϊόν <b>πωλείται και δεν μπορείς να το κλείσεις ποτέ</b>.
+    Αυτό είναι που πρέπει να δεις.
+  </div>
+</div>
+
+<!-- ── ΕΦΑΡΜΟΓΗ ───────────────────────────────── -->
+<div class="sec">
+  <div class="sec-head"><div class="sec-num">5</div><h2 class="sec-title">Τίποτα δεν εφαρμόζεται χωρίς να το δεις</h2></div>
+  <p class="sec-sub">Ό,τι κι αν άλλαξες — μία γραμμή ή είκοσι — πρώτα το βλέπεις γραμμένο.</p>
+
+  <div class="stage">
+    <div class="map">
+      <div class="mrow"><span style="flex:1">➕ <b>Σουβλάκι Γαλοπούλα</b> συνδέεται · παίρνει <b>11 υλικά</b> αυτόματα</span></div>
+      <div class="mrow"><span style="flex:1">✏️ <b>Λαβάς Special</b> = το ίδιο προϊόν (οι παραγγελίες συνεχίζουν)</span></div>
+      <div class="mrow"><span style="flex:1">🔗 <b>Σως μουστάρδας</b> = <b>Sauce μουστάρδας</b> — θα κλείνουν μαζί</span></div>
+      <div class="mrow"><span style="flex:1">➖ <b>Τζατζίκι</b> εξαιρείται από <b>Tamam Burger</b></span></div>
+      <div class="mrow"><span style="flex:1">💰 <b>2 τιμές</b> υλικών ενημερώνονται</span></div>
+    </div>
+    <div style="margin-top:13px;display:flex;gap:9px;flex-wrap:wrap">
+      <span class="btn primary">✓ Εφάρμοσε</span><span class="btn ghost">Άκυρο</span>
     </div>
   </div>
 
   <div class="box ok">
-    <span class="h">Και μετά; Αναίρεση με ένα πάτημα.</span>
-    Κρατιέται <b>αντίγραφο της προηγούμενης κατάστασης</b>. Αν κάτι πήγε στραβά,
-    «Επαναφορά προηγούμενου» και γύρισες πίσω.
+    <span class="h">Και μετά, αναίρεση.</span>
+    Κρατιέται αντίγραφο. Ένα πάτημα «Επαναφορά προηγούμενου» και γύρισες πίσω —
+    <b>ακόμα κι αν έχεις κλείσει την οθόνη</b>.
   </div>
 </div>
 
 <!-- ── ΤΑ ΣΕΝΑΡΙΑ ───────────────────────────────── -->
 <div class="sec">
-  <div class="sec-head"><div class="sec-num">✓</div><h2 class="sec-title">Τα 10 σενάρια — τι κάνει το καθένα</h2></div>
-  <p class="sec-sub">Όλα όσα μπορεί να συμβούν στο μενού σου, και η απάντηση του συστήματος.</p>
+  <div class="sec-head"><div class="sec-num">✓</div><h2 class="sec-title">Τα 12 σενάρια</h2></div>
   <table>
-    <tr><th style="width:34%">Κάνεις…</th><th style="width:33%">Τι σπάει σήμερα</th><th style="width:33%">Με τη λύση</th></tr>
-    <tr><td><b>Νέο προϊόν</b> στην e-food</td><td>δεν κλείνει ποτέ από τον POS</td><td><span class="k">ρωτά</span> σε ποιο POS αντιστοιχεί</td></tr>
-    <tr><td><b>Νέο προϊόν</b> με υπάρχοντα υλικά</td><td>τα υλικά <b>δεν κλείνουν</b> εκεί</td><td><span class="a">αυτόματα</span> — προσθέτει όλες τις συνδέσεις</td></tr>
-    <tr><td><b>Μετονομασία</b> στην e-food</td><td>σταματούν οι <b>παραγγελίες</b></td><td><span class="k">ρωτά</span> «είναι το ίδιο;»</td></tr>
-    <tr><td><b>Δεύτερη κατηγορία</b> (προσφορά)</td><td>το δίδυμο <b>συνεχίζει να πουλάει</b></td><td><span class="a">αυτόματα</span> — προσθέτει 2ο κωδικό</td></tr>
-    <tr><td><b>Αλλαγή τιμής</b> υλικού</td><td>ίσως επανέλθει η παλιά</td><td><span class="a">αυτόματα</span> — ενημερώνει</td></tr>
-    <tr><td><b>Σβήνεις</b> προϊόν από e-food</td><td>κόκκινη κουκκίδα + μηνύματα</td><td><span class="a">αυτόματα</span> — καθαρίζει</td></tr>
-    <tr><td><b>Νέο υλικό</b></td><td>δεν κλείνει ποτέ</td><td><span class="k">ρωτά</span> αν είναι ίδιο με υπάρχον</td></tr>
-    <tr><td><b>Προϊόν μόνο στον POS</b></td><td>καμία ένδειξη</td><td><span class="w">ενημερώνει</span> στην αναφορά</td></tr>
-    <tr><td><b>Νέο μέγεθος</b> (Μεγάλο dip)</td><td>—</td><td><span class="a">αγνοείται</span> — δεν είναι υλικό</td></tr>
-    <tr><td><b>Λάθος</b> επιλογή</td><td>—</td><td><span class="a">αναίρεση</span> με ένα πάτημα</td></tr>
+    <tr><th style="width:33%">Κάνεις…</th><th style="width:34%">Τι σπάει σήμερα</th><th style="width:33%">Με τον χάρτη</th></tr>
+    <tr><td><b>Νέο προϊόν</b> στην e-food</td><td>δεν κλείνει ποτέ από τον POS</td><td><span class="k">το βλέπεις</span> στα «Ασύνδετα ➡»</td></tr>
+    <tr><td><b>Νέο προϊόν</b> με υπάρχοντα υλικά</td><td>τα υλικά δεν κλείνουν εκεί</td><td><span class="a">αυτόματα</span> ✓ τσεκαρισμένα</td></tr>
+    <tr><td><b>Μετονομασία</b> στην e-food</td><td>σταματούν οι παραγγελίες</td><td><span class="k">σημάδι</span> «ΜΕΤΟΝΟΜΑΣΤΗΚΕ»</td></tr>
+    <tr><td><b>Δεύτερη κατηγορία</b> (προσφορά)</td><td>το δίδυμο πουλάει</td><td><span class="a">αυτόματα</span> — 2ος κωδικός</td></tr>
+    <tr><td><b>Αλλαγή τιμής</b> υλικού</td><td>ίσως επανέλθει η παλιά</td><td><span class="a">αυτόματα</span></td></tr>
+    <tr><td><b>Σβήνεις</b> από e-food</td><td>κόκκινη κουκκίδα, μηνύματα</td><td><span class="a">καθαρίζεται</span></td></tr>
+    <tr><td><b>Νέο υλικό</b></td><td>δεν κλείνει ποτέ</td><td><span class="k">πρόταση</span> «μήπως = υπάρχον;»</td></tr>
+    <tr><td><b>Προϊόν μόνο στον POS</b></td><td>καμία ένδειξη</td><td><span class="w">καρτέλα</span> «Ασύνδετα ⬅»</td></tr>
+    <tr><td><b>Λάθος</b> παλιά σύνδεση</td><td>δεν φαίνεται πουθενά</td><td><span class="a">τη βλέπεις &amp; τη διορθώνεις</span></td></tr>
+    <tr><td><b>Υλικό που δεν βάζεις</b> σε κάποιο πιάτο</td><td>δεν ρυθμίζεται</td><td><span class="a">το ξεδιαλέγεις</span></td></tr>
+    <tr><td><b>Νέο μέγεθος</b> (Μεγάλο dip)</td><td>—</td><td><span class="a">αγνοείται</span></td></tr>
+    <tr><td><b>Λάθος</b> επιλογή σου</td><td>—</td><td><span class="a">αναίρεση</span></td></tr>
   </table>
 </div>
 
@@ -305,29 +379,15 @@ td .a{color:#7ef0b6;font-weight:700} td .k{color:#9ecdff;font-weight:700} td .w{
   <ul class="steps">
     <li><b>Δεν αλλάζει τίποτα στην e-food.</b> Μόνο διαβάζει. Το μενού το φτιάχνεις εσύ στο portal.</li>
     <li><b>Δεν κλείνει προϊόντα ή υλικά.</b> Είναι οθόνη ρυθμίσεων, όχι πωλήσεων.</li>
-    <li><b>Δεν μαντεύει.</b> Ό,τι θέλει ανθρώπινη γνώση (ίδιο ψυγείο; ίδιο προϊόν;) — <b>ρωτά</b>.</li>
-    <li><b>Δεν εφαρμόζει χωρίς να δεις.</b> Πάντα προεπισκόπηση, πάντα «Άκυρο».</li>
-    <li><b>Δεν αφήνει σιωπηλή αστοχία.</b> Ό,τι δεν μπόρεσε να λύσει, το <b>γράφει</b>.</li>
+    <li><b>Δεν μαντεύει.</b> Ό,τι θέλει τη γνώση σου, το <b>προτείνει</b> και περιμένει.</li>
+    <li><b>Δεν σβήνει τις ρυθμίσεις σου.</b> Ό,τι ξεδιάλεξες μένει, ακόμα κι αν ξανατρέξει ο έλεγχος.</li>
+    <li><b>Δεν εφαρμόζει χωρίς προεπισκόπηση</b> — και υπάρχει πάντα αναίρεση.</li>
   </ul>
-</div>
-
-<!-- ── ΠΟΤΕ ───────────────────────────────── -->
-<div class="sec">
-  <div class="sec-head"><div class="sec-num">⏱</div><h2 class="sec-title">Πότε το τρέχεις</h2></div>
-  <ul class="steps">
-    <li><b>Όποτε αλλάξεις κάτι στο μενού</b> της e-food — προσθήκη, μετονομασία, τιμή.</li>
-    <li><b>Ο POS θα σου το θυμίζει</b> αν περάσει καιρός: διακριτικό σημάδι στην καρτέλα E-food.</li>
-    <li><b>Σε νεκρή ώρα</b>, όχι σε αιχμή — διαβάζει όλο το μενού και θέλει μερικά δευτερόλεπτα.</li>
-  </ul>
-  <div class="box note">
-    <span class="h">Δεν τρέχει μόνο του.</span>
-    Σκόπιμα: μια αυτόματη αλλαγή καταλόγου εν ώρα λειτουργίας είναι επικίνδυνη. <b>Εσύ αποφασίζεις πότε.</b>
-  </div>
 </div>
 
 <div class="foot">
-  <span class="chg">v2 — αντικαθιστά την πρώτη πρόταση</span><br><br>
-  Τίποτα δεν έχει υλοποιηθεί ακόμα.<br>
+  <b>v3</b> — πλήρης χάρτης, παραμετροποίηση ανά προϊόν, και οι δύο κατευθύνσεις.<br>
+  Τίποτα δεν έχει υλοποιηθεί ακόμα.<br><br>
   Πες μου <b>ναι</b>, ή τι θέλεις αλλιώς.
 </div>
 
