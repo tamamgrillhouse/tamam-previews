@@ -139,9 +139,8 @@ td .a{color:#7ef0b6;font-weight:700} td .k{color:#9ecdff;font-weight:700} td .w{
   <table>
     <tr><th>Τι ρυθμίζεις</th><th>Γραμμές</th><th></th></tr>
     <tr><td><b>Προϊόντα</b> — ποιο δικό σου = ποιο δικό τους</td><td><b>123</b> <span style="opacity:.7">(12 δίδυμα)</span></td><td><span class="a">✓ το ρυθμίζεις</span></td></tr>
-    <tr><td><b>Υλικά</b> — ποιο δικό σου = ποιο δικό τους</td><td><b>26</b></td><td><span class="a">✓ το ρυθμίζεις</span></td></tr>
+    <tr><td><b>Υλικά</b> — ένα δικό σου = ΟΣΑ δικά τους</td><td><b>24</b></td><td><span class="a">✓ το ρυθμίζεις</span></td></tr>
     <tr><td><b>Υλικό ανά προϊόν</b> — πού ισχύει το καθένα</td><td><b>ανά υλικό</b></td><td><span class="a">✓ το ρυθμίζεις</span></td></tr>
-    <tr><td><b>«Ίδιο πράγμα»</b> — κοινό απόθεμα</td><td><b>2</b> σήμερα</td><td><span class="a">✓ το ρυθμίζεις</span></td></tr>
     <tr><td colspan="3" style="padding-top:14px;border:0">
       <div class="box note" style="margin:0"><span class="h">Σύνολο: ~150 γραμμές.</span>
       Ένας πίνακας που τον σκρολάρεις σε ένα λεπτό — με αναζήτηση και φίλτρα.</div></td></tr>
@@ -157,8 +156,7 @@ td .a{color:#7ef0b6;font-weight:700} td .k{color:#9ecdff;font-weight:700} td .w{
     <div class="tabs">
       <span class="tab on">📦 Προϊόντα<span class="c">123</span></span>
       <span class="tab">🥬 Υλικά<span class="c">26</span></span>
-      <span class="tab">🔗 Ίδιο πράγμα<span class="c">3</span></span>
-      <span class="tab">⚠️ Ασύνδετα<span class="c">6</span></span>
+            <span class="tab">⚠️ Ασύνδετα<span class="c">6</span></span>
     </div>
     <div class="tools">
       <div class="search">🔍 Αναζήτηση προϊόντος…</div>
@@ -206,8 +204,7 @@ td .a{color:#7ef0b6;font-weight:700} td .k{color:#9ecdff;font-weight:700} td .w{
     <div class="tabs">
       <span class="tab">📦 Προϊόντα<span class="c">123</span></span>
       <span class="tab on">🥬 Υλικά<span class="c">26</span></span>
-      <span class="tab">🔗 Ίδιο πράγμα<span class="c">3</span></span>
-      <span class="tab">⚠️ Ασύνδετα<span class="c">6</span></span>
+            <span class="tab">⚠️ Ασύνδετα<span class="c">6</span></span>
     </div>
 
     <div class="map">
@@ -215,8 +212,11 @@ td .a{color:#7ef0b6;font-weight:700} td .k{color:#9ecdff;font-weight:700} td .w{
         <span class="m-ef"><b>Τζατζίκι</b> · <span class="count">σε 66 προϊόντα</span></span>
         <span class="m-end"><span class="bdg ok">ΟΚ</span><span class="edit">✏️</span></span></div>
       <div class="mrow"><span class="m-pos">Μπέικον</span><span class="m-arr">→</span>
-        <span class="m-ef"><b>Μπέικον</b> · <span class="count">σε 54 προϊόντα</span></span>
-        <span class="m-end"><span class="bdg tw">= Ψημένο</span><span class="edit">✏️</span></span></div>
+        <span class="m-ef"><b>Μπέικον</b> + <b>Ψημένο μπέικον</b> · <span class="count">σε 56 προϊόντα</span></span>
+        <span class="m-end"><span class="bdg tw">2 ΟΝΟΜΑΤΑ</span><span class="edit">✏️</span></span></div>
+      <div class="mrow"><span class="m-pos">Σως Caesar's</span><span class="m-arr">→</span>
+        <span class="m-ef"><b>Caesar`s sauce</b> + <b>Σως Caesar`s</b> + <b>Ceasar`s sauce</b></span>
+        <span class="m-end"><span class="bdg tw">3 ΟΝΟΜΑΤΑ</span><span class="edit">✏️</span></span></div>
       <div class="mrow"><span class="m-pos">Κρουτόν</span><span class="m-arr">→</span>
         <span class="m-ef"><b>Κρουτόν</b> · <span class="count">σε 1 προϊόν</span></span>
         <span class="m-end"><span class="bdg ok">ΟΚ</span><span class="edit">✏️</span></span></div>
@@ -250,61 +250,16 @@ td .a{color:#7ef0b6;font-weight:700} td .k{color:#9ecdff;font-weight:700} td .w{
   </div>
 </div>
 
-<!-- ── ΚΑΡΤΕΛΑ 3 ───────────────────────────────── -->
-<div class="sec">
-  <div class="sec-head"><div class="sec-num">3</div><h2 class="sec-title">Καρτέλα «Ίδιο πράγμα»</h2></div>
-  <p class="sec-sub">Υλικά που βγαίνουν από το ίδιο βάζο. Κλείνει το ένα → κλείνουν όλα.</p>
-
-  <div class="stage">
-    <div class="tabs">
-      <span class="tab">📦 Προϊόντα<span class="c">123</span></span>
-      <span class="tab">🥬 Υλικά<span class="c">26</span></span>
-      <span class="tab on">🔗 Ίδιο πράγμα<span class="c">3</span></span>
-      <span class="tab">⚠️ Ασύνδετα<span class="c">6</span></span>
-    </div>
-    <div class="map">
-      <div class="mrow"><span class="m-pos">Μπέικον</span><span class="m-arr">=</span>
-        <span class="m-ef"><b>Ψημένο Μπέικον</b></span>
-        <span class="m-end"><span class="bdg ok">ΕΝΕΡΓΟ</span><span class="edit">✏️</span><span class="edit">🗑</span></span></div>
-      <div class="mrow"><span class="m-pos">Πράσινη Σαλάτα</span><span class="m-arr">=</span>
-        <span class="m-ef"><b>Iceberg</b></span>
-        <span class="m-end"><span class="bdg ok">ΕΝΕΡΓΟ</span><span class="edit">✏️</span><span class="edit">🗑</span></span></div>
-      <div class="mrow"><span class="m-pos">Σως Caesar's</span><span class="m-arr">=</span>
-        <span class="m-ef"><b>Caesar`s sauce</b> = <b>Σως Caesar`s</b> = <b>Ceasar`s sauce</b></span>
-        <span class="m-end"><span class="bdg tw">3 ΟΝΟΜΑΤΑ</span><span class="edit">✏️</span><span class="edit">🗑</span></span></div>
-      <div class="mrow hl"><span class="m-pos">Σως μουστάρδας</span><span class="m-arr">?</span>
-        <span class="m-ef"><b>Sauce μουστάρδας</b> <span style="opacity:.7">παρόμοιο όνομα</span></span>
-        <span class="m-end"><span class="bdg new">ΠΡΟΤΑΣΗ</span><span class="edit">✓ Ίδιο</span><span class="edit">✕ Όχι</span></span></div>
-    </div>
-    <div style="margin-top:12px"><span class="btn sm">➕ Νέα ομάδα</span></div>
-  </div>
-
-  <div class="box note">
-    <span class="h">Όσα ονόματα θέλεις — όχι μόνο δύο.</span>
-    Ένα υλικό μπορεί να έχει <b>3, 4 ή περισσότερες</b> ονομασίες στην e-food. Το «Σως Caesar's»
-    έχει ήδη <b>τρεις</b> (η μία με ορθογραφικό: <i>Ceasar</i>). Πατάς «➕ Πρόσθεσε όνομα» όσες φορές
-    χρειάζεται — <b>δεν υπάρχει όριο</b>.
-  </div>
-
-  <div class="box stop">
-    <span class="h">Αφορά ΜΟΝΟ υλικά — ποτέ προϊόντα.</span>
-    Τελείωσε το μπέικον; Το burger <b>μένει πωλήσιμο</b> — ο πελάτης απλώς δεν μπορεί να διαλέξει μπέικον.<br><br>
-    <b>Στο μενού της e-food:</b> το πιάτο παραμένει κανονικά· γκριζάρει <b>μόνο το τικ</b> του υλικού από κάτω.
-    Το ίδιο ισχύει για ΟΛΑ τα υλικά — τζατζίκι, ντομάτα, κασέρι. <b>Ποτέ δεν φεύγει πιάτο επειδή λείπει υλικό.</b>
-  </div>
-</div>
-
 <!-- ── ΚΑΡΤΕΛΑ 4 ───────────────────────────────── -->
 <div class="sec">
-  <div class="sec-head"><div class="sec-num">4</div><h2 class="sec-title">Καρτέλα «Ασύνδετα» — και οι δύο κατευθύνσεις</h2></div>
+  <div class="sec-head"><div class="sec-num">3</div><h2 class="sec-title">Καρτέλα «Ασύνδετα» — και οι δύο κατευθύνσεις</h2></div>
   <p class="sec-sub">Ό,τι υπάρχει στη μία πλευρά και όχι στην άλλη. Κάθε κατεύθυνση έχει άλλη σημασία.</p>
 
   <div class="stage">
     <div class="tabs">
       <span class="tab">📦 Προϊόντα<span class="c">123</span></span>
       <span class="tab">🥬 Υλικά<span class="c">26</span></span>
-      <span class="tab">🔗 Ίδιο πράγμα<span class="c">3</span></span>
-      <span class="tab on">⚠️ Ασύνδετα<span class="c">6</span></span>
+            <span class="tab on">⚠️ Ασύνδετα<span class="c">6</span></span>
     </div>
 
     <div class="dirn"><b>⬅ Μόνο στον POS</b> — το πουλάς στο κατάστημα, όχι στην e-food. <b>Φυσιολογικό.</b></div>
@@ -342,7 +297,7 @@ td .a{color:#7ef0b6;font-weight:700} td .k{color:#9ecdff;font-weight:700} td .w{
 
 <!-- ── ΕΦΑΡΜΟΓΗ ───────────────────────────────── -->
 <div class="sec">
-  <div class="sec-head"><div class="sec-num">5</div><h2 class="sec-title">Τίποτα δεν εφαρμόζεται χωρίς να το δεις</h2></div>
+  <div class="sec-head"><div class="sec-num">4</div><h2 class="sec-title">Τίποτα δεν εφαρμόζεται χωρίς να το δεις</h2></div>
   <p class="sec-sub">Ό,τι κι αν άλλαξες — μία γραμμή ή είκοσι — πρώτα το βλέπεις γραμμένο.</p>
 
   <div class="stage">
