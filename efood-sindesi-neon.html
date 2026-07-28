@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
+<title>Πρόταση — Σύνδεση νέων προϊόντων & υλικών με την e-food</title>
+<style>
+:root{
+  --black:#0e1330; --dark:#12183a; --card:#1c2554; --card2:#243068;
+  --yellow:#f5c400; --white:#e8eaf6; --muted:#93a0dd;
+  --red:#ef5350; --green:#26c281; --blue:#4a9ef0; --border:#2a3580;
+  --radius:16px; --radius-card:8px; --radius-btn:6px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--black);color:var(--white);
+  font-family:'Noto Sans',system-ui,-apple-system,'Segoe UI',sans-serif;padding:24px 16px 70px;line-height:1.5}
+h1{font-size:21px;margin:0 0 8px;text-align:center;letter-spacing:.3px}
+.lead{text-align:center;color:var(--muted);font-size:13px;max-width:760px;margin:0 auto 10px;line-height:1.6}
+.lead b{color:var(--white)}
+.wrap{max-width:900px;margin:0 auto}
+
+.sec{margin:38px 0 0}
+.sec-head{display:flex;align-items:center;gap:10px;margin:0 0 14px}
+.sec-num{width:26px;height:26px;border-radius:50%;background:var(--yellow);color:#1a1200;
+  font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1}
+.sec-title{font-size:16px;font-weight:800;margin:0}
+.sec-sub{color:var(--muted);font-size:12.5px;margin:-8px 0 14px 36px}
+
+.stage{background:linear-gradient(160deg,#0b1028,#111634);border:1px solid rgba(255,255,255,.09);
+  border-radius:var(--radius);padding:18px;position:relative;overflow:hidden}
+
+.card{background:var(--card);border-left:3px solid var(--yellow);border-radius:var(--radius-card);
+  padding:14px 16px;margin:0 0 12px}
+.card-t{font-size:13.5px;font-weight:800;margin:0 0 4px;display:flex;align-items:center;gap:7px}
+.card-d{font-size:11.5px;color:var(--muted);margin:0}
+
+.btn{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.14);color:var(--white);border-radius:var(--radius-btn);
+  padding:9px 16px;font-size:12.5px;font-weight:700;cursor:default}
+.btn.primary{background:linear-gradient(180deg,#f5c400,#d4a900);color:#1a1200;border-color:transparent}
+.btn.ghost{background:transparent;color:var(--muted)}
+
+.res{background:var(--dark);border:1px solid var(--border);border-radius:var(--radius-card);
+  padding:14px;margin-top:12px}
+.res-line{display:flex;align-items:center;gap:9px;font-size:12.5px;padding:7px 0;
+  border-bottom:1px solid rgba(255,255,255,.05)}
+.res-line:last-child{border-bottom:0}
+.dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.dot.ok{background:var(--green)} .dot.new{background:var(--blue)} .dot.warn{background:var(--yellow)}
+.res-line b{color:var(--white)} .res-line span{color:var(--muted)}
+
+.row{display:flex;align-items:center;gap:10px;background:var(--dark);border:1px solid var(--border);
+  border-radius:var(--radius-card);padding:11px 13px;margin-bottom:9px;flex-wrap:wrap}
+.row-name{flex:1 1 190px;min-width:0}
+.row-name b{display:block;font-size:13px}
+.row-name small{color:var(--muted);font-size:10.5px}
+.sel{background:var(--card2);border:1px solid var(--border);color:var(--white);
+  border-radius:var(--radius-btn);padding:8px 11px;font-size:12px;min-width:190px;
+  font-family:inherit;appearance:none;
+  background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+  background-position:calc(100% - 15px) 52%,calc(100% - 10px) 52%;
+  background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:30px}
+.sel.done{border-color:rgba(38,194,129,.5);color:#a8ffd0}
+.sel.skip{border-color:rgba(255,255,255,.1);color:var(--muted)}
+
+.pair{display:flex;align-items:center;gap:10px;background:var(--dark);border:1px solid var(--border);
+  border-radius:var(--radius-card);padding:11px 13px;margin-bottom:9px}
+.chip{background:var(--card2);border:1px solid var(--border);border-radius:var(--radius-btn);
+  padding:6px 11px;font-size:12px;font-weight:700}
+.link{color:var(--yellow);font-size:16px}
+.pair-act{margin-left:auto;display:flex;gap:6px}
+.mini{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:var(--muted);
+  border-radius:var(--radius-btn);padding:5px 10px;font-size:11px;font-weight:700}
+.mini.yes{background:rgba(38,194,129,.15);border-color:rgba(38,194,129,.45);color:#a8ffd0}
+
+.box{border-radius:var(--radius-card);padding:12px 14px;font-size:12.5px;margin:14px 0;line-height:1.6}
+.box .h{font-weight:800;display:block;margin-bottom:3px}
+.box.warn{background:rgba(245,196,0,.09);border:1px solid rgba(245,196,0,.32)}
+.box.warn .h{color:var(--yellow)}
+.box.stop{background:rgba(239,83,80,.09);border:1px solid rgba(239,83,80,.32)}
+.box.stop .h{color:#ff9d9b}
+.box.ok{background:rgba(38,194,129,.09);border:1px solid rgba(38,194,129,.32)}
+.box.ok .h{color:#7ef0b6}
+.box.note{background:rgba(74,158,240,.09);border:1px solid rgba(74,158,240,.3)}
+.box.note .h{color:#9ecdff}
+
+table{width:100%;border-collapse:collapse;font-size:12.5px;margin:10px 0}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.07)}
+th{color:var(--yellow);font-size:11px;text-transform:uppercase;letter-spacing:.6px}
+td b{color:var(--white)}
+td{color:var(--muted)}
+
+.steps{counter-reset:s;list-style:none;padding:0;margin:12px 0}
+.steps li{counter-increment:s;position:relative;padding:0 0 12px 34px;font-size:12.5px;color:var(--muted)}
+.steps li::before{content:counter(s);position:absolute;left:0;top:-1px;width:22px;height:22px;
+  border-radius:50%;background:rgba(245,196,0,.15);border:1px solid rgba(245,196,0,.4);
+  color:var(--yellow);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.steps li b{color:var(--white)}
+
+.foot{text-align:center;color:var(--muted);font-size:11.5px;margin-top:44px;padding-top:20px;
+  border-top:1px solid rgba(255,255,255,.07)}
+.tag{display:inline-block;font-size:10px;letter-spacing:1px;text-transform:uppercase;
+  color:var(--yellow);background:rgba(245,196,0,.12);border:1px solid rgba(245,196,0,.3);
+  padding:3px 9px;border-radius:50px;margin-bottom:8px}
+@media(max-width:600px){ .sel{min-width:100%} .row-name{flex:1 1 100%} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div style="text-align:center"><span class="tag">Πρόταση προς έγκριση</span></div>
+<h1>Σύνδεση νέων προϊόντων &amp; υλικών με την e-food</h1>
+<p class="lead">Σήμερα, κάθε φορά που προσθέτεις κάτι στο μενού, χρειάζεσαι <b>εμένα</b> για να το συνδέσω.<br>
+Η πρόταση: ένα κουμπί που το κάνει <b>μόνος σου, σε 2 λεπτά</b>.</p>
+
+<!-- ── ΤΟ ΠΡΟΒΛΗΜΑ ───────────────────────────────── -->
+<div class="sec">
+  <div class="sec-head"><div class="sec-num">!</div><h2 class="sec-title">Τι συμβαίνει σήμερα</h2></div>
+  <div class="box stop">
+    <span class="h">Προσθέτεις προϊόν → ο POS δεν ξέρει ότι υπάρχει στην e-food.</span>
+    Το κλείνεις όταν τελειώσει, ο POS το γκριζάρει, <b>και η e-food συνεχίζει να το πουλάει</b> —
+    χωρίς κανένα μήνυμα λάθους. Ακριβώς αυτό συνέβαινε με το «Ψημένο μπέικον» πριν το φτιάξουμε.
+  </div>
+  <p class="card-d" style="margin-left:2px">Η σύνδεση ζει σήμερα μέσα σε αρχεία κώδικα — δεν υπάρχει οθόνη να την αλλάξεις.</p>
+</div>
+
+<!-- ── ΒΗΜΑ 1 ───────────────────────────────── -->
+<div class="sec">
+  <div class="sec-head"><div class="sec-num">1</div><h2 class="sec-title">Πατάς «Έλεγχος για αλλαγές»</h2></div>
+  <p class="sec-sub">Νέα κάρτα στο <b>Ρυθμίσεις → Σύστημα → E-food</b>. Διαβάζει το ζωντανό μενού της e-food και το συγκρίνει με τον POS.</p>
+
+  <div class="stage">
+    <div class="card">
+      <div class="card-t">🔄 Ανανέωση καταλόγου από e-food</div>
+      <p class="card-d">Ελέγχει αν προστέθηκαν ή αφαιρέθηκαν προϊόντα και υλικά στην e-food.</p>
+      <div style="margin-top:12px"><span class="btn primary">🔍 Έλεγχος για αλλαγές</span></div>
+
+      <div class="res">
+        <div class="res-line"><span class="dot ok"></span><b>122 προϊόντα</b><span>&nbsp;συνδεδεμένα σωστά</span></div>
+        <div class="res-line"><span class="dot ok"></span><b>25 υλικά</b><span>&nbsp;συνδεδεμένα σωστά</span></div>
+        <div class="res-line"><span class="dot new"></span><b>3 νέα στην e-food</b><span>&nbsp;— δεν τα ξέρει ο POS</span></div>
+        <div class="res-line"><span class="dot warn"></span><b>1 λείπει από την e-food</b><span>&nbsp;— μήπως το έσβησες;</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="box ok">
+    <span class="h">Δεν αλλάζει τίποτα με το πάτημα.</span>
+    Είναι μόνο <b>ανάγνωση</b> — σου δείχνει τι βρήκε. Τίποτα δεν κλείνει, τίποτα δεν στέλνεται.
+  </div>
+</div>
+
+<!-- ── ΒΗΜΑ 2 ───────────────────────────────── -->
+<div class="sec">
+  <div class="sec-head"><div class="sec-num">2</div><h2 class="sec-title">Συνδέεις τα νέα — με λίστα, όχι πληκτρολόγηση</h2></div>
+  <p class="sec-sub">Για κάθε νέο στοιχείο διαλέγεις σε ποιο προϊόν του POS αντιστοιχεί. Αν δεν το πουλάς εδώ, το λες και τελείωσε.</p>
+
+  <div class="stage">
+    <div class="row">
+      <div class="row-name"><b>Σουβλάκι Γαλοπούλα Πίτα</b><small>νέο στην e-food · κατηγορία «Τυλιχτά»</small></div>
+      <select class="sel done"><option>✓ Σουβλάκι Γαλοπούλα Πίτα</option></select>
+    </div>
+    <div class="row">
+      <div class="row-name"><b>Πατάτες γλυκοπατάτας</b><small>νέο στην e-food · κατηγορία «Ορεκτικά»</small></div>
+      <select class="sel"><option>— Διάλεξε προϊόν POS —</option></select>
+    </div>
+    <div class="row">
+      <div class="row-name"><b>Coca-Cola 250ml</b><small>νέο στην e-food · κατηγορία «Αναψυκτικά»</small></div>
+      <select class="sel skip"><option>✕ Δεν το πουλάμε εδώ</option></select>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:9px;flex-wrap:wrap">
+      <span class="btn primary">💾 Αποθήκευση συνδέσεων</span>
+      <span class="btn ghost">Άκυρο</span>
+    </div>
+  </div>
+
+  <div class="box note">
+    <span class="h">Γιατί λίστα και όχι πληκτρολόγηση;</span>
+    Τα ονόματα <b>δεν ταιριάζουν</b> μεταξύ POS και e-food — σε 99 στα 113 προϊόντα είναι γραμμένα αλλιώς
+    («Λαβάς» → «Λαβάς ζυμωτό ψωμί»). Αν έγραφες όνομα, θα έσπαγε. Με λίστα, διαλέγεις και κλείδωσε.
+  </div>
+</div>
+
+<!-- ── ΒΗΜΑ 3 ───────────────────────────────── -->
+<div class="sec">
+  <div class="sec-head"><div class="sec-num">3</div><h2 class="sec-title">Δηλώνεις τι είναι «το ίδιο πράγμα»</h2></div>
+  <p class="sec-sub">Μόνο για υλικά. Ό,τι βγαίνει από το ίδιο βάζο/σακούλα, κλείνει μαζί.</p>
+
+  <div class="stage">
+    <div class="pair">
+      <span class="chip">Μπέικον</span><span class="link">=</span><span class="chip">Ψημένο μπέικον</span>
+      <div class="pair-act"><span class="mini yes">✓ Ίδιο</span><span class="mini">Άλλαξέ το</span></div>
+    </div>
+    <div class="pair">
+      <span class="chip">Πράσινη σαλάτα</span><span class="link">=</span><span class="chip">Iceberg</span>
+      <div class="pair-act"><span class="mini yes">✓ Ίδιο</span><span class="mini">Άλλαξέ το</span></div>
+    </div>
+    <div class="pair" style="border-style:dashed;opacity:.85">
+      <span class="chip">Σως μουστάρδας</span><span class="link" style="color:var(--muted)">?</span><span class="chip">Sauce μουστάρδας</span>
+      <div class="pair-act"><span class="mini">Είναι το ίδιο;</span></div>
+    </div>
+    <div style="margin-top:14px"><span class="btn">➕ Πρόσθεσε ζευγάρι</span></div>
+  </div>
+
+  <div class="box warn">
+    <span class="h">Ο POS θα σου προτείνει πιθανά ζευγάρια.</span>
+    Όταν βρίσκει δύο υλικά με παρόμοιο όνομα (όπως το τρίτο παραπάνω), <b>ρωτάει</b> αντί να αποφασίσει μόνος του.
+    Εσύ ξέρεις τι υπάρχει στο ψυγείο — όχι ο υπολογιστής.
+  </div>
+
+  <div class="box stop">
+    <span class="h">Αυτό αφορά ΜΟΝΟ υλικά — ποτέ προϊόντα.</span>
+    Το burger με μπέικον <b>μένει πωλήσιμο</b> όταν τελειώσει το μπέικον· ο πελάτης απλώς δεν μπορεί να το διαλέξει.
+  </div>
+</div>
+
+<!-- ── ΤΙ ΚΕΡΔΙΖΕΙΣ ───────────────────────────────── -->
+<div class="sec">
+  <div class="sec-head"><div class="sec-num">✓</div><h2 class="sec-title">Πριν και μετά</h2></div>
+  <table>
+    <tr><th>Θέλω να…</th><th>Σήμερα</th><th>Μετά</th></tr>
+    <tr><td>Προσθέσω προϊόν στην e-food</td><td>με φωνάζεις</td><td><b>2 λεπτά, μόνος σου</b></td></tr>
+    <tr><td>Προσθέσω νέο υλικό</td><td>με φωνάζεις</td><td><b>2 λεπτά, μόνος σου</b></td></tr>
+    <tr><td>Δηλώσω «αυτά είναι το ίδιο»</td><td>με φωνάζεις</td><td><b>ένα πάτημα</b></td></tr>
+    <tr><td>Δω αν κάτι ξέμεινε ασύνδετο</td><td>δεν φαίνεται πουθενά</td><td><b>το λέει μόνο του</b></td></tr>
+  </table>
+</div>
+
+<!-- ── ΑΣΦΑΛΕΙΑ ───────────────────────────────── -->
+<div class="sec">
+  <div class="sec-head"><div class="sec-num">🔒</div><h2 class="sec-title">Τι ΔΕΝ θα κάνει ποτέ</h2></div>
+  <ul class="steps">
+    <li><b>Δεν αλλάζει τίποτα στην e-food.</b> Μόνο διαβάζει. Οι αλλαγές στο μενού γίνονται πάντα από εσένα, στο portal.</li>
+    <li><b>Δεν αποφασίζει μόνο του</b> ποια είναι «το ίδιο πράγμα». Προτείνει· εσύ επιβεβαιώνεις.</li>
+    <li><b>Δεν σβήνει συνδέσεις</b> που δουλεύουν. Αν κάτι λείπει από την e-food, το <em>αναφέρει</em> — δεν το πετάει.</li>
+    <li><b>Δεν κλείνει προϊόντα.</b> Είναι οθόνη ρυθμίσεων, όχι πωλήσεων.</li>
+  </ul>
+</div>
+
+<!-- ── ΤΙ ΧΡΕΙΑΖΕΤΑΙ ───────────────────────────────── -->
+<div class="sec">
+  <div class="sec-head"><div class="sec-num">⚙</div><h2 class="sec-title">Τι χρειάζεται για να δουλέψει</h2></div>
+  <ul class="steps">
+    <li>Ανοιχτή τη σελίδα της e-food (όπως και το sold-out σήμερα) — <b>υπάρχει ήδη</b>.</li>
+    <li>Ανάγνωση καταλόγου &amp; υλικών — <b>υπάρχει ήδη</b>, το χρησιμοποιούμε στον έλεγχο συμφωνίας.</li>
+    <li>Νέα οθόνη στις ρυθμίσεις + αποθήκευση των επιλογών σου — <b>αυτό είναι το νέο κομμάτι</b>.</li>
+  </ul>
+  <div class="box ok">
+    <span class="h">Τα δύσκολα υπάρχουν ήδη.</span>
+    Η επικοινωνία με την e-food δουλεύει και έχει δοκιμαστεί ζωντανά. Αυτό που λείπει είναι η <b>οθόνη</b>.
+  </div>
+</div>
+
+<div class="foot">
+  Πρόταση προς έγκριση — τίποτα δεν έχει υλοποιηθεί ακόμα.<br>
+  Πες μου <b>ναι</b>, ή τι θέλεις αλλιώς.
+</div>
+
+</div>
+</body>
+</html>
