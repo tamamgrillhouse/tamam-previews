@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+<title>Preview — Τι τελείωσε; (επιλογή εμβέλειας)</title>
+<style>
+:root{
+  --black:#0e1330; --dark:#141a3d; --card:#1c2554; --card2:#232d63;
+  --yellow:#f5c842; --white:#eef1ff; --muted:#93a0dd;
+  --red:#e05a5a; --green:#38d97a; --blue:#4a9ef0;
+  --border:#2a3580; --radius:16px; --radius-card:8px; --radius-btn:6px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--black);color:var(--white);
+  font-family:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:14px;line-height:1.5;padding:24px 16px 80px}
+.wrap{max-width:1180px;margin:0 auto}
+h1{font-size:22px;margin:0 0 6px}
+h2{font-size:17px;margin:44px 0 4px;padding-top:20px;border-top:1px solid var(--border)}
+h3{font-size:13px;margin:0;letter-spacing:.4px}
+.lead{color:var(--muted);font-size:13px;margin:0 0 8px;max-width:760px}
+.tag{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.6px;
+  padding:3px 8px;border-radius:var(--radius-btn);background:rgba(245,200,66,.14);
+  color:var(--yellow);border:1px solid rgba(245,200,66,.3);vertical-align:middle}
+.tag.g{background:rgba(56,217,122,.12);color:var(--green);border-color:rgba(56,217,122,.35)}
+.tag.r{background:rgba(224,90,90,.12);color:var(--red);border-color:rgba(224,90,90,.35)}
+
+/* ── grid of option cards ── */
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:18px;margin-top:18px}
+.opt{background:var(--dark);border:1px solid var(--border);border-radius:var(--radius);
+  padding:14px;display:flex;flex-direction:column}
+.opt-head{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.opt-num{width:26px;height:26px;flex:0 0 26px;border-radius:50%;display:flex;
+  align-items:center;justify-content:center;font-weight:800;font-size:12px;line-height:1;
+  background:var(--card2);color:var(--yellow);border:1px solid rgba(245,200,66,.35)}
+.opt-desc{color:var(--muted);font-size:12px;margin:0 0 12px}
+.pros{margin:12px 0 0;padding:10px;background:rgba(255,255,255,.03);
+  border-radius:var(--radius-card);font-size:11.5px;color:var(--muted)}
+.pros b{color:var(--white);font-weight:700}
+.pros .y{color:var(--green)}
+.pros .n{color:var(--red)}
+
+/* ── phone-ish mock ── */
+.mock{background:var(--card);border:1px solid rgba(255,255,255,.10);
+  border-radius:12px;padding:14px;flex:1}
+.mock-title{font-size:15px;font-weight:800;margin-bottom:2px}
+.mock-sub{font-size:11.5px;color:var(--muted);margin-bottom:12px}
+
+/* big scope buttons */
+.scope{display:flex;flex-direction:column;gap:8px}
+.sbtn{display:flex;align-items:center;gap:10px;width:100%;text-align:left;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);
+  border-radius:var(--radius-card);padding:11px 12px;color:var(--white);
+  font:inherit;cursor:pointer;transition:.15s}
+.sbtn:hover{border-color:rgba(245,200,66,.45);background:rgba(245,200,66,.06)}
+.sbtn.on{border-color:var(--yellow);background:rgba(245,200,66,.10);
+  box-shadow:inset 3px 0 0 var(--yellow)}
+.sbtn .ico{font-size:17px;line-height:1}
+.sbtn .tx{flex:1;min-width:0}
+.sbtn .t1{font-weight:700;font-size:13.5px}
+.sbtn .t2{font-size:11px;color:var(--muted)}
+.sbtn .cnt{font-size:11px;font-weight:800;color:var(--yellow);
+  background:rgba(245,200,66,.12);border-radius:20px;padding:2px 8px}
+
+/* checkbox list */
+.list{margin-top:10px;max-height:230px;overflow-y:auto;border-radius:var(--radius-card);
+  border:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.18)}
+.li{display:flex;align-items:center;gap:9px;padding:8px 10px;cursor:pointer;
+  border-bottom:1px solid rgba(255,255,255,.04);font-size:12.5px}
+.li:last-child{border-bottom:none}
+.li:hover{background:rgba(255,255,255,.03)}
+.li input{display:none}
+.dot{width:15px;height:15px;flex:0 0 15px;border-radius:4px;
+  border:1.5px solid rgba(255,255,255,.28);position:relative;transition:.15s}
+.li input:checked ~ .dot{background:var(--red);border-color:var(--red);
+  box-shadow:0 0 8px rgba(224,90,90,.5)}
+.li input:checked ~ .dot::after{content:'✓';position:absolute;inset:0;color:#fff;
+  font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center}
+.li input:checked ~ .nm{color:rgba(255,255,255,.45);text-decoration:line-through}
+.nm{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.li .cat{font-size:10px;color:var(--muted);background:rgba(255,255,255,.05);
+  padding:1px 6px;border-radius:4px}
+.li.dish{background:rgba(74,158,240,.06)}
+.li.dish .cat{background:rgba(74,158,240,.14);color:var(--blue)}
+
+.grp{padding:6px 10px;font-size:10.5px;font-weight:800;letter-spacing:.5px;
+  color:var(--muted);background:rgba(255,255,255,.04);
+  position:sticky;top:0;display:flex;justify-content:space-between;align-items:center}
+.grp button{background:none;border:none;color:var(--yellow);font:inherit;
+  font-size:10.5px;cursor:pointer;text-decoration:underline}
+
+.foot{display:flex;gap:8px;margin-top:12px}
+.btn{flex:1;padding:11px;border-radius:var(--radius-card);border:1px solid;font:inherit;
+  font-weight:800;font-size:13px;cursor:pointer;text-align:center}
+.btn.pri{background:var(--yellow);color:#1a1a1a;border-color:var(--yellow)}
+.btn.sec{background:transparent;color:var(--muted);border-color:rgba(255,255,255,.14)}
+.btn.dan{background:rgba(224,90,90,.14);color:#ffb3b3;border-color:rgba(224,90,90,.45)}
+.more{margin-top:9px;text-align:center;font-size:11.5px;color:var(--muted);
+  background:none;border:none;cursor:pointer;width:100%;padding:6px}
+.more:hover{color:var(--yellow)}
+
+.summary{margin-top:10px;padding:9px 11px;border-radius:var(--radius-card);
+  background:rgba(224,90,90,.08);border:1px solid rgba(224,90,90,.25);
+  font-size:12px;color:#ffcfcf}
+.summary b{color:#fff}
+
+.note{margin-top:14px;padding:12px 14px;border-radius:var(--radius-card);
+  background:rgba(74,158,240,.07);border-left:3px solid var(--blue);font-size:12.5px}
+.note b{color:var(--blue)}
+
+.pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;
+  background:rgba(255,255,255,.06);color:var(--muted);margin-right:4px}
+.rule{display:flex;align-items:center;gap:10px;padding:9px 11px;
+  border-bottom:1px solid rgba(255,255,255,.05);font-size:12.5px}
+.rule:last-child{border-bottom:none}
+.rule .rn{flex:1}
+.seg{display:flex;border:1px solid rgba(255,255,255,.12);border-radius:20px;overflow:hidden}
+.seg button{background:none;border:none;color:var(--muted);font:inherit;font-size:10.5px;
+  font-weight:700;padding:4px 10px;cursor:pointer}
+.seg button.on{background:var(--yellow);color:#1a1a1a}
+.q{margin-top:36px;padding:16px;border:1px solid rgba(245,200,66,.3);
+  border-radius:var(--radius);background:rgba(245,200,66,.05)}
+.q h3{color:var(--yellow);margin-bottom:8px;font-size:14px}
+.q ol{margin:0;padding-left:20px}
+.q li{margin-bottom:7px;font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>«Τι τελείωσε;» — επιλογή εμβέλειας</h1>
+<p class="lead">Τρεις σχεδιαστικές λύσεις για το <b>Α</b> (παρατεταμένο πάτημα σε προϊόν) και τρεις για το <b>Γ</b>
+(υλικό που είναι <i>και</i> πιάτο). Τα κουμπιά και τα ✓ δουλεύουν — πάτησέ τα.
+Σενάριο παντού: κρατάς πατημένο το <b>«Σουβλάκι Χοιρινό Λαβάς»</b>.</p>
+
+<!-- ══════════════════════════ Α ══════════════════════════ -->
+<h2>Α · Παρατεταμένο πάτημα σε προϊόν <span class="tag">3 λύσεις</span></h2>
+<p class="lead">Το ζητούμενο: να διαλέγω <b>κρέας ή ψωμί</b>, και μετά να μπορώ να <b>αποεπιλέξω</b> ό,τι δεν θέλω να κλείσει.</p>
+
+<div class="opts">
+
+  <!-- A1 -->
+  <div class="opt">
+    <div class="opt-head"><span class="opt-num">1</span><h3>ΓΡΗΓΟΡΟ + «Διάλεξε ποια»</h3></div>
+    <p class="opt-desc">Δύο βήματα. Στα γρήγορα πατάς ένα κουμπί και τελείωσες.
+      Η λίστα ανοίγει <b>μόνο</b> αν τη ζητήσεις.</p>
+    <div class="mock">
+      <div class="mock-title">Σουβλάκι Χοιρινό Λαβάς</div>
+      <div class="mock-sub">Τι τελείωσε;</div>
+      <div class="scope" data-radio="a1">
+        <button class="sbtn" data-n="1"><span class="ico">🍽</span><span class="tx">
+          <div class="t1">Μόνο αυτό</div><div class="t2">Σουβλάκι Χοιρινό Λαβάς</div></span>
+          <span class="cnt">1</span></button>
+        <button class="sbtn on" data-n="6"><span class="ico">🥩</span><span class="tx">
+          <div class="t1">Το ΧΟΙΡΙΝΟ</div><div class="t2">σε όλες τις κατηγορίες</div></span>
+          <span class="cnt">6</span></button>
+        <button class="sbtn" data-n="11"><span class="ico">🫓</span><span class="tx">
+          <div class="t1">Ο ΛΑΒΑΣ</div><div class="t2">όλα τα τυλιχτά σε λαβά</div></span>
+          <span class="cnt">11</span></button>
+      </div>
+      <button class="more" onclick="tgl('a1list',this)">✎ Διάλεξε ποια ακριβώς ▾</button>
+      <div id="a1list" style="display:none">
+        <div class="list">
+          <div class="grp"><span>ΧΟΙΡΙΝΟ · 6 προϊόντα</span><button onclick="all('a1list',false)">καθάρισε</button></div>
+          <label class="li"><input type="checkbox" checked onchange="sum('a1')"><span class="dot"></span><span class="nm">Σουβλάκι Χοιρινό τεμ.</span><span class="cat">Τεμάχια</span></label>
+          <label class="li"><input type="checkbox" checked onchange="sum('a1')"><span class="dot"></span><span class="nm">Σουβλάκι Χοιρινό Πίτα</span><span class="cat">Πίτα</span></label>
+          <label class="li"><input type="checkbox" checked onchange="sum('a1')"><span class="dot"></span><span class="nm">Σουβλάκι Χοιρινό Αραβική</span><span class="cat">Αραβική</span></label>
+          <label class="li"><input type="checkbox" checked onchange="sum('a1')"><span class="dot"></span><span class="nm">Σουβλάκι Χοιρινό Λαβάς</span><span class="cat">Λαβάς</span></label>
+          <label class="li"><input type="checkbox" checked onchange="sum('a1')"><span class="dot"></span><span class="nm">Σουβλάκι Χοιρινό XXL</span><span class="cat">XXL</span></label>
+          <label class="li"><input type="checkbox" checked onchange="sum('a1')"><span class="dot"></span><span class="nm">Σουβλάκι Χοιρινό Μερίδα</span><span class="cat">Μερίδες</span></label>
+        </div>
+        <div class="summary" id="a1sum">Θα κλείσουν <b>6</b> προϊόντα.</div>
+      </div>
+      <div class="foot">
+        <button class="btn pri">🚫 Εξαντλήθηκε σήμερα</button>
+        <button class="btn sec">Άκυρο</button>
+      </div>
+      <button class="more">⚙ Περισσότερες επιλογές (επ' αόριστον)</button>
+    </div>
+    <div class="pros">
+      <b class="y">+</b> 1 πάτημα στη συνήθη περίπτωση · δεν αλλάζει η σημερινή συνήθεια<br>
+      <b class="y">+</b> η λίστα δεν ενοχλεί όποιον δεν τη θέλει<br>
+      <b class="n">−</b> η δυνατότητα «αποεπιλογής» είναι <i>κρυμμένη</i> — μπορεί να μη βρεθεί ποτέ
+    </div>
+  </div>
+
+  <!-- A2 -->
+  <div class="opt">
+    <div class="opt-head"><span class="opt-num">2</span><h3>ΜΙΑ ΟΘΟΝΗ (καρτέλες)</h3></div>
+    <p class="opt-desc">Διαλέγεις καρτέλα (Κρέας / Ψωμί / Μόνο αυτό) και βλέπεις
+      <b>αμέσως</b> τι θα κλείσει. Ξετσεκάρεις ό,τι θες.</p>
+    <div class="mock">
+      <div class="mock-title">Σουβλάκι Χοιρινό Λαβάς</div>
+      <div class="mock-sub">Τι τελείωσε;</div>
+      <div class="scope" data-radio="a2" style="flex-direction:row;gap:6px">
+        <button class="sbtn" style="justify-content:center;padding:9px 6px" onclick="tab('a2',0)"><span class="tx"><div class="t1" style="font-size:12px">🍽 Μόνο αυτό</div></span></button>
+        <button class="sbtn on" style="justify-content:center;padding:9px 6px" onclick="tab('a2',1)"><span class="tx"><div class="t1" style="font-size:12px">🥩 Χοιρινό</div></span></button>
+        <button class="sbtn" style="justify-content:center;padding:9px 6px" onclick="tab('a2',2)"><span class="tx"><div class="t1" style="font-size:12px">🫓 Λαβάς</div></span></button>
+      </div>
+      <div class="list" id="a2list"></div>
+      <div class="summary" id="a2sum"></div>
+      <div class="foot">
+        <button class="btn pri">🚫 Εξαντλήθηκε σήμερα</button>
+        <button class="btn sec">Άκυρο</button>
+      </div>
+      <button class="more">⚙ Περισσότερες επιλογές (επ' αόριστον)</button>
+    </div>
+    <div class="pros">
+      <b class="y">+</b> <b>βλέπεις πάντα</b> ακριβώς τι κλείνει πριν το πατήσεις — μηδέν έκπληξη<br>
+      <b class="y">+</b> η αποεπιλογή είναι φανερή, στο ίδιο σημείο<br>
+      <b class="n">−</b> πιο «φορτωμένη» οθόνη · +1 ματιά κάθε φορά ακόμα κι όταν δεν χρειάζεται
+    </div>
+  </div>
+
+  <!-- A3 -->
+  <div class="opt">
+    <div class="opt-head"><span class="opt-num">3</span><h3>ΕΝΙΑΙΑ ΛΙΣΤΑ (ομάδες)</h3></div>
+    <p class="opt-desc">Καμία καρτέλα. Μία λίστα με <b>ομάδες</b> — τσεκάρεις ολόκληρη ομάδα
+      από την κεφαλίδα της ή μεμονωμένα προϊόντα.</p>
+    <div class="mock">
+      <div class="mock-title">Σουβλάκι Χοιρινό Λαβάς</div>
+      <div class="mock-sub">Διάλεξε τι τελείωσε</div>
+      <div class="list" style="max-height:280px">
+        <div class="grp"><span>🥩 ΧΟΙΡΙΝΟ</span><button onclick="grp('g1',true)">όλα</button></div>
+        <label class="li"><input type="checkbox" class="g1" checked onchange="sum('a3')"><span class="dot"></span><span class="nm">Σουβλάκι Χοιρινό τεμ.</span><span class="cat">Τεμ.</span></label>
+        <label class="li"><input type="checkbox" class="g1" checked onchange="sum('a3')"><span class="dot"></span><span class="nm">Σουβλάκι Χοιρινό Πίτα</span><span class="cat">Πίτα</span></label>
+        <label class="li"><input type="checkbox" class="g1" checked onchange="sum('a3')"><span class="dot"></span><span class="nm">Σουβλάκι Χοιρινό Αραβική</span><span class="cat">Αραβ.</span></label>
+        <label class="li"><input type="checkbox" class="g1" checked onchange="sum('a3')"><span class="dot"></span><span class="nm">Σουβλάκι Χοιρινό Λαβάς</span><span class="cat">Λαβάς</span></label>
+        <label class="li"><input type="checkbox" class="g1" checked onchange="sum('a3')"><span class="dot"></span><span class="nm">Σουβλάκι Χοιρινό XXL</span><span class="cat">XXL</span></label>
+        <label class="li"><input type="checkbox" class="g1" checked onchange="sum('a3')"><span class="dot"></span><span class="nm">Σουβλάκι Χοιρινό Μερίδα</span><span class="cat">Μερ.</span></label>
+        <div class="grp"><span>🫓 ΛΑΒΑΣ (11)</span><button onclick="grp('g2',true)">όλα</button></div>
+        <label class="li"><input type="checkbox" class="g2" onchange="sum('a3')"><span class="dot"></span><span class="nm">Κεμπαπάκι Λαβάς</span></label>
+        <label class="li"><input type="checkbox" class="g2" onchange="sum('a3')"><span class="dot"></span><span class="nm">Ντόνερ Λαβάς</span></label>
+        <label class="li"><input type="checkbox" class="g2" onchange="sum('a3')"><span class="dot"></span><span class="nm">Σουβλάκι Κοτόπουλο Λαβάς</span></label>
+        <label class="li"><input type="checkbox" class="g2" onchange="sum('a3')"><span class="dot"></span><span class="nm">Λουκάνικο Λαβάς</span></label>
+        <label class="li"><input type="checkbox" class="g2" onchange="sum('a3')"><span class="dot"></span><span class="nm">Μπιφτέκι Λαβάς</span></label>
+        <label class="li"><input type="checkbox" class="g2" onchange="sum('a3')"><span class="dot"></span><span class="nm">…και 6 ακόμη</span></label>
+      </div>
+      <div class="summary" id="a3sum">Θα κλείσουν <b>6</b> προϊόντα.</div>
+      <div class="foot">
+        <button class="btn pri">🚫 Εξαντλήθηκε σήμερα</button>
+        <button class="btn sec">Άκυρο</button>
+      </div>
+    </div>
+    <div class="pros">
+      <b class="y">+</b> μέγιστη ελευθερία — μπορείς να κλείσεις «χοιρινό <i>και</i> λαβά» μαζί<br>
+      <b class="n">−</b> <b>πιο αργό</b> στη συνήθη περίπτωση (πρέπει να διαβάσεις τη λίστα)<br>
+      <b class="n">−</b> με μεγάλες ομάδες θέλει σκρολ σε βραδιά αιχμής
+    </div>
+  </div>
+</div>
+
+<div class="note"><b>Σημείωση:</b> και στις τρεις λύσεις το «σήμερα / επ' αόριστον» μένει όπως είναι σήμερα
+(το «επ' αόριστον» κρυμμένο πίσω από «⚙ Περισσότερες επιλογές» + δικαίωμα υπευθύνου).
+Αλλάζει <b>μόνο</b> το «ποια προϊόντα», όχι το «για πόσο».</div>
+
+<!-- ══════════════════════════ Γ ══════════════════════════ -->
+<h2>Γ · Υλικό που είναι <i>και</i> πιάτο <span class="tag">3 λύσεις</span></h2>
+<p class="lead">Σενάριο: τελειώνει το <b>Λάχανο &amp; καρότο</b>. Είναι υλικό (μπαίνει στα «Απ'Όλα Ταμάμ»)
+αλλά πουλιέται και ως <b>σαλάτα</b>. Ίδιο μοτίβο με τις 11 Αλοιφές, την Ντομάτα, τις Πατάτες.</p>
+
+<div class="opts">
+
+  <!-- Γ1 -->
+  <div class="opt">
+    <div class="opt-head"><span class="opt-num">1</span><h3>ΕΡΩΤΗΣΗ ΚΑΘΕ ΦΟΡΑ</h3></div>
+    <p class="opt-desc">Μόλις κλείσεις το υλικό, εμφανίζεται ερώτηση για το πιάτο.</p>
+    <div class="mock">
+      <div class="mock-title">🚫 Λάχανο &amp; καρότο — τελείωσε</div>
+      <div class="mock-sub">Πουλιέται και ως πιάτο. Να κλείσει κι αυτό;</div>
+      <div class="list">
+        <label class="li dish"><input type="checkbox" checked><span class="dot"></span><span class="nm">Σαλάτα «Λάχανο-Καρότο»</span><span class="cat">πιάτο</span></label>
+      </div>
+      <div class="foot">
+        <button class="btn dan">Ναι, και τα δύο</button>
+        <button class="btn sec">Όχι, μόνο ως υλικό</button>
+      </div>
+    </div>
+    <div class="pros">
+      <b class="y">+</b> πλήρης έλεγχος στη στιγμή · μηδέν ρύθμιση από πριν<br>
+      <b class="n">−</b> <b>ερώτηση κάθε φορά</b> — στη βιασύνη πατιέται μηχανικά το πρώτο κουμπί<br>
+      <b class="n">−</b> ×11 αλοιφές = πολύ κλικ σε μια βραδιά
+    </div>
+  </div>
+
+  <!-- Γ2 -->
+  <div class="opt">
+    <div class="opt-head"><span class="opt-num">2</span><h3>ΣΤΑΘΕΡΟΣ ΚΑΝΟΝΑΣ (admin)</h3></div>
+    <p class="opt-desc">Ορίζεις <b>μία φορά</b> στις ρυθμίσεις τι κάνει κάθε ζευγάρι.
+      Ο ταμίας δεν ρωτιέται ποτέ.</p>
+    <div class="mock">
+      <div class="mock-title">🔗 Υλικά που είναι και πιάτα</div>
+      <div class="mock-sub">Όταν τελειώνει το υλικό, το πιάτο…</div>
+      <div class="list" style="max-height:250px">
+        <div class="rule"><span class="rn">Τζατζίκι <span class="pill">→ Αλοιφή Τζατζίκι</span></span>
+          <span class="seg"><button class="on">κλείνει</button><button>μένει</button></span></div>
+        <div class="rule"><span class="rn">Σως Ταμάμ <span class="pill">→ Αλοιφή Σως Ταμάμ</span></span>
+          <span class="seg"><button class="on">κλείνει</button><button>μένει</button></span></div>
+        <div class="rule"><span class="rn">Λάχανο &amp; καρότο <span class="pill">→ Σαλάτα</span></span>
+          <span class="seg"><button class="on">κλείνει</button><button>μένει</button></span></div>
+        <div class="rule"><span class="rn">Ντομάτα <span class="pill">→ Αγγουροντομάτα</span></span>
+          <span class="seg"><button>κλείνει</button><button class="on">μένει</button></span></div>
+        <div class="rule"><span class="rn">Πατάτες <span class="pill">→ 4 πιάτα</span></span>
+          <span class="seg"><button class="on">κλείνει</button><button>μένει</button></span></div>
+      </div>
+    </div>
+    <div class="pros">
+      <b class="y">+</b> ο ταμίας δεν σκέφτεται ποτέ — <b>μηδέν λάθος στη βιασύνη</b><br>
+      <b class="y">+</b> εσύ αποφασίζεις μια φορά, με ηρεμία<br>
+      <b class="n">−</b> δεν καλύπτει την εξαίρεση της ημέρας («σήμερα έχω μόνο για σαλάτες»)
+    </div>
+  </div>
+
+  <!-- Γ3 -->
+  <div class="opt">
+    <div class="opt-head"><span class="opt-num">3</span><h3>ΚΑΝΟΝΑΣ + ΛΙΣΤΑ <span class="tag g">προτείνω</span></h3></div>
+    <p class="opt-desc">Ο κανόνας του admin ορίζει τι είναι <b>προτσεκαρισμένο</b> — αλλά η λίστα
+      φαίνεται πάντα, οπότε μπορείς να το αλλάξεις στη στιγμή. <b>Ίδια οθόνη με το Α.</b></p>
+    <div class="mock">
+      <div class="mock-title">Λάχανο &amp; καρότο</div>
+      <div class="mock-sub">Τι τελείωσε;</div>
+      <div class="list">
+        <div class="grp"><span>🥬 ΩΣ ΥΛΙΚΟ</span></div>
+        <label class="li"><input type="checkbox" checked onchange="sum('c3')"><span class="dot"></span><span class="nm">Σε όλα τα τυλιχτά &amp; τα «Απ'Όλα Ταμάμ»</span></label>
+        <div class="grp"><span>🍽 ΩΣ ΠΙΑΤΟ</span></div>
+        <label class="li dish"><input type="checkbox" checked onchange="sum('c3')"><span class="dot"></span><span class="nm">Σαλάτα «Λάχανο-Καρότο»</span><span class="cat">πιάτο</span></label>
+      </div>
+      <div class="summary" id="c3sum">Κλείνει ως <b>υλικό</b> και ως <b>πιάτο</b>.</div>
+      <div class="foot">
+        <button class="btn pri">🚫 Τελείωσε σήμερα</button>
+        <button class="btn sec">Άκυρο</button>
+      </div>
+    </div>
+    <div class="pros">
+      <b class="y">+</b> <b>μία λογική για όλα</b> — ίδια οθόνη με το Α, ο ταμίας μαθαίνει ένα πράγμα<br>
+      <b class="y">+</b> γρήγορο (όλα προτσεκαρισμένα) αλλά και ευέλικτο<br>
+      <b class="n">−</b> θέλει και τη σελίδα κανόνων στο admin (λίγη παραπάνω δουλειά τώρα)
+    </div>
+  </div>
+</div>
+
+<div class="note"><b>Το ίδιο μοτίβο λύνει και τις Πατάτες:</b> κρατάς πατημένο το «Πατάτες τηγανητές» και βλέπεις
+<span class="pill">🍽 Πατάτες τηγανητές</span><span class="pill">🍽 Πατάτες Αραβική</span><span class="pill">🍽 Πατάτες Λαβάς</span>
+<span class="pill">🍽 Πατατόπιτα</span><span class="pill">🍔 +Πατάτες / Combo</span> — προτσεκαρισμένα,
+και ξεχωριστά (ξετσέκαρα) τις <b>Μερίδες</b> και τα <b>Box</b> που είπες ότι μένουν ανοιχτά.</div>
+
+<div class="q">
+  <h3>Τι χρειάζομαι από εσένα</h3>
+  <ol>
+    <li>Για το <b>Α</b>: 1, 2 ή 3;</li>
+    <li>Για το <b>Γ</b>: 1, 2 ή 3; <i>(Αν διαλέξεις Α2 ή Α3 και Γ3, γίνονται μία ενιαία οθόνη — ο ταμίας μαθαίνει ένα μόνο πράγμα.)</i></li>
+    <li>Στην ενιαία λίστα, θέλεις να φαίνεται και η <b>κατηγορία</b> κάθε προϊόντος (Πίτα/Αραβική/…) ή σκέτο το όνομα;</li>
+  </ol>
+</div>
+
+</div>
+<script>
+document.querySelectorAll('[data-radio] .sbtn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    b.parentElement.querySelectorAll('.sbtn').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+  });
+});
+function tgl(id,btn){const e=document.getElementById(id);
+  const open=e.style.display==='none';e.style.display=open?'':'none';
+  btn.textContent=open?'✎ Διάλεξε ποια ακριβώς ▴':'✎ Διάλεξε ποια ακριβώς ▾';}
+function all(id,v){document.querySelectorAll('#'+id+' input').forEach(i=>i.checked=v);sum('a1');}
+function grp(cls,v){document.querySelectorAll('.'+cls).forEach(i=>i.checked=v);sum('a3');}
+function sum(k){
+  const map={a1:'#a1list',a3:'.opt:nth-child(3) .list',c3:'.opt:nth-child(3) .list'};
+  let box,el;
+  if(k==='a1'){box=document.querySelectorAll('#a1list input');el=document.getElementById('a1sum');}
+  if(k==='a3'){box=document.querySelectorAll('.g1,.g2');el=document.getElementById('a3sum');}
+  if(k==='c3'){el=document.getElementById('c3sum');
+    const ins=el.parentElement.querySelectorAll('.list input');
+    const a=ins[0].checked,b=ins[1].checked;
+    el.innerHTML=(!a&&!b)?'Δεν θα κλείσει τίποτα.':
+      a&&b?'Κλείνει ως <b>υλικό</b> και ως <b>πιάτο</b>.':
+      a?'Κλείνει <b>μόνο ως υλικό</b> — η σαλάτα πουλιέται.':
+        'Κλείνει <b>μόνο η σαλάτα</b> — το υλικό μπαίνει κανονικά.';
+    return;}
+  if(!box)return;
+  const n=[...box].filter(i=>i.checked).length;
+  el.innerHTML=n?('Θα κλείσουν <b>'+n+'</b> '+(n===1?'προϊόν':'προϊόντα')+'.')
+    :'Δεν έχεις επιλέξει τίποτα.';
+}
+const A2={
+ 0:[['Σουβλάκι Χοιρινό Λαβάς','Λαβάς']],
+ 1:[['Σουβλάκι Χοιρινό τεμ.','Τεμάχια'],['Σουβλάκι Χοιρινό Πίτα','Πίτα'],
+    ['Σουβλάκι Χοιρινό Αραβική','Αραβική'],['Σουβλάκι Χοιρινό Λαβάς','Λαβάς'],
+    ['Σουβλάκι Χοιρινό XXL','XXL'],['Σουβλάκι Χοιρινό Μερίδα','Μερίδες']],
+ 2:[['Κεμπαπάκι Λαβάς',''],['Ντόνερ Λαβάς',''],['Σουβλάκι Χοιρινό Λαβάς',''],
+    ['Σουβλάκι Κοτόπουλο Λαβάς',''],['Λουκάνικο Λαβάς',''],['Μπιφτέκι Λαβάς',''],
+    ['Πανσέτα Λαβάς',''],['Σνίτσελ Κοτόπουλο Λαβάς',''],['Γύρος Λαβάς',''],
+    ['Φιλέτο Μπούτι Λαβάς',''],['Πατάτες Λαβάς','']]
+};
+function tab(k,i){
+  const c=document.querySelectorAll('[data-radio="a2"] .sbtn');
+  c.forEach((b,j)=>b.classList.toggle('on',j===i));
+  const L=document.getElementById('a2list');
+  L.innerHTML=A2[i].map(([n,c2])=>
+    '<label class="li"><input type="checkbox" checked onchange="a2sum()"><span class="dot"></span>'+
+    '<span class="nm">'+n+'</span>'+(c2?'<span class="cat">'+c2+'</span>':'')+'</label>').join('');
+  a2sum();
+}
+function a2sum(){
+  const n=[...document.querySelectorAll('#a2list input')].filter(i=>i.checked).length;
+  document.getElementById('a2sum').innerHTML=n?
+    ('Θα κλείσουν <b>'+n+'</b> '+(n===1?'προϊόν':'προϊόντα')+'.'):'Δεν έχεις επιλέξει τίποτα.';
+}
+tab('a2',1);
+</script>
+</body>
+</html>
