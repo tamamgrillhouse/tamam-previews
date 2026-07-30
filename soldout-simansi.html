@@ -4,916 +4,448 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>TAMAM · Σήμανση εξαντλημένων — 4 προτάσεις × 4 οθόνες</title>
+<title>TAMAM · Σήμανση εξαντλημένων — διάλεξε 1, 2 ή 3</title>
 <style>
   :root{
     --black:#0e1330; --dark:#12183a; --card:#1c2554; --card2:#243068;
     --yellow:#f5c400; --white:#e8eaf6; --muted:#93a0dd;
     --red:#ef5350; --green:#26c281; --border:#2a3580;
-    --efood:#ff6a3d; --efood-dim:rgba(255,106,61,.14);
-    --indef:#a06cff;
-    --radius:16px; --radius-card:8px; --radius-btn:6px; --radius-xs:4px; --radius-pill:50px;
-    --grid-min:190px;
+    --efood:#ff6a3d; --indef:#a06cff;
+    --radius:16px; --radius-card:8px; --radius-btn:6px; --radius-xs:4px;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{
     font-family:'Noto Sans','Segoe UI',system-ui,sans-serif;
     background:radial-gradient(ellipse at top,#1a1f3a,var(--black) 70%);
-    color:var(--white);min-height:100vh;padding:0 16px 80px;
+    color:var(--white);min-height:100vh;padding:30px 20px 70px;
   }
-  .wrap{max-width:1500px;margin:0 auto}
+  .wrap{max-width:1240px;margin:0 auto}
 
-  /* ═══ Sticky εργαλεία ═══ */
-  .tools{
-    position:sticky;top:0;z-index:60;margin:0 -16px;padding:11px 16px;
-    background:rgba(14,19,48,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);
-  }
-  .trow{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
-  .trow+.trow{margin-top:8px}
-  .tlbl{font-size:11px;color:var(--muted);letter-spacing:.3px;flex:0 0 auto}
-  .tbtn{
-    font-family:inherit;font-size:12.5px;font-weight:800;cursor:pointer;
-    background:var(--card);border:1px solid var(--border);color:var(--muted);
-    padding:8px 13px;border-radius:20px;min-height:36px;transition:.14s;
-  }
-  .tbtn:hover{border-color:var(--muted);color:var(--white)}
-  .tbtn.on{background:var(--yellow);border-color:var(--yellow);color:#1a1206}
-  .tbtn.nowbtn.on{background:var(--muted);border-color:var(--muted);color:#0e1330}
-  .tsm{font-size:11.5px;font-weight:700;padding:7px 11px;min-height:32px}
+  h1{font-size:26px;font-weight:800;display:flex;align-items:center;gap:11px;flex-wrap:wrap}
+  h1 .tag{font-size:11px;background:var(--yellow);color:#1a1206;padding:3px 10px;border-radius:20px;font-weight:800}
 
-  /* ═══ Κεφαλίδα ═══ */
-  header{padding-top:24px}
-  h1{font-size:25px;font-weight:800;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-  h1 .tag{font-size:11px;background:var(--yellow);color:#1a1206;padding:3px 9px;border-radius:20px;font-weight:800}
-  .lead{color:var(--muted);margin-top:12px;font-size:14.5px;line-height:1.75;max-width:840px}
-  .lead b{color:var(--white)}
-
-  .prob{
-    margin-top:20px;background:rgba(239,83,80,.09);border:1px solid rgba(239,83,80,.35);
+  /* ── Το πρόβλημα σε μία γραμμή ── */
+  .why{
+    margin-top:18px;display:flex;gap:20px;align-items:center;flex-wrap:wrap;
+    background:rgba(239,83,80,.09);border:1px solid rgba(239,83,80,.35);
     border-left:4px solid var(--red);border-radius:var(--radius-card);padding:16px 18px;
   }
-  .prob h3{font-size:14px;margin-bottom:8px}
-  .prob ul{margin:0;padding-left:20px;color:var(--muted);font-size:13.5px;line-height:1.85}
-  .prob b{color:var(--white)}
+  .why-tx{flex:1 1 320px;min-width:280px}
+  .why-tx h3{font-size:15px;margin-bottom:7px}
+  .why-tx p{color:var(--muted);font-size:13.5px;line-height:1.75}
+  .why-tx b{color:var(--white)}
+  .why-demo{display:flex;gap:10px;flex:0 0 auto}
+  .why-demo .cell{width:150px}
 
-  /* ═══ Επικεφαλίδα ενεργής πρότασης ═══ */
-  .vhead{
-    margin-top:26px;display:flex;gap:14px;align-items:flex-start;
-    background:var(--dark);border:1px solid var(--border);border-radius:var(--radius);padding:18px;
+  /* ── Οδηγία ── */
+  .howto{
+    margin-top:26px;background:var(--card);border:1px solid var(--border);
+    border-radius:var(--radius-card);padding:15px 18px;font-size:14px;line-height:1.75;color:var(--muted);
   }
-  .vnum{
-    flex:0 0 auto;width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;
-    font-weight:900;font-size:19px;background:var(--card2);border:1px solid var(--border);color:var(--yellow);
-  }
-  .vt{font-size:21px;font-weight:800}
-  .vd{color:var(--muted);font-size:13.5px;line-height:1.75;margin-top:5px}
-  .vd b{color:var(--white)}
-  .vmech{
-    display:inline-block;margin-top:9px;font-size:11px;font-weight:800;letter-spacing:.4px;
-    background:rgba(245,196,0,.12);border:1px solid rgba(245,196,0,.4);color:var(--yellow);
-    padding:3px 10px;border-radius:20px;text-transform:uppercase;
-  }
-  .vwarn{
-    margin-top:10px;font-size:12.5px;line-height:1.6;color:#ffcf9a;
-    background:rgba(245,200,66,.1);border:1px solid rgba(245,200,66,.34);
-    border-radius:var(--radius-btn);padding:9px 11px;
-  }
-  .vwarn b{color:#fff}
+  .howto b{color:var(--white)}
+  .howto .big{color:var(--yellow);font-weight:800}
 
-  /* ═══ Οθόνες ═══ */
-  .screen{margin-top:22px}
-  .sc-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:9px}
-  .sc-n{
-    font-size:10.5px;font-weight:900;letter-spacing:.6px;color:var(--yellow);
-    background:rgba(245,196,0,.12);border:1px solid rgba(245,196,0,.35);
-    padding:2px 8px;border-radius:20px;text-transform:uppercase;
+  /* ── Οι 3 επιλογές ── */
+  .opts{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
+  .opt{
+    background:var(--dark);border:1.5px solid var(--border);border-radius:var(--radius);
+    padding:16px;display:flex;flex-direction:column;
   }
-  .sc-t{font-size:16px;font-weight:800}
-  .sc-w{font-size:12px;color:var(--muted)}
-  .panel{background:var(--dark);border:1px solid var(--border);border-radius:var(--radius);padding:17px}
-  .plbl{font-size:11.5px;color:var(--muted);margin-bottom:12px;line-height:1.5}
+  .opt.reco{border-color:rgba(38,194,129,.5);box-shadow:0 0 0 1px rgba(38,194,129,.15)}
+  .opt-h{display:flex;align-items:center;gap:10px}
+  .opt-n{
+    width:34px;height:34px;flex:0 0 auto;border-radius:10px;display:flex;align-items:center;justify-content:center;
+    font-weight:900;font-size:17px;background:var(--card2);border:1px solid var(--border);color:var(--yellow);
+  }
+  .opt.reco .opt-n{background:rgba(38,194,129,.16);border-color:rgba(38,194,129,.5);color:#6ee7b0}
+  .opt-t{font-size:16.5px;font-weight:800;line-height:1.25}
+  .opt-badge{
+    display:inline-block;margin-top:8px;font-size:10.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;
+    padding:3px 9px;border-radius:20px;
+  }
+  .bd-reco{background:rgba(38,194,129,.14);border:1px solid rgba(38,194,129,.45);color:#6ee7b0}
+  .bd-alt{background:rgba(147,160,221,.12);border:1px solid rgba(147,160,221,.35);color:var(--muted)}
+  .opt-d{color:var(--muted);font-size:13px;line-height:1.7;margin-top:10px}
+  .opt-d b{color:var(--white)}
+  .opt-cards{display:flex;flex-direction:column;gap:9px;margin-top:14px}
+  .opt-foot{
+    margin-top:auto;padding-top:14px;font-size:12.5px;color:var(--muted);line-height:1.6;
+    border-top:1px solid var(--border);
+  }
+  .opt-foot b{color:var(--white)}
+  .plus{color:#6ee7b0}
+  .minus{color:#ffab91}
 
-  /* ═══ ΚΟΙΝΟ: κάρτα προϊόντος (πιστό αντίγραφο POS) ═══ */
-  .products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--grid-min),1fr));gap:12px}
-  .cell{display:flex;flex-direction:column}
+  /* ── Γραμμή κατάστασης πάνω από κάθε κάρτα ── */
+  .row-lbl{
+    font-size:10.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;
+    color:var(--muted);margin-bottom:-3px;
+  }
+
+  /* ═══ Κάρτα προϊόντος (αντίγραφο POS) ═══ */
   .prod-card{
     background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);
-    padding:0;cursor:pointer;text-align:center;transition:all .18s;position:relative;
-    display:flex;flex-direction:column;overflow:hidden;font-family:inherit;color:inherit;min-height:96px;
+    position:relative;display:flex;flex-direction:column;overflow:hidden;
+    font-family:inherit;color:inherit;text-align:center;min-height:78px;width:100%;cursor:default;
   }
-  .prod-card-body{padding:14px 10px;display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;justify-content:center}
+  .pcb{padding:12px 10px;display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;justify-content:center}
   .pname{font-size:14px;font-weight:700;color:var(--white);line-height:1.3}
-  .pprice{font-size:16px;color:var(--yellow);font-weight:900}
-  .case-lbl{font-size:10.5px;color:var(--muted);text-align:center;margin-top:7px;line-height:1.45}
-  .case-lbl b{color:var(--white)}
+  .pprice{font-size:15.5px;color:var(--yellow);font-weight:900}
 
-  /* ═══ ΚΟΙΝΟ: chips υλικών μέσα στη φόρμα προϊόντος ═══ */
-  .mock-modal{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-card);padding:14px}
-  .mm-lbl{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.4px;margin-bottom:9px}
-  .mm-lbl::before{content:'> ';color:rgba(245,200,66,.35)}
-  .mm-chips{display:flex;flex-wrap:wrap;gap:7px}
-  .ing-chip{
-    font-family:'JetBrains Mono',monospace;font-size:12px;padding:9px 12px;min-height:38px;
-    display:inline-flex;align-items:center;gap:5px;position:relative;
-    background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
-    border-radius:var(--radius-btn);color:rgba(255,255,255,.4);cursor:pointer;
-  }
-  .ing-chip.sel{box-shadow:inset 3px 0 0 #f5c842;background:rgba(245,200,66,.07);color:#f5c842}
-
-  /* ═══ ΚΟΙΝΟ: οθόνη «Εξαντλημένα» ═══ */
-  .iso-box{background:var(--dark);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;max-width:620px}
-  .iso-header{padding:14px 16px;font-size:16px;font-weight:800;border-bottom:1px solid var(--border);display:flex;align-items:center}
-  .iso-count-badge{
-    display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 6px;
-    margin-left:7px;border-radius:var(--radius-pill);background:rgba(224,90,90,.18);
-    border:1px solid rgba(224,90,90,.5);color:#ffb3b3;font-size:12px;font-weight:800;line-height:1;
-  }
-  .iso-body{padding:14px 16px}
-  .iso-group-title{font-size:12.5px;font-weight:800;color:var(--yellow);margin-bottom:9px;letter-spacing:.3px}
-  .iso-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
-  .iso-chip{
-    padding:10px 13px;min-height:44px;border-radius:var(--radius-card);position:relative;
-    background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.10);
-    color:var(--white);font-size:13.5px;font-weight:600;cursor:pointer;
-    display:inline-flex;align-items:center;gap:6px;
-  }
-  .iso-plist{display:flex;flex-direction:column;gap:3px}
-  .iso-prow{
-    display:flex;align-items:center;gap:8px;min-height:42px;padding:6px 10px;cursor:pointer;
-    font-size:13px;border-radius:var(--radius-btn);position:relative;overflow:hidden;
-    background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
-  }
-  .iso-pnm{flex:1;min-width:0;color:rgba(255,255,255,.62)}
-  .iso-pwhy{font-size:11px;color:var(--yellow);flex-shrink:0}
-
-  /* ═══ ΚΟΙΝΟ: «Τι τελείωσε;» (λίστα επιλογής) ═══ */
-  .sco-box{
-    width:min(380px,100%);background:var(--dark);border:1px solid rgba(255,255,255,.18);
-    border-radius:var(--radius);padding:17px;
-  }
-  .sco-title{font-size:16.5px;font-weight:800;text-align:center;line-height:1.25}
-  .sco-sub{font-size:12px;color:var(--muted);text-align:center;margin:6px 0 12px;line-height:1.4}
-  .sco-list{border:1px solid rgba(255,255,255,.1);border-radius:var(--radius-card);overflow:hidden;margin-bottom:11px}
-  .sco-li{
-    display:flex;align-items:center;gap:9px;min-height:44px;padding:6px 10px;cursor:pointer;position:relative;
-    border-bottom:1px solid rgba(255,255,255,.06);
-  }
-  .sco-li:last-child{border-bottom:none}
-  .sco-dot{
-    width:16px;height:16px;flex:0 0 16px;border-radius:4px;position:relative;
-    background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.28);
-  }
-  .sco-dot.on{background:var(--red);border-color:var(--red);box-shadow:0 0 8px rgba(224,90,90,.5)}
-  .sco-dot.on::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-    font-size:11px;font-weight:900;color:#fff}
-  .sco-nm{flex:1;min-width:0;color:var(--white);font-size:13.5px}
-  .sco-cat{font-size:10px;color:var(--muted);background:rgba(255,255,255,.06);padding:2px 6px;border-radius:var(--radius-xs);flex-shrink:0}
-  .sco-already{font-size:9.5px;font-weight:800;color:#ffcf9a;background:rgba(245,200,66,.14);
-    border:1px solid rgba(245,200,66,.3);padding:2px 6px;border-radius:var(--radius-xs);flex-shrink:0}
-
-  /* ═════════════════════════════════════════════════════════════════════
-     ΤΩΡΑ  (v-now)
-     ═════════════════════════════════════════════════════════════════════ */
+  /* ── ΤΩΡΑ ── */
   .v-now .prod-card.st{opacity:.45;filter:grayscale(1);border-color:rgba(224,90,90,.4)}
   .v-now .prod-card.st .pprice{text-decoration:line-through}
-  .v-now .prod-card.st-ef-only{opacity:1;filter:none;border-color:rgba(255,106,61,.55)}
-  .v-now .n-badge{
-    position:absolute;top:6px;left:6px;z-index:2;background:rgba(224,90,90,.92);color:#fff;
-    font-size:10px;font-weight:800;letter-spacing:.3px;padding:2px 7px;border-radius:var(--radius-xs);text-transform:uppercase;
+  .v-now .prod-card.s-ef{opacity:1;filter:none;border-color:rgba(255,106,61,.55)}
+  .v-now .nb{
+    position:absolute;top:6px;left:6px;background:rgba(224,90,90,.92);color:#fff;
+    font-size:10px;font-weight:800;padding:2px 7px;border-radius:var(--radius-xs);text-transform:uppercase;
   }
-  .v-now .n-badge i{display:block;font-style:normal;font-size:8.5px;font-weight:700;opacity:.8;margin-top:1px}
-  .v-now .n-ef{
-    position:absolute;top:6px;right:6px;z-index:3;background:var(--efood);color:#2a0d00;
-    font-size:9px;font-weight:900;padding:2px 6px;border-radius:var(--radius-xs);line-height:1.2;
-    box-shadow:0 2px 8px rgba(255,106,61,.45);
+  .v-now .nb i{display:block;font-style:normal;font-size:8.5px;font-weight:700;opacity:.8;margin-top:1px}
+  .v-now .nef{
+    position:absolute;top:6px;right:6px;background:var(--efood);color:#2a0d00;
+    font-size:9px;font-weight:900;padding:2px 6px;border-radius:var(--radius-xs);
   }
-  .v-now .ing-chip.st{
-    background:rgba(120,120,130,.10)!important;border-color:rgba(255,255,255,.06)!important;
-    color:rgba(255,255,255,.28)!important;box-shadow:none!important;text-decoration:line-through;opacity:.55;
-  }
-  .v-now .ing-chip.st::after{content:'🚫';font-size:10px;margin-left:4px;filter:grayscale(1);opacity:.8}
-  .v-now .ing-chip.st-ef-only{border-color:rgba(255,106,61,.55)!important;opacity:1;text-decoration:none;
-    background:rgba(255,255,255,.04)!important;color:rgba(255,255,255,.4)!important}
-  .v-now .ing-chip.st-ef-only::after{content:''}
-  .v-now .ef-dot{
-    position:absolute;top:50%;right:5px;transform:translateY(-50%);width:15px;height:15px;border-radius:50%;
-    background:var(--efood);display:flex;align-items:center;justify-content:center;font-size:8px;line-height:1;
-  }
-  .v-now .iso-chip.st:not(.s-ef){background:rgba(224,90,90,.12);border-color:rgba(224,90,90,.55);color:#ffb3b3;
-    text-decoration:line-through;opacity:.8}
-  .v-now .iso-chip.st:not(.s-ef)::before{content:'🚫';text-decoration:none}
-  .v-now .iso-chip.s-ef{border-color:rgba(255,106,61,.55);padding-right:28px}
-  .v-now .iso-pnm.st{text-decoration:line-through}
-  .v-now .iso-prow.s-ef .iso-pnm{text-decoration:none;color:rgba(255,255,255,.8)}
 
-  /* ═════════════════════════════════════════════════════════════════════
-     Α — ΛΩΡΙΔΑ ΚΑΤΑΣΤΑΣΗΣ
-     ═════════════════════════════════════════════════════════════════════ */
-  .v-a .prod-card.st{background:#181f45}
-  .v-a .prod-card.st .pname{color:rgba(232,234,246,.62)}
-  .v-a .prod-card.st .pprice{color:rgba(147,160,221,.72);font-weight:800;text-decoration:line-through}
-  .v-a .prod-card.st-ef-only .pprice{color:var(--yellow);text-decoration:none;font-weight:900}
-  .v-a .prod-card.s-today{border-color:rgba(239,83,80,.55)}
-  .v-a .prod-card.s-indef{border-color:rgba(160,108,255,.55)}
-  .v-a .prod-card.s-ef{border-color:rgba(255,106,61,.5)}
-  .v-a .a-band{
+  /* ── 1: ράβδος + λωρίδα με λέξη (προτεινόμενο) ── */
+  .v-1 .prod-card.st{background:#181f45}
+  .v-1 .prod-card.st .pname{color:rgba(232,234,246,.66)}
+  .v-1 .prod-card.st .pprice{color:rgba(147,160,221,.72);font-weight:800;text-decoration:line-through}
+  .v-1 .prod-card.s-ef .pprice{color:var(--yellow);text-decoration:none;font-weight:900}
+  .v-1 .prod-card.st::before{content:'';position:absolute;inset:0 auto 0 0;width:5px;z-index:2}
+  .v-1 .prod-card.s-today::before{background:var(--red)}
+  .v-1 .prod-card.s-indef::before{background:var(--indef)}
+  .v-1 .prod-card.s-ef::before{background:var(--efood)}
+  .v-1 .prod-card.s-today{border-color:rgba(239,83,80,.5)}
+  .v-1 .prod-card.s-indef{border-color:rgba(160,108,255,.5)}
+  .v-1 .prod-card.s-ef{border-color:rgba(255,106,61,.5)}
+  .v-1 .band{
     display:flex;align-items:center;justify-content:center;gap:6px;
-    font-size:10.5px;font-weight:800;letter-spacing:.2px;padding:6px;line-height:1.25;
-    border-top:1px solid rgba(0,0,0,.25);
+    font-size:10.5px;font-weight:800;padding:5px 6px;line-height:1.25;border-top:1px solid rgba(0,0,0,.25);
   }
-  .v-a .a-band .sub{font-weight:700;opacity:.78}
-  .v-a .b-today{background:#c0392b;color:#fff}
-  .v-a .b-indef{background:#5b3a9e;color:#fff}
-  .v-a .b-ef{background:var(--efood);color:#2a0d00}
-  /* chips: η λωρίδα γίνεται έγχρωμη ράβδος-inset + ετικέτα μέσα στο chip */
-  .v-a .ing-chip.st{color:rgba(255,255,255,.34);text-decoration:line-through}
-  .v-a .ing-chip.s-today{box-shadow:inset 3px 0 0 var(--red);background:rgba(239,83,80,.07)}
-  .v-a .ing-chip.s-indef{box-shadow:inset 3px 0 0 var(--indef);background:rgba(160,108,255,.08)}
-  .v-a .ing-chip.s-ef{box-shadow:inset 3px 0 0 var(--efood);background:rgba(255,106,61,.07);text-decoration:none;color:rgba(255,255,255,.42)}
-  .v-a .ctag{
-    font-size:9px;font-weight:900;letter-spacing:.3px;padding:2px 5px;border-radius:3px;
-    text-decoration:none;flex-shrink:0;line-height:1.2;
-  }
-  .v-a .ct-today{background:#c0392b;color:#fff}
-  .v-a .ct-indef{background:#5b3a9e;color:#fff}
-  .v-a .ct-ef{background:var(--efood);color:#2a0d00}
-  .v-a .iso-chip.st{color:rgba(255,255,255,.55)}
-  .v-a .iso-chip.s-today{background:rgba(239,83,80,.1);border-color:rgba(239,83,80,.5);box-shadow:inset 4px 0 0 var(--red)}
-  .v-a .iso-chip.s-indef{background:rgba(160,108,255,.1);border-color:rgba(160,108,255,.5);box-shadow:inset 4px 0 0 var(--indef)}
-  .v-a .iso-chip.s-ef{background:rgba(255,106,61,.1);border-color:rgba(255,106,61,.5);box-shadow:inset 4px 0 0 var(--efood)}
-  .v-a .iso-prow.s-today{box-shadow:inset 4px 0 0 var(--red)}
-  .v-a .iso-prow.s-indef{box-shadow:inset 4px 0 0 var(--indef)}
-  .v-a .iso-prow.s-ef{box-shadow:inset 4px 0 0 var(--efood)}
-  .v-a .iso-prow.st{padding-left:16px}
-  .v-a .sco-li.s-today{box-shadow:inset 4px 0 0 var(--red)}
-  .v-a .sco-li.s-indef{box-shadow:inset 4px 0 0 var(--indef)}
-  .v-a .sco-li.st{padding-left:16px}
+  .v-1 .band .sub{font-weight:700;opacity:.8}
+  .v-1 .b-today{background:#c0392b;color:#fff}
+  .v-1 .b-indef{background:#5b3a9e;color:#fff}
+  .v-1 .b-ef{background:var(--efood);color:#2a0d00}
 
-  /* ═════════════════════════════════════════════════════════════════════
-     Β — ΡΑΒΔΟΣ + ΚΥΚΛΑΚΙ
-     ═════════════════════════════════════════════════════════════════════ */
-  .v-b .prod-card.st{background:#171d40}
-  .v-b .prod-card.st .pname{color:rgba(232,234,246,.55)}
-  .v-b .prod-card.st .pprice{color:rgba(147,160,221,.55);text-decoration:line-through}
-  .v-b .prod-card.st-ef-only .pprice{color:var(--yellow);text-decoration:none}
-  .v-b .prod-card.st::before{content:'';position:absolute;inset:0 auto 0 0;width:5px;z-index:2}
-  .v-b .prod-card.s-today::before{background:var(--red)}
-  .v-b .prod-card.s-indef::before{background:var(--indef)}
-  .v-b .prod-card.s-ef::before{background:var(--efood)}
-  .v-b .prod-card.s-today{border-color:rgba(239,83,80,.4)}
-  .v-b .prod-card.s-indef{border-color:rgba(160,108,255,.4)}
-  .v-b .prod-card.s-ef{border-color:rgba(255,106,61,.4)}
-  .v-b .dots{position:absolute;top:7px;right:7px;z-index:3;display:flex;gap:4px}
-  .v-b .dot{
-    width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-    font-size:11px;line-height:1;box-shadow:0 2px 6px rgba(0,0,0,.45);
+  /* ── 2: μόνο ράβδος + κυκλάκι (διακριτικό) ── */
+  .v-2 .prod-card.st{background:#171d40}
+  .v-2 .prod-card.st .pname{color:rgba(232,234,246,.55)}
+  .v-2 .prod-card.st .pprice{color:rgba(147,160,221,.55);text-decoration:line-through}
+  .v-2 .prod-card.s-ef .pprice{color:var(--yellow);text-decoration:none}
+  .v-2 .prod-card.st::before{content:'';position:absolute;inset:0 auto 0 0;width:5px;z-index:2}
+  .v-2 .prod-card.s-today::before{background:var(--red)}
+  .v-2 .prod-card.s-indef::before{background:var(--indef)}
+  .v-2 .prod-card.s-ef::before{background:var(--efood)}
+  .v-2 .prod-card.s-today{border-color:rgba(239,83,80,.4)}
+  .v-2 .prod-card.s-indef{border-color:rgba(160,108,255,.4)}
+  .v-2 .prod-card.s-ef{border-color:rgba(255,106,61,.4)}
+  .v-2 .dot{
+    position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:11px;line-height:1;
+    box-shadow:0 2px 6px rgba(0,0,0,.45);
   }
-  .v-b .d-today{background:var(--red);color:#fff}
-  .v-b .d-indef{background:var(--indef);color:#fff}
-  .v-b .d-ef{background:var(--efood);color:#2a0d00}
-  .v-b .why{
+  .v-2 .d-today{background:var(--red);color:#fff}
+  .v-2 .d-indef{background:var(--indef);color:#fff}
+  .v-2 .d-ef{background:var(--efood);color:#2a0d00}
+  .v-2 .sub2{
     position:absolute;bottom:0;left:0;right:0;font-size:9.5px;font-weight:700;
     padding:3px 6px 4px;color:rgba(232,234,246,.75);background:rgba(0,0,0,.28);
   }
-  /* chips: ίδια γλώσσα — ράβδος αριστερά + μικρό κυκλάκι δεξιά */
-  .v-b .ing-chip.st{color:rgba(255,255,255,.34);text-decoration:line-through;padding-right:26px}
-  .v-b .ing-chip.s-today{box-shadow:inset 4px 0 0 var(--red)}
-  .v-b .ing-chip.s-indef{box-shadow:inset 4px 0 0 var(--indef)}
-  .v-b .ing-chip.s-ef{box-shadow:inset 4px 0 0 var(--efood);text-decoration:none;color:rgba(255,255,255,.42)}
-  .v-b .cdot{
-    position:absolute;top:50%;right:5px;transform:translateY(-50%);
-    width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-    font-size:9px;line-height:1;
-  }
-  .v-b .cd-today{background:var(--red);color:#fff}
-  .v-b .cd-indef{background:var(--indef);color:#fff}
-  .v-b .cd-ef{background:var(--efood);color:#2a0d00}
-  .v-b .iso-chip.st{color:rgba(255,255,255,.55);padding-right:30px}
-  .v-b .iso-chip.s-today{box-shadow:inset 5px 0 0 var(--red);border-color:rgba(239,83,80,.4)}
-  .v-b .iso-chip.s-indef{box-shadow:inset 5px 0 0 var(--indef);border-color:rgba(160,108,255,.4)}
-  .v-b .iso-chip.s-ef{box-shadow:inset 5px 0 0 var(--efood);border-color:rgba(255,106,61,.4)}
-  .v-b .iso-prow.st{padding-left:16px}
-  .v-b .iso-prow.s-today{box-shadow:inset 5px 0 0 var(--red)}
-  .v-b .iso-prow.s-indef{box-shadow:inset 5px 0 0 var(--indef)}
-  .v-b .iso-prow.s-ef{box-shadow:inset 5px 0 0 var(--efood)}
-  .v-b .sco-li.st{padding-left:16px}
-  .v-b .sco-li.s-today{box-shadow:inset 5px 0 0 var(--red)}
-  .v-b .sco-li.s-indef{box-shadow:inset 5px 0 0 var(--indef)}
 
-  /* ═════════════════════════════════════════════════════════════════════
-     Γ — ΣΦΡΑΓΙΔΑ
-     ═════════════════════════════════════════════════════════════════════ */
-  .v-c .prod-card.st .prod-card-body{opacity:.34}
-  .v-c .prod-card.st-ef-only .prod-card-body{opacity:.62}
-  .v-c .prod-card.s-today{border-color:rgba(239,83,80,.5)}
-  .v-c .prod-card.s-indef{border-color:rgba(160,108,255,.5)}
-  .v-c .prod-card.s-ef{border-color:rgba(255,106,61,.5)}
-  .v-c .stamp-wrap{
-    position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;gap:3px;pointer-events:none;background:rgba(10,13,32,.42);
+  /* ── 3: σφραγίδα (έντονο) ── */
+  .v-3 .prod-card.st .pcb{opacity:.32}
+  .v-3 .prod-card.s-ef .pcb{opacity:.6}
+  .v-3 .prod-card.s-today{border-color:rgba(239,83,80,.5)}
+  .v-3 .prod-card.s-indef{border-color:rgba(160,108,255,.5)}
+  .v-3 .prod-card.s-ef{border-color:rgba(255,106,61,.5)}
+  .v-3 .stamp-wrap{
+    position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+    background:rgba(10,13,32,.42);
   }
-  .v-c .prod-card.st-ef-only .stamp-wrap{background:rgba(10,13,32,.16)}
-  .v-c .stamp{
-    transform:rotate(-11deg);border:2.5px solid currentColor;border-radius:6px;padding:3px 10px;
-    font-size:12.5px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;line-height:1.15;
-    box-shadow:0 2px 10px rgba(0,0,0,.45);
+  .v-3 .prod-card.s-ef .stamp-wrap{background:rgba(10,13,32,.16)}
+  .v-3 .stamp{
+    transform:rotate(-10deg);border:2.5px solid currentColor;border-radius:6px;padding:2px 9px;
+    font-size:12px;font-weight:900;letter-spacing:1.1px;text-transform:uppercase;line-height:1.15;
   }
-  .v-c .s-today .stamp{color:#ff7b78;background:rgba(192,57,43,.32)}
-  .v-c .s-indef .stamp{color:#c9a6ff;background:rgba(91,58,158,.36)}
-  .v-c .s-ef .stamp{color:#ffa07a;background:rgba(180,60,20,.32);font-size:11px}
-  .v-c .stamp-sub{
-    transform:rotate(-11deg);font-size:9.5px;font-weight:800;color:rgba(232,234,246,.85);
-    text-shadow:0 1px 3px rgba(0,0,0,.7);
-  }
-  /* chips: η σφραγίδα ΔΕΝ χωράει → διαγώνια γραμμή + έγχρωμο πλαίσιο (υποχώρηση) */
-  .v-c .ing-chip.st{color:rgba(255,255,255,.3);overflow:hidden}
-  .v-c .ing-chip.st::before{
-    content:'';position:absolute;left:-10%;right:-10%;top:50%;height:2px;transform:rotate(-8deg);
-    background:currentColor;opacity:.55;
-  }
-  .v-c .ing-chip.s-today{border-color:rgba(239,83,80,.55);color:#ff9b98}
-  .v-c .ing-chip.s-indef{border-color:rgba(160,108,255,.55);color:#c9a6ff}
-  .v-c .ing-chip.s-ef{border-color:rgba(255,106,61,.55);color:#ffa07a}
-  .v-c .ing-chip.s-ef::before{display:none}
-  .v-c .iso-chip.st{color:rgba(255,255,255,.5)}
-  .v-c .iso-chip.s-today{border-color:rgba(239,83,80,.55);background:rgba(239,83,80,.08)}
-  .v-c .iso-chip.s-indef{border-color:rgba(160,108,255,.55);background:rgba(160,108,255,.08)}
-  .v-c .iso-chip.s-ef{border-color:rgba(255,106,61,.55);background:rgba(255,106,61,.08)}
-  .v-c .cstamp{
-    font-size:9px;font-weight:900;letter-spacing:.5px;text-transform:uppercase;
-    border:1.5px solid currentColor;border-radius:4px;padding:1px 5px;transform:rotate(-5deg);
-    flex-shrink:0;line-height:1.25;
-  }
-  .v-c .cs-today{color:#ff7b78}
-  .v-c .cs-indef{color:#c9a6ff}
-  .v-c .cs-ef{color:#ffa07a}
-  .v-c .iso-prow.st .iso-pnm{text-decoration:line-through}
+  .v-3 .s-today .stamp{color:#ff7b78;background:rgba(192,57,43,.32)}
+  .v-3 .s-indef .stamp{color:#c9a6ff;background:rgba(91,58,158,.36)}
+  .v-3 .s-ef .stamp{color:#ffa07a;background:rgba(180,60,20,.32);font-size:10.5px}
+  .v-3 .stamp-sub{transform:rotate(-10deg);font-size:9px;font-weight:800;color:rgba(232,234,246,.85)}
 
-  /* ═════════════════════════════════════════════════════════════════════
-     Δ — ΥΦΗ (ριγέ)
-     ═════════════════════════════════════════════════════════════════════ */
-  .v-d .prod-card.st .pname{color:rgba(232,234,246,.6)}
-  .v-d .prod-card.st .pprice{color:rgba(147,160,221,.6);text-decoration:line-through}
-  .v-d .prod-card.st-ef-only .pprice{color:var(--yellow);text-decoration:none}
-  .v-d .prod-card.s-today{border-color:rgba(239,83,80,.45)}
-  .v-d .prod-card.s-indef{
-    border-color:rgba(160,108,255,.5);
-    background:repeating-linear-gradient(135deg,#1c2554 0 9px,#2a2260 9px 18px);
-  }
-  .v-d .prod-card.s-ef{
-    border-color:rgba(255,106,61,.5);
-    background:repeating-linear-gradient(90deg,#1c2554 0 14px,#2b2148 14px 16px);
-  }
-  .v-d .d-band{
-    display:flex;align-items:center;gap:5px;justify-content:center;
-    font-size:10px;font-weight:900;letter-spacing:.5px;text-transform:uppercase;padding:4px 6px;line-height:1.2;
-  }
-  .v-d .db-today{background:var(--red);color:#fff}
-  .v-d .db-indef{background:var(--indef);color:#22103f}
-  .v-d .db-ef{background:var(--efood);color:#2a0d00}
-  .v-d .d-sub{font-size:9.5px;font-weight:800;color:rgba(232,234,246,.8);background:rgba(0,0,0,.3);padding:3px 6px;line-height:1.25}
-  .v-d .ing-chip.st{color:rgba(255,255,255,.36);text-decoration:line-through}
-  .v-d .ing-chip.s-today{border-color:rgba(239,83,80,.4)}
-  .v-d .ing-chip.s-indef{
-    border-color:rgba(160,108,255,.5);
-    background:repeating-linear-gradient(135deg,rgba(255,255,255,.03) 0 6px,rgba(160,108,255,.14) 6px 12px);
-  }
-  .v-d .ing-chip.s-ef{
-    border-color:rgba(255,106,61,.5);text-decoration:none;color:rgba(255,255,255,.44);
-    background:repeating-linear-gradient(90deg,rgba(255,255,255,.03) 0 10px,rgba(255,106,61,.13) 10px 12px);
-  }
-  .v-d .iso-chip.st{color:rgba(255,255,255,.6)}
-  .v-d .iso-chip.s-today{border-color:rgba(239,83,80,.5);background:rgba(239,83,80,.1)}
-  .v-d .iso-chip.s-indef{
-    border-color:rgba(160,108,255,.55);
-    background:repeating-linear-gradient(135deg,rgba(255,255,255,.04) 0 8px,rgba(160,108,255,.16) 8px 16px);
-  }
-  .v-d .iso-chip.s-ef{
-    border-color:rgba(255,106,61,.55);
-    background:repeating-linear-gradient(90deg,rgba(255,255,255,.04) 0 12px,rgba(255,106,61,.15) 12px 14px);
-  }
-  .v-d .iso-prow.s-indef{background:repeating-linear-gradient(135deg,rgba(255,255,255,.03) 0 8px,rgba(160,108,255,.13) 8px 16px)}
-  .v-d .iso-prow.s-ef{background:repeating-linear-gradient(90deg,rgba(255,255,255,.03) 0 12px,rgba(255,106,61,.12) 12px 14px)}
-  .v-d .iso-prow.s-today{background:rgba(239,83,80,.08)}
-  .v-d .sco-li.s-indef{background:repeating-linear-gradient(135deg,rgba(255,255,255,.02) 0 8px,rgba(160,108,255,.12) 8px 16px)}
-  .v-d .sco-li.s-today{background:rgba(239,83,80,.07)}
-  .v-d .dtag{
-    font-size:9px;font-weight:900;letter-spacing:.4px;text-transform:uppercase;padding:2px 5px;
-    border-radius:3px;flex-shrink:0;line-height:1.25;text-decoration:none;
-  }
-  .v-d .dt-today{background:var(--red);color:#fff}
-  .v-d .dt-indef{background:var(--indef);color:#22103f}
-  .v-d .dt-ef{background:var(--efood);color:#2a0d00}
+  /* ── Λεζάντα χρωμάτων ── */
+  .legend{display:flex;gap:9px;flex-wrap:wrap;margin-top:22px}
+  .lg{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);
+      background:var(--card);border:1px solid var(--border);border-radius:20px;padding:7px 13px}
+  .lg i{width:12px;height:12px;border-radius:50%;flex:0 0 auto}
+  .lg b{color:var(--white)}
 
-  /* ═══ Μήτρα σύγκρισης δίπλα-δίπλα (desktop) ═══ */
-  .mx{
-    display:grid;grid-template-columns:150px repeat(5,minmax(0,1fr));
-    gap:10px;align-items:stretch;
+  /* ── Οι άλλες οθόνες (καθησυχασμός, όχι απόφαση) ── */
+  .also{
+    margin-top:30px;background:var(--dark);border:1px solid var(--border);
+    border-radius:var(--radius);padding:18px;
   }
-  .mx-h{
-    font-size:12px;font-weight:900;letter-spacing:.4px;text-transform:uppercase;
-    padding:8px 10px;border-radius:var(--radius-btn);text-align:center;
-    background:var(--card2);border:1px solid var(--border);color:var(--muted);
-    position:sticky;top:86px;z-index:20;
-  }
-  .mx-h.hnow{color:#c3cbf0}
-  .mx-h.hpick{color:var(--yellow);border-color:rgba(245,196,0,.45);background:rgba(245,196,0,.1)}
-  .mx-s{
-    display:flex;flex-direction:column;justify-content:center;gap:3px;
-    font-size:11.5px;line-height:1.4;padding:6px 8px;border-right:1px solid var(--border);
-  }
-  .mx-s b{color:var(--white);font-size:12px}
-  .mx-s span{color:var(--muted)}
-  .mx-c{display:flex;align-items:stretch}
-  .mx-c>.prod-card{width:100%}
-  .mx-sep{grid-column:1/-1;height:1px;background:var(--border);margin:2px 0}
-  .mx-note{
-    margin-top:14px;font-size:12.5px;color:var(--muted);line-height:1.7;
-    background:var(--card);border:1px solid var(--border);border-radius:var(--radius-btn);padding:11px 13px;
-  }
-  .mx-note b{color:var(--white)}
+  .also h3{font-size:16px;font-weight:800}
+  .also>p{color:var(--muted);font-size:13.5px;line-height:1.75;margin-top:7px;max-width:800px}
+  .also>p b{color:var(--white)}
+  .also-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px;margin-top:16px}
+  .ag{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-card);padding:13px}
+  .ag-t{font-size:12px;font-weight:800;color:var(--yellow);letter-spacing:.3px;margin-bottom:10px}
+  .ag-w{font-size:11.5px;color:var(--muted);margin-top:9px;line-height:1.5}
 
-  /* μήτρα για chips υλικών */
-  .mxc{display:grid;grid-template-columns:150px repeat(5,minmax(0,1fr));gap:10px;align-items:center}
-  .mxc-c{display:flex;justify-content:center}
+  .chips{display:flex;flex-wrap:wrap;gap:7px}
+  .chip{
+    font-family:'JetBrains Mono',monospace;font-size:12px;padding:8px 11px;min-height:36px;
+    display:inline-flex;align-items:center;gap:5px;position:relative;
+    background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+    border-radius:var(--radius-btn);color:rgba(255,255,255,.4);
+  }
+  .chip.s-today{box-shadow:inset 3px 0 0 var(--red);background:rgba(239,83,80,.07);
+    color:rgba(255,255,255,.36);text-decoration:line-through}
+  .chip.s-indef{box-shadow:inset 3px 0 0 var(--indef);background:rgba(160,108,255,.08);
+    color:rgba(255,255,255,.36);text-decoration:line-through}
+  .chip.s-ef{box-shadow:inset 3px 0 0 var(--efood);background:rgba(255,106,61,.07);color:rgba(255,255,255,.44)}
+  .ctag{font-size:9px;font-weight:900;padding:2px 5px;border-radius:3px;text-decoration:none;line-height:1.2}
+  .ct-today{background:#c0392b;color:#fff}
+  .ct-indef{background:#5b3a9e;color:#fff}
+  .ct-ef{background:var(--efood);color:#2a0d00}
 
-  /* ═══ Λεζάντα ═══ */
-  .legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-  .lg{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--muted);
-      background:var(--card);border:1px solid var(--border);border-radius:20px;padding:5px 11px}
-  .lg i{width:11px;height:11px;border-radius:50%;display:block;flex:0 0 auto}
+  .rows{display:flex;flex-direction:column;gap:3px}
+  .prow{
+    display:flex;align-items:center;gap:8px;min-height:40px;padding:6px 10px;font-size:13px;
+    border-radius:var(--radius-btn);background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+  }
+  .prow.s-today{box-shadow:inset 4px 0 0 var(--red);padding-left:15px}
+  .prow.s-indef{box-shadow:inset 4px 0 0 var(--indef);padding-left:15px}
+  .prow.s-ef{box-shadow:inset 4px 0 0 var(--efood);padding-left:15px}
+  .prow-n{flex:1;color:rgba(255,255,255,.66)}
 
-  /* ═══ Σύγκριση + κλείσιμο ═══ */
-  .cmp{margin-top:40px;overflow-x:auto;-webkit-overflow-scrolling:touch}
-  table{border-collapse:collapse;width:100%;min-width:660px;font-size:12.5px}
-  th,td{padding:10px 11px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
-  th{background:var(--card2);font-size:11px;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);font-weight:800}
-  td{color:var(--muted);line-height:1.6}
-  td b{color:var(--white)}
-  .yes{color:var(--green);font-weight:800}
-  .no{color:var(--red);font-weight:800}
-  .mid{color:var(--yellow);font-weight:800}
+  /* ── Τι να μου πεις ── */
   .ask{
-    margin-top:38px;background:rgba(38,194,129,.08);border:1px solid rgba(38,194,129,.35);
-    border-left:4px solid var(--green);border-radius:var(--radius-card);padding:18px}
-  .ask h3{font-size:15px;margin-bottom:8px}
-  .ask p{color:var(--muted);font-size:13.5px;line-height:1.9}
+    margin-top:30px;background:rgba(38,194,129,.08);border:1px solid rgba(38,194,129,.35);
+    border-left:4px solid var(--green);border-radius:var(--radius-card);padding:20px;
+  }
+  .ask h3{font-size:17px;margin-bottom:12px}
+  .ask ol{margin:0;padding-left:22px;color:var(--muted);font-size:14px;line-height:2}
   .ask b{color:var(--white)}
-  .foot{margin-top:32px;font-size:11.5px;color:var(--muted);text-align:center;line-height:1.7;
+  .ask .hint{color:var(--muted);opacity:.8;font-size:13px}
+
+  .foot{margin-top:30px;font-size:11.5px;color:var(--muted);text-align:center;line-height:1.7;
         border-top:1px solid var(--border);padding-top:16px}
 
-  @media(max-width:700px){
-    body{padding:0 12px 60px}
-    .tools{margin:0 -12px;padding:11px 12px}
-    h1{font-size:20px}
-    :root{--grid-min:130px}
-    .vt{font-size:18px}
-    .panel{padding:13px}
-    .vhead{padding:14px;gap:11px}
-    .vnum{width:38px;height:38px;font-size:16px}
+  @media(max-width:980px){
+    .opts{grid-template-columns:1fr}
+    body{padding:20px 14px 60px}
+    h1{font-size:21px}
   }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <div class="tools">
-    <div class="trow">
-      <span class="tlbl">Δες:</span>
-      <button class="tbtn nowbtn" data-v="now">Πώς είναι ΣΗΜΕΡΑ</button>
-      <button class="tbtn on" data-v="a">Α · Λωρίδα</button>
-      <button class="tbtn" data-v="b">Β · Ράβδος</button>
-      <button class="tbtn" data-v="c">Γ · Σφραγίδα</button>
-      <button class="tbtn" data-v="d">Δ · Υφή</button>
-    </div>
-    <div class="trow">
-      <span class="tlbl">Μέγεθος καρτών:</span>
-      <button class="tbtn tsm on" data-size="190">Μεγάλη οθόνη 27&quot;</button>
-      <button class="tbtn tsm" data-size="150">Μικρότερη οθόνη</button>
-      <button class="tbtn tsm" id="gray">🩶 Ασπρόμαυρο</button>
-    </div>
-  </div>
+  <h1>🚫 Σήμανση εξαντλημένων <span class="tag">ΔΙΑΛΕΞΕ 1, 2 Ή 3</span></h1>
 
-  <header>
-    <h1>🚫 Σήμανση εξαντλημένων <span class="tag">4 ΠΡΟΤΑΣΕΙΣ × 4 ΟΘΟΝΕΣ</span></h1>
-    <p class="lead">
-      Πάτα <b>Α / Β / Γ / Δ</b> πάνω και όλη η σελίδα αλλάζει: βλέπεις την ίδια πρόταση εφαρμοσμένη
-      <b>και στις 4 οθόνες</b> όπου εμφανίζεται η σήμανση. Πάτα <b>«Πώς είναι ΣΗΜΕΡΑ»</b> για σύγκριση.
-      Σε κάθε οθόνη υπάρχουν <b>και οι 4 καταστάσεις</b>: τελείωσε σήμερα · εκτός μενού (επ' αόριστον) ·
-      μόνο e-food · και τα δύο μαζί.
-    </p>
-
-    <div class="prob">
-      <h3>🔍 Τι δεν δουλεύει σήμερα</h3>
-      <ul>
-        <li><b>«Τελείωσε σήμερα»</b> και <b>«κλειστό επ' αόριστον»</b> δείχνουν <b>ίδια</b> — ίδιο κόκκινο «ΕΞΑΝΤΛΗΘΗΚΕ» παντού. Δεν ξεχωρίζεις τι θα ξανανοίξει αύριο μόνο του.</li>
-        <li>Η κάρτα γίνεται <b>ασπρόμαυρη και σχεδόν διάφανη</b> → δεν διαβάζεται καν το όνομα.</li>
-        <li>Ο <b>λόγος</b> («λαβάς», «χοιρινό») γράφεται με 8,5px — πράκτικα αόρατος.</li>
-        <li>Το <b>🛵 e-food</b> κάθεται σε άλλη γωνία με άλλη λογική → σε προϊόν κλειστό και εδώ και εκεί μαζεύονται 2 ταμπελάκια.</li>
-        <li>Στα <b>chips υλικών</b> η σήμανση είναι μόνο γκρι + 🚫, <b>χωρίς διάκριση</b> σήμερα/επ' αόριστον.</li>
-      </ul>
+  <!-- ══════ ΤΟ ΠΡΟΒΛΗΜΑ ══════ -->
+  <div class="why">
+    <div class="why-tx">
+      <h3>🔍 Το πρόβλημα σε μία γραμμή</h3>
+      <p>
+        Αυτές οι δύο κάρτες δεξιά είναι <b>δύο διαφορετικά πράγματα</b>: η πρώτη τελείωσε
+        <b>σήμερα</b> (αύριο ανοίγει μόνη της), η δεύτερη είναι κλειστή <b>επ' αόριστον</b>
+        (μένει κλειστή ώσπου να την ανοίξεις εσύ). <b>Φαίνονται ίδιες.</b>
+        Επιπλέον ο λόγος («λείπει ο λαβάς») γράφεται τόσο μικρός που δεν διαβάζεται.
+      </p>
     </div>
-  </header>
-
-  <!-- ══════════ ΜΗΤΡΑ: όλα δίπλα-δίπλα ══════════ -->
-  <div class="screen" style="margin-top:30px">
-    <div class="sc-head">
-      <span class="sc-n">Σύγκριση</span>
-      <span class="sc-t">Όλα δίπλα-δίπλα</span>
-      <span class="sc-w">κάθε γραμμή = μία κατάσταση · κάθε στήλη = μία πρόταση</span>
-    </div>
-    <div class="panel">
-      <div class="plbl">
-        Ξεκίνα από εδώ: <b>σύγκρινε τη στήλη «ΤΩΡΑ» με τις άλλες τέσσερις</b>. Πρόσεξε τις δύο πρώτες
-        γραμμές — <b>«τελείωσε σήμερα»</b> και <b>«εκτός μενού»</b> — στο ΤΩΡΑ είναι πανομοιότυπες.
+    <div class="why-demo v-now">
+      <div class="cell">
+        <button class="prod-card st s-today"><span class="nb">Εξαντλήθηκε</span>
+          <div class="pcb"><div class="pname">Κεμπαπάκι Πίτα</div><div class="pprice">3,60 €</div></div></button>
       </div>
-      <div class="mx" id="mx"></div>
-      <div class="mx-note">
-        💡 Παρακάτω, με τα κουμπιά <b>Α / Β / Γ / Δ</b> πάνω, βλέπεις κάθε πρόταση <b>ολόκληρη</b> —
-        και στις 4 οθόνες όπου εμφανίζεται η σήμανση, σε πραγματικό μέγεθος.
+      <div class="cell">
+        <button class="prod-card st s-indef"><span class="nb">Εξαντλήθηκε</span>
+          <div class="pcb"><div class="pname">Φιλέτο Πίτα</div><div class="pprice">4,00 €</div></div></button>
       </div>
     </div>
   </div>
 
-  <!-- ══════════ Chips δίπλα-δίπλα ══════════ -->
-  <div class="screen">
-    <div class="sc-head">
-      <span class="sc-n">Σύγκριση</span>
-      <span class="sc-t">Το ίδιο σε μικρό chip υλικού</span>
-      <span class="sc-w">εδώ ξεχωρίζει ποια γλώσσα κλιμακώνεται</span>
+  <!-- ══════ ΟΔΗΓΙΑ ══════ -->
+  <div class="howto">
+    👇 Παρακάτω είναι <b>3 τρόποι να φαίνεται</b>. Κοίτα μόνο τις κάρτες — <span class="big">διάλεξε έναν
+    και πες μου το νούμερο</span>. Δεν χρειάζεται να αποφασίσεις για κάθε οθόνη χωριστά:
+    ό,τι διαλέξεις <b>το εφαρμόζω μόνος μου παντού</b> (υλικά, λίστες, οθόνη «Τι τελείωσε;»)
+    με τα ίδια χρώματα και τις ίδιες λέξεις.
+  </div>
+
+  <!-- ══════ ΟΙ 3 ΕΠΙΛΟΓΕΣ ══════ -->
+  <div class="opts">
+
+    <!-- 1 -->
+    <div class="opt reco">
+      <div class="opt-h"><div class="opt-n">1</div><div>
+        <div class="opt-t">Χρωματιστή λωρίδα με λέξη</div>
+        <span class="opt-badge bd-reco">✓ Η πρότασή μου</span>
+      </div></div>
+      <div class="opt-d">Έγχρωμη ράβδος στο πλάι + <b>λωρίδα στη βάση που γράφει τι συμβαίνει</b>.
+        Δεν χρειάζεται να θυμάσαι χρώματα — <b>το διαβάζεις</b>.</div>
+      <div class="opt-cards v-1">
+        <div class="row-lbl">Τελείωσε σήμερα</div>
+        <button class="prod-card st s-today">
+          <div class="pcb"><div class="pname">Κεμπαπάκι Πίτα</div><div class="pprice">3,60 €</div></div>
+          <div class="band b-today">⛔ ΤΕΛΕΙΩΣΕ ΣΗΜΕΡΑ</div></button>
+
+        <div class="row-lbl">Εκτός μενού (επ' αόριστον)</div>
+        <button class="prod-card st s-indef">
+          <div class="pcb"><div class="pname">Φιλέτο Πίτα</div><div class="pprice">4,00 €</div></div>
+          <div class="band b-indef">🔒 ΕΚΤΟΣ ΜΕΝΟΥ</div></button>
+
+        <div class="row-lbl">Έκλεισε λόγω ομάδας</div>
+        <button class="prod-card st s-today">
+          <div class="pcb"><div class="pname">Γύρος Λαβάς</div><div class="pprice">4,20 €</div></div>
+          <div class="band b-today">⛔ ΤΕΛΕΙΩΣΕ <span class="sub">· λαβάς</span></div></button>
+
+        <div class="row-lbl">Κλειστό μόνο στην e-food</div>
+        <button class="prod-card st s-ef">
+          <div class="pcb"><div class="pname">Ντόνερ Πίτα</div><div class="pprice">3,60 €</div></div>
+          <div class="band b-ef">🛵 ΚΛΕΙΣΤΟ ΣΤΗΝ E-FOOD</div></button>
+      </div>
+      <div class="opt-foot">
+        <span class="plus">+</span> Ξεκάθαρο, δεν μπερδεύεται<br>
+        <span class="plus">+</span> Φαίνεται ο λόγος («λαβάς»)<br>
+        <span class="minus">−</span> Πιάνει λίγο χώρο στην κάρτα
+      </div>
     </div>
-    <div class="panel">
-      <div class="plbl">Το chip είναι μόλις 38px ψηλό. Ό,τι δεν χωράει εδώ, <b>σπάει τη συνέπεια</b> του συστήματος.</div>
-      <div class="mxc" id="mxc"></div>
+
+    <!-- 2 -->
+    <div class="opt">
+      <div class="opt-h"><div class="opt-n">2</div><div>
+        <div class="opt-t">Μόνο χρώμα + εικονίδιο</div>
+        <span class="opt-badge bd-alt">Πιο διακριτικό</span>
+      </div></div>
+      <div class="opt-d">Ράβδος στο πλάι + ένα κυκλάκι. <b>Καθαρή οθόνη</b>, αλλά πρέπει να
+        μάθεις τι σημαίνει κάθε χρώμα.</div>
+      <div class="opt-cards v-2">
+        <div class="row-lbl">Τελείωσε σήμερα</div>
+        <button class="prod-card st s-today"><span class="dot d-today">⛔</span>
+          <div class="pcb"><div class="pname">Κεμπαπάκι Πίτα</div><div class="pprice">3,60 €</div></div></button>
+
+        <div class="row-lbl">Εκτός μενού (επ' αόριστον)</div>
+        <button class="prod-card st s-indef"><span class="dot d-indef">🔒</span>
+          <div class="pcb"><div class="pname">Φιλέτο Πίτα</div><div class="pprice">4,00 €</div></div></button>
+
+        <div class="row-lbl">Έκλεισε λόγω ομάδας</div>
+        <button class="prod-card st s-today"><span class="dot d-today">⛔</span>
+          <div class="pcb" style="padding-bottom:20px"><div class="pname">Γύρος Λαβάς</div><div class="pprice">4,20 €</div></div>
+          <div class="sub2">λείπει: λαβάς</div></button>
+
+        <div class="row-lbl">Κλειστό μόνο στην e-food</div>
+        <button class="prod-card st s-ef"><span class="dot d-ef">🛵</span>
+          <div class="pcb"><div class="pname">Ντόνερ Πίτα</div><div class="pprice">3,60 €</div></div></button>
+      </div>
+      <div class="opt-foot">
+        <span class="plus">+</span> Η πιο ήσυχη οθόνη<br>
+        <span class="plus">+</span> Δεν πιάνει χώρο<br>
+        <span class="minus">−</span> Θέλει να θυμάσαι τα χρώματα<br>
+        <span class="minus">−</span> Πιο εύκολο να το πατήσεις κατά λάθος
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="opt">
+      <div class="opt-h"><div class="opt-n">3</div><div>
+        <div class="opt-t">Σφραγίδα πάνω στην κάρτα</div>
+        <span class="opt-badge bd-alt">Πιο έντονο</span>
+      </div></div>
+      <div class="opt-d">Λοξή σφραγίδα στο κέντρο. <b>Το βλέπεις από 2 μέτρα</b> και δεν το πατάς
+        κατά λάθος — αλλά σκεπάζει το όνομα.</div>
+      <div class="opt-cards v-3">
+        <div class="row-lbl">Τελείωσε σήμερα</div>
+        <button class="prod-card st s-today">
+          <div class="pcb"><div class="pname">Κεμπαπάκι Πίτα</div><div class="pprice">3,60 €</div></div>
+          <div class="stamp-wrap"><div class="stamp">Τελείωσε</div></div></button>
+
+        <div class="row-lbl">Εκτός μενού (επ' αόριστον)</div>
+        <button class="prod-card st s-indef">
+          <div class="pcb"><div class="pname">Φιλέτο Πίτα</div><div class="pprice">4,00 €</div></div>
+          <div class="stamp-wrap"><div class="stamp">🔒 Εκτός</div></div></button>
+
+        <div class="row-lbl">Έκλεισε λόγω ομάδας</div>
+        <button class="prod-card st s-today">
+          <div class="pcb"><div class="pname">Γύρος Λαβάς</div><div class="pprice">4,20 €</div></div>
+          <div class="stamp-wrap"><div class="stamp">Τελείωσε</div><div class="stamp-sub">λείπει λαβάς</div></div></button>
+
+        <div class="row-lbl">Κλειστό μόνο στην e-food</div>
+        <button class="prod-card st s-ef">
+          <div class="pcb"><div class="pname">Ντόνερ Πίτα</div><div class="pprice">3,60 €</div></div>
+          <div class="stamp-wrap"><div class="stamp">🛵 e-food</div></div></button>
+      </div>
+      <div class="opt-foot">
+        <span class="plus">+</span> Αδύνατο να μη το προσέξεις<br>
+        <span class="minus">−</span> Σκεπάζει το όνομα προϊόντος<br>
+        <span class="minus">−</span> Πιο φορτωμένη οθόνη
+      </div>
     </div>
   </div>
 
-  <div id="vhead"></div>
-  <div id="stage"></div>
-
-  <!-- ══════════ ΣΥΓΚΡΙΣΗ ══════════ -->
-  <div class="cmp">
-    <h2 style="font-size:19px;font-weight:800;margin-bottom:12px">⚖️ Γρήγορη σύγκριση</h2>
-    <table>
-      <tr><th>Κριτήριο</th><th>Α · Λωρίδα</th><th>Β · Ράβδος</th><th>Γ · Σφραγίδα</th><th>Δ · Υφή</th></tr>
-      <tr>
-        <td><b>Ξεχωρίζεις «σήμερα» από «εκτός μενού»</b></td>
-        <td class="yes">Ναι — γραμμένο</td><td class="mid">Χρώμα + εικονίδιο</td>
-        <td class="yes">Άλλη λέξη</td><td class="yes">Και ασπρόμαυρο</td>
-      </tr>
-      <tr>
-        <td><b>Διαβάζεται ο λόγος («λαβάς»)</b></td>
-        <td class="yes">Καθαρά</td><td class="mid">Μικρό</td><td class="yes">Καθαρά</td><td class="yes">Καθαρά</td>
-      </tr>
-      <tr>
-        <td><b>Διαβάζεται το όνομα προϊόντος</b></td>
-        <td class="yes">Ναι</td><td class="yes">Ναι</td><td class="no">Το σκεπάζει η σφραγίδα</td><td class="yes">Ναι</td>
-      </tr>
-      <tr>
-        <td><b>Ορατό από απόσταση</b></td>
-        <td class="mid">Μέτρια</td><td class="mid">Μέτρια</td><td class="yes">Πολύ</td><td class="yes">Πολύ</td>
-      </tr>
-      <tr>
-        <td><b>Ίδια γλώσσα και στα μικρά chips</b></td>
-        <td class="yes">Ναι (ράβδος + ετικέτα)</td><td class="yes">Ναι — ίδιο ακριβώς</td>
-        <td class="no">Όχι — δεν χωράει σφραγίδα</td><td class="mid">Ναι, αλλά ρίγες σε μικρό chip κουράζουν</td>
-      </tr>
-      <tr>
-        <td><b>Ήσυχη οθόνη (όχι φασαρία)</b></td>
-        <td class="mid">Μέτρια</td><td class="yes">Πολύ ήσυχη</td><td class="no">Φορτωμένη</td><td class="mid">Μέτρια</td>
-      </tr>
-      <tr>
-        <td><b>Ύψος που «τρώει» από την κάρτα</b></td>
-        <td class="mid">2 λωρίδες = ~26px</td><td class="yes">Μηδέν — μπαίνει πάνω στην κάρτα</td>
-        <td class="yes">Μηδέν</td><td class="mid">Ταινία + γραμμή λόγου</td>
-      </tr>
-      <tr>
-        <td><b>Το πατάς κατά λάθος σε ώρα αιχμής;</b></td>
-        <td class="mid">Δύσκολα</td><td class="no">Πιο εύκολα — διακριτικό</td>
-        <td class="yes">Σχεδόν αδύνατο</td><td class="mid">Δύσκολα</td>
-      </tr>
-    </table>
+  <div class="legend">
+    <div class="lg"><i style="background:#c0392b"></i><b>Κόκκινο</b> = τελείωσε σήμερα, αύριο ανοίγει μόνο του</div>
+    <div class="lg"><i style="background:#5b3a9e"></i><b>Μοβ</b> = εκτός μενού, μένει κλειστό ώσπου να το ανοίξεις</div>
+    <div class="lg"><i style="background:#ff6a3d"></i><b>Πορτοκαλί</b> = κλειστό μόνο στην e-food, στο μαγαζί πωλείται</div>
   </div>
 
-  <div class="ask">
-    <h3>💬 Τι χρειάζομαι από εσένα</h3>
+  <!-- ══════ ΟΙ ΑΛΛΕΣ ΟΘΟΝΕΣ ══════ -->
+  <div class="also">
+    <h3>📍 Και στις υπόλοιπες οθόνες — δεν χρειάζεται να διαλέξεις ξανά</h3>
     <p>
-      1️⃣ Ποια πρόταση: <b>Α</b>, <b>Β</b>, <b>Γ</b> ή <b>Δ</b>; (ή συνδυασμός — π.χ. «ράβδος του Β στις κάρτες, λωρίδα του Α στις λίστες»)<br>
-      2️⃣ Οι λέξεις: <b>«ΤΕΛΕΙΩΣΕ ΣΗΜΕΡΑ»</b> για το ημερήσιο και <b>«ΕΚΤΟΣ ΜΕΝΟΥ»</b> για το επ' αόριστον —
-      σου κάθονται, ή προτιμάς κάτι άλλο («ΔΕΝ ΤΟ ΕΧΟΥΜΕ», «ΚΑΤΑΡΓΗΘΗΚΕ», «ΠΑΓΩΜΕΝΟ», «ΚΛΕΙΣΤΟ»);<br>
-      3️⃣ Το <b>μοβ</b> για το «εκτός μενού» ταιριάζει, ή θέλεις άλλο χρώμα (γκρι / μπλε / σκούρο κόκκινο);<br>
-      4️⃣ Στο 🛵 e-food: σου αρέσει που η <b>τιμή μένει κίτρινη χωρίς διαγραφή</b> (γιατί στο μαγαζί πωλείται κανονικά);
+      Η σήμανση εμφανίζεται σε <b>άλλα τρία σημεία</b>. Εδώ βλέπεις πώς θα γίνουν <b>αν διαλέξεις το 1</b>
+      (ίδια χρώματα, ίδιες λέξεις — απλώς μικρότερα). Είναι για να ξέρεις πού αλλάζει· <b>δεν είναι απόφαση</b>.
     </p>
+    <div class="also-grid">
+      <div class="ag">
+        <div class="ag-t">ΥΛΙΚΑ ΜΕΣΑ ΣΤΗ ΦΟΡΜΑ ΠΡΟΪΟΝΤΟΣ</div>
+        <div class="chips">
+          <span class="chip">Ντομάτα</span>
+          <span class="chip s-today">Τζατζίκι<span class="ctag ct-today">ΣΗΜΕΡΑ</span></span>
+          <span class="chip s-indef">Σως Μουστάρδας<span class="ctag ct-indef">ΕΚΤΟΣ</span></span>
+          <span class="chip s-ef">Λάχανο-Καρότο<span class="ctag ct-ef">E-FOOD</span></span>
+        </div>
+        <div class="ag-w">Σήμερα: όλα γκρι με 🚫, χωρίς διάκριση διάρκειας.</div>
+      </div>
+      <div class="ag">
+        <div class="ag-t">ΟΘΟΝΗ «ΕΞΑΝΤΛΗΜΕΝΑ»</div>
+        <div class="rows">
+          <div class="prow s-today"><span class="prow-n">Γύρος Λαβάς</span><span class="ctag ct-today">ΤΕΛΕΙΩΣΕ · λαβάς</span></div>
+          <div class="prow s-indef"><span class="prow-n">Φιλέτο Πίτα</span><span class="ctag ct-indef">ΕΚΤΟΣ</span></div>
+          <div class="prow s-ef"><span class="prow-n">Ντόνερ Πίτα</span><span class="ctag ct-ef">E-FOOD</span></div>
+        </div>
+        <div class="ag-w">Με μια ματιά ποια ανοίγουν αύριο και ποια όχι.</div>
+      </div>
+      <div class="ag">
+        <div class="ag-t">ΟΘΟΝΗ «ΤΙ ΤΕΛΕΙΩΣΕ;»</div>
+        <div class="rows">
+          <div class="prow"><span class="prow-n">Σουβλάκι Λαβάς</span></div>
+          <div class="prow s-today"><span class="prow-n">Ντόνερ Λαβάς</span><span class="ctag ct-today">ΗΔΗ ΚΛΕΙΣΤΟ</span></div>
+          <div class="prow s-indef"><span class="prow-n">Φιλέτο Λαβάς</span><span class="ctag ct-indef">ΕΚΤΟΣ ΜΕΝΟΥ</span></div>
+        </div>
+        <div class="ag-w">Φαίνεται τι είναι ήδη κλειστό και γιατί.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ ΤΙ ΝΑ ΜΟΥ ΠΕΙΣ ══════ -->
+  <div class="ask">
+    <h3>💬 Πες μου μόνο αυτά</h3>
+    <ol>
+      <li><b>Νούμερο: 1, 2 ή 3.</b> <span class="hint">(αν κανένα, πες τι σε χαλάει)</span></li>
+      <li>Οι λέξεις <b>«ΤΕΛΕΙΩΣΕ ΣΗΜΕΡΑ»</b> και <b>«ΕΚΤΟΣ ΜΕΝΟΥ»</b> σου κάθονται;
+        <span class="hint">(αλλιώς: «ΔΕΝ ΤΟ ΕΧΟΥΜΕ», «ΚΑΤΑΡΓΗΘΗΚΕ», «ΠΑΓΩΜΕΝΟ», ή ό,τι λες εσύ στο μαγαζί)</span></li>
+      <li>Το <b>μοβ</b> για το «εκτός μενού» ταιριάζει;
+        <span class="hint">(αλλιώς γκρι, μπλε ή σκούρο κόκκινο)</span></li>
+    </ol>
   </div>
 
   <p class="foot">
-    TAMAM POS · Preview σήμανσης εξαντλημένων · Δείγμα δεδομένων, καμία πραγματική τιμή<br>
-    Οι οθόνες είναι αντίγραφα του ταμείου — τα ονόματα/τιμές είναι ενδεικτικά.
+    TAMAM POS · Σήμανση εξαντλημένων · Δείγμα δεδομένων, καμία πραγματική τιμή<br>
+    Οι κάρτες είναι αντίγραφο του ταμείου — τα ονόματα/τιμές είναι ενδεικτικά.
   </p>
 </div>
-
-<script>
-/* ══════════════ Δεδομένα (ίδια σε όλες τις προτάσεις) ══════════════ */
-var CARDS = [
-  { n:'Σουβλάκι Πίτα',  p:'3,40 €', st:null },
-  { n:'Κεμπαπάκι Πίτα', p:'3,60 €', st:'today', lbl:'Τελείωσε σήμερα' },
-  { n:'Φιλέτο Πίτα',    p:'4,00 €', st:'indef', lbl:'Εκτός μενού (μόνιμα)' },
-  { n:'Γύρος Λαβάς',    p:'4,20 €', st:'today', why:'λαβάς', lbl:'Λόγω ομάδας (λείπει ο λαβάς)' },
-  { n:'Ντόνερ Πίτα',    p:'3,60 €', st:'ef',    lbl:'Μόνο e-food — <b>εδώ πωλείται</b>' },
-  { n:'Πανσέτα Πίτα',   p:'4,10 €', st:'today', why:'χοιρινό', ef:true, lbl:'Και τα δύο μαζί' }
-];
-var CHIPS = [
-  { n:'Ντομάτα',        st:null, sel:true },
-  { n:'Κρεμμύδι',       st:null },
-  { n:'Τζατζίκι',       st:'today' },
-  { n:'Σως Μουστάρδας', st:'indef' },
-  { n:'Λάχανο-Καρότο',  st:'ef' },
-  { n:'Πατάτες',        st:'today' }
-];
-var ISO_ING = [
-  { n:'Τζατζίκι', st:'today' }, { n:'Σως Μουστάρδας', st:'indef' },
-  { n:'Λάχανο-Καρότο', st:'ef' }, { n:'Ντομάτα', st:null }, { n:'Κρεμμύδι', st:null }
-];
-var ISO_PROD = [
-  { n:'Γύρος Λαβάς',   st:'today', why:'λαβάς' },
-  { n:'Φιλέτο Πίτα',   st:'indef', why:'' },
-  { n:'Πανσέτα Πίτα',  st:'today', why:'χοιρινό' },
-  { n:'Ντόνερ Πίτα',   st:'ef',    why:'' }
-];
-var SCO = [
-  { n:'Σουβλάκι Λαβάς', cat:'Λαβάς', on:true },
-  { n:'Γύρος Λαβάς',    cat:'Λαβάς', on:true },
-  { n:'Ντόνερ Λαβάς',   cat:'Λαβάς', on:true, st:'today', already:'ήδη κλειστό' },
-  { n:'Φιλέτο Λαβάς',   cat:'Λαβάς', on:false, st:'indef', already:'εκτός μενού' }
-];
-
-var W = {
-  today:{ ic:'⛔', long:'ΤΕΛΕΙΩΣΕ ΣΗΜΕΡΑ', mid:'ΤΕΛΕΙΩΣΕ', short:'ΣΗΜΕΡΑ', stamp:'Τελείωσε' },
-  indef:{ ic:'🔒', long:'ΕΚΤΟΣ ΜΕΝΟΥ',     mid:'ΕΚΤΟΣ',     short:'ΕΚΤΟΣ',  stamp:'🔒 Εκτός' },
-  ef:   { ic:'🛵', long:'ΚΛΕΙΣΤΟ ΣΤΗΝ E-FOOD', mid:'E-FOOD', short:'E-FOOD', stamp:'🛵 e-food' }
-};
-
-var META = {
-  now:{ num:'·', t:'Πώς είναι σήμερα', mech:'', d:'Για σύγκριση. Κοίτα τη <b>2η και την 3η κάρτα</b>: είναι διαφορετική κατάσταση και φαίνονται ίδιες. Το ίδιο και στα chips υλικών παρακάτω.',
-    warn:'Στην οθόνη «Εξαντλημένα» και στο «Τι τελείωσε;» <b>δεν υπάρχει καμία ένδειξη διάρκειας</b> — ένα υλικό κλειστό μόνιμα δείχνει ίδιο με ένα που τελείωσε σήμερα.' },
-  a:{ num:'Α', t:'Λωρίδα κατάστασης', mech:'Αναγνωρίζεται από: κείμενο που διαβάζεται',
-    d:'Η κάρτα <b>μένει διαβάσιμη</b> (τίποτα ασπρόμαυρο) και όλη η πληροφορία πάει σε <b>φαρδιά έγχρωμη λωρίδα στη βάση</b>: εικονίδιο + τι συμβαίνει + ο λόγος. Κλειστό και εδώ και στην e-food → <b>δύο λωρίδες στοιβαγμένες</b>, καμία στοίβα σε γωνίες. Στα μικρά chips η λωρίδα γίνεται <b>έγχρωμη ράβδος + μικρή ετικέτα</b>.',
-    warn:'' },
-  b:{ num:'Β', t:'Χρωματική ράβδος + κυκλάκι', mech:'Αναγνωρίζεται από: θέση + χρώμα',
-    d:'Το πιο <b>διακριτικό</b>. Έγχρωμη <b>ράβδος στην αριστερή πλευρά</b> + μικρό κυκλάκι-εικονίδιο. Το πιάνεις με την <b>περιφερειακή όραση</b> χωρίς να διαβάσεις. Ο λόγος μπαίνει σε λεπτή γραμμούλα στη βάση μόνο όταν υπάρχει.',
-    warn:'Το μόνο που είναι <b>πανομοιότυπο σε όλες τις οθόνες</b> — ίδια ράβδος και ίδιο κυκλάκι σε κάρτα, chip, λίστα. Μαθαίνεται μια φορά.' },
-  c:{ num:'Γ', t:'Σφραγίδα πάνω στην κάρτα', mech:'Αναγνωρίζεται από: μέγεθος — ορατό από απόσταση',
-    d:'Σαν <b>σφραγίδα σε τιμοκατάλογο</b>. Λοξή σφραγίδα στο κέντρο της κάρτας — <b>το βλέπεις από 2 μέτρα</b> και δεν το πατάς κατά λάθος χωρίς να το προσέξεις.',
-    warn:'⚠️ <b>Δεν κλιμακώνεται:</b> σε ένα chip υλικού 38px δεν χωράει σφραγίδα, οπότε εκεί υποχωρεί σε διαγώνια γραμμή + έγχρωμο πλαίσιο. Δηλαδή <b>δύο διαφορετικές γλώσσες</b> στο ίδιο σύστημα.' },
-  d:{ num:'Δ', t:'Υφή (ριγέ) + ταινία', mech:'Αναγνωρίζεται από: υφή — δουλεύει και ασπρόμαυρο',
-    d:'Η κατάσταση φαίνεται από την <b>υφή του φόντου</b>, όχι μόνο από το χρώμα: το «εκτός μενού» παίρνει <b>λοξές ρίγες σαν κορδέλα εργοταξίου</b>, το e-food λεπτές κάθετες, το «σήμερα» μένει σκέτο.',
-    warn:'Πάτα <b>«🩶 Ασπρόμαυρο»</b> πάνω: <b>μόνο αυτή η πρόταση</b> ξεχωρίζει χωρίς χρώματα — χρήσιμο σε φωτεινή κουζίνα ή αν κάποιος δεν ξεχωρίζει χρώματα.' }
-};
-
-/* ══════════════ Renderers ανά πρόταση ══════════════ */
-function stCls(c){ return c.st ? ' st s-' + c.st + (c.st === 'ef' ? ' st-ef-only' : '') : ''; }
-
-function cardNow(c){
-  var h = '<button class="prod-card' + stCls(c) + '">';
-  if (c.st === 'today' || c.st === 'indef')
-    h += '<span class="n-badge">Εξαντλήθηκε' + (c.why ? '<i>' + c.why + '</i>' : '') + '</span>';
-  if (c.st === 'ef' || c.ef) h += '<span class="n-ef">🛵 e-food</span>';
-  h += '<div class="prod-card-body"><div class="pname">' + c.n + '</div><div class="pprice">' + c.p + '</div></div>';
-  return h + '</button>';
-}
-function cardA(c){
-  var h = '<button class="prod-card' + stCls(c) + '">';
-  h += '<div class="prod-card-body"><div class="pname">' + c.n + '</div><div class="pprice">' + c.p + '</div></div>';
-  if (c.st) {
-    var w = W[c.st];
-    h += '<div class="a-band b-' + c.st + '"><span>' + w.ic + '</span>' + (c.st === 'today' && c.why ? w.mid : w.long) +
-         (c.why ? '<span class="sub">· ' + c.why + '</span>' : '') + '</div>';
-  }
-  if (c.ef) h += '<div class="a-band b-ef"><span>🛵</span>ΚΑΙ ΣΤΗΝ E-FOOD</div>';
-  return h + '</button>';
-}
-function cardB(c){
-  var h = '<button class="prod-card' + stCls(c) + '">';
-  if (c.st) {
-    h += '<div class="dots">' + (c.ef ? '<span class="dot d-ef">🛵</span>' : '') +
-         '<span class="dot d-' + c.st + '">' + W[c.st].ic + '</span></div>';
-  }
-  h += '<div class="prod-card-body"' + (c.why ? ' style="padding-bottom:22px"' : '') + '>' +
-       '<div class="pname">' + c.n + '</div><div class="pprice">' + c.p + '</div></div>';
-  if (c.why) h += '<div class="why">λείπει: ' + c.why + '</div>';
-  return h + '</button>';
-}
-function cardC(c){
-  var h = '<button class="prod-card' + stCls(c) + '">';
-  h += '<div class="prod-card-body"><div class="pname">' + c.n + '</div><div class="pprice">' + c.p + '</div></div>';
-  if (c.st) {
-    h += '<div class="stamp-wrap"><div class="stamp">' + W[c.st].stamp + '</div>';
-    var sub = (c.why ? 'λείπει ' + c.why : '') + (c.ef ? (c.why ? ' · ' : '') + '🛵 και e-food' : '');
-    if (sub) h += '<div class="stamp-sub">' + sub + '</div>';
-    h += '</div>';
-  }
-  return h + '</button>';
-}
-function cardD(c){
-  var h = '<button class="prod-card' + stCls(c) + '">';
-  if (c.st) h += '<div class="d-band db-' + c.st + '">' + W[c.st].ic + ' ' + W[c.st].short +
-                 (c.ef ? '<span style="opacity:.75">+ 🛵</span>' : '') + '</div>';
-  h += '<div class="prod-card-body"><div class="pname">' + c.n + '</div><div class="pprice">' + c.p + '</div></div>';
-  var sub = (c.why ? 'λείπει: ' + c.why : '') + (c.ef ? (c.why ? ' · ' : '') + 'κλειστό και στην e-food' : '');
-  if (sub) h += '<div class="d-sub">' + sub + '</div>';
-  return h + '</button>';
-}
-var CARD_FN = { now:cardNow, a:cardA, b:cardB, c:cardC, d:cardD };
-
-/* ── chip υλικού ── */
-function chip(c, v){
-  var cls = 'ing-chip' + (c.sel ? ' sel' : '') + stCls(c);
-  var h = '<span class="' + cls + '">' + c.n;
-  if (c.st) {
-    if (v === 'now' && c.st === 'ef') h += '<span class="ef-dot">🛵</span>';
-    else if (v === 'a') h += '<span class="ctag ct-' + c.st + '">' + W[c.st].short + '</span>';
-    else if (v === 'b') h += '<span class="cdot cd-' + c.st + '">' + W[c.st].ic + '</span>';
-    else if (v === 'c') h += '<span class="cstamp cs-' + c.st + '">' + W[c.st].short + '</span>';
-    else if (v === 'd') h += '<span class="dtag dt-' + c.st + '">' + W[c.st].short + '</span>';
-  }
-  return h + '</span>';
-}
-function isoChip(c, v){
-  var h = '<span class="iso-chip' + stCls(c) + '">' + c.n;
-  if (c.st) {
-    if (v === 'now' && c.st === 'ef') h += '<span class="ef-dot">🛵</span>';
-    else if (v === 'a') h += '<span class="ctag ct-' + c.st + '">' + W[c.st].mid + '</span>';
-    else if (v === 'b') h += '<span class="cdot cd-' + c.st + '">' + W[c.st].ic + '</span>';
-    else if (v === 'c') h += '<span class="cstamp cs-' + c.st + '">' + W[c.st].mid + '</span>';
-    else if (v === 'd') h += '<span class="dtag dt-' + c.st + '">' + W[c.st].mid + '</span>';
-  }
-  return h + '</span>';
-}
-function isoRow(r, v){
-  var h = '<div class="iso-prow' + stCls(r) + '">';
-  if (v === 'b' && r.st) h += '<span class="cdot cd-' + r.st + '" style="position:static;transform:none">' + W[r.st].ic + '</span>';
-  h += '<span class="iso-pnm' + (r.st ? ' st' : '') + '">' + r.n + '</span>';
-  if (r.st) {
-    if (v === 'now') h += '<span class="iso-pwhy">' + (r.why ? '· ' + r.why : '') + '</span>';
-    else if (v === 'a') h += '<span class="ctag ct-' + r.st + '">' + W[r.st].mid + (r.why ? ' · ' + r.why : '') + '</span>';
-    else if (v === 'b') h += '<span class="iso-pwhy">' + (r.why || W[r.st].short) + '</span>';
-    else if (v === 'c') h += '<span class="cstamp cs-' + r.st + '">' + W[r.st].mid + (r.why ? ' · ' + r.why : '') + '</span>';
-    else if (v === 'd') h += '<span class="dtag dt-' + r.st + '">' + W[r.st].mid + (r.why ? ' · ' + r.why : '') + '</span>';
-  }
-  return h + '</div>';
-}
-function scoRow(r, v){
-  var h = '<div class="sco-li' + stCls(r) + '">';
-  h += '<span class="sco-dot' + (r.on ? ' on' : '') + '"></span>';
-  h += '<span class="sco-nm">' + r.n + '</span>';
-  h += '<span class="sco-cat">' + r.cat + '</span>';
-  if (r.st) {
-    if (v === 'now') h += '<span class="sco-already">' + r.already + '</span>';
-    else if (v === 'a') h += '<span class="ctag ct-' + r.st + '">' + W[r.st].mid + '</span>';
-    else if (v === 'b') h += '<span class="cdot cd-' + r.st + '" style="position:static;transform:none">' + W[r.st].ic + '</span>';
-    else if (v === 'c') h += '<span class="cstamp cs-' + r.st + '">' + W[r.st].mid + '</span>';
-    else if (v === 'd') h += '<span class="dtag dt-' + r.st + '">' + W[r.st].mid + '</span>';
-  }
-  return h + '</div>';
-}
-
-/* ══════════════ Σύνθεση σελίδας ══════════════ */
-function render(v){
-  var m = META[v];
-  document.getElementById('vhead').innerHTML =
-    '<div class="vhead"><div class="vnum">' + m.num + '</div><div>' +
-    '<div class="vt">' + m.t + '</div><div class="vd">' + m.d + '</div>' +
-    (m.mech ? '<span class="vmech">' + m.mech + '</span>' : '') +
-    (m.warn ? '<div class="vwarn">' + m.warn + '</div>' : '') +
-    '</div></div>';
-
-  var cf = CARD_FN[v], h = '';
-
-  /* 1 — κάρτες */
-  h += '<div class="screen"><div class="sc-head"><span class="sc-n">Οθόνη 1</span>' +
-       '<span class="sc-t">Κάρτες προϊόντων στο μενού</span>' +
-       '<span class="sc-w">αυτό που βλέπει ο ταμίας όλη μέρα</span></div><div class="panel">';
-  h += '<div class="plbl">Κόκκινο = τελείωσε σήμερα (αύριο ανοίγει μόνο του) · Μοβ = εκτός μενού · Πορτοκαλί = μόνο e-food</div>';
-  h += '<div class="products-grid">';
-  CARDS.forEach(function (c) {
-    h += '<div class="cell">' + cf(c) + '<div class="case-lbl">' + (c.lbl || 'Κανονικό') + '</div></div>';
-  });
-  h += '</div><div class="legend">' +
-       '<div class="lg"><i style="background:#c0392b"></i>⛔ Τελείωσε σήμερα — αύριο ανοίγει μόνο του</div>' +
-       '<div class="lg"><i style="background:#5b3a9e"></i>🔒 Εκτός μενού — μένει κλειστό ώσπου να το ανοίξεις</div>' +
-       '<div class="lg"><i style="background:#ff6a3d"></i>🛵 Μόνο e-food — στο μαγαζί πωλείται</div>' +
-       '</div></div></div>';
-
-  /* 2 — chips υλικών */
-  h += '<div class="screen"><div class="sc-head"><span class="sc-n">Οθόνη 2</span>' +
-       '<span class="sc-t">Υλικά μέσα στη φόρμα προϊόντος</span>' +
-       '<span class="sc-w">όταν φτιάχνει μια πίτα</span></div><div class="panel">';
-  h += '<div class="plbl">Εδώ κρίνεται αν η ίδια γλώσσα <b>χωράει σε μικρό chip</b> 38px.</div>';
-  h += '<div class="mock-modal"><div class="mm-lbl">ΥΛΙΚΑ</div><div class="mm-chips">';
-  CHIPS.forEach(function (c) { h += chip(c, v); });
-  h += '</div></div></div></div>';
-
-  /* 3 — οθόνη Εξαντλημένα */
-  h += '<div class="screen"><div class="sc-head"><span class="sc-n">Οθόνη 3</span>' +
-       '<span class="sc-t">«Εξαντλημένα» (Ενέργειες → Τελείωσαν)</span>' +
-       '<span class="sc-w">η λίστα με ό,τι είναι κλειστό</span></div><div class="panel">';
-  h += '<div class="plbl">Εδώ ο ιδιοκτήτης θέλει να δει <b>με μια ματιά ποια θα ανοίξουν αύριο</b> και ποια όχι.</div>';
-  h += '<div class="iso-box"><div class="iso-header">🥬 Τι τελείωσε<span class="iso-count-badge">5</span></div>' +
-       '<div class="iso-body"><div class="iso-group-title">ΥΛΙΚΑ</div><div class="iso-chips">';
-  ISO_ING.forEach(function (c) { h += isoChip(c, v); });
-  h += '</div><div class="iso-group-title">ΠΡΟΪΟΝΤΑ ΠΟΥ ΕΚΛΕΙΣΑΝ</div><div class="iso-plist">';
-  ISO_PROD.forEach(function (r) { h += isoRow(r, v); });
-  h += '</div></div></div></div></div>';
-
-  /* 4 — Τι τελείωσε; */
-  h += '<div class="screen"><div class="sc-head"><span class="sc-n">Οθόνη 4</span>' +
-       '<span class="sc-t">«Τι τελείωσε;» — επιλογή τι κλείνει</span>' +
-       '<span class="sc-w">παρατεταμένο πάτημα σε προϊόν</span></div><div class="panel">';
-  h += '<div class="plbl">Στη λίστα υπάρχουν και προϊόντα <b>ήδη κλειστά</b> — πρέπει να φαίνεται <b>γιατί</b>, ώστε να μην τα ξανακλείνει.</div>';
-  h += '<div class="sco-box"><div class="sco-title">Τι τελείωσε;</div>' +
-       '<div class="sco-sub">Θα κλείσουν όσα είναι τσεκαρισμένα</div><div class="sco-list">';
-  SCO.forEach(function (r) { h += scoRow(r, v); });
-  h += '</div></div></div></div>';
-
-  /* ⚠️ Το variant class μπαίνει σε wrapper, ΟΧΙ στο <body> — αλλιώς οι κανόνες
-     .v-a … θα έπιαναν και τις στήλες της μήτρας (που έχουν το δικό τους .v-*). */
-  document.getElementById('stage').innerHTML = '<div class="v-' + v + '">' + h + '</div>';
-  applyGray();
-}
-
-/* ══════════════ Μήτρα σύγκρισης ══════════════ */
-var VS = [
-  { k:'now', t:'Τώρα',      cls:'hnow'  },
-  { k:'a',   t:'Α · Λωρίδα', cls:'hpick' },
-  { k:'b',   t:'Β · Ράβδος', cls:'hpick' },
-  { k:'c',   t:'Γ · Σφραγίδα', cls:'hpick' },
-  { k:'d',   t:'Δ · Υφή',    cls:'hpick' }
-];
-var MX_STATES = [
-  { i:1, b:'Τελείωσε σήμερα',    s:'αύριο ανοίγει μόνο του' },
-  { i:2, b:'Εκτός μενού',        s:'μένει κλειστό ώσπου να το ανοίξεις' },
-  { i:3, b:'Λόγω ομάδας',        s:'κλειστό επειδή λείπει ο λαβάς' },
-  { i:4, b:'Μόνο στην e-food',   s:'στο μαγαζί πωλείται κανονικά' },
-  { i:5, b:'Και τα δύο μαζί',    s:'τελείωσε ΚΑΙ κλειστό στην e-food' },
-  { i:0, b:'Κανονικό',           s:'για σύγκριση' }
-];
-function renderMatrix(){
-  var h = '<div class="mx-s"></div>';
-  VS.forEach(function (v) { h += '<div class="mx-h ' + v.cls + '">' + v.t + '</div>'; });
-  MX_STATES.forEach(function (st) {
-    var c = CARDS[st.i];
-    h += '<div class="mx-s"><b>' + st.b + '</b><span>' + st.s + '</span></div>';
-    VS.forEach(function (v) {
-      h += '<div class="mx-c v-' + v.k + '">' + CARD_FN[v.k](c) + '</div>';
-    });
-  });
-  document.getElementById('mx').innerHTML = h;
-
-  var hc = '<div class="mx-s"></div>';
-  VS.forEach(function (v) { hc += '<div class="mx-h ' + v.cls + '">' + v.t + '</div>'; });
-  [
-    { d:{ n:'Τζατζίκι', st:'today' },       b:'Τελείωσε σήμερα', s:'υλικό' },
-    { d:{ n:'Σως Μουστάρδας', st:'indef' }, b:'Εκτός μενού',     s:'υλικό' },
-    { d:{ n:'Λάχανο-Καρότο', st:'ef' },     b:'Μόνο e-food',     s:'υλικό' },
-    { d:{ n:'Ντομάτα', st:null },           b:'Κανονικό',        s:'για σύγκριση' }
-  ].forEach(function (row) {
-    hc += '<div class="mx-s"><b>' + row.b + '</b><span>' + row.s + '</span></div>';
-    VS.forEach(function (v) {
-      hc += '<div class="mxc-c v-' + v.k + '">' + chip(row.d, v.k) + '</div>';
-    });
-  });
-  document.getElementById('mxc').innerHTML = hc;
-}
-
-/* ══════════════ Εργαλεία ══════════════ */
-document.querySelectorAll('.tbtn[data-v]').forEach(function (b) {
-  b.addEventListener('click', function () {
-    document.querySelectorAll('.tbtn[data-v]').forEach(function (x) { x.classList.remove('on'); });
-    b.classList.add('on');
-    render(b.dataset.v);
-    window.scrollTo({ top: document.getElementById('vhead').offsetTop - 90, behavior: 'smooth' });
-  });
-});
-document.querySelectorAll('.tbtn[data-size]').forEach(function (b) {
-  b.addEventListener('click', function () {
-    document.querySelectorAll('.tbtn[data-size]').forEach(function (x) { x.classList.remove('on'); });
-    b.classList.add('on');
-    document.documentElement.style.setProperty('--grid-min', b.dataset.size + 'px');
-  });
-});
-var grayOn = false, gb = document.getElementById('gray');
-function applyGray(){
-  document.querySelectorAll('.panel').forEach(function (p) { p.style.filter = grayOn ? 'grayscale(1)' : ''; });
-}
-gb.addEventListener('click', function () {
-  grayOn = !grayOn;
-  gb.classList.toggle('on', grayOn);
-  gb.textContent = grayOn ? '🎨 Με χρώμα' : '🩶 Ασπρόμαυρο';
-  applyGray();
-});
-
-renderMatrix();
-render('a');
-</script>
 </body>
 </html>
