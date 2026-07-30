@@ -13,7 +13,7 @@
     --efood:#ff6a3d; --efood-dim:rgba(255,106,61,.14);
     --indef:#a06cff;
     --radius:16px; --radius-card:8px; --radius-btn:6px; --radius-xs:4px; --radius-pill:50px;
-    --grid-min:150px;
+    --grid-min:190px;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{
@@ -21,7 +21,7 @@
     background:radial-gradient(ellipse at top,#1a1f3a,var(--black) 70%);
     color:var(--white);min-height:100vh;padding:0 16px 80px;
   }
-  .wrap{max-width:1180px;margin:0 auto}
+  .wrap{max-width:1500px;margin:0 auto}
 
   /* ═══ Sticky εργαλεία ═══ */
   .tools{
@@ -405,6 +405,38 @@
   .v-d .dt-indef{background:var(--indef);color:#22103f}
   .v-d .dt-ef{background:var(--efood);color:#2a0d00}
 
+  /* ═══ Μήτρα σύγκρισης δίπλα-δίπλα (desktop) ═══ */
+  .mx{
+    display:grid;grid-template-columns:150px repeat(5,minmax(0,1fr));
+    gap:10px;align-items:stretch;
+  }
+  .mx-h{
+    font-size:12px;font-weight:900;letter-spacing:.4px;text-transform:uppercase;
+    padding:8px 10px;border-radius:var(--radius-btn);text-align:center;
+    background:var(--card2);border:1px solid var(--border);color:var(--muted);
+    position:sticky;top:86px;z-index:20;
+  }
+  .mx-h.hnow{color:#c3cbf0}
+  .mx-h.hpick{color:var(--yellow);border-color:rgba(245,196,0,.45);background:rgba(245,196,0,.1)}
+  .mx-s{
+    display:flex;flex-direction:column;justify-content:center;gap:3px;
+    font-size:11.5px;line-height:1.4;padding:6px 8px;border-right:1px solid var(--border);
+  }
+  .mx-s b{color:var(--white);font-size:12px}
+  .mx-s span{color:var(--muted)}
+  .mx-c{display:flex;align-items:stretch}
+  .mx-c>.prod-card{width:100%}
+  .mx-sep{grid-column:1/-1;height:1px;background:var(--border);margin:2px 0}
+  .mx-note{
+    margin-top:14px;font-size:12.5px;color:var(--muted);line-height:1.7;
+    background:var(--card);border:1px solid var(--border);border-radius:var(--radius-btn);padding:11px 13px;
+  }
+  .mx-note b{color:var(--white)}
+
+  /* μήτρα για chips υλικών */
+  .mxc{display:grid;grid-template-columns:150px repeat(5,minmax(0,1fr));gap:10px;align-items:center}
+  .mxc-c{display:flex;justify-content:center}
+
   /* ═══ Λεζάντα ═══ */
   .legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
   .lg{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--muted);
@@ -455,10 +487,9 @@
       <button class="tbtn" data-v="d">Δ · Υφή</button>
     </div>
     <div class="trow">
-      <span class="tlbl">Οθόνη:</span>
-      <button class="tbtn tsm on" data-size="150">Κανονικό</button>
-      <button class="tbtn tsm" data-size="190">Μεγάλη</button>
-      <button class="tbtn tsm" data-size="120">Κινητό</button>
+      <span class="tlbl">Μέγεθος καρτών:</span>
+      <button class="tbtn tsm on" data-size="190">Μεγάλη οθόνη 27&quot;</button>
+      <button class="tbtn tsm" data-size="150">Μικρότερη οθόνη</button>
       <button class="tbtn tsm" id="gray">🩶 Ασπρόμαυρο</button>
     </div>
   </div>
@@ -483,6 +514,39 @@
       </ul>
     </div>
   </header>
+
+  <!-- ══════════ ΜΗΤΡΑ: όλα δίπλα-δίπλα ══════════ -->
+  <div class="screen" style="margin-top:30px">
+    <div class="sc-head">
+      <span class="sc-n">Σύγκριση</span>
+      <span class="sc-t">Όλα δίπλα-δίπλα</span>
+      <span class="sc-w">κάθε γραμμή = μία κατάσταση · κάθε στήλη = μία πρόταση</span>
+    </div>
+    <div class="panel">
+      <div class="plbl">
+        Ξεκίνα από εδώ: <b>σύγκρινε τη στήλη «ΤΩΡΑ» με τις άλλες τέσσερις</b>. Πρόσεξε τις δύο πρώτες
+        γραμμές — <b>«τελείωσε σήμερα»</b> και <b>«εκτός μενού»</b> — στο ΤΩΡΑ είναι πανομοιότυπες.
+      </div>
+      <div class="mx" id="mx"></div>
+      <div class="mx-note">
+        💡 Παρακάτω, με τα κουμπιά <b>Α / Β / Γ / Δ</b> πάνω, βλέπεις κάθε πρόταση <b>ολόκληρη</b> —
+        και στις 4 οθόνες όπου εμφανίζεται η σήμανση, σε πραγματικό μέγεθος.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ Chips δίπλα-δίπλα ══════════ -->
+  <div class="screen">
+    <div class="sc-head">
+      <span class="sc-n">Σύγκριση</span>
+      <span class="sc-t">Το ίδιο σε μικρό chip υλικού</span>
+      <span class="sc-w">εδώ ξεχωρίζει ποια γλώσσα κλιμακώνεται</span>
+    </div>
+    <div class="panel">
+      <div class="plbl">Το chip είναι μόλις 38px ψηλό. Ό,τι δεν χωράει εδώ, <b>σπάει τη συνέπεια</b> του συστήματος.</div>
+      <div class="mxc" id="mxc"></div>
+    </div>
+  </div>
 
   <div id="vhead"></div>
   <div id="stage"></div>
@@ -519,8 +583,14 @@
         <td class="mid">Μέτρια</td><td class="yes">Πολύ ήσυχη</td><td class="no">Φορτωμένη</td><td class="mid">Μέτρια</td>
       </tr>
       <tr>
-        <td><b>Χωράει σε στενή κάρτα (κινητό)</b></td>
-        <td class="mid">Με 2 λωρίδες σφίγγει</td><td class="yes">Άνετα</td><td class="yes">Άνετα</td><td class="mid">Οριακά</td>
+        <td><b>Ύψος που «τρώει» από την κάρτα</b></td>
+        <td class="mid">2 λωρίδες = ~26px</td><td class="yes">Μηδέν — μπαίνει πάνω στην κάρτα</td>
+        <td class="yes">Μηδέν</td><td class="mid">Ταινία + γραμμή λόγου</td>
+      </tr>
+      <tr>
+        <td><b>Το πατάς κατά λάθος σε ώρα αιχμής;</b></td>
+        <td class="mid">Δύσκολα</td><td class="no">Πιο εύκολα — διακριτικό</td>
+        <td class="yes">Σχεδόν αδύνατο</td><td class="mid">Δύσκολα</td>
       </tr>
     </table>
   </div>
@@ -765,8 +835,54 @@ function render(v){
   SCO.forEach(function (r) { h += scoRow(r, v); });
   h += '</div></div></div></div>';
 
-  document.getElementById('stage').innerHTML = h;
+  /* ⚠️ Το variant class μπαίνει σε wrapper, ΟΧΙ στο <body> — αλλιώς οι κανόνες
+     .v-a … θα έπιαναν και τις στήλες της μήτρας (που έχουν το δικό τους .v-*). */
+  document.getElementById('stage').innerHTML = '<div class="v-' + v + '">' + h + '</div>';
   applyGray();
+}
+
+/* ══════════════ Μήτρα σύγκρισης ══════════════ */
+var VS = [
+  { k:'now', t:'Τώρα',      cls:'hnow'  },
+  { k:'a',   t:'Α · Λωρίδα', cls:'hpick' },
+  { k:'b',   t:'Β · Ράβδος', cls:'hpick' },
+  { k:'c',   t:'Γ · Σφραγίδα', cls:'hpick' },
+  { k:'d',   t:'Δ · Υφή',    cls:'hpick' }
+];
+var MX_STATES = [
+  { i:1, b:'Τελείωσε σήμερα',    s:'αύριο ανοίγει μόνο του' },
+  { i:2, b:'Εκτός μενού',        s:'μένει κλειστό ώσπου να το ανοίξεις' },
+  { i:3, b:'Λόγω ομάδας',        s:'κλειστό επειδή λείπει ο λαβάς' },
+  { i:4, b:'Μόνο στην e-food',   s:'στο μαγαζί πωλείται κανονικά' },
+  { i:5, b:'Και τα δύο μαζί',    s:'τελείωσε ΚΑΙ κλειστό στην e-food' },
+  { i:0, b:'Κανονικό',           s:'για σύγκριση' }
+];
+function renderMatrix(){
+  var h = '<div class="mx-s"></div>';
+  VS.forEach(function (v) { h += '<div class="mx-h ' + v.cls + '">' + v.t + '</div>'; });
+  MX_STATES.forEach(function (st) {
+    var c = CARDS[st.i];
+    h += '<div class="mx-s"><b>' + st.b + '</b><span>' + st.s + '</span></div>';
+    VS.forEach(function (v) {
+      h += '<div class="mx-c v-' + v.k + '">' + CARD_FN[v.k](c) + '</div>';
+    });
+  });
+  document.getElementById('mx').innerHTML = h;
+
+  var hc = '<div class="mx-s"></div>';
+  VS.forEach(function (v) { hc += '<div class="mx-h ' + v.cls + '">' + v.t + '</div>'; });
+  [
+    { d:{ n:'Τζατζίκι', st:'today' },       b:'Τελείωσε σήμερα', s:'υλικό' },
+    { d:{ n:'Σως Μουστάρδας', st:'indef' }, b:'Εκτός μενού',     s:'υλικό' },
+    { d:{ n:'Λάχανο-Καρότο', st:'ef' },     b:'Μόνο e-food',     s:'υλικό' },
+    { d:{ n:'Ντομάτα', st:null },           b:'Κανονικό',        s:'για σύγκριση' }
+  ].forEach(function (row) {
+    hc += '<div class="mx-s"><b>' + row.b + '</b><span>' + row.s + '</span></div>';
+    VS.forEach(function (v) {
+      hc += '<div class="mxc-c v-' + v.k + '">' + chip(row.d, v.k) + '</div>';
+    });
+  });
+  document.getElementById('mxc').innerHTML = hc;
 }
 
 /* ══════════════ Εργαλεία ══════════════ */
@@ -774,7 +890,6 @@ document.querySelectorAll('.tbtn[data-v]').forEach(function (b) {
   b.addEventListener('click', function () {
     document.querySelectorAll('.tbtn[data-v]').forEach(function (x) { x.classList.remove('on'); });
     b.classList.add('on');
-    document.body.className = 'v-' + b.dataset.v;
     render(b.dataset.v);
     window.scrollTo({ top: document.getElementById('vhead').offsetTop - 90, behavior: 'smooth' });
   });
@@ -797,7 +912,7 @@ gb.addEventListener('click', function () {
   applyGray();
 });
 
-document.body.className = 'v-a';
+renderMatrix();
 render('a');
 </script>
 </body>
