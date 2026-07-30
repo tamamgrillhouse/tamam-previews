@@ -4,1176 +4,553 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>TAMAM · Σήμανση Εξαντλημένων — 4 προτάσεις</title>
+<title>TAMAM · Σήμανση Εξαντλημένων — διάλεξε 1 ανά σημείο</title>
 <style>
-/* ══════════════ ΒΑΣΗ (ίδια χρώματα με τον POS) ══════════════ */
 :root{
   --black:#0e1330; --dark:#12183a; --card:#1c2554; --card2:#243068;
   --yellow:#f5c400; --white:#e8eaf6; --muted:#93a0dd;
   --red:#ef5350; --green:#26c281; --border:#2a3580;
-  --efood:#ff6a3d;
-
-  /* Η «γλώσσα» των 3 καταστάσεων — κοινή σε ΟΛΕΣ τις προτάσεις */
-  --st-today:#ef5350;            /* ⏳ εξαντλήθηκε ΣΗΜΕΡΑ (θα ξανάρθει)  */
-  --st-indef:#0a0c18;            /* 🔒 κλειστό ΕΠ' ΑΟΡΙΣΤΟΝ (μόνιμο)     */
-  --st-indef-ink:#ffd7d7;
-  --st-efood:#ff6a3d;            /* 🛵 κλειστό στην e-food (πουλάμε εδώ) */
+  /* Οι 3 καταστάσεις */
+  --s-today:#ef5350;   /* ΕΞΑΝΤΛΗΘΗΚΕ ΣΗΜΕΡΑ      */
+  --s-indef:#a06cff;   /* ΕΞΑΝΤΛΗΘΗΚΕ ΕΠ' ΑΟΡΙΣΤΟΝ */
+  --s-efood:#ff6a3d;   /* ΕΚΤΟΣ e-food             */
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{
   font-family:'Segoe UI','Noto Sans',system-ui,sans-serif;
   background:radial-gradient(ellipse at top,#1a1f3a,var(--black) 70%);
-  color:var(--white); min-height:100vh; padding:22px 14px 70px;
-  -webkit-text-size-adjust:100%;
+  color:var(--white);min-height:100vh;padding:24px 14px 70px;-webkit-text-size-adjust:100%;
 }
-.wrap{max-width:1080px;margin:0 auto}
-
-h1{font-size:26px;font-weight:800;letter-spacing:.3px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.wrap{max-width:1220px;margin:0 auto}
+h1{font-size:25px;font-weight:800;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 h1 .tag{font-size:11px;background:var(--yellow);color:#1a1206;padding:3px 9px;border-radius:20px;font-weight:800}
-.lead{color:var(--muted);margin-top:12px;font-size:14.5px;line-height:1.7}
+.lead{color:var(--muted);margin-top:11px;font-size:14.5px;line-height:1.7}
 .lead b{color:var(--white)}
 
-.sec{margin-top:34px}
-.sec-h{
-  display:flex;align-items:center;gap:11px;padding:13px 15px;
-  background:linear-gradient(90deg,rgba(245,196,0,.10),transparent);
-  border-left:4px solid var(--yellow); border-radius:8px;
-}
-.sec-h .n{
-  width:28px;height:28px;flex:0 0 28px;border-radius:8px;background:var(--yellow);color:#1a1206;
-  display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;
-}
-.sec-h .t{font-size:17px;font-weight:800;display:block}
-.sec-h .d{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.45;display:block}
+/* ── Λεξιλόγιο ── */
+.voc{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:11px;margin-top:18px}
+.vc{background:var(--card);border:1px solid var(--border);border-left:4px solid;border-radius:10px;padding:12px 14px}
+.vc.t{border-left-color:var(--s-today)}
+.vc.i{border-left-color:var(--s-indef)}
+.vc.e{border-left-color:var(--s-efood)}
+.vc .w{font-size:14px;font-weight:800;letter-spacing:.2px}
+.vc .x{font-size:12px;color:var(--muted);line-height:1.55;margin-top:5px}
+.vc .x b{color:var(--white)}
+
+/* ── Ενότητα ── */
+.sec{margin-top:38px}
+.sec-h{display:flex;align-items:center;gap:12px;padding:14px 16px;
+  background:linear-gradient(90deg,rgba(245,196,0,.11),transparent);
+  border-left:4px solid var(--yellow);border-radius:8px}
+.sec-h .n{width:34px;height:34px;flex:0 0 34px;border-radius:9px;background:var(--yellow);color:#1a1206;
+  display:flex;align-items:center;justify-content:center;font-weight:900;font-size:17px}
+.sec-h .t{font-size:18px;font-weight:800;display:block}
+.sec-h .d{font-size:12.5px;color:var(--muted);margin-top:2px;line-height:1.45;display:block}
 .sec-h>span:last-child{min-width:0}
 
-.note{
-  margin-top:14px;background:rgba(255,255,255,.03);border:1px solid var(--border);
-  border-left:3px solid var(--muted);border-radius:8px;padding:12px 14px;
-  font-size:13px;line-height:1.65;color:var(--muted);
-}
-.note b{color:var(--white)}
-.note.warn{border-left-color:var(--red);background:rgba(239,83,80,.07)}
-.note.ok{border-left-color:var(--green);background:rgba(38,194,129,.07)}
+/* ── Κάρτες επιλογής ── */
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:15px;margin-top:16px}
+.op{background:var(--dark);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;
+  display:flex;flex-direction:column;min-width:0}
+.op.now{border-color:rgba(239,83,80,.45);opacity:.92}
+.op-h{padding:12px 14px;background:rgba(255,255,255,.04);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px}
+.op-k{font-size:13px;font-weight:900;min-width:34px;height:26px;padding:0 8px;border-radius:7px;
+  background:var(--yellow);color:#1a1206;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.op.now .op-k{background:var(--red);color:#fff}
+.op-t{font-weight:800;font-size:14.5px;display:block}
+.op-s{font-size:11.5px;color:var(--muted);margin-top:1px;display:block}
+.op-h>span:last-child{min-width:0}
+.op-b{padding:15px 13px;flex:1;min-width:0}
+.op-f{padding:10px 14px;border-top:1px solid var(--border);background:rgba(0,0,0,.16);
+  font-size:11.5px;line-height:1.6;color:var(--muted)}
+.op-f b{color:var(--white)}
 
-/* ── Πίνακας γλώσσας ── */
-.lang{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:16px}
-.lang-c{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;border-top:4px solid}
-.lang-c.a{border-top-color:var(--st-today)}
-.lang-c.b{border-top-color:#5b6480}
-.lang-c.c{border-top-color:var(--st-efood)}
-.lang-c .i{font-size:26px}
-.lang-c .n{font-weight:800;font-size:15px;margin-top:6px}
-.lang-c .x{font-size:12.5px;color:var(--muted);line-height:1.55;margin-top:5px}
-
-/* ── Κανόνας ΦΡΑΓΗ vs ΠΛΗΡΟΦΟΡΙΑ ── */
-.rule-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin-top:16px}
-.rc{border-radius:10px;padding:15px;border:1px solid}
-.rc-block{background:rgba(239,83,80,.07);border-color:rgba(239,83,80,.4)}
-.rc-info{background:rgba(38,194,129,.07);border-color:rgba(38,194,129,.4)}
-.rc-h{font-size:14.5px;font-weight:800;display:flex;align-items:center;gap:8px}
-.rc-block .rc-h{color:#ff9b98}
-.rc-info .rc-h{color:#6ee7b0}
-.rc-w{font-size:12.5px;color:var(--muted);line-height:1.65;margin-top:8px}
-.rc-w b{color:var(--white)}
-.rc-demo{margin-top:13px}
-
-/* ══════════════ Ε · ΔΙΠΛΟ ΦΑΝΑΡΙ (2 κανάλια σε 1 σήμα) ══════════════ */
-.lamp{
-  position:absolute;top:6px;right:6px;z-index:5;display:flex;border-radius:20px;overflow:hidden;
-  border:1.5px solid rgba(255,255,255,.35);box-shadow:0 2px 8px rgba(0,0,0,.55);
-}
-.lamp i{
-  width:23px;height:21px;display:flex;align-items:center;justify-content:center;
-  font-size:11px;font-style:normal;line-height:1;position:relative;
-}
-.lamp i.on{background:#1d9c67}
-.lamp i.off{background:#7a1b1b}
-.lamp i.off::after{
-  content:'';position:absolute;left:3px;right:3px;top:50%;height:2px;
-  background:#fff;transform:rotate(-38deg);border-radius:2px;
-}
-.lamp i+i{border-left:1.5px solid rgba(255,255,255,.35)}
-.lamp.sm{top:auto;right:5px;top:50%;transform:translateY(-50%);border-width:1px}
-.lamp.sm i{width:17px;height:15px;font-size:8px}
-/* inline (για λίστες) */
-.lamp.inline{position:static;transform:none;flex:0 0 auto}
-
-/* ══════════════ ΣΤ · ΡΗΤΗ ΛΕΞΗ ══════════════ */
-.wb{
-  position:absolute;top:5px;left:5px;right:5px;z-index:5;
-  font-size:8.5px;font-weight:900;letter-spacing:.4px;padding:3px 2px;border-radius:4px;
-  text-align:center;text-transform:uppercase;line-height:1.25;
-}
-.wb-here{background:var(--st-efood);color:#2a0d00}
-.wb-efood{background:#ffd23d;color:#3a2600;box-shadow:0 0 0 2px rgba(255,210,61,.35)}
-.wb-none{background:#0a0c18;color:#ffb3b3;box-shadow:inset 0 0 0 1px rgba(255,179,179,.55)}
-.pc.f{padding-top:0}
-.pc.f .pc-b{padding-top:26px}
-.pc.f.dim .nm{opacity:.7}
-.pc.f.dim .pr{text-decoration:line-through;opacity:.5}
-.pc.f.k-here{border-color:rgba(255,106,61,.6)}
-.pc.f.k-efood{border-color:rgba(255,210,61,.75)}
-.pc.f.k-none{border-color:rgba(255,255,255,.3)}
-.ch .wbi{
-  font-size:8px;font-weight:900;letter-spacing:.4px;margin-left:7px;padding:2px 5px;border-radius:3px;
-  text-decoration:none;display:inline-block;text-transform:uppercase;font-family:inherit;
-}
-.wbi-here{background:var(--st-efood);color:#2a0d00}
-.wbi-efood{background:#ffd23d;color:#3a2600}
-.wbi-none{background:#0a0c18;color:#ffb3b3;box-shadow:inset 0 0 0 1px rgba(255,179,179,.5)}
-
-/* ── Πίνακας 4 καταστάσεων ── */
-.four{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px;margin-top:16px}
-.fc{background:var(--dark);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.fc-h{padding:10px 13px;font-size:12.5px;font-weight:800;display:flex;align-items:center;gap:8px;
-  border-bottom:1px solid var(--border);background:rgba(255,255,255,.04)}
-.fc-h .ch2{font-size:11px;font-weight:700;color:var(--muted);margin-left:auto;letter-spacing:.3px}
-.fc-b{padding:13px;display:flex;gap:11px;align-items:flex-start}
-.fc-b>div{flex:1;min-width:0}
-.fc-cap{font-size:9.5px;font-weight:800;letter-spacing:.5px;color:var(--muted);
-  text-transform:uppercase;margin-bottom:6px;text-align:center}
-.fc-note{padding:0 13px 12px;font-size:11.5px;color:var(--muted);line-height:1.55}
-.fc-note b{color:var(--white)}
-.fc.danger{border-color:rgba(255,210,61,.55)}
-.fc.danger .fc-h{background:rgba(255,210,61,.12);color:#ffe27a}
-
-/* ── Επιλογή χρώματος «επ' αόριστον» ── */
-.hue{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:16px}
-.hue-c{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px}
-.hue-c h4{font-size:14px;font-weight:800;margin-bottom:4px}
-.hue-c p{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:11px}
-.hue-demo{display:flex;gap:9px;align-items:flex-start}
-.hue-demo .pc{max-width:118px}
-
-/* ── Καρτέλες σύγκρισης ── */
-.cmp{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px}
-.panel{
-  background:var(--dark);border:1px solid var(--border);border-radius:14px;overflow:hidden;
-  display:flex;flex-direction:column;
-}
-.panel.now{border-color:rgba(239,83,80,.45)}
-.panel-h{
-  padding:11px 14px;background:rgba(255,255,255,.04);border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:9px;
-}
-.panel-h .badge{
-  font-size:11px;font-weight:900;padding:3px 9px;border-radius:20px;
-  background:var(--yellow);color:#1a1206;letter-spacing:.4px;flex-shrink:0;
-}
-.panel.now .panel-h .badge{background:var(--red);color:#fff}
-.panel-h .ttl{font-weight:800;font-size:14.5px;display:block}
-.panel-h .sub{font-size:11.5px;color:var(--muted);margin-top:1px;display:block}
-.panel-h>span:last-child{min-width:0}
-.panel-b{padding:16px 14px;flex:1;min-width:0}
-.panel{min-width:0}
-.panel-f{
-  padding:10px 14px;border-top:1px solid var(--border);font-size:11.5px;line-height:1.6;color:var(--muted);
-  background:rgba(0,0,0,.14);
-}
-.panel-f b{color:var(--white)}
-
-.row-lbl{font-size:10.5px;font-weight:800;letter-spacing:.6px;color:var(--muted);
-  text-transform:uppercase;margin:14px 0 8px;display:flex;align-items:center;gap:7px}
-.row-lbl:first-child{margin-top:0}
-.row-lbl::after{content:'';flex:1;height:1px;background:var(--border)}
-
-/* ══════════════ ΚΑΡΤΑ ΠΡΟΪΟΝΤΟΣ (αντίγραφο POS) ══════════════ */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:10px}
-.pc{
-  position:relative;background:var(--card);border:1.5px solid var(--border);border-radius:16px;
-  padding:0;text-align:center;overflow:hidden;display:flex;flex-direction:column;
-  font-family:inherit;color:var(--white);cursor:pointer;transition:.18s;min-height:92px;
-}
-.pc-b{padding:14px 8px;display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;justify-content:center}
-.pc .nm{font-size:13.5px;font-weight:700;line-height:1.3}
-.pc .pr{font-size:15px;color:var(--yellow);font-weight:900}
-
-/* ── ΤΩΡΑ ── */
-.pc.now-out{opacity:.45;filter:grayscale(1);border-color:rgba(224,90,90,.4)}
-.pc.now-out .pr{text-decoration:line-through}
-.now-badge{
-  position:absolute;top:6px;left:6px;z-index:2;background:rgba(224,90,90,.92);color:#fff;
-  font-size:10px;font-weight:800;letter-spacing:.3px;padding:2px 7px;border-radius:4px;text-transform:uppercase;
-}
-.now-badge i{display:block;font-style:normal;font-size:8.5px;font-weight:700;opacity:.8;margin-top:1px}
-.now-ef{
-  position:absolute;top:6px;right:6px;z-index:3;background:var(--efood);color:#2a0d00;
-  font-size:9px;font-weight:900;padding:2px 6px;border-radius:4px;display:flex;align-items:center;gap:3px;
-  box-shadow:0 2px 8px rgba(255,106,61,.45);
-}
-.now-ef.today{background:#ffb066;color:#3a1a00}
-.pc.now-ef-off{border-color:rgba(255,106,61,.55)}
-
-/* ══════════════ Α · ΤΑΙΝΙΑ ΓΩΝΙΑΣ ══════════════ */
-.pc.a{opacity:1;filter:none}
-.pc.a.s-today{border-color:rgba(239,83,80,.7);background:linear-gradient(180deg,rgba(239,83,80,.09),var(--card) 60%)}
-.pc.a.s-indef{border-color:rgba(255,255,255,.30);background:linear-gradient(180deg,rgba(0,0,0,.45),var(--card) 60%)}
-.pc.a.s-ef{border-color:rgba(255,106,61,.65)}
-.pc.a.s-today .nm,.pc.a.s-indef .nm{opacity:.82}
-.pc.a.s-today .pr,.pc.a.s-indef .pr{text-decoration:line-through;opacity:.6}
-.rib{
-  position:absolute;top:11px;right:-33px;width:126px;transform:rotate(45deg);z-index:4;
-  text-align:center;font-size:9.5px;font-weight:900;letter-spacing:.6px;padding:3px 0;
-  box-shadow:0 2px 6px rgba(0,0,0,.45);
-}
-.rib.today{background:var(--st-today);color:#fff}
-.rib.indef{background:var(--st-indef);color:var(--st-indef-ink);box-shadow:0 2px 6px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.25)}
-.rib.ef{background:var(--st-efood);color:#2a0d00}
-.rib-bl{
-  position:absolute;bottom:11px;left:-33px;width:126px;transform:rotate(45deg);z-index:4;
-  text-align:center;font-size:9.5px;font-weight:900;letter-spacing:.6px;padding:3px 0;
-  background:var(--st-efood);color:#2a0d00;box-shadow:0 2px 6px rgba(0,0,0,.45);
-}
-
-/* ══════════════ Β · ΜΠΑΡΑ ΚΑΤΑΣΤΑΣΗΣ ══════════════ */
-.pc.b{padding-left:5px}
-.pc.b::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;z-index:3}
-.pc.b.s-today::before{background:var(--st-today)}
-.pc.b.s-indef::before{background:linear-gradient(180deg,#ffd7d7,#5a1010)}
-.pc.b.s-ef::before{background:var(--st-efood)}
-.pc.b.s-today{border-color:rgba(239,83,80,.5)}
-.pc.b.s-indef{border-color:rgba(255,255,255,.28)}
-.pc.b.s-ef{border-color:rgba(255,106,61,.55)}
-.pc.b .pc-b{padding-bottom:8px}
-.pc.b.dim .nm{opacity:.75}
-.pc.b.dim .pr{text-decoration:line-through;opacity:.55}
-.strip{
-  display:flex;align-items:center;justify-content:center;gap:5px;
-  font-size:9.5px;font-weight:900;letter-spacing:.5px;padding:4px 3px;text-transform:uppercase;
-  border-top:1px solid rgba(255,255,255,.10);
-}
-.strip.today{background:rgba(239,83,80,.22);color:#ffc9c8}
-.strip.indef{background:#0a0c18;color:var(--st-indef-ink)}
-.pc.b.s-indef-v::before{background:linear-gradient(180deg,#c9a4ff,#5b2ea8)}
-.pc.b.s-indef-v{border-color:rgba(160,108,255,.55)}
-.strip.indef-v{background:rgba(160,108,255,.24);color:#dcc7ff}
-.strip.ef{background:rgba(255,106,61,.20);color:#ffbfa8}
-.strip.two{flex-direction:column;gap:0;padding:2px}
-.strip.two span{display:flex;align-items:center;justify-content:center;gap:4px;padding:2px 0;width:100%}
-
-/* ══════════════ Γ · ΣΦΡΑΓΙΔΑ ══════════════ */
-.pc.c .veil{
-  position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;
-  background:rgba(8,10,26,.60);backdrop-filter:saturate(.35);
-}
-.pc.c .stamp{
-  transform:rotate(-11deg);font-size:12px;font-weight:900;letter-spacing:1px;
-  padding:4px 12px;border:2.5px solid;border-radius:6px;text-transform:uppercase;
-  display:flex;align-items:center;gap:6px;white-space:nowrap;
-}
-.pc.c .stamp.today{color:#ff8b88;border-color:#ff8b88;background:rgba(239,83,80,.16)}
-.pc.c .stamp.indef{color:#fff;border-color:#fff;background:rgba(0,0,0,.55)}
-.pc.c .stamp.ef{color:#ffbfa8;border-color:var(--st-efood);background:rgba(255,106,61,.18);font-size:10.5px}
-.pc.c .stamp-stack{display:flex;flex-direction:column;gap:6px;align-items:center}
-/* e-food = ΠΛΗΡΟΦΟΡΙΑ → ποτέ πέπλο, μόνο σημαδάκι γωνίας (η κάρτα μένει πωλήσιμη) */
-.stamp-corner{
-  position:absolute;top:5px;right:5px;z-index:5;background:var(--st-efood);color:#2a0d00;
-  font-size:9px;font-weight:900;padding:2px 6px;border-radius:4px;line-height:1.3;
-  box-shadow:0 2px 7px rgba(255,106,61,.5);
-}
-.pc.c.s-today{border-color:rgba(239,83,80,.6)}
-.pc.c.s-indef{border-color:rgba(255,255,255,.3)}
-.pc.c.s-ef{border-color:rgba(255,106,61,.6)}
-
-/* ══════════════ Δ · ΚΟΥΠΟΝΙ (TOKEN) ══════════════ */
-.pc.d.s-today{border-color:rgba(239,83,80,.6)}
-.pc.d.s-indef{border-color:rgba(255,255,255,.32)}
-.pc.d.s-ef{border-color:rgba(255,106,61,.6)}
-.pc.d.dim .nm{opacity:.72}
-.pc.d.dim .pr{text-decoration:line-through;opacity:.5}
-.tok-wrap{position:absolute;top:6px;right:6px;z-index:4;display:flex;flex-direction:column;gap:4px}
-.tok{
-  width:25px;height:25px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  font-size:12px;line-height:1;box-shadow:0 2px 7px rgba(0,0,0,.55);border:1.5px solid rgba(255,255,255,.22);
-}
-.tok.today{background:var(--st-today)}
-.tok.indef{background:var(--st-indef);border-color:rgba(255,255,255,.45)}
-.tok.ef{background:var(--st-efood)}
-.tok.sm{width:17px;height:17px;font-size:9px;border-width:1px}
-
-/* ══════════════ CHIPS ΥΛΙΚΩΝ (αντίγραφο #modal) ══════════════ */
-.chips{display:flex;flex-wrap:wrap;gap:7px;min-width:0;max-width:100%}
-.ch{
-  position:relative;font-family:'Consolas','JetBrains Mono',monospace;font-size:12px;letter-spacing:.3px;
-  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);color:rgba(255,255,255,.32);
-  padding:8px 12px;border-radius:6px;cursor:pointer;min-height:36px;display:inline-flex;align-items:center;
-}
-.ch.active{background:rgba(245,200,66,.07);border-color:rgba(245,200,66,.3);color:#f5c842;box-shadow:inset 3px 0 0 #f5c842}
-.ch.removed{background:rgba(224,90,90,.06);border-color:rgba(224,90,90,.3);color:var(--red);box-shadow:inset 3px 0 0 var(--red)}
+/* ══════ ΚΑΡΤΑ ΠΡΟΪΟΝΤΟΣ ══════ */
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.pc{position:relative;background:var(--card);border:1.5px solid var(--border);border-radius:16px;
+  overflow:hidden;display:flex;flex-direction:column;text-align:center;min-height:88px;
+  font-family:inherit;color:var(--white);cursor:pointer}
+.pcb{padding:13px 7px;display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;justify-content:center}
+.pc .nm{font-size:13px;font-weight:700;line-height:1.3}
+.pc .pr{font-size:14.5px;color:var(--yellow);font-weight:900}
+.pc.off .nm{opacity:.72}
+.pc.off .pr{text-decoration:line-through;opacity:.5}
+.bt{border-color:rgba(239,83,80,.6)}
+.bi{border-color:rgba(160,108,255,.6)}
+.be{border-color:rgba(255,106,61,.6)}
 
 /* ΤΩΡΑ */
-.ch.now-so{
-  background:rgba(120,120,130,.10)!important;border-color:rgba(255,255,255,.06)!important;
-  color:rgba(255,255,255,.28)!important;box-shadow:none!important;text-decoration:line-through;opacity:.55;
-}
-.ch.now-so::after{content:'🚫';font-size:10px;margin-left:5px;filter:grayscale(1);opacity:.8}
-.ch.now-ef{border-color:rgba(255,106,61,.55);padding-right:26px}
-.ch .ef-dot{
-  position:absolute;top:50%;right:6px;transform:translateY(-50%);width:15px;height:15px;border-radius:50%;
-  background:var(--efood);display:flex;align-items:center;justify-content:center;font-size:8px;
-}
+.pc.oldout{opacity:.45;filter:grayscale(1);border-color:rgba(224,90,90,.4)}
+.pc.oldout .pr{text-decoration:line-through}
+.oldb{position:absolute;top:6px;left:6px;z-index:2;background:rgba(224,90,90,.92);color:#fff;
+  font-size:9.5px;font-weight:800;padding:2px 6px;border-radius:4px;text-transform:uppercase}
+.oldb i{display:block;font-style:normal;font-size:8px;opacity:.8}
+.olde{position:absolute;top:6px;right:6px;z-index:3;background:var(--s-efood);color:#2a0d00;
+  font-size:9px;font-weight:900;padding:2px 6px;border-radius:4px;box-shadow:0 2px 8px rgba(255,106,61,.45)}
 
-/* Α · chip = γωνία */
-.ch.a-today{background:rgba(239,83,80,.10);border-color:rgba(239,83,80,.5);color:#ffb0ae;text-decoration:line-through}
-.ch.a-indef{background:rgba(0,0,0,.5);border-color:rgba(255,255,255,.30);color:var(--st-indef-ink);text-decoration:line-through}
-.ch.a-ef{border-color:rgba(255,106,61,.6);color:#ffbfa8;background:rgba(255,106,61,.08)}
-.ch.a-corner::before{
-  content:'';position:absolute;top:0;right:0;width:0;height:0;
-  border-style:solid;border-width:0 13px 13px 0;border-color:transparent;
-}
-.ch.a-today.a-corner::before{border-right-color:var(--st-today)}
-.ch.a-indef.a-corner::before{border-right-color:#ffd7d7}
-.ch.a-ef.a-corner::before{border-right-color:var(--st-efood)}
+/* 1Α — λωρίδα κάτω */
+.strip{display:flex;align-items:center;justify-content:center;gap:5px;padding:4px 3px;
+  font-size:9px;font-weight:900;letter-spacing:.4px;text-transform:uppercase;
+  border-top:1px solid rgba(255,255,255,.10);line-height:1.3}
+.strip.t{background:rgba(239,83,80,.24);color:#ffc9c8}
+.strip.i{background:rgba(160,108,255,.24);color:#dcc7ff}
+.strip.e{background:rgba(255,106,61,.22);color:#ffbfa8}
 
-/* Β · chip = μπάρα + λέξη */
-.ch.b-s{padding-left:14px}
-.ch.b-s::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:6px 0 0 6px}
-.ch.b-today::before{background:var(--st-today)}
-.ch.b-indef::before{background:linear-gradient(180deg,#ffd7d7,#5a1010)}
-.ch.b-ef::before{background:var(--st-efood)}
-.ch.b-today{background:rgba(239,83,80,.09);border-color:rgba(239,83,80,.35);color:#ffb0ae;text-decoration:line-through}
-.ch.b-indef{background:rgba(0,0,0,.45);border-color:rgba(255,255,255,.22);color:var(--st-indef-ink);text-decoration:line-through}
-.ch.b-ef{background:rgba(255,106,61,.08);border-color:rgba(255,106,61,.4);color:#ffbfa8}
-.ch .tag{
-  font-family:inherit;font-size:8.5px;font-weight:900;letter-spacing:.5px;margin-left:7px;
-  padding:2px 5px;border-radius:3px;text-decoration:none;display:inline-block;text-transform:uppercase;
-}
-.ch.b-today .tag{background:var(--st-today);color:#fff}
-.ch.b-indef .tag{background:#ffd7d7;color:#3a0000}
-.ch.b-ef .tag{background:var(--st-efood);color:#2a0d00}
+/* 1Β — ταινία γωνίας */
+.rib{position:absolute;top:13px;right:-36px;width:132px;transform:rotate(45deg);z-index:4;text-align:center;
+  font-size:7.5px;font-weight:900;letter-spacing:.3px;padding:3px 0;box-shadow:0 2px 6px rgba(0,0,0,.5);
+  white-space:nowrap;overflow:hidden}
+.rib.t{background:var(--s-today);color:#fff}
+.rib.i{background:var(--s-indef);color:#1a0533}
+.rib.e{background:var(--s-efood);color:#2a0d00}
 
-/* Γ · chip = μπάντα */
-.ch.c-s{color:rgba(255,255,255,.62)}
-.ch.c-today{background:rgba(239,83,80,.14);border-color:var(--st-today)}
-.ch.c-indef{background:rgba(0,0,0,.6);border-color:rgba(255,255,255,.4)}
-.ch.c-ef{background:rgba(255,106,61,.14);border-color:var(--st-efood)}
-.ch.c-s .band{
-  position:absolute;left:0;right:0;top:50%;height:2px;transform:translateY(-50%);pointer-events:none;
-}
-.ch.c-today .band{background:var(--st-today)}
-.ch.c-indef .band{background:#fff}
-.ch.c-ef .band{background:var(--st-efood)}
+/* 1Γ — σφραγίδα */
+.veil{position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;
+  background:rgba(8,10,26,.62)}
+.stamp{transform:rotate(-10deg);font-size:7.5px;font-weight:900;letter-spacing:.3px;padding:4px 6px;
+  border:2px solid;border-radius:6px;text-transform:uppercase;text-align:center;line-height:1.35;max-width:86%}
+.stamp.t{color:#ff8b88;border-color:#ff8b88;background:rgba(239,83,80,.18)}
+.stamp.i{color:#c9a4ff;border-color:#c9a4ff;background:rgba(160,108,255,.18)}
+.corner{position:absolute;top:5px;right:5px;z-index:5;background:var(--s-efood);color:#2a0d00;
+  font-size:8.5px;font-weight:900;padding:3px 6px;border-radius:4px;line-height:1.2;
+  box-shadow:0 2px 7px rgba(255,106,61,.5)}
 
-/* Δ · chip = token */
-.ch.d-s{padding-right:28px;color:rgba(255,255,255,.55)}
-.ch.d-today{background:rgba(239,83,80,.09);border-color:rgba(239,83,80,.45);text-decoration:line-through}
-.ch.d-indef{background:rgba(0,0,0,.45);border-color:rgba(255,255,255,.26);text-decoration:line-through}
-.ch.d-ef{background:rgba(255,106,61,.08);border-color:rgba(255,106,61,.45)}
-.ch .tok-abs{position:absolute;top:50%;right:5px;transform:translateY(-50%)}
-.ch.d-two{padding-right:46px}
-.ch.d-two .tok-abs{right:5px}
-.ch.d-two .tok-abs.t2{right:24px}
+/* 1Δ — ταμπέλα κορυφής */
+.top{position:absolute;top:0;left:0;right:0;z-index:4;padding:4px 3px;text-align:center;
+  font-size:9px;font-weight:900;letter-spacing:.4px;text-transform:uppercase;line-height:1.3}
+.top.t{background:var(--s-today);color:#fff}
+.top.i{background:var(--s-indef);color:#1a0533}
+.top.e{background:var(--s-efood);color:#2a0d00}
+.pc.hastop .pcb{padding-top:26px}
 
-/* ── Λίστα (οθόνη «Εξαντλημένα») ── */
-.lst{display:flex;flex-direction:column;gap:3px}
-.li{
-  display:flex;align-items:center;gap:9px;min-height:42px;padding:7px 10px;border-radius:6px;
-  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);font-size:13px;
-}
+/* ══════ CHIPS ══════ */
+.chips{display:flex;flex-wrap:wrap;gap:7px;min-width:0;max-width:100%}
+.ch{position:relative;font-family:'Consolas','JetBrains Mono',monospace;font-size:12px;letter-spacing:.3px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);color:rgba(255,255,255,.34);
+  padding:8px 12px;border-radius:6px;min-height:36px;display:inline-flex;align-items:center;cursor:pointer}
+.ch.on{background:rgba(245,200,66,.07);border-color:rgba(245,200,66,.3);color:#f5c842;box-shadow:inset 3px 0 0 #f5c842}
+.ch.rm{background:rgba(224,90,90,.06);border-color:rgba(224,90,90,.3);color:var(--red);box-shadow:inset 3px 0 0 var(--red)}
+/* ΤΩΡΑ */
+.ch.oldso{background:rgba(120,120,130,.10);border-color:rgba(255,255,255,.06);
+  color:rgba(255,255,255,.28);text-decoration:line-through;opacity:.55}
+.ch.oldso::after{content:'🚫';font-size:10px;margin-left:5px;filter:grayscale(1)}
+.ch.oldef{border-color:rgba(255,106,61,.55);padding-right:26px}
+.ch .efdot{position:absolute;top:50%;right:6px;transform:translateY(-50%);width:15px;height:15px;
+  border-radius:50%;background:var(--s-efood);display:flex;align-items:center;justify-content:center;font-size:8px}
+
+/* 2Α ράχη + λέξη */
+.ch.bar{padding-left:14px}
+.ch.bar::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:6px 0 0 6px}
+.ch.ct::before{background:var(--s-today)} .ch.ci::before{background:var(--s-indef)} .ch.ce::before{background:var(--s-efood)}
+.ch.ct{background:rgba(239,83,80,.09);border-color:rgba(239,83,80,.4);color:#ffb0ae}
+.ch.ci{background:rgba(160,108,255,.09);border-color:rgba(160,108,255,.4);color:#d6bcff}
+.ch.ce{background:rgba(255,106,61,.08);border-color:rgba(255,106,61,.42);color:#ffbfa8}
+.ch.ct .nmx,.ch.ci .nmx{text-decoration:line-through}
+.tg{font-family:inherit;font-size:8px;font-weight:900;letter-spacing:.4px;margin-left:7px;padding:2px 5px;
+  border-radius:3px;text-transform:uppercase;text-decoration:none;display:inline-block}
+.ch.ct .tg{background:var(--s-today);color:#fff}
+.ch.ci .tg{background:var(--s-indef);color:#1a0533}
+.ch.ce .tg{background:var(--s-efood);color:#2a0d00}
+
+/* 2Β μόνο χρώμα */
+.ch.plain.ct,.ch.plain.ci{}
+/* 2Γ εικονίδιο δεξιά */
+.ch.ico{padding-right:30px}
+.tok{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:9px;line-height:1;border:1px solid rgba(255,255,255,.25)}
+.tok.t{background:var(--s-today)} .tok.i{background:var(--s-indef)} .tok.e{background:var(--s-efood)}
+.tok.abs{position:absolute;top:50%;right:5px;transform:translateY(-50%)}
+.tok.big{width:25px;height:25px;font-size:12px;border-width:1.5px;box-shadow:0 2px 7px rgba(0,0,0,.5)}
+.tok.bigabs{position:absolute;top:6px;right:6px;z-index:5}
+
+/* 2Δ δύο γραμμές */
+.ch.two{flex-direction:column;align-items:flex-start;gap:3px;padding:7px 12px}
+.ch.two .lbl{font-size:7.5px;font-weight:900;letter-spacing:.5px;text-transform:uppercase;
+  font-family:inherit;text-decoration:none;opacity:.95}
+.ch.two.ct .lbl{color:#ff8b88} .ch.two.ci .lbl{color:#c9a4ff} .ch.two.ce .lbl{color:#ffbfa8}
+
+/* ══════ ΛΙΣΤΕΣ ══════ */
+.lst{display:flex;flex-direction:column;gap:4px}
+.li{display:flex;align-items:center;gap:9px;min-height:42px;padding:7px 10px;border-radius:7px;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);font-size:13px;position:relative;overflow:hidden}
 .li .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.li .why{font-size:10.5px;color:var(--muted);flex-shrink:0}
-.li.now{opacity:.55}
-.li.a-today{border-left:none;background:rgba(239,83,80,.08);border-color:rgba(239,83,80,.35)}
-.li.a-indef{background:rgba(0,0,0,.45);border-color:rgba(255,255,255,.22)}
-.li.b-s{padding-left:12px;position:relative;overflow:hidden}
-.li.b-s::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px}
-.li.b-today::before{background:var(--st-today)}
-.li.b-indef::before{background:linear-gradient(180deg,#ffd7d7,#5a1010)}
+.li .wy{font-size:10.5px;color:var(--muted);flex-shrink:0}
+.li.old{opacity:.55}
+.li.bar{padding-left:13px}
+.li.bar::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px}
+.li.lt::before{background:var(--s-today)} .li.li2::before{background:var(--s-indef)} .li.le::before{background:var(--s-efood)}
+.pill{font-size:8.5px;font-weight:900;letter-spacing:.4px;padding:3px 7px;border-radius:20px;
+  text-transform:uppercase;flex-shrink:0}
+.pill.t{background:var(--s-today);color:#fff}
+.pill.i{background:var(--s-indef);color:#1a0533}
+.pill.e{background:var(--s-efood);color:#2a0d00}
+.ghd{font-size:9.5px;font-weight:900;letter-spacing:.7px;text-transform:uppercase;
+  padding:7px 10px 4px;display:flex;align-items:center;gap:7px}
+.ghd.t{color:#ff8b88} .ghd.i{color:#c9a4ff} .ghd.e{color:#ffbfa8}
+.ghd::after{content:'';flex:1;height:1px;background:currentColor;opacity:.28}
 
-/* ── Πίνακας απόφασης ── */
-.tbl{width:100%;border-collapse:collapse;margin-top:16px;font-size:13px;background:var(--card);
-  border-radius:12px;overflow:hidden;border:1px solid var(--border)}
-.tbl th,.tbl td{padding:11px 12px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
-.tbl th{background:rgba(255,255,255,.05);font-size:11.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
-.tbl td:first-child{font-weight:700;white-space:nowrap}
-.tbl tr:last-child td{border-bottom:none}
-.yes{color:var(--green);font-weight:800}
-.no{color:var(--red);font-weight:800}
-.mid{color:var(--yellow);font-weight:800}
-.tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.rowlbl{font-size:10px;font-weight:800;letter-spacing:.6px;color:var(--muted);text-transform:uppercase;
+  margin:14px 0 8px;display:flex;align-items:center;gap:7px}
+.rowlbl:first-child{margin-top:0}
+.rowlbl::after{content:'';flex:1;height:1px;background:var(--border)}
 
-.rec{
-  margin-top:20px;background:linear-gradient(135deg,rgba(38,194,129,.12),rgba(38,194,129,.04));
-  border:1px solid rgba(38,194,129,.4);border-left:4px solid var(--green);border-radius:12px;padding:16px 18px;
-}
-.rec h3{font-size:16px;font-weight:800;display:flex;align-items:center;gap:8px}
-.rec p{font-size:13.5px;line-height:1.7;color:var(--muted);margin-top:9px}
-.rec p b{color:var(--white)}
-
-.ask{
-  margin-top:26px;background:var(--card);border:1px dashed var(--yellow);border-radius:12px;padding:18px;
-  font-size:14px;line-height:1.8;
-}
+.ask{margin-top:34px;background:var(--card);border:1px dashed var(--yellow);border-radius:12px;padding:18px 20px;
+  font-size:14.5px;line-height:1.9}
 .ask b{color:var(--yellow)}
-.ask ul{margin:10px 0 0 20px;color:var(--muted);font-size:13px}
-.ask li{margin-bottom:5px}
-
-.foot{margin-top:34px;font-size:11.5px;color:var(--muted);text-align:center;line-height:1.8;
+.ask ul{margin:12px 0 0 20px;color:var(--muted);font-size:13.5px}
+.ask li{margin-bottom:7px}
+.ask li b{color:var(--white)}
+.foot{margin-top:30px;font-size:11.5px;color:var(--muted);text-align:center;line-height:1.8;
   border-top:1px solid var(--border);padding-top:16px}
-.foot a{color:var(--yellow)}
-
-@media (max-width:700px){
-  h1{font-size:21px}
-  .grid{grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:8px}
-  .pc .nm{font-size:12.5px}
-}
+@media (max-width:700px){ h1{font-size:20px} .pc .nm{font-size:12px} }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <h1>🚫 Σήμανση Εξαντλημένων <span class="tag">4 ΠΡΟΤΑΣΕΙΣ</span></h1>
+  <h1>🏷️ Σήμανση Εξαντλημένων <span class="tag">ΔΙΑΛΕΞΕ 1 ΑΝΑ ΣΗΜΕΙΟ</span></h1>
   <p class="lead">
-    Πώς φαίνεται ότι κάτι <b>δεν πουλιέται</b> — στις κάρτες προϊόντων, στα υλικά μέσα στις φόρμες,
-    στις επιλογές και στις λίστες. Κάθε ενότητα δείχνει <b>πρώτα πώς είναι σήμερα</b> και δίπλα τις 4 προτάσεις,
-    ώστε να διαλέξεις με τα μάτια σου. Μπορείς να διαλέξεις <b>διαφορετική πρόταση ανά παράθυρο</b> — αλλά διάβασε
-    πρώτα τη «γλώσσα» πιο κάτω, γιατί το νόημα πρέπει να μένει ίδιο παντού.
+    Τρία σημεία, τέσσερις προτάσεις στο καθένα. Πρώτο κουτί είναι πάντα το <b>«ΤΩΡΑ»</b>.
+    Πες μου έναν κωδικό ανά σημείο — π.χ. <b>1Α, 2Γ, 3Β</b>. Μπορούν να είναι διαφορετικά μεταξύ τους.
   </p>
 
-  <!-- ═══════════ ΤΙ ΔΕΝ ΠΑΕΙ ΚΑΛΑ ═══════════ -->
-  <div class="sec">
-    <div class="sec-h">
-      <span class="n">!</span>
-      <span><span class="t">Τι δεν πάει καλά σήμερα</span>
-      <span class="d">4 συγκεκριμένα προβλήματα — όχι γούστο, λειτουργία</span></span>
+  <!-- ΛΕΞΙΛΟΓΙΟ -->
+  <div class="voc">
+    <div class="vc t">
+      <div class="w">⏳ ΕΞΑΝΤΛΗΘΗΚΕ · ΣΗΜΕΡΑ</div>
+      <div class="x">Κόκκινο. Ανοίγει <b>μόνο του αύριο</b>. Δεν πωλείται.</div>
     </div>
-
-    <div class="note warn">
-      <b>1. «Σήμερα» και «επ' αόριστον» φαίνονται ΟΛΟΙΔΙΑ.</b><br>
-      Και τα δύο δείχνουν το ίδιο κόκκινο «ΕΞΑΝΤΛΗΘΗΚΕ» και το ίδιο γκριζάρισμα.
-      Ο ταμίας δεν μπορεί να ξεχωρίσει «θα ξανάρθει αύριο» από «το βγάλαμε από το μενού».
-      Είναι <b>δύο εντελώς διαφορετικές αποφάσεις</b> με ίδια εμφάνιση.
+    <div class="vc i">
+      <div class="w">🔒 ΕΞΑΝΤΛΗΘΗΚΕ · ΕΠ' ΑΟΡΙΣΤΟΝ</div>
+      <div class="x">Μωβ. <b>Ίδια λέξη — αλλάζει η διάρκεια.</b> Δεν ανοίγει μόνο του. Δεν πωλείται.</div>
     </div>
-    <div class="note warn">
-      <b>2. Η κάρτα σβήνει τόσο που δεν διαβάζεται.</b><br>
-      Σήμερα εφαρμόζεται 45% διαφάνεια <i>και</i> πλήρες ασπρόμαυρο. Σε φωτεινή κουζίνα το όνομα
-      του προϊόντος γίνεται δυσανάγνωστο — ο ταμίας πρέπει να σκύψει για να δει <i>ποιο</i> τελείωσε.
-    </div>
-    <div class="note warn">
-      <b>3. Τα υλικά μέσα στις φόρμες σχεδόν εξαφανίζονται.</b><br>
-      Το γκρι κείμενο με 55% διαφάνεια πέφτει κάτω από κάθε όριο αναγνωσιμότητας
-      (χρειάζεται 4,5:1 — είμαστε κάτω από 2:1). Και το «🚫» δεν λέει <i>γιατί</i>: τελείωσε σήμερα; μόνιμα;
-    </div>
-    <div class="note warn">
-      <b>4. Τρεις διαφορετικές «γλώσσες» στην ίδια οθόνη.</b><br>
-      Κάρτα = κόκκινο ταμπελάκι πάνω αριστερά. Υλικό = γκρι + 🚫. e-food = πορτοκαλί πάνω δεξιά.
-      Τίποτα δεν μοιάζει με τίποτα, οπότε κάθε παράθυρο πρέπει να «μαθευτεί» ξεχωριστά.
+    <div class="vc e">
+      <div class="w">🛵 ΕΚΤΟΣ e-food</div>
+      <div class="x">Πορτοκαλί. <b>Το πουλάς κανονικά</b> — απλώς δεν το βλέπουν στην e-food.
+      Η κάρτα μένει <b>φωτεινή</b>.</div>
     </div>
   </div>
 
-  <!-- ═══════════ Ο ΚΑΝΟΝΑΣ ═══════════ -->
-  <div class="sec">
-    <div class="sec-h">
-      <span class="n">🔑</span>
-      <span><span class="t">Ο κανόνας πριν από κάθε σχέδιο: ΦΡΑΓΗ ≠ ΠΛΗΡΟΦΟΡΙΑ</span>
-      <span class="d">Δύο εντελώς διαφορετικά είδη σήμανσης — δεν επιτρέπεται να μοιάζουν</span></span>
-    </div>
-
-    <div class="rule-grid">
-      <div class="rc rc-block">
-        <div class="rc-h">🚫 ΦΡΑΓΗ — «δεν μπορείς να το πουλήσεις»</div>
-        <div class="rc-w">
-          Εξαντλήθηκε σήμερα ή κλειστό επ' αόριστον. Η κάρτα <b>σβήνει</b>, η τιμή <b>διαγράφεται</b>,
-          το πάτημα μπλοκάρεται.
-        </div>
-        <div class="rc-demo">
-          <button class="pc b s-today dim" style="max-width:150px"><div class="pc-b"><div class="nm">Γύρος</div><div class="pr">3,50 €</div></div>
-            <div class="strip today">⏳ ΣΗΜΕΡΑ</div></button>
-        </div>
-      </div>
-      <div class="rc rc-info">
-        <div class="rc-h">🛵 ΠΛΗΡΟΦΟΡΙΑ — «το πουλάς κανονικά»</div>
-        <div class="rc-w">
-          Κλειστό <b>μόνο στην e-food</b>. Η κάρτα μένει <b>ΚΑΝΟΝΙΚΗ</b> — φωτεινή, τιμή ακέραιη,
-          πατιέται. Μπαίνει <b>μόνο ένα σημαδάκι</b> για ενημέρωση.
-        </div>
-        <div class="rc-demo">
-          <button class="pc b s-ef" style="max-width:150px"><div class="pc-b"><div class="nm">Κεμπαπάκι</div><div class="pr">3,40 €</div></div>
-            <div class="strip ef">🛵 E-FOOD</div></button>
-        </div>
-      </div>
-    </div>
-
-    <div class="note warn">
-      <b>Γιατί έχει σημασία:</b> αν το «κλειστό στην e-food» δείχνει σβηστό, ο ταμίας <b>διστάζει να χτυπήσει
-      προϊόν που έχεις στο ψυγείο</b> — και χάνεις πώληση από μια εμφάνιση. Όλες οι προτάσεις πιο κάτω
-      τηρούν αυτόν τον κανόνα.
-    </div>
-  </div>
-
-  <!-- ═══════════ ΤΟ ΚΡΙΣΙΜΟ ═══════════ -->
-  <div class="sec">
-    <div class="sec-h">
-      <span class="n">🎯</span>
-      <span><span class="t">Το κρίσιμο: «εξαντλημένο στην e-food ή και στα δύο;»</span>
-      <span class="d">3 καταστάσεις — και η λύση είναι ένας κανόνας, όχι δεύτερο σηματάκι</span></span>
-    </div>
-
-    <div class="note warn">
-      <b>Το πραγματικό πρόβλημα:</b> σήμερα βλέπεις <b>δύο ξεχωριστά σημάδια</b> (κόκκινο ταμπελάκι +
-      πορτοκαλί ταμπελάκι) και πρέπει να τα διαβάσεις και τα δύο και να τα συνδυάσεις στο μυαλό σου.
-      Χειρότερα: στην κάρτα <b>πέφτουν το ένα πάνω στο άλλο</b>.
-    </div>
-
-    <div class="note ok">
-      <b>Η λύση — ο κανόνας:</b> αφού «κλειστό εδώ» σημαίνει πάντα «κλειστό και στην e-food»,
-      η <b>σβηστή κάρτα ήδη λέει «πουθενά»</b>. Άρα το πορτοκαλί σήμα μπαίνει
-      <b>ΜΟΝΟ σε φωτεινή κάρτα</b>. Έτσι δεν υπάρχει ποτέ διπλό σήμα:<br><br>
-      🔆 <b>Φωτεινή + πορτοκαλί</b> = το έχω, απλώς δεν φεύγει από e-food<br>
-      🌑 <b>Σβηστή</b> = δεν το έχω — ούτε εδώ, ούτε στην e-food
-    </div>
-
-    <div class="four">
-
-      <div class="fc">
-        <div class="fc-h">✅ Κανονικό <span class="ch2">Μαγαζί ✓ · e-food ✓</span></div>
-        <div class="fc-b">
-          <div><div class="fc-cap">Τώρα</div>
-            <button class="pc"><div class="pc-b"><div class="nm">Σουβλάκι</div><div class="pr">3,20 €</div></div></button></div>
-          <div><div class="fc-cap">Ε · Σήμα</div>
-            <button class="pc"><div class="pc-b"><div class="nm">Σουβλάκι</div><div class="pr">3,20 €</div></div></button></div>
-          <div><div class="fc-cap">ΣΤ · Λέξη</div>
-            <button class="pc"><div class="pc-b"><div class="nm">Σουβλάκι</div><div class="pr">3,20 €</div></div></button></div>
-        </div>
-        <div class="fc-note">Καμία σήμανση πουθενά — <b>το «καθαρό» είναι κι αυτό πληροφορία</b>.</div>
-      </div>
-
-      <div class="fc">
-        <div class="fc-h">🏪 Μόνο εδώ <span class="ch2">Μαγαζί ✓ · e-food ✕</span></div>
-        <div class="fc-b">
-          <div><div class="fc-cap">Τώρα</div>
-            <button class="pc now-ef-off"><span class="now-ef">🛵 e-food</span>
-              <div class="pc-b"><div class="nm">Κεμπαπάκι</div><div class="pr">3,40 €</div></div></button></div>
-          <div><div class="fc-cap">Ε · Σήμα</div>
-            <button class="pc b s-ef"><div class="pc-b"><div class="nm">Κεμπαπάκι</div><div class="pr">3,40 €</div></div>
-              <div class="strip ef">🛵 ΟΧΙ E-FOOD</div></button></div>
-          <div><div class="fc-cap">ΣΤ · Λέξη</div>
-            <button class="pc f k-here"><span class="wb wb-here">ΜΟΝΟ ΕΔΩ</span>
-              <div class="pc-b"><div class="nm">Κεμπαπάκι</div><div class="pr">3,40 €</div></div></button></div>
-        </div>
-        <div class="fc-note">Πωλείται κανονικά — η κάρτα <b>μένει φωτεινή, η τιμή ακέραιη</b> και στις τρεις.
-        Το πορτοκαλί εμφανίζεται <b>ΜΟΝΟ εδώ</b>.</div>
-      </div>
-
-      <div class="fc">
-        <div class="fc-h">⛔ Πουθενά <span class="ch2">Μαγαζί ✕ · e-food ✕</span></div>
-        <div class="fc-b">
-          <div><div class="fc-cap">Τώρα</div>
-            <button class="pc now-out now-ef-off"><span class="now-badge">Εξαντλήθηκε<i>λαβάς</i></span>
-              <span class="now-ef">🛵 e-food</span>
-              <div class="pc-b"><div class="nm">Ντόνερ Λαβάς</div><div class="pr">4,00 €</div></div></button></div>
-          <div><div class="fc-cap">Ε · Σήμα</div>
-            <button class="pc b s-today dim"><div class="pc-b"><div class="nm">Ντόνερ Λαβάς</div><div class="pr">4,00 €</div></div>
-              <div class="strip today">⏳ ΣΗΜΕΡΑ · ΛΑΒΑΣ</div></button></div>
-          <div><div class="fc-cap">ΣΤ · Λέξη</div>
-            <button class="pc f k-none dim"><span class="wb wb-none">ΠΟΥΘΕΝΑ · ΛΑΒΑΣ</span>
-              <div class="pc-b"><div class="nm">Ντόνερ Λαβάς</div><div class="pr">4,00 €</div></div></button></div>
-        </div>
-        <div class="fc-note">Στο «Τώρα» τα δύο ταμπελάκια <b>πέφτουν το ένα πάνω στο άλλο</b> (φαίνεται στην εικόνα).
-        Στα Ε/ΣΤ <b>δεν υπάρχει καθόλου σήμα e-food</b> — η σβηστή κάρτα το λέει ήδη.</div>
-      </div>
-
-    </div>
-
-    <div class="note ok">
-      <b>Γιατί αυτό λύνει το ερώτημα:</b> δεν χρειάζεται να συγκρίνεις δύο σήματα.
-      Κοιτάς <b>ένα πράγμα — αν η κάρτα είναι φωτεινή ή σβηστή</b>. Το πορτοκαλί δεν συνυπάρχει ποτέ
-      με σβηστή κάρτα, άρα δεν μπορεί να σε μπερδέψει.<br>
-      Το <b>Ε</b> το λέει με χρώμα+εικονίδιο (πιο διακριτικό), το <b>ΣΤ</b> με λέξη (μηδέν εκπαίδευση).
-    </div>
-
-    <div class="row-lbl" style="margin-top:22px">ΤΑ ΙΔΙΑ ΣΤΑ ΥΛΙΚΑ ΜΕΣΑ ΣΤΙΣ ΦΟΡΜΕΣ</div>
-    <div class="cmp" style="margin-top:0">
-      <div class="panel">
-        <div class="panel-h"><span class="badge">Ε</span><span><span class="ttl">Σήμα</span>
-          <span class="sub">Πορτοκαλί μόνο σε ενεργό υλικό</span></span></div>
-        <div class="panel-b">
-          <div class="chips">
-            <span class="ch active">Ντομάτα</span>
-            <span class="ch b-s b-ef">Κασέρι<span class="tag">όχι e-food</span></span>
-            <span class="ch b-s b-today">Τζατζίκι<span class="tag">σήμερα</span></span>
-            <span class="ch b-s b-indef">Μπέικον<span class="tag">κλειστό</span></span>
-          </div>
-        </div>
-        <div class="panel-f">Το <b>Κασέρι</b> είναι ενεργό (μπορείς να το βάλεις) — απλώς δεν φεύγει από e-food.
-          Τα άλλα δύο είναι <b>διαγραμμένα</b> = δεν υπάρχουν πουθενά.</div>
-      </div>
-      <div class="panel">
-        <div class="panel-h"><span class="badge">ΣΤ</span><span><span class="ttl">Ρητή λέξη</span>
-          <span class="sub">Χωρίς καμία εκπαίδευση</span></span></div>
-        <div class="panel-b">
-          <div class="chips">
-            <span class="ch active">Ντομάτα</span>
-            <span class="ch" style="border-color:rgba(255,106,61,.5)">Κασέρι<span class="wbi wbi-here">μόνο εδώ</span></span>
-            <span class="ch" style="border-color:rgba(255,255,255,.28);color:rgba(255,255,255,.5)"><span style="text-decoration:line-through">Τζατζίκι</span><span class="wbi wbi-none">πουθενά</span></span>
-            <span class="ch" style="border-color:rgba(255,255,255,.28);color:rgba(255,255,255,.5)"><span style="text-decoration:line-through">Μπέικον</span><span class="wbi wbi-none">πουθενά</span></span>
-          </div>
-        </div>
-        <div class="panel-f">Τα chips πλαταίνουν αισθητά — <b>λιγότερα ανά γραμμή</b>.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══════════ Η ΓΛΩΣΣΑ ═══════════ -->
-  <div class="sec">
-    <div class="sec-h">
-      <span class="n">✳</span>
-      <span><span class="t">Η κοινή «γλώσσα» — 3 καταστάσεις, 3 χρώματα</span>
-      <span class="d">Ίδια και στις 4 προτάσεις. Αλλάζει μόνο το ΣΧΗΜΑ, ποτέ το νόημα.</span></span>
-    </div>
-
-    <div class="lang">
-      <div class="lang-c a">
-        <div class="i">⏳</div>
-        <div class="n">Εξαντλήθηκε σήμερα</div>
-        <div class="x"><b style="color:#ff8b88">ΚΟΚΚΙΝΟ</b> — προσωρινό. Αύριο ανοίγει μόνο του.
-        Δεν το έχουμε τώρα, το περιμένουμε.</div>
-      </div>
-      <div class="lang-c b">
-        <div class="i">🔒</div>
-        <div class="n">Κλειστό επ' αόριστον</div>
-        <div class="x"><b>ΜΑΥΡΟ</b> — μόνιμο. Δεν ανοίγει μόνο του, κάποιος πρέπει να το ξανανοίξει.
-        Ουσιαστικά «εκτός μενού».</div>
-      </div>
-      <div class="lang-c c">
-        <div class="i">🛵</div>
-        <div class="n">Κλειστό στην e-food</div>
-        <div class="x"><b style="color:#ff6a3d">ΠΟΡΤΟΚΑΛΙ</b> — <b>το πουλάμε κανονικά στο μαγαζί!</b>
-        Κλειστό είναι μόνο στην εφαρμογή delivery.</div>
-      </div>
-    </div>
-
-    <div class="hue">
-      <div class="hue-c">
-        <h4>🔒 Εκδοχή 1 — ΜΑΥΡΟ</h4>
-        <p>«Σβηστό / εκτός μενού». Δεν μοιάζει με τίποτα άλλο στην οθόνη.</p>
-        <div class="hue-demo">
-          <button class="pc b s-today dim"><div class="pc-b"><div class="nm">Γύρος</div><div class="pr">3,50 €</div></div>
-            <div class="strip today">⏳ ΣΗΜΕΡΑ</div></button>
-          <button class="pc b s-indef dim"><div class="pc-b"><div class="nm">Πανσέτα</div><div class="pr">3,80 €</div></div>
-            <div class="strip indef">🔒 ΚΛΕΙΣΤΟ</div></button>
-        </div>
-      </div>
-      <div class="hue-c">
-        <h4>🔒 Εκδοχή 2 — ΜΩΒ</h4>
-        <p>Πιο «ζωντανό», ξεχωρίζει χωρίς να βαραίνει την οθόνη.</p>
-        <div class="hue-demo">
-          <button class="pc b s-today dim"><div class="pc-b"><div class="nm">Γύρος</div><div class="pr">3,50 €</div></div>
-            <div class="strip today">⏳ ΣΗΜΕΡΑ</div></button>
-          <button class="pc b s-indef-v dim"><div class="pc-b"><div class="nm">Πανσέτα</div><div class="pr">3,80 €</div></div>
-            <div class="strip indef-v">🔒 ΚΛΕΙΣΤΟ</div></button>
-        </div>
-      </div>
-    </div>
-
-    <div class="note ok">
-      <b>Γιατί ΟΧΙ δεύτερο κόκκινο για το «επ' αόριστον»;</b> Επειδή δύο αποχρώσεις κόκκινου δεν ξεχωρίζουν με μια ματιά
-      σε βραδιά αιχμής. Το μαύρο διαβάζεται αμέσως ως «σβηστό / εκτός», δεν μπερδεύεται με τίποτα,
-      και αφήνει το κόκκινο να σημαίνει πάντα «σήμερα».
-    </div>
-  </div>
-
-  <!-- ═══════════ ΕΝΟΤΗΤΑ 1 · ΚΑΡΤΕΣ ═══════════ -->
+  <!-- ═══════════ ΣΗΜΕΙΟ 1 ═══════════ -->
   <div class="sec">
     <div class="sec-h">
       <span class="n">1</span>
-      <span><span class="t">Κάρτες προϊόντων (η κύρια οθόνη)</span>
-      <span class="d">Το πιο σημαντικό — εδώ κοιτάει ο ταμίας 100 φορές τη βραδιά</span></span>
+      <span><span class="t">Κάρτες προϊόντων</span>
+      <span class="d">Η κύρια οθόνη — εδώ κοιτάει ο ταμίας όλη τη βραδιά</span></span>
     </div>
 
-    <div class="cmp">
+    <div class="opts">
 
-      <!-- ΤΩΡΑ -->
-      <div class="panel now">
-        <div class="panel-h">
-          <span class="badge">ΤΩΡΑ</span>
-          <span><span class="ttl">Όπως είναι σήμερα</span>
-          <span class="sub">Γκριζάρισμα + κόκκινο ταμπελάκι</span></span>
-        </div>
-        <div class="panel-b">
+      <div class="op now">
+        <div class="op-h"><span class="op-k">ΤΩΡΑ</span>
+          <span><span class="op-t">Όπως είναι σήμερα</span><span class="op-s">Σβήνει + κόκκινο ταμπελάκι</span></span></div>
+        <div class="op-b">
           <div class="grid">
-            <button class="pc"><div class="pc-b"><div class="nm">Σουβλάκι</div><div class="pr">3,20 €</div></div></button>
-            <button class="pc now-out"><span class="now-badge">Εξαντλήθηκε</span>
-              <div class="pc-b"><div class="nm">Γύρος Πίτα</div><div class="pr">3,50 €</div></div></button>
-            <button class="pc now-out"><span class="now-badge">Εξαντλήθηκε</span>
-              <div class="pc-b"><div class="nm">Πανσέτα</div><div class="pr">3,80 €</div></div></button>
-            <button class="pc now-ef-off"><span class="now-ef">🛵 e-food</span>
-              <div class="pc-b"><div class="nm">Κεμπαπάκι</div><div class="pr">3,40 €</div></div></button>
-            <button class="pc now-out now-ef-off"><span class="now-badge">Εξαντλήθηκε<i>λαβάς</i></span>
-              <span class="now-ef">🛵 e-food</span>
-              <div class="pc-b"><div class="nm">Ντόνερ Λαβάς</div><div class="pr">4,00 €</div></div></button>
-            <button class="pc"><div class="pc-b"><div class="nm">Φιλέτο</div><div class="pr">4,20 €</div></div></button>
+            <button class="pc"><div class="pcb"><div class="nm">Σουβλάκι</div><div class="pr">3,20 €</div></div></button>
+            <button class="pc oldout"><span class="oldb">Εξαντλήθηκε</span>
+              <div class="pcb"><div class="nm">Γύρος Πίτα</div><div class="pr">3,50 €</div></div></button>
+            <button class="pc oldout"><span class="oldb">Εξαντλήθηκε</span>
+              <div class="pcb"><div class="nm">Πανσέτα</div><div class="pr">3,80 €</div></div></button>
+            <button class="pc" style="border-color:rgba(255,106,61,.55)"><span class="olde">🛵 e-food</span>
+              <div class="pcb"><div class="nm">Κεμπαπάκι</div><div class="pr">3,40 €</div></div></button>
           </div>
         </div>
-        <div class="panel-f">
-          ⚠️ Οι <b>2 κόκκινες κάρτες</b> πιο πάνω είναι <b>διαφορετικές</b>: ο Γύρος τελείωσε <b>σήμερα</b>,
-          η Πανσέτα είναι κλειστή <b>επ' αόριστον</b>. Δεν φαίνεται πουθενά.
-        </div>
+        <div class="op-f">⚠️ Ο <b>Γύρος</b> (σήμερα) και η <b>Πανσέτα</b> (επ' αόριστον) φαίνονται <b>ολόιδιοι</b>.
+          Και το «e-food» σκέτο δεν λέει τίποτα.</div>
       </div>
 
-      <!-- Α -->
-      <div class="panel">
-        <div class="panel-h">
-          <span class="badge">Α</span>
-          <span><span class="ttl">Ταινία γωνίας</span>
-          <span class="sub">Διαγώνια κορδέλα, η κάρτα μένει ευανάγνωστη</span></span>
-        </div>
-        <div class="panel-b">
+      <div class="op">
+        <div class="op-h"><span class="op-k">1Α</span>
+          <span><span class="op-t">Λωρίδα κάτω</span><span class="op-s">Ράχη χρώματος + λέξη στη βάση</span></span></div>
+        <div class="op-b">
           <div class="grid">
-            <button class="pc a"><div class="pc-b"><div class="nm">Σουβλάκι</div><div class="pr">3,20 €</div></div></button>
-            <button class="pc a s-today"><span class="rib today">ΣΗΜΕΡΑ</span>
-              <div class="pc-b"><div class="nm">Γύρος Πίτα</div><div class="pr">3,50 €</div></div></button>
-            <button class="pc a s-indef"><span class="rib indef">ΚΛΕΙΣΤΟ</span>
-              <div class="pc-b"><div class="nm">Πανσέτα</div><div class="pr">3,80 €</div></div></button>
-            <button class="pc a s-ef"><span class="rib ef">E-FOOD</span>
-              <div class="pc-b"><div class="nm">Κεμπαπάκι</div><div class="pr">3,40 €</div></div></button>
-            <button class="pc a s-today"><span class="rib today">ΣΗΜΕΡΑ</span>
-              <div class="pc-b"><div class="nm">Ντόνερ Λαβάς</div><div class="pr">4,00 €</div></div></button>
-            <button class="pc a"><div class="pc-b"><div class="nm">Φιλέτο</div><div class="pr">4,20 €</div></div></button>
+            <button class="pc"><div class="pcb"><div class="nm">Σουβλάκι</div><div class="pr">3,20 €</div></div></button>
+            <button class="pc off bt"><div class="pcb"><div class="nm">Γύρος Πίτα</div><div class="pr">3,50 €</div></div>
+              <div class="strip t">⏳ ΕΞΑΝΤΛΗΘΗΚΕ ΣΗΜΕΡΑ</div></button>
+            <button class="pc off bi"><div class="pcb"><div class="nm">Πανσέτα</div><div class="pr">3,80 €</div></div>
+              <div class="strip i">🔒 ΕΠ' ΑΟΡΙΣΤΟΝ</div></button>
+            <button class="pc be"><div class="pcb"><div class="nm">Κεμπαπάκι</div><div class="pr">3,40 €</div></div>
+              <div class="strip e">🛵 ΕΚΤΟΣ e-food</div></button>
           </div>
         </div>
-        <div class="panel-f">
-          <b>+</b> Το όνομα διαβάζεται πάντα · η λέξη λέει ακριβώς τι τρέχει.<br>
-          <b>−</b> Δύο ταινίες μαζί (πάνω+κάτω) θέλουν συνήθεια. Σε πολύ μικρή κάρτα η λέξη στενεύει.
-        </div>
+        <div class="op-f"><b>+</b> Χωράει και ο <b>λόγος</b> («λείπει ο λαβάς») · διαβάζεται πάντα το όνομα.<br>
+          <b>−</b> Η κάρτα ψηλώνει λίγο.</div>
       </div>
 
-      <!-- Β -->
-      <div class="panel">
-        <div class="panel-h">
-          <span class="badge">Β</span>
-          <span><span class="ttl">Μπάρα + γραμμή κατάστασης</span>
-          <span class="sub">Χρωματιστή ράχη αριστερά + λεζάντα κάτω</span></span>
-        </div>
-        <div class="panel-b">
+      <div class="op">
+        <div class="op-h"><span class="op-k">1Β</span>
+          <span><span class="op-t">Ταινία γωνίας</span><span class="op-s">Διαγώνια κορδέλα πάνω δεξιά</span></span></div>
+        <div class="op-b">
           <div class="grid">
-            <button class="pc b"><div class="pc-b"><div class="nm">Σουβλάκι</div><div class="pr">3,20 €</div></div></button>
-            <button class="pc b s-today dim"><div class="pc-b"><div class="nm">Γύρος Πίτα</div><div class="pr">3,50 €</div></div>
-              <div class="strip today">⏳ ΣΗΜΕΡΑ</div></button>
-            <button class="pc b s-indef dim"><div class="pc-b"><div class="nm">Πανσέτα</div><div class="pr">3,80 €</div></div>
-              <div class="strip indef">🔒 ΚΛΕΙΣΤΟ</div></button>
-            <button class="pc b s-ef"><div class="pc-b"><div class="nm">Κεμπαπάκι</div><div class="pr">3,40 €</div></div>
-              <div class="strip ef">🛵 E-FOOD</div></button>
-            <button class="pc b s-today dim"><div class="pc-b"><div class="nm">Ντόνερ Λαβάς</div><div class="pr">4,00 €</div></div>
-              <div class="strip today">⏳ ΣΗΜΕΡΑ · ΛΑΒΑΣ</div></button>
-            <button class="pc b"><div class="pc-b"><div class="nm">Φιλέτο</div><div class="pr">4,20 €</div></div></button>
+            <button class="pc"><div class="pcb"><div class="nm">Σουβλάκι</div><div class="pr">3,20 €</div></div></button>
+            <button class="pc off bt"><span class="rib t">ΣΗΜΕΡΑ</span>
+              <div class="pcb"><div class="nm">Γύρος Πίτα</div><div class="pr">3,50 €</div></div></button>
+            <button class="pc off bi"><span class="rib i">ΕΠ' ΑΟΡΙΣΤΟΝ</span>
+              <div class="pcb"><div class="nm">Πανσέτα</div><div class="pr">3,80 €</div></div></button>
+            <button class="pc be"><span class="rib e">ΕΚΤΟΣ</span>
+              <div class="pcb"><div class="nm">Κεμπαπάκι</div><div class="pr">3,40 €</div></div></button>
           </div>
         </div>
-        <div class="panel-f">
-          <b>+</b> Χωράει και ο <b>λόγος</b> («λαβάς») · οι δύο καταστάσεις στοιβάζονται καθαρά ·
-          ταιριάζει με τις χρωματιστές ράχες που ήδη έχει ο POS.<br>
-          <b>−</b> Η κάρτα ψηλώνει λίγο.
-        </div>
+        <div class="op-f"><b>+</b> Καθαρό, δεν αλλάζει το ύψος της κάρτας.<br>
+          <b>−</b> Μικρός χώρος — <b>δεν χωράει ο λόγος</b>, και οι μεγάλες λέξεις στριμώχνονται.</div>
       </div>
 
-      <!-- Γ -->
-      <div class="panel">
-        <div class="panel-h">
-          <span class="badge">Γ</span>
-          <span><span class="ttl">Σφραγίδα</span>
-          <span class="sub">Σκούρο πέπλο + λοξή σφραγίδα πάνω στην κάρτα</span></span>
-        </div>
-        <div class="panel-b">
+      <div class="op">
+        <div class="op-h"><span class="op-k">1Γ</span>
+          <span><span class="op-t">Σφραγίδα</span><span class="op-s">Πέπλο + λοξή σφραγίδα</span></span></div>
+        <div class="op-b">
           <div class="grid">
-            <button class="pc c"><div class="pc-b"><div class="nm">Σουβλάκι</div><div class="pr">3,20 €</div></div></button>
-            <button class="pc c s-today"><div class="pc-b"><div class="nm">Γύρος Πίτα</div><div class="pr">3,50 €</div></div>
-              <div class="veil"><span class="stamp today">⏳ ΣΗΜΕΡΑ</span></div></button>
-            <button class="pc c s-indef"><div class="pc-b"><div class="nm">Πανσέτα</div><div class="pr">3,80 €</div></div>
-              <div class="veil"><span class="stamp indef">🔒 ΚΛΕΙΣΤΟ</span></div></button>
-            <button class="pc c s-ef"><span class="stamp-corner">🛵 e-food</span>
-              <div class="pc-b"><div class="nm">Κεμπαπάκι</div><div class="pr">3,40 €</div></div></button>
-            <button class="pc c s-today">
-              <div class="pc-b"><div class="nm">Ντόνερ Λαβάς</div><div class="pr">4,00 €</div></div>
-              <div class="veil"><span class="stamp today">⏳ ΣΗΜΕΡΑ</span></div></button>
-            <button class="pc c"><div class="pc-b"><div class="nm">Φιλέτο</div><div class="pr">4,20 €</div></div></button>
+            <button class="pc"><div class="pcb"><div class="nm">Σουβλάκι</div><div class="pr">3,20 €</div></div></button>
+            <button class="pc bt"><div class="pcb"><div class="nm">Γύρος Πίτα</div><div class="pr">3,50 €</div></div>
+              <div class="veil"><span class="stamp t">ΕΞΑΝΤΛΗΘΗΚΕ<br>ΣΗΜΕΡΑ</span></div></button>
+            <button class="pc bi"><div class="pcb"><div class="nm">Πανσέτα</div><div class="pr">3,80 €</div></div>
+              <div class="veil"><span class="stamp i">ΕΞΑΝΤΛΗΘΗΚΕ<br>ΕΠ' ΑΟΡΙΣΤΟΝ</span></div></button>
+            <button class="pc be"><span class="corner">🛵 ΕΚΤΟΣ e-food</span>
+              <div class="pcb"><div class="nm">Κεμπαπάκι</div><div class="pr">3,40 €</div></div></button>
           </div>
         </div>
-        <div class="panel-f">
-          <b>+</b> Φαίνεται από <b>2 μέτρα μακριά</b> — αδύνατο να πατηθεί κατά λάθος.<br>
-          <b>−</b> <b>Κρύβει το όνομα του προϊόντος.</b> Ο ταμίας βλέπει ότι κάτι έκλεισε αλλά όχι πάντα τι.
-        </div>
+        <div class="op-f"><b>+</b> Φαίνεται από <b>2 μέτρα</b> — αδύνατο να πατηθεί κατά λάθος.<br>
+          <b>−</b> <b>Κρύβει το όνομα.</b> Βλέπεις ότι κάτι έκλεισε, όχι πάντα τι.</div>
       </div>
 
-      <!-- Δ -->
-      <div class="panel">
-        <div class="panel-h">
-          <span class="badge">Δ</span>
-          <span><span class="ttl">Κουπόνι (στρογγυλό σήμα)</span>
-          <span class="sub">Ένα εικονίδιο, ίδιο παντού — κάρτα, υλικό, λίστα</span></span>
-        </div>
-        <div class="panel-b">
+      <div class="op">
+        <div class="op-h"><span class="op-k">1Δ</span>
+          <span><span class="op-t">Ταμπέλα κορυφής</span><span class="op-s">Γεμάτη μπάρα στο πάνω μέρος</span></span></div>
+        <div class="op-b">
           <div class="grid">
-            <button class="pc d"><div class="pc-b"><div class="nm">Σουβλάκι</div><div class="pr">3,20 €</div></div></button>
-            <button class="pc d s-today dim"><span class="tok-wrap"><span class="tok today">⏳</span></span>
-              <div class="pc-b"><div class="nm">Γύρος Πίτα</div><div class="pr">3,50 €</div></div></button>
-            <button class="pc d s-indef dim"><span class="tok-wrap"><span class="tok indef">🔒</span></span>
-              <div class="pc-b"><div class="nm">Πανσέτα</div><div class="pr">3,80 €</div></div></button>
-            <button class="pc d s-ef"><span class="tok-wrap"><span class="tok ef">🛵</span></span>
-              <div class="pc-b"><div class="nm">Κεμπαπάκι</div><div class="pr">3,40 €</div></div></button>
-            <button class="pc d s-today dim"><span class="tok-wrap"><span class="tok today">⏳</span></span>
-              <div class="pc-b"><div class="nm">Ντόνερ Λαβάς</div><div class="pr">4,00 €</div></div></button>
-            <button class="pc d"><div class="pc-b"><div class="nm">Φιλέτο</div><div class="pr">4,20 €</div></div></button>
+            <button class="pc"><div class="pcb"><div class="nm">Σουβλάκι</div><div class="pr">3,20 €</div></div></button>
+            <button class="pc off bt hastop"><span class="top t">ΕΞΑΝΤΛΗΘΗΚΕ ΣΗΜΕΡΑ</span>
+              <div class="pcb"><div class="nm">Γύρος Πίτα</div><div class="pr">3,50 €</div></div></button>
+            <button class="pc off bi hastop"><span class="top i">ΕΞΑΝΤΛΗΘΗΚΕ ΕΠ' ΑΟΡΙΣΤΟΝ</span>
+              <div class="pcb"><div class="nm">Πανσέτα</div><div class="pr">3,80 €</div></div></button>
+            <button class="pc be hastop"><span class="top e">🛵 ΕΚΤΟΣ e-food</span>
+              <div class="pcb"><div class="nm">Κεμπαπάκι</div><div class="pr">3,40 €</div></div></button>
           </div>
         </div>
-        <div class="panel-f">
-          <b>+</b> Το πιο <b>«ένα σύστημα»</b>: το ίδιο σήμα δουλεύει σε κάρτα, υλικό, λίστα, οπουδήποτε.
-          Δύο καταστάσεις μαζί = δύο σημαδάκια, χωρίς μπέρδεμα.<br>
-          <b>−</b> Χωρίς λέξη — ο υπάλληλος πρέπει να μάθει τι σημαίνει ⏳ και τι 🔒 (μία φορά).
-        </div>
+        <div class="op-f"><b>+</b> Το πιο <b>ευανάγνωστο</b> — γεμάτο χρώμα, μεγάλη λέξη, ίδια θέση πάντα.<br>
+          <b>−</b> Πιο «βαρύ» οπτικά όταν κλείσουν πολλά μαζί.</div>
       </div>
 
     </div>
   </div>
 
-  <!-- ═══════════ ΕΝΟΤΗΤΑ 2 · CHIPS ═══════════ -->
+  <!-- ═══════════ ΣΗΜΕΙΟ 2 ═══════════ -->
   <div class="sec">
     <div class="sec-h">
       <span class="n">2</span>
-      <span><span class="t">Υλικά μέσα στη φόρμα προϊόντος</span>
-      <span class="d">Τα κουμπάκια όταν ανοίγεις π.χ. ένα σουβλάκι — «Απ' Όλα», σάλτσες, έξτρα</span></span>
+      <span><span class="t">Υλικά &amp; επιλογές μέσα στις φόρμες</span>
+      <span class="d">Τα κουμπάκια όταν ανοίγεις προϊόν: υλικά, σάλτσες, έξτρα, «Διπλή Πίτα», ποτό combo</span></span>
     </div>
 
-    <div class="cmp">
+    <div class="opts">
 
-      <div class="panel now">
-        <div class="panel-h"><span class="badge">ΤΩΡΑ</span>
-          <span><span class="ttl">Όπως είναι σήμερα</span><span class="sub">Γκρι + διαγραφή + 🚫</span></span></div>
-        <div class="panel-b">
-          <div class="row-lbl">&gt; ΥΛΙΚΑ</div>
+      <div class="op now">
+        <div class="op-h"><span class="op-k">ΤΩΡΑ</span>
+          <span><span class="op-t">Όπως είναι σήμερα</span><span class="op-s">Γκρι + διαγραφή + 🚫</span></span></div>
+        <div class="op-b">
+          <div class="rowlbl">Υλικά</div>
           <div class="chips">
-            <span class="ch active">Ντομάτα</span>
-            <span class="ch">Κρεμμύδι</span>
-            <span class="ch removed">Πατάτες</span>
-            <span class="ch now-so">Τζατζίκι</span>
-            <span class="ch now-so">Μπέικον</span>
-            <span class="ch now-ef">Κασέρι<span class="ef-dot">🛵</span></span>
+            <span class="ch on">Ντομάτα</span>
+            <span class="ch oldso">Τζατζίκι</span>
+            <span class="ch oldso">Μπέικον</span>
+            <span class="ch oldef">Κασέρι<span class="efdot">🛵</span></span>
           </div>
-          <div class="row-lbl">&gt; ΣΑΛΤΣΕΣ</div>
+          <div class="rowlbl">Έξτρα</div>
           <div class="chips">
-            <span class="ch active">Σως Γιαούρτι</span>
-            <span class="ch now-so">Κέτσαπ</span>
+            <span class="ch on">Διπλό Κρέας</span>
+            <span class="ch oldso" style="opacity:.42">Διπλή Πίτα</span>
           </div>
         </div>
-        <div class="panel-f">
-          ⚠️ Τα σβηστά chips είναι <b>μόλις ορατά</b>. Και δεν ξεχωρίζεις αν το Τζατζίκι
-          τελείωσε <b>σήμερα</b> ή είναι κλειστό <b>μόνιμα</b>.
-        </div>
+        <div class="op-f">⚠️ Μόλις ορατά. Και <b>δεν ξεχωρίζεις</b> αν το Τζατζίκι τελείωσε σήμερα ή μόνιμα.</div>
       </div>
 
-      <div class="panel">
-        <div class="panel-h"><span class="badge">Α</span>
-          <span><span class="ttl">Ταινία γωνίας</span><span class="sub">Χρωματιστή γωνίτσα πάνω δεξιά</span></span></div>
-        <div class="panel-b">
-          <div class="row-lbl">&gt; ΥΛΙΚΑ</div>
+      <div class="op">
+        <div class="op-h"><span class="op-k">2Α</span>
+          <span><span class="op-t">Ράχη + λέξη</span><span class="op-s">Χρωματιστή ράχη + μικρή ετικέτα</span></span></div>
+        <div class="op-b">
+          <div class="rowlbl">Υλικά</div>
           <div class="chips">
-            <span class="ch active">Ντομάτα</span>
-            <span class="ch">Κρεμμύδι</span>
-            <span class="ch removed">Πατάτες</span>
-            <span class="ch a-today a-corner">Τζατζίκι</span>
-            <span class="ch a-indef a-corner">Μπέικον</span>
-            <span class="ch a-ef a-corner">Κασέρι</span>
+            <span class="ch on">Ντομάτα</span>
+            <span class="ch bar ct"><span class="nmx">Τζατζίκι</span><span class="tg">σήμερα</span></span>
+            <span class="ch bar ci"><span class="nmx">Μπέικον</span><span class="tg">επ' αόριστον</span></span>
+            <span class="ch bar ce">Κασέρι<span class="tg">εκτός e-food</span></span>
           </div>
-          <div class="row-lbl">&gt; ΣΑΛΤΣΕΣ</div>
+          <div class="rowlbl">Έξτρα</div>
           <div class="chips">
-            <span class="ch active">Σως Γιαούρτι</span>
-            <span class="ch a-today a-corner">Κέτσαπ</span>
+            <span class="ch on">Διπλό Κρέας</span>
+            <span class="ch bar ct"><span class="nmx">Διπλή Πίτα</span><span class="tg">σήμερα</span></span>
           </div>
         </div>
-        <div class="panel-f"><b>+</b> Διακριτικό, το κείμενο διαβάζεται.<br>
-          <b>−</b> Η γωνίτσα είναι μικρή — σε γεμάτη φόρμα χάνεται.</div>
+        <div class="op-f"><b>+</b> Μηδέν απορία — το λέει με λέξη.<br>
+          <b>−</b> Πλαταίνουν, <b>χωράνε λιγότερα ανά γραμμή</b>.</div>
       </div>
 
-      <div class="panel">
-        <div class="panel-h"><span class="badge">Β</span>
-          <span><span class="ttl">Μπάρα + λεζάντα</span><span class="sub">Ράχη χρώματος + μικρή λέξη</span></span></div>
-        <div class="panel-b">
-          <div class="row-lbl">&gt; ΥΛΙΚΑ</div>
+      <div class="op">
+        <div class="op-h"><span class="op-k">2Β</span>
+          <span><span class="op-t">Μόνο χρώμα</span><span class="op-s">Χωρίς λέξεις — καθαρή γραμμή</span></span></div>
+        <div class="op-b">
+          <div class="rowlbl">Υλικά</div>
           <div class="chips">
-            <span class="ch active">Ντομάτα</span>
-            <span class="ch">Κρεμμύδι</span>
-            <span class="ch removed">Πατάτες</span>
-            <span class="ch b-s b-today">Τζατζίκι<span class="tag">σήμερα</span></span>
-            <span class="ch b-s b-indef">Μπέικον<span class="tag">κλειστό</span></span>
-            <span class="ch b-s b-ef">Κασέρι<span class="tag">e-food</span></span>
+            <span class="ch on">Ντομάτα</span>
+            <span class="ch bar ct"><span class="nmx">Τζατζίκι</span></span>
+            <span class="ch bar ci"><span class="nmx">Μπέικον</span></span>
+            <span class="ch bar ce">Κασέρι</span>
           </div>
-          <div class="row-lbl">&gt; ΣΑΛΤΣΕΣ</div>
+          <div class="rowlbl">Έξτρα</div>
           <div class="chips">
-            <span class="ch active">Σως Γιαούρτι</span>
-            <span class="ch b-s b-today">Κέτσαπ<span class="tag">σήμερα</span></span>
+            <span class="ch on">Διπλό Κρέας</span>
+            <span class="ch bar ct"><span class="nmx">Διπλή Πίτα</span></span>
           </div>
         </div>
-        <div class="panel-f"><b>+</b> <b>Μηδέν απορία</b> — το λέει με λέξη · ίδια ράχη με τις κάρτες.<br>
-          <b>−</b> Τα chips πλαταίνουν, χωράνε λιγότερα ανά γραμμή.</div>
+        <div class="op-f"><b>+</b> Το πιο <b>καθαρό</b> — χωράνε όλα τα υλικά άνετα.<br>
+          <b>−</b> Κόκκινο και μωβ πρέπει να τα <b>μάθει</b> ο υπάλληλος.</div>
       </div>
 
-      <div class="panel">
-        <div class="panel-h"><span class="badge">Γ</span>
-          <span><span class="ttl">Μπάντα διαγραφής</span><span class="sub">Έντονη γραμμή + καθαρό περίγραμμα</span></span></div>
-        <div class="panel-b">
-          <div class="row-lbl">&gt; ΥΛΙΚΑ</div>
+      <div class="op">
+        <div class="op-h"><span class="op-k">2Γ</span>
+          <span><span class="op-t">Εικονίδιο δεξιά</span><span class="op-s">Στρογγυλό σημαδάκι μέσα στο chip</span></span></div>
+        <div class="op-b">
+          <div class="rowlbl">Υλικά</div>
           <div class="chips">
-            <span class="ch active">Ντομάτα</span>
-            <span class="ch">Κρεμμύδι</span>
-            <span class="ch removed">Πατάτες</span>
-            <span class="ch c-s c-today">Τζατζίκι<span class="band"></span></span>
-            <span class="ch c-s c-indef">Μπέικον<span class="band"></span></span>
-            <span class="ch c-s c-ef">Κασέρι</span>
+            <span class="ch on">Ντομάτα</span>
+            <span class="ch bar ct ico"><span class="nmx">Τζατζίκι</span><span class="tok t abs">⏳</span></span>
+            <span class="ch bar ci ico"><span class="nmx">Μπέικον</span><span class="tok i abs">🔒</span></span>
+            <span class="ch bar ce ico">Κασέρι<span class="tok e abs">🛵</span></span>
           </div>
-          <div class="row-lbl">&gt; ΣΑΛΤΣΕΣ</div>
+          <div class="rowlbl">Έξτρα</div>
           <div class="chips">
-            <span class="ch active">Σως Γιαούρτι</span>
-            <span class="ch c-s c-today">Κέτσαπ<span class="band"></span></span>
+            <span class="ch on">Διπλό Κρέας</span>
+            <span class="ch bar ct ico"><span class="nmx">Διπλή Πίτα</span><span class="tok t abs">⏳</span></span>
           </div>
         </div>
-        <div class="panel-f"><b>+</b> Πολύ έντονο «όχι αυτό» · το όνομα παραμένει ορατό.<br>
-          <b>−</b> Κόκκινη γραμμή ≈ μοιάζει με το «αφαιρεμένο υλικό» που ήδη υπάρχει (Πατάτες) → <b>ρίσκο μπερδέματος</b>.</div>
+        <div class="op-f"><b>+</b> Χρώμα <b>και</b> σχήμα — δεν βασίζεται μόνο στο χρώμα.<br>
+          <b>−</b> Το εικονίδιο είναι μικρό σε γεμάτη φόρμα.</div>
       </div>
 
-      <div class="panel">
-        <div class="panel-h"><span class="badge">Δ</span>
-          <span><span class="ttl">Κουπόνι</span><span class="sub">Το ίδιο σημαδάκι με τις κάρτες</span></span></div>
-        <div class="panel-b">
-          <div class="row-lbl">&gt; ΥΛΙΚΑ</div>
+      <div class="op">
+        <div class="op-h"><span class="op-k">2Δ</span>
+          <span><span class="op-t">Δύο γραμμές</span><span class="op-s">Όνομα πάνω, κατάσταση από κάτω</span></span></div>
+        <div class="op-b">
+          <div class="rowlbl">Υλικά</div>
           <div class="chips">
-            <span class="ch active">Ντομάτα</span>
-            <span class="ch">Κρεμμύδι</span>
-            <span class="ch removed">Πατάτες</span>
-            <span class="ch d-s d-today">Τζατζίκι<span class="tok sm today tok-abs">⏳</span></span>
-            <span class="ch d-s d-indef">Μπέικον<span class="tok sm indef tok-abs">🔒</span></span>
-            <span class="ch d-s d-ef">Κασέρι<span class="tok sm ef tok-abs">🛵</span></span>
-            <span class="ch d-s d-two d-today">Ντομάτα<span class="tok sm today tok-abs t2">⏳</span><span class="tok sm ef tok-abs">🛵</span></span>
+            <span class="ch on">Ντομάτα</span>
+            <span class="ch bar ct two"><span class="nmx">Τζατζίκι</span><span class="lbl">εξαντλήθηκε σήμερα</span></span>
+            <span class="ch bar ci two"><span class="nmx">Μπέικον</span><span class="lbl">επ' αόριστον</span></span>
+            <span class="ch bar ce two">Κασέρι<span class="lbl">εκτός e-food</span></span>
           </div>
-          <div class="row-lbl">&gt; ΣΑΛΤΣΕΣ</div>
+          <div class="rowlbl">Έξτρα</div>
           <div class="chips">
-            <span class="ch active">Σως Γιαούρτι</span>
-            <span class="ch d-s d-today">Κέτσαπ<span class="tok sm today tok-abs">⏳</span></span>
+            <span class="ch on">Διπλό Κρέας</span>
+            <span class="ch bar ct two"><span class="nmx">Διπλή Πίτα</span><span class="lbl">εξαντλήθηκε σήμερα</span></span>
           </div>
         </div>
-        <div class="panel-f"><b>+</b> <b>Ίδιο ακριβώς σήμα με την κάρτα</b> — μαθαίνεις μία φορά, ισχύει παντού.
-          Χωράει και διπλή κατάσταση.<br>
-          <b>−</b> Χωρίς λέξη.</div>
+        <div class="op-f"><b>+</b> Πλήρης εξήγηση <b>χωρίς να πλαταίνει</b> το chip.<br>
+          <b>−</b> Ψηλώνουν οι γραμμές — η φόρμα σκρολάρει περισσότερο.</div>
       </div>
 
     </div>
   </div>
 
-  <!-- ═══════════ ΕΝΟΤΗΤΑ 3 · ΕΠΙΛΟΓΕΣ ═══════════ -->
+  <!-- ═══════════ ΣΗΜΕΙΟ 3 ═══════════ -->
   <div class="sec">
     <div class="sec-h">
       <span class="n">3</span>
-      <span><span class="t">Επιλογές που δεν γίνονται</span>
-      <span class="d">«Διπλή Πίτα», «+ Πατάτες», ποτό σε combo — όταν λείπει η πρώτη ύλη</span></span>
+      <span><span class="t">Λίστες</span>
+      <span class="d">Η οθόνη «Τι τελείωσε;» και το «Εξαντλημένα» — εκεί που τα βλέπεις μαζεμένα</span></span>
     </div>
 
-    <div class="note">
-      Εδώ ο κανόνας είναι σταθερός: η επιλογή <b>μένει ορατή αλλά κλειστή</b> — ποτέ δεν εξαφανίζεται,
-      γιατί τότε ο ταμίας ψάχνει «γιατί λείπει» και νομίζει ότι χάλασε το σύστημα.
-    </div>
+    <div class="opts">
 
-    <div class="cmp">
-      <div class="panel now">
-        <div class="panel-h"><span class="badge">ΤΩΡΑ</span><span><span class="ttl">Όπως είναι σήμερα</span></span></div>
-        <div class="panel-b">
-          <div class="row-lbl">&gt; ΕΞΤΡΑ</div>
-          <div class="chips">
-            <span class="ch active">Διπλό Κρέας</span>
-            <span class="ch now-so" style="opacity:.42">Διπλή Πίτα</span>
-          </div>
-          <div class="row-lbl">&gt; ΠΟΤΟ COMBO</div>
-          <div class="chips">
-            <span class="ch active">Coca-Cola</span>
-            <span class="ch now-so" style="opacity:.42">Fanta</span>
-            <span class="ch">Σπράιτ</span>
-          </div>
-        </div>
-        <div class="panel-f">⚠️ 42% διαφάνεια — σχεδόν αόρατο ότι υπάρχει καν επιλογή.</div>
-      </div>
-
-      <div class="panel">
-        <div class="panel-h"><span class="badge">Β</span><span><span class="ttl">Μπάρα + λεζάντα</span></span></div>
-        <div class="panel-b">
-          <div class="row-lbl">&gt; ΕΞΤΡΑ</div>
-          <div class="chips">
-            <span class="ch active">Διπλό Κρέας</span>
-            <span class="ch b-s b-today">Διπλή Πίτα<span class="tag">δεν γίνεται</span></span>
-          </div>
-          <div class="row-lbl">&gt; ΠΟΤΟ COMBO</div>
-          <div class="chips">
-            <span class="ch active">Coca-Cola</span>
-            <span class="ch b-s b-today">Fanta<span class="tag">τελείωσε</span></span>
-            <span class="ch">Σπράιτ</span>
-          </div>
-        </div>
-        <div class="panel-f"><b>+</b> Ο ταμίας μπορεί να το <b>πει στον πελάτη</b> χωρίς να ψάξει.</div>
-      </div>
-
-      <div class="panel">
-        <div class="panel-h"><span class="badge">Δ</span><span><span class="ttl">Κουπόνι</span></span></div>
-        <div class="panel-b">
-          <div class="row-lbl">&gt; ΕΞΤΡΑ</div>
-          <div class="chips">
-            <span class="ch active">Διπλό Κρέας</span>
-            <span class="ch d-s d-today">Διπλή Πίτα<span class="tok sm today tok-abs">⏳</span></span>
-          </div>
-          <div class="row-lbl">&gt; ΠΟΤΟ COMBO</div>
-          <div class="chips">
-            <span class="ch active">Coca-Cola</span>
-            <span class="ch d-s d-today">Fanta<span class="tok sm today tok-abs">⏳</span></span>
-            <span class="ch">Σπράιτ</span>
-          </div>
-        </div>
-        <div class="panel-f"><b>+</b> Ίδιο σήμα με παντού · <b>−</b> δεν λέει «δεν γίνεται» με λόγια.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══════════ ΕΝΟΤΗΤΑ 4 · ΛΙΣΤΕΣ ═══════════ -->
-  <div class="sec">
-    <div class="sec-h">
-      <span class="n">4</span>
-      <span><span class="t">Λίστες — οθόνη «Τι τελείωσε;» &amp; «Εξαντλημένα»</span>
-      <span class="d">Εκεί που βλέπεις μαζεμένα τι είναι κλειστό</span></span>
-    </div>
-
-    <div class="cmp">
-      <div class="panel now">
-        <div class="panel-h"><span class="badge">ΤΩΡΑ</span><span><span class="ttl">Όπως είναι σήμερα</span></span></div>
-        <div class="panel-b">
+      <div class="op now">
+        <div class="op-h"><span class="op-k">ΤΩΡΑ</span>
+          <span><span class="op-t">Όπως είναι σήμερα</span><span class="op-s">Όλα ίδια, σβηστά</span></span></div>
+        <div class="op-b">
           <div class="lst">
-            <div class="li now"><span class="nm">Γύρος Πίτα</span><span class="why">κλειστό</span></div>
-            <div class="li now"><span class="nm">Πανσέτα</span><span class="why">κλειστό</span></div>
-            <div class="li now"><span class="nm">Ντόνερ Λαβάς</span><span class="why">λαβάς</span></div>
+            <div class="li old"><span class="nm">Γύρος Πίτα</span><span class="wy">κλειστό</span></div>
+            <div class="li old"><span class="nm">Πανσέτα</span><span class="wy">κλειστό</span></div>
+            <div class="li old"><span class="nm">Ντόνερ Λαβάς</span><span class="wy">λαβάς</span></div>
+            <div class="li old"><span class="nm">Κεμπαπάκι</span><span class="wy">—</span></div>
           </div>
         </div>
-        <div class="panel-f">⚠️ Όλα ίδια. Δεν ξεχωρίζεις τι θα ανοίξει μόνο του αύριο.</div>
+        <div class="op-f">⚠️ Δεν ξεχωρίζεις <b>τι θα ανοίξει μόνο του αύριο</b> και τι όχι.</div>
       </div>
 
-      <div class="panel">
-        <div class="panel-h"><span class="badge">Α</span><span><span class="ttl">Χρωματιστό φόντο</span></span></div>
-        <div class="panel-b">
+      <div class="op">
+        <div class="op-h"><span class="op-k">3Α</span>
+          <span><span class="op-t">Ράχη + ταμπελάκι</span><span class="op-s">Χρώμα αριστερά, λέξη δεξιά</span></span></div>
+        <div class="op-b">
           <div class="lst">
-            <div class="li a-today"><span class="nm">Γύρος Πίτα</span><span class="why">⏳ σήμερα</span></div>
-            <div class="li a-indef"><span class="nm">Πανσέτα</span><span class="why">🔒 επ' αόριστον</span></div>
-            <div class="li a-today"><span class="nm">Ντόνερ Λαβάς</span><span class="why">⏳ λαβάς</span></div>
+            <div class="li bar lt"><span class="nm">Γύρος Πίτα</span><span class="pill t">σήμερα</span></div>
+            <div class="li bar li2"><span class="nm">Πανσέτα</span><span class="pill i">επ' αόριστον</span></div>
+            <div class="li bar lt"><span class="nm">Ντόνερ Λαβάς</span><span class="wy">λαβάς</span><span class="pill t">σήμερα</span></div>
+            <div class="li bar le"><span class="nm">Κεμπαπάκι</span><span class="pill e">εκτός e-food</span></div>
           </div>
         </div>
-        <div class="panel-f"><b>+</b> Ξεχωρίζει με μια ματιά ποια θα ανοίξουν μόνα τους.</div>
+        <div class="op-f"><b>+</b> Σκανάρεις τη <b>στήλη δεξιά</b> και τα ομαδοποιείς με μια ματιά.</div>
       </div>
 
-      <div class="panel">
-        <div class="panel-h"><span class="badge">Β</span><span><span class="ttl">Μπάρα αριστερά</span></span></div>
-        <div class="panel-b">
+      <div class="op">
+        <div class="op-h"><span class="op-k">3Β</span>
+          <span><span class="op-t">Εικονίδιο μπροστά</span><span class="op-s">Στήλη σημάτων αριστερά</span></span></div>
+        <div class="op-b">
           <div class="lst">
-            <div class="li b-s b-today"><span class="nm">Γύρος Πίτα</span><span class="why">σήμερα</span></div>
-            <div class="li b-s b-indef"><span class="nm">Πανσέτα</span><span class="why">επ' αόριστον</span></div>
-            <div class="li b-s b-today"><span class="nm">Ντόνερ Λαβάς</span><span class="why">λαβάς</span></div>
+            <div class="li"><span class="tok t">⏳</span><span class="nm">Γύρος Πίτα</span><span class="wy">σήμερα</span></div>
+            <div class="li"><span class="tok i">🔒</span><span class="nm">Πανσέτα</span><span class="wy">επ' αόριστον</span></div>
+            <div class="li"><span class="tok t">⏳</span><span class="nm">Ντόνερ Λαβάς</span><span class="wy">λαβάς</span></div>
+            <div class="li"><span class="tok e">🛵</span><span class="nm">Κεμπαπάκι</span><span class="wy">εκτός e-food</span></div>
           </div>
         </div>
-        <div class="panel-f"><b>+</b> Πιο διακριτικό, ίδιο μοτίβο με τις κάρτες.</div>
+        <div class="op-f"><b>+</b> Πολύ γρήγορο σκανάρισμα — <b>ευθυγραμμισμένα σήματα</b> στην ίδια στήλη.</div>
       </div>
 
-      <div class="panel">
-        <div class="panel-h"><span class="badge">Δ</span><span><span class="ttl">Κουπόνι</span></span></div>
-        <div class="panel-b">
+      <div class="op">
+        <div class="op-h"><span class="op-k">3Γ</span>
+          <span><span class="op-t">Χωρισμένα σε ομάδες</span><span class="op-s">Κεφαλίδα ανά κατάσταση</span></span></div>
+        <div class="op-b">
+          <div class="ghd t">⏳ Εξαντλήθηκαν σήμερα</div>
           <div class="lst">
-            <div class="li"><span class="tok sm today">⏳</span><span class="nm">Γύρος Πίτα</span><span class="why">σήμερα</span></div>
-            <div class="li"><span class="tok sm indef">🔒</span><span class="nm">Πανσέτα</span><span class="why">επ' αόριστον</span></div>
-            <div class="li"><span class="tok sm today">⏳</span><span class="nm">Ντόνερ Λαβάς</span><span class="why">λαβάς</span></div>
+            <div class="li"><span class="nm">Γύρος Πίτα</span></div>
+            <div class="li"><span class="nm">Ντόνερ Λαβάς</span><span class="wy">λαβάς</span></div>
+          </div>
+          <div class="ghd i">🔒 Επ' αόριστον</div>
+          <div class="lst"><div class="li"><span class="nm">Πανσέτα</span></div></div>
+          <div class="ghd e">🛵 Εκτός e-food</div>
+          <div class="lst"><div class="li"><span class="nm">Κεμπαπάκι</span></div></div>
+        </div>
+        <div class="op-f"><b>+</b> Το πιο ξεκάθαρο — <b>βλέπεις αμέσως πόσα είναι σε κάθε κατηγορία</b>.<br>
+          <b>−</b> Πιάνει περισσότερο ύψος.</div>
+      </div>
+
+      <div class="op">
+        <div class="op-h"><span class="op-k">3Δ</span>
+          <span><span class="op-t">Μόνο ταμπελάκι</span><span class="op-s">Χωρίς ράχη, χωρίς εικονίδιο</span></span></div>
+        <div class="op-b">
+          <div class="lst">
+            <div class="li"><span class="nm">Γύρος Πίτα</span><span class="pill t">εξαντλήθηκε σήμερα</span></div>
+            <div class="li"><span class="nm">Πανσέτα</span><span class="pill i">επ' αόριστον</span></div>
+            <div class="li"><span class="nm">Ντόνερ Λαβάς</span><span class="pill t">εξαντλήθηκε σήμερα</span></div>
+            <div class="li"><span class="nm">Κεμπαπάκι</span><span class="pill e">εκτός e-food</span></div>
           </div>
         </div>
-        <div class="panel-f"><b>+</b> Σκανάρεις τη στήλη των σημάτων και τα ομαδοποιείς αμέσως.</div>
+        <div class="op-f"><b>+</b> Το πιο <b>λιτό</b> — μία λέξη, τίποτα άλλο.<br>
+          <b>−</b> Χωρίς χρωματιστή ράχη, χάνεται λίγο σε μεγάλη λίστα.</div>
       </div>
-    </div>
-  </div>
 
-  <!-- ═══════════ ΣΥΓΚΡΙΣΗ ═══════════ -->
-  <div class="sec">
-    <div class="sec-h">
-      <span class="n">⚖</span>
-      <span><span class="t">Σύγκριση με μια ματιά</span>
-      <span class="d">Τι κερδίζεις και τι χάνεις σε κάθε πρόταση</span></span>
-    </div>
-
-    <div class="tbl-scroll">
-    <table class="tbl">
-      <tr>
-        <th>Κριτήριο</th><th>ΤΩΡΑ</th><th>Α · Ταινία</th><th>Β · Μπάρα</th><th>Γ · Σφραγίδα</th><th>Δ · Κουπόνι</th>
-      </tr>
-      <tr>
-        <td>Ξεχωρίζει «σήμερα» από «μόνιμο»</td>
-        <td class="no">Όχι</td><td class="yes">Ναι</td><td class="yes">Ναι</td><td class="yes">Ναι</td><td class="yes">Ναι</td>
-      </tr>
-      <tr>
-        <td>Διαβάζεται το όνομα προϊόντος</td>
-        <td class="no">Δύσκολα</td><td class="yes">Ναι</td><td class="yes">Ναι</td><td class="no">Καλύπτεται</td><td class="yes">Ναι</td>
-      </tr>
-      <tr>
-        <td>Φαίνεται από μακριά</td>
-        <td class="mid">Μέτρια</td><td class="yes">Καλά</td><td class="yes">Καλά</td><td class="yes">Άριστα</td><td class="mid">Μέτρια</td>
-      </tr>
-      <tr>
-        <td>Χωράει ο λόγος («λαβάς»)</td>
-        <td class="mid">Μικρά</td><td class="no">Όχι</td><td class="yes">Ναι</td><td class="no">Όχι</td><td class="mid">Μόνο δίπλα</td>
-      </tr>
-      <tr>
-        <td>Δύο καταστάσεις μαζί<br><span style="font-weight:400;color:var(--muted);font-size:11.5px">(εξαντλημένο + e-food)</span></td>
-        <td class="mid">Στριμώχνονται</td><td class="mid">Δύο γωνίες</td><td class="yes">Στοιβάζονται</td><td class="mid">Στοιβάζονται</td><td class="yes">Δύο σημαδάκια</td>
-      </tr>
-      <tr>
-        <td>Ίδιο σε κάρτα + υλικό + λίστα</td>
-        <td class="no">Όχι</td><td class="mid">Σχεδόν</td><td class="yes">Ναι</td><td class="no">Όχι στα chips</td><td class="yes">Απόλυτα</td>
-      </tr>
-      <tr>
-        <td>Δουλεύει χωρίς εξήγηση</td>
-        <td class="mid">Μερικώς</td><td class="yes">Ναι (λέξη)</td><td class="yes">Ναι (λέξη)</td><td class="yes">Ναι</td><td class="no">Θέλει μάθημα</td>
-      </tr>
-      <tr>
-        <td>Αναγνωσιμότητα (πρότυπο 4,5:1)</td>
-        <td class="no">Κάτω από 2:1</td><td class="yes">Εντάξει</td><td class="yes">Εντάξει</td><td class="yes">Εντάξει</td><td class="yes">Εντάξει</td>
-      </tr>
-    </table>
-    </div>
-
-    <div class="rec">
-      <h3>💡 Η δική μου πρόταση — ειλικρινά</h3>
-      <p>
-        <b>Β (Μπάρα + λεζάντα) για τις κάρτες και τα υλικά</b>, με το <b>κουπόνι του Δ</b> στις λίστες.
-      </p>
-      <p>
-        Γιατί: το Β είναι το μόνο που <b>χωράει τον λόγο</b> — και ο λόγος είναι που σώζει τον ταμία
-        («γιατί είναι κλειστό το Ντόνερ Λαβάς; α, τελείωσε ο λαβάς»). Επίσης χρησιμοποιεί τη χρωματιστή ράχη
-        που <b>ήδη ξέρει</b> ο POS (delivery/take away/τραπέζι), οπότε δεν μαθαίνει κανείς κάτι καινούριο.
-      </p>
-      <p>
-        Το <b>Γ (σφραγίδα)</b> είναι το πιο εντυπωσιακό αλλά το απορρίπτω για την κύρια οθόνη:
-        κρύβει το όνομα, και σε βραδιά αιχμής ο ταμίας θέλει να δει <i>τι</i> έκλεισε, όχι απλώς <i>ότι</i> κάτι έκλεισε.
-      </p>
-      <p>
-        Το <b>Δ (κουπόνι)</b> είναι το πιο «καθαρό σύστημα» και θα το πρότεινα αν είχες πολλούς υπαλλήλους
-        που αλλάζουν συχνά — αλλά χωρίς λέξη, οι νέοι θα ρωτάνε «τι είναι το ρολογάκι;» τις πρώτες μέρες.
-      </p>
     </div>
   </div>
 
   <div class="ask">
-    <b>Τι χρειάζομαι από σένα:</b>
+    <b>Πες μου 3 κωδικούς — π.χ. «1Δ, 2Β, 3Γ»</b>
     <ul>
-      <li>Δέχεσαι τον <b>κανόνα</b>; «Σβηστή κάρτα = πουθενά · φωτεινή + πορτοκαλί = το έχω, όχι στην e-food»
-        — δηλαδή <b>ποτέ δύο σήματα μαζί</b>.</li>
-      <li>Στο «μόνο e-food»: <b>Ε (σήμα/χρώμα)</b> ή <b>ΣΤ (η λέξη «ΜΟΝΟ ΕΔΩ»)</b>;</li>
-      <li>Ποια πρόταση για τις <b>κάρτες προϊόντων</b>; (Α / Β / Γ / Δ)</li>
-      <li>Ποια για τα <b>υλικά μέσα στις φόρμες</b>; (μπορεί να είναι άλλη)</li>
-      <li>Ποια για τις <b>λίστες</b>;</li>
-      <li>Σε βολεύει το <b>μαύρο</b> για το «επ' αόριστον» ή το θες κι αυτό κόκκινο (πιο σκούρο);</li>
-      <li>Θες <b>εικονίδια</b> (⏳🔒🛵) ή <b>σκέτες λέξεις</b> (ΣΗΜΕΡΑ / ΚΛΕΙΣΤΟ / E-FOOD);</li>
+      <li><b>Σημείο 1</b> — Κάρτες προϊόντων: 1Α / 1Β / 1Γ / 1Δ</li>
+      <li><b>Σημείο 2</b> — Υλικά &amp; επιλογές: 2Α / 2Β / 2Γ / 2Δ</li>
+      <li><b>Σημείο 3</b> — Λίστες: 3Α / 3Β / 3Γ / 3Δ</li>
+      <li>Και αν θες αλλαγή στις <b>λέξεις</b> ή στο <b>μωβ</b> του «επ' αόριστον», πες το.</li>
     </ul>
   </div>
 
-  <div class="foot">
-    Mockup — μόνο εμφάνιση, κανένα πραγματικό δεδομένο.<br>
-    Τα χρώματα και οι διαστάσεις είναι αντιγραμμένα από τον πραγματικό POS ώστε αυτό που βλέπεις να είναι αυτό που θα πάρεις.
-  </div>
+  <div class="foot">Mockup — μόνο εμφάνιση. Τα χρώματα και οι διαστάσεις είναι αντιγραμμένα από τον πραγματικό POS.</div>
 
 </div>
 </body>
