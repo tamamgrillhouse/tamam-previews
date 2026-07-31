@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+<title>TAMAM POS — «Δεν βρέθηκε η παραγγελία» · 4 προτάσεις</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#0e1330; --dark:#12183a; --card:#1c2554; --card2:#243068;
+  --yellow:#f5c400; --white:#e8eaf6; --muted:#93a0dd;
+  --red:#ef5350; --green:#26c281; --efood:#ff6a3d; --border:#2a3580;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--black); color:var(--white);
+  font-family:'Noto Sans',system-ui,sans-serif;
+  padding:24px 16px 80px; line-height:1.5;
+}
+.wrap{max-width:1180px;margin:0 auto}
+
+/* ── Κεφαλίδα ─────────────────────────────────────────────── */
+header{margin-bottom:28px;border-bottom:1px solid var(--border);padding-bottom:20px}
+h1{font-size:clamp(20px,4.5vw,28px);font-weight:800;letter-spacing:-.4px}
+h1 span{color:var(--efood)}
+.sub{color:var(--muted);font-size:14px;margin-top:8px;max-width:70ch}
+.ctx{
+  margin-top:16px;padding:14px 16px;border-radius:8px;
+  background:rgba(255,106,61,.10);border:1px solid rgba(255,106,61,.32);
+  font-size:13.5px;color:#ffd0bf;max-width:80ch;
+}
+.ctx b{color:#fff}
+
+/* ── Πλέγμα προτάσεων ─────────────────────────────────────── */
+.grid{display:grid;gap:26px;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));margin-top:28px}
+.prop{
+  background:var(--dark);border:1px solid var(--border);border-radius:16px;
+  overflow:hidden;display:flex;flex-direction:column;
+}
+.prop-head{padding:16px 18px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.02)}
+.prop-n{
+  display:inline-block;font-size:11px;font-weight:800;letter-spacing:1px;
+  color:var(--black);background:var(--yellow);padding:3px 9px;border-radius:4px;margin-bottom:8px;
+}
+.prop-t{font-size:17px;font-weight:800}
+.prop-d{font-size:13px;color:var(--muted);margin-top:6px}
+
+/* σκηνή = μίμηση οθόνης POS */
+.stage{
+  padding:20px 14px;background:
+    linear-gradient(rgba(14,19,48,.86),rgba(14,19,48,.86)),
+    repeating-linear-gradient(135deg,#1c2554 0 12px,#19224c 12px 24px);
+  min-height:250px;display:flex;align-items:center;justify-content:center;
+}
+.stage.top{align-items:flex-start}
+
+.pros{padding:14px 18px 18px;font-size:12.5px;display:flex;flex-direction:column;gap:7px;margin-top:auto}
+.pros div{display:flex;gap:8px;align-items:flex-start}
+.pros .i{flex:0 0 14px;font-weight:800}
+.ok .i{color:var(--green)} .no .i{color:var(--red)}
+.pros .no span,.pros .ok span{color:rgba(232,234,246,.82)}
+
+/* ── ΚΟΙΝΑ στοιχεία διαλόγου (αντιγραφή από τον πραγματικό POS) ── */
+.efd-box{
+  background:var(--dark);border:1px solid rgba(255,255,255,.1);border-radius:16px;
+  width:100%;max-width:360px;padding:18px;display:flex;flex-direction:column;gap:10px;
+  box-shadow:0 20px 60px rgba(0,0,0,.6);
+}
+.efd-head{display:flex;justify-content:space-between;align-items:center;font-size:1.05rem;font-weight:700;color:var(--yellow)}
+.efd-num{font-size:.9rem;opacity:.7;color:var(--white)}
+.efd-sep{height:1px;background:rgba(255,255,255,.08)}
+.efd-cust{font-size:.85rem;display:flex;flex-direction:column;gap:2px}
+.efd-item{display:flex;justify-content:space-between;font-size:.85rem}
+.efd-total{display:flex;justify-content:space-between;font-size:.85rem;color:rgba(255,255,255,.6)}
+.efd-amt{font-weight:700;color:var(--yellow);font-size:1rem}
+.efd-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:4px}
+.efd-btn{
+  flex:1 1 auto;min-width:120px;padding:12px 10px;border:none;border-radius:10px;
+  font-size:.88rem;font-weight:700;cursor:pointer;font-family:inherit;
+}
+.efd-btn-accept{background:rgba(56,217,122,.9);color:#04160c;border:1px solid #38d97a}
+.efd-btn-sec{background:rgba(74,158,240,.14);color:#7bbcf5;border:1px solid rgba(74,158,240,.4)}
+.efd-btn-reject{flex:0 1 auto;min-width:104px;background:rgba(224,90,90,.15);color:#e05a5a;border:1px solid rgba(224,90,90,.3)}
+
+/* ── 1: η παραγγελία γυρίζει πίσω με κόκκινη ταινία ── */
+.p1-banner{
+  margin:-18px -18px 2px;padding:12px 16px;
+  background:rgba(239,83,80,.16);border-bottom:1px solid rgba(239,83,80,.45);
+  display:flex;gap:10px;align-items:flex-start;
+}
+.p1-ico{font-size:17px;line-height:1.2}
+.p1-tt{font-size:13.5px;font-weight:800;color:#ffb3b3}
+.p1-dd{font-size:12px;color:rgba(255,207,207,.85);margin-top:3px;line-height:1.45}
+
+/* ── 2: απλό μπλοκαριστικό μήνυμα ── */
+.dlg{
+  background:var(--card);border:1px solid var(--border);border-radius:16px;
+  width:100%;max-width:330px;padding:24px 20px;text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,.6);
+}
+.dlg-ico{font-size:38px;line-height:1;margin-bottom:12px}
+.dlg-t{font-size:16px;font-weight:800;margin-bottom:10px}
+.dlg-m{font-size:13.5px;color:var(--muted);line-height:1.6}
+.dlg-m b{color:var(--white)}
+.dlg-btn{
+  margin-top:18px;width:100%;padding:13px;border:none;border-radius:10px;
+  background:var(--card2);color:var(--white);font:700 14px 'Noto Sans',sans-serif;
+  border:1px solid var(--border);cursor:pointer;
+}
+
+/* ── 3: μόνιμη λωρίδα ── */
+.p3-shell{width:100%;max-width:420px}
+.p3-strip{
+  display:flex;align-items:center;gap:11px;padding:11px 14px;border-radius:10px;
+  background:rgba(239,83,80,.14);border:1px solid rgba(239,83,80,.5);
+  box-shadow:0 0 0 3px rgba(239,83,80,.07);cursor:pointer;
+}
+.p3-dot{
+  flex:0 0 9px;height:9px;border-radius:50%;background:var(--red);
+  box-shadow:0 0 8px rgba(239,83,80,.9);animation:blink 1.3s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.p3-txt{flex:1;font-size:13px;font-weight:700;color:#ffb3b3}
+.p3-txt small{display:block;font-weight:400;font-size:11.5px;color:rgba(255,207,207,.75);margin-top:2px}
+.p3-arrow{color:#ffb3b3;font-size:18px;opacity:.7}
+.p3-fake{margin-top:14px;opacity:.34;pointer-events:none}
+.p3-row{
+  display:flex;justify-content:space-between;padding:11px 13px;margin-bottom:7px;
+  background:var(--card);border-radius:8px;font-size:13px;
+  box-shadow:inset 2px 0 0 var(--yellow);
+}
+
+/* ── 4: οδηγός βημάτων ── */
+.p4{
+  background:var(--card);border:1px solid var(--border);border-radius:16px;
+  width:100%;max-width:340px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.6);
+}
+.p4-t{font-size:15px;font-weight:800;color:#ffb3b3;display:flex;gap:8px;align-items:center}
+.p4-big{
+  margin:14px 0;padding:14px;border-radius:10px;text-align:center;
+  background:var(--black);border:1px dashed var(--border);
+}
+.p4-lbl{font-size:10.5px;letter-spacing:1.4px;color:var(--muted);font-weight:700}
+.p4-num{font-size:27px;font-weight:800;color:var(--yellow);letter-spacing:1px;margin-top:4px;font-variant-numeric:tabular-nums}
+.p4-steps{display:flex;flex-direction:column;gap:9px;margin:14px 0}
+.p4-step{display:flex;gap:10px;align-items:flex-start;font-size:13px}
+.p4-i{
+  flex:0 0 21px;height:21px;border-radius:50%;background:var(--card2);
+  border:1px solid var(--border);display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:800;color:var(--yellow);
+}
+.p4-btns{display:flex;gap:9px;margin-top:4px}
+.p4-b{flex:1;padding:12px;border-radius:10px;font:700 13px 'Noto Sans',sans-serif;cursor:pointer;border:1px solid}
+.p4-done{background:rgba(38,194,129,.9);color:#04160c;border-color:var(--green)}
+.p4-later{background:transparent;color:var(--muted);border-color:var(--border)}
+
+footer{margin-top:44px;padding-top:22px;border-top:1px solid var(--border);color:var(--muted);font-size:13px}
+footer b{color:var(--white)}
+.note{margin-top:12px;font-size:12.5px;color:var(--muted);line-height:1.65;max-width:80ch}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Όταν η γέφυρα <span>δεν βρίσκει</span> την παραγγελία στο portal</h1>
+  <p class="sub">
+    Τέσσερις προτάσεις για το ίδιο δευτερόλεπτο: πάτησες «Αποδοχή» στον POS,
+    και η γέφυρα δεν μπόρεσε να εντοπίσει <em>αυτή τη συγκεκριμένη</em> παραγγελία στο portal.
+  </p>
+  <div class="ctx">
+    <b>Γιατί υπάρχει αυτή η οθόνη.</b> Σήμερα, σε αυτή την περίπτωση, η γέφυρα πατάει
+    <b>την πρώτη παραγγελία που θα βρει</b> — μπορεί να δεχτεί άλλη από αυτή που βλέπεις.
+    Με την αλλαγή, <b>δεν πατιέται τίποτα</b> και το μαθαίνεις. Οι προτάσεις διαφέρουν
+    στο <b>πόσο επίμονα</b> σου το λένε.
+  </div>
+</header>
+
+<div class="grid">
+
+  <!-- ═══ 1 ═══ -->
+  <section class="prop">
+    <div class="prop-head">
+      <span class="prop-n">ΠΡΟΤΑΣΗ 1</span>
+      <div class="prop-t">Η παραγγελία γυρίζει πίσω</div>
+      <div class="prop-d">Ξαναεμφανίζεται ολόκληρη, με κόκκινη ταινία από πάνω. Αποφασίζεις ξανά.</div>
+    </div>
+    <div class="stage">
+      <div class="efd-box">
+        <div class="p1-banner">
+          <span class="p1-ico">⚠️</span>
+          <div>
+            <div class="p1-tt">Δεν στάλθηκε στην e-food</div>
+            <div class="p1-dd">Η γέφυρα δεν βρήκε την παραγγελία στο portal. <b>Δεν πατήθηκε τίποτα.</b></div>
+          </div>
+        </div>
+        <div class="efd-head"><span>🛵 Νέα παραγγελία</span><span class="efd-num">#684042477</span></div>
+        <div class="efd-cust">
+          <span>👤 ΤΟΝΙΑ Ρ.</span>
+          <span style="color:var(--muted)">📍 ΦΑΣΣΑ ΗΛΙΑ 2 · 2ος</span>
+        </div>
+        <div class="efd-sep"></div>
+        <div class="efd-item"><span>1× ΣΟΥΒΛΑΚΙ ΚΟΤΟΠΟΥΛΟ</span><span>8,50</span></div>
+        <div class="efd-item"><span>1× ΠΑΤΑΤΕΣ</span><span>3,00</span></div>
+        <div class="efd-total"><span>Μετρητά</span><span class="efd-amt">11,50€</span></div>
+        <div class="efd-actions">
+          <button class="efd-btn efd-btn-sec" style="flex:1 1 100%">🔄 Δοκίμασε ξανά</button>
+          <button class="efd-btn efd-btn-reject">❌ Απόρριψη</button>
+          <button class="efd-btn efd-btn-accept">✅ Αποδοχή</button>
+        </div>
+      </div>
+    </div>
+    <div class="pros">
+      <div class="ok"><span class="i">✓</span><span>Δεν χάνεται τίποτα — η παραγγελία είναι μπροστά σου, με όλα τα στοιχεία.</span></div>
+      <div class="ok"><span class="i">✓</span><span>Ίδια λογική με το «← Πίσω» της απόρριψης που ήδη ξέρεις.</span></div>
+      <div class="ok"><span class="i">✓</span><span>Το «Δοκίμασε ξανά» λύνει τις στιγμιαίες αστοχίες με ένα πάτημα.</span></div>
+      <div class="no"><span class="i">✗</span><span>Σε σταματάει. Σε ώρα αιχμής θέλει μια απόφαση εκεί και τότε.</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ 2 ═══ -->
+  <section class="prop">
+    <div class="prop-head">
+      <span class="prop-n">ΠΡΟΤΑΣΗ 2</span>
+      <div class="prop-t">Σκέτο μήνυμα</div>
+      <div class="prop-d">Το κλασικό παράθυρο του POS. Το κλείνεις και η παραγγελία ξαναμπαίνει στη σειρά.</div>
+    </div>
+    <div class="stage">
+      <div class="dlg">
+        <div class="dlg-ico">⚠️</div>
+        <div class="dlg-t">Δεν βρέθηκε στο portal</div>
+        <div class="dlg-m">
+          Η παραγγελία <b>#684042477</b> δεν εντοπίστηκε.<br>
+          <b>Δεν πατήθηκε τίποτα.</b><br><br>
+          Χειρίσου τη από το portal της e-food.
+        </div>
+        <button class="dlg-btn">Κατάλαβα</button>
+      </div>
+    </div>
+    <div class="pros">
+      <div class="ok"><span class="i">✓</span><span>Απλό και οικείο — ίδιο με κάθε άλλο μήνυμα του POS.</span></div>
+      <div class="ok"><span class="i">✓</span><span>Ένα πάτημα και συνεχίζεις.</span></div>
+      <div class="no"><span class="i">✗</span><span>Μόλις το κλείσεις, δεν μένει κανένα ίχνος. Αν το ξεχάσεις, χάθηκε.</span></div>
+      <div class="no"><span class="i">✗</span><span>Δεν βλέπεις ποιος πελάτης είναι — μόνο έναν αριθμό.</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ 3 ═══ -->
+  <section class="prop">
+    <div class="prop-head">
+      <span class="prop-n">ΠΡΟΤΑΣΗ 3</span>
+      <div class="prop-t">Λωρίδα που δεν φεύγει</div>
+      <div class="prop-d">Δεν σε διακόπτει. Κάθεται στην κορυφή και αναβοσβήνει μέχρι να την τακτοποιήσεις.</div>
+    </div>
+    <div class="stage top">
+      <div class="p3-shell">
+        <div class="p3-strip">
+          <span class="p3-dot"></span>
+          <span class="p3-txt">1 παραγγελία δεν στάλθηκε στην e-food
+            <small>#684042477 · ΤΟΝΙΑ Ρ. · 11,50€ — πάτησε για λεπτομέρειες</small></span>
+          <span class="p3-arrow">›</span>
+        </div>
+        <div class="p3-fake">
+          <div class="p3-row"><span>2× Σουβλάκι Χοιρινό</span><span>7,00</span></div>
+          <div class="p3-row"><span>1× Μερίδα Γύρος</span><span>9,50</span></div>
+          <div class="p3-row"><span>1× Coca-Cola</span><span>1,50</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="pros">
+      <div class="ok"><span class="i">✓</span><span>Δεν σε σταματάει καθόλου — συνεχίζεις τη δουλειά σου.</span></div>
+      <div class="ok"><span class="i">✓</span><span>Μένει εκεί. Δεν μπορεί να ξεχαστεί «κατά λάθος».</span></div>
+      <div class="ok"><span class="i">✓</span><span>Αν μαζευτούν δύο, τις δείχνει και τις δύο.</span></div>
+      <div class="no"><span class="i">✗</span><span>Σε βραδιά αιχμής μπορεί να μη γυρίσεις να την κοιτάξεις για ώρα.</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ 4 ═══ -->
+  <section class="prop">
+    <div class="prop-head">
+      <span class="prop-n">ΠΡΟΤΑΣΗ 4</span>
+      <div class="prop-t">Οδηγός βημάτων</div>
+      <div class="prop-d">Δεν λέει μόνο τι πήγε στραβά — λέει τι να κάνεις, βήμα-βήμα.</div>
+    </div>
+    <div class="stage">
+      <div class="p4">
+        <div class="p4-t"><span>⚠️</span><span>Χρειάζεται να το κάνεις εσύ</span></div>
+        <div class="p4-big">
+          <div class="p4-lbl">ΑΡΙΘΜΟΣ ΠΑΡΑΓΓΕΛΙΑΣ</div>
+          <div class="p4-num">684042477</div>
+        </div>
+        <div class="p4-steps">
+          <div class="p4-step"><span class="p4-i">1</span><span>Άνοιξε το <b>e-food Partner</b></span></div>
+          <div class="p4-step"><span class="p4-i">2</span><span>Βρες την παραγγελία με αυτόν τον αριθμό</span></div>
+          <div class="p4-step"><span class="p4-i">3</span><span>Πάτησε <b>Παράδοση σε 30 λεπτά</b></span></div>
+        </div>
+        <div class="p4-btns">
+          <button class="p4-b p4-later">Αργότερα</button>
+          <button class="p4-b p4-done">✓ Το έκανα</button>
+        </div>
+      </div>
+    </div>
+    <div class="pros">
+      <div class="ok"><span class="i">✓</span><span>Ο υπάλληλος δεν χρειάζεται να ξέρει τίποτα — του λέει ακριβώς τι να πατήσει.</span></div>
+      <div class="ok"><span class="i">✓</span><span>Ο αριθμός είναι μεγάλος και ευανάγνωστος — δεν τον αντιγράφεις λάθος.</span></div>
+      <div class="ok"><span class="i">✓</span><span>Το «Αργότερα» αφήνει πίσω του λωρίδα — δεν χάνεται.</span></div>
+      <div class="no"><span class="i">✗</span><span>Η μεγαλύτερη οθόνη από τις τέσσερις. Περισσότερο διάβασμα.</span></div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <b>Η γνώμη μου:</b> η <b>Πρόταση 1</b> για την ίδια τη στιγμή — γιατί κρατά μπροστά σου
+  <em>ποιος</em> είναι ο πελάτης και τι παρήγγειλε, όχι έναν γυμνό αριθμό — και η
+  <b>λωρίδα της Πρότασης 3</b> από κάτω, για ό,τι δεν τακτοποιήθηκε αμέσως.
+  Οι δύο δεν συγκρούονται: η πρώτη είναι η ερώτηση, η δεύτερη η υπενθύμιση.
+  <div class="note">
+    Και στις τέσσερις ισχύει το ίδιο: <b>ο POS δεν πατάει τίποτα στα τυφλά.</b>
+    Αυτό είναι το κέρδος — το πώς σου το ανακοινώνει είναι το ερώτημα.
+    Μπορείς να διαλέξεις και συνδυασμό.
+  </div>
+</footer>
+
+</div>
+</body>
+</html>
