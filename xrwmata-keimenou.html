@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Χρώματα γραμμάτων — Τώρα vs Πρόταση | TAMAM</title>
+<style>
+  :root{
+    --accent:#f59e0b; --accent-dark:#d97706; --danger:#ef4444; --success:#10b981;
+    --accent-text:#9c6406; --danger-text:#b91c1c; --success-text:#15803d;
+    --text:#1e293b; --muted:#5d6b7f; --border:#e2e8f0; --bg:#f1f5f9;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+       font-size:14px;color:var(--text);background:var(--bg);line-height:1.55;padding:26px 20px 70px}
+  .wrap{max-width:1240px;margin:0 auto}
+
+  .head{background:#fff;border:1px solid var(--border);border-radius:14px;padding:24px 28px;margin-bottom:22px;
+        box-shadow:0 1px 3px rgba(0,0,0,.06)}
+  .head h1{font-size:23px;margin-bottom:8px}
+  .head p{color:var(--muted);font-size:14px;max-width:900px}
+  .head p + p{margin-top:9px}
+  .head b{color:var(--text)}
+
+  .legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-bottom:26px}
+  .lg{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px}
+  .lg .t{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);margin-bottom:11px}
+  .sw{display:flex;align-items:center;gap:10px;margin-bottom:7px;font-size:13.5px}
+  .sw .chip{width:22px;height:22px;border-radius:6px;border:1px solid rgba(0,0,0,.10);flex:none}
+  .sw .hex{font-family:ui-monospace,"Cascadia Mono",Consolas,monospace;font-size:12px;color:var(--muted)}
+  .sw .ratio{margin-left:auto;font-weight:800;font-size:12.5px;font-family:ui-monospace,Consolas,monospace}
+  .bad{color:#b91c1c}.good{color:#15803d}
+  .arrow{text-align:center;color:var(--muted);font-size:17px;margin:3px 0}
+
+  .sec{margin-bottom:14px}
+  .sec-h{font-size:15px;font-weight:800;margin:30px 0 12px;display:flex;align-items:center;gap:9px}
+  .sec-h .n{background:#1e2d3d;color:#fff;width:24px;height:24px;border-radius:7px;display:inline-flex;
+            align-items:center;justify-content:center;font-size:12px;flex:none}
+  .sec-h .where{font-weight:600;font-size:12.5px;color:var(--muted);margin-left:auto;text-align:right}
+
+  .cmp{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media (max-width:900px){.cmp{grid-template-columns:1fr}}
+  .col{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  .col.now{border-color:#f3c7c7}
+  .col.new{border-color:#b7e3c6}
+  .col-h{font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;
+         padding:9px 15px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .col.now .col-h{background:#fef2f2;color:#991b1b}
+  .col.new .col-h{background:#f0fdf4;color:#166534}
+  .col-h .r{font-family:ui-monospace,Consolas,monospace;font-weight:800;font-size:11.5px}
+  .col-b{padding:17px 18px}
+
+  /* ── app-like bits ── */
+  .hint{font-size:12.5px;line-height:1.5}
+  .row{display:flex;justify-content:space-between;align-items:center;gap:14px;
+       padding:9px 0;border-bottom:1px solid #eef2f7;font-size:13.5px}
+  .row:last-child{border-bottom:none}
+  .row .lbl{color:var(--muted)}
+  .kpi{display:flex;flex-direction:column;gap:3px}
+  .kpi .k{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);font-weight:700}
+  .kpi .v{font-size:26px;font-weight:900;line-height:1.1}
+  .big{font-size:30px;font-weight:900}
+  .tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+  .tbl th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.3px;color:var(--muted);
+          padding:7px 8px;border-bottom:2px solid var(--border)}
+  .tbl td{padding:8px;border-bottom:1px solid #eef2f7}
+  .tbl tr:last-child td{border-bottom:none}
+  .tbl .r{text-align:right;font-variant-numeric:tabular-nums}
+  .small{font-size:11px;font-weight:700}
+  .mini{font-size:11.5px;font-weight:700;display:inline-flex;align-items:center;gap:5px;cursor:default}
+  .glyph{font-size:18px}
+  .note{font-size:11.5px;margin-top:3px}
+  .del{font-size:15px;cursor:default}
+  .verd{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:13px 15px;font-size:13.5px}
+  .verd .num{font-weight:800}
+  .msum{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:7px 0}
+  .msum b{font-size:18px}
+
+  /* NOW colours */
+  .n-accent{color:var(--accent)} .n-danger{color:var(--danger)} .n-success{color:var(--success)}
+  .n-warn{color:var(--accent-dark)}
+  /* PROPOSED colours */
+  .p-accent{color:var(--accent-text)} .p-danger{color:var(--danger-text)} .p-success{color:var(--success-text)}
+
+  .keep{background:#fff;border:1px solid var(--border);border-radius:14px;padding:22px 26px;margin-top:34px}
+  .keep h2{font-size:17px;margin-bottom:6px}
+  .keep > p{color:var(--muted);font-size:13.5px;margin-bottom:16px;max-width:900px}
+  .keep-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+  .keep-card{border:1px solid var(--border);border-radius:11px;padding:14px 16px;background:#fcfdfe}
+  .keep-card .kt{font-size:12.5px;font-weight:800;margin-bottom:9px}
+  .keep-card .kd{font-size:12px;color:var(--muted);margin-top:9px;line-height:1.45}
+  .btn{height:40px;padding:0 18px;border-radius:9px;font-size:13.5px;font-weight:700;border:1.5px solid transparent;
+       display:inline-flex;align-items:center;justify-content:center;gap:7px;font-family:inherit}
+  .btn-primary{background:var(--accent);color:var(--text)}
+  .btn-danger{background:#fff;color:var(--danger-text);border-color:#f3c7c7}
+  .dot{display:inline-block;width:11px;height:11px;border-radius:50%;vertical-align:middle}
+  .bar{height:9px;border-radius:20px;background:#eef2f7;overflow:hidden}
+  .bar i{display:block;height:100%;border-radius:20px}
+  .pillx{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:700}
+  .sidebar-demo{background:#1e2d3d;border-radius:10px;padding:13px 15px}
+  .sidebar-demo .g{color:var(--accent);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px}
+  .sidebar-demo .l{color:#94a3b8;font-size:13px;margin-top:7px}
+
+  .foot{margin-top:32px;background:#fff;border:1px solid var(--border);border-radius:14px;padding:22px 26px}
+  .foot h2{font-size:17px;margin-bottom:10px}
+  .foot ul{margin-left:19px;font-size:13.5px;color:var(--muted)}
+  .foot li{margin-bottom:6px}
+  .foot li b{color:var(--text)}
+  .tag{display:inline-block;background:#eef2f7;color:#475569;border-radius:6px;padding:2px 7px;
+       font-size:11px;font-family:ui-monospace,Consolas,monospace;font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <h1>🎨 Χρώματα γραμμάτων — «Τώρα» δίπλα στην πρόταση</h1>
+    <p>Στην εφαρμογή υπάρχουν <b>δύο σετ</b> από πορτοκαλί/κόκκινο/πράσινο: ένα για <b>γεμίσματα</b> (κουμπιά, κουκκίδες, μπάρες) και ένα για <b>γράμματα</b>. Σε ~60 σημεία χρησιμοποιείται κατά λάθος το χρώμα του γεμίσματος πάνω σε γράμματα — εκεί το κείμενο ξεθωριάζει.</p>
+    <p><b>Ο αριθμός δεξιά σε κάθε κουτί</b> είναι η «αντίθεση» — πόσο ξεχωρίζουν τα γράμματα από το φόντο. Το διεθνές όριο για να διαβάζεται άνετα είναι <b>4,5</b>. Κάτω από αυτό, στο φως της ημέρας ή σε λιγότερο καλή οθόνη, το κείμενο γίνεται θολό.</p>
+    <p>⚠️ <b>Καμία αλλαγή σε κουμπιά, κουκκίδες, μπάρες ή στο μενού αριστερά.</b> Αλλάζουν <b>μόνο γράμματα</b>. Η «πορτοκαλί ταυτότητα» της εφαρμογής μένει ίδια — απλά μια απόχρωση πιο βαθιά εκεί που είναι κείμενο.</p>
+  </div>
+
+  <div class="legend">
+    <div class="lg">
+      <div class="t">🟠 Πορτοκαλί</div>
+      <div class="sw"><span class="chip" style="background:#f59e0b"></span><span>Τώρα</span><span class="hex">#f59e0b</span><span class="ratio bad">2,15 ✕</span></div>
+      <div class="arrow">↓</div>
+      <div class="sw"><span class="chip" style="background:#9c6406"></span><span>Πρόταση</span><span class="hex">#9c6406</span><span class="ratio good">4,95 ✓</span></div>
+    </div>
+    <div class="lg">
+      <div class="t">🔴 Κόκκινο</div>
+      <div class="sw"><span class="chip" style="background:#ef4444"></span><span>Τώρα</span><span class="hex">#ef4444</span><span class="ratio bad">3,76 ✕</span></div>
+      <div class="arrow">↓</div>
+      <div class="sw"><span class="chip" style="background:#b91c1c"></span><span>Πρόταση</span><span class="hex">#b91c1c</span><span class="ratio good">6,47 ✓</span></div>
+    </div>
+    <div class="lg">
+      <div class="t">🟢 Πράσινο</div>
+      <div class="sw"><span class="chip" style="background:#10b981"></span><span>Τώρα</span><span class="hex">#10b981</span><span class="ratio bad">2,54 ✕</span></div>
+      <div class="arrow">↓</div>
+      <div class="sw"><span class="chip" style="background:#15803d"></span><span>Πρόταση</span><span class="hex">#15803d</span><span class="ratio good">5,02 ✓</span></div>
+    </div>
+  </div>
+
+  <!-- 1 -->
+  <div class="sec">
+    <div class="sec-h"><span class="n">1</span> Η προειδοποίηση για το κλειδί των αντιγράφων <span class="where">Αντίγραφα Ασφαλείας</span></div>
+    <div class="cmp">
+      <div class="col now"><div class="col-h">Τώρα <span class="r">2,15</span></div><div class="col-b">
+        <div class="hint n-accent">✓ Υπάρχει κλειδί. <b>Κράτησέ το κάπου ασφαλή</b> — χωρίς αυτό τα αντίγραφα του GitHub δεν ξεκλειδώνουν.</div>
+        <div class="hint n-accent" style="margin-top:10px">⚠️ Το κλειδί πρέπει να είναι <b>ίδιο</b> και στις δύο συσκευές.</div>
+      </div></div>
+      <div class="col new"><div class="col-h">Πρόταση <span class="r">4,95</span></div><div class="col-b">
+        <div class="hint p-accent">✓ Υπάρχει κλειδί. <b>Κράτησέ το κάπου ασφαλή</b> — χωρίς αυτό τα αντίγραφα του GitHub δεν ξεκλειδώνουν.</div>
+        <div class="hint p-accent" style="margin-top:10px">⚠️ Το κλειδί πρέπει να είναι <b>ίδιο</b> και στις δύο συσκευές.</div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="sec">
+    <div class="sec-h"><span class="n">2</span> Ποσά σε ευρώ γραμμένα πορτοκαλί <span class="where">Κόστος Πρόσληψης · Διανομέας ή εξωτερικός · Μισθός Ιδιοκτήτη</span></div>
+    <div class="cmp">
+      <div class="col now"><div class="col-h">Τώρα <span class="r">2,15</span></div><div class="col-b">
+        <div class="row"><span class="lbl">Σύνολο (εσωτερικό)</span><span class="n-accent" style="font-weight:700">1.284,50 €</span></div>
+        <div class="msum"><span class="lbl">Κόστος με δικό μας διανομέα</span><b class="n-accent">1.140,00 €</b></div>
+        <div class="verd" style="margin-top:8px">Συμφέρει ο <b>δικός μας</b> διανομέας — διαφορά <span class="num n-accent">210,00 €</span> τον μήνα.</div>
+        <div style="margin-top:14px" class="kpi"><span class="k">Υπόλοιπο τράπεζας</span><span class="big n-accent">3.412,80 €</span></div>
+      </div></div>
+      <div class="col new"><div class="col-h">Πρόταση <span class="r">4,95</span></div><div class="col-b">
+        <div class="row"><span class="lbl">Σύνολο (εσωτερικό)</span><span class="p-accent" style="font-weight:700">1.284,50 €</span></div>
+        <div class="msum"><span class="lbl">Κόστος με δικό μας διανομέα</span><b class="p-accent">1.140,00 €</b></div>
+        <div class="verd" style="margin-top:8px">Συμφέρει ο <b>δικός μας</b> διανομέας — διαφορά <span class="num p-accent">210,00 €</span> τον μήνα.</div>
+        <div style="margin-top:14px" class="kpi"><span class="k">Υπόλοιπο τράπεζας</span><span class="big p-accent">3.412,80 €</span></div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="sec">
+    <div class="sec-h"><span class="n">3</span> Τα «✓ Αποθηκευμένο» στις Ρυθμίσεις <span class="where">Ρυθμίσεις → Email · SMS · Θυρίδα · POS</span></div>
+    <div class="cmp">
+      <div class="col now"><div class="col-h">Τώρα <span class="r">2,54</span></div><div class="col-b">
+        <div class="note n-success">✓ Αποθηκευμένο — άφησε κενό για να το κρατήσεις</div>
+        <div class="note n-success" style="margin-top:9px">✓ Συνδέθηκε σωστά</div>
+        <div class="note n-success" style="margin-top:9px">Τελευταίος έλεγχος: 28 Ιουλίου.</div>
+        <div class="mini n-success" style="margin-top:11px">✓ Το POS απάντησε</div>
+      </div></div>
+      <div class="col new"><div class="col-h">Πρόταση <span class="r">5,02</span></div><div class="col-b">
+        <div class="note p-success">✓ Αποθηκευμένο — άφησε κενό για να το κρατήσεις</div>
+        <div class="note p-success" style="margin-top:9px">✓ Συνδέθηκε σωστά</div>
+        <div class="note p-success" style="margin-top:9px">Τελευταίος έλεγχος: 28 Ιουλίου.</div>
+        <div class="mini p-success" style="margin-top:11px">✓ Το POS απάντησε</div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="sec">
+    <div class="sec-h"><span class="n">4</span> Άνοδος / πτώση σε ποσοστά <span class="where">Σύνοψη · Παραγωγικότητα · Τι θα γινόταν αν · Αλλαγές Τιμών</span></div>
+    <div class="cmp">
+      <div class="col now"><div class="col-h">Τώρα <span class="r">3,76 / 2,54</span></div><div class="col-b">
+        <table class="tbl">
+          <tr><th>Μήνας</th><th class="r">Τζίρος</th><th class="r">Μεταβολή</th></tr>
+          <tr><td>Ιούλιος</td><td class="r">18.420 €</td><td class="r n-success" style="font-weight:800">▲ 6,4%</td></tr>
+          <tr><td>Ιούνιος</td><td class="r">17.310 €</td><td class="r n-danger" style="font-weight:800">▼ 2,1%</td></tr>
+          <tr><td>Κόστος υλικών</td><td class="r">6.180 €</td><td class="r n-danger" style="font-weight:800">▲ 11,3%</td></tr>
+        </table>
+        <div style="margin-top:13px;font-size:13px">Κρεοπωλείο Γεωργίου — Γύρος χοιρινός <b class="n-danger">+0,42 €/κιλό</b></div>
+      </div></div>
+      <div class="col new"><div class="col-h">Πρόταση <span class="r">6,47 / 5,02</span></div><div class="col-b">
+        <table class="tbl">
+          <tr><th>Μήνας</th><th class="r">Τζίρος</th><th class="r">Μεταβολή</th></tr>
+          <tr><td>Ιούλιος</td><td class="r">18.420 €</td><td class="r p-success" style="font-weight:800">▲ 6,4%</td></tr>
+          <tr><td>Ιούνιος</td><td class="r">17.310 €</td><td class="r p-danger" style="font-weight:800">▼ 2,1%</td></tr>
+          <tr><td>Κόστος υλικών</td><td class="r">6.180 €</td><td class="r p-danger" style="font-weight:800">▲ 11,3%</td></tr>
+        </table>
+        <div style="margin-top:13px;font-size:13px">Κρεοπωλείο Γεωργίου — Γύρος χοιρινός <b class="p-danger">+0,42 €/κιλό</b></div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="sec">
+    <div class="sec-h"><span class="n">5</span> Κόκκινα ποσά & προειδοποιήσεις <span class="where">Κέρδος/Ζημιά · Πάγια · Τιμολόγια · Ψώνια αύριο · Προμηθευτές</span></div>
+    <div class="cmp">
+      <div class="col now"><div class="col-h">Τώρα <span class="r">3,76</span></div><div class="col-b">
+        <table class="tbl">
+          <tr><td>Έξοδα υλικών</td><td class="r n-danger">− 6.180,00 €</td></tr>
+          <tr><td>Μισθοδοσία</td><td class="r n-danger">− 3.240,00 €</td></tr>
+          <tr><td>Πάγια</td><td class="r n-danger">− 1.850,00 €</td></tr>
+        </table>
+        <div style="display:flex;gap:22px;margin-top:15px">
+          <div class="kpi"><span class="k">Εκπρόθεσμα</span><span class="v n-danger">3</span></div>
+          <div class="kpi"><span class="k">Απλήρωτα</span><span class="v n-danger">1.420 €</span></div>
+          <div class="kpi"><span class="k">Συνέπεια</span><span class="v n-danger">84%</span></div>
+        </div>
+        <div style="margin-top:15px;font-size:13.5px">Ντομάτα — απόθεμα <b class="n-danger">1,2 κιλά</b> (κάτω από το όριο)</div>
+      </div></div>
+      <div class="col new"><div class="col-h">Πρόταση <span class="r">6,47</span></div><div class="col-b">
+        <table class="tbl">
+          <tr><td>Έξοδα υλικών</td><td class="r p-danger">− 6.180,00 €</td></tr>
+          <tr><td>Μισθοδοσία</td><td class="r p-danger">− 3.240,00 €</td></tr>
+          <tr><td>Πάγια</td><td class="r p-danger">− 1.850,00 €</td></tr>
+        </table>
+        <div style="display:flex;gap:22px;margin-top:15px">
+          <div class="kpi"><span class="k">Εκπρόθεσμα</span><span class="v p-danger">3</span></div>
+          <div class="kpi"><span class="k">Απλήρωτα</span><span class="v p-danger">1.420 €</span></div>
+          <div class="kpi"><span class="k">Συνέπεια</span><span class="v p-danger">84%</span></div>
+        </div>
+        <div style="margin-top:15px;font-size:13.5px">Ντομάτα — απόθεμα <b class="p-danger">1,2 κιλά</b> (κάτω από το όριο)</div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- 6 -->
+  <div class="sec">
+    <div class="sec-h"><span class="n">6</span> Μικρά σημάδια & σύνδεσμοι <span class="where">Υλικά · Συνταγές · Κατάλογος Πελατών · Ρυθμίσεις</span></div>
+    <div class="cmp">
+      <div class="col now"><div class="col-h">Τώρα <span class="r">2,15 / 3,76</span></div><div class="col-b">
+        <div class="row"><span><span class="n-accent">★</span> <b>Κρεοπωλείο Γεωργίου</b></span><span class="lbl">προτιμώμενος</span></div>
+        <div class="row"><span>Κιλά <span class="n-accent glyph">→</span> Γραμμάρια</span><span class="lbl">μετατροπή</span></div>
+        <div class="row"><span>Όνομα <span class="n-accent">▲</span></span><span class="lbl">ταξινόμηση</span></div>
+        <div class="row"><span>Γραμμή τιμολογίου</span><span class="n-danger del">✕</span></div>
+        <div style="margin-top:11px">
+          <div style="font-size:13.5px;font-weight:700">Σουβλάκι καλαμάκι</div>
+          <div class="small n-danger">εισήχθη από Excel — έλεγξέ το</div>
+          <div class="mini n-danger" style="margin-top:7px">🗑 Αφαίρεση φωτογραφίας</div>
+        </div>
+        <div style="margin-top:13px;font-size:13px">Δες τον <a href="#" class="n-accent" style="font-weight:700;text-decoration:none">Οδηγό Χρήσης</a> για τα βήματα.</div>
+      </div></div>
+      <div class="col new"><div class="col-h">Πρόταση <span class="r">4,95 / 6,47</span></div><div class="col-b">
+        <div class="row"><span><span class="p-accent">★</span> <b>Κρεοπωλείο Γεωργίου</b></span><span class="lbl">προτιμώμενος</span></div>
+        <div class="row"><span>Κιλά <span class="p-accent glyph">→</span> Γραμμάρια</span><span class="lbl">μετατροπή</span></div>
+        <div class="row"><span>Όνομα <span class="p-accent">▲</span></span><span class="lbl">ταξινόμηση</span></div>
+        <div class="row"><span>Γραμμή τιμολογίου</span><span class="p-danger del">✕</span></div>
+        <div style="margin-top:11px">
+          <div style="font-size:13.5px;font-weight:700">Σουβλάκι καλαμάκι</div>
+          <div class="small p-danger">εισήχθη από Excel — έλεγξέ το</div>
+          <div class="mini p-danger" style="margin-top:7px">🗑 Αφαίρεση φωτογραφίας</div>
+        </div>
+        <div style="margin-top:13px;font-size:13px">Δες τον <a href="#" class="p-accent" style="font-weight:700;text-decoration:none">Οδηγό Χρήσης</a> για τα βήματα.</div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="sec">
+    <div class="sec-h"><span class="n">7</span> Το σκούρο πορτοκαλί των αποκλίσεων <span class="where">Κοινή κλάση — Τιμές · Αναφορές · Πρόβλεψη</span></div>
+    <div class="cmp">
+      <div class="col now"><div class="col-h">Τώρα <span class="r">3,19</span></div><div class="col-b">
+        <div class="row"><span class="lbl">Πρόβλεψη vs πραγματικό</span><span class="n-warn" style="font-weight:800">−7,4%</span></div>
+        <div class="row"><span class="lbl">Απόκλιση τιμής POS</span><span class="n-warn" style="font-weight:800">0,30 €</span></div>
+        <div class="note" style="color:#d97706;margin-top:9px">Προσοχή: 4 προϊόντα έχουν διαφορετική τιμή στο POS.</div>
+      </div></div>
+      <div class="col new"><div class="col-h">Πρόταση <span class="r">4,95</span></div><div class="col-b">
+        <div class="row"><span class="lbl">Πρόβλεψη vs πραγματικό</span><span class="p-accent" style="font-weight:800">−7,4%</span></div>
+        <div class="row"><span class="lbl">Απόκλιση τιμής POS</span><span class="p-accent" style="font-weight:800">0,30 €</span></div>
+        <div class="note p-accent" style="margin-top:9px">Προσοχή: 4 προϊόντα έχουν διαφορετική τιμή στο POS.</div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- WHAT DOES NOT CHANGE -->
+  <div class="keep">
+    <h2>✋ Τι ΔΕΝ αλλάζει καθόλου</h2>
+    <p>Όλα τα παρακάτω μένουν <b>ακριβώς όπως είναι σήμερα</b>. Το φωτεινό πορτοκαλί/κόκκινο/πράσινο είναι φτιαγμένο για γεμίσματα — εκεί δουλεύει σωστά και δεν το πειράζω.</p>
+    <div class="keep-grid">
+      <div class="keep-card">
+        <div class="kt">Κουμπιά</div>
+        <button class="btn btn-primary">💾 Αποθήκευση</button>
+        <button class="btn btn-danger" style="margin-top:8px">🗑 Διαγραφή</button>
+        <div class="kd">Ίδιο πορτοκαλί γέμισμα, ίδια σκούρα γράμματα.</div>
+      </div>
+      <div class="keep-card">
+        <div class="kt">Κουκκίδες & σημαδάκια</div>
+        <div style="display:flex;gap:15px;align-items:center;font-size:12.5px;color:#5d6b7f">
+          <span><span class="dot" style="background:#10b981"></span> ενεργό</span>
+          <span><span class="dot" style="background:#ef4444"></span> κλειστό</span>
+          <span><span class="dot" style="background:#f59e0b"></span> εξαντλήθηκε</span>
+        </div>
+        <div style="margin-top:11px">
+          <span class="pillx" style="background:#dcfce7;color:#166534">Πληρωμένο</span>
+          <span class="pillx" style="background:#fef3c7;color:#92400e">Εκκρεμεί</span>
+          <span class="pillx" style="background:#fee2e2;color:#991b1b">Εκπρόθεσμο</span>
+        </div>
+        <div class="kd">Τα χρωματιστά σημαδάκια έχουν ήδη σκούρα γράμματα — σωστά.</div>
+      </div>
+      <div class="keep-card">
+        <div class="kt">Μπάρες & γραφήματα</div>
+        <div class="bar"><i style="width:72%;background:#f59e0b"></i></div>
+        <div class="bar" style="margin-top:7px"><i style="width:45%;background:#10b981"></i></div>
+        <div class="bar" style="margin-top:7px"><i style="width:28%;background:#ef4444"></i></div>
+        <div class="kd">Γεμίσματα, όχι γράμματα — μένουν ζωηρά.</div>
+      </div>
+      <div class="keep-card">
+        <div class="kt">Το μενού αριστερά</div>
+        <div class="sidebar-demo">
+          <div class="g">● Χρήματα</div>
+          <div class="l">👜 Ταμείο</div>
+          <div class="l">💰 Έξοδα &amp; Κερδοφορία</div>
+        </div>
+        <div class="kd">Εκεί το πορτοκαλί είναι πάνω σε σκούρο φόντο — διαβάζεται μια χαρά (5,6).</div>
+      </div>
+      <div class="keep-card">
+        <div class="kt">Οι σελίδες Προμηθευτών</div>
+        <div style="font-size:12.5px;color:#15803d;font-weight:700">✓ Η σύνδεση δοκιμάστηκε</div>
+        <div style="font-size:12.5px;color:#dc2626;font-weight:700;margin-top:6px">✕ Απέτυχε η σύνδεση</div>
+        <div class="kd">Το δικό τους θέμα χρησιμοποιεί ήδη σωστές αποχρώσεις (4,83 &amp; 7,0). <b>Καμία αλλαγή.</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <h2>📋 Τι ακριβώς θα αλλάξω αν πεις ναι</h2>
+    <ul>
+      <li><b>2 κοινές κλάσεις</b> στο κεντρικό αρχείο στυλ <span class="tag">main.css</span> — αυτές τις κληρονομούν όλες οι σελίδες που τις χρησιμοποιούν, οπότε διορθώνονται μονομιάς.</li>
+      <li><b>~30 σημεία</b> μέσα σε σελίδες: Ρυθμίσεις, Αντίγραφα, Κόστος Πρόσληψης, Διανομέας, Μισθός Ιδιοκτήτη, Τράπεζα, Σύνοψη, Κέρδος/Ζημιά, Πάγια, Τιμολόγια, Αλλαγές Τιμών, Παραγωγικότητα, «Τι θα γινόταν αν», Ψώνια, Συνταγές, Υλικά, Πελάτες, Σάρωση.</li>
+      <li><b>Μηδέν αλλαγή</b> σε κουμπιά, κουκκίδες, μπάρες, σημαδάκια, μενού και στις σελίδες Προμηθευτών.</li>
+      <li><b>Μηδέν αλλαγή</b> σε νούμερα, υπολογισμούς ή λειτουργία — καθαρά χρώμα γραμμάτων.</li>
+    </ul>
+  </div>
+
+</div>
+</body>
+</html>
