@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<title>Opa POS — Η οθόνη ταμία, τέσσερις προτάσεις</title>
+<style>
+@font-face{font-family:'Noto Sans';src:url('../assets/fonts/notosans-400-normal-greek.woff2') format('woff2');font-weight:400;font-display:swap;unicode-range:U+0370-03FF,U+1F00-1FFF}
+@font-face{font-family:'Noto Sans';src:url('../assets/fonts/notosans-400-normal-latin.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Noto Sans';src:url('../assets/fonts/notosans-500-normal-greek.woff2') format('woff2');font-weight:500;font-display:swap;unicode-range:U+0370-03FF,U+1F00-1FFF}
+@font-face{font-family:'Noto Sans';src:url('../assets/fonts/notosans-500-normal-latin.woff2') format('woff2');font-weight:500;font-display:swap}
+@font-face{font-family:'Noto Sans';src:url('../assets/fonts/notosans-700-normal-greek.woff2') format('woff2');font-weight:700;font-display:swap;unicode-range:U+0370-03FF,U+1F00-1FFF}
+@font-face{font-family:'Noto Sans';src:url('../assets/fonts/notosans-700-normal-latin.woff2') format('woff2');font-weight:700;font-display:swap}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans',system-ui,sans-serif;background:#0c0e11;color:#e7ecf1;line-height:1.55;
+  padding:0 40px 130px;-webkit-font-smoothing:antialiased}
+.page{max-width:2380px;margin:0 auto}
+
+.hero{padding:74px 0 26px}
+.kicker{font-size:12px;font-weight:700;letter-spacing:.26em;color:#6b7783;margin-bottom:20px}
+h1{font-size:64px;font-weight:700;letter-spacing:-.03em;line-height:1.05;margin-bottom:20px;max-width:22ch}
+.lead{font-size:19px;color:#a9b5c0;max-width:96ch}
+.lead b{color:#fff}
+
+h2{font-size:36px;font-weight:700;letter-spacing:-.02em;margin-bottom:6px}
+h3{font-size:17px;font-weight:700;color:#fff;margin-bottom:10px}
+.section{border-top:1px solid #1d232a;margin-top:64px;padding-top:56px}
+.idx{font-size:13px;font-weight:700;letter-spacing:.2em;color:#5d6874;margin-bottom:12px}
+.thesis{font-size:18px;color:#a9b5c0;max-width:94ch;margin-bottom:6px}
+.thesis b{color:#fff}
+
+.sw{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0 6px}
+.sw div{width:82px}
+.sw i{display:block;height:40px;border-radius:5px;border:1px solid rgba(255,255,255,.08)}
+.sw span{display:block;font-size:11px;color:#727e8a;margin-top:5px;letter-spacing:.03em}
+
+.cap{font-size:12px;font-weight:700;letter-spacing:.16em;color:#6b7783;margin-bottom:10px}
+.pair{display:flex;gap:32px;flex-wrap:wrap;margin-top:22px}
+
+.pros{display:flex;gap:40px;flex-wrap:wrap;margin-top:24px}
+.pros ul{list-style:none;max-width:54ch}
+.pros li{padding:5px 0 5px 24px;position:relative;font-size:16px;color:#b8c3cd}
+.pros li::before{position:absolute;left:0;font-weight:700}
+.pros .good li::before{content:'+';color:#5ecb8c}
+.pros .bad li::before{content:'−';color:#e79088}
+
+table.info{border-collapse:collapse;margin:20px 0;font-size:15px}
+table.info th,table.info td{border:1px solid #212830;padding:10px 15px;text-align:left;vertical-align:top}
+table.info th{background:#131920;font-weight:700;color:#fff}
+.note{border-left:3px solid #38434f;background:#11161b;padding:18px 22px;margin:26px 0;max-width:98ch;color:#bcc7d1}
+.note b{color:#fff}
+
+/* ---------- the switches ---------- */
+.controls{position:sticky;top:0;z-index:30;display:flex;gap:30px;flex-wrap:wrap;align-items:center;
+  padding:15px 20px;margin:26px 0 0;background:rgba(12,14,17,.95);backdrop-filter:blur(10px);
+  border:1px solid #212830;border-radius:14px}
+.ctl{display:flex;align-items:center;gap:11px}
+.ctl > span{font-size:11px;font-weight:700;letter-spacing:.16em;color:#6b7783}
+.seg{display:flex;background:#161b21;border:1px solid #242c34;border-radius:10px;padding:3px}
+.seg button{border:0;background:transparent;color:#8f9ba7;font-family:inherit;font-size:14px;
+  font-weight:700;padding:9px 16px;border-radius:8px;cursor:pointer}
+.seg button.on{background:#e7ecf1;color:#0c0e11}
+
+/* =========================================================
+   THE SCREEN — 1280x800. Products left, cart right.
+   ========================================================= */
+:root{--s:.86}
+.frame{width:calc(1280px * var(--s));height:calc(800px * var(--s));overflow:hidden;border-radius:8px}
+.screen{width:1280px;height:800px;transform:scale(var(--s));transform-origin:top left;
+  display:flex;flex-direction:column;overflow:hidden;background:var(--bg);color:var(--tx);
+  font-family:'Noto Sans',sans-serif;
+  --meat:#D24B3E;--drink:#2E6FD9;--soft:#12A594;--side:#E09B12;--entry:#8B5CF6}
+
+.top{display:flex;align-items:center;gap:14px;padding:0 22px;height:70px;flex:0 0 auto;
+  background:var(--panel);border-bottom:1px solid var(--line)}
+.till{font-size:24px;font-weight:700}
+.till em{font-style:normal;color:var(--mut);font-weight:400;font-size:16px;margin-left:11px}
+.clock{margin-left:auto;font-size:15px;color:var(--mut)}
+.chip{border:1px solid var(--line);border-radius:8px;padding:9px 15px;font-size:14px;font-weight:700}
+
+.body{display:flex;flex:1;min-height:0}
+.left{flex:1;min-width:0;display:flex;flex-direction:column;padding:13px 15px 15px;gap:11px}
+.cart{width:430px;flex:0 0 430px;display:flex;flex-direction:column;
+  background:var(--panel);border-left:1px solid var(--line)}
+
+.legend{display:flex;gap:7px;flex-wrap:wrap;flex:0 0 auto}
+.legend div{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;letter-spacing:.07em;
+  color:var(--mut);padding:5px 10px;border-radius:20px;border:1px solid var(--line)}
+.legend i{width:10px;height:10px;border-radius:50%}
+
+/* the rows share the height that exists: no dead space under the last row, and every
+   tile is as big a target as the screen can afford */
+.grid{flex:1;display:grid;gap:11px;grid-auto-rows:1fr;grid-template-columns:repeat(4,1fr)}
+.tile{display:flex;align-items:center;gap:11px;padding:12px;border-radius:12px;
+  border:1px solid var(--line);background:var(--card);color:var(--tx);position:relative}
+.tile .meta{flex:1;min-width:0}
+.tile b{display:block;font-size:17px;font-weight:700;line-height:1.15}
+.tile .pr{display:block;font-size:22px;font-weight:700;letter-spacing:-.01em;margin-top:2px;
+  font-variant-numeric:tabular-nums}
+
+/* the empty slot: this is where the picture or the drawing goes */
+.slot{flex:0 0 auto;width:52px;height:52px;border-radius:9px;display:flex;align-items:center;
+  justify-content:center;text-align:center;border:2px dashed var(--slot-line);color:var(--slot-tx);
+  font-size:8.5px;font-weight:700;letter-spacing:.06em;line-height:1.1;padding:2px}
+
+/* ---------- cart ---------- */
+.cart-h{padding:15px 20px 9px;font-size:12px;font-weight:700;letter-spacing:.16em;color:var(--mut);
+  display:flex;justify-content:space-between}
+.lines{flex:1;overflow:hidden;padding:0 14px}
+.line{display:flex;align-items:center;gap:10px;padding:8px 6px;border-bottom:1px solid var(--line)}
+.line .nm{flex:1;min-width:0}
+.line .nm b{display:block;font-size:18px;font-weight:700;line-height:1.2;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.line .nm span{display:block;font-size:13px;line-height:1.3;color:var(--mut)}
+.qty{display:flex;align-items:center;gap:6px}
+.qty button{width:42px;height:42px;border-radius:8px;border:1px solid var(--line);background:transparent;
+  color:var(--tx);font-size:22px;font-weight:700;line-height:1;font-family:inherit}
+.qty b{min-width:30px;text-align:center;font-size:20px;font-weight:700}
+.line .amt{width:72px;text-align:right;font-size:19px;font-weight:700;font-variant-numeric:tabular-nums}
+.line.free .amt,.line.free .nm span{color:var(--soft);font-weight:700}
+
+.sum{padding:14px 20px;border-top:1px solid var(--line);display:flex;align-items:baseline;
+  justify-content:space-between}
+.sum span{font-size:12px;font-weight:700;letter-spacing:.16em;color:var(--mut)}
+.sum b{font-size:46px;font-weight:700;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+
+.acts{padding:0 14px 12px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.acts button{height:58px;border-radius:10px;border:1px solid var(--line);background:transparent;
+  color:var(--tx);font-size:15px;font-weight:700;font-family:inherit;letter-spacing:.02em}
+.pay{margin:0 14px 14px;width:calc(100% - 28px);height:92px;border-radius:12px;border:0;
+  background:var(--go);color:#fff;font-size:29px;font-weight:700;font-family:inherit}
+
+.padwrap{flex:1;display:flex;flex-direction:column;padding:0 14px 12px;gap:9px;min-height:0}
+.given{border:1px solid var(--line);border-radius:10px;padding:9px 16px}
+.given span{font-size:11px;font-weight:700;letter-spacing:.16em;color:var(--mut)}
+.given b{display:block;font-size:34px;font-weight:700;font-variant-numeric:tabular-nums}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;flex:1}
+.pad button{border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--tx);
+  font-size:28px;font-weight:700;font-family:inherit}
+.change{border-radius:12px;padding:10px 18px 14px;text-align:center;background:var(--go);color:#fff}
+.change span{font-size:12px;font-weight:700;letter-spacing:.2em;opacity:.85}
+.change b{display:block;font-size:72px;font-weight:700;line-height:1.02;letter-spacing:-.04em;
+  font-variant-numeric:tabular-nums}
+.dim{opacity:.3}
+
+/* the panic button, last word — no proposal may weaken it */
+.acts button.danger{background:var(--red);border-color:var(--red);color:#fff}
+
+/* =========================================================
+   01 · ΗΡΕΜΟ
+   ========================================================= */
+.p1.dark{--bg:#0F1316;--panel:#161B20;--card:#1A2026;--line:#262E36;--tx:#EDF2F6;--mut:#8E9BA6;
+  --go:#16A34A;--red:#DC2626;--slot-line:#39434D;--slot-tx:#77838F}
+.p1.light{--bg:#F4F6F8;--panel:#FFFFFF;--card:#FFFFFF;--line:#E2E7EC;--tx:#111619;--mut:#657079;
+  --go:#15803D;--red:#DC2626;--slot-line:#CBD3DA;--slot-tx:#8A959E}
+.p1 .tile{border-radius:14px}
+.p1 .tile b::before{content:'';display:inline-block;width:9px;height:9px;border-radius:50%;
+  background:var(--c);margin-right:8px;vertical-align:middle}
+.p1 .tile .pr{color:var(--mut)}
+.p1.light .tile .pr{color:#2F3841}
+
+/* =========================================================
+   02 · ΛΩΡΙΔΑ
+   ========================================================= */
+.p2.dark{--bg:#121110;--panel:#1A1817;--card:#201E1C;--line:#2E2A27;--tx:#F4F1ED;--mut:#A2988E;
+  --go:#1E9E57;--red:#D4402C;--slot-line:#463F39;--slot-tx:#8B8177}
+.p2.light{--bg:#F7F4EF;--panel:#FFFDFB;--card:#FFFDFB;--line:#E5DED4;--tx:#191614;--mut:#776E64;
+  --go:#1B7A47;--red:#C43A28;--slot-line:#D6CCBF;--slot-tx:#8E8579}
+.p2 .tile{padding-left:18px;padding-right:11px;gap:10px;overflow:hidden;
+  background:linear-gradient(90deg,color-mix(in srgb,var(--c) 9%,transparent),transparent 55%),var(--card)}
+.p2 .tile::before{content:'';position:absolute;left:0;top:0;bottom:0;width:7px;background:var(--c)}
+.p2 .slot{width:48px;height:48px}
+.p2 .tile b{font-size:16px}
+.p2 .tile .pr{color:var(--c)}
+.p2.dark .tile .pr{filter:brightness(1.45)}
+
+/* =========================================================
+   03 · ΚΑΡΤΕΣ
+   ========================================================= */
+.p3.dark{--bg:#0D1117;--panel:#141A21;--card:#192029;--line:#232C36;--tx:#EAF0F6;--mut:#8B98A6;
+  --go:#0EA05B;--red:#DC3B32;--slot-line:#36414E;--slot-tx:#7A8794}
+.p3.light{--bg:#F1F4F7;--panel:#FFFFFF;--card:#FFFFFF;--line:#DFE5EB;--tx:#0F141A;--mut:#616D79;
+  --go:#0B8A4E;--red:#CE362D;--slot-line:#C8D2DB;--slot-tx:#7F8B97}
+.p3 .grid{gap:13px}
+.p3 .tile{flex-direction:column;align-items:stretch;gap:0;padding:0;border-radius:16px;overflow:hidden}
+.p3 .tile .meta{padding:10px 14px 13px}
+.p3 .tile b{font-size:18px}
+.p3 .tile .pr{font-size:24px}
+.p3 .slot{width:100%;height:auto;flex:1;min-height:96px;border-radius:0;border:0;
+  border-bottom:2px dashed var(--slot-line);
+  font-size:11px;letter-spacing:.14em;background:color-mix(in srgb,var(--slot-line) 22%,transparent)}
+/* where a card has no picture, the category's colour fills the same block: an even grid
+   beats a grid with holes in it */
+.p3 .block{width:100%;height:auto;flex:1;min-height:96px;background:var(--c);display:flex;
+  align-items:center;justify-content:center;color:#fff;font-size:34px;font-weight:700;opacity:.92}
+
+/* =========================================================
+   04 · ΛΙΣΤΑ
+   ========================================================= */
+.p4.dark{--bg:#0A0A0C;--panel:#131316;--card:#151519;--line:#2A2A31;--tx:#FFFFFF;--mut:#9A9AA6;
+  --go:#12A150;--red:#E0342A;--slot-line:#3A3A44;--slot-tx:#8A8A96}
+.p4.light{--bg:#FFFFFF;--panel:#FFFFFF;--card:#FFFFFF;--line:#D8D8DE;--tx:#000000;--mut:#5B5B66;
+  --go:#0E8A45;--red:#CE2C22;--slot-line:#C6C6CE;--slot-tx:#77777F}
+.p4 .grid{grid-template-columns:repeat(2,1fr);gap:10px}
+.p4 .tile{padding:14px 18px;border-radius:10px;gap:16px}
+.p4 .tile .meta{display:flex;align-items:center;gap:14px}
+.p4 .tile b{flex:1;font-size:24px;line-height:1.1}
+.p4 .tile b::before{content:'';display:inline-block;width:11px;height:11px;border-radius:50%;
+  background:var(--c);margin-right:11px;vertical-align:middle}
+.p4 .tile .pr{margin:0;font-size:26px;white-space:nowrap}
+.p4 .slot{width:56px;height:56px}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="hero">
+  <div class="kicker">OPA POS · ΒΗΜΑ 3 · Η ΟΘΟΝΗ ΤΑΜΙΑ</div>
+  <h1>Τέσσερις προτάσεις για την οθόνη που θα δουλεύει έξι ώρες συνέχεια.</h1>
+  <p class="lead">Ίδια παραγγελία, ίδιο μενού, ίδια ώρα σε όλες. <b>Τα προϊόντα αριστερά, το ταμείο
+  δεξιά</b> — εκεί που είναι ήδη το χέρι. Οι δύο διακόπτες παρακάτω αλλάζουν <b>και τις τέσσερις
+  μαζί</b>: είναι οι ίδιοι διακόπτες που θα έχει ο σύλλογος στο πρόγραμμα.</p>
+</div>
+
+<div class="controls">
+  <div class="ctl"><span>ΘΕΜΑ</span>
+    <div class="seg">
+      <button data-theme="dark">ΣΚΟΤΕΙΝΟ</button>
+      <button data-theme="light">ΦΩΤΕΙΝΟ</button>
+    </div>
+  </div>
+  <div class="ctl"><span>ΠΛΑΚΙΔΙΑ</span>
+    <div class="seg">
+      <button data-mode="text">ΜΟΝΟ ΚΕΙΜΕΝΟ</button>
+      <button data-mode="photo">ΚΕΙΜΕΝΟ + ΦΩΤΟΓΡΑΦΙΑ</button>
+      <button data-mode="draw">ΚΕΙΜΕΝΟ + ΣΧΕΔΙΟ</button>
+    </div>
+  </div>
+</div>
+
+<div class="note">
+<b>Τα κενά πλαίσια είναι σκόπιμα.</b> Δείχνουν πού μπαίνει η φωτογραφία και πόσο χώρο πιάνει.
+Δεν βάζω δείγματα: οι φωτογραφίες θα μπουν αληθινές, από τη βιβλιοθήκη.<br><br>
+<b>Φωτογραφία έχουν μόνο τα ποτά</b> — αναψυκτικά, μπύρες, ουίσκι. Είναι τα προϊόντα που το
+κουρασμένο μάτι ψάχνει με το σχήμα και το χρώμα του μπουκαλιού αντί να διαβάσει. Στη λειτουργία
+«κείμενο + φωτογραφία» <b>το σουβλάκι δείχνει σκέτο κείμενο</b>, όχι άδειο κουτί. Πάτα τον
+διακόπτη και δες τη διαφορά: στα ΠΟΤΑ και στα ΑΝΑΨΥΚΤΙΚΑ ανοίγει θέση, αλλού όχι.<br><br>
+<b>Μία εξαίρεση, στις Κάρτες (03).</b> Εκεί η εικόνα πιάνει όλο το πλάτος, οπότε ένα πλακίδιο
+χωρίς φωτογραφία θα άφηνε τρύπα στη σειρά. Στη θέση της μπαίνει <b>το χρώμα της κατηγορίας με το
+αρχικό γράμμα</b>. Η σειρά μένει ίσια.
+</div>
+
+<div class="note">
+<b>Τι ισχύει σε όλες.</b> Μία οθόνη χωρίς βάθος, όλα τα προϊόντα ταυτόχρονα, καμία πλοήγηση μέσα
+στην πώληση. Η <b>ΑΚΥΡΩΣΗ ΟΛΩΝ</b> κόκκινη και στην ίδια θέση παντού. Τα <b>ΡΕΣΤΑ</b> το
+μεγαλύτερο πράγμα στην οθόνη τη στιγμή που μετράνε. Καμία κίνηση, κανένα εφέ στον δρόμο της
+πώλησης. Τα χρώματα των κατηγοριών τα διαλέγει ο σύλλογος — εδώ είναι δείγμα.
+</div>
+
+<!-- 01 -->
+<div class="section">
+  <div class="idx">ΠΡΟΤΑΣΗ 01</div>
+  <h2>Ήρεμο</h2>
+  <p class="thesis">Ουδέτερες επιφάνειες, ένα χρώμα για την πληρωμή, και η κατηγορία σαν μια
+  <b>μικρή κουκκίδα δίπλα στο όνομα</b>. Τίποτα δεν φωνάζει· όλα διαβάζονται. Είναι η πρόταση που
+  δείχνει <b>εργαλείο</b>, όχι παιχνίδι — και η μόνη που δεν κουράζει μετά από τέσσερις ώρες.</p>
+  <div class="sw">
+    <div><i style="background:#0F1316"></i><span>φόντο</span></div>
+    <div><i style="background:#1A2026"></i><span>πλακίδιο</span></div>
+    <div><i style="background:#F4F6F8"></i><span>φωτεινό</span></div>
+    <div><i style="background:#16A34A"></i><span>πληρωμή</span></div>
+    <div><i style="background:#DC2626"></i><span>ακύρωση</span></div>
+  </div>
+  <div id="p1"></div>
+  <div class="pros">
+    <div class="good"><h3>Υπέρ</h3><ul>
+      <li>Η πιο ξεκούραστη στα μάτια, σκοτεινή ή φωτεινή.</li>
+      <li>Το όνομα και η τιμή έχουν πάντα καθαρή αντίθεση, ό,τι χρώμα κι αν διαλέξει ο σύλλογος.</li>
+      <li>Δείχνει επαγγελματική σε επίδειξη — μοιάζει με πρόγραμμα που πληρώνεις.</li>
+    </ul></div>
+    <div class="bad"><h3>Κατά</h3><ul>
+      <li>Η κατηγορία φαίνεται λιγότερο. Ο νέος εθελοντής <b>διαβάζει</b> αντί να στοχεύει σε χρώμα.</li>
+      <li>Στα σκοτεινά, με ουρά, τα δευτερόλεπτα ανάγνωσης κοστίζουν.</li>
+    </ul></div>
+  </div>
+</div>
+
+<!-- 02 -->
+<div class="section">
+  <div class="idx">ΠΡΟΤΑΣΗ 02</div>
+  <h2>Λωρίδα</h2>
+  <p class="thesis">Το ίδιο ήρεμο πλακίδιο, αλλά με μια <b>χοντρή χρωματιστή λωρίδα στο πλάι</b> και
+  μια ελάχιστη απόχρωση από πίσω. Η κατηγορία φαίνεται από ένα μέτρο μακριά, χωρίς η οθόνη να
+  γεμίσει χρώμα. Η τιμή παίρνει κι αυτή το χρώμα της κατηγορίας — άρα «κόκκινο σύνολο» σημαίνει
+  κρεατικά, χωρίς να το σκεφτείς.</p>
+  <div class="sw">
+    <div><i style="background:#121110"></i><span>φόντο</span></div>
+    <div><i style="background:#201E1C"></i><span>πλακίδιο</span></div>
+    <div><i style="background:#F7F4EF"></i><span>φωτεινό</span></div>
+    <div><i style="background:#1E9E57"></i><span>πληρωμή</span></div>
+    <div><i style="background:#D4402C"></i><span>ακύρωση</span></div>
+  </div>
+  <div id="p2"></div>
+  <div class="pros">
+    <div class="good"><h3>Υπέρ</h3><ul>
+      <li>Ισορροπία: βρίσκεις κατηγορία με το χρώμα, διαβάζεις όνομα με καθαρή αντίθεση.</li>
+      <li>Το ζεστό ουδέτερο φόντο δεν «καίει» όπως το καθαρό γκρι στο σκοτάδι.</li>
+      <li>Σηκώνει 40 προϊόντα χωρίς να γίνει χάρτης χρωμάτων.</li>
+    </ul></div>
+    <div class="bad"><h3>Κατά</h3><ul>
+      <li>Αν ο σύλλογος διαλέξει πέντε παρόμοια χρώματα, η λωρίδα δεν σώζει τίποτα.</li>
+      <li>Λιγότερο εντυπωσιακή από την 03 σε πρώτη ματιά.</li>
+    </ul></div>
+  </div>
+</div>
+
+<!-- 03 -->
+<div class="section">
+  <div class="idx">ΠΡΟΤΑΣΗ 03</div>
+  <h2>Κάρτες</h2>
+  <p class="thesis">Η μόνη φτιαγμένη <b>γύρω από τη φωτογραφία</b>. Κάθε προϊόν είναι κάρτα: εικόνα
+  πάνω σε όλο το πλάτος, όνομα και τιμή από κάτω. Με τις φωτογραφίες των ποτών μέσα, μοιάζει με
+  κατάλογο — και το μπουκάλι το βρίσκεις χωρίς να διαβάσεις λέξη. <b>Πάτα «κείμενο + φωτογραφία»
+  για να την κρίνεις</b>· στο σκέτο κείμενο δεν δείχνει τι αξίζει.</p>
+  <div class="sw">
+    <div><i style="background:#0D1117"></i><span>φόντο</span></div>
+    <div><i style="background:#192029"></i><span>κάρτα</span></div>
+    <div><i style="background:#F1F4F7"></i><span>φωτεινό</span></div>
+    <div><i style="background:#0EA05B"></i><span>πληρωμή</span></div>
+    <div><i style="background:#DC3B32"></i><span>ακύρωση</span></div>
+  </div>
+  <div id="p3"></div>
+  <div class="pros">
+    <div class="good"><h3>Υπέρ</h3><ul>
+      <li>Με φωτογραφίες, το γρηγορότερο μάτι από τα τέσσερα στα ποτά.</li>
+      <li>Το πιο εντυπωσιακό σε επίδειξη — αυτό που θα δείξει ο σύλλογος σε άλλον σύλλογο.</li>
+      <li>Όπου λείπει φωτογραφία, το χρώμα κατηγορίας κρατάει τη σειρά ίσια.</li>
+    </ul></div>
+    <div class="bad"><h3>Κατά</h3><ul>
+      <li><b>Χωράει τα μισά προϊόντα.</b> Πάνω από 12, θέλει κύλιση μέσα στην πώληση.</li>
+      <li>Εξαρτάται από τη βιβλιοθήκη: χωρίς φωτογραφίες είναι απλώς μια μεγάλη κάρτα.</li>
+      <li>Απαιτεί συνέπεια στις φωτογραφίες. Μία στραβή χαλάει ολόκληρη τη σειρά.</li>
+    </ul></div>
+  </div>
+</div>
+
+<!-- 04 -->
+<div class="section">
+  <div class="idx">ΠΡΟΤΑΣΗ 04</div>
+  <h2>Λίστα</h2>
+  <p class="thesis">Δύο στήλες, φαρδιές γραμμές, <b>τεράστια γράμματα</b>. Όνομα αριστερά, τιμή
+  δεξιά, κουκκίδα κατηγορίας μπροστά. Καθαρό μαύρο ή καθαρό λευκό, μηδέν διακόσμηση. Είναι η
+  πρόταση για μεγάλα ονόματα, για γυαλιά που δεν φοράει κανείς, και για χέρια που δεν στοχεύουν.</p>
+  <div class="sw">
+    <div><i style="background:#0A0A0C"></i><span>φόντο</span></div>
+    <div><i style="background:#151519"></i><span>γραμμή</span></div>
+    <div><i style="background:#FFFFFF"></i><span>φωτεινό</span></div>
+    <div><i style="background:#12A150"></i><span>πληρωμή</span></div>
+    <div><i style="background:#E0342A"></i><span>ακύρωση</span></div>
+  </div>
+  <div id="p4"></div>
+  <div class="pros">
+    <div class="good"><h3>Υπέρ</h3><ul>
+      <li>Αδύνατο να αστοχήσεις με το δάχτυλο. Οι μεγαλύτεροι στόχοι από τα τέσσερα.</li>
+      <li>Διαβάζεται από μισό μέτρο, με οποιοδήποτε φως.</li>
+      <li>Χωράει άνετα μεγάλα ονόματα — «Καλαμάκι κοτόπουλο» δεν σπάει σε δύο σειρές.</li>
+    </ul></div>
+    <div class="bad"><h3>Κατά</h3><ul>
+      <li>Χωράει λιγότερα προϊόντα από 01 και 02.</li>
+      <li>Μοιάζει με λίστα, όχι με ταμείο. Λιγότερο «μοντέρνο» στο μάτι.</li>
+      <li>Η φωτογραφία μένει μικρή στο πλάι — δεν αξιοποιεί τη βιβλιοθήκη.</li>
+    </ul></div>
+  </div>
+</div>
+
+<!-- σύγκριση -->
+<div class="section">
+  <h2>Πώς συγκρίνονται</h2>
+  <table class="info">
+    <tr><th></th><th>01 Ήρεμο</th><th>02 Λωρίδα</th><th>03 Κάρτες</th><th>04 Λίστα</th></tr>
+    <tr><th>Προϊόντα χωρίς κύλιση</th><td>20</td><td>20</td><td><b>12</b></td><td>16</td></tr>
+    <tr><th>Ταχύτητα στα σκοτεινά</th><td>Καλή</td><td><b>Πολύ καλή</b></td><td><b>Πολύ καλή</b> (με φωτογραφίες)</td><td>Καλή</td></tr>
+    <tr><th>Μέγεθος στόχου για το δάχτυλο</th><td>Μεσαίο</td><td>Μεσαίο</td><td>Μεγάλο</td><td><b>Το μεγαλύτερο</b></td></tr>
+    <tr><th>Χωρίς βιβλιοθήκη φωτογραφιών</th><td>Μια χαρά</td><td>Μια χαρά</td><td><b>Χάνει τον λόγο ύπαρξής της</b></td><td>Μια χαρά</td></tr>
+    <tr><th>Δείχνει επαγγελματικό</th><td><b>Ναι</b></td><td><b>Ναι</b></td><td><b>Ναι</b></td><td>Απλό, λιτό</td></tr>
+  </table>
+
+  <h3 style="font-size:23px;margin-top:32px">Η σύστασή μου</h3>
+  <p class="thesis"><b>02 «Λωρίδα» για βάση, με τις κάρτες της 03 ως επιλογή.</b> Η Λωρίδα κρατάει
+  και τα δύο που μετράνε — βρίσκεις κατηγορία με το χρώμα, διαβάζεις με καθαρή αντίθεση — και
+  δουλεύει το ίδιο καλά με ή χωρίς φωτογραφίες, δηλαδή <b>δεν εξαρτάται από δουλειά που δεν έχει
+  γίνει ακόμη</b>. Η 03 είναι πραγματικά ωραία, αλλά στηρίζεται ολόκληρη στη βιβλιοθήκη και κόβει
+  τα προϊόντα στα μισά.</p>
+  <table class="info">
+    <tr><th>Τι προτείνω</th><th>Γιατί</th></tr>
+    <tr><td>Βάση η <b>02</b></td><td>Δεν έχει αδύναμο σενάριο. Ούτε χωρίς φωτογραφίες, ούτε με 40 προϊόντα, ούτε στο φως</td></tr>
+    <tr><td>Η <b>03</b> μπαίνει ως τρίτη επιλογή στον ίδιο διακόπτη πλακιδίων</td><td>Ο σύλλογος με λίγα προϊόντα και καλές φωτογραφίες θα τη θέλει, και είναι η ίδια οθόνη με άλλο πλακίδιο — όχι δεύτερο πρόγραμμα</td></tr>
+    <tr><td>Από την <b>04</b> κρατάω τα μεγέθη γραμμάτων στο καλάθι</td><td>Το καλάθι το διαβάζει ο ταμίας με τη σειρά, υπό πίεση. Εκεί το μεγάλο γράμμα κερδίζει πάντα</td></tr>
+    <tr><td>Από την <b>01</b> κρατάω το ουδέτερο φόντο ως εναλλακτική παλέτα</td><td>Αν το ζεστό της 02 σου φανεί πολύ, αλλάζουν μόνο έξι χρώματα</td></tr>
+  </table>
+
+  <div class="note">
+  <b>Τι μένει ανοιχτό.</b> Το <b>ελάχιστο μέγεθος κουμπιού μετριέται σε αληθινή οθόνη αφής</b>, όχι
+  εδώ — τα μεγέθη είναι σχεδιαστικά. Το ίδιο και η συμπεριφορά με 10, 20 και 40 προϊόντα σε αληθινό
+  μενού. Και η <b>βιβλιοθήκη φωτογραφιών</b> είναι χωριστή δουλειά, που ξεκινάει μόλις διαλέξεις
+  πρόταση.
+  </div>
+</div>
+
+</div>
+
+<script>
+const CATS = {meat:'ΚΡΕΑΤΙΚΑ', drink:'ΠΟΤΑ', soft:'ΑΝΑΨΥΚΤΙΚΑ', side:'ΣΥΝΟΔΕΥΤΙΚΑ', entry:'ΕΙΣΟΔΟΣ'};
+
+/* Only bottled and canned drinks have a picture in the library — that is the whole point of
+   the library. Everything else shows text, and shows it deliberately. */
+const HASPHOTO = c => c === 'drink' || c === 'soft';
+
+/* Ordered so that the first twelve already cover every category: the Κάρτες show twelve,
+   and a preview that hid the drinks would be lying about the busiest part of the screen. */
+const PRODUCTS = [
+  ['Σουβλάκι χοιρινό','1,50','meat'],
+  ['Κοντοσούβλι','3,00','meat'],
+  ['Λουκάνικο','2,50','meat'],
+  ['Μπριζόλα','6,50','meat'],
+  ['Γύρος μερίδα','5,00','meat'],
+  ['Μπύρα 500ml','3,00','drink'],
+  ['Ουίσκι','6,00','drink'],
+  ['Κρασί ποτήρι','2,00','drink'],
+  ['Αναψυκτικό','2,00','soft'],
+  ['Νερό 500ml','0,50','soft'],
+  ['Πατάτες','3,00','side'],
+  ['Εισιτήριο','5,00','entry'],
+  ['Κοκορέτσι','4,00','meat'],
+  ['Παϊδάκια','8,00','meat'],
+  ['Καλαμάκι κοτόπουλο','1,80','meat'],
+  ['Ούζο','3,00','drink'],
+  ['Καφές','1,50','soft'],
+  ['Ψωμί','0,50','side'],
+  ['Τζατζίκι','2,50','side'],
+  ['Χωριάτικη','5,00','side']
+];
+
+const CART = [
+  ['Σουβλάκι χοιρινό','1,50 € / τεμ.',4,'6,00'],
+  ['Μπύρα 500ml','3,00 € / τεμ.',2,'6,00'],
+  ['Πατάτες','3,00 € / τεμ.',1,'3,00'],
+  ['Νερό 500ml','ΚΕΡΑΣΜΑ',1,'0,00',true],
+  ['Ψωμί','0,50 € / τεμ.',2,'1,00']
+];
+
+let THEME = 'dark';
+let MODE = 'text';
+
+/* how many products fit without scrolling, per proposal and per mode */
+const CAPACITY = {p1:20, p2:20, p3:12, p4:16};
+
+function slotHTML(prop, cat, name){
+  if (MODE === 'draw') return `<span class="slot">ΣΧΕΔΙΟ</span>`;
+  if (MODE === 'photo' && HASPHOTO(cat)) return `<span class="slot">ΦΩΤΟ<br>ΓΡΑΦΙΑ</span>`;
+  // Proposal 03 keeps its picture block filled with the category colour, so the row stays even
+  if (MODE === 'photo' && prop === 'p3') return `<span class="block">${name.charAt(0)}</span>`;
+  return '';
+}
+
+function tiles(prop){
+  return PRODUCTS.slice(0, CAPACITY[prop]).map(([nm,pr,c]) => `
+    <div class="tile" style="--c:var(--${c})">
+      ${slotHTML(prop, c, nm)}
+      <span class="meta"><b>${nm}</b><span class="pr">${pr} €</span></span>
+    </div>`).join('');
+}
+
+const legend = () => Object.entries(CATS)
+  .map(([k,v]) => `<div><i style="background:var(--${k})"></i>${v}</div>`).join('');
+
+const cart = () => CART.map(l => `
+  <div class="line ${l[4] ? 'free' : ''}">
+    <div class="nm"><b>${l[0]}</b><span>${l[1]}</span></div>
+    <div class="qty"><button>−</button><b>${l[2]}</b><button>+</button></div>
+    <div class="amt">${l[3]}</div>
+  </div>`).join('');
+
+const selling = () => `
+  <div class="cart-h"><span>ΠΑΡΑΓΓΕΛΙΑ</span><span>5 ΕΙΔΗ</span></div>
+  <div class="lines">${cart()}</div>
+  <div class="sum"><span>ΣΥΝΟΛΟ</span><b>16,00 €</b></div>
+  <div class="acts">
+    <button>ΚΕΡΑΣΜΑ</button><button>ΔΙΑΦΟΡΑ</button>
+    <button>ΑΝΑΤΥΠΩΣΗ</button><button class="danger">ΑΚΥΡΩΣΗ ΟΛΩΝ</button>
+  </div>
+  <button class="pay">ΠΛΗΡΩΜΗ · 16,00 €</button>`;
+
+const paying = () => {
+  const keys = ['7','8','9','4','5','6','1','2','3','00','0','C'];
+  return `
+  <div class="cart-h"><span>ΠΛΗΡΩΜΗ</span><span>ΣΥΝΟΛΟ 16,00 €</span></div>
+  <div class="padwrap">
+    <div class="given"><span>ΕΔΩΣΕ</span><b>20,00 €</b></div>
+    <div class="pad">${keys.map(k => `<button>${k}</button>`).join('')}</div>
+    <div class="change"><span>ΡΕΣΤΑ</span><b>4,00 €</b></div>
+  </div>
+  <button class="pay">ΠΛΗΡΩΜΗ &amp; ΕΚΤΥΠΩΣΗ</button>`;
+};
+
+function screenHTML(prop, mode){
+  const pay = mode === 'pay';
+  return `<div class="screen ${prop} ${THEME}">
+    <div class="top">
+      <div class="till">ΤΑΜΕΙΟ Κ<em>Πανηγύρι Αγίου Γεωργίου</em></div>
+      <div class="clock">Πέμπτη 15 Αυγούστου · 21:47</div>
+      <div class="chip">ΤΑΜΙΑΣ: ΓΙΩΡΓΟΣ</div>
+      <div class="chip">ΔΙΑΧΕΙΡΙΣΗ</div>
+    </div>
+    <div class="body">
+      <div class="left ${pay ? 'dim' : ''}">
+        <div class="legend">${legend()}</div>
+        <div class="grid">${tiles(prop)}</div>
+      </div>
+      <div class="cart">${pay ? paying() : selling()}</div>
+    </div>
+  </div>`;
+}
+
+function render(){
+  ['p1','p2','p3','p4'].forEach(p => {
+    document.getElementById(p).innerHTML = `
+      <div class="pair">
+        <div><div class="cap">ΚΑΝΟΝΙΚΗ ΔΟΥΛΕΙΑ</div>
+          <div class="frame">${screenHTML(p,'sell')}</div></div>
+        <div><div class="cap">Η ΣΤΙΓΜΗ ΤΗΣ ΠΛΗΡΩΜΗΣ</div>
+          <div class="frame">${screenHTML(p,'pay')}</div></div>
+      </div>`;
+  });
+  document.querySelectorAll('[data-theme]').forEach(b => b.classList.toggle('on', b.dataset.theme === THEME));
+  document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('on', b.dataset.mode === MODE));
+}
+
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-theme]'), m = e.target.closest('[data-mode]');
+  if (t) { THEME = t.dataset.theme; render(); }
+  if (m) { MODE = m.dataset.mode; render(); }
+});
+
+render();
+</script>
+</body>
+</html>
