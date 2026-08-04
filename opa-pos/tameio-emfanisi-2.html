@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<title>Opa POS — Δεύτερος γύρος: τέσσερις κατευθύνσεις</title>
+<style>
+@font-face{font-family:'Noto Sans';src:url('../assets/fonts/notosans-400-normal-greek.woff2') format('woff2');font-weight:400;font-display:swap;unicode-range:U+0370-03FF,U+1F00-1FFF}
+@font-face{font-family:'Noto Sans';src:url('../assets/fonts/notosans-400-normal-latin.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Noto Sans';src:url('../assets/fonts/notosans-500-normal-greek.woff2') format('woff2');font-weight:500;font-display:swap;unicode-range:U+0370-03FF,U+1F00-1FFF}
+@font-face{font-family:'Noto Sans';src:url('../assets/fonts/notosans-500-normal-latin.woff2') format('woff2');font-weight:500;font-display:swap}
+@font-face{font-family:'Noto Sans';src:url('../assets/fonts/notosans-700-normal-greek.woff2') format('woff2');font-weight:700;font-display:swap;unicode-range:U+0370-03FF,U+1F00-1FFF}
+@font-face{font-family:'Noto Sans';src:url('../assets/fonts/notosans-700-normal-latin.woff2') format('woff2');font-weight:700;font-display:swap}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans',system-ui,sans-serif;background:#0b0d10;color:#e9edf2;line-height:1.55;
+  padding:0 40px 140px;-webkit-font-smoothing:antialiased}
+.page{max-width:2360px;margin:0 auto}
+
+/* ---------- page hero ---------- */
+.hero{padding:88px 0 20px;border-bottom:1px solid #1e242b;margin-bottom:56px}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:.24em;color:#6d7a86;margin-bottom:22px}
+h1{font-size:76px;font-weight:700;letter-spacing:-.035em;line-height:1.02;margin-bottom:26px;max-width:20ch}
+h1 em{font-style:normal;color:#7d8a97}
+.lead{font-size:20px;color:#aeb9c4;max-width:92ch}
+.lead b{color:#fff;font-weight:700}
+
+h2{font-size:40px;font-weight:700;letter-spacing:-.02em;margin:0 0 4px}
+h3{font-size:18px;font-weight:700;margin:0 0 12px;letter-spacing:.02em;color:#fff}
+p{max-width:100ch}
+
+.chapter{padding:70px 0 10px;border-top:1px solid #1e242b;margin-top:70px}
+.num{display:flex;align-items:baseline;gap:18px;margin-bottom:10px}
+.num i{font-style:normal;font-size:15px;font-weight:700;letter-spacing:.2em;color:#5f6b77}
+.thesis{font-size:19px;color:#aeb9c4;max-width:96ch;margin-top:14px}
+.thesis b{color:#fff}
+.sig{margin-top:18px;padding:14px 20px;border-left:3px solid #3d4a57;background:#12161a;max-width:96ch;color:#c2cdd8;font-size:16px}
+.sig b{color:#fff}
+
+.sw{display:flex;gap:9px;flex-wrap:wrap;margin:22px 0 4px}
+.sw div{width:88px}
+.sw i{display:block;height:44px;border-radius:6px;border:1px solid rgba(255,255,255,.08)}
+.sw span{display:block;font-size:11px;color:#78848f;margin-top:5px;font-style:normal;letter-spacing:.04em}
+
+.cap{font-size:13px;font-weight:700;letter-spacing:.16em;color:#6d7a86;margin-bottom:11px}
+.pair{display:flex;gap:34px;flex-wrap:wrap;margin:22px 0 0}
+.rowlabel{font-size:13px;font-weight:700;letter-spacing:.16em;color:#8894a0;margin:34px 0 4px}
+
+.pros{display:flex;gap:40px;flex-wrap:wrap;margin-top:26px}
+.pros ul{list-style:none;max-width:56ch}
+.pros li{padding:5px 0 5px 26px;position:relative;font-size:16px;color:#bcc6d0}
+.pros li::before{position:absolute;left:0;font-weight:700}
+.pros .good li::before{content:'+';color:#5fd193}
+.pros .bad li::before{content:'−';color:#e8938a}
+
+table.info{border-collapse:collapse;margin:22px 0;font-size:15px}
+table.info th,table.info td{border:1px solid #232a31;padding:10px 15px;text-align:left;vertical-align:top}
+table.info th{background:#12171c;font-weight:700;color:#fff}
+.note{border-left:3px solid #3d4a57;background:#12161a;padding:18px 22px;margin:28px 0;max-width:100ch;color:#c2cdd8}
+.note b{color:#fff}
+
+/* =========================================================
+   MOCK CANVAS — 1280x800 logical
+   ========================================================= */
+:root{--s:.86}
+.frame{width:calc(1280px * var(--s));height:calc(800px * var(--s));overflow:hidden;border-radius:8px}
+.screen{width:1280px;height:800px;transform:scale(var(--s));transform-origin:top left;
+  display:flex;flex-direction:column;position:relative;overflow:hidden;
+  font-family:'Noto Sans',sans-serif;background:var(--bg);color:var(--tx)}
+
+.top{display:flex;align-items:center;gap:16px;padding:0 22px;height:72px;flex:0 0 auto;position:relative;z-index:2}
+.till{font-size:25px;font-weight:700;letter-spacing:.01em}
+.till em{font-style:normal;color:var(--mut);font-weight:400;font-size:17px;margin-left:12px}
+.clock{margin-left:auto;font-size:16px;color:var(--mut)}
+.chip{border:1px solid var(--line);border-radius:8px;padding:10px 16px;font-size:15px;font-weight:700;color:var(--tx)}
+
+.body{display:flex;flex:1;min-height:0;position:relative;z-index:2}
+.cart{width:430px;flex:0 0 430px;display:flex;flex-direction:column;background:var(--panel);border-right:1px solid var(--line)}
+.right{flex:1;min-width:0;display:flex;flex-direction:column;padding:14px 16px 16px;gap:12px}
+
+.cart-h{padding:15px 20px 9px;font-size:13px;font-weight:700;letter-spacing:.16em;color:var(--mut)}
+.lines{flex:1;overflow:hidden;padding:0 14px}
+.line{display:flex;align-items:center;gap:10px;padding:8px 6px;border-bottom:1px solid var(--line)}
+.line .nm{flex:1;min-width:0}
+.line .nm b{display:block;font-size:18px;font-weight:700;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.line .nm span{display:block;font-size:13px;line-height:1.3;color:var(--mut)}
+.qty{display:flex;align-items:center;gap:6px}
+.qty button{width:44px;height:44px;border-radius:8px;border:1px solid var(--line);background:transparent;
+  color:var(--tx);font-size:23px;font-weight:700;line-height:1;font-family:inherit;cursor:default}
+.qty b{min-width:32px;text-align:center;font-size:21px;font-weight:700}
+.line .amt{width:74px;text-align:right;font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
+.line.free .amt,.line.free .nm span{color:var(--acc-free);font-weight:700}
+
+.sum{padding:14px 20px;border-top:1px solid var(--line);display:flex;align-items:baseline;justify-content:space-between}
+.sum span{font-size:13px;font-weight:700;letter-spacing:.16em;color:var(--mut)}
+.sum b{font-size:46px;font-weight:700;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+
+.acts{padding:0 14px 12px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.acts button{height:60px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--tx);
+  font-size:15px;font-weight:700;font-family:inherit;letter-spacing:.03em;cursor:default}
+.acts button.danger{background:var(--red);border-color:var(--red);color:#fff}
+.pay{margin:0 14px 14px;height:94px;width:calc(100% - 28px);border-radius:12px;border:0;
+  background:var(--go);color:var(--go-tx);font-size:30px;font-weight:700;font-family:inherit;
+  letter-spacing:.02em;cursor:default}
+
+.legend{display:flex;gap:8px;flex-wrap:wrap;flex:0 0 auto}
+.legend div{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;letter-spacing:.08em;
+  color:var(--mut);padding:5px 11px;border-radius:20px;border:1px solid var(--line)}
+.legend i{width:11px;height:11px;border-radius:50%;display:block}
+
+.grid{flex:1;display:grid;gap:12px;align-content:start;overflow:hidden}
+.tile{display:flex;align-items:center;gap:11px;padding:12px;border-radius:14px;
+  border:1px solid var(--line);background:var(--card);color:var(--tx);text-align:left;
+  font-family:inherit;position:relative;overflow:hidden;cursor:default}
+.tile .ico{flex:0 0 auto;width:46px;height:46px;color:var(--c);display:flex}
+.tile .ico svg{width:100%;height:100%}
+.tile .ico svg .f{fill:currentColor;stroke:none;opacity:.17}
+.tile .meta{flex:1;min-width:0}
+.tile b{display:block;font-size:17px;font-weight:700;line-height:1.15}
+.tile .pr{display:block;font-size:23px;font-weight:700;letter-spacing:-.01em;font-variant-numeric:tabular-nums;margin-top:3px}
+
+/* payment column */
+.padwrap{flex:1;display:flex;flex-direction:column;padding:0 14px 12px;gap:10px;min-height:0}
+.given{border:1px solid var(--line);border-radius:10px;padding:9px 16px}
+.given span{font-size:12px;font-weight:700;letter-spacing:.16em;color:var(--mut)}
+.given b{display:block;font-size:36px;font-weight:700;font-variant-numeric:tabular-nums}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;flex:1}
+.pad button{border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--tx);
+  font-size:29px;font-weight:700;font-family:inherit;cursor:default}
+.change{border-radius:12px;padding:10px 18px 14px;text-align:center;background:var(--go);color:var(--go-tx)}
+.change span{font-size:13px;font-weight:700;letter-spacing:.2em;opacity:.85}
+.change b{display:block;font-size:74px;font-weight:700;line-height:1.02;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.dim{opacity:.3}
+
+/* =========================================================
+   1 · ΓΙΡΛΑΝΤΑ — the strung bulbs of the festival
+   ========================================================= */
+.dG{--meat:#F2554B;--drink:#5B86F5;--soft:#1FC0A4;--side:#F5B32B;--entry:#B366E8;--acc-free:#1FC0A4}
+.dG.dark{--bg:#080B24;--panel:#0E1233;--card:#141A45;--line:#28306E;--tx:#F3F2FF;--mut:#9AA1D8;
+  --go:#F5B32B;--go-tx:#241A02;--red:#E14B3C}
+.dG.light{--bg:#FAF3E9;--panel:#FFFFFF;--card:#FFFFFF;--line:#E5DBCB;--tx:#1B1740;--mut:#6F6893;
+  --go:#F0AC33;--go-tx:#2A1B02;--red:#C4382A}
+.dG .top{border-bottom:1px solid var(--line)}
+.garland{display:none}
+.dG .garland{display:block;height:54px;margin:-14px -16px -4px;flex:0 0 auto}
+.dG .garland svg{width:100%;height:54px;display:block}
+.dG .grid{grid-template-columns:repeat(4,1fr)}
+.dG .tile{background:linear-gradient(180deg,color-mix(in srgb,var(--c) 13%,transparent),transparent 70%),var(--card);
+  border-color:color-mix(in srgb,var(--c) 38%,var(--line))}
+.dG .tile .ico{width:46px;height:46px;border-radius:50%;padding:6px;
+  background:color-mix(in srgb,var(--c) 16%,transparent);
+  box-shadow:0 0 0 1px color-mix(in srgb,var(--c) 30%,transparent),0 0 22px -6px var(--c)}
+.dG .tile .pr{color:var(--c)}
+.dG.light .tile{background:linear-gradient(180deg,color-mix(in srgb,var(--c) 22%,transparent),color-mix(in srgb,var(--c) 4%,transparent) 78%),var(--card);
+  border-color:color-mix(in srgb,var(--c) 52%,var(--line))}
+.dG.light .tile .ico{background:color-mix(in srgb,var(--c) 26%,#fff);box-shadow:0 0 0 1px color-mix(in srgb,var(--c) 40%,transparent)}
+.dG.light .tile .pr{color:color-mix(in srgb,var(--c) 72%,#000)}
+.dG .sum b{color:var(--go)}
+.dG.light .sum b{color:var(--tx)}
+.dG .pay{box-shadow:0 0 34px -10px var(--go)}
+
+/* =========================================================
+   2 · ΛΑΔΟΚΟΛΛΑ — the paper on the taverna table
+   ========================================================= */
+.dL{--meat:#B8372C;--drink:#2C4C86;--soft:#137A6B;--side:#B37414;--entry:#6C3E9E;--acc-free:#137A6B}
+.dL.light{--bg:#EFE8D6;--panel:#FBF7EC;--card:#FFFDF6;--line:#D6C9AC;--tx:#1E2A44;--mut:#7C6F55;
+  --go:#2F6B45;--go-tx:#FFFFFF;--red:#B8372C;--check:rgba(30,42,68,.055)}
+.dL.dark{--bg:#14120D;--panel:#1C1913;--card:#221E17;--line:#383126;--tx:#F5EEDC;--mut:#A2957A;
+  --go:#3E8A5C;--go-tx:#FFFFFF;--red:#C9503F;--check:rgba(245,238,220,.05)}
+.dL .screen,.dL.dark .screen{background:var(--bg)}
+.dL::before{content:'';position:absolute;inset:0;z-index:0;
+  background:repeating-linear-gradient(0deg,var(--check) 0 1px,transparent 1px 26px),
+             repeating-linear-gradient(90deg,var(--check) 0 1px,transparent 1px 26px)}
+.dL .grid{grid-template-columns:repeat(5,1fr);gap:14px}
+.dL .tile{flex-direction:column;align-items:center;text-align:center;gap:6px;padding:12px 10px 0;
+  border-radius:4px;border:1px solid var(--line);background:var(--card);
+  box-shadow:0 1px 0 rgba(0,0,0,.06)}
+.dL .tile .ico{width:44px;height:44px}
+.dL .tile .meta{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;width:100%}
+.dL .tile b{font-size:17px;line-height:1.2}
+.dL .tile .pr{margin:6px 0 0;padding:3px 12px 5px;font-size:21px;color:var(--red);
+  border:2px solid var(--red);border-radius:3px;transform:rotate(-1.6deg);letter-spacing:-.02em}
+.dL .tile::after{content:'';position:absolute;left:0;right:0;bottom:0;height:8px;
+  background:radial-gradient(circle at 5px 8px,var(--bg) 4px,transparent 4.5px) repeat-x;
+  background-size:10px 10px}
+.dL .cart{border-right:1px solid var(--line)}
+.dL .line{border-bottom:1px dotted var(--line)}
+.dL .sum{border-top:2px solid var(--tx);margin:0 14px;padding:14px 6px}
+.dL .sum b{border:3px double var(--red);color:var(--red);padding:2px 14px 4px;border-radius:4px;
+  transform:rotate(-1.2deg);font-size:40px}
+.dL .cart-h{letter-spacing:.3em}
+
+/* =========================================================
+   3 · ΚΑΝΤΙΝΑ — enamel plates and hard shadows
+   ========================================================= */
+.dK{--meat:#D0392B;--drink:#1F6FB2;--soft:#0E9B8A;--side:#DFA020;--entry:#7B4BAF;--acc-free:#0E9B8A}
+.dK.light{--bg:#E4EAE5;--panel:#FFFFFF;--card:#FFFFFF;--line:#C6D0C8;--tx:#13201A;--mut:#5B6B60;
+  --go:#1E8E4A;--go-tx:#FFFFFF;--red:#D0392B;--hard:rgba(19,32,26,.22)}
+.dK.dark{--bg:#0D1412;--panel:#151E1A;--card:#1B2621;--line:#2C3A33;--tx:#F1F7F3;--mut:#8DA396;
+  --go:#1EA155;--go-tx:#FFFFFF;--red:#DC4133;--hard:rgba(0,0,0,.55)}
+.dK .grid{grid-template-columns:repeat(4,1fr)}
+.dK .tile{flex-direction:column;align-items:center;gap:0;padding:0;border:0;border-radius:16px;
+  background:var(--c);color:#fff;box-shadow:0 5px 0 var(--hard)}
+.dK .tile::before{content:'';position:absolute;inset:4px;border:2px solid rgba(255,255,255,.55);
+  border-radius:12px;pointer-events:none}
+.dK .tile .ico{width:44px;height:44px;color:#fff;margin-top:13px}
+.dK .tile .ico svg .f{opacity:.28}
+.dK .tile .meta{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;width:100%}
+.dK .tile b{font-size:18px;text-align:center;padding:5px 12px 0}
+.dK .tile .pr{width:100%;margin:0;padding:5px 0 7px;text-align:center;font-size:23px;
+  background:rgba(0,0,0,.26);border-radius:0 0 16px 16px}
+.dK .chip,.dK .acts button,.dK .qty button,.dK .pad button{border-width:2px}
+.dK .acts button{box-shadow:0 4px 0 var(--hard)}
+.dK .acts button.danger,.dK .pay,.dK .change{box-shadow:0 5px 0 var(--hard)}
+.dK .pay{border-radius:14px}
+.dK .sum b{font-size:48px}
+
+/* =========================================================
+   4 · ΚΑΘΑΡΟ ΦΩΣ — quiet surfaces, colour only in the icon
+   ========================================================= */
+.dF{--meat:#E1554B;--drink:#3B82F6;--soft:#10B981;--side:#F59E0B;--entry:#8B5CF6;--acc-free:#10B981}
+.dF.light{--bg:#F4F5F7;--panel:#FFFFFF;--card:#FFFFFF;--line:#E6E8ED;--tx:#12151A;--mut:#6B7280;
+  --go:#0E9F5B;--go-tx:#FFFFFF;--red:#E0392B;--soft-shadow:0 1px 2px rgba(16,20,28,.06),0 6px 18px -8px rgba(16,20,28,.18)}
+.dF.dark{--bg:#0D0F12;--panel:#14171B;--card:#181C21;--line:#242830;--tx:#F4F5F7;--mut:#98A0AB;
+  --go:#12A75F;--go-tx:#FFFFFF;--red:#E0453A;--soft-shadow:0 1px 2px rgba(0,0,0,.5)}
+.dF .grid{grid-template-columns:repeat(4,1fr);gap:14px}
+.dF .tile{border-radius:20px;box-shadow:var(--soft-shadow);padding:13px;gap:12px}
+.dF .tile .ico{width:46px;height:46px;padding:8px;border-radius:14px;
+  background:color-mix(in srgb,var(--c) 12%,transparent)}
+.dF .tile b{font-size:17px;font-weight:500}
+.dF .tile .pr{font-size:22px;color:var(--mut)}
+.dF.light .tile .pr{color:#3A4049}
+.dF .cart{border-right:1px solid var(--line)}
+.dF .sum{padding:18px 20px}
+.dF .sum b{font-size:54px;letter-spacing:-.045em}
+.dF .sum b em{font-style:normal;font-weight:400;color:var(--mut);margin-left:4px}
+.dF .pay{border-radius:16px}
+.dF .acts button,.dF .qty button,.dF .pad button{border-radius:12px;background:var(--card);box-shadow:var(--soft-shadow)}
+.dF .change b{font-size:80px}
+
+/* THE CONTRAST GUARD, running for real in this page.
+   When the association picks a light category colour, white lettering would vanish on it.
+   A script measures every tile's actual colour and flips the lettering to near-black.
+   Look at the amber tiles in ΚΑΝΤΙΝΑ — that is the guard working, not a hand-made exception. */
+.tile.onlight{color:#1A1206}
+.tile.onlight .ico{color:#1A1206}
+.dK .tile.onlight::before{border-color:rgba(0,0,0,.28)}
+.dK .tile.onlight .pr{background:rgba(0,0,0,.15)}
+
+/* Last word on the panic button. Every direction restyles its buttons, and the danger
+   state must never lose to one of them — this rule sits last on purpose. */
+.acts button.danger{background:var(--red);border-color:var(--red);color:#fff}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="hero">
+  <div class="eyebrow">OPA POS · ΒΗΜΑ 3 · ΔΕΥΤΕΡΟΣ ΓΥΡΟΣ</div>
+  <h1>Τέσσερις κατευθύνσεις που <em>δεν μοιάζουν με ταμείο.</em></h1>
+  <p class="lead">Ο πρώτος γύρος ρώτησε «πόσο γρήγορα διαβάζεται;». Αυτός ρωτάει κάτι άλλο:
+  <b>πώς είναι να στέκεσαι μπροστά του έξι ώρες;</b> Και οι τέσσερις έχουν <b>δικό τους σχέδιο για κάθε προϊόν</b> —
+  εικοσι σχέδια φτιαγμένα από το μηδέν, όχι εικονίδια κατεβασμένα. Κάθε κατεύθυνση σε φωτεινό και σκοτεινό.</p>
+</div>
+
+<div class="note">
+<b>Τι κρατάει και εδώ.</b> Καλάθι αριστερά, προϊόντα δεξιά, μία οθόνη χωρίς βάθος, όλα τα προϊόντα ταυτόχρονα.
+Η ΑΚΥΡΩΣΗ ΟΛΩΝ κόκκινη και ευρισκόμενη χωρίς βλέμμα, τα ρέστα το μεγαλύτερο πράγμα στην οθόνη,
+<b>καμία κίνηση στον δρόμο της πώλησης</b>. Τα χρώματα των κατηγοριών τα διαλέγει ο σύλλογος —
+εδώ είναι δείγμα.
+<br><br>
+<b>Γραμματοσειρά: Noto Sans, παντού.</b> Είναι η μόνη που έχει ήδη ελεγμένη άδεια και ταξιδεύει μέσα στην
+εφαρμογή. Θα μπορούσα να σου δείξω κάτι πιο εντυπωσιακό με δανεική γραμματοσειρά του υπολογιστή σου
+και μετά να μη μοιάζει καθόλου έτσι στο tablet του πελάτη. Η προσωπικότητα εδώ βγαίνει από βάρος,
+μέγεθος και διάταξη. <b>Δεύτερη γραμματοσειρά είναι χωριστή απόφαση, με έλεγχο άδειας πρώτα.</b>
+<br><br>
+<b>Η δικλείδα αντίθεσης τρέχει αληθινά μέσα σε αυτή τη σελίδα.</b> Όταν ο σύλλογος διαλέξει ανοιχτό
+χρώμα, το λευκό γράμμα εξαφανίζεται πάνω του. Εδώ, κάθε πλακίδιο μετριέται και όπου χρειάζεται
+γυρίζει σε μαύρα γράμματα μόνο του — δες τα κεχριμπαρένια στην <b>Καντίνα</b>. Είναι ο ίδιος
+κανόνας που θα μπει στην εφαρμογή.
+</div>
+
+<!-- ══════════════ 1 ══════════════ -->
+<div class="chapter">
+  <div class="num"><i>ΚΑΤΕΥΘΥΝΣΗ 01</i></div>
+  <h2>Γιρλάντα</h2>
+  <p class="thesis">Το πανηγύρι δεν είναι γκρι δωμάτιο· είναι <b>λάμπες κρεμασμένες σε σύρμα πάνω από την πλατεία</b>.
+  Η οθόνη παίρνει το χρώμα της νύχτας — βαθύ μπλε του μεσονυχτίου — και κάθε προϊόν φωτίζεται με το χρώμα
+  της κατηγορίας του, σαν λαμπάκι. Το ταμείο μοιάζει να ανήκει στη βραδιά, όχι να την κόβει στη μέση.</p>
+  <div class="sig"><b>Η υπογραφή:</b> η αληθινή γιρλάντα με τις λάμπες στην κορυφή της οθόνης, και ο δακτύλιος
+  γύρω από κάθε εικονίδιο που φωτίζει απαλά προς τα έξω. Το κουμπί πληρωμής είναι χρυσό, όχι πράσινο:
+  μέσα στο μπλε της νύχτας το χρυσό είναι το πιο ζεστό πράγμα στην οθόνη.</div>
+  <div class="sw">
+    <div><i style="background:#080B24"></i><span>μεσονύχτι</span></div>
+    <div><i style="background:#141A45"></i><span>πλακίδιο</span></div>
+    <div><i style="background:#F5B32B"></i><span>χρυσό</span></div>
+    <div><i style="background:#F2554B"></i><span>λάμπα 1</span></div>
+    <div><i style="background:#5B86F5"></i><span>λάμπα 2</span></div>
+    <div><i style="background:#1FC0A4"></i><span>λάμπα 3</span></div>
+  </div>
+  <div id="G"></div>
+  <div class="pros">
+    <div class="good"><h3>Υπέρ</h3><ul>
+      <li>Το μόνο από τα τέσσερα που έχει <b>ταυτότητα</b>. Δεν μοιάζει με κανένα άλλο ταμείο.</li>
+      <li>Το σκοτεινό μπλε είναι το φυσικό του περιβάλλον: νύχτα, έξω, χωρίς φως.</li>
+      <li>Το χρώμα δείχνει κατηγορία χωρίς να πνίγει το όνομα.</li>
+    </ul></div>
+    <div class="bad"><h3>Κατά</h3><ul>
+      <li>Η φωτεινή εκδοχή είναι σαφώς πιο αδύναμη — η ιδέα ζει στο σκοτάδι.</li>
+      <li>Το φωτοστέφανο γύρω από τα εικονίδια είναι κόστος σε φθηνό tablet· <b>μετριέται πριν μπει</b>.</li>
+      <li>Χρυσό κουμπί πληρωμής: όμορφο, αλλά το πράσινο είναι πιο «πάτα εδώ» για κόσμο που δεν το ξέρει.</li>
+    </ul></div>
+  </div>
+</div>
+
+<!-- ══════════════ 2 ══════════════ -->
+<div class="chapter">
+  <div class="num"><i>ΚΑΤΕΥΘΥΝΣΗ 02</i></div>
+  <h2>Λαδόκολλα</h2>
+  <p class="thesis">Πριν από κάθε ταμείο υπήρχε <b>το μπλοκάκι και το χαρτί στο τραπέζι</b>. Αυτή η κατεύθυνση
+  δεν το μιμείται νοσταλγικά — το χρησιμοποιεί: τα προϊόντα είναι κομμένα χαρτάκια με τρύπες
+  αποκόμματος στη βάση, οι τιμές είναι σφραγίδες, το καλάθι είναι μπλοκ παραγγελίας με διάστικτες γραμμές.
+  Ο εθελοντής ξέρει ήδη πώς δουλεύει, γιατί το κρατάει στα χέρια του κάθε χρόνο.</p>
+  <div class="sig"><b>Η υπογραφή:</b> η κόκκινη σφραγίδα. Κάθε τιμή είναι σφραγισμένη με λίγη κλίση, και το
+  σύνολο στο καλάθι είναι διπλοπλαισιωμένο σαν πραγματική σφραγίδα. Από κάτω, το καρό της λαδόκολλας —
+  τόσο αχνό που δεν το προσέχεις, αρκετό ώστε η οθόνη να μη μοιάζει με λευκό χαρτόνι.</div>
+  <div class="sw">
+    <div><i style="background:#EFE8D6"></i><span>λαδόκολλα</span></div>
+    <div><i style="background:#FFFDF6"></i><span>χαρτάκι</span></div>
+    <div><i style="background:#1E2A44"></i><span>μελάνι</span></div>
+    <div><i style="background:#B8372C"></i><span>σφραγίδα</span></div>
+    <div><i style="background:#2F6B45"></i><span>έγκριση</span></div>
+  </div>
+  <div id="L"></div>
+  <div class="pros">
+    <div class="good"><h3>Υπέρ</h3><ul>
+      <li>Ζεστό και οικείο. Κανένας εθελοντής δεν φοβάται ένα μπλοκάκι.</li>
+      <li><b>20 προϊόντα σε πέντε στήλες</b> — η πιο πυκνή από τις τέσσερις, χωρίς να πνίγεται.</li>
+      <li>Ξεχωρίζει ακαριαία σε φωτογραφία και σε επίδειξη. Πουλάει.</li>
+    </ul></div>
+    <div class="bad"><h3>Κατά</h3><ul>
+      <li>Η κλίση στις σφραγίδες είναι <b>χαρακτήρας που κουράζει</b> αν δεν σου κάτσει από την πρώτη μέρα.</li>
+      <li>Μικρότερα εικονίδια και μικρότερα ονόματα από τις άλλες τρεις.</li>
+      <li>Η σκοτεινή εκδοχή είναι λιγότερο πειστική: το χαρτί θέλει φως για να είναι χαρτί.</li>
+    </ul></div>
+  </div>
+</div>
+
+<!-- ══════════════ 3 ══════════════ -->
+<div class="chapter">
+  <div class="num"><i>ΚΑΤΕΥΘΥΝΣΗ 03</i></div>
+  <h2>Καντίνα</h2>
+  <p class="thesis">Οι πινακίδες των παλιών καντινών: <b>χοντρό σμάλτο, λευκό περίγραμμα, καθαρό χρώμα</b>.
+  Κάθε προϊόν είναι μια σμαλτωμένη πλακέτα με σκληρή σκιά από κάτω — φαίνεται ότι έχει πάχος, ότι πατιέται.
+  Η τιμή κάθεται σε δική της σκοτεινή λωρίδα στο κάτω μέρος, όπως στις πινακίδες που κρέμονται πάνω από τον πάγκο.</p>
+  <div class="sig"><b>Η υπογραφή:</b> το λευκό εσωτερικό περίγραμμα και η σκληρή σκιά — όχι θολή σκιά «σαν
+  εφαρμογή», αλλά καθαρή μετατόπιση όπως έχει ένα αντικείμενο. Είναι το πιο <i>απτό</i> από τα τέσσερα:
+  το μάτι πιστεύει ότι πατάει κάτι.</div>
+  <div class="sw">
+    <div><i style="background:#E4EAE5"></i><span>φόντο</span></div>
+    <div><i style="background:#D0392B"></i><span>σμάλτο 1</span></div>
+    <div><i style="background:#1F6FB2"></i><span>σμάλτο 2</span></div>
+    <div><i style="background:#0E9B8A"></i><span>σμάλτο 3</span></div>
+    <div><i style="background:#DFA020"></i><span>σμάλτο 4</span></div>
+    <div><i style="background:#1E8E4A"></i><span>πληρωμή</span></div>
+  </div>
+  <div id="K"></div>
+  <div class="pros">
+    <div class="good"><h3>Υπέρ</h3><ul>
+      <li>Το πιο εύκολο στο μάτι από απόσταση — χρώμα, σχήμα και σκιά μαζί.</li>
+      <li>Η σκιά λέει «κουμπί» σε άνθρωπο που δεν έχει ξαναδεί οθόνη αφής.</li>
+      <li>Δουλεύει εξίσου καλά φωτεινό και σκοτεινό, χωρίς να χάνει τίποτα.</li>
+    </ul></div>
+    <div class="bad"><h3>Κατά</h3><ul>
+      <li>Είναι <b>ο πλούσιος ξάδερφος της πρότασης Α</b> του πρώτου γύρου, όχι κάτι εντελώς νέο.</li>
+      <li>Με 40 προϊόντα γίνεται πολύ χρώμα ταυτόχρονα.</li>
+      <li>Χωρίς δικλείδα αντίθεσης θα έσπαγε στα χέρια του πελάτη — γι' αυτό <b>τη δικλείδα τη
+      βλέπεις ήδη να δουλεύει εδώ</b>: κοίτα τα κεχριμπαρένια πλακίδια. Είναι τα μόνα με μαύρα
+      γράμματα, και κανείς δεν τα ξεχώρισε με το χέρι· μετρήθηκε το χρώμα τους.</li>
+    </ul></div>
+  </div>
+</div>
+
+<!-- ══════════════ 4 ══════════════ -->
+<div class="chapter">
+  <div class="num"><i>ΚΑΤΕΥΘΥΝΣΗ 04</i></div>
+  <h2>Καθαρό Φως</h2>
+  <p class="thesis">Η ήσυχη. Λευκές επιφάνειες με απαλή σκιά, μεγάλες καμπύλες, άπλετος αέρας, και
+  <b>χρώμα μόνο μέσα στο τετραγωνάκι του εικονιδίου</b>. Τίποτα δεν φωνάζει, όλα διαβάζονται. Είναι η γλώσσα
+  που έχουν σήμερα τα καλά εργαλεία — και ο λόγος που τη βάζω τελευταία είναι ότι είναι η πιο ασφαλής,
+  όχι η πιο τολμηρή.</p>
+  <div class="sig"><b>Η υπογραφή:</b> το σύνολο. Τεράστιο, σφιχτό, με το «€» σε ελαφρύ βάρος δίπλα του —
+  ένα νούμερο που διαβάζεται από τρία μέτρα. Και τα ρέστα: όχι κουτάκι, αλλά ολόκληρη έγχρωμη επιφάνεια
+  που καταλαμβάνει το κάτω μέρος της οθόνης.</div>
+  <div class="sw">
+    <div><i style="background:#F4F5F7"></i><span>φόντο</span></div>
+    <div><i style="background:#FFFFFF"></i><span>κάρτα</span></div>
+    <div><i style="background:#0D0F12"></i><span>νύχτα</span></div>
+    <div><i style="background:#0E9F5B"></i><span>πληρωμή</span></div>
+    <div><i style="background:#3B82F6"></i><span>κατηγορία</span></div>
+  </div>
+  <div id="F"></div>
+  <div class="pros">
+    <div class="good"><h3>Υπέρ</h3><ul>
+      <li>Η πιο ξεκούραστη στα μάτια σε βάθος ωρών.</li>
+      <li>Το όνομα και η τιμή έχουν πάντα καθαρή αντίθεση, ό,τι χρώμα κι αν διαλέξει ο σύλλογος.</li>
+      <li>Δεν παλιώνει. Σε πέντε χρόνια θα δείχνει το ίδιο σωστή.</li>
+    </ul></div>
+    <div class="bad"><h3>Κατά</h3><ul>
+      <li><b>Δεν θυμάσαι τίποτα από αυτήν.</b> Είναι σωστή, όχι αξέχαστη.</li>
+      <li>Το χρώμα υπάρχει μόνο στο εικονίδιο — η δρομολόγηση στα πόστα φαίνεται λιγότερο.</li>
+      <li>Μοιάζει με εφαρμογή γραφείου, όχι με πανηγύρι.</li>
+    </ul></div>
+  </div>
+</div>
+
+<!-- ══════════════ ΣΥΓΚΡΙΣΗ ══════════════ -->
+<div class="chapter">
+  <h2>Πώς συγκρίνονται</h2>
+  <table class="info">
+    <tr><th></th><th>Γιρλάντα</th><th>Λαδόκολλα</th><th>Καντίνα</th><th>Καθαρό Φως</th></tr>
+    <tr><th>Προϊόντα χωρίς κύλιση</th><td>20</td><td><b>20 σε 5 στήλες</b> — σηκώνει τα περισσότερα</td><td>20</td><td>20</td></tr>
+    <tr><th>Ταχύτητα ματιού στα σκοτεινά</th><td>Πολύ καλή</td><td>Μέτρια — μικρά γράμματα</td><td><b>Άριστη</b></td><td>Καλή</td></tr>
+    <tr><th>Ξεχωρίζει από κάθε άλλο ταμείο</th><td><b>Ναι, απόλυτα</b></td><td><b>Ναι</b></td><td>Εν μέρει</td><td>Όχι</td></tr>
+    <tr><th>Φωτεινό εξίσου δυνατό;</th><td>Όχι</td><td>Ναι — το σκοτεινό είναι το αδύναμο</td><td><b>Ναι</b></td><td><b>Ναι</b></td></tr>
+    <tr><th>Κόστος σε φθηνό tablet</th><td>Το υψηλότερο (φωτοστέφανα)</td><td>Χαμηλό</td><td>Χαμηλό</td><td>Χαμηλό</td></tr>
+  </table>
+
+  <h3 style="margin-top:34px;font-size:24px">Η σύστασή μου</h3>
+  <p class="thesis"><b>Γιρλάντα, με τρεις διορθώσεις.</b> Είναι η μόνη που απαντάει στο «θέλω κάτι υπέροχο»
+  χωρίς να πληρώσει σε ταχύτητα, και είναι η μόνη που θα θυμάται ο σύλλογος όταν σε συστήσει σε άλλον σύλλογο.
+  Οι διορθώσεις:</p>
+  <table class="info">
+    <tr><th>Τι αλλάζω</th><th>Γιατί</th></tr>
+    <tr><td>Το κουμπί πληρωμής γίνεται <b>πράσινο</b>, το χρυσό μένει για το σύνολο και τα ρέστα</td><td>Το πράσινο το καταλαβαίνει κόσμος που δεν του εξήγησε κανείς τίποτα. Το χρυσό κρατάει την ταυτότητα εκεί που δεν κοστίζει</td></tr>
+    <tr><td>Το φωτοστέφανο των εικονιδίων <b>γίνεται διακόπτης</b> στο admin, ανοιχτό μόνο αν το αντέχει η συσκευή</td><td>Είναι το μόνο σημείο που μπορεί να κοστίσει καρέ σε φθηνό tablet. <b>Μετριέται πριν μπει</b>, δεν το υπόσχομαι</td></tr>
+    <tr><td>Δανείζεται από την <b>Καντίνα</b> τη σκληρή σκιά στα κουμπιά ενεργειών</td><td>Το «φαίνεται ότι πατιέται» είναι το πιο χρήσιμο πράγμα που έχει η Καντίνα, και δεν χαλάει τη νύχτα</td></tr>
+    <tr><td>Δανείζεται από τη <b>Λαδόκολλα</b> τις διάστικτες γραμμές στο καλάθι</td><td>Το καλάθι είναι το μόνο σημείο που ο ταμίας διαβάζει με τη σειρά, σαν λίστα. Οι διάστικτες γραμμές τη διαβάζουν πιο εύκολα</td></tr>
+  </table>
+  <p class="thesis">Δεύτερη επιλογή, αν σου φανεί υπερβολική η νύχτα: <b>Καντίνα</b>. Είναι η ασφαλής,
+  και είναι πραγματικά καλή. Την <b>Λαδόκολλα</b> τη θεωρώ την πιο χαριτωμένη και την πιο επικίνδυνη —
+  θα την αγαπήσεις ή θα σε κουράσει, και δεν το ξέρω εγώ αυτό, το ξέρεις εσύ.</p>
+
+  <div class="note">
+  <b>Τι μένει ανοιχτό, όπως και στον πρώτο γύρο:</b> το ελάχιστο μέγεθος κουμπιού μετριέται σε αληθινή οθόνη
+  αφής, όχι εδώ. Το ίδιο και η ταχύτητα σε φθηνό tablet. Και τα εικονίδια που βλέπεις είναι <b>για είκοσι
+  προϊόντα</b>· ένας σύλλογος με δικό του μενού θα χρειαστεί ή δικά του σχέδια ή ένα ουδέτερο εικονίδιο
+  ανά κατηγορία — <b>είναι απόφαση που πρέπει να πάρουμε πριν γραφτεί κώδικας</b>.
+  </div>
+</div>
+
+</div>
+
+<script src="icons.js"></script>
+<script>
+const CATS = {meat:'ΚΡΕΑΤΙΚΑ', drink:'ΠΟΤΑ', soft:'ΑΝΑΨΥΚΤΙΚΑ', side:'ΣΥΝΟΔΕΥΤΙΚΑ', entry:'ΕΙΣΟΔΟΣ'};
+
+const PRODUCTS = [
+  ['Σουβλάκι χοιρινό','1,50','meat','souvlaki'],
+  ['Κοντοσούβλι','3,00','meat','kontosouvli'],
+  ['Λουκάνικο','2,50','meat','loukaniko'],
+  ['Κοκορέτσι','4,00','meat','kokoretsi'],
+  ['Μπριζόλα','6,50','meat','brizola'],
+  ['Παϊδάκια','8,00','meat','paidakia'],
+  ['Γύρος μερίδα','5,00','meat','gyros'],
+  ['Μπύρα 500ml','3,00','drink','beer'],
+  ['Κρασί ποτήρι','2,00','drink','krasi'],
+  ['Κρασί κιλό','6,00','drink','karafa'],
+  ['Ούζο','3,00','drink','ouzo'],
+  ['Τσίπουρο','3,50','drink','tsipouro'],
+  ['Αναψυκτικό','2,00','soft','anapsiktiko'],
+  ['Νερό 500ml','0,50','soft','nero'],
+  ['Καφές','1,50','soft','kafes'],
+  ['Πατάτες','3,00','side','patates'],
+  ['Ψωμί','0,50','side','psomi'],
+  ['Τζατζίκι','2,50','side','tzatziki'],
+  ['Χωριάτικη','5,00','side','salata'],
+  ['Εισιτήριο','5,00','entry','eisitirio']
+];
+
+const CART = [
+  ['Σουβλάκι χοιρινό','1,50 € / τεμ.',4,'6,00'],
+  ['Μπύρα 500ml','3,00 € / τεμ.',2,'6,00'],
+  ['Πατάτες','3,00 € / τεμ.',1,'3,00'],
+  ['Νερό 500ml','ΚΕΡΑΣΜΑ',1,'0,00',true],
+  ['Ψωμί','0,50 € / τεμ.',2,'1,00']
+];
+
+const svg = key => `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3"
+  stroke-linecap="round" stroke-linejoin="round">${ICONS[key]}</svg>`;
+
+const tiles = () => PRODUCTS.map(([nm,pr,c,ic]) => `
+  <div class="tile" style="--c:var(--${c})">
+    <span class="ico">${svg(ic)}</span>
+    <span class="meta"><b>${nm}</b><span class="pr">${pr} €</span></span>
+  </div>`).join('');
+
+const legend = () => Object.entries(CATS)
+  .map(([k,v]) => `<div><i style="background:var(--${k})"></i>${v}</div>`).join('');
+
+const cart = () => CART.map(l => `
+  <div class="line ${l[4] ? 'free' : ''}">
+    <div class="nm"><b>${l[0]}</b><span>${l[1]}</span></div>
+    <div class="qty"><button>−</button><b>${l[2]}</b><button>+</button></div>
+    <div class="amt">${l[3]}</div>
+  </div>`).join('');
+
+const selling = dir => `
+  <div class="cart-h">ΠΑΡΑΓΓΕΛΙΑ</div>
+  <div class="lines">${cart()}</div>
+  <div class="sum"><span>ΣΥΝΟΛΟ</span><b>16,00${dir === 'F' ? '<em>€</em>' : ' €'}</b></div>
+  <div class="acts">
+    <button>ΚΕΡΑΣΜΑ</button><button>ΔΙΑΦΟΡΑ</button>
+    <button>ΑΝΑΤΥΠΩΣΗ</button><button class="danger">ΑΚΥΡΩΣΗ ΟΛΩΝ</button>
+  </div>
+  <button class="pay">ΠΛΗΡΩΜΗ · 16,00 €</button>`;
+
+const paying = () => {
+  const keys = ['7','8','9','4','5','6','1','2','3','00','0','C'];
+  return `
+  <div class="cart-h">ΠΛΗΡΩΜΗ — ΣΥΝΟΛΟ 16,00 €</div>
+  <div class="padwrap">
+    <div class="given"><span>ΕΔΩΣΕ</span><b>20,00 €</b></div>
+    <div class="pad">${keys.map(k => `<button>${k}</button>`).join('')}</div>
+    <div class="change"><span>ΡΕΣΤΑ</span><b>4,00 €</b></div>
+  </div>
+  <button class="pay">ΠΛΗΡΩΜΗ &amp; ΕΚΤΥΠΩΣΗ</button>`;
+};
+
+/* the strung bulbs — drawn, not decorated: wire sags, bulbs hang, colours cycle */
+function garland(){
+  const cols = ['var(--meat)','var(--side)','var(--soft)','var(--drink)','var(--entry)'];
+  const pts = [], bulbs = [];
+  for (let i = 0; i <= 10; i++){
+    const x = 8 + i * 80;
+    const y = 12 + Math.sin(i * 0.85) * 7;
+    pts.push(`${x},${y}`);
+    if (i > 0 && i < 10){
+      const c = cols[i % cols.length];
+      bulbs.push(`<line x1="${x}" y1="${y}" x2="${x}" y2="${y + 11}" stroke="var(--line)" stroke-width="2"/>
+        <circle cx="${x}" cy="${y + 19}" r="7.5" fill="${c}" opacity=".92"/>
+        <circle cx="${x}" cy="${y + 19}" r="16" fill="${c}" opacity=".13"/>`);
+    }
+  }
+  return `<div class="garland"><svg viewBox="0 0 808 54">
+    <polyline points="${pts.join(' ')}" fill="none" stroke="var(--line)" stroke-width="2"/>
+    ${bulbs.join('')}</svg></div>`;
+}
+
+function screenHTML(dir, theme, mode){
+  const pay = mode === 'pay';
+  return `<div class="screen d${dir} ${theme}">
+    <div class="top">
+      <div class="till">ΤΑΜΕΙΟ Κ<em>Πανηγύρι Αγίου Γεωργίου</em></div>
+      <div class="clock">Πέμπτη 15 Αυγούστου · 21:47</div>
+      <div class="chip">ΤΑΜΙΑΣ: ΓΙΩΡΓΟΣ</div>
+      <div class="chip">ΔΙΑΧΕΙΡΙΣΗ</div>
+    </div>
+    <div class="body">
+      <div class="cart">${pay ? paying() : selling(dir)}</div>
+      <div class="right ${pay ? 'dim' : ''}">
+        ${dir === 'G' ? garland() : ''}
+        <div class="legend">${legend()}</div>
+        <div class="grid">${tiles()}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function block(dir, nativeTheme){
+  return `
+  <div class="rowlabel">ΚΑΝΟΝΙΚΗ ΔΟΥΛΕΙΑ</div>
+  <div class="pair">
+    <div><div class="cap">ΣΚΟΤΕΙΝΟ</div><div class="frame">${screenHTML(dir,'dark','sell')}</div></div>
+    <div><div class="cap">ΦΩΤΕΙΝΟ</div><div class="frame">${screenHTML(dir,'light','sell')}</div></div>
+  </div>
+  <div class="rowlabel">Η ΣΤΙΓΜΗ ΤΗΣ ΠΛΗΡΩΜΗΣ</div>
+  <div class="pair">
+    <div><div class="cap">${nativeTheme === 'dark' ? 'ΣΚΟΤΕΙΝΟ' : 'ΦΩΤΕΙΝΟ'}</div>
+      <div class="frame">${screenHTML(dir,nativeTheme,'pay')}</div></div>
+  </div>`;
+}
+
+document.getElementById('G').innerHTML = block('G','dark');
+document.getElementById('L').innerHTML = block('L','light');
+document.getElementById('K').innerHTML = block('K','light');
+document.getElementById('F').innerHTML = block('F','dark');
+
+/* The contrast guard. Measures what the tile actually ended up coloured — not what we
+   assumed — and flips the lettering to near-black where white would disappear. This is the
+   real rule the app needs, because the colours come from the customer, not from us. */
+function guardContrast(){
+  const relLum = rgb => {
+    const [r,g,b] = rgb.match(/\d+/g).slice(0,3).map(Number).map(v => {
+      v /= 255; return v <= 0.03928 ? v/12.92 : Math.pow((v + 0.055)/1.055, 2.4);
+    });
+    return 0.2126*r + 0.7152*g + 0.0722*b;
+  };
+  document.querySelectorAll('.tile').forEach(t => {
+    const bg = getComputedStyle(t).backgroundColor;
+    if (!bg || /rgba\(0, 0, 0, 0\)/.test(bg)) return;
+    const ch = bg.match(/\d+/g).slice(0,3).map(Number);
+    // Only tiles painted with the category's own colour are candidates. A white or
+    // near-grey card already carries dark lettering and must keep its coloured icon.
+    if (Math.max(...ch) - Math.min(...ch) < 40) return;
+    if (relLum(bg) > 0.4) t.classList.add('onlight');
+  });
+}
+guardContrast();
+</script>
+</body>
+</html>
