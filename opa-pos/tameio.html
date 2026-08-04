@@ -98,6 +98,12 @@ table.info th{background:#131920;font-weight:700;color:#fff}
 .tile .pr{display:block;font-size:22px;font-weight:700;letter-spacing:-.01em;margin-top:2px;
   font-variant-numeric:tabular-nums}
 
+/* A narrow cell cannot hold a picture beside the name — the name loses. So the tile decides
+   for itself: wide cell, picture on the left; narrow cell, picture on top. */
+.tile.narrow{flex-direction:column;align-items:flex-start;gap:6px;justify-content:center}
+.tile.narrow .slot{width:40px;height:40px}
+.tile.narrow .meta{width:100%}
+
 /* the empty slot: this is where the picture or the drawing goes */
 .slot{flex:0 0 auto;width:52px;height:52px;border-radius:9px;display:flex;align-items:center;
   justify-content:center;text-align:center;border:2px dashed var(--slot-line);color:var(--slot-tx);
@@ -209,6 +215,56 @@ table.info th{background:#131920;font-weight:700;color:#fff}
   background:var(--c);margin-right:11px;vertical-align:middle}
 .p4 .tile .pr{margin:0;font-size:26px;white-space:nowrap}
 .p4 .slot{width:56px;height:56px}
+
+/* =========================================================
+   THE LAYOUT DESIGNER — admin panel
+   ========================================================= */
+.adm{--bg:#0F1316;--panel:#161B20;--card:#1A2026;--line:#262E36;--tx:#EDF2F6;--mut:#8E9BA6;
+  --go:#16A34A;--red:#DC2626;--slot-line:#39434D;--slot-tx:#77838F}
+.adm .body{padding:0}
+.canvas{flex:1;min-width:0;display:flex;flex-direction:column;padding:16px 18px;gap:12px}
+.canvas-h{display:flex;align-items:baseline;gap:14px}
+.canvas-h b{font-size:20px}
+.canvas-h span{font-size:14px;color:var(--mut)}
+.board{flex:1;display:grid;gap:11px;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(4,1fr);
+  padding:12px;border:1px solid var(--line);border-radius:12px;background:#12171B}
+.cell{border:2px dashed #2E3941;border-radius:10px;display:flex;align-items:center;justify-content:center;
+  color:#4B5964;font-size:26px;font-weight:700}
+.ptile{border-radius:11px;background:var(--card);border:1px solid var(--line);position:relative;
+  padding:10px 12px 10px 18px;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.ptile::before{content:'';position:absolute;left:0;top:0;bottom:0;width:7px;background:var(--c)}
+.ptile b{font-size:15px;font-weight:700;line-height:1.15}
+.ptile span{font-size:17px;font-weight:700;color:var(--c);filter:brightness(1.45)}
+.ptile i{position:absolute;top:6px;right:8px;font-style:normal;font-size:10px;font-weight:700;
+  letter-spacing:.08em;color:var(--mut)}
+.ptile.dragging{outline:2px solid #58A6FF;box-shadow:0 14px 30px -10px rgba(0,0,0,.7);transform:rotate(-1.2deg)}
+.cell.target{border-color:#58A6FF;background:rgba(88,166,255,.10);color:#58A6FF}
+
+.side{width:330px;flex:0 0 330px;background:var(--panel);border-left:1px solid var(--line);
+  padding:16px 18px;display:flex;flex-direction:column;gap:16px;overflow:hidden}
+.side h4{font-size:11px;font-weight:700;letter-spacing:.16em;color:var(--mut)}
+.stepper{display:flex;align-items:center;gap:10px;margin-top:8px}
+.stepper button{width:38px;height:38px;border-radius:8px;border:1px solid var(--line);background:transparent;
+  color:var(--tx);font-size:20px;font-weight:700;font-family:inherit}
+.stepper b{font-size:19px;min-width:62px;text-align:center}
+.sizes{display:flex;gap:8px;margin-top:8px}
+.sizes button{flex:1;height:44px;border-radius:9px;border:1px solid var(--line);background:transparent;
+  color:var(--tx);font-size:14px;font-weight:700;font-family:inherit}
+.sizes button.on{background:#E7ECF1;color:#0F1316;border-color:#E7ECF1}
+.queue{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+.queue span{font-size:13px;font-weight:700;padding:7px 11px;border-radius:8px;border:1px solid var(--line);
+  color:var(--tx);position:relative;padding-left:18px}
+.queue span::before{content:'';position:absolute;left:7px;top:50%;transform:translateY(-50%);
+  width:6px;height:6px;border-radius:50%;background:var(--c)}
+.warn{margin-top:auto;border-radius:10px;padding:12px 14px;font-size:14px;line-height:1.45;
+  background:rgba(224,155,18,.12);border:1px solid rgba(224,155,18,.45);color:#F0B843}
+.warn b{color:#FFCF6B}
+.switchrow{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  border-top:1px solid var(--line);padding-top:14px}
+.switchrow span{font-size:14px;font-weight:700}
+.knob{width:52px;height:30px;border-radius:15px;background:#2A333B;position:relative;flex:0 0 auto}
+.knob::after{content:'';position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;
+  background:#7E8B96}
 
 /* =========================================================
    05 · ΧΡΩΜΑ — the tile is the colour
@@ -430,6 +486,31 @@ table.info th{background:#131920;font-weight:700;color:#fff}
   </div>
 </div>
 
+<!-- ο σχεδιαστής -->
+<div class="section">
+  <div class="idx">ΤΟ ADMIN · ΝΕΑ ΟΘΟΝΗ</div>
+  <h2>Ο σχεδιαστής διάταξης</h2>
+  <p class="thesis">Το πλέγμα <b>δεν βγαίνει από τη σειρά μιας λίστας — το στήνεις εσύ</b>. Ορίζεις
+  πόσες στήλες και γραμμές, σέρνεις κάθε προϊόν στη θέση του, και δίνεις σε όποιο θέλεις
+  <b>διπλό ή τετραπλό μέγεθος</b>. Παρακάτω είναι η ίδια διάταξη τρεις φορές: όπως τη στήνεις,
+  και όπως βγαίνει στο ταμείο με τα δύο θέματα πλακιδίου.</p>
+  <div class="sig" style="border-left:3px solid #38434f;background:#11161b;padding:16px 20px;
+    margin:18px 0;max-width:98ch;color:#bcc7d1">
+  <b>Το σουβλάκι είναι 2×2 και οι πατάτες 2×1.</b> Αυτός είναι ο μισός λόγος να υπάρχει
+  σχεδιαστής: το προϊόν που είναι το 70% της βραδιάς γίνεται ο μεγαλύτερος στόχος στην οθόνη.
+  Το κενό κελί κάτω δεξιά είναι κι αυτό επιλογή — <b>τα κενά επιτρέπονται</b>.
+  </div>
+  <div id="adm"></div>
+  <table class="info">
+    <tr><th>Κανόνας</th><th>Τι σημαίνει στην πράξη</th></tr>
+    <tr><td><b>Κελιά, όχι ελεύθερη τοποθέτηση</b></td><td>Ό,τι στήνεις στο μόνιτορ των Windows βγαίνει σωστό και στο tablet, που έχει άλλο σχήμα οθόνης</td></tr>
+    <tr><td><b>Από 3×3 έως 6×5</b></td><td>Οκτώ προϊόντα → οκτώ τεράστια κουμπιά. Το εύρος <b>μπορεί να αλλάξει</b> όταν μετρηθούν αληθινές οθόνες στο βήμα 4</td></tr>
+    <tr><td><b>Δεν σε αφήνει να ξεχειλίσεις</b></td><td>«3 προϊόντα χωρίς θέση, 1 ελεύθερο κελί». Το λύνεις στο τραπέζι της κουζίνας, όχι στον πάγκο με ουρά</td></tr>
+    <tr><td><b>Κύλιση: κλειστή από προεπιλογή</b></td><td>Αν ο σύλλογος έχει πολλά προϊόντα, την ανοίγει και το πλέγμα κυλάει — <b>ολόκληρες γραμμές</b>, ποτέ μισό πλακίδιο. Ό,τι έβαλες πρώτο μένει πάντα στην πρώτη οθόνη</td></tr>
+    <tr><td><b>Μία διάταξη, μέσα στο πρότυπο</b></td><td>Στήνεις μία φορά, φορτώνει παντού, ταξιδεύει με το πρότυπο μενού</td></tr>
+  </table>
+</div>
+
 <!-- σύγκριση -->
 <div class="section">
   <h2>Πώς συγκρίνονται</h2>
@@ -605,6 +686,112 @@ function guardContrast(){
   });
 }
 
+/* ==========================================================================
+   THE LAYOUT DESIGNER — one layout, three screens.
+   The same array below feeds the admin canvas and both cashier screens, which is the
+   only honest way to show that what you arrange is what you get.
+   [name, price, category, column, row, width, height]
+   ========================================================================== */
+const COLS = 5, ROWS = 4;
+const LAYOUT = [
+  ['Σουβλάκι χοιρινό','1,50','meat',1,1,2,2],
+  ['Μπύρα 500ml','3,00','drink',3,1,2,1],
+  ['Κοντοσούβλι','3,00','meat',5,1,1,1],
+  ['Γύρος μερίδα','5,00','meat',3,2,1,1],
+  ['Ουίσκι','6,00','drink',4,2,1,1],
+  ['Κρασί ποτήρι','2,00','drink',5,2,1,1],
+  ['Λουκάνικο','2,50','meat',1,3,1,1],
+  ['Μπριζόλα','6,50','meat',2,3,1,1],
+  ['Αναψυκτικό','2,00','soft',3,3,1,1],
+  ['Νερό 500ml','0,50','soft',4,3,1,1],
+  ['Εισιτήριο','5,00','entry',5,3,1,1],
+  ['Πατάτες','3,00','side',1,4,2,1],
+  ['Ψωμί','0,50','side',3,4,1,1],
+  ['Τζατζίκι','2,50','side',4,4,1,1]
+];
+const UNPLACED = [['Κοκορέτσι','meat'],['Παϊδάκια','meat'],['Καφές','soft']];
+
+/* the admin canvas: empty cells first, tiles on top of them */
+function board(){
+  const taken = new Set();
+  LAYOUT.forEach(([,,,c,r,w,h]) => {
+    for (let x = c; x < c + w; x++) for (let y = r; y < r + h; y++) taken.add(x + ',' + y);
+  });
+  let cells = '';
+  for (let y = 1; y <= ROWS; y++) for (let x = 1; x <= COLS; x++) {
+    if (taken.has(x + ',' + y)) continue;
+    const target = (x === 5 && y === 4);
+    cells += `<div class="cell ${target ? 'target' : ''}" style="grid-area:${y}/${x}/${y+1}/${x+1}">+</div>`;
+  }
+  const tiles = LAYOUT.map(([nm,pr,c,x,y,w,h]) => `
+    <div class="ptile ${nm === 'Πατάτες' ? 'dragging' : ''}" style="--c:var(--${c});
+      grid-area:${y}/${x}/${y+h}/${x+w}">
+      ${w > 1 || h > 1 ? `<i>${w}×${h}</i>` : ''}
+      <b>${nm}</b><span>${pr} €</span>
+    </div>`).join('');
+  return `<div class="board">${cells}${tiles}</div>`;
+}
+
+function designerHTML(){
+  return `<div class="screen adm dark">
+    <div class="top">
+      <div class="till">ΔΙΑΧΕΙΡΙΣΗ<em>Μενού · Διάταξη οθόνης</em></div>
+      <div class="clock">Πρότυπο: «Πανηγύρι Αγίου Γεωργίου»</div>
+      <div class="chip">ΑΚΥΡΩΣΗ</div>
+      <div class="chip" style="background:var(--go);border-color:var(--go);color:#fff">ΑΠΟΘΗΚΕΥΣΗ</div>
+    </div>
+    <div class="body">
+      <div class="canvas">
+        <div class="canvas-h"><b>Το πλέγμα του ταμείου</b>
+          <span>Σύρε ένα προϊόν σε ελεύθερο κελί</span></div>
+        ${board()}
+      </div>
+      <div class="side">
+        <div><h4>ΜΕΓΕΘΟΣ ΠΛΕΓΜΑΤΟΣ</h4>
+          <div class="stepper"><button>−</button><b>5 × 4</b><button>+</button></div>
+        </div>
+        <div><h4>ΜΕΓΕΘΟΣ ΠΛΑΚΙΔΙΟΥ — ΠΑΤΑΤΕΣ</h4>
+          <div class="sizes"><button>1×1</button><button class="on">2×1</button><button>2×2</button></div>
+        </div>
+        <div><h4>ΧΩΡΙΣ ΘΕΣΗ — ${UNPLACED.length}</h4>
+          <div class="queue">${UNPLACED.map(([n,c]) =>
+            `<span style="--c:var(--${c})">${n}</span>`).join('')}</div>
+        </div>
+        <div class="warn"><b>3 προϊόντα χωρίς θέση, 1 ελεύθερο κελί.</b>
+          Μεγάλωσε το πλέγμα, μίκρυνε ένα πλακίδιο, ή άνοιξε την κύλιση.</div>
+        <div class="switchrow"><span>Κύλιση πλέγματος</span><div class="knob"></div></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* the same layout, on the cashier screen */
+function tillFromLayout(prop){
+  // a one-cell tile in a five-column grid is narrow: the picture moves on top of the name
+  const narrow = w => (w === 1 && COLS >= 5) ? 'narrow' : '';
+  const tiles = LAYOUT.map(([nm,pr,c,x,y,w,h]) => `
+    <div class="tile ${MODE === 'text' ? '' : narrow(w)}" style="--c:var(--${c});grid-area:${y}/${x}/${y+h}/${x+w}">
+      ${slotHTML(prop, c, nm, true)}
+      <span class="meta"><b>${nm}</b><span class="pr">${pr} €</span></span>
+    </div>`).join('');
+  return `<div class="screen ${prop} ${THEME}">
+    <div class="top">
+      <div class="till">ΤΑΜΕΙΟ Κ<em>Πανηγύρι Αγίου Γεωργίου</em></div>
+      <div class="clock">Πέμπτη 15 Αυγούστου · 21:47</div>
+      <div class="chip">ΤΑΜΙΑΣ: ΓΙΩΡΓΟΣ</div>
+      <div class="chip">ΔΙΑΧΕΙΡΙΣΗ</div>
+    </div>
+    <div class="body">
+      <div class="left">
+        <div class="legend">${legend()}</div>
+        <div class="grid" style="grid-template-columns:repeat(${COLS},1fr);
+          grid-template-rows:repeat(${ROWS},1fr)">${tiles}</div>
+      </div>
+      <div class="cart">${selling()}</div>
+    </div>
+  </div>`;
+}
+
 function render(){
   ['p1','p2','p3','p4','p5'].forEach(p => {
     document.getElementById(p).innerHTML = `
@@ -616,6 +803,17 @@ function render(){
       </div>`;
   });
   document.querySelectorAll('[data-theme]').forEach(b => b.classList.toggle('on', b.dataset.theme === THEME));
+  document.getElementById('adm').innerHTML = `
+    <div class="pair">
+      <div><div class="cap">ΣΤΟ ADMIN — ΤΟ ΣΤΗΝΕΙΣ ΕΣΥ</div>
+        <div class="frame">${designerHTML()}</div></div>
+    </div>
+    <div class="pair">
+      <div><div class="cap">ΤΟ ΙΔΙΟ ΣΤΟ ΤΑΜΕΙΟ — ΘΕΜΑ «ΛΩΡΙΔΑ»</div>
+        <div class="frame">${tillFromLayout('p2')}</div></div>
+      <div><div class="cap">ΤΟ ΙΔΙΟ ΣΤΟ ΤΑΜΕΙΟ — ΘΕΜΑ «ΧΡΩΜΑ»</div>
+        <div class="frame">${tillFromLayout('p5')}</div></div>
+    </div>`;
   document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('on', b.dataset.mode === MODE));
   guardContrast();
 }
