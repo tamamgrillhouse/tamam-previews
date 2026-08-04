@@ -2,7 +2,7 @@
 <html lang="el">
 <head>
 <meta charset="utf-8">
-<title>Opa POS — Η οθόνη ταμία, τέσσερις προτάσεις</title>
+<title>Opa POS — Η οθόνη ταμία, πέντε προτάσεις</title>
 <style>
 @font-face{font-family:'Noto Sans';src:url('../assets/fonts/notosans-400-normal-greek.woff2') format('woff2');font-weight:400;font-display:swap;unicode-range:U+0370-03FF,U+1F00-1FFF}
 @font-face{font-family:'Noto Sans';src:url('../assets/fonts/notosans-400-normal-latin.woff2') format('woff2');font-weight:400;font-display:swap}
@@ -209,6 +209,23 @@ table.info th{background:#131920;font-weight:700;color:#fff}
   background:var(--c);margin-right:11px;vertical-align:middle}
 .p4 .tile .pr{margin:0;font-size:26px;white-space:nowrap}
 .p4 .slot{width:56px;height:56px}
+
+/* =========================================================
+   05 · ΧΡΩΜΑ — the tile is the colour
+   ========================================================= */
+.p5.dark{--bg:#0E0F12;--panel:#15181C;--card:#1A1E23;--line:#262B32;--tx:#F2F5F8;--mut:#98A1AC;
+  --go:#16A34A;--red:#DC2626;--slot-line:rgba(255,255,255,.55);--slot-tx:rgba(255,255,255,.85)}
+.p5.light{--bg:#ECEFF2;--panel:#FFFFFF;--card:#FFFFFF;--line:#DDE2E7;--tx:#101418;--mut:#5E6771;
+  --go:#15803D;--red:#DC2626;--slot-line:rgba(255,255,255,.6);--slot-tx:rgba(255,255,255,.9)}
+.p5 .tile{background:var(--c);border:0;border-radius:13px;color:#fff}
+.p5 .tile b{font-size:18px}
+.p5 .tile .pr{font-size:23px;opacity:.96}
+.p5 .slot{border-color:rgba(255,255,255,.6);color:rgba(255,255,255,.9);
+  background:rgba(255,255,255,.14)}
+/* the contrast guard: a light category colour would swallow white lettering, so the tile
+   measures its own colour and turns the lettering black. Look at ΣΥΝΟΔΕΥΤΙΚΑ. */
+.p5 .tile.onlight{color:#17110A}
+.p5 .tile.onlight .slot{border-color:rgba(0,0,0,.34);color:rgba(0,0,0,.62);background:rgba(0,0,0,.07)}
 </style>
 </head>
 <body>
@@ -216,9 +233,9 @@ table.info th{background:#131920;font-weight:700;color:#fff}
 
 <div class="hero">
   <div class="kicker">OPA POS · ΒΗΜΑ 3 · Η ΟΘΟΝΗ ΤΑΜΙΑ</div>
-  <h1>Τέσσερις προτάσεις για την οθόνη που θα δουλεύει έξι ώρες συνέχεια.</h1>
+  <h1>Πέντε προτάσεις για την οθόνη που θα δουλεύει έξι ώρες συνέχεια.</h1>
   <p class="lead">Ίδια παραγγελία, ίδιο μενού, ίδια ώρα σε όλες. <b>Τα προϊόντα αριστερά, το ταμείο
-  δεξιά</b> — εκεί που είναι ήδη το χέρι. Οι δύο διακόπτες παρακάτω αλλάζουν <b>και τις τέσσερις
+  δεξιά</b> — εκεί που είναι ήδη το χέρι. Οι δύο διακόπτες παρακάτω αλλάζουν <b>και τις πέντε
   μαζί</b>: είναι οι ίδιοι διακόπτες που θα έχει ο σύλλογος στο πρόγραμμα.</p>
 </div>
 
@@ -245,6 +262,13 @@ table.info th{background:#131920;font-weight:700;color:#fff}
 κουρασμένο μάτι ψάχνει με το σχήμα και το χρώμα του μπουκαλιού αντί να διαβάσει. Στη λειτουργία
 «κείμενο + φωτογραφία» <b>το σουβλάκι δείχνει σκέτο κείμενο</b>, όχι άδειο κουτί. Πάτα τον
 διακόπτη και δες τη διαφορά: στα ΠΟΤΑ και στα ΑΝΑΨΥΚΤΙΚΑ ανοίγει θέση, αλλού όχι.<br><br>
+<b>Στο «κείμενο + σχέδιο» τα ποτά κρατάνε τη φωτογραφία τους.</b> Καμία ζωγραφιά μπουκαλιού δεν
+είναι καλύτερη από τη φωτογραφία του ίδιου μπουκαλιού, οπότε δεν υπάρχει λόγος να χαλάσει κάτι
+που ήδη δουλεύει. Σχέδιο παίρνουν τα υπόλοιπα.<br><br>
+<b>Ο κανόνας που τα σκεπάζει όλα:</b> πλακίδιο χωρίς φωτογραφία <b>και</b> χωρίς σχέδιο πέφτει
+αυτόματα σε <b>σκέτο κείμενο</b>. Ποτέ άδειο πλαίσιο. Στο «κείμενο + σχέδιο» δες το
+<b>Κοκορέτσι</b> και το <b>Καλαμάκι κοτόπουλο</b>: τους έχω αφαιρέσει επίτηδες το σχέδιο, και
+γίνονται κείμενο χωρίς να χαλάσει η σειρά.<br><br>
 <b>Μία εξαίρεση, στις Κάρτες (03).</b> Εκεί η εικόνα πιάνει όλο το πλάτος, οπότε ένα πλακίδιο
 χωρίς φωτογραφία θα άφηνε τρύπα στη σειρά. Στη θέση της μπαίνει <b>το χρώμα της κατηγορίας με το
 αρχικό γράμμα</b>. Η σειρά μένει ίσια.
@@ -332,7 +356,7 @@ table.info th{background:#131920;font-weight:700;color:#fff}
   <div id="p3"></div>
   <div class="pros">
     <div class="good"><h3>Υπέρ</h3><ul>
-      <li>Με φωτογραφίες, το γρηγορότερο μάτι από τα τέσσερα στα ποτά.</li>
+      <li>Με φωτογραφίες, το γρηγορότερο μάτι απ' όλες στα ποτά.</li>
       <li>Το πιο εντυπωσιακό σε επίδειξη — αυτό που θα δείξει ο σύλλογος σε άλλον σύλλογο.</li>
       <li>Όπου λείπει φωτογραφία, το χρώμα κατηγορίας κρατάει τη σειρά ίσια.</li>
     </ul></div>
@@ -361,7 +385,7 @@ table.info th{background:#131920;font-weight:700;color:#fff}
   <div id="p4"></div>
   <div class="pros">
     <div class="good"><h3>Υπέρ</h3><ul>
-      <li>Αδύνατο να αστοχήσεις με το δάχτυλο. Οι μεγαλύτεροι στόχοι από τα τέσσερα.</li>
+      <li>Αδύνατο να αστοχήσεις με το δάχτυλο. Οι μεγαλύτεροι στόχοι απ' όλες.</li>
       <li>Διαβάζεται από μισό μέτρο, με οποιοδήποτε φως.</li>
       <li>Χωράει άνετα μεγάλα ονόματα — «Καλαμάκι κοτόπουλο» δεν σπάει σε δύο σειρές.</li>
     </ul></div>
@@ -373,31 +397,65 @@ table.info th{background:#131920;font-weight:700;color:#fff}
   </div>
 </div>
 
+<!-- 05 -->
+<div class="section">
+  <div class="idx">ΠΡΟΤΑΣΗ 05</div>
+  <h2>Χρώμα</h2>
+  <p class="thesis">Ολόκληρο το πλακίδιο βάφεται στο χρώμα της κατηγορίας. Το μάτι δεν ψάχνει
+  γράμματα — <b>πάει στο κόκκινο μπλοκ για κρεατικά, στο μπλε για ποτά</b>, και μόνο εκεί μέσα
+  διαβάζει ποιο ακριβώς. Είναι η πιο γρήγορη οπτική επιλογή από όλες, και η μόνη που δουλεύει
+  για εθελοντή που είδε την εφαρμογή πριν από πέντε λεπτά.</p>
+  <div class="sw">
+    <div><i style="background:#0E0F12"></i><span>φόντο</span></div>
+    <div><i style="background:#D24B3E"></i><span>κατηγορία 1</span></div>
+    <div><i style="background:#2E6FD9"></i><span>κατηγορία 2</span></div>
+    <div><i style="background:#12A594"></i><span>κατηγορία 3</span></div>
+    <div><i style="background:#E09B12"></i><span>κατηγορία 4</span></div>
+    <div><i style="background:#16A34A"></i><span>πληρωμή</span></div>
+  </div>
+  <div id="p5"></div>
+  <div class="pros">
+    <div class="good"><h3>Υπέρ</h3><ul>
+      <li><b>Η γρηγορότερη στοχευση από τις πέντε.</b> Βρίσκεις κατηγορία χωρίς να διαβάσεις λέξη.</li>
+      <li>Στα σκοτεινά ξεχωρίζει και με τη μισή ματιά.</li>
+      <li>Δείχνει αμέσως σε ποιο πόστο θα τυπωθεί το κάθε πράγμα.</li>
+    </ul></div>
+    <div class="bad"><h3>Κατά</h3><ul>
+      <li>Με 40 προϊόντα η οθόνη γίνεται πολύ χρώμα ταυτόχρονα.</li>
+      <li>Το όνομα έχει μικρότερη αντίθεση από ό,τι σε ουδέτερο πλακίδιο.</li>
+      <li><b>Εξαρτάται από τα χρώματα που θα διαλέξει ο σύλλογος.</b> Πέντε παρόμοια, και χάθηκε
+      το πλεονέκτημα. Γι' αυτό τρέχει η δικλείδα: τα ανοιχτόχρωμα πλακίδια <b>γυρίζουν μόνα τους
+      σε μαύρα γράμματα</b> — δες τα ΣΥΝΟΔΕΥΤΙΚΑ.</li>
+    </ul></div>
+  </div>
+</div>
+
 <!-- σύγκριση -->
 <div class="section">
   <h2>Πώς συγκρίνονται</h2>
   <table class="info">
-    <tr><th></th><th>01 Ήρεμο</th><th>02 Λωρίδα</th><th>03 Κάρτες</th><th>04 Λίστα</th></tr>
-    <tr><th>Προϊόντα χωρίς κύλιση</th><td>20</td><td>20</td><td><b>12</b></td><td>16</td></tr>
-    <tr><th>Ταχύτητα στα σκοτεινά</th><td>Καλή</td><td><b>Πολύ καλή</b></td><td><b>Πολύ καλή</b> (με φωτογραφίες)</td><td>Καλή</td></tr>
-    <tr><th>Μέγεθος στόχου για το δάχτυλο</th><td>Μεσαίο</td><td>Μεσαίο</td><td>Μεγάλο</td><td><b>Το μεγαλύτερο</b></td></tr>
-    <tr><th>Χωρίς βιβλιοθήκη φωτογραφιών</th><td>Μια χαρά</td><td>Μια χαρά</td><td><b>Χάνει τον λόγο ύπαρξής της</b></td><td>Μια χαρά</td></tr>
-    <tr><th>Δείχνει επαγγελματικό</th><td><b>Ναι</b></td><td><b>Ναι</b></td><td><b>Ναι</b></td><td>Απλό, λιτό</td></tr>
+    <tr><th></th><th>01 Ήρεμο</th><th>02 Λωρίδα</th><th>03 Κάρτες</th><th>04 Λίστα</th><th>05 Χρώμα</th></tr>
+    <tr><th>Προϊόντα χωρίς κύλιση</th><td>20</td><td>20</td><td><b>12</b></td><td>16</td><td>20</td></tr>
+    <tr><th>Ταχύτητα στα σκοτεινά</th><td>Καλή</td><td>Πολύ καλή</td><td>Πολύ καλή <span style="color:#7d8a97">(με φωτογραφίες)</span></td><td>Καλή</td><td><b>Η καλύτερη</b></td></tr>
+    <tr><th>Μέγεθος στόχου για το δάχτυλο</th><td>Μεσαίο</td><td>Μεσαίο</td><td>Μεγάλο</td><td><b>Το μεγαλύτερο</b></td><td>Μεσαίο</td></tr>
+    <tr><th>Χωρίς βιβλιοθήκη φωτογραφιών</th><td>Μια χαρά</td><td>Μια χαρά</td><td><b>Χάνει τον λόγο ύπαρξής της</b></td><td>Μια χαρά</td><td>Μια χαρά</td></tr>
+    <tr><th>Αντέχει κακή επιλογή χρωμάτων</th><td><b>Ναι</b></td><td>Μερικώς</td><td><b>Ναι</b></td><td><b>Ναι</b></td><td><b>Όχι</b> — εκεί κρίνεται</td></tr>
+    <tr><th>Δείχνει επαγγελματικό</th><td><b>Ναι</b></td><td><b>Ναι</b></td><td><b>Ναι</b></td><td>Απλό, λιτό</td><td>Ζωντανό, λιγότερο σοβαρό</td></tr>
   </table>
 
   <h3 style="font-size:23px;margin-top:32px">Η σύστασή μου</h3>
-  <p class="thesis"><b>02 «Λωρίδα» για βάση, με τις κάρτες της 03 ως επιλογή.</b> Η Λωρίδα κρατάει
-  και τα δύο που μετράνε — βρίσκεις κατηγορία με το χρώμα, διαβάζεις με καθαρή αντίθεση — και
-  δουλεύει το ίδιο καλά με ή χωρίς φωτογραφίες, δηλαδή <b>δεν εξαρτάται από δουλειά που δεν έχει
-  γίνει ακόμη</b>. Η 03 είναι πραγματικά ωραία, αλλά στηρίζεται ολόκληρη στη βιβλιοθήκη και κόβει
-  τα προϊόντα στα μισά.</p>
+  <p class="thesis">Το ερώτημα δεν είναι «ποια είναι ωραία», είναι <b>ποια αντέχει τη χειρότερη
+  βραδιά</b>: σκοτάδι, ουρά, εθελοντής πέντε λεπτών, και χρώματα που τα διάλεξε κάποιος άλλος.</p>
   <table class="info">
     <tr><th>Τι προτείνω</th><th>Γιατί</th></tr>
-    <tr><td>Βάση η <b>02</b></td><td>Δεν έχει αδύναμο σενάριο. Ούτε χωρίς φωτογραφίες, ούτε με 40 προϊόντα, ούτε στο φως</td></tr>
-    <tr><td>Η <b>03</b> μπαίνει ως τρίτη επιλογή στον ίδιο διακόπτη πλακιδίων</td><td>Ο σύλλογος με λίγα προϊόντα και καλές φωτογραφίες θα τη θέλει, και είναι η ίδια οθόνη με άλλο πλακίδιο — όχι δεύτερο πρόγραμμα</td></tr>
+    <tr><td><b>Βάση η 02 «Λωρίδα»</b></td><td>Είναι η μόνη χωρίς αδύναμο σενάριο: κρατάει και το χρώμα για το μάτι και την καθαρή αντίθεση για το όνομα, δουλεύει με ή χωρίς φωτογραφίες, και δεν καταρρέει αν ο σύλλογος διαλέξει μέτρια χρώματα</td></tr>
+    <tr><td><b>Η 05 «Χρώμα» αν το κριτήριο είναι μόνο η ταχύτητα</b></td><td>Είναι αντικειμενικά η γρηγορότερη στο μάτι, και η δικλείδα αντίθεσης λύνει το μισό της ρίσκο. Το άλλο μισό μένει: <b>πέντε κακοδιαλεγμένα χρώματα την ισοπεδώνουν</b>, και αυτό δεν το ελέγχουμε εμείς. Αν τη διαλέξεις, θέλει ο κατάλογος χρωμάτων στο admin να προτείνει <b>έτοιμη παλέτα</b> αντί για ελεύθερη επιλογή</td></tr>
+    <tr><td>Η <b>03</b> μπαίνει ως επιλογή στον ίδιο διακόπτη πλακιδίων</td><td>Ο σύλλογος με λίγα προϊόντα και καλές φωτογραφίες θα τη θέλει, και είναι η ίδια οθόνη με άλλο πλακίδιο — όχι δεύτερο πρόγραμμα</td></tr>
     <tr><td>Από την <b>04</b> κρατάω τα μεγέθη γραμμάτων στο καλάθι</td><td>Το καλάθι το διαβάζει ο ταμίας με τη σειρά, υπό πίεση. Εκεί το μεγάλο γράμμα κερδίζει πάντα</td></tr>
     <tr><td>Από την <b>01</b> κρατάω το ουδέτερο φόντο ως εναλλακτική παλέτα</td><td>Αν το ζεστό της 02 σου φανεί πολύ, αλλάζουν μόνο έξι χρώματα</td></tr>
   </table>
+  <p class="thesis">Αν θέλεις την ειλικρινή μου γνώμη σε μία γραμμή: <b>02 για προϊόν που πουλιέται
+  σε αγνώστους, 05 για ταμείο που θα στήσεις εσύ και θα διαλέξεις εσύ τα χρώματα.</b></p>
 
   <div class="note">
   <b>Τι μένει ανοιχτό.</b> Το <b>ελάχιστο μέγεθος κουμπιού μετριέται σε αληθινή οθόνη αφής</b>, όχι
@@ -431,9 +489,9 @@ const PRODUCTS = [
   ['Νερό 500ml','0,50','soft'],
   ['Πατάτες','3,00','side'],
   ['Εισιτήριο','5,00','entry'],
-  ['Κοκορέτσι','4,00','meat'],
+  ['Κοκορέτσι','4,00','meat',false],
   ['Παϊδάκια','8,00','meat'],
-  ['Καλαμάκι κοτόπουλο','1,80','meat'],
+  ['Καλαμάκι κοτόπουλο','1,80','meat',false],
   ['Ούζο','3,00','drink'],
   ['Καφές','1,50','soft'],
   ['Ψωμί','0,50','side'],
@@ -453,20 +511,28 @@ let THEME = 'dark';
 let MODE = 'text';
 
 /* how many products fit without scrolling, per proposal and per mode */
-const CAPACITY = {p1:20, p2:20, p3:12, p4:16};
+const CAPACITY = {p1:20, p2:20, p3:12, p4:16, p5:20};
 
-function slotHTML(prop, cat, name){
-  if (MODE === 'draw') return `<span class="slot">ΣΧΕΔΙΟ</span>`;
-  if (MODE === 'photo' && HASPHOTO(cat)) return `<span class="slot">ΦΩΤΟ<br>ΓΡΑΦΙΑ</span>`;
-  // Proposal 03 keeps its picture block filled with the category colour, so the row stays even
-  if (MODE === 'photo' && prop === 'p3') return `<span class="block">${name.charAt(0)}</span>`;
+/* One rule above the switch: a tile with neither a picture nor a drawing shows text alone.
+   Never an empty frame — that reads as something broken, and nothing is broken.
+   A drink keeps its photograph even in drawing mode: a photograph of the bottle beats any
+   drawing of a bottle, so there is no reason to trade down. */
+function slotHTML(prop, cat, name, hasDraw){
+  const photo = HASPHOTO(cat);
+  const empty = () => prop === 'p3' ? `<span class="block">${name.charAt(0)}</span>` : '';
+
+  if (MODE === 'photo') return photo ? `<span class="slot">ΦΩΤΟ<br>ΓΡΑΦΙΑ</span>` : empty();
+  if (MODE === 'draw'){
+    if (photo) return `<span class="slot">ΦΩΤΟ<br>ΓΡΑΦΙΑ</span>`;
+    return hasDraw ? `<span class="slot">ΣΧΕΔΙΟ</span>` : empty();
+  }
   return '';
 }
 
 function tiles(prop){
-  return PRODUCTS.slice(0, CAPACITY[prop]).map(([nm,pr,c]) => `
+  return PRODUCTS.slice(0, CAPACITY[prop]).map(([nm,pr,c,hasDraw = true]) => `
     <div class="tile" style="--c:var(--${c})">
-      ${slotHTML(prop, c, nm)}
+      ${slotHTML(prop, c, nm, hasDraw)}
       <span class="meta"><b>${nm}</b><span class="pr">${pr} €</span></span>
     </div>`).join('');
 }
@@ -522,8 +588,25 @@ function screenHTML(prop, mode){
   </div>`;
 }
 
+/* The contrast guard, running for real. It measures the colour each tile actually ended up
+   with — the customer picks those colours, we do not — and flips the lettering to black where
+   white would disappear. Only proposal 05 paints whole tiles, so only 05 is affected. */
+function guardContrast(){
+  const lum = rgb => {
+    const [r,g,b] = rgb.match(/\d+/g).slice(0,3).map(Number).map(v => {
+      v /= 255; return v <= 0.03928 ? v/12.92 : Math.pow((v + 0.055)/1.055, 2.4);
+    });
+    return 0.2126*r + 0.7152*g + 0.0722*b;
+  };
+  document.querySelectorAll('.p5 .tile').forEach(t => {
+    const bg = getComputedStyle(t).backgroundColor;
+    // 0.30 is not a taste call: above it, white lettering drops under a 3:1 contrast ratio
+    if (bg && !/rgba\(0, 0, 0, 0\)/.test(bg) && lum(bg) > 0.30) t.classList.add('onlight');
+  });
+}
+
 function render(){
-  ['p1','p2','p3','p4'].forEach(p => {
+  ['p1','p2','p3','p4','p5'].forEach(p => {
     document.getElementById(p).innerHTML = `
       <div class="pair">
         <div><div class="cap">ΚΑΝΟΝΙΚΗ ΔΟΥΛΕΙΑ</div>
@@ -534,6 +617,7 @@ function render(){
   });
   document.querySelectorAll('[data-theme]').forEach(b => b.classList.toggle('on', b.dataset.theme === THEME));
   document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('on', b.dataset.mode === MODE));
+  guardContrast();
 }
 
 document.addEventListener('click', e => {
