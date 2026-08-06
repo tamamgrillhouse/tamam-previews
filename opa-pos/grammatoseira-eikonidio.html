@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Opa POS — Γραμματοσειρά και εικονίδιο</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=IBM+Plex+Sans:wght@400;600;700&family=Source+Sans+3:wght@400;600;700&family=Fira+Sans:wght@400;600;700&family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#121110; --panel:#1A1817; --tile:#201E1C; --line:#2E2A27;
+    --text:#F4F1ED; --muted:#A2988E; --pay:#1E9E57; --danger:#D4402C; --warn:#C98A16;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+       font-family:Roboto,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:40px 24px 80px}
+  h1{font-size:26px;font-weight:800;letter-spacing:.5px;margin:0 0 6px}
+  .sub{color:var(--muted);font-size:15px;line-height:1.7;margin:0 0 12px;max-width:820px}
+  h2{font-size:12px;letter-spacing:2.4px;color:var(--muted);font-weight:700;
+     margin:56px 0 16px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+  .note{color:var(--muted);font-size:13.5px;line-height:1.7;max-width:820px;margin:0 0 22px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+        padding:22px 24px;margin-bottom:18px}
+  .card-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:4px}
+  .name{font-size:19px;font-weight:800}
+  .lic{font-size:11.5px;letter-spacing:1.4px;color:var(--pay);font-weight:700;
+       border:1px solid var(--pay);border-radius:5px;padding:3px 8px}
+  .why{color:var(--muted);font-size:13.5px;line-height:1.7;margin:8px 0 20px;max-width:760px}
+  .why b{color:var(--text);font-weight:600}
+
+  /* --- the real screen, at the real sizes ------------------------------- */
+  .demo{display:flex;gap:16px;flex-wrap:wrap;align-items:stretch}
+  .tile{width:196px;background:var(--tile);border:1px solid var(--line);
+        border-radius:12px;display:flex;overflow:hidden;min-height:104px}
+  .stripe{width:9px;flex:none}
+  .tile-body{padding:13px 14px;display:flex;flex-direction:column;justify-content:space-between;flex:1}
+  .tile-name{font-size:19px;font-weight:700;line-height:1.25}
+  .tile-price{font-size:22px;font-weight:700}
+  .cart{flex:1;min-width:300px;background:var(--tile);border:1px solid var(--line);
+        border-radius:12px;padding:16px 18px}
+  .row{display:flex;justify-content:space-between;align-items:center;
+       padding:9px 0;border-bottom:1px solid var(--line);font-size:16px}
+  .row:last-of-type{border-bottom:0}
+  .qty{color:var(--muted);font-size:14px}
+  .total{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px}
+  .total span:first-child{font-size:11.5px;letter-spacing:2px;color:var(--muted);font-weight:700}
+  .total span:last-child{font-size:34px;font-weight:800}
+  .num{font-size:52px;font-weight:800;letter-spacing:1px}
+  .numline{display:flex;align-items:baseline;gap:18px;margin-top:6px}
+  .numline small{font-size:11.5px;letter-spacing:2px;color:var(--muted);font-weight:700}
+  .caps{font-size:11.5px;letter-spacing:2px;color:var(--muted);font-weight:700;margin-bottom:8px}
+
+  /* --- icons ------------------------------------------------------------ */
+  .icons{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
+  .icon-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px}
+  .sizes{display:flex;align-items:flex-end;gap:18px;margin:6px 0 16px}
+  .sizes figure{margin:0;text-align:center}
+  .sizes figcaption{color:var(--muted);font-size:10.5px;letter-spacing:1.2px;margin-top:7px}
+  .desk{margin-top:14px;background:#0d0c0b;border:1px solid var(--line);border-radius:10px;
+        padding:12px;display:flex;align-items:center;gap:11px}
+  .desk span{font-size:12.5px;color:var(--muted)}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;margin-top:6px}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-size:11px;letter-spacing:1.6px;font-weight:700}
+  td b{font-weight:700}
+  .pick{color:var(--warn);font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Γραμματοσειρά και εικονίδιο</h1>
+  <p class="sub">Τα δύο τελευταία ανοιχτά του βήματος 5 που θέλουν <b>δική σου επιλογή</b>.
+     Όλα εδώ είναι ζωγραφισμένα με τα <b>πραγματικά χρώματα και μεγέθη</b> του προγράμματος —
+     πλακίδιο «Λωρίδα», σκοτεινό θέμα, καλάθι δεξιά.</p>
+  <p class="sub">Πες μου έναν αριθμό από κάθε ενότητα. Αν δεν σου αρέσει κανένα, πες το —
+     δεν χρειάζεται να διαλέξεις κάτι επειδή είναι εκεί.</p>
+
+  <!-- ================================================================== -->
+  <h2>Α · Η ΓΡΑΜΜΑΤΟΣΕΙΡΑ — ΤΕΣΣΕΡΙΣ ΠΡΟΤΑΣΕΙΣ</h2>
+  <p class="note">
+    Και οι τέσσερις έχουν <b>πλήρη ελληνικά</b> και <b>άδεια SIL OFL 1.1</b>, που επιτρέπει
+    να ταξιδεύουν μέσα σε πουλημένο πρόγραμμα. Το επαλήθευσα στην πηγή: στο αρχείο άδειας
+    του καθενός και στο <code>METADATA.pb</code> του Google Fonts, όπου φαίνεται το υποσύνολο
+    <code>greek</code>. Καμία δεν κοστίζει τίποτα και καμία δεν θέλει αναφορά μέσα στην εφαρμογή.
+    <br><br>
+    Σήμερα τρέχει η <b>Roboto</b>, η προεπιλογή του Flutter (άδεια Apache 2.0, επίσης εντάξει).
+    Η πέμπτη κάρτα είναι αυτή, για να έχεις με τι να συγκρίνεις.
+  </p>
+
+  <!-- 1 -->
+  <div class="card" style="font-family:Inter,sans-serif">
+    <div class="card-head"><span class="name">1 · Inter</span><span class="lic">SIL OFL 1.1 · GREEK</span></div>
+    <p class="why">Φτιαγμένη <b>αποκλειστικά για οθόνες</b>, όχι για χαρτί. Ψηλά μικρά γράμματα,
+       ανοιχτά σχήματα, και <b>νούμερα που δεν μπερδεύονται</b> — το πιο σημαντικό εδώ, γιατί
+       το «5» και το «6» τα διαβάζει κάποιος στα σκοτεινά, από μισό μέτρο.
+       Είναι η πιο ουδέτερη από τις τέσσερις: δεν έχει ύφος, έχει ευκρίνεια.</p>
+    <div class="demo">
+      <div class="tile"><div class="stripe" style="background:#C0392B"></div>
+        <div class="tile-body"><div class="tile-name">Σουβλάκι<br>χοιρινό</div><div class="tile-price">1,50 €</div></div></div>
+      <div class="tile"><div class="stripe" style="background:#C98A16"></div>
+        <div class="tile-body"><div class="tile-name">Μπύρα<br>500ml</div><div class="tile-price">3,00 €</div></div></div>
+      <div class="cart">
+        <div class="caps">ΚΑΛΑΘΙ</div>
+        <div class="row"><span>Σουβλάκι χοιρινό <span class="qty">×3</span></span><span>4,50 €</span></div>
+        <div class="row"><span>Μπύρα 500ml <span class="qty">×2</span></span><span>6,00 €</span></div>
+        <div class="row"><span>Πατάτες <span class="qty">×1</span></span><span>2,50 €</span></div>
+        <div class="total"><span>ΣΥΝΟΛΟ</span><span>13,00 €</span></div>
+        <div class="numline"><span class="num">Α4831</span><small>ΡΕΣΤΑ 7,00 €</small></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="card" style="font-family:'IBM Plex Sans',sans-serif">
+    <div class="card-head"><span class="name">2 · IBM Plex Sans</span><span class="lic">SIL OFL 1.1 · GREEK</span></div>
+    <p class="why">Η πιο <b>«μηχανή»</b> από τις τέσσερις, με την καλή έννοια: φτιάχτηκε από την IBM
+       για εργαλεία δουλειάς. Λίγο πιο στενή, άρα χωράει <b>μεγαλύτερα γράμματα στο ίδιο
+       πλακίδιο</b> — μετράει σε προϊόντα με μακριά ονόματα («Κοντοσούβλι χοιρινό μερίδα»).
+       Δίνει στο πρόγραμμα ύφος σοβαρού μηχανήματος και όχι εφαρμογής κινητού.</p>
+    <div class="demo">
+      <div class="tile"><div class="stripe" style="background:#C0392B"></div>
+        <div class="tile-body"><div class="tile-name">Κοντοσούβλι<br>μερίδα</div><div class="tile-price">8,00 €</div></div></div>
+      <div class="tile"><div class="stripe" style="background:#1E9E57"></div>
+        <div class="tile-body"><div class="tile-name">Νερό<br>0,5L</div><div class="tile-price">0,50 €</div></div></div>
+      <div class="cart">
+        <div class="caps">ΚΑΛΑΘΙ</div>
+        <div class="row"><span>Κοντοσούβλι μερίδα <span class="qty">×1</span></span><span>8,00 €</span></div>
+        <div class="row"><span>Νερό 0,5L <span class="qty">×4</span></span><span>2,00 €</span></div>
+        <div class="row"><span>Σουβλάκι κοτόπουλο <span class="qty">×2</span></span><span>3,00 €</span></div>
+        <div class="total"><span>ΣΥΝΟΛΟ</span><span>13,00 €</span></div>
+        <div class="numline"><span class="num">Α4831</span><small>ΡΕΣΤΑ 7,00 €</small></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="card" style="font-family:'Source Sans 3',sans-serif">
+    <div class="card-head"><span class="name">3 · Source Sans 3</span><span class="lic">SIL OFL 1.1 · GREEK</span></div>
+    <p class="why">Της Adobe, και η <b>πιο ήσυχη</b> στα ελληνικά — τα «θ», «ξ», «φ» της είναι
+       γραμμένα από άνθρωπο που ήξερε ελληνικά, όχι προσαρμοσμένα από λατινικά. Διαβάζεται
+       άνετα σε μικρά μεγέθη, που εδώ σημαίνει <b>τις λεζάντες και τις ρυθμίσεις</b>.
+       Ελαφρώς πιο «ζεστή» και λιγότερο τεχνική από τις δύο πρώτες.</p>
+    <div class="demo">
+      <div class="tile"><div class="stripe" style="background:#8E44AD"></div>
+        <div class="tile-body"><div class="tile-name">Κρασί<br>ποτήρι</div><div class="tile-price">2,00 €</div></div></div>
+      <div class="tile"><div class="stripe" style="background:#C98A16"></div>
+        <div class="tile-body"><div class="tile-name">Πατάτες<br>τηγανητές</div><div class="tile-price">2,50 €</div></div></div>
+      <div class="cart">
+        <div class="caps">ΚΑΛΑΘΙ</div>
+        <div class="row"><span>Κρασί ποτήρι <span class="qty">×2</span></span><span>4,00 €</span></div>
+        <div class="row"><span>Πατάτες τηγανητές <span class="qty">×1</span></span><span>2,50 €</span></div>
+        <div class="row"><span>Εισιτήριο εισόδου <span class="qty">×3</span></span><span>15,00 €</span></div>
+        <div class="total"><span>ΣΥΝΟΛΟ</span><span>21,50 €</span></div>
+        <div class="numline"><span class="num">Α4831</span><small>ΡΕΣΤΑ 8,50 €</small></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="card" style="font-family:'Fira Sans',sans-serif">
+    <div class="card-head"><span class="name">4 · Fira Sans</span><span class="lic">SIL OFL 1.1 · GREEK</span></div>
+    <p class="why">Φτιάχτηκε για το λειτουργικό της Mozilla, δηλαδή για <b>μικρές οθόνες αφής
+       που κρατιούνται στο χέρι</b>. Είναι η πιο «στρογγυλή» και η πιο φιλική από τις τέσσερις·
+       αν σου φαίνονται ψυχρές οι άλλες, αυτή είναι η απάντηση. Χάνει λίγο σε αυστηρότητα,
+       κερδίζει σε ζεστασιά — και το πανηγύρι δεν είναι τράπεζα.</p>
+    <div class="demo">
+      <div class="tile"><div class="stripe" style="background:#C0392B"></div>
+        <div class="tile-body"><div class="tile-name">Σουβλάκι<br>χοιρινό</div><div class="tile-price">1,50 €</div></div></div>
+      <div class="tile"><div class="stripe" style="background:#2980B9"></div>
+        <div class="tile-body"><div class="tile-name">Αναψυκτικό</div><div class="tile-price">1,50 €</div></div></div>
+      <div class="cart">
+        <div class="caps">ΚΑΛΑΘΙ</div>
+        <div class="row"><span>Σουβλάκι χοιρινό <span class="qty">×6</span></span><span>9,00 €</span></div>
+        <div class="row"><span>Αναψυκτικό <span class="qty">×2</span></span><span>3,00 €</span></div>
+        <div class="row"><span>Ψωμί <span class="qty">×2</span></span><span>1,00 €</span></div>
+        <div class="total"><span>ΣΥΝΟΛΟ</span><span>13,00 €</span></div>
+        <div class="numline"><span class="num">Α4831</span><small>ΡΕΣΤΑ 7,00 €</small></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 0 -->
+  <div class="card" style="font-family:Roboto,sans-serif;opacity:.85">
+    <div class="card-head"><span class="name">0 · Roboto — αυτό που τρέχει σήμερα</span><span class="lic" style="color:var(--muted);border-color:var(--line)">APACHE 2.0 · GREEK</span></div>
+    <p class="why">Δεν είναι κακή επιλογή· είναι η <b>μη επιλογή</b>. Την έχει κάθε πρόγραμμα
+       Android στον κόσμο, οπότε το ταμείο μοιάζει με «ακόμα μια εφαρμογή». Αν διαλέξεις αυτή,
+       το κουτάκι κλείνει σήμερα και δεν προστίθεται τίποτα στο μέγεθος του προγράμματος.</p>
+    <div class="demo">
+      <div class="tile"><div class="stripe" style="background:#C0392B"></div>
+        <div class="tile-body"><div class="tile-name">Σουβλάκι<br>χοιρινό</div><div class="tile-price">1,50 €</div></div></div>
+      <div class="cart">
+        <div class="caps">ΚΑΛΑΘΙ</div>
+        <div class="row"><span>Σουβλάκι χοιρινό <span class="qty">×3</span></span><span>4,50 €</span></div>
+        <div class="row"><span>Μπύρα 500ml <span class="qty">×2</span></span><span>6,00 €</span></div>
+        <div class="total"><span>ΣΥΝΟΛΟ</span><span>10,50 €</span></div>
+        <div class="numline"><span class="num">Α4831</span><small>ΡΕΣΤΑ 9,50 €</small></div>
+      </div>
+    </div>
+  </div>
+
+  <h2>ΤΙ ΑΛΛΑΖΕΙ ΠΡΑΚΤΙΚΑ</h2>
+  <table>
+    <tr><th>&nbsp;</th><th>Μέγεθος στο πρόγραμμα</th><th>Πού ξεχωρίζει</th></tr>
+    <tr><td><b>Inter</b></td><td>+ ~450 KB</td><td>Στα <b>νούμερα</b> και στα ρέστα</td></tr>
+    <tr><td><b>IBM Plex Sans</b></td><td>+ ~500 KB</td><td>Στα <b>μακριά ονόματα προϊόντων</b></td></tr>
+    <tr><td><b>Source Sans 3</b></td><td>+ ~420 KB</td><td>Στα <b>μικρά κείμενα</b> των ρυθμίσεων</td></tr>
+    <tr><td><b>Fira Sans</b></td><td>+ ~480 KB</td><td>Στο <b>ύφος</b> — πιο φιλικό</td></tr>
+    <tr><td><b>Roboto</b></td><td>0 — υπάρχει ήδη</td><td>Πουθενά· είναι η προεπιλογή</td></tr>
+  </table>
+  <p class="note" style="margin-top:14px">Το μέγεθος είναι για <b>δύο πάχη</b> (κανονικό και
+     έντονο) με ελληνικά και λατινικά μόνο. Μισό μεγαμπάιτ σε ένα πρόγραμμα που ήδη πιάνει
+     δεκάδες — δεν είναι κριτήριο, το γράφω για να το ξέρεις.</p>
+
+  <!-- ================================================================== -->
+  <h2>Β · ΤΟ ΕΙΚΟΝΙΔΙΟ — ΤΕΣΣΕΡΙΣ ΠΡΟΤΑΣΕΙΣ</h2>
+  <p class="note">
+    Αυτό που θα βλέπει ο σύλλογος στην επιφάνεια εργασίας των Windows και στο tablet.
+    Κάθε πρόταση φαίνεται σε <b>τρία μεγέθη</b> — 128, 64 και <b>32 pixel</b>, που είναι το
+    μέγεθος στη γραμμή εργασιών και το μόνο που κρίνει αν ένα εικονίδιο δουλεύει.
+    Και οι τέσσερις μιλάνε τη γλώσσα του προγράμματος: σκούρο πλακίδιο, χοντρή λωρίδα.
+  </p>
+
+  <div class="icons">
+
+    <!-- ICON 1 -->
+    <div class="icon-card">
+      <div class="card-head"><span class="name">1 · Το πλακίδιο</span></div>
+      <p class="why">Το ίδιο το πλακίδιο της οθόνης, με το <b>Ο</b> μέσα. Ό,τι βλέπει ο ταμίας
+         όλη τη βραδιά, μικρότερο. Η πιο συνεπής επιλογή: το εικονίδιο <b>δεν λέει κάτι
+         καινούριο</b>, λέει το ίδιο πράγμα.</p>
+      <div class="sizes">
+        <figure><svg width="128" height="128" viewBox="0 0 128 128"><rect width="128" height="128" rx="28" fill="#201E1C" stroke="#2E2A27" stroke-width="2"/><rect x="14" y="26" width="13" height="76" rx="6.5" fill="#1E9E57"/><text x="78" y="64" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="74" font-weight="800" fill="#F4F1ED">Ο</text></svg><figcaption>128</figcaption></figure>
+        <figure><svg width="64" height="64" viewBox="0 0 128 128"><rect width="128" height="128" rx="28" fill="#201E1C" stroke="#2E2A27" stroke-width="2"/><rect x="14" y="26" width="13" height="76" rx="6.5" fill="#1E9E57"/><text x="78" y="64" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="74" font-weight="800" fill="#F4F1ED">Ο</text></svg><figcaption>64</figcaption></figure>
+        <figure><svg width="32" height="32" viewBox="0 0 128 128"><rect width="128" height="128" rx="28" fill="#201E1C" stroke="#2E2A27" stroke-width="2"/><rect x="14" y="26" width="13" height="76" rx="6.5" fill="#1E9E57"/><text x="78" y="64" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="74" font-weight="800" fill="#F4F1ED">Ο</text></svg><figcaption>32</figcaption></figure>
+      </div>
+      <div class="desk"><svg width="18" height="18" viewBox="0 0 128 128"><rect width="128" height="128" rx="28" fill="#201E1C"/><rect x="14" y="26" width="13" height="76" rx="6.5" fill="#1E9E57"/><text x="78" y="64" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="74" font-weight="800" fill="#F4F1ED">Ο</text></svg><span>Opa POS</span></div>
+    </div>
+
+    <!-- ICON 2 -->
+    <div class="icon-card">
+      <div class="card-head"><span class="name">2 · Το απόκομμα</span></div>
+      <p class="why">Το χαρτάκι με το νούμερο — <b>αυτό που κρατάει ο πελάτης</b>. Λέει τι κάνει
+         το πρόγραμμα σε κάποιον που δεν το έχει ξαναδεί. Το κομμένο κάτω άκρο είναι η κοπή
+         του θερμικού.</p>
+      <div class="sizes">
+        <figure><svg width="128" height="128" viewBox="0 0 128 128"><rect width="128" height="128" rx="28" fill="#1A1817" stroke="#2E2A27" stroke-width="2"/><path d="M34 24h60v66l-7.5 7-7.5-7-7.5 7-7.5-7-7.5 7-7.5-7-7.5 7-7.5-7z" fill="#F4F1ED"/><rect x="34" y="24" width="60" height="11" fill="#1E9E57"/><text x="64" y="62" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="30" font-weight="800" fill="#191614">Α48</text><rect x="45" y="76" width="38" height="5" rx="2.5" fill="#A2988E"/></svg><figcaption>128</figcaption></figure>
+        <figure><svg width="64" height="64" viewBox="0 0 128 128"><rect width="128" height="128" rx="28" fill="#1A1817" stroke="#2E2A27" stroke-width="2"/><path d="M34 24h60v66l-7.5 7-7.5-7-7.5 7-7.5-7-7.5 7-7.5-7-7.5 7-7.5-7z" fill="#F4F1ED"/><rect x="34" y="24" width="60" height="11" fill="#1E9E57"/><text x="64" y="62" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="30" font-weight="800" fill="#191614">Α48</text><rect x="45" y="76" width="38" height="5" rx="2.5" fill="#A2988E"/></svg><figcaption>64</figcaption></figure>
+        <figure><svg width="32" height="32" viewBox="0 0 128 128"><rect width="128" height="128" rx="28" fill="#1A1817" stroke="#2E2A27" stroke-width="2"/><path d="M34 24h60v66l-7.5 7-7.5-7-7.5 7-7.5-7-7.5 7-7.5-7-7.5 7-7.5-7z" fill="#F4F1ED"/><rect x="34" y="24" width="60" height="11" fill="#1E9E57"/><text x="64" y="62" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="30" font-weight="800" fill="#191614">Α48</text><rect x="45" y="76" width="38" height="5" rx="2.5" fill="#A2988E"/></svg><figcaption>32</figcaption></figure>
+      </div>
+      <div class="desk"><svg width="18" height="18" viewBox="0 0 128 128"><rect width="128" height="128" rx="28" fill="#1A1817"/><path d="M34 24h60v66l-7.5 7-7.5-7-7.5 7-7.5-7-7.5 7-7.5-7-7.5 7-7.5-7z" fill="#F4F1ED"/><rect x="34" y="24" width="60" height="11" fill="#1E9E57"/></svg><span>Opa POS</span></div>
+    </div>
+
+    <!-- ICON 3 -->
+    <div class="icon-card">
+      <div class="card-head"><span class="name">3 · Ο κύκλος</span></div>
+      <p class="why">Στρογγυλό σήμα με τη λωρίδα να το κόβει. Είναι το μόνο που <b>δουλεύει
+         αυτούσιο και στο Android</b>, που κόβει κάθε εικονίδιο σε κύκλο — τα τετράγωνα τα
+         πετσοκόβει στις γωνίες. Το πιο «λογότυπο» από τα τέσσερα.</p>
+      <div class="sizes">
+        <figure><svg width="128" height="128" viewBox="0 0 128 128"><circle cx="64" cy="64" r="60" fill="#201E1C" stroke="#2E2A27" stroke-width="2"/><path d="M64 4a60 60 0 0 0-46.5 97.9L104 22.4A59.8 59.8 0 0 0 64 4z" fill="#1E9E57" opacity=".18"/><rect x="20" y="58" width="88" height="12" rx="6" fill="#1E9E57"/><text x="64" y="40" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="40" font-weight="800" fill="#F4F1ED">ΟΠΑ</text><text x="64" y="92" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="20" font-weight="700" fill="#A2988E" letter-spacing="3">POS</text></svg><figcaption>128</figcaption></figure>
+        <figure><svg width="64" height="64" viewBox="0 0 128 128"><circle cx="64" cy="64" r="60" fill="#201E1C" stroke="#2E2A27" stroke-width="2"/><rect x="20" y="58" width="88" height="12" rx="6" fill="#1E9E57"/><text x="64" y="40" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="40" font-weight="800" fill="#F4F1ED">ΟΠΑ</text><text x="64" y="92" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="20" font-weight="700" fill="#A2988E" letter-spacing="3">POS</text></svg><figcaption>64</figcaption></figure>
+        <figure><svg width="32" height="32" viewBox="0 0 128 128"><circle cx="64" cy="64" r="60" fill="#201E1C" stroke="#2E2A27" stroke-width="2"/><rect x="20" y="58" width="88" height="12" rx="6" fill="#1E9E57"/><text x="64" y="40" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="40" font-weight="800" fill="#F4F1ED">ΟΠΑ</text><text x="64" y="92" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="20" font-weight="700" fill="#A2988E" letter-spacing="3">POS</text></svg><figcaption>32</figcaption></figure>
+      </div>
+      <div class="desk"><svg width="18" height="18" viewBox="0 0 128 128"><circle cx="64" cy="64" r="60" fill="#201E1C"/><rect x="20" y="58" width="88" height="12" rx="6" fill="#1E9E57"/><text x="64" y="40" text-anchor="middle" dominant-baseline="central" font-family="Inter,sans-serif" font-size="40" font-weight="800" fill="#F4F1ED">ΟΠΑ</text></svg><span>Opa POS</span></div>
+    </div>
+
+    <!-- ICON 4 -->
+    <div class="icon-card">
+      <div class="card-head"><span class="name">4 · Το πλέγμα</span></div>
+      <p class="why">Τέσσερα πλακίδια, το ένα πατημένο. Είναι <b>η ίδια η οθόνη ταμία</b> σε
+         σύμβολο: το πλέγμα των προϊόντων. Ξεχωρίζει αμέσως από κάθε άλλο εικονίδιο στην
+         επιφάνεια εργασίας, γιατί δεν είναι γράμμα.</p>
+      <div class="sizes">
+        <figure><svg width="128" height="128" viewBox="0 0 128 128"><rect width="128" height="128" rx="28" fill="#1A1817" stroke="#2E2A27" stroke-width="2"/><rect x="22" y="22" width="38" height="38" rx="8" fill="#2E2A27"/><rect x="22" y="22" width="9" height="38" rx="4.5" fill="#C0392B"/><rect x="68" y="22" width="38" height="38" rx="8" fill="#2E2A27"/><rect x="68" y="22" width="9" height="38" rx="4.5" fill="#C98A16"/><rect x="22" y="68" width="38" height="38" rx="8" fill="#2E2A27"/><rect x="22" y="68" width="9" height="38" rx="4.5" fill="#2980B9"/><rect x="68" y="68" width="38" height="38" rx="8" fill="#1E9E57"/><rect x="68" y="68" width="9" height="38" rx="4.5" fill="#F4F1ED"/></svg><figcaption>128</figcaption></figure>
+        <figure><svg width="64" height="64" viewBox="0 0 128 128"><rect width="128" height="128" rx="28" fill="#1A1817" stroke="#2E2A27" stroke-width="2"/><rect x="22" y="22" width="38" height="38" rx="8" fill="#2E2A27"/><rect x="22" y="22" width="9" height="38" rx="4.5" fill="#C0392B"/><rect x="68" y="22" width="38" height="38" rx="8" fill="#2E2A27"/><rect x="68" y="22" width="9" height="38" rx="4.5" fill="#C98A16"/><rect x="22" y="68" width="38" height="38" rx="8" fill="#2E2A27"/><rect x="22" y="68" width="9" height="38" rx="4.5" fill="#2980B9"/><rect x="68" y="68" width="38" height="38" rx="8" fill="#1E9E57"/><rect x="68" y="68" width="9" height="38" rx="4.5" fill="#F4F1ED"/></svg><figcaption>64</figcaption></figure>
+        <figure><svg width="32" height="32" viewBox="0 0 128 128"><rect width="128" height="128" rx="28" fill="#1A1817" stroke="#2E2A27" stroke-width="2"/><rect x="22" y="22" width="38" height="38" rx="8" fill="#2E2A27"/><rect x="22" y="22" width="9" height="38" rx="4.5" fill="#C0392B"/><rect x="68" y="22" width="38" height="38" rx="8" fill="#2E2A27"/><rect x="68" y="22" width="9" height="38" rx="4.5" fill="#C98A16"/><rect x="22" y="68" width="38" height="38" rx="8" fill="#2E2A27"/><rect x="22" y="68" width="9" height="38" rx="4.5" fill="#2980B9"/><rect x="68" y="68" width="38" height="38" rx="8" fill="#1E9E57"/><rect x="68" y="68" width="9" height="38" rx="4.5" fill="#F4F1ED"/></svg><figcaption>32</figcaption></figure>
+      </div>
+      <div class="desk"><svg width="18" height="18" viewBox="0 0 128 128"><rect width="128" height="128" rx="28" fill="#1A1817"/><rect x="22" y="22" width="38" height="38" rx="8" fill="#2E2A27"/><rect x="22" y="22" width="9" height="38" rx="4.5" fill="#C0392B"/><rect x="68" y="22" width="38" height="38" rx="8" fill="#2E2A27"/><rect x="68" y="22" width="9" height="38" rx="4.5" fill="#C98A16"/><rect x="22" y="68" width="38" height="38" rx="8" fill="#2E2A27"/><rect x="22" y="68" width="9" height="38" rx="4.5" fill="#2980B9"/><rect x="68" y="68" width="38" height="38" rx="8" fill="#1E9E57"/></svg><span>Opa POS</span></div>
+    </div>
+
+  </div>
+
+  <h2>ΤΙ ΘΑ ΕΛΕΓΑ ΕΓΩ</h2>
+  <p class="note">
+    <span class="pick">Γραμματοσειρά: η 1, Inter.</span> Το ταμείο είναι νούμερα και τιμές
+    διαβασμένα γρήγορα, στα σκοτεινά, από απόσταση — και είναι το μόνο κριτήριο που έχει
+    πραγματικό κόστος όταν αστοχήσει. Δεύτερη η IBM Plex Sans, αν θέλεις πιο «μηχανή».
+    <br><br>
+    <span class="pick">Εικονίδιο: το 1, το πλακίδιο.</span> Είναι το μόνο που δεν προσθέτει
+    καινούριο σύμβολο στο πρόγραμμα — δείχνει αυτό που ήδη υπάρχει. Το 4 είναι το πιο
+    ξεχωριστό αν θέλεις να φαίνεται από μακριά ότι δεν είναι «ακόμα μια εφαρμογή».
+  </p>
+
+</div>
+</body>
+</html>
