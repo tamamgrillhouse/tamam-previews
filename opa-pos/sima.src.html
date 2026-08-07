@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<title>ΟΠΑ! POS — ένα θαυμαστικό, παντού το ίδιο</title>
+<style>
+@font-face{font-family:'Manrope';font-style:normal;font-weight:200 800;
+  src:url(data:font/ttf;base64,__FONT_B64__) format('truetype');font-display:block}
+:root{
+  --bg:#121110; --panel:#1A1817; --line:#2E2A27; --text:#F4F1ED; --muted:#A2988E;
+  --green:#1E9E57; --amber:#C98A16; --red:#D4402C;
+  --lpanel:#FFFDFB; --lline:#E5DED4; --ltext:#191614; --lmuted:#776E64; --lgreen:#1B7A47;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);
+     font-family:Manrope,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:44px 24px 120px}
+h1{font-size:30px;font-weight:800;letter-spacing:-.5px;margin:0 0 12px}
+.lede{color:var(--muted);font-size:15.5px;line-height:1.78;max-width:900px;margin:0 0 10px}
+.lede b{color:var(--text);font-weight:700}
+h2{font-size:11.5px;letter-spacing:2.6px;color:var(--muted);font-weight:800;
+   margin:52px 0 16px;padding-bottom:11px;border-bottom:1px solid var(--line)}
+.note{color:var(--muted);font-size:14px;line-height:1.75}
+.note b{color:var(--text);font-weight:700}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px 26px;margin-bottom:16px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cell{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:26px 22px;text-align:center}
+.cell.l{background:var(--lpanel);border-color:var(--lline)}
+.cell .cap{font-size:9.5px;letter-spacing:1.6px;color:var(--muted);margin-top:18px;font-weight:800}
+.cell.l .cap{color:var(--lmuted)}
+.cell .sub{font-size:12.5px;color:var(--muted);line-height:1.6;margin-top:8px}
+.stage{display:flex;align-items:center;justify-content:center;min-height:150px}
+.tag{display:inline-block;font-size:9.5px;letter-spacing:1.8px;font-weight:800;
+     padding:4px 9px;border-radius:5px;background:#0d0c0b;border:1px solid var(--line);color:var(--muted)}
+.tag.rec{color:var(--green);border-color:#1c4a30}
+.tag.bad{color:var(--red);border-color:#5a241c}
+.bar{position:sticky;top:0;z-index:20;background:rgba(18,17,16,.95);backdrop-filter:blur(8px);
+     border-bottom:1px solid var(--line);padding:13px 0;margin-bottom:6px;
+     display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.lbl{font-size:10.5px;letter-spacing:2px;color:var(--muted);font-weight:800;margin-right:2px}
+.pick{background:#0d0c0b;border:1px solid var(--line);color:var(--muted);font-family:inherit;
+      font-size:13px;font-weight:800;letter-spacing:.3px;padding:9px 13px;border-radius:9px;cursor:pointer}
+.pick[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:#08130c}
+.pick.alt[aria-pressed="true"]{background:var(--amber);border-color:var(--amber);color:#1a1204}
+.picker{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 10px}
+.readout{font-size:13px;color:var(--muted);margin:0 0 14px}
+.readout b{color:var(--green);font-weight:800}
+.holder{overflow:hidden;border-radius:10px}
+.frame{background:var(--bg);border:1px solid var(--line);border-radius:10px;position:relative;
+       transform-origin:top left;overflow:hidden}
+.frame .col{position:absolute;inset:0;display:flex;flex-direction:column;
+            align-items:center;justify-content:center}
+.pindot{border-radius:50%;border-style:solid;border-color:#4a443e}
+.pindot.on{background:var(--green);border-color:var(--green)}
+.key{border-radius:12px;background:#1F1C1A;border:1px solid #2E2A27;
+     display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--text)}
+.key.dim{color:#6E655C}
+[data-fit]{display:inline-block}
+.logo{display:flex;align-items:center}
+.logo .words{display:flex;flex-direction:column}
+.logo .line1{display:flex;align-items:center}
+.logo .word{font-weight:800;line-height:.98;letter-spacing:-.02em;white-space:nowrap}
+.logo .pill{font-weight:800;display:inline-flex;align-items:center;justify-content:center;
+            line-height:1;white-space:nowrap}
+.logo .tagline{font-weight:700;white-space:nowrap}
+.q{border-left:3px solid var(--amber);padding:2px 0 2px 18px;margin:14px 0}
+.q b{color:var(--text)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Ένα θαυμαστικό, παντού το ίδιο</h1>
+<p class="lede">
+Το είδες σωστά: το «!» της λέξης ήταν το θαυμαστικό της <b>γραμματοσειράς</b>, ενώ το «!» του
+σήματος είναι <b>δικό μας σχήμα</b>. Δύο διαφορετικά θαυμαστικά στο ίδιο λογότυπο.
+Τώρα είναι ένα — <b>το δικό μας</b>, στο ύψος των κεφαλαίων.
+</p>
+
+<h2>1 · Η ΛΕΞΗ, ΠΡΙΝ ΚΑΙ ΜΕΤΑ</h2>
+<div class="grid2">
+  <div class="cell">
+    <div class="stage"><span data-word="font" data-h="150"></span></div>
+    <div class="cap">ΠΡΙΝ — ΤΟ «!» ΤΗΣ ΓΡΑΜΜΑΤΟΣΕΙΡΑΣ</div>
+    <div class="sub">Λεπτότερο, με τετράγωνη τελεία. Δεν είναι το ίδιο σχήμα με το σήμα.</div>
+    <div style="margin-top:10px"><span class="tag bad">ΦΕΥΓΕΙ</span></div>
+  </div>
+  <div class="cell">
+    <div class="stage"><span data-word="mark" data-h="150"></span></div>
+    <div class="cap">ΜΕΤΑ — ΤΟ «!» ΤΟΥ ΣΗΜΑΤΟΣ</div>
+    <div class="sub">Ίδια στρογγυλεμένη μπάρα, ίδια στρογγυλή τελεία, ίδιες αναλογίες.</div>
+    <div style="margin-top:10px"><span class="tag rec">ΜΠΑΙΝΕΙ</span></div>
+  </div>
+</div>
+
+<div class="panel" style="margin-top:16px">
+  <p class="note" style="margin:0 0 18px"><b>Δίπλα-δίπλα με το σήμα.</b> Τα δύο θαυμαστικά πρέπει να
+  διαβάζονται ως ένα σχήμα σε δύο μεγέθη. Αν κάτι χοντραίνει ή λεπταίνει, εδώ φαίνεται.</p>
+  <div class="stage" style="min-height:200px"><span data-full data-h="130"></span></div>
+</div>
+
+<h2>2 · ΠΟΣΟ ΧΟΝΤΡΟ ΤΟ ΘΑΥΜΑΣΤΙΚΟ ΤΗΣ ΛΕΞΗΣ</h2>
+<p class="note" style="margin-bottom:16px">
+Το σήμα έχει ένα συγκεκριμένο πάχος. Στο ύψος των γραμμάτων, αυτό το πάχος είναι λίγο πιο χοντρό
+από τη γραμμή των γραμμάτων. Δύο επιλογές — <b>πιστό στο σήμα</b> ή <b>ίσο με τη γραμμή των γραμμάτων</b>.
+</p>
+<div class="grid2">
+  <div class="cell">
+    <div class="stage"><span data-word="mark" data-h="150" data-thin="0"></span></div>
+    <div class="cap">ΠΙΣΤΟ ΣΤΟ ΣΗΜΑ</div>
+    <div class="sub">Ακριβώς οι αναλογίες του σήματος, μικρογραφημένες. Δίπλα στα γράμματα βαραίνει.</div>
+  </div>
+  <div class="cell">
+    <div class="stage"><span data-word="mark" data-h="150" data-thin="1"></span></div>
+    <div class="cap">ΙΣΟ ΜΕ ΤΑ ΓΡΑΜΜΑΤΑ</div>
+    <div class="sub">Ίδιο σχήμα, ίδια τελεία, ίδιο κενό — μόνο πιο στενή μπάρα, στο πάχος των γραμμάτων.</div>
+    <div style="margin-top:10px"><span class="tag rec">ΤΟ ΔΙΑΛΕΞΕΣ</span></div>
+  </div>
+</div>
+<div class="grid2" style="margin-top:14px">
+  <div class="cell l"><div class="stage" style="min-height:120px"><span data-word="mark" data-h="96" data-theme="light"></span></div><div class="cap">ΠΙΣΤΟ · ΣΕ ΧΑΡΤΙ</div></div>
+  <div class="cell l"><div class="stage" style="min-height:120px"><span data-word="mark" data-h="96" data-thin="1" data-theme="light"></span></div><div class="cap">ΛΕΠΤΟΤΕΡΟ · ΣΕ ΧΑΡΤΙ</div></div>
+</div>
+
+<div class="bar">
+  <span class="lbl">ΟΘΟΝΗ:</span>
+  <button class="pick" data-screen="0">1280×720</button>
+  <button class="pick" data-screen="1">1366×768</button>
+  <button class="pick" data-screen="2" aria-pressed="true">1920×1080</button>
+  <button class="pick" data-screen="3">2560×1440</button>
+  <button class="pick" data-screen="4">1200×800 ταμπλέτα</button>
+  <button class="pick" data-screen="5">1024×600 φθηνή</button>
+  <span class="lbl" style="margin-left:14px">ΘΑΥΜΑΣΤΙΚΟ:</span>
+  <button class="pick alt" data-thin="0">ΠΙΣΤΟ ΣΤΟ ΣΗΜΑ</button>
+  <button class="pick alt" data-thin="1" aria-pressed="true">ΛΕΠΤΟΤΕΡΟ</button>
+</div>
+
+<h2>3 · ΕΝΑΡΞΗ — ΟΡΙΖΟΝΤΙΟ, 80%</h2>
+<div class="panel">
+  <div class="picker" data-pct="launch">
+    <span class="lbl">ΠΛΑΤΟΣ:</span>
+    <button class="pick" data-p="60">60%</button>
+    <button class="pick" data-p="70">70%</button>
+    <button class="pick" data-p="80" aria-pressed="true">80%</button>
+    <button class="pick" data-p="90">90%</button>
+  </div>
+  <p class="readout" data-read="launch"></p>
+  <div class="holder" data-holder="launch"></div>
+</div>
+
+<h2>4 · ΕΙΣΟΔΟΣ ΤΑΜΙΑ — 40%</h2>
+<div class="panel">
+  <div class="picker" data-pct="login">
+    <span class="lbl">ΠΛΑΤΟΣ:</span>
+    <button class="pick" data-p="30">30%</button>
+    <button class="pick" data-p="35">35%</button>
+    <button class="pick" data-p="40" aria-pressed="true">40%</button>
+    <button class="pick" data-p="50">50%</button>
+  </div>
+  <p class="readout" data-read="login"></p>
+  <div class="holder" data-holder="login"></div>
+</div>
+
+<h2>5 · ΑΝΑΚΤΗΣΗ PIN — 40%</h2>
+<div class="panel">
+  <div class="picker" data-pct="recovery">
+    <span class="lbl">ΠΛΑΤΟΣ:</span>
+    <button class="pick" data-p="30">30%</button>
+    <button class="pick" data-p="35">35%</button>
+    <button class="pick" data-p="40" aria-pressed="true">40%</button>
+    <button class="pick" data-p="50">50%</button>
+  </div>
+  <p class="readout" data-read="recovery"></p>
+  <div class="holder" data-holder="recovery"></div>
+</div>
+
+<h2>6 · ΤΙ ΑΠΟΦΑΣΙΖΕΙΣ</h2>
+<div class="panel">
+  <div class="q"><b>α.</b> Μένουν τα <b>80 / 40 / 40</b>, τώρα που το θαυμαστικό λέπτυνε;</div>
+  <p class="note" style="margin-top:14px">Αν είναι εντάξει και τα δύο, πες μου μόνο «εντάξει»
+  και ξεκινάει η δουλειά: ξαναβγαίνει ο φάκελος <code>brand/</code> και μπαίνει το λογότυπο στο πρόγραμμα.</p>
+</div>
+
+</div>
+
+<script>
+const DARK  = {ink:'#F4F1ED', green:'#1E9E57', muted:'#A2988E', pillInk:'#FFFFFF'};
+const LIGHT = {ink:'#191614', green:'#1B7A47', muted:'#776E64', pillInk:'#FFFFFF'};
+const GAP_DEG = 50, BOX = [4, 18, 83.5, 64];
+const CAP = 0.72;            // Manrope's cap height, read out of the font itself
+const SCREENS = [
+  {w:1280,h:720}, {w:1366,h:768}, {w:1920,h:1080},
+  {w:2560,h:1440}, {w:1200,h:800}, {w:1024,h:600}
+];
+const state = {screen:2, thin:1, pct:{launch:80, login:40, recovery:40}};
+
+function ring(cx, cy, r, sw, colour, rot){
+  const circ = 2*Math.PI*r, gap = circ*GAP_DEG/360, dash = circ-gap;
+  return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${colour}" stroke-width="${sw}"
+    stroke-linecap="round" stroke-dasharray="${dash.toFixed(2)} ${gap.toFixed(2)}"
+    transform="rotate(${rot} ${cx} ${cy})"/>`;
+}
+const markBody = (c) => ring(36, 50, 24, 13, c.ink, -155)
+  + `<rect x="71" y="20" width="15" height="40" rx="7.5" fill="${c.green}"/>`
+  + `<circle cx="78.5" cy="73" r="7.5" fill="${c.green}"/>`;
+const markSvg = (h, c) => `<svg width="${(h*BOX[2]/BOX[3]).toFixed(1)}" height="${h}"
+  viewBox="${BOX[0]} ${BOX[1]} ${BOX[2]} ${BOX[3]}" style="display:block">${markBody(c)}</svg>`;
+
+// The exclamation, lifted straight out of the mark: bar 15 wide over 40 tall, dot
+// r7.5 below it, 60.5 tall in all. Drawn at the letters' cap height and sitting on
+// the baseline, so it is the same shape the mark carries, only smaller.
+function bangSvg(capPx, colour, thin){
+  // The same construction the mark uses: a rounded bar over a round dot, with the
+  // gap and the dot both tied to the bar's width. At W=15 this is exactly the
+  // exclamation inside the mark; thinner keeps its character and only lengthens
+  // the bar, so the height stays the letters' cap height either way.
+  const W = thin ? 11.4 : 15;
+  const gap = 5.5 * W / 15, barH = 60.5 - gap - W;
+  return `<svg width="${(capPx * W / 60.5).toFixed(2)}" height="${capPx.toFixed(2)}"
+    viewBox="0 0 ${W} 60.5"
+    style="vertical-align:baseline;margin-left:${(capPx * .10).toFixed(2)}px">
+    <rect x="0" y="0" width="${W}" height="${barH.toFixed(2)}" rx="${W / 2}" fill="${colour}"/>
+    <circle cx="${W / 2}" cy="${(60.5 - W / 2).toFixed(2)}" r="${W / 2}" fill="${colour}"/></svg>`;
+}
+
+// The word. `kind` is 'font' for Manrope's own exclamation — kept only so the two
+// can be compared — and 'mark' for ours.
+function wordHtml(size, c, kind, thin){
+  const bang = kind === 'font'
+    ? `<span style="color:${c.green}">!</span>`
+    : bangSvg(size * CAP, c.green, thin);
+  return `<span class="word" style="font-size:${size.toFixed(1)}px;color:${c.ink}">ΟΠΑ${bang}</span>`;
+}
+
+function logoHtml(h, c, thin){
+  return `<span class="logo" style="gap:${(h*.3).toFixed(1)}px">${markSvg(h, c)}
+    <span class="words" style="gap:${(h*.13).toFixed(1)}px">
+      <span class="line1">
+        ${wordHtml(h*.78, c, 'mark', thin)}
+        <span class="pill" style="font-size:${(h*.318).toFixed(1)}px;background:${c.green};
+          color:${c.pillInk};border-radius:${(h*.112).toFixed(1)}px;
+          padding:${(h*.13).toFixed(1)}px ${(h*.16).toFixed(1)}px;margin-left:${(h*.22).toFixed(1)}px;
+          letter-spacing:${(h*.028).toFixed(2)}px">POS</span>
+      </span>
+      <span class="tagline" style="font-size:${(h*.206).toFixed(1)}px;color:${c.muted};
+        letter-spacing:${(h*.06).toFixed(2)}px">ΤΑΜΕΙΟ ΕΚΔΗΛΩΣΕΩΝ</span>
+    </span></span>`;
+}
+
+// Asked for by width: draw once at a reference height, measure, scale to fit.
+const REF = 100;
+function build(wanted, thin){
+  const probe = document.createElement('div');
+  probe.style.cssText = 'position:absolute;left:-9999px;top:0;visibility:hidden';
+  probe.innerHTML = logoHtml(REF, DARK, thin);
+  document.body.appendChild(probe);
+  const w0 = probe.firstElementChild.offsetWidth;
+  probe.remove();
+  const h = Math.round(REF * wanted / w0);
+  return {h, html:`<span data-fit>${logoHtml(h, DARK, thin)}</span>`};
+}
+
+function body(kind, logo){
+  if (kind === 'launch') return `<div class="col">${logo}</div>`;
+  if (kind === 'login'){
+    const keys = ['1','2','3','4','5','6','7','8','9','✕','0','⌫'].map(k =>
+      `<div class="key${'✕⌫'.includes(k) ? ' dim' : ''}" style="width:88px;height:66px;
+        font-size:${'✕⌫'.includes(k) ? 20 : 26}px">${k}</div>`).join('');
+    const dots = [1,1,1,0].map(on =>
+      `<i class="pindot${on ? ' on' : ''}" style="width:19px;height:19px;border-width:2px"></i>`).join('');
+    return `<div class="col">${logo}
+      <div style="margin-top:28px;font-size:22px;font-weight:700">Πληκτρολόγησε το PIN σου</div>
+      <div style="display:flex;gap:14px;margin-top:24px">${dots}</div>
+      <div style="display:grid;grid-template-columns:repeat(3,88px);gap:12px;margin-top:24px">${keys}</div>
+    </div>`;
+  }
+  return `<div class="col" style="justify-content:flex-start;padding-top:56px">${logo}
+    <div style="width:780px;margin-top:28px;color:#A2988E;font-size:19px;line-height:1.7;text-align:center">
+      Αν χαθεί το PIN του διαχειριστή, υπάρχουν δύο δρόμοι για να μπεις ξανά.
+      Δεν χρειάζεσαι εμάς για κανέναν από τους δύο.</div>
+    <div style="display:flex;gap:16px;margin-top:24px">
+      <div style="width:380px;height:170px;border-radius:14px;background:#1F1C1A;border:1px solid #2E2A27"></div>
+      <div style="width:380px;height:170px;border-radius:14px;background:#1F1C1A;border:1px solid #2E2A27"></div>
+    </div></div>`;
+}
+
+const PAGE_W = 1080;
+
+function draw(kind){
+  const s = SCREENS[state.screen], scale = PAGE_W / s.w;
+  const wanted = s.w * state.pct[kind] / 100;
+  const {h, html} = build(wanted, state.thin);
+  const holder = document.querySelector(`[data-holder="${kind}"]`);
+  holder.style.height = (s.h * scale) + 'px';
+  holder.innerHTML = `<div class="frame" style="width:${s.w}px;height:${s.h}px;
+    transform:scale(${scale})">${body(kind, html)}</div>`;
+  const fit = holder.querySelector('[data-fit]');
+  const realH = fit ? Math.round(fit.getBoundingClientRect().height / scale) : 0;
+  document.querySelector(`[data-read="${kind}"]`).innerHTML =
+    `Πλάτος <b>${Math.round(wanted)} pixel</b> (${state.pct[kind]}% των ${s.w}) · ύψος <b>${realH}</b> · σήμα ${h}`;
+}
+
+function render(){
+  document.querySelectorAll('[data-word]').forEach(el => {
+    const c = el.dataset.theme === 'light' ? LIGHT : DARK;
+    const thin = el.dataset.thin !== undefined ? +el.dataset.thin : state.thin;
+    el.innerHTML = wordHtml(+el.dataset.h, c, el.dataset.word, thin);
+  });
+  document.querySelectorAll('[data-full]').forEach(el => {
+    el.innerHTML = logoHtml(+el.dataset.h, DARK, state.thin);
+  });
+  ['launch','login','recovery'].forEach(draw);
+}
+
+document.querySelector('.bar').addEventListener('click', e => {
+  const b = e.target.closest('.pick'); if (!b) return;
+  const key = b.dataset.screen !== undefined ? 'screen' : 'thin';
+  document.querySelectorAll(`.bar .pick[data-${key}]`).forEach(o => o.setAttribute('aria-pressed', o === b));
+  state[key] = +b.dataset[key];
+  render();
+});
+document.querySelectorAll('[data-pct]').forEach(p => {
+  p.addEventListener('click', e => {
+    const b = e.target.closest('.pick'); if (!b) return;
+    p.querySelectorAll('.pick').forEach(o => o.setAttribute('aria-pressed', o === b));
+    state.pct[p.dataset.pct] = +b.dataset.p;
+    render();
+  });
+});
+
+document.fonts.ready.then(render);
+render();
+</script>
+</body>
+</html>
