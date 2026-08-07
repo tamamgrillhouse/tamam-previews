@@ -1,0 +1,800 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<title>ΟΠΑ! POS — η εκτύπωση</title>
+<style>
+@font-face{
+  font-family:'Manrope';
+  src:url(data:font/ttf;base64,__FONT_B64__) format('truetype');
+  font-weight:200 800;
+  font-display:block;
+}
+:root{
+  --bg:#121110; --panel:#1A1817; --tile:#201E1C; --line:#2E2A27;
+  --ink:#F4F1ED; --muted:#A2988E; --green:#1E9E57; --warn:#C98A16;
+  --paper:#FBFAF7; --print:#1A1A1A;
+  --mm:4px;                      /* one millimetre of real paper */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:'Manrope',system-ui,sans-serif;
+  font-weight:400; line-height:1.5;
+  padding:56px 48px 120px;
+}
+.wrap{max-width:2300px;margin:0 auto}
+
+h1{font-size:44px;font-weight:800;letter-spacing:-.5px}
+h1 .g{color:var(--green)}
+.lede{color:var(--muted);font-size:19px;max-width:960px;margin-top:14px}
+.lede b{color:var(--ink);font-weight:700}
+
+h2{
+  font-size:15px;font-weight:800;letter-spacing:2.5px;color:var(--muted);
+  margin:70px 0 6px;padding-bottom:12px;border-bottom:1px solid var(--line);
+}
+h2 span{color:var(--green)}
+.sub{color:var(--muted);font-size:17px;margin:16px 0 30px;max-width:1050px}
+.sub b{color:var(--ink);font-weight:700}
+
+/* ---------- the paper itself ------------------------------------------- */
+
+.roll{
+  background:var(--paper); color:var(--print);
+  font-family:Consolas,'DejaVu Sans Mono','Courier New',monospace;
+  font-size:12px; line-height:1.42;
+  box-shadow:0 18px 44px rgba(0,0,0,.55);
+  position:relative;
+}
+.w80{width:calc(80 * var(--mm))}
+.w58{width:calc(58 * var(--mm))}
+.roll .pad{padding:calc(4 * var(--mm)) calc(4 * var(--mm))}
+.w58 .pad{padding:calc(5 * var(--mm)) calc(5 * var(--mm))}
+.roll::before,.roll::after{
+  content:'';position:absolute;left:0;right:0;height:7px;
+  background:
+    repeating-linear-gradient(135deg,var(--paper) 0 6px,transparent 6px 12px),
+    repeating-linear-gradient(45deg,var(--paper) 0 6px,transparent 6px 12px);
+}
+.roll::before{top:-6px}
+.roll::after{bottom:-6px}
+
+.c{text-align:center}
+.big{font-size:34px;font-weight:700;letter-spacing:2px;line-height:1.15}
+.huge{font-size:52px;font-weight:700;letter-spacing:3px;line-height:1.05}
+.mid{font-size:19px;font-weight:700;letter-spacing:1px}
+.lg{font-size:16px;font-weight:700}
+.sm{font-size:11px}
+.gap{height:14px}
+.gap-l{height:30px}
+.band{
+  background:var(--print);color:var(--paper);
+  padding:7px 0;margin:0 -2px;font-weight:700;letter-spacing:2px;
+}
+.band.big2{font-size:26px;padding:12px 0;letter-spacing:4px}
+.tear{border-top:2px dashed #7a7a7a;position:relative;margin:0}
+.tear span{
+  position:absolute;top:-9px;left:50%;transform:translateX(-50%);
+  background:var(--paper);padding:0 8px;font-size:9px;color:#8a8a8a;letter-spacing:1px;
+}
+.row{display:flex;justify-content:space-between;gap:8px}
+.row .nm{flex:1;min-width:0}
+.rowbig{display:flex;justify-content:space-between;gap:8px;font-size:16px;font-weight:700}
+.logo{margin:0 auto;display:block}
+.logo.s{width:36%}
+.logo.m{width:56%}
+.logo.l{width:80%}
+.frame{border:3px solid var(--print);padding:12px 6px;margin:4px 0}
+
+/* ---------- cards ------------------------------------------------------ */
+
+.grid{display:flex;gap:30px;flex-wrap:wrap;align-items:flex-start}
+.card{
+  background:var(--panel);border:1px solid var(--line);border-radius:16px;
+  padding:24px 24px 30px;width:400px;
+}
+.card.scr{width:1050px}
+.badge{
+  display:inline-block;background:var(--tile);border:1px solid var(--line);
+  border-radius:999px;padding:5px 15px;font-size:12px;font-weight:800;
+  letter-spacing:1.6px;color:var(--green);
+}
+.badge.pick{background:var(--green);border-color:var(--green);color:#fff}
+.card h3{font-size:25px;font-weight:800;margin:15px 0 4px;letter-spacing:-.3px}
+.card .tag{color:var(--muted);font-size:14px;font-weight:700}
+.card p{color:var(--muted);font-size:15px;margin-top:13px}
+.card p b{color:var(--ink);font-weight:700}
+.stage{
+  margin:24px 0 6px;padding:32px 0;border-radius:12px;
+  background:radial-gradient(120% 80% at 50% 0%,#2a2724 0%,#171514 70%);
+  display:flex;justify-content:center;align-items:flex-start;
+}
+.facts{list-style:none;margin-top:16px;border-top:1px solid var(--line);padding-top:14px}
+.facts li{font-size:14px;color:var(--muted);padding:7px 0 7px 20px;position:relative}
+.facts li::before{
+  content:'';position:absolute;left:0;top:13px;width:7px;height:7px;
+  border-radius:2px;background:var(--green);
+}
+.facts li.no::before{background:var(--warn)}
+.facts li b{color:var(--ink);font-weight:700}
+
+.note{
+  background:var(--tile);border-left:3px solid var(--warn);
+  border-radius:0 10px 10px 0;padding:20px 24px;margin:26px 0 0;
+  color:var(--muted);font-size:16px;max-width:1150px;
+}
+.note.ok{border-left-color:var(--green)}
+.note b{color:var(--ink);font-weight:700}
+
+/* ---------- the screen sketches ---------------------------------------- */
+
+.screen{background:var(--bg);border:1px solid var(--line);border-radius:14px;overflow:hidden;width:980px}
+.bar{background:var(--panel);border-bottom:1px solid var(--line);padding:13px 18px;display:flex;align-items:center;gap:12px}
+.bar .t{font-weight:800;letter-spacing:1.6px;font-size:14px}
+.bar .sp{flex:1}
+.pill{background:var(--tile);border:1px solid var(--line);border-radius:8px;padding:6px 13px;font-size:12px;color:var(--muted);font-weight:700}
+.pill.on{background:var(--green);border-color:var(--green);color:#fff}
+.body2{display:flex;min-height:470px}
+.side{width:190px;background:var(--panel);border-right:1px solid var(--line);padding:12px 0}
+.side div{padding:10px 18px;font-size:13px;color:var(--muted);font-weight:700}
+.side div.on{color:var(--ink);background:var(--tile);border-left:3px solid var(--green)}
+.form{flex:1;padding:22px 24px;display:flex;flex-direction:column;gap:18px}
+.field label{display:block;font-size:11px;font-weight:800;letter-spacing:1.4px;color:var(--muted);margin-bottom:7px}
+.field .box{background:var(--tile);border:1px solid var(--line);border-radius:9px;padding:11px 13px;font-size:14px}
+.field .box.tall{min-height:66px;color:var(--muted)}
+.fieldrow{display:flex;gap:16px}
+.fieldrow .field{flex:1}
+.seg{display:flex;gap:7px}
+.seg span{flex:1;text-align:center;background:var(--tile);border:1px solid var(--line);border-radius:9px;padding:10px 0;font-size:13px;font-weight:700;color:var(--muted)}
+.seg span.on{background:var(--green);border-color:var(--green);color:#fff}
+.sw{display:flex;align-items:center;gap:11px;font-size:14px;color:var(--muted)}
+.sw i{width:40px;height:23px;border-radius:999px;background:var(--line);position:relative;display:inline-block;flex:none}
+.sw i::after{content:'';position:absolute;top:3px;left:3px;width:17px;height:17px;border-radius:50%;background:#6b635b}
+.sw.on i{background:var(--green)}
+.sw.on i::after{left:20px;background:#fff}
+.sw.on{color:var(--ink)}
+.swgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px 20px}
+.pane{width:320px;background:var(--panel);border-left:1px solid var(--line);padding:20px 0;display:flex;flex-direction:column;align-items:center;gap:12px}
+.cap{font-size:11px;font-weight:800;letter-spacing:1.6px;color:var(--muted)}
+.mini{transform:scale(.74);transform-origin:top center}
+.mini2{transform:scale(.6);transform-origin:top center}
+.cards{display:flex;flex-direction:column;gap:14px}
+.gcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.gcard .h{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:800;letter-spacing:1.2px}
+.gcard .h .chev{margin-left:auto;color:var(--muted)}
+.gcard .body{margin-top:14px;display:flex;flex-direction:column;gap:14px}
+.hot{outline:2px dashed var(--green);outline-offset:3px;position:relative}
+.hot::after{
+  content:'ΓΡΑΨΕ ΕΔΩ';position:absolute;right:-4px;top:-16px;
+  font-family:'Manrope',sans-serif;font-size:8px;font-weight:800;
+  letter-spacing:1px;color:var(--green);
+}
+
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.legend span{background:var(--tile);border:1px solid var(--line);border-radius:999px;padding:7px 16px;font-size:13px;color:var(--muted)}
+.legend b{color:var(--ink)}
+.foot{margin-top:80px;padding-top:26px;border-top:1px solid var(--line);color:var(--muted);font-size:16px;max-width:1150px}
+.foot b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Η εκτύπωση <span class="g">—</span> τι βγαίνει στο χαρτί</h1>
+<p class="lede">
+  Τέσσερις προτάσεις για το <b>εισιτήριο</b>, τέσσερις για το <b>απόκομμα πώλησης</b>
+  (κρέατα, ποτά) και τέσσερις για την <b>οθόνη της ΔΙΑΧΕΙΡΙΣΗΣ</b> που τα ρυθμίζει.
+  Όλα τα χαρτιά είναι σχεδιασμένα στο πραγματικό τους μέγεθος.
+  Πράσινη κουκκίδα = τι κερδίζεις. Κίτρινη = τι πληρώνεις.
+</p>
+
+<div class="note ok">
+  <b>Τα εισιτήρια είναι μόνο σε 80&nbsp;mm.</b> Δική σου απόφαση, 07/08: στα 58&nbsp;mm το
+  μέγεθος δεν βγάζει σοβαρό εισιτήριο. Άρα και οι τέσσερις προτάσεις παρακάτω είναι σε
+  80άρι ρολό. <b>Τα 58&nbsp;mm μένουν ζωντανά για τα αποκόμματα πώλησης</b> — ένα μικρό
+  μπαρ σε γωνία μπορεί κάλλιστα να έχει στενό μηχάνημα. Το panel θα σε
+  <b>προειδοποιεί</b> αν βάλεις το πόστο της πύλης σε 58άρι, αλλά <b>δεν θα σταματάει
+  πώληση</b>: κακό εισιτήριο είναι καλύτερο από κανένα.
+</div>
+
+<!-- =================================================================== -->
+<h2>ΤΟ ΕΙΣΙΤΗΡΙΟ <span>— τέσσερις προτάσεις, όλες 80 mm</span></h2>
+<p class="sub">
+  Το εισιτήριο <b>δεν λέει τι αγόρασες — είναι αυτό που αγόρασες</b>. Ένα χαρτί ανά άτομο,
+  σκίζεται στην πύλη, και σε λαχειοφόρο το νούμερό του πάει στην κληρωτίδα. Δέκα είσοδοι
+  σε μία πώληση είναι <b>δέκα χαρτιά και δέκα κοψίματα</b>, οπότε το μήκος του καθενός
+  μετράει πραγματικά.
+</p>
+
+<div class="grid">
+
+  <div class="card">
+    <span class="badge">Ε1</span>
+    <h3>Το Κοντό</h3>
+    <div class="tag">~6 cm μήκος</div>
+    <div class="stage">
+      <div class="roll w80"><div class="pad">
+        <div class="c mid">ΕΙΣΟΔΟΣ</div>
+        <div class="gap"></div>
+        <div class="c huge">0128</div>
+        <div class="gap"></div>
+        <div class="c big">5,00 €</div>
+        <div class="gap"></div>
+        <div class="row sm"><span class="nm">15/08/2026 21:14</span><span>Κ 48 31</span></div>
+      </div></div>
+    </div>
+    <p>Το ελάχιστο που είναι έγκυρο εισιτήριο. Τίποτα από πάνω.</p>
+    <ul class="facts">
+      <li><b>Το γρηγορότερο και το φθηνότερο.</b> Δέκα εισιτήρια σε ~60 cm χαρτί</li>
+      <li>Ο αριθμός είναι ό,τι μεγαλύτερο σηκώνει το χαρτί</li>
+      <li class="no">Δεν λέει ποιανού είναι. Δύο σύλλογοι δίπλα-δίπλα βγάζουν
+        <b>ίδια εισιτήρια</b></li>
+      <li class="no">Φαρδύ και κοντό — δεν μοιάζει με εισιτήριο, μοιάζει με απόδειξη</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <span class="badge">Ε2</span>
+    <h3>Η Λωρίδα</h3>
+    <div class="tag">περιθώρια · ~13 cm μήκος</div>
+    <div class="stage">
+      <div class="roll w80"><div class="pad" style="padding-left:calc(14*var(--mm));padding-right:calc(14*var(--mm))">
+        <svg class="logo l" viewBox="0 0 44 44" aria-hidden="true">
+          <circle cx="18" cy="22" r="14" fill="none" stroke="#1A1A1A" stroke-width="6"/>
+          <rect x="36" y="8" width="6" height="20" fill="#1A1A1A"/>
+          <rect x="36" y="31" width="6" height="6" fill="#1A1A1A"/>
+        </svg>
+        <div class="gap"></div>
+        <div class="c sm">ΠΟΛΙΤΙΣΤΙΚΟΣ<br>ΣΥΛΛΟΓΟΣ<br>ΑΓ. ΓΕΩΡΓΙΟΥ</div>
+        <div class="gap-l"></div>
+        <div class="c mid">ΕΙΣΟΔΟΣ</div>
+        <div class="gap"></div>
+        <div class="c huge">0128</div>
+        <div class="gap-l"></div>
+        <div class="c big">5,00 €</div>
+        <div class="gap-l"></div>
+        <div class="c sm">15/08/2026<br>21:14<br>Κ 48 31</div>
+        <div class="gap"></div>
+      </div></div>
+    </div>
+    <p>Ίδιο ρολό, αλλά το τύπωμα μαζεύεται σε <b>στενή στήλη στο κέντρο</b> και το χαρτί
+      βγαίνει μακρύ. Έτσι γίνεται μακρόστενο πάνω σε 80άρι.</p>
+    <ul class="facts">
+      <li><b>Κρατιέται σαν λωρίδα</b> στο χέρι, όχι σαν απόδειξη</li>
+      <li>Χωράει λογότυπο και όνομα συλλόγου χωρίς να στριμώξει τον αριθμό</li>
+      <li class="no">Διπλάσιο χαρτί από το Ε1, και <b>δέκα λογότυπα</b> στη σειρά είναι
+        το πιο αργό πράγμα που κάνει ο εκτυπωτής</li>
+      <li class="no">Το τύπωμα πέφτει στους 26 χαρακτήρες πλάτος αντί για 48</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <span class="badge">Ε3</span>
+    <h3>Με Στέλεχος</h3>
+    <div class="tag">δύο μισά, ένα κόψιμο · ~12 cm</div>
+    <div class="stage">
+      <div class="roll w80"><div class="pad">
+        <div class="c sm">ΣΤΕΛΕΧΟΣ — ΜΕΝΕΙ ΣΤΗΝ ΚΛΗΡΩΤΙΔΑ</div>
+        <div class="gap"></div>
+        <div class="c big">0128</div>
+        <div class="gap"></div>
+        <div class="c sm">15/08/2026&nbsp;&nbsp;Κ 48 31</div>
+        <div class="gap"></div>
+        <div class="tear"><span>ΣΚΙΣΕ ΕΔΩ</span></div>
+        <div class="gap"></div>
+        <div class="c sm">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΑΓ. ΓΕΩΡΓΙΟΥ</div>
+        <div class="c mid">ΕΙΣΟΔΟΣ</div>
+        <div class="gap"></div>
+        <div class="c huge">0128</div>
+        <div class="gap"></div>
+        <div class="c big">5,00 €</div>
+        <div class="gap"></div>
+        <div class="c sm">15/08/2026&nbsp;&nbsp;21:14</div>
+      </div></div>
+    </div>
+    <p>Το κλασικό εισιτήριο πανηγυριού: <b>ο ίδιος αριθμός δύο φορές</b>. Το πάνω μισό το
+      κρατάει η πύλη, το κάτω ο πελάτης.</p>
+    <ul class="facts">
+      <li><b>Λύνει τη λαχειοφόρο χωρίς δεύτερη εκτύπωση.</b> Τα στελέχη γεμίζουν την
+        κληρωτίδα όσο τρέχει η βραδιά — δεν τυπώνεις χίλια νούμερα στο τέλος</li>
+      <li>Η πύλη κρατάει <b>χειροπιαστή απόδειξη πόσοι μπήκαν</b></li>
+      <li class="no">Ο αριθμός τυπώνεται δύο φορές και το χαρτί είναι διπλάσιο του Ε1</li>
+      <li class="no">Η διάστικτη γραμμή <b>τυπώνεται, δεν είναι διάτρηση</b> — ο κόσμος
+        πρέπει να σκίζει σωστά</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <span class="badge">Ε4</span>
+    <h3>Η Μαύρη Μπάρα</h3>
+    <div class="tag">ανάποδο τύπωμα · ~7 cm</div>
+    <div class="stage">
+      <div class="roll w80"><div class="pad">
+        <div class="c band big2">ΕΙΣΟΔΟΣ</div>
+        <div class="gap"></div>
+        <div class="c huge">0128</div>
+        <div class="gap"></div>
+        <div class="c big">5,00 €</div>
+        <div class="gap"></div>
+        <div class="c sm">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΑΓ. ΓΕΩΡΓΙΟΥ</div>
+        <div class="c sm">15/08/2026&nbsp;&nbsp;21:14&nbsp;&nbsp;Κ 48 31</div>
+      </div></div>
+    </div>
+    <p>Το όνομα του πόστου <b>άσπρο μέσα σε μαύρη μπάρα</b>. Στα σκοτεινά, στα τρία μέτρα,
+      η μαύρη μπάρα είναι το πρώτο πράγμα που πιάνει το μάτι.</p>
+    <ul class="facts">
+      <li><b>Ξεχωρίζει αμέσως</b> ποιο χαρτί είναι εισιτήριο και ποιο απόκομμα φαγητού,
+        χωρίς να διαβάσει κανείς λέξη</li>
+      <li>Κοντό σαν το Ε1, αλλά λέει και ποιανού είναι</li>
+      <li class="no"><b>Δεν το υποστηρίζουν όλα τα μηχανήματα.</b> Είναι εντολή ESC/POS
+        που τα φθηνά μερικές φορές αγνοούν — θα φανεί μόνο σε αληθινό εκτυπωτή</li>
+      <li class="no">Η μαύρη μπάρα <b>τρώει χρόνο και θερμότητα</b>· δέκα στη σειρά
+        ζεσταίνουν την κεφαλή</li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- =================================================================== -->
+<h2>ΤΟ ΑΠΟΚΟΜΜΑ ΠΩΛΗΣΗΣ <span>— κρέατα, ποτά · τέσσερις προτάσεις</span></h2>
+<p class="sub">
+  Αυτό το χαρτί το διαβάζουν <b>δύο διαφορετικοί άνθρωποι</b>: ο μάγειρας πίσω από τα
+  κάρβουνα, που θέλει να δει <b>τι</b> να φτιάξει, και ο πελάτης, που θέλει να δει
+  <b>ποιο νούμερο</b> είναι και <b>τι πλήρωσε</b>. Οι τέσσερις προτάσεις διαφέρουν
+  ακριβώς στο ποιον από τους δύο εξυπηρετούν πρώτα.
+</p>
+
+<div class="grid">
+
+  <div class="card">
+    <span class="badge">Π1</span>
+    <h3>Το Πλήρες</h3>
+    <div class="tag">και οι δύο, ισότιμα</div>
+    <div class="stage">
+      <div class="roll w80"><div class="pad">
+        <svg class="logo m" viewBox="0 0 120 44" aria-hidden="true">
+          <circle cx="22" cy="22" r="17" fill="none" stroke="#1A1A1A" stroke-width="7"/>
+          <rect x="46" y="6" width="7" height="24" fill="#1A1A1A"/>
+          <rect x="46" y="34" width="7" height="7" fill="#1A1A1A"/>
+          <text x="66" y="30" font-family="Consolas,monospace" font-size="15"
+                font-weight="700" fill="#1A1A1A">POS</text>
+        </svg>
+        <div class="gap"></div>
+        <div class="c">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ</div>
+        <div class="c">ΑΓΙΟΥ ΓΕΩΡΓΙΟΥ ΓΡΕΒΕΝΩΝ</div>
+        <div class="gap-l"></div>
+        <div class="c big">Κ 48 31</div>
+        <div class="c mid">ΨΗΣΤΑΡΙΑ</div>
+        <div class="gap-l"></div>
+        <div class="row"><span class="nm">2 x ΣΟΥΒΛΑΚΙ ΧΟΙΡΙΝΟ</span><span>7,00 €</span></div>
+        <div class="row"><span class="nm">1 x ΜΠΙΦΤΕΚΙ</span><span>4,50 €</span></div>
+        <div class="gap"></div>
+        <div class="row"><span class="nm"><b>ΣΥΝΟΛΟ</b></span><span><b>11,50 €</b></span></div>
+        <div class="gap-l"></div>
+        <div class="sm">15/08/2026&nbsp;&nbsp;22:41&nbsp;&nbsp;Κρεάτων</div>
+        <div class="sm">Ταμίας: Γιώργος</div>
+        <div class="gap"></div>
+        <div class="c sm">ευχαριστούμε — καλή όρεξη</div>
+      </div></div>
+    </div>
+    <p>Ό,τι υπάρχει, ανοιχτό. Το χαρτί που δίνεις σε κάποιον που θέλει να δει τα πάντα.</p>
+    <ul class="facts">
+      <li>Το νούμερο <b>ομαδοποιημένο</b> — «Κ 48 31», όχι «Κ4831»</li>
+      <li>Το ΣΥΝΟΛΟ είναι <b>της παραγγελίας</b>, όχι του πόστου: ο πελάτης πλήρωσε μία
+        φορά και μπορεί να σηκώσει όποιο χαρτί θέλει</li>
+      <li class="no">Με λογότυπο και επικεφαλίδα, κάθε απόκομμα κοστίζει
+        <b>~3 cm χαρτί παραπάνω</b></li>
+      <li class="no">Ο μάγειρας διαβάζει τιμές που δεν τον αφορούν</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <span class="badge">Π2</span>
+    <h3>Της Κουζίνας</h3>
+    <div class="tag">ο μάγειρας πρώτα — <b>χωρίς τιμές</b></div>
+    <div class="stage">
+      <div class="roll w80"><div class="pad">
+        <div class="c band">ΨΗΣΤΑΡΙΑ</div>
+        <div class="gap"></div>
+        <div class="c huge">Κ 48 31</div>
+        <div class="gap-l"></div>
+        <div class="lg">2 x ΣΟΥΒΛΑΚΙ ΧΟΙΡΙΝΟ</div>
+        <div class="lg">1 x ΜΠΙΦΤΕΚΙ</div>
+        <div class="gap-l"></div>
+        <div class="sm">15/08/2026&nbsp;&nbsp;22:41&nbsp;&nbsp;Γιώργος</div>
+      </div></div>
+    </div>
+    <p>Χωρίς λογότυπο, χωρίς επικεφαλίδα, <b>χωρίς καμία τιμή</b>. Είδη σε μεγάλα γράμματα
+      και τεράστιο νούμερο. Το χαρτί που διαβάζεται με μια ματιά πάνω από τα κάρβουνα.</p>
+    <ul class="facts">
+      <li><b>Το πιο γρήγορο να διαβαστεί σωστά.</b> Λιγότερα γράμματα, μεγαλύτερα</li>
+      <li>Ο μάγειρας <b>δεν βλέπει τζίρο</b> — ούτε θέλει, ούτε πρέπει</li>
+      <li>Κοντό: λιγότερο χαρτί από το Π1 παρά τα μεγάλα γράμματα</li>
+      <li class="no"><b>Ο πελάτης δεν βλέπει τι πλήρωσε.</b> Αν κρατάει μόνο αυτό το
+        χαρτί, δεν έχει απόδειξη ποσού</li>
+      <li class="no">Θέλει το ΣΥΝΟΛΟ να λέγεται προφορικά ή να μπαίνει σε άλλο χαρτί</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <span class="badge">Π3</span>
+    <h3>Δύο Ζώνες</h3>
+    <div class="tag">ένα χαρτί, σκίζεται στα δύο</div>
+    <div class="stage">
+      <div class="roll w80"><div class="pad">
+        <div class="c sm">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΑΓ. ΓΕΩΡΓΙΟΥ</div>
+        <div class="gap"></div>
+        <div class="c big">Κ 48 31</div>
+        <div class="gap"></div>
+        <div class="rowbig"><span>ΣΥΝΟΛΟ</span><span>11,50 €</span></div>
+        <div class="gap"></div>
+        <div class="c sm">ευχαριστούμε — καλή όρεξη</div>
+        <div class="gap"></div>
+        <div class="tear"><span>Ο ΠΕΛΑΤΗΣ ΚΡΑΤΑΕΙ ΑΠΟ ΕΔΩ ΠΑΝΩ</span></div>
+        <div class="gap"></div>
+        <div class="c band">ΨΗΣΤΑΡΙΑ</div>
+        <div class="gap"></div>
+        <div class="c big">Κ 48 31</div>
+        <div class="gap"></div>
+        <div class="lg">2 x ΣΟΥΒΛΑΚΙ ΧΟΙΡΙΝΟ</div>
+        <div class="lg">1 x ΜΠΙΦΤΕΚΙ</div>
+        <div class="gap"></div>
+        <div class="sm">22:41&nbsp;&nbsp;Γιώργος</div>
+      </div></div>
+    </div>
+    <p>Ένα κόψιμο, δύο χρήσεις: <b>πάνω ο πελάτης</b> με το νούμερο και το σύνολο,
+      <b>κάτω η κουζίνα</b> με τα είδη και χωρίς τιμές.</p>
+    <ul class="facts">
+      <li><b>Λύνει το πρόβλημα του Π2</b> χωρίς δεύτερο χαρτί και χωρίς δεύτερο κόψιμο</li>
+      <li>Ο μάγειρας κρατάει το κάτω μισό στη σειρά του — <b>γίνεται η ουρά της κουζίνας</b></li>
+      <li>Ο ίδιος αριθμός και στα δύο, ώστε να ταιριάζουν στο ταψί</li>
+      <li class="no">Μακρύτερο από όλα τα άλλα</li>
+      <li class="no">Θέλει τον ταμία να το <b>σκίσει σωστά</b> κάθε φορά, στη βιασύνη</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <span class="badge">Π4</span>
+    <h3>Ο Ένας Πάγκος</h3>
+    <div class="tag">όλα τα πόστα σε ένα χαρτί</div>
+    <div class="stage">
+      <div class="roll w80"><div class="pad">
+        <div class="c sm">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΑΓ. ΓΕΩΡΓΙΟΥ</div>
+        <div class="gap-l"></div>
+        <div class="c big">Κ 48 31</div>
+        <div class="gap-l"></div>
+        <div class="c mid">ΨΗΣΤΑΡΙΑ</div>
+        <div class="row"><span class="nm">2 x ΣΟΥΒΛΑΚΙ ΧΟΙΡΙΝΟ</span><span>7,00 €</span></div>
+        <div class="row"><span class="nm">1 x ΜΠΙΦΤΕΚΙ</span><span>4,50 €</span></div>
+        <div class="gap"></div>
+        <div class="c mid">ΜΠΑΡ</div>
+        <div class="row"><span class="nm">2 x ΜΠΥΡΑ</span><span>6,00 €</span></div>
+        <div class="row"><span class="nm">1 x ΝΕΡΟ</span><span>0,50 €</span></div>
+        <div class="gap"></div>
+        <div class="row"><span class="nm"><b>ΣΥΝΟΛΟ</b></span><span><b>18,00 €</b></span></div>
+        <div class="gap-l"></div>
+        <div class="sm">15/08/2026&nbsp;&nbsp;22:41&nbsp;&nbsp;Ταμίας: Γιώργος</div>
+      </div></div>
+    </div>
+    <p>Ένα κομμάτι χαρτί για ολόκληρη την παραγγελία, με τα πόστα ως επικεφαλίδες μέσα του.
+      Για στάντ με <b>έναν πάγκο</b>, όπου δεν υπάρχει «πίσω κουζίνα».</p>
+    <ul class="facts">
+      <li><b>Το λιγότερο χαρτί απ' όλα</b> και ένα μόνο κόψιμο ανά παραγγελία</li>
+      <li>Ο πελάτης κρατάει <b>ένα</b> χαρτί, όχι δύο που μπορεί να χάσει το ένα</li>
+      <li class="no"><b>Δεν δουλεύει με δύο πόστα σε απόσταση.</b> Το μπαρ πρέπει να δει
+        χαρτί που το κρατάει η ψησταριά</li>
+      <li class="no">Δεν είναι πρόταση — είναι ο διακόπτης «ένα χαρτί για όλα τα πόστα»
+        που υπάρχει ήδη. Μπαίνει εδώ για να τον δεις</li>
+    </ul>
+  </div>
+
+</div>
+
+<div class="legend">
+  <span>Παντού: <b>δέκα είσοδοι = δέκα χαρτιά</b>, ποτέ ένα που γράφει «10»</span>
+  <span>Παντού: το πακέτο τυπώνεται <b>στα πόστα των περιεχομένων</b>, χωρίς τιμές πάνω τους</span>
+  <span>Παντού: <b>ΔΙΟΡΘΩΜΕΝΗ 2</b> πάνω από τον αριθμό όταν ξανατυπώνεται διορθωμένη</span>
+  <span>Παντού: <b>ΚΕΡΑΣΜΑ</b> και 0,00 όταν η παραγγελία χαρίστηκε</span>
+</div>
+
+<!-- =================================================================== -->
+<h2>Η ΟΘΟΝΗ <span>— ΔΙΑΧΕΙΡΙΣΗ → ΜΟΡΦΗ ΧΑΡΤΙΟΥ · τέσσερις προτάσεις</span></h2>
+<p class="sub">
+  Το σημαντικό δεν είναι πού κάθονται τα κουτάκια. Είναι ότι <b>το χαρτί δίπλα δεν είναι
+  ζωγραφιά</b>: το φτιάχνει ο ίδιος κώδικας που στέλνει τα bytes στον εκτυπωτή, στο
+  πραγματικό πλάτος του ρολού. Ό,τι βλέπεις εκεί, αυτό βγαίνει.
+  Και στις τέσσερις υπάρχει <b>επιλογέας ΑΠΟΚΟΜΜΑ / ΕΙΣΙΤΗΡΙΟ</b>, γιατί είναι δύο
+  ξεχωριστά πρότυπα και δεν πρέπει να μπερδεύονται ποτέ.
+</p>
+
+<div class="grid">
+
+  <!-- Σ1 -->
+  <div class="card scr">
+    <span class="badge">Σ1</span>
+    <h3>Το Δίπτυχο</h3>
+    <div class="tag">ρυθμίσεις αριστερά, χαρτί πάντα ορατό δεξιά</div>
+    <div class="stage" style="padding:20px">
+      <div class="screen">
+        <div class="bar">
+          <span class="t">ΜΟΡΦΗ ΧΑΡΤΙΟΥ</span><span class="sp"></span>
+          <span class="pill">ΔΟΚΙΜΑΣΤΙΚΗ ΕΚΤΥΠΩΣΗ</span><span class="pill">ΑΠΟΘΗΚΕΥΣΗ</span>
+        </div>
+        <div class="body2">
+          <div class="side">
+            <div>ΠΟΣΤΑ</div><div>ΚΑΤΗΓΟΡΙΕΣ</div><div>ΠΡΟΪΟΝΤΑ</div>
+            <div>ΕΚΤΥΠΩΤΕΣ</div><div class="on">ΜΟΡΦΗ ΧΑΡΤΙΟΥ</div><div>ΤΑΜΙΕΣ</div>
+          </div>
+          <div class="form">
+            <div class="field">
+              <label>ΤΙ ΡΥΘΜΙΖΕΙΣ</label>
+              <div class="seg"><span class="on">ΑΠΟΚΟΜΜΑ ΠΩΛΗΣΗΣ</span><span>ΕΙΣΙΤΗΡΙΟ / ΚΟΥΠΟΝΙ</span></div>
+            </div>
+            <div class="fieldrow">
+              <div class="field"><label>ΛΟΓΟΤΥΠΟ</label>
+                <div class="box">logo.png &nbsp;·&nbsp; ΑΛΛΑΓΗ &nbsp;·&nbsp; ΑΦΑΙΡΕΣΗ</div></div>
+              <div class="field" style="flex:0 0 230px"><label>ΜΕΓΕΘΟΣ</label>
+                <div class="seg"><span>ΜΙΚΡΟ</span><span class="on">ΜΕΣΑΙΟ</span><span>ΜΕΓΑΛΟ</span></div></div>
+            </div>
+            <div class="field"><label>ΕΠΙΚΕΦΑΛΙΔΑ</label>
+              <div class="box tall">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ<br>ΑΓΙΟΥ ΓΕΩΡΓΙΟΥ ΓΡΕΒΕΝΩΝ</div></div>
+            <div class="field"><label>ΥΠΟΣΕΛΙΔΟ</label>
+              <div class="box tall">ευχαριστούμε — καλή όρεξη</div></div>
+            <div class="swgrid">
+              <div class="sw on"><i></i> Ημερομηνία</div>
+              <div class="sw on"><i></i> Ώρα</div>
+              <div class="sw on"><i></i> Όνομα ταμία</div>
+              <div class="sw"><i></i> Πόστο του ταμείου</div>
+              <div class="sw on"><i></i> Τιμές ανά είδος</div>
+              <div class="sw on"><i></i> Σύνολο</div>
+            </div>
+            <div class="field"><label>ΜΕΓΕΘΟΣ ΑΡΙΘΜΟΥ</label>
+              <div class="seg"><span>1</span><span>2</span><span class="on">3</span><span>4</span><span>5</span></div></div>
+          </div>
+          <div class="pane">
+            <div class="cap">ΟΠΩΣ ΘΑ ΒΓΕΙ · 80 mm</div>
+            <div class="mini"><div class="roll w80"><div class="pad">
+              <div class="c sm">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ</div>
+              <div class="c sm">ΑΓΙΟΥ ΓΕΩΡΓΙΟΥ ΓΡΕΒΕΝΩΝ</div>
+              <div class="gap"></div>
+              <div class="c big">Κ 48 31</div>
+              <div class="c mid">ΨΗΣΤΑΡΙΑ</div>
+              <div class="gap"></div>
+              <div class="row"><span class="nm">2 x ΣΟΥΒΛΑΚΙ</span><span>7,00 €</span></div>
+              <div class="row"><span class="nm"><b>ΣΥΝΟΛΟ</b></span><span><b>7,00 €</b></span></div>
+              <div class="gap"></div>
+              <div class="sm">15/08/2026&nbsp;&nbsp;22:41</div>
+              <div class="sm">Ταμίας: Γιώργος</div>
+              <div class="gap"></div>
+              <div class="c sm">ευχαριστούμε — καλή όρεξη</div>
+            </div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ul class="facts">
+      <li><b>Το χαρτί δεν φεύγει ποτέ από το μάτι σου.</b> Γράφεις και το βλέπεις</li>
+      <li>Ο επιλογέας πάνω-πάνω: <b>αδύνατον να ρυθμίσεις το ένα νομίζοντας το άλλο</b></li>
+      <li class="no">Η στήλη του χαρτιού τρώει 320 px — τα πεδία στριμώχνονται σε
+        οθόνη 1280 πλάτος</li>
+    </ul>
+  </div>
+
+  <!-- Σ2 -->
+  <div class="card scr">
+    <span class="badge">Σ2</span>
+    <h3>Το Χαρτί Πρώτα</h3>
+    <div class="tag">το χαρτί στο κέντρο, οι διακόπτες στη μεριά που αλλάζουν</div>
+    <div class="stage" style="padding:20px">
+      <div class="screen">
+        <div class="bar">
+          <span class="t">ΜΟΡΦΗ ΧΑΡΤΙΟΥ</span>
+          <span class="pill">ΑΠΟΚΟΜΜΑ</span><span class="pill on">ΕΙΣΙΤΗΡΙΟ</span>
+          <span class="sp"></span><span class="pill">80 mm</span>
+          <span class="pill">ΔΟΚΙΜΑΣΤΙΚΗ ΕΚΤΥΠΩΣΗ</span>
+        </div>
+        <div class="body2">
+          <div class="form" style="flex:0 0 290px">
+            <div class="field"><label>ΠΑΝΩ ΑΠΟ ΤΟΝ ΑΡΙΘΜΟ</label>
+              <div class="swgrid" style="grid-template-columns:1fr">
+                <div class="sw on"><i></i> Λογότυπο</div>
+                <div class="sw on"><i></i> Επικεφαλίδα</div>
+                <div class="sw"><i></i> Μαύρη μπάρα στο πόστο</div>
+              </div></div>
+            <div class="field"><label>ΕΠΙΚΕΦΑΛΙΔΑ</label>
+              <div class="box tall">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ<br>ΑΓ. ΓΕΩΡΓΙΟΥ</div></div>
+            <div class="field"><label>ΜΕΓΕΘΟΣ ΛΟΓΟΤΥΠΟΥ</label>
+              <div class="seg"><span>ΜΙΚΡΟ</span><span class="on">ΜΕΣΑΙΟ</span><span>ΜΕΓΑΛΟ</span></div></div>
+          </div>
+          <div class="pane" style="flex:1;border-right:1px solid var(--line);justify-content:flex-start">
+            <div class="cap">ΟΠΩΣ ΘΑ ΒΓΕΙ · ΕΙΣΙΤΗΡΙΟ · 80 mm</div>
+            <div class="roll w80"><div class="pad">
+              <div class="c sm">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΑΓ. ΓΕΩΡΓΙΟΥ</div>
+              <div class="c mid">ΕΙΣΟΔΟΣ</div>
+              <div class="gap"></div>
+              <div class="c huge">0128</div>
+              <div class="gap"></div>
+              <div class="c big">5,00 €</div>
+              <div class="gap"></div>
+              <div class="c sm">15/08/2026&nbsp;&nbsp;21:14&nbsp;&nbsp;Κ 48 31</div>
+            </div></div>
+          </div>
+          <div class="form" style="flex:0 0 290px">
+            <div class="field"><label>ΚΑΤΩ ΑΠΟ ΤΗΝ ΤΙΜΗ</label>
+              <div class="swgrid" style="grid-template-columns:1fr">
+                <div class="sw on"><i></i> Ημερομηνία</div>
+                <div class="sw on"><i></i> Ώρα</div>
+                <div class="sw on"><i></i> Αριθμός παραγγελίας</div>
+                <div class="sw"><i></i> Όνομα ταμία</div>
+                <div class="sw"><i></i> Στέλεχος για κλήρωση</div>
+              </div></div>
+            <div class="field"><label>ΜΕΓΕΘΟΣ ΑΡΙΘΜΟΥ</label>
+              <div class="seg"><span>3</span><span>4</span><span class="on">5</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ul class="facts">
+      <li><b>Το χαρτί είναι το μεγαλύτερο πράγμα στην οθόνη</b>, στο πραγματικό μέγεθος</li>
+      <li>Οι διακόπτες κάθονται <b>στη μεριά που πραγματικά αλλάζουν</b> — αριστερά ό,τι
+        είναι πάνω από τον αριθμό, δεξιά ό,τι από κάτω</li>
+      <li class="no">Τρεις στήλες θέλουν πλατιά οθόνη. Στο tablet γίνονται μία κάτω από
+        την άλλη, δηλαδή <b>άλλη διάταξη για την ίδια σελίδα</b></li>
+    </ul>
+  </div>
+
+  <!-- Σ3 -->
+  <div class="card scr">
+    <span class="badge">Σ3</span>
+    <h3>Οι Καρτέλες</h3>
+    <div class="tag">ομάδες που ανοιγοκλείνουν, χαρτί κολλημένο δεξιά</div>
+    <div class="stage" style="padding:20px">
+      <div class="screen">
+        <div class="bar">
+          <span class="t">ΜΟΡΦΗ ΧΑΡΤΙΟΥ</span>
+          <span class="pill on">ΑΠΟΚΟΜΜΑ</span><span class="pill">ΕΙΣΙΤΗΡΙΟ</span>
+          <span class="sp"></span><span class="pill">ΔΟΚΙΜΑΣΤΙΚΗ ΕΚΤΥΠΩΣΗ</span>
+        </div>
+        <div class="body2">
+          <div class="form">
+            <div class="cards">
+              <div class="gcard">
+                <div class="h">1 · ΤΟ ΠΑΝΩ ΜΕΡΟΣ <span class="chev">▾</span></div>
+                <div class="body">
+                  <div class="fieldrow">
+                    <div class="field"><label>ΛΟΓΟΤΥΠΟ</label><div class="box">logo.png · ΑΛΛΑΓΗ</div></div>
+                    <div class="field" style="flex:0 0 200px"><label>ΜΕΓΕΘΟΣ</label>
+                      <div class="seg"><span>Μ</span><span class="on">ΜΕ</span><span>ΜΓ</span></div></div>
+                  </div>
+                  <div class="field"><label>ΕΠΙΚΕΦΑΛΙΔΑ</label>
+                    <div class="box tall">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΑΓ. ΓΕΩΡΓΙΟΥ</div></div>
+                </div>
+              </div>
+              <div class="gcard"><div class="h">2 · Ο ΑΡΙΘΜΟΣ ΚΑΙ ΤΑ ΕΙΔΗ <span class="chev">▸</span></div></div>
+              <div class="gcard"><div class="h">3 · ΤΟ ΚΑΤΩ ΜΕΡΟΣ <span class="chev">▸</span></div></div>
+              <div class="gcard"><div class="h">4 · ΧΑΡΤΙ ΚΑΙ ΜΕΓΕΘΗ <span class="chev">▸</span></div></div>
+            </div>
+          </div>
+          <div class="pane">
+            <div class="cap">ΟΠΩΣ ΘΑ ΒΓΕΙ · 80 mm</div>
+            <div class="mini"><div class="roll w80"><div class="pad">
+              <svg class="logo m" viewBox="0 0 120 44" aria-hidden="true">
+                <circle cx="22" cy="22" r="17" fill="none" stroke="#1A1A1A" stroke-width="7"/>
+                <rect x="46" y="6" width="7" height="24" fill="#1A1A1A"/>
+                <rect x="46" y="34" width="7" height="7" fill="#1A1A1A"/>
+              </svg>
+              <div class="gap"></div>
+              <div class="c sm">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΑΓ. ΓΕΩΡΓΙΟΥ</div>
+              <div class="gap"></div>
+              <div class="c big">Κ 48 31</div>
+              <div class="c mid">ΨΗΣΤΑΡΙΑ</div>
+              <div class="gap"></div>
+              <div class="row"><span class="nm">2 x ΣΟΥΒΛΑΚΙ</span><span>7,00 €</span></div>
+              <div class="row"><span class="nm"><b>ΣΥΝΟΛΟ</b></span><span><b>7,00 €</b></span></div>
+            </div></div></div>
+            <div class="cap" style="margin-top:6px">η καρτέλα 1 φωτίζει αυτό το κομμάτι</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ul class="facts">
+      <li><b>Τέσσερις αποφάσεις, όχι δεκαπέντε.</b> Ανοίγεις μία ομάδα τη φορά και η
+        υπόλοιπη οθόνη μένει ήσυχη</li>
+      <li>Οι ομάδες είναι <b>με τη σειρά που τυπώνεται το χαρτί</b>, από πάνω προς τα κάτω —
+        άρα ξέρεις πού να ψάξεις χωρίς να μάθεις τίποτα</li>
+      <li>Δουλεύει και σε <b>tablet</b> χωρίς δεύτερη διάταξη: οι καρτέλες απλώς
+        στοιβάζονται</li>
+      <li class="no">Ό,τι είναι κλειστό <b>δεν φαίνεται</b>. Μια ρύθμιση που ξέχασες
+        ανοιχτή κρύβεται σε καρτέλα που δεν άνοιξες</li>
+    </ul>
+  </div>
+
+  <!-- Σ4 -->
+  <div class="card scr">
+    <span class="badge">Σ4</span>
+    <h3>Πάνω στο Χαρτί</h3>
+    <div class="tag">γράφεις απευθείας εκεί που θα τυπωθεί</div>
+    <div class="stage" style="padding:20px">
+      <div class="screen">
+        <div class="bar">
+          <span class="t">ΜΟΡΦΗ ΧΑΡΤΙΟΥ</span>
+          <span class="pill on">ΑΠΟΚΟΜΜΑ</span><span class="pill">ΕΙΣΙΤΗΡΙΟ</span>
+          <span class="sp"></span>
+          <span class="pill">ΛΟΓΟΤΥΠΟ</span><span class="pill">ΜΕΓΕΘΗ</span>
+          <span class="pill">ΤΙ ΦΑΙΝΕΤΑΙ</span><span class="pill">ΔΟΚΙΜΑΣΤΙΚΗ</span>
+        </div>
+        <div class="body2" style="justify-content:center;padding:26px 0;background:var(--panel)">
+          <div style="display:flex;gap:40px;align-items:flex-start">
+            <div>
+              <div class="cap" style="margin-bottom:12px;text-align:center">ΤΟ ΧΑΡΤΙ ΣΟΥ · 80 mm</div>
+              <div class="roll w80"><div class="pad">
+                <svg class="logo m hot" viewBox="0 0 120 44" aria-hidden="true">
+                  <circle cx="22" cy="22" r="17" fill="none" stroke="#1A1A1A" stroke-width="7"/>
+                  <rect x="46" y="6" width="7" height="24" fill="#1A1A1A"/>
+                  <rect x="46" y="34" width="7" height="7" fill="#1A1A1A"/>
+                </svg>
+                <div class="gap"></div>
+                <div class="c hot">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ<br>ΑΓΙΟΥ ΓΕΩΡΓΙΟΥ ΓΡΕΒΕΝΩΝ</div>
+                <div class="gap-l"></div>
+                <div class="c big">Κ 48 31</div>
+                <div class="c mid">ΨΗΣΤΑΡΙΑ</div>
+                <div class="gap-l"></div>
+                <div class="row"><span class="nm">2 x ΣΟΥΒΛΑΚΙ ΧΟΙΡΙΝΟ</span><span>7,00 €</span></div>
+                <div class="row"><span class="nm">1 x ΜΠΙΦΤΕΚΙ</span><span>4,50 €</span></div>
+                <div class="gap"></div>
+                <div class="row"><span class="nm"><b>ΣΥΝΟΛΟ</b></span><span><b>11,50 €</b></span></div>
+                <div class="gap-l"></div>
+                <div class="sm">15/08/2026&nbsp;&nbsp;22:41&nbsp;&nbsp;Κρεάτων</div>
+                <div class="sm">Ταμίας: Γιώργος</div>
+                <div class="gap"></div>
+                <div class="c hot">ευχαριστούμε — καλή όρεξη</div>
+              </div></div>
+            </div>
+            <div style="width:250px">
+              <div class="gcard">
+                <div class="h">ΤΙ ΦΑΙΝΕΤΑΙ</div>
+                <div class="body">
+                  <div class="sw on"><i></i> Ημερομηνία</div>
+                  <div class="sw on"><i></i> Ώρα</div>
+                  <div class="sw on"><i></i> Ταμίας</div>
+                  <div class="sw on"><i></i> Πόστο ταμείου</div>
+                  <div class="sw on"><i></i> Τιμές</div>
+                </div>
+              </div>
+              <div style="height:14px"></div>
+              <div class="gcard">
+                <div class="h">ΜΕΓΕΘΟΣ ΑΡΙΘΜΟΥ</div>
+                <div class="body"><div class="seg"><span>2</span><span class="on">3</span><span>4</span></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ul class="facts">
+      <li><b>Δεν υπάρχει φόρμα για τα κείμενα.</b> Πατάς πάνω στην επικεφαλίδα του χαρτιού
+        και γράφεις εκεί. Ό,τι βλέπεις είναι ό,τι τυπώνεται, κυριολεκτικά</li>
+      <li>Για κάποιον που <b>δεν είναι τεχνικός</b>, αυτό είναι η πιο σύντομη απόσταση:
+        μηδέν ερμηνεία ανάμεσα στο κουτάκι και στο χαρτί</li>
+      <li>Οι διακόπτες μένουν, γιατί «σβήσε την ώρα» δεν γράφεται πουθενά</li>
+      <li class="no"><b>Το πιο δύσκολο να γραφτεί σωστά</b>, και το πιο εύκολο να πάει
+        στραβά σε οθόνη αφής: το δάχτυλο δεν είναι δείκτης ποντικιού</li>
+      <li class="no">Ό,τι είναι σβηστό <b>δεν υπάρχει στο χαρτί</b> — άρα δεν μπορείς να
+        το πατήσεις για να το ανάψεις. Χρειάζεται πάντα η δεξιά στήλη</li>
+    </ul>
+  </div>
+
+</div>
+
+<div class="foot">
+  <b>Πες μου τρία: ένα Ε (εισιτήριο), ένα Π (απόκομμα πώλησης), ένα Σ (οθόνη).</b>
+  Μείξη επιτρέπεται — π.χ. «Ε3 αλλά χωρίς λογότυπο», «Π3 με τιμές και στο κάτω μισό»,
+  «Σ3 με τον επιλογέα του Σ2». Ό,τι διαλέξεις γίνεται <b>προεπιλογή</b>· ο κάθε σύλλογος
+  μπορεί να φτάσει σε οποιοδήποτε από τα άλλα γυρνώντας διακόπτες, γιατί όλα
+  <b>είναι</b> διακόπτες.
+</div>
+
+</div>
+</body>
+</html>
