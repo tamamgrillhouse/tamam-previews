@@ -97,8 +97,15 @@ h1{font-size:40px;font-weight:800;letter-spacing:-.5px;margin:14px 0 18px;line-h
 .logo{width:100%}
 .logo svg{display:block;width:100%;height:auto;overflow:visible}
 
-/* Ό,τι κινείται, κινείται μέσα στο δικό του κουτί. */
-.markmove,.ringmove,.ring,.nib,.mbar,.mdot,.word,.wg,.wbar,.wdot,
+/* Ό,τι κινείται, κινείται μέσα στο δικό του κουτί.
+
+   ⚠ ΜΟΝΟ στοιχεία που ΔΕΝ κουβαλάνε δικό τους transform. Το `fill-box`
+   μεταφέρει την αρχή των συντεταγμένων στη γωνία του σχήματος, οπότε ένα
+   `rotate(-155 36 50)` γραμμένο μέσα στο SVG αρχίζει να γυρίζει γύρω από
+   άλλο σημείο. Μπήκε μία φορά πάνω στον κύκλο και ο κύκλος έφυγε 53 μονάδες
+   κάτω, έξω από το σήμα. Γι' αυτό γυρίζει το περίβλημα `.ringmove` και όχι
+   ο ίδιος ο κύκλος. */
+.ringmove,.mbar,.mdot,.wg,.wbar,.wdot,
 .pill,.pillbox,.pg,.tag{transform-box:fill-box}
 .mbar{transform-origin:top center}
 .wbar{transform-origin:top center}
@@ -108,40 +115,11 @@ h1{font-size:40px;font-weight:800;letter-spacing:-.5px;margin:14px 0 18px;line-h
 /* D-078: το λογότυπο πιάνει το 80% του ΠΛΑΤΟΥΣ της οθόνης έναρξης. */
 .hero{width:80%;transform-origin:var(--m-ox) var(--m-oy)}
 
-/* ---------- η οθόνη εισόδου που ακολουθεί ---------- */
-.login{
-  position:absolute;inset:0;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;background:var(--bg);opacity:0;
-}
-/* D-078: 40% του πλάτους στην είσοδο. */
-.login .logo{width:40%;margin-bottom:6px}
-.login .ask{font-size:22px;font-weight:700;letter-spacing:1px;margin-top:26px}
-.dots{display:flex;align-items:center;justify-content:center;margin-top:20px;height:22px}
-.dot{width:20px;height:20px;border-radius:50%;margin:0 8px;border:2px solid var(--muted)}
-.dot.f{background:var(--pay);border-color:var(--pay)}
-.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:22px;width:360px}
-.key{
-  height:84px;background:var(--tile);border:1px solid var(--line);border-radius:10px;
-  display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;
-}
-.key.blank{background:transparent;border-color:transparent}
-.key.dim{color:rgba(162,152,142,.45)}
-.login .foot{
-  position:absolute;left:0;right:0;bottom:0;height:64px;display:flex;
-  align-items:center;padding:0 30px;gap:16px;border-top:1px solid var(--line);
-}
-.login .foot .who{font-size:14px;color:var(--muted);letter-spacing:.5px}
-.login .foot .clk{margin-left:auto;font-size:18px;font-weight:700;color:var(--muted)}
-.adminbtn{
-  border:1px solid var(--line);border-radius:8px;padding:8px 12px;
-  font-size:13px;font-weight:700;letter-spacing:1px;color:var(--muted);
-}
-
 /* =========================================================================
    ΤΑ ΚΙΝΗΜΑΤΑ
 
    Η προεπιλεγμένη κατάσταση κάθε κομματιού είναι το ΤΕΛΕΙΩΜΕΝΟ λογότυπο —
-   γι' αυτό η ίδια ακριβώς σήμανση στέκεται ακίνητη μέσα στην οθόνη εισόδου.
+   γι' αυτό η ίδια ακριβώς σήμανση στέκεται ακίνητη στην αναφορά της κορυφής.
    Το `both` είναι που το επιτρέπει: όσο τρέχει η καθυστέρηση, το στοιχείο
    κρατάει τη μορφή του `from`, δηλαδή κρύβεται μόνο του.
 
@@ -150,9 +128,14 @@ h1{font-size:40px;font-weight:800;letter-spacing:-.5px;margin:14px 0 18px;line-h
    απόγονο, δεν ταιριάζει πουθενά, και δεν παίζει τίποτα χωρίς κανένα σφάλμα.
    ========================================================================= */
 
+/* Η αδιαφάνεια δεν είναι στολίδι εδώ: μια παύλα μηδενικού μήκους με
+   στρογγυλή απόληξη ζωγραφίζεται ως ΤΕΛΕΙΑ, οπότε χωρίς αυτήν υπάρχει ένα
+   φωτεινό στίγμα στο πρώτο καρέ — και η υπόσχεση είναι ότι στο πρώτο καρέ
+   δεν υπάρχει τίποτα. */
 @keyframes ringDraw{
-  from{stroke-dasharray:0px 100px}
-  to{stroke-dasharray:var(--ring-dash) 100px}
+  0%{stroke-dasharray:0px 100px;opacity:0}
+  5%{opacity:1}
+  100%{stroke-dasharray:var(--ring-dash) 100px;opacity:1}
 }
 @keyframes nibRun{
   0%{stroke-dasharray:4px 100px;stroke-dashoffset:0;opacity:0}
@@ -162,7 +145,11 @@ h1{font-size:40px;font-weight:800;letter-spacing:-.5px;margin:14px 0 18px;line-h
 }
 /* Ποτέ κοντύτερη από το ίδιο της το κεφάλι: μια στρογγυλεμένη μπάρα
    ζωγραφισμένη στο μηδέν είναι μουτζούρα, όχι σχήμα. */
-@keyframes barGrow{from{transform:scaleY(.375)}to{transform:scaleY(1)}}
+@keyframes barGrow{
+  0%{transform:scaleY(.375);opacity:0}
+  10%{opacity:1}
+  100%{transform:scaleY(1);opacity:1}
+}
 @keyframes dotPop{from{opacity:0;transform:scale(0)}to{opacity:1;transform:scale(1)}}
 @keyframes heroBack{
   from{transform:translate(var(--m-dx),var(--m-dy)) scale(1.42)}
@@ -201,7 +188,6 @@ h1{font-size:40px;font-weight:800;letter-spacing:-.5px;margin:14px 0 18px;line-h
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes holdOut{from{opacity:1}to{opacity:0}}
-.go .login{animation:fadeIn .45s ease var(--login-at,2.9s) both}
 
 /* ---- Α — ΤΟ ΞΕΔΙΠΛΩΜΑ ------------------------------------------------- */
 .go.v1 .hero            {animation:heroBack 1.00s cubic-bezier(.6,0,.15,1) 1.34s both}
@@ -294,8 +280,8 @@ h1{font-size:40px;font-weight:800;letter-spacing:-.5px;margin:14px 0 18px;line-h
   Κανένα έτοιμο σχήμα δεν ξεθωριάζει μέσα — όλα <b>δημιουργούνται</b>. Αλλάζει ο ρυθμός, η σειρά,
   και το τι λέει η κίνηση.</p>
   <p class="lede">Κάθε πλαίσιο παίζει μόλις το φτάσεις και ξαναπαίζει με το κουμπί. Στο τέλος
-  ξεπροβάλλει η <b>οθόνη εισόδου</b>, με το ίδιο λογότυπο στο 40% του πλάτους — για να δεις και
-  τα δύο μεγέθη του D-078 στην ίδια κίνηση.</p>
+  <b>σβήνει</b> — εκεί ακριβώς παραδίδει το πρόγραμμα, και ό,τι ακολουθεί δεν είναι θέμα αυτής
+  της σελίδας.</p>
 
   <div class="ref">
     <div class="label">ΤΟ ΠΛΗΡΕΣ ΛΟΓΟΤΥΠΟ — Η ΑΚΙΝΗΤΗ ΑΝΑΦΟΡΑ</div>
@@ -340,26 +326,11 @@ h1{font-size:40px;font-weight:800;letter-spacing:-.5px;margin:14px 0 18px;line-h
       <div class="beat"><b>1.3s</b><span>Το σήμα γλιστράει αριστερά</span></div>
       <div class="beat"><b>1.5s</b><span>Ο · Π · Α ξεδιπλώνονται</span></div>
       <div class="beat"><b>2.2s</b><span>POS και λεζάντα</span></div>
-      <div class="beat"><b>3.0s</b><span>Η οθόνη εισόδου</span></div>
+      <div class="beat"><b>3.0s</b><span>Σβήνει, και παραδίδει</span></div>
     </div>
     <div class="bar"><div class="caption">1280 × 720 · ΛΟΓΟΤΥΠΟ ΣΤΟ 80% ΤΟΥ ΠΛΑΤΟΥΣ</div><button class="play" data-for="s1">▶ ΠΑΙΞΕ ΞΑΝΑ</button></div>
-    <div class="frame"><div class="screen v1" id="s1" style="--login-at:3.0s">
+    <div class="frame"><div class="screen v1" id="s1">
       <div class="splash"><div class="logo hero"><svg viewBox="__VIEWBOX__">__LOCKUP__</svg></div></div>
-      <div class="login">
-        <div class="logo"><svg viewBox="__VIEWBOX__">__LOCKUP__</svg></div>
-        <div class="ask">ΓΡΑΨΕ ΤΟ PIN ΣΟΥ</div>
-        <div class="dots"><div class="dot f"></div><div class="dot f"></div><div class="dot"></div><div class="dot"></div></div>
-        <div class="keys">
-          <div class="key">1</div><div class="key">2</div><div class="key">3</div>
-          <div class="key">4</div><div class="key">5</div><div class="key">6</div>
-          <div class="key">7</div><div class="key">8</div><div class="key">9</div>
-          <div class="key blank"></div><div class="key">0</div><div class="key dim">⌫</div>
-        </div>
-        <div class="foot">
-          <div class="who">ΠΑΝΗΓΥΡΙ ΑΓΙΟΥ ΝΙΚΟΛΑΟΥ · ΤΑΜΕΙΟ Α · ΚΡΕΑΤΩΝ</div>
-          <div class="adminbtn">ΔΙΑΧΕΙΡΙΣΤΗΣ</div><div class="clk">21:14</div>
-        </div>
-      </div>
     </div></div>
   </section>
 
@@ -387,26 +358,11 @@ h1{font-size:40px;font-weight:800;letter-spacing:-.5px;margin:14px 0 18px;line-h
       <div class="beat"><b>1.05s</b><span>Ο · Π · Α χαράζονται</span></div>
       <div class="beat"><b>1.7s</b><span>Η πλακέτα και τα P·O·S</span></div>
       <div class="beat"><b>2.3s</b><span>Η λεζάντα</span></div>
-      <div class="beat"><b>2.9s</b><span>Η οθόνη εισόδου</span></div>
+      <div class="beat"><b>2.9s</b><span>Σβήνει, και παραδίδει</span></div>
     </div>
     <div class="bar"><div class="caption">1280 × 720 · ΛΟΓΟΤΥΠΟ ΣΤΟ 80% ΤΟΥ ΠΛΑΤΟΥΣ</div><button class="play" data-for="s2">▶ ΠΑΙΞΕ ΞΑΝΑ</button></div>
-    <div class="frame"><div class="screen v2" id="s2" style="--login-at:2.92s">
+    <div class="frame"><div class="screen v2" id="s2">
       <div class="splash"><div class="logo hero"><svg viewBox="__VIEWBOX__">__LOCKUP__</svg></div></div>
-      <div class="login">
-        <div class="logo"><svg viewBox="__VIEWBOX__">__LOCKUP__</svg></div>
-        <div class="ask">ΓΡΑΨΕ ΤΟ PIN ΣΟΥ</div>
-        <div class="dots"><div class="dot f"></div><div class="dot f"></div><div class="dot"></div><div class="dot"></div></div>
-        <div class="keys">
-          <div class="key">1</div><div class="key">2</div><div class="key">3</div>
-          <div class="key">4</div><div class="key">5</div><div class="key">6</div>
-          <div class="key">7</div><div class="key">8</div><div class="key">9</div>
-          <div class="key blank"></div><div class="key">0</div><div class="key dim">⌫</div>
-        </div>
-        <div class="foot">
-          <div class="who">ΠΑΝΗΓΥΡΙ ΑΓΙΟΥ ΝΙΚΟΛΑΟΥ · ΤΑΜΕΙΟ Α · ΚΡΕΑΤΩΝ</div>
-          <div class="adminbtn">ΔΙΑΧΕΙΡΙΣΤΗΣ</div><div class="clk">21:14</div>
-        </div>
-      </div>
     </div></div>
   </section>
 
@@ -433,26 +389,11 @@ h1{font-size:40px;font-weight:800;letter-spacing:-.5px;margin:14px 0 18px;line-h
       <div class="beat"><b>0.6–0.9s</b><span>Ο · Π · Α σε ρυθμό</span></div>
       <div class="beat"><b>1.0s</b><span>Το θαυμαστικό καρφώνεται</span></div>
       <div class="beat"><b>1.4s</b><span>POS από τα δεξιά</span></div>
-      <div class="beat"><b>2.3s</b><span>Η οθόνη εισόδου</span></div>
+      <div class="beat"><b>2.3s</b><span>Σβήνει, και παραδίδει</span></div>
     </div>
     <div class="bar"><div class="caption">1280 × 720 · ΛΟΓΟΤΥΠΟ ΣΤΟ 80% ΤΟΥ ΠΛΑΤΟΥΣ</div><button class="play" data-for="s3">▶ ΠΑΙΞΕ ΞΑΝΑ</button></div>
-    <div class="frame"><div class="screen v3" id="s3" style="--login-at:2.32s">
+    <div class="frame"><div class="screen v3" id="s3">
       <div class="splash"><div class="logo hero"><svg viewBox="__VIEWBOX__">__LOCKUP__</svg></div></div>
-      <div class="login">
-        <div class="logo"><svg viewBox="__VIEWBOX__">__LOCKUP__</svg></div>
-        <div class="ask">ΓΡΑΨΕ ΤΟ PIN ΣΟΥ</div>
-        <div class="dots"><div class="dot f"></div><div class="dot f"></div><div class="dot"></div><div class="dot"></div></div>
-        <div class="keys">
-          <div class="key">1</div><div class="key">2</div><div class="key">3</div>
-          <div class="key">4</div><div class="key">5</div><div class="key">6</div>
-          <div class="key">7</div><div class="key">8</div><div class="key">9</div>
-          <div class="key blank"></div><div class="key">0</div><div class="key dim">⌫</div>
-        </div>
-        <div class="foot">
-          <div class="who">ΠΑΝΗΓΥΡΙ ΑΓΙΟΥ ΝΙΚΟΛΑΟΥ · ΤΑΜΕΙΟ Α · ΚΡΕΑΤΩΝ</div>
-          <div class="adminbtn">ΔΙΑΧΕΙΡΙΣΤΗΣ</div><div class="clk">21:14</div>
-        </div>
-      </div>
     </div></div>
   </section>
 
@@ -478,26 +419,11 @@ h1{font-size:40px;font-weight:800;letter-spacing:-.5px;margin:14px 0 18px;line-h
       <div class="beat"><b>0.9–1.1s</b><span>Ο · Π · Α σε τόξο</span></div>
       <div class="beat"><b>1.35s</b><span>Η πλακέτα POS</span></div>
       <div class="beat"><b>1.6s</b><span>Η λεζάντα</span></div>
-      <div class="beat"><b>2.25s</b><span>Η οθόνη εισόδου</span></div>
+      <div class="beat"><b>2.25s</b><span>Σβήνει, και παραδίδει</span></div>
     </div>
     <div class="bar"><div class="caption">1280 × 720 · ΛΟΓΟΤΥΠΟ ΣΤΟ 80% ΤΟΥ ΠΛΑΤΟΥΣ</div><button class="play" data-for="s4">▶ ΠΑΙΞΕ ΞΑΝΑ</button></div>
-    <div class="frame"><div class="screen v4" id="s4" style="--login-at:2.28s">
+    <div class="frame"><div class="screen v4" id="s4">
       <div class="splash"><div class="logo hero"><svg viewBox="__VIEWBOX__">__LOCKUP__</svg></div></div>
-      <div class="login">
-        <div class="logo"><svg viewBox="__VIEWBOX__">__LOCKUP__</svg></div>
-        <div class="ask">ΓΡΑΨΕ ΤΟ PIN ΣΟΥ</div>
-        <div class="dots"><div class="dot f"></div><div class="dot f"></div><div class="dot"></div><div class="dot"></div></div>
-        <div class="keys">
-          <div class="key">1</div><div class="key">2</div><div class="key">3</div>
-          <div class="key">4</div><div class="key">5</div><div class="key">6</div>
-          <div class="key">7</div><div class="key">8</div><div class="key">9</div>
-          <div class="key blank"></div><div class="key">0</div><div class="key dim">⌫</div>
-        </div>
-        <div class="foot">
-          <div class="who">ΠΑΝΗΓΥΡΙ ΑΓΙΟΥ ΝΙΚΟΛΑΟΥ · ΤΑΜΕΙΟ Α · ΚΡΕΑΤΩΝ</div>
-          <div class="adminbtn">ΔΙΑΧΕΙΡΙΣΤΗΣ</div><div class="clk">21:14</div>
-        </div>
-      </div>
     </div></div>
   </section>
 
@@ -515,11 +441,9 @@ h1{font-size:40px;font-weight:800;letter-spacing:-.5px;margin:14px 0 18px;line-h
     ξεχωριστό και παίζει σε <b>κάθε</b> είσοδο.
   </div>
   <div class="foot-note">
-    <b>Δύο πράγματα που θα προσέξεις.</b> Πρώτον, το λογότυπο είναι <b>μεγάλο</b>: το 80% του
-    πλάτους σε οθόνη 1280 σημαίνει λογότυπο 1024 πίξελ φαρδύ και σήμα 218 πίξελ ψηλό — τριπλάσιο
-    από το σημερινό. Έτσι το λέει το D-078· αν σου φαίνεται πολύ, το ποσοστό αλλάζει με μία
-    γραμμή. Δεύτερον, στην οθόνη εισόδου το ίδιο λογότυπο μπαίνει στο <b>40%</b>, και δίπλα του
-    δεν χρειάζεται πια η λεζάντα από κάτω — <b>την κουβαλάει μέσα του</b>.
+    <b>Το λογότυπο είναι μεγάλο.</b> Το 80% του πλάτους σε οθόνη 1280 σημαίνει λογότυπο 1024
+    πίξελ φαρδύ και σήμα 218 πίξελ ψηλό — τριπλάσιο από το σημερινό. Έτσι το λέει το D-078· αν
+    σου φαίνεται πολύ, το ποσοστό αλλάζει με μία γραμμή.
   </div>
   <div class="foot-note">
     Το σχήμα δεν το ζωγράφισα εδώ: κάθε γράμμα, το τόξο και η πλακέτα βγαίνουν κατευθείαν από

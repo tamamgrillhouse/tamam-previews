@@ -150,6 +150,95 @@ def lockup():
     return vb, inner, css_vars, h
 
 
+# =============================================================================
+# THE CHECK
+# =============================================================================
+# The lock-up was once generated correctly and then **deformed by the page's own
+# stylesheet**: `transform-box: fill-box` landed on the ring, which already
+# carries a `rotate(-155 36 50)`, so the rotation centre moved to the corner of
+# the shape and the ring fell 53 units out of the mark. Nothing in the markup was
+# wrong, so reading the markup would never have found it.
+#
+# So the check renders the built page's own logo — stylesheet and all — and
+# subtracts it from brand/svg/logo-horizontal-dark.svg. It fails the build.
+CHROME = r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
+OFFICIAL = BRAND / "svg" / "logo-horizontal-dark.svg"
+CHECK_W, CHECK_H = 1052, 256
+
+
+def _shoot(html, out):
+    import subprocess
+    import tempfile
+    with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False,
+                                     encoding="utf-8") as f:
+        f.write(html)
+        tmp = f.name
+    subprocess.run([CHROME, "--headless=new", "--disable-gpu", "--hide-scrollbars",
+                    f"--screenshot={out}", f"--window-size={CHECK_W},{CHECK_H}",
+                    "--virtual-time-budget=4000",
+                    pathlib.Path(tmp).as_uri()],
+                   check=True, capture_output=True, timeout=180)
+    pathlib.Path(tmp).unlink(missing_ok=True)
+
+
+def _ink_box(img):
+    px = img.load()
+    box = [10 ** 9, 10 ** 9, -1, -1]
+    for y in range(img.height):
+        for x in range(img.width):
+            r, g, b = px[x, y]
+            if abs(r - 18) + abs(g - 17) + abs(b - 16) < 24:
+                continue
+            box[0], box[1] = min(box[0], x), min(box[1], y)
+            box[2], box[3] = max(box[2], x), max(box[3], y)
+    return box
+
+
+def check():
+    import re
+    import tempfile
+    from PIL import Image, ImageChops
+
+    page = (HERE / "othoni-enarxis.html").read_text(encoding="utf-8")
+    style = re.search(r"<style>(.*?)</style>", page, re.S).group(1)
+    svg = re.search(r'(<svg viewBox="[^"]+">.*?</svg>)', page, re.S).group(1)
+
+    tmpdir = pathlib.Path(tempfile.mkdtemp())
+    frame = ("<!doctype html><meta charset=utf-8><style>html,body{margin:0;"
+             "padding:0;overflow:hidden;background:#121110}</style>")
+
+    official = OFFICIAL.read_text(encoding="utf-8")
+    official = (official.replace('width="526"', f'width="{CHECK_W}"')
+                        .replace('height="128"', f'height="{CHECK_H}"'))
+    _shoot(frame + official, tmpdir / "a.png")
+
+    # the page's own logo, under the page's own stylesheet
+    _shoot(f"<!doctype html><meta charset=utf-8><style>{style}"
+           "html,body{margin:0;padding:0;overflow:hidden;background:#121110}"
+           f".screen{{position:fixed;inset:0;width:{CHECK_W}px;height:{CHECK_H}px}}"
+           "</style>"
+           f'<div class="screen"><div class="splash">'
+           f'<div class="logo hero" style="width:100%">{svg}</div></div></div>',
+           tmpdir / "b.png")
+
+    a = Image.open(tmpdir / "a.png").convert("RGB")
+    b = Image.open(tmpdir / "b.png").convert("RGB")
+    ba, bb = _ink_box(a), _ink_box(b)
+    ra = (ba[2] - ba[0]) / (ba[3] - ba[1])
+    rb = (bb[2] - bb[0]) / (bb[3] - bb[1])
+    hist = ImageChops.difference(a, b).convert("L").histogram()
+    bad = sum(hist[24:]) / (CHECK_W * CHECK_H)
+
+    print(f"  check: shape {ra:.3f} vs {rb:.3f}   pixels differing {bad * 100:.2f}%")
+    if abs(ra - rb) / ra > 0.02:
+        raise SystemExit(f"FAIL: the logo in the page is the wrong shape "
+                         f"({rb:.3f} against {ra:.3f} in {OFFICIAL.name}). "
+                         f"Something in the stylesheet is deforming it.")
+    if bad > 0.04:
+        raise SystemExit(f"FAIL: {bad * 100:.1f}% of the logo disagrees with "
+                         f"{OFFICIAL.name}.")
+
+
 def main():
     font_b64 = base64.b64encode(FONT.read_bytes()).decode()
 
@@ -171,6 +260,8 @@ def main():
     out.write_text(page, encoding="utf-8")
     print(f"othoni-enarxis.html  {out.stat().st_size // 1024} KB")
     print(f"  viewBox {vb}   ratio {h['viewbox'][2] / h['viewbox'][3]:.3f}")
+    check()
+    print("  all checks passed")
 
 
 if __name__ == "__main__":
