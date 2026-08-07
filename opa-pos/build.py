@@ -3,7 +3,6 @@
 #     python build.py
 #
 #   sima.src.html            -> sima.html            (font only)
-#   ektyposi.src.html        -> ektyposi.html        (font only)
 #   othoni-enarxis.src.html  -> othoni-enarxis.html  (font + the full lock-up,
 #                                                     every letter its own path)
 #
@@ -355,12 +354,11 @@ def check():
 def main():
     font_b64 = base64.b64encode(FONT.read_bytes()).decode()
 
-    for name in ("sima", "ektyposi"):
-        src = (HERE / f"{name}.src.html").read_text(encoding="utf-8")
-        assert "__FONT_B64__" in src, f"the font placeholder is gone from {name}.src.html"
-        out = HERE / f"{name}.html"
-        out.write_text(src.replace("__FONT_B64__", font_b64), encoding="utf-8")
-        print(f"{name}.html{' ' * max(1, 21 - len(name))}{out.stat().st_size // 1024} KB")
+    src = (HERE / "sima.src.html").read_text(encoding="utf-8")
+    assert "__FONT_B64__" in src, "the font placeholder is gone from sima.src.html"
+    out = HERE / "sima.html"
+    out.write_text(src.replace("__FONT_B64__", font_b64), encoding="utf-8")
+    print(f"sima.html            {out.stat().st_size // 1024} KB")
 
     vb, inner, css_vars, offsets, h = lockup()
     src = (HERE / "othoni-enarxis.src.html").read_text(encoding="utf-8")
