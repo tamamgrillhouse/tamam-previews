@@ -254,6 +254,102 @@ h1{font-size:40px;font-weight:800;letter-spacing:-.5px;margin:14px 0 18px;line-h
 .go.v4 .splash          {animation:holdOut .38s ease 2.22s both}
 @keyframes spin{from{transform:rotate(-96deg)}to{transform:none}}
 
+/* =========================================================================
+   ΟΙ ΤΡΕΙΣ ΠΟΥ ΒΓΑΖΟΥΝ ΓΡΑΜΜΑ ΜΕΣΑ ΑΠΟ ΓΡΑΜΜΑ
+
+   Το πού είναι η ΤΡΥΠΑ κάθε γράμματος δεν γράφεται εδώ — το μετράει το
+   build.py πάνω στις καμπύλες της Manrope και το κατεβάζει σαν μεταβλητές.
+   Η τρύπα δεν είναι η μέση: του Π είναι χαμηλά ανάμεσα στα πόδια του, του Α
+   ψηλά στην κορυφή, και μόνο του Ο συμπίπτει με το κέντρο του.
+   ========================================================================= */
+__OFFSETS__
+
+/* Ό,τι γεννιέται από αλλού μικραίνει προς το ΚΕΝΤΡΟ του, όχι προς την
+   κορυφή του — αλλιώς η απόσταση που μέτρησε το build.py δεν βγαίνει. */
+.v5 .mbar,.v6 .mbar,.v6 .wbar,.v7 .mbar,.v7 .wbar{transform-origin:center}
+
+/* ---- Ε — ΤΟ ΚΟΨΙΜΟ ---------------------------------------------------- */
+/* Ο κύκλος κλείνει ΟΛΟΚΛΗΡΟΣ πρώτα — είναι ένα κανονικό Ο. Μετά ανοίγει το
+   κενό και το κομμάτι που βγήκε ταξιδεύει δεξιά και στέκεται όρθιο. */
+@keyframes ringCut{
+  0%  {stroke-dasharray:0px 100px;opacity:0}
+  4%  {opacity:1}
+  40% {stroke-dasharray:100px 100px;opacity:1}
+  55% {stroke-dasharray:100px 100px;opacity:1}
+  100%{stroke-dasharray:var(--ring-dash) 100px;opacity:1}
+}
+@keyframes cutBar{
+  0%  {opacity:0;transform:translate(var(--cut-bar-dx),var(--cut-bar-dy)) rotate(-108deg) scale(.72)}
+  18% {opacity:1}
+  100%{opacity:1;transform:none}
+}
+@keyframes cutDot{
+  0%  {opacity:0;transform:translate(var(--cut-dot-dx),var(--cut-dot-dy)) scale(.55)}
+  18% {opacity:1}
+  100%{opacity:1;transform:none}
+}
+.go.v5 .hero            {animation:heroBack .95s cubic-bezier(.6,0,.15,1) 1.58s both}
+.go.v5 .hero .ring      {animation:ringCut 1.20s ease-out .18s both}
+.go.v5 .hero .mbar      {animation:cutBar .62s cubic-bezier(.25,.9,.3,1) .84s both}
+.go.v5 .hero .mdot      {animation:cutDot .62s cubic-bezier(.25,.9,.3,1) .92s both}
+.go.v5 .hero .wg0       {animation:outRight .52s cubic-bezier(.2,.8,.25,1) 1.74s both}
+.go.v5 .hero .wg1       {animation:outRight .52s cubic-bezier(.2,.8,.25,1) 1.84s both}
+.go.v5 .hero .wg2       {animation:outRight .52s cubic-bezier(.2,.8,.25,1) 1.94s both}
+.go.v5 .hero .wbar      {animation:barGrow .34s cubic-bezier(.3,.9,.3,1) 2.08s both}
+.go.v5 .hero .wdot      {animation:dotPop .28s cubic-bezier(.3,1.7,.5,1) 2.26s both}
+.go.v5 .hero .pill      {animation:stamp .38s cubic-bezier(.2,1.5,.4,1) 2.36s both}
+.go.v5 .hero .tag       {animation:trackIn .60s ease 2.54s both}
+.go.v5 .splash          {animation:holdOut .40s ease 3.14s both}
+
+/* ---- ΣΤ — Η ΠΥΛΗ ------------------------------------------------------ */
+/* Το Π είναι πύλη: δύο πόδια και ένα ανώφλι. Χτίζεται πρώτο, μόνο του, και
+   όλα τα υπόλοιπα βγαίνουν ΜΕΣΑ ΑΠΟ ΤΟ ΑΝΟΙΓΜΑ ΤΟΥ. */
+@keyframes gateIn{from{opacity:0;transform:scaleY(.12)}to{opacity:1;transform:none}}
+@keyframes gateBack{
+  from{transform:translate(var(--p-dx),var(--p-dy)) scale(1.58)}
+  to{transform:none}
+}
+/* Ξεκινάει στο .20 και όχι στο μηδέν: ένα σχήμα που βγαίνει από μια τρύπα
+   πρέπει να φαίνεται ΕΝΩ βγαίνει, αλλιώς απλώς εμφανίζεται κάπου. */
+@keyframes fromGate{
+  from{opacity:0;transform:translate(var(--gx),var(--gy)) scale(.20)}
+  8%{opacity:1}
+  to{opacity:1;transform:none}
+}
+.v6 .hero               {transform-origin:var(--p-ox) var(--p-oy)}
+.v6 .wg1                {transform-origin:top center}
+.go.v6 .hero            {animation:gateBack 1.00s cubic-bezier(.6,0,.15,1) .82s both}
+.go.v6 .hero .wg1       {animation:gateIn .55s cubic-bezier(.25,.95,.3,1) .18s both}
+.go.v6 .hero .ringmove  {animation:fromGate .62s cubic-bezier(.2,.85,.25,1) .90s both}
+.go.v6 .hero .wg0       {animation:fromGate .58s cubic-bezier(.2,.85,.25,1) .97s both}
+.go.v6 .hero .wg2       {animation:fromGate .58s cubic-bezier(.2,.85,.25,1) 1.04s both}
+.go.v6 .hero .mbar      {animation:fromGate .56s cubic-bezier(.2,.85,.25,1) 1.11s both}
+.go.v6 .hero .mdot      {animation:fromGate .52s cubic-bezier(.2,.85,.25,1) 1.17s both}
+.go.v6 .hero .wbar      {animation:fromGate .52s cubic-bezier(.2,.85,.25,1) 1.23s both}
+.go.v6 .hero .wdot      {animation:fromGate .48s cubic-bezier(.2,.85,.25,1) 1.29s both}
+.go.v6 .hero .pill      {animation:fromGate .55s cubic-bezier(.2,.85,.25,1) 1.35s both}
+.go.v6 .hero .tag       {animation:fadeUp .50s ease 1.98s both}
+.go.v6 .splash          {animation:holdOut .40s ease 2.52s both}
+
+/* ---- Ζ — ΤΟ ΕΝΑ ΜΕΣΑ ΣΤΟ ΑΛΛΟ ---------------------------------------- */
+/* Αλυσίδα: κάθε σχήμα γεννιέται από την τρύπα του προηγούμενου. */
+@keyframes born{
+  from{opacity:0;transform:translate(var(--nx),var(--ny)) scale(.06)}
+  to{opacity:1;transform:none}
+}
+.go.v7 .hero .ring      {animation:ringDraw .70s cubic-bezier(.35,.6,.3,1) .16s both}
+.go.v7 .hero .nib       {animation:nibRun  .70s cubic-bezier(.35,.6,.3,1) .16s both}
+.go.v7 .hero .mbar      {animation:born .46s cubic-bezier(.2,.9,.25,1) .78s both}
+.go.v7 .hero .mdot      {animation:born .42s cubic-bezier(.2,.9,.25,1) .90s both}
+.go.v7 .hero .wg0       {animation:born .48s cubic-bezier(.2,.9,.25,1) 1.00s both}
+.go.v7 .hero .wg1       {animation:born .48s cubic-bezier(.2,.9,.25,1) 1.14s both}
+.go.v7 .hero .wg2       {animation:born .48s cubic-bezier(.2,.9,.25,1) 1.28s both}
+.go.v7 .hero .wbar      {animation:born .44s cubic-bezier(.2,.9,.25,1) 1.42s both}
+.go.v7 .hero .wdot      {animation:born .40s cubic-bezier(.2,.9,.25,1) 1.54s both}
+.go.v7 .hero .pill      {animation:born .50s cubic-bezier(.2,.9,.25,1) 1.66s both}
+.go.v7 .hero .tag       {animation:fadeUp .50s ease 1.92s both}
+.go.v7 .splash          {animation:holdOut .40s ease 2.56s both}
+
 .foot-note{
   border-top:1px solid var(--line);margin-top:60px;padding-top:28px;
   font-size:14.5px;line-height:1.7;color:var(--muted);max-width:880px;
@@ -272,11 +368,11 @@ h1{font-size:40px;font-weight:800;letter-spacing:-.5px;margin:14px 0 18px;line-h
 <div class="wrap">
 
   <div class="kicker">Opa POS · Βήμα 5 · Η κινούμενη έναρξη, με το πλήρες λογότυπο</div>
-  <h1>Τέσσερις τρόποι να γραφτεί το ΟΠΑ!</h1>
+  <h1>Επτά τρόποι να γραφτεί το ΟΠΑ!</h1>
   <p class="lede">Μέχρι τώρα η έναρξη ζωγράφιζε <b>μόνο το σήμα</b>. Εδώ ζωγραφίζεται
   <b>ολόκληρο το λογότυπο</b> — το σήμα, η λέξη <b>ΟΠΑ!</b>, η πλακέτα <b>POS</b> και η λεζάντα
   <b>ΤΑΜΕΙΟ ΕΚΔΗΛΩΣΕΩΝ</b> — και σε κάθε πρόταση <b>κάθε γράμμα κινείται μόνο του</b>.</p>
-  <p class="lede">Και στις τέσσερις ισχύει το ίδιο: <b>στο πρώτο καρέ δεν υπάρχει τίποτα.</b>
+  <p class="lede">Και στις επτά ισχύει το ίδιο: <b>στο πρώτο καρέ δεν υπάρχει τίποτα.</b>
   Κανένα έτοιμο σχήμα δεν ξεθωριάζει μέσα — όλα <b>δημιουργούνται</b>. Αλλάζει ο ρυθμός, η σειρά,
   και το τι λέει η κίνηση.</p>
   <p class="lede">Κάθε πλαίσιο παίζει μόλις το φτάσεις και ξαναπαίζει με το κουμπί. Στο τέλος
@@ -345,7 +441,7 @@ h1{font-size:40px;font-weight:800;letter-spacing:-.5px;margin:14px 0 18px;line-h
     σήμερα — συνεχίζει μέσα στη λέξη. Κάθε γράμμα <b>περιγράφεται πρώτα με μια λεπτή γραμμή και
     μετά γεμίζει</b>, σαν να το χαράζει χέρι, και το ίδιο κάνει η πλακέτα: πρώτο το πράσινο
     περίγραμμα, μετά το γέμισμα, μετά τα <b>P · O · S</b> μέσα του.</p>
-    <p>Είναι η πιο όμορφη από τις τέσσερις και η μόνη που μοιάζει <b>φτιαγμένη στο χέρι</b>
+    <p>Είναι η πιο όμορφη του πρώτου γύρου και η μόνη που μοιάζει <b>φτιαγμένη στο χέρι</b>
     αντί για συναρμολογημένη.</p>
     <p><b>Το τίμημα, και είναι αληθινό.</b> Το πρόγραμμα δεν ξέρει να «γράψει» ένα γράμμα —
     ξέρει να το τυπώσει. Για να χαραχτεί, πρέπει να <b>κουβαλήσουμε μέσα στο πρόγραμμα το σχήμα
@@ -427,8 +523,127 @@ h1{font-size:40px;font-weight:800;letter-spacing:-.5px;margin:14px 0 18px;line-h
     </div></div>
   </section>
 
+  <div class="rule"></div>
+  <div class="kicker">ΔΕΥΤΕΡΟΣ ΓΥΡΟΣ · ΓΡΑΜΜΑ ΜΕΣΑ ΑΠΟ ΓΡΑΜΜΑ</div>
+  <h1 style="margin-bottom:14px">Τα γράμματα έχουν τρύπες. Να τις χρησιμοποιήσουμε.</h1>
+  <p class="lede">Οι τέσσερις πάνω <b>συναρμολογούν</b> το λογότυπο — τα κομμάτια έρχονται από
+  έξω και κάθονται στη θέση τους. Οι τρεις εδώ κάτω κάνουν κάτι άλλο: <b>κάθε σχήμα βγαίνει από
+  μέσα από ένα άλλο</b>.</p>
+  <p class="lede">Γι' αυτό χρειάστηκε να μετρηθούν τα ίδια τα γράμματα. Η <b>τρύπα</b> ενός
+  γράμματος δεν είναι η μέση του: του <b>Π</b> είναι <b>χαμηλά, ανάμεσα στα δύο πόδια του</b> —
+  είναι πύλη· του <b>Α</b> είναι <b>ψηλά, κάτω από την κορυφή</b>· και μόνο του <b>Ο</b> η τρύπα
+  πέφτει στο κέντρο του. Αυτά τα τρία σημεία τα βγάζει το πρόγραμμα από τις καμπύλες της Manrope,
+  δεν τα έγραψα εγώ.</p>
+
+  <!-- ================================ Ε ================================ -->
+  <section class="prop">
+    <div class="prop-head">
+      <div class="prop-letter">Ε</div>
+      <h2>Το Κόψιμο</h2>
+      <div class="tag-pill">ΤΟ ΟΝΟΜΑ ΤΟΥ ΙΔΙΟΥ ΤΟΥ ΣΗΜΑΤΟΣ</div>
+    </div>
+    <p><b>Στην αρχή δεν υπάρχει σήμα. Υπάρχει ένα Ο.</b> Ένας ολόκληρος, κλειστός κύκλος —
+    το πρώτο γράμμα της λέξης, τίποτα άλλο. Στέκεται μια στιγμή για να το δεις.</p>
+    <p>Και μετά <b>κόβεται</b>. Ανοίγει το κενό στα αριστερά του, και <b>το κομμάτι που βγήκε
+    ταξιδεύει δεξιά, γυρίζει, και στέκεται όρθιο ως θαυμαστικό</b>. Μπροστά στα μάτια σου το
+    <b>Ο</b> γίνεται <b>Ο!</b> — και δεν προστέθηκε τίποτα, μόνο κόπηκε.</p>
+    <p><b>Γιατί έχει σημασία.</b> Το σήμα λέγεται «Το Κόψιμο» και είναι το απόκομμα που κόβεται
+    και δίνεται στον πελάτη. Μέχρι τώρα αυτό ήταν <b>μια εξήγηση που έπρεπε να πει κάποιος</b>.
+    Εδώ γίνεται μπροστά του, σε ενάμισι δευτερόλεπτο, χωρίς λέξη. Το Α διδάσκει <i>πού ανήκει</i>
+    το σήμα· το Ε διδάσκει <i>τι είναι</i>.</p>
+    <p><b>Το τίμημα:</b> είναι <b>το πιο αργό</b> από όλα, 3,1 δευτερόλεπτα — γιατί η στιγμή
+    ακινησίας πριν το κόψιμο είναι ολόκληρη η ιδέα και δεν κόβεται άλλο.</p>
+    <div class="beats">
+      <div class="beat"><b>0.2s</b><span>Ένας κλειστός κύκλος γράφεται</span></div>
+      <div class="beat"><b>0.7s</b><span>Στέκεται. Είναι ένα <b>Ο</b></span></div>
+      <div class="beat"><b>0.85s</b><span>Ανοίγει το κενό</span></div>
+      <div class="beat"><b>0.9–1.5s</b><span>Το κομμάτι ταξιδεύει και στέκεται όρθιο</span></div>
+      <div class="beat"><b>1.7s</b><span>Ξεδιπλώνεται η λέξη</span></div>
+      <div class="beat"><b>3.1s</b><span>Σβήνει, και παραδίδει</span></div>
+    </div>
+    <div class="bar"><div class="caption">1280 × 720 · ΛΟΓΟΤΥΠΟ ΣΤΟ 80% ΤΟΥ ΠΛΑΤΟΥΣ</div><button class="play" data-for="s5">▶ ΠΑΙΞΕ ΞΑΝΑ</button></div>
+    <div class="frame"><div class="screen v5" id="s5">
+      <div class="splash"><div class="logo hero"><svg viewBox="__VIEWBOX__">__LOCKUP__</svg></div></div>
+    </div></div>
+  </section>
+
+  <!-- =============================== ΣΤ ================================ -->
+  <section class="prop">
+    <div class="prop-head">
+      <div class="prop-letter">ΣΤ</div>
+      <h2>Η Πύλη</h2>
+      <div class="tag-pill">ΤΟ ΠΙΟ ΕΥΦΑΝΤΑΣΤΟ</div>
+    </div>
+    <p><b>Κοίτα το Π.</b> Δύο πόδια και ένα ανώφλι από πάνω. <b>Είναι πύλη.</b> Και κάθε πανηγύρι
+    αρχίζει με μια πύλη — περνάς από κάτω και μπαίνεις μέσα.</p>
+    <p>Έτσι, στην οθόνη δεν υπάρχει λογότυπο. Υπάρχει <b>μια πύλη που χτίζεται</b>, μεγάλη, στη
+    μέση. Και μόλις σταθεί, <b>μέσα από το άνοιγμά της βγαίνουν όλα τα υπόλοιπα</b>: πρώτο το
+    σήμα, που κυλάει αριστερά· μετά το <b>Ο</b>, που πάει να σταθεί μπροστά της· μετά το
+    <b>Α</b>, το θαυμαστικό, η πλακέτα <b>POS</b>. Η πύλη μένει στη θέση της και όλο το λογότυπο
+    μαζεύεται γύρω της.</p>
+    <p><b>Γιατί δουλεύει.</b> Είναι η μόνη πρόταση όπου <b>η κίνηση λέει τι κάνει το πρόγραμμα</b>
+    και όχι μόνο τι σχήμα έχει. Ένα ταμείο πανηγυριού είναι κυριολεκτικά η πύλη: από εκεί περνάει
+    ο κόσμος, από εκεί βγαίνει το απόκομμα. Και το γράμμα που το λέει είναι το <b>Π</b> — του
+    <b>πανηγυριού</b>, της <b>πύλης</b>, του <b>πόστου</b>.</p>
+    <p><b>Το ρίσκο:</b> για μιάμιση στιγμή στην οθόνη υπάρχει <b>ένα σκέτο Π</b>, και όποιος δεν
+    ξέρει τι βλέπει δεν καταλαβαίνει τίποτα μέχρι να βγουν τα υπόλοιπα.</p>
+    <div class="beats">
+      <div class="beat"><b>0.2s</b><span>Η πύλη χτίζεται</span></div>
+      <div class="beat"><b>0.9s</b><span>Το σήμα κυλάει έξω</span></div>
+      <div class="beat"><b>1.0–1.9s</b><span>Τα γράμματα βγαίνουν από κάτω της</span></div>
+      <div class="beat"><b>2.0s</b><span>Η λεζάντα</span></div>
+      <div class="beat"><b>2.5s</b><span>Σβήνει, και παραδίδει</span></div>
+    </div>
+    <div class="bar"><div class="caption">1280 × 720 · ΛΟΓΟΤΥΠΟ ΣΤΟ 80% ΤΟΥ ΠΛΑΤΟΥΣ</div><button class="play" data-for="s6">▶ ΠΑΙΞΕ ΞΑΝΑ</button></div>
+    <div class="frame"><div class="screen v6" id="s6">
+      <div class="splash"><div class="logo hero"><svg viewBox="__VIEWBOX__">__LOCKUP__</svg></div></div>
+    </div></div>
+  </section>
+
+  <!-- ================================ Ζ ================================ -->
+  <section class="prop">
+    <div class="prop-head">
+      <div class="prop-letter">Ζ</div>
+      <h2>Το Ένα Μέσα στο Άλλο</h2>
+      <div class="tag-pill">ΜΙΑ ΑΛΥΣΙΔΑ, 2,6 δευτ.</div>
+    </div>
+    <p><b>Κάθε σχήμα γεννάει το επόμενο από την τρύπα του.</b> Γράφεται ο κύκλος του σήματος·
+    <b>μέσα από την τρύπα του</b> πετάγεται το θαυμαστικό, και δίπλα του βγαίνει το <b>Ο</b> της
+    λέξης. Από την τρύπα του <b>Ο</b> βγαίνει το <b>Π</b>. Κάτω από την πύλη του <b>Π</b> βγαίνει
+    το <b>Α</b>. Από την κορυφή του <b>Α</b> πετάγεται το πράσινο <b>θαυμαστικό</b>, από την τελεία
+    του η πλακέτα <b>POS</b>.</p>
+    <p><b>Οκτώ γεννήσεις σε δυόμισι δευτερόλεπτα</b>, η μία μέσα από την άλλη, χωρίς καμία παύση.
+    Είναι η πιο απροσδόκητη από τις επτά: δεν έχεις δει λογότυπο να φτιάχνεται έτσι, γιατί
+    απαιτεί να ξέρεις πού είναι η τρύπα κάθε γράμματος.</p>
+    <p><b>Και το κατά:</b> είναι <b>πυκνή</b>. Συμβαίνουν πολλά γρήγορα, και την πρώτη φορά ίσως
+    δεν προλάβεις να δεις ότι το ένα βγήκε από το άλλο — το καταλαβαίνεις τη δεύτερη. Το αντίθετο
+    ακριβώς από το Ε, που το καταλαβαίνεις αμέσως και δεν χρειάζεται δεύτερη.</p>
+    <div class="beats">
+      <div class="beat"><b>0.2s</b><span>Ο κύκλος — ο σπόρος</span></div>
+      <div class="beat"><b>0.8s</b><span>Από την τρύπα του, το θαυμαστικό</span></div>
+      <div class="beat"><b>1.0–1.3s</b><span>Ο → Π → Α, το ένα μέσα από το άλλο</span></div>
+      <div class="beat"><b>1.4–1.7s</b><span>! και POS</span></div>
+      <div class="beat"><b>2.6s</b><span>Σβήνει, και παραδίδει</span></div>
+    </div>
+    <div class="bar"><div class="caption">1280 × 720 · ΛΟΓΟΤΥΠΟ ΣΤΟ 80% ΤΟΥ ΠΛΑΤΟΥΣ</div><button class="play" data-for="s7">▶ ΠΑΙΞΕ ΞΑΝΑ</button></div>
+    <div class="frame"><div class="screen v7" id="s7">
+      <div class="splash"><div class="logo hero"><svg viewBox="__VIEWBOX__">__LOCKUP__</svg></div></div>
+    </div></div>
+  </section>
+
   <div class="foot-note">
-    <b>Πού καταλήγω: το Α.</b> Είναι το μόνο που <b>κερδίζει κάτι πέρα από ομορφιά</b> — διδάσκει
+    <b>Πού καταλήγω τώρα: το Ε, «Το Κόψιμο».</b> Με τον δεύτερο γύρο αλλάζω σύσταση, και σου λέω
+    γιατί: το Α ήταν το καλύτερο <i>όταν το ζητούμενο ήταν να μπει το πλήρες λογότυπο</i>. Το Ε
+    κάνει το ίδιο πράγμα καλύτερα — γιατί δεν δείχνει απλώς το σήμα, <b>το φτιάχνει μπροστά σου
+    κόβοντάς το</b>, που είναι κυριολεκτικά το όνομά του και κυριολεκτικά αυτό που πουλάς: ένα
+    απόκομμα που κόβεται. Καμία άλλη πρόταση δεν λέει την ιστορία του προϊόντος.
+    <br><br>
+    <b>Δεύτερο το ΣΤ</b>, αν θες κάτι που θα το θυμούνται: είναι το πιο τολμηρό και το μόνο με
+    δικό του σύμβολο. <b>Τρίτο το Ζ</b> αν θες το πιο σύντομο από τα ευφάνταστα.
+  </div>
+
+  <div class="foot-note">
+    <b>Από τον πρώτο γύρο, το Α.</b> Είναι το μόνο των τεσσάρων που <b>κερδίζει κάτι πέρα από ομορφιά</b> — διδάσκει
     το σήμα. Ο πελάτης που ανοίγει το πρόγραμμα πρώτη φορά δεν έχει ιδέα γιατί ο κύκλος είναι
     κομμένος· αυτή η κίνηση του το λέει σε δύο δευτερόλεπτα, χωρίς λέξη. Το Β είναι το
     ωραιότερο αλλά κοστίζει μισή μέρα παραπάνω και δένει το πρόγραμμα με τη γραμματοσειρά. Το Γ
@@ -436,7 +651,7 @@ h1{font-size:40px;font-weight:800;letter-spacing:-.5px;margin:14px 0 18px;line-h
     πιο άδειο.
   </div>
   <div class="foot-note">
-    <b>Ισχύουν και για τα τέσσερα:</b> παίζει <b>μόνο στην εκκίνηση</b> — ποτέ σε κλείδωμα, ποτέ σε
+    <b>Ισχύουν και για τις επτά:</b> παίζει <b>μόνο στην εκκίνηση</b> — ποτέ σε κλείδωμα, ποτέ σε
     παράδοση βάρδιας — και <b>φεύγει με το πρώτο άγγιγμα</b>. Το «ΚΑΛΩΣ ΗΡΘΕΣ ΝΙΚΟ» είναι
     ξεχωριστό και παίζει σε <b>κάθε</b> είσοδο.
   </div>

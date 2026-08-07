@@ -27,6 +27,29 @@ MUTED = G.MUTED      # the tagline
 NIB = "#7BE8AC"      # the pen's head, launch screen only
 
 
+def _cursors(text, size, x, tracking):
+    """Where each letter starts. One place, so markup and geometry agree."""
+    out, c = [], x
+    for ch in text:
+        out.append((ch, c))
+        c += G.advance(ch) * size / G._upm + tracking
+    return out
+
+
+def _glyph_box(ch, size, x, baseline):
+    """The letter's real ink box, read out of the outline — not guessed.
+
+    Needed because the animations below aim one letter at the *hole* inside
+    another, and a hole is not where the advance width says it is.
+    """
+    from fontTools.pens.boundsPen import BoundsPen
+    s = size / G._upm
+    pen = BoundsPen(G._glyphs)
+    G._glyphs[G._cmap[ord(ch)]].draw(
+        G.TransformPen(pen, (s, 0, 0, -s, x, baseline)))
+    return pen.bounds          # (xMin, yMin, xMax, yMax)
+
+
 def _glyphs(text, size, x, baseline, tracking, cls, fill):
     """One <path> per letter, already placed.
 
@@ -34,12 +57,10 @@ def _glyphs(text, size, x, baseline, tracking, cls, fill):
     without knowing how long its outline is — the numbers become percentages.
     """
     out = []
-    cursor = x
-    for i, ch in enumerate(text):
+    for i, (ch, cursor) in enumerate(_cursors(text, size, x, tracking)):
         d, _ = G.text_outline(ch, size, cursor, baseline, 0.0, "start")
         out.append(f'<path class="{cls} {cls}{i}" pathLength="100" d="{d}" '
                    f'fill="{fill}"/>')
-        cursor += G.advance(ch) * size / G._upm + tracking
     return "".join(out)
 
 
@@ -147,7 +168,98 @@ def lockup():
         f"  --ring-dash:{dash:.2f}px;   /* how much of the circle the O is */\n"
         f"  --ring-dash-neg:{-dash:.2f}px;"
     )
-    return vb, inner, css_vars, h
+    extra, block = _anchors(h, s, x0, y0, w0, h0)
+    return vb, inner, css_vars + "\n" + extra, block, h
+
+
+# =============================================================================
+# WHERE ONE LETTER'S HOLE IS, SO ANOTHER CAN BE BORN OUT OF IT
+# =============================================================================
+# Three of the proposals need a letter to come *out of* another letter. That
+# only works if the target is the letter's hole rather than its middle: the
+# gate of a Π is low and between its legs, the counter of an Α is up near the
+# apex, and the Ο is the only one whose hole really is its centre.
+#
+# Two coordinate spaces are in play and mixing them is the whole difficulty.
+# The word, the pill and the tagline sit in the lock-up's own units; the ring
+# and the exclamation of the MARK sit inside the mark's 100-unit space, which
+# the group scales by `s`. A distance measured in the first has to be divided
+# by `s` before it can be handed to the second.
+IN_MARK = {"ringmove", "mbar", "mdot"}
+
+
+def _anchors(h, s, x0, y0, w0, h0):
+    cap, base = h["cap"], h["baseline"]
+    bw, bar_h, r = G.bang_parts()
+    bs = cap / G.BANG_TOTAL
+
+    def m(u, v):                       # mark space -> lock-up space
+        return (h["mark_x"] + (u - G.MARK_BOX[0]) * s,
+                h["mark_y"] + (v - G.MARK_BOX[1]) * s)
+
+    boxes = {}
+    for i, (ch, cx) in enumerate(_cursors(G.WORD, h["word_size"], h["word_x"],
+                                          h["word_track"])):
+        boxes[f"wg{i}"] = _glyph_box(ch, h["word_size"], cx, base)
+
+    def mid(k):
+        b = boxes[k]
+        return ((b[0] + b[2]) / 2, (b[1] + b[3]) / 2)
+
+    centre = {
+        "ringmove": m(G.RING_CX, G.RING_CY),
+        "mbar": m(G.BANG_X + G.BANG_W / 2, G.BANG_TOP + G.BANG_BAR_H / 2),
+        "mdot": m(G.BANG_X + G.BANG_W / 2, G.BANG_DOT_CY),
+        "wg0": mid("wg0"), "wg1": mid("wg1"), "wg2": mid("wg2"),
+        "wbar": (h["bang_x"] + bw * bs / 2, base - cap + bar_h * bs / 2),
+        "wdot": (h["bang_x"] + bw * bs / 2, base - r * bs),
+        "pill": (h["pill_cx"], h["pill_y"] + h["pill_h"] / 2),
+    }
+    # The hole, which is not the middle.
+    hole = dict(centre)
+    hole["wg1"] = (mid("wg1")[0], base - 0.32 * cap)          # under the lintel
+    hole["wg2"] = (mid("wg2")[0], base - cap + 0.32 * cap)    # up at the apex
+
+    def off(child, parent):
+        dx = hole[parent][0] - centre[child][0]
+        dy = hole[parent][1] - centre[child][1]
+        k = 1 / s if child in IN_MARK else 1.0
+        return dx * k, dy * k
+
+    lines = []
+
+    # ΣΤ — everything walks out through the Π
+    for key in ("ringmove", "mbar", "mdot", "wg0", "wg2", "wbar", "wdot", "pill"):
+        dx, dy = off(key, "wg1")
+        lines.append(f".v6 .{key}{{--gx:{dx:.2f}px;--gy:{dy:.2f}px}}")
+
+    # Ζ — each letter is born from the one before it
+    chain = [("mbar", "ringmove"), ("mdot", "mbar"), ("wg0", "ringmove"),
+             ("wg1", "wg0"), ("wg2", "wg1"), ("wbar", "wg2"),
+             ("wdot", "wbar"), ("pill", "wdot")]
+    for child, parent in chain:
+        dx, dy = off(child, parent)
+        lines.append(f".v7 .{child}{{--nx:{dx:.2f}px;--ny:{dy:.2f}px}}")
+
+    # Ε — the piece is cut out of the Ο's left side and stands up on the right.
+    # In the mark's own units, because that is where the two shapes live.
+    gap = (G.RING_CX - G.RING_R, G.RING_CY)          # the gap faces left
+    bar_c = (G.BANG_X + G.BANG_W / 2, G.BANG_TOP + G.BANG_BAR_H / 2)
+    dot_c = (G.BANG_X + G.BANG_W / 2, G.BANG_DOT_CY)
+    # Where the Π sits, for ΣΤ's opening shot.
+    pox = (centre["wg1"][0] - x0) / w0
+    poy = (centre["wg1"][1] - y0) / h0
+    extra = (
+        f"  --cut-bar-dx:{gap[0] - bar_c[0]:.2f}px;"
+        f"  --cut-bar-dy:{gap[1] - bar_c[1]:.2f}px;\n"
+        f"  --cut-dot-dx:{gap[0] - dot_c[0]:.2f}px;"
+        f"  --cut-dot-dy:{gap[1] - dot_c[1]:.2f}px;\n"
+        f"  --p-ox:{pox * 100:.3f}%;   /* the Π's own centre */\n"
+        f"  --p-oy:{poy * 100:.3f}%;\n"
+        f"  --p-dx:{(0.5 - pox) * 100:.3f}%;\n"
+        f"  --p-dy:{(0.5 - poy) * 100:.3f}%;"
+    )
+    return extra, "\n".join(lines)
 
 
 # =============================================================================
@@ -248,12 +360,14 @@ def main():
     out.write_text(src.replace("__FONT_B64__", font_b64), encoding="utf-8")
     print(f"sima.html            {out.stat().st_size // 1024} KB")
 
-    vb, inner, css_vars, h = lockup()
+    vb, inner, css_vars, offsets, h = lockup()
     src = (HERE / "othoni-enarxis.src.html").read_text(encoding="utf-8")
-    for token in ("__FONT_B64__", "__VIEWBOX__", "__LOCKUP__", "__VARS__"):
+    for token in ("__FONT_B64__", "__VIEWBOX__", "__LOCKUP__", "__VARS__",
+                  "__OFFSETS__"):
         assert token in src, f"{token} is gone from othoni-enarxis.src.html"
     page = (src.replace("__VIEWBOX__", vb)
                .replace("__VARS__", css_vars)
+               .replace("__OFFSETS__", offsets)
                .replace("__LOCKUP__", inner)
                .replace("__FONT_B64__", font_b64))
     out = HERE / "othoni-enarxis.html"
