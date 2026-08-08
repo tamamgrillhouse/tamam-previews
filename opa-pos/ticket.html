@@ -14,11 +14,12 @@
   font-weight: 200 800;
 }
 
-/* One dot of the printer's head. Everything on the paper is sized in dots,
-   because that is the only unit the machine has. 576 dots = 72 mm printed. */
+/* One dot of the printer's head — the only unit the machine has.
+   576 dots across = 72 mm printed. A card is that width and short. */
 :root {
-  --d: 0.78px;
+  --d: 0.80px;
   --paper: calc(576 * var(--d));
+  --wide: calc(864 * var(--d));
   --page: #15171b;
   --panel: #1d2026;
   --line: #2d323a;
@@ -36,133 +37,169 @@ body {
 }
 
 h1 { font-size: 34px; font-weight: 800; letter-spacing: -0.01em; }
-
-.lede { max-width: 1220px; margin-top: 14px; font-size: 17px; line-height: 1.62; color: #b8c0cb; }
+.lede { max-width: 1240px; margin-top: 14px; font-size: 17px; line-height: 1.62; color: #b8c0cb; }
 .lede b { color: #fff; font-weight: 700; }
 
-.panels { display: flex; gap: 28px; margin-top: 34px; max-width: 1660px; align-items: stretch; }
+.panels { display: flex; gap: 28px; margin-top: 34px; max-width: 1700px; align-items: stretch; }
 
-.box {
-  flex: 1;
-  padding: 26px 30px;
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-}
-
-.box h2 {
-  font-size: 12.5px;
-  font-weight: 800;
-  letter-spacing: 0.16em;
-  color: var(--accent);
-  margin-bottom: 16px;
-}
-
-.box ol, .box ul { padding-left: 20px; }
-.box li { font-size: 15px; line-height: 1.5; margin-bottom: 9px; color: #ccd3dc; }
-.box li b { color: #fff; font-weight: 700; }
-.box p { font-size: 15px; line-height: 1.55; color: #ccd3dc; margin-bottom: 12px; }
+.box { flex: 1; padding: 26px 30px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; }
+.box h2 { font-size: 12.5px; font-weight: 800; letter-spacing: 0.16em; color: var(--accent); margin-bottom: 16px; }
+.box ol { padding-left: 20px; }
+.box li { font-size: 14.5px; line-height: 1.5; margin-bottom: 8px; color: #ccd3dc; }
+.box li b, .box p b { color: #fff; font-weight: 700; }
+.box p { font-size: 14.5px; line-height: 1.55; color: #ccd3dc; margin-bottom: 12px; }
 .box p:last-child { margin-bottom: 0; }
+
+.warn { border-left: 3px solid var(--accent); padding-left: 14px; }
 
 /* ---------- the four columns --------------------------------------------- */
 
-.grid { display: flex; gap: 42px; margin-top: 60px; align-items: flex-start; }
+.grid { display: flex; gap: 46px; margin-top: 60px; align-items: flex-start; }
 .col { width: var(--paper); flex: none; }
-.col > header { min-height: 178px; }
+.col.wide { width: var(--wide); }
+.col > header { min-height: 196px; }
 
 .name { font-size: 12px; font-weight: 800; letter-spacing: 0.22em; color: var(--accent); }
 .title { font-size: 26px; font-weight: 800; margin-top: 6px; }
+.size { font-size: 12.5px; font-weight: 700; color: var(--dim); margin-top: 5px; letter-spacing: 0.04em; }
 .principle { font-size: 14.5px; line-height: 1.55; color: #a9b2bd; margin-top: 11px; }
 
-.caption {
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.18em;
-  color: #7d8794;
-  margin: 32px 0 9px;
-}
+.caption { font-size: 11px; font-weight: 800; letter-spacing: 0.18em; color: #7d8794; margin: 34px 0 10px; }
 
-/* ---------- the paper ----------------------------------------------------- */
+/* ---------- the card ------------------------------------------------------ */
 
-.paper {
+.card {
   width: var(--paper);
   background: #fff;
   color: #000;
-  padding: calc(16 * var(--d)) 0 calc(14 * var(--d));
   /* A thermal head burns a dot or it does not. Nothing here is grey. */
   -webkit-font-smoothing: none;
   font-variant-numeric: tabular-nums;
+  display: flex;
+  overflow: hidden;
 }
 
-/* The cut. No gap: ten tickets come off as one strip. */
-.cut { width: var(--paper); border-top: 2px dashed #454b54; margin-bottom: 26px; }
+.card.w { width: var(--wide); }
+
+/* The cut, tight against the card. Ten tickets come off as one strip. */
+.cut { border-top: 2px dashed #454b54; margin-bottom: 30px; width: var(--paper); }
+.cut.w { width: var(--wide); }
 
 .c { text-align: center; }
 .r { text-align: right; }
-.pad { padding: 0 calc(20 * var(--d)); }
 
-.club    { font-size: calc(27 * var(--d)); font-weight: 800; line-height: 1.14; }
-.fest    { font-size: calc(20 * var(--d)); font-weight: 400; line-height: 1.3; }
-.postbig { font-size: calc(72 * var(--d)); font-weight: 800; line-height: 1.05; }
-.postmid { font-size: calc(56 * var(--d)); font-weight: 800; line-height: 1.08; }
-.postsm  { font-size: calc(30 * var(--d)); font-weight: 800; line-height: 1.15; letter-spacing: 0.1em; }
-.huge    { font-size: calc(112 * var(--d)); font-weight: 800; line-height: 1.0; letter-spacing: 0.005em; }
-.big     { font-size: calc(84 * var(--d)); font-weight: 800; line-height: 1.02; }
-.cellnum { font-size: calc(44 * var(--d)); font-weight: 800; line-height: 1.05; }
-.dateline{ font-size: calc(22 * var(--d)); font-weight: 600; letter-spacing: 0.055em; line-height: 1.3; }
-.label   { font-size: calc(16 * var(--d)); font-weight: 700; letter-spacing: 0.22em; }
-.price   { font-size: calc(46 * var(--d)); font-weight: 800; line-height: 1.1; }
-.micro   { font-size: calc(16 * var(--d)); font-weight: 400; line-height: 1.4; }
-.sig     { font-size: calc(14 * var(--d)); font-weight: 700; letter-spacing: 0.1em; }
+.club   { font-size: calc(23 * var(--d)); font-weight: 800; line-height: 1.14; }
+.fest   { font-size: calc(17 * var(--d)); font-weight: 400; line-height: 1.28; }
+.what   { font-size: calc(58 * var(--d)); font-weight: 800; line-height: 1.04; }
+.whatbig{ font-size: calc(84 * var(--d)); font-weight: 800; line-height: 1.02; }
+.num    { font-size: calc(84 * var(--d)); font-weight: 800; line-height: 1.0; }
+.numbig { font-size: calc(112 * var(--d)); font-weight: 800; line-height: 1.0; }
+.date   { font-size: calc(20 * var(--d)); font-weight: 600; letter-spacing: 0.05em; line-height: 1.3; }
+.label  { font-size: calc(14 * var(--d)); font-weight: 700; letter-spacing: 0.22em; }
+.price  { font-size: calc(40 * var(--d)); font-weight: 800; line-height: 1.1; }
+.micro  { font-size: calc(15 * var(--d)); font-weight: 400; line-height: 1.4; }
+.sig    { font-size: calc(13 * var(--d)); font-weight: 700; letter-spacing: 0.1em; }
 
 .rule    { height: calc(3 * var(--d)); background: #000; }
-.rule-hi { height: calc(7 * var(--d)); background: #000; }
+.rule-hi { height: calc(6 * var(--d)); background: #000; }
+.vrule   { width: calc(3 * var(--d)); background: #000; align-self: stretch; }
+
+.sp2 { height: calc(6 * var(--d)); }
+.sp4 { height: calc(13 * var(--d)); }
+.sp8 { height: calc(24 * var(--d)); }
+
+.rowmid { display: flex; align-items: center; gap: calc(14 * var(--d)); }
+.split  { display: flex; align-items: flex-end; justify-content: space-between; gap: calc(14 * var(--d)); }
+.grow   { flex: 1; }
+.push   { margin-top: auto; }
+
+.mark    { width: calc(96 * var(--d)); height: calc(96 * var(--d)); display: block; flex: none; }
+.mark-sm { width: calc(62 * var(--d)); height: calc(62 * var(--d)); display: block; flex: none; }
+.mark-lg { width: calc(132 * var(--d)); height: calc(132 * var(--d)); display: block; flex: none; }
+
+/* --- Α: the vertical plate down the edge, the way a real ticket does it --- */
+
+.sidebar {
+  width: calc(122 * var(--d));
+  flex: none;
+  background: #000;
+  color: #fff;
+  font-weight: 800;
+  font-size: calc(46 * var(--d));
+  letter-spacing: 0.08em;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(14 * var(--d)) 0;
+}
+
+.bodyA {
+  flex: 1;
+  padding: calc(18 * var(--d)) calc(22 * var(--d)) calc(14 * var(--d));
+  display: flex;
+  flex-direction: column;
+  min-height: calc(384 * var(--d));
+}
+
+/* --- Β: two columns inside a printed border ------------------------------ */
+
+.frameB {
+  flex: 1;
+  border: calc(4 * var(--d)) solid #000;
+  margin: calc(10 * var(--d));
+  padding: calc(16 * var(--d)) calc(18 * var(--d)) calc(12 * var(--d));
+  display: flex;
+  flex-direction: column;
+  min-height: calc(384 * var(--d));
+}
+
+.colsB { display: flex; gap: calc(18 * var(--d)); flex: 1; }
+.colsB > .l { flex: 1; display: flex; flex-direction: column; }
+.colsB > .rgt { width: calc(196 * var(--d)); flex: none; text-align: center; display: flex; flex-direction: column; justify-content: center; }
+
+/* --- Γ: horizontal plates ------------------------------------------------ */
+
+.bodyC { flex: 1; display: flex; flex-direction: column; min-height: calc(392 * var(--d)); }
 
 .plate {
   background: #000;
   color: #fff;
   font-weight: 800;
   text-align: center;
-  padding: calc(7 * var(--d)) calc(14 * var(--d));
-  line-height: 1.12;
+  padding: calc(9 * var(--d)) calc(16 * var(--d));
+  line-height: 1.1;
 }
 
-.sp2 { height: calc(6 * var(--d)); }
-.sp4 { height: calc(13 * var(--d)); }
-.sp8 { height: calc(24 * var(--d)); }
+.padC { padding: calc(14 * var(--d)) calc(22 * var(--d)); }
 
-.split { display: flex; align-items: flex-end; justify-content: space-between; gap: calc(14 * var(--d)); }
-.rowmid { display: flex; align-items: center; gap: calc(16 * var(--d)); }
+/* --- Δ: the big card, printed turned --------------------------------------*/
 
-/* Β only — the number in a cell of its own. */
-.cell {
-  border: calc(4 * var(--d)) solid #000;
-  padding: calc(7 * var(--d)) calc(13 * var(--d)) calc(5 * var(--d));
-  text-align: center;
-  flex: none;
+.bodyD {
+  flex: 1;
+  display: flex;
+  gap: calc(24 * var(--d));
+  padding: calc(24 * var(--d)) calc(28 * var(--d)) calc(16 * var(--d));
+  min-height: calc(576 * var(--d));
 }
 
-.mark { width: calc(120 * var(--d)); height: calc(120 * var(--d)); display: block; }
-.mark-sm { width: calc(86 * var(--d)); height: calc(86 * var(--d)); display: block; flex: none; }
-.mark-xs { width: calc(58 * var(--d)); height: calc(58 * var(--d)); display: block; flex: none; }
+.turned {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
 
 /* ---------- the verdict table -------------------------------------------- */
 
-table { margin-top: 84px; border-collapse: collapse; font-size: 15px; max-width: 1500px; }
-
-caption {
-  text-align: left;
-  font-size: 12.5px;
-  font-weight: 800;
-  letter-spacing: 0.16em;
-  color: var(--accent);
-  padding-bottom: 16px;
-}
-
+table { margin-top: 88px; border-collapse: collapse; font-size: 15px; max-width: 1520px; }
+caption { text-align: left; font-size: 12.5px; font-weight: 800; letter-spacing: 0.16em; color: var(--accent); padding-bottom: 16px; }
 th, td { border-bottom: 1px solid var(--line); padding: 13px 18px; text-align: left; }
 thead th { font-size: 12px; letter-spacing: 0.12em; color: var(--dim); font-weight: 800; }
-tbody th { font-weight: 400; color: #ccd3dc; width: 660px; }
-td { text-align: center; width: 150px; font-weight: 700; }
+tbody th { font-weight: 400; color: #ccd3dc; width: 640px; }
+td { text-align: center; width: 160px; font-weight: 700; }
 .win { color: var(--accent); }
 .no { color: #6b7480; font-weight: 400; }
 
@@ -173,7 +210,7 @@ td { text-align: center; width: 150px; font-weight: 700; }
   border: 1px solid var(--line);
   border-left: 4px solid var(--accent);
   border-radius: 10px;
-  max-width: 1500px;
+  max-width: 1520px;
   font-size: 16.5px;
   line-height: 1.66;
   color: #ccd3dc;
@@ -183,8 +220,8 @@ td { text-align: center; width: 150px; font-weight: 700; }
 </style>
 
 <!-- The association's emblem, drawn once and used by all four.
-     Deliberately chunky: on a thermal head a thin line is not a thin line,
-     it is a smudge. Nothing here is thinner than seven dots. -->
+     Deliberately chunky: on a thermal head a thin line is a smudge, not a
+     thin line. Nothing here is narrower than seven dots. -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="emblem" viewBox="0 0 100 100">
     <circle cx="50" cy="50" r="44" fill="none" stroke="#000" stroke-width="7"/>
@@ -196,48 +233,48 @@ td { text-align: center; width: 150px; font-weight: 700; }
   </symbol>
 </svg>
 
-<h1>Το πρότυπο του εισιτηρίου</h1>
+<h1>Το πρότυπο του εισιτηρίου — κάρτα, οριζόντια</h1>
 
 <p class="lede">
-  Τέσσερις <b>ολόκληρες</b> προτάσεις. Η καθεμία λύνει και τα δώδεκα από κάτω <b>μόνη της</b>,
-  και <b>και οι τέσσερις σηκώνουν λογότυπο</b> — το πρώτο χαρτί κάθε στήλης το δείχνει με το
-  έμβλημα, το δεύτερο με γράμματα. Αυτό που αλλάζει ανάμεσά τους είναι η <b>αρχιτεκτονική της
-  σελίδας</b>: πώς χτίζεται η ιεραρχία, όχι πόσο μεγάλο είναι κάτι.
-  Τα δεκαέξι χαρτιά είναι στην ίδια κλίμακα, στις αληθινές 576 κουκκίδες του 80άρι, με τη
-  Manrope που ταξιδεύει μέσα στο πρόγραμμα. Πουθενά γκρι: η θερμική κεφαλή ή καίει την
-  κουκκίδα ή δεν την καίει.
+  Το ρολό είναι 72 χιλιοστά φαρδύ. Αυτό δεν είναι υποχρέωση να τυπώνουμε <b>μακριά</b>: είναι
+  άδεια να τυπώνουμε <b>φαρδιά και κοντά</b> — δηλαδή κάρτα. Και οι τέσσερις προτάσεις είναι
+  τώρα οριζόντιες κάρτες, διαβάζονται με τη μακριά πλευρά στο χέρι, και <b>καμία δεν μοιάζει
+  με απόκομμα</b>. Η καθεμία λύνει και τα δώδεκα από κάτω μόνη της, και <b>και οι τέσσερις
+  σηκώνουν λογότυπο</b> — το πρώτο χαρτί κάθε στήλης το δείχνει με έμβλημα, το δεύτερο με
+  γράμματα. Όλα στην ίδια κλίμακα, στις αληθινές κουκκίδες, με τη Manrope που ταξιδεύει μέσα
+  στο πρόγραμμα. Πουθενά γκρι.
 </p>
 
 <div class="panels">
   <section class="box">
     <h2>ΤΙ ΠΡΕΠΕΙ ΝΑ ΛΥΝΕΙ ΚΑΘΕ ΜΙΑ</h2>
     <ol>
-      <li>Ο πελάτης <b>κρατάει</b> το χαρτί — ένα κομμάτι, κανένα στέλεχος.</li>
+      <li>Είναι <b>κάρτα</b>: οριζόντια, με τη μακριά πλευρά στο χέρι.</li>
+      <li>Ο πελάτης το <b>κρατάει</b> — ένα κομμάτι, κανένα στέλεχος.</li>
       <li><b>Λογότυπο, γράμματα ή τίποτα</b> στην κορυφή, χωρίς να ξεχαρβαλώνεται η σελίδα.</li>
       <li>Ο σειριακός φέρει <b>το γράμμα του ταμείου</b> — αλλιώς δύο ταμεία δίνουν το ίδιο 0128.</li>
       <li>Ο αριθμός κλήρωσης <b>δεν μπερδεύεται</b> με τον αριθμό παραγγελίας.</li>
       <li>Η <b>ημερομηνία τυπώνεται πάντα</b> — αλλιώς περνάει το περσινό εισιτήριο.</li>
       <li>Η τιμή είναι <b>ενός</b> εισιτηρίου, ποτέ σύνολο.</li>
       <li>Εισιτήριο μέσα σε πακέτο <b>δεν τυπώνει τιμή</b>, αντί για 0,00 €.</li>
-      <li>Χωρίς κλήρωση το χαρτί <b>δεν αδειάζει</b>.</li>
+      <li>Χωρίς κλήρωση η κάρτα <b>δεν αδειάζει</b>.</li>
       <li>Στο κουπόνι πρωταγωνιστεί <b>το προϊόν</b>, όχι το πόστο.</li>
-      <li>Το πάνω μέρος ρυθμίζεται <b>χωριστά από το απόκομμα</b>.</li>
-      <li>Κοπή <b>χωρίς κενό</b>: δέκα εισιτήρια βγαίνουν σαν μία λωρίδα.</li>
+      <li>Κοπή <b>χωρίς κενό</b>: δέκα κάρτες βγαίνουν σαν μία λωρίδα.</li>
       <li>«ΟΠΑ! POS» μικρό, στο πόδι, με διακόπτη.</li>
     </ol>
   </section>
 
   <section class="box">
-    <h2>ΤΡΙΑ ΠΡΑΓΜΑΤΑ ΚΟΙΝΑ ΚΑΙ ΣΤΙΣ ΤΕΣΣΕΡΙΣ</h2>
-    <p><b>Η ημερομηνία γράφεται ολόκληρη</b> — «ΠΑΡΑΣΚΕΥΗ 15 ΑΥΓΟΥΣΤΟΥ 2026», όχι 15/08/2026.
-    Στην πύλη, στο σκοτάδι, δεν διαβάζεται λάθος και το περσινό χαρτί ξεχωρίζει αμέσως. Η ώρα
-    μένει μικρή στο πόδι, γιατί είναι για έλεγχο, όχι για ανάγνωση.</p>
-    <p><b>Η ιεραρχία χτίζεται με βάρος, όχι μόνο με μέγεθος.</b> Η Manrope δίνει από 200 έως
-    800 μέσα από ένα αρχείο, οπότε μια λεπτή γραμμή δίπλα σε μια βαριά ξεχωρίζει χωρίς να
-    μεγαλώσει τίποτα — αυτό είναι που κάνει ένα χαρτί να μοιάζει τυπωμένο και όχι εκτυπωμένο.</p>
+    <h2>ΤΡΙΑ ΠΡΑΓΜΑΤΑ ΠΟΥ ΠΡΕΠΕΙ ΝΑ ΞΕΡΕΙΣ</h2>
+    <p class="warn"><b>Η κάρτα υπάρχει μόνο με τον δικό μας τρόπο εκτύπωσης.</b> Στήλες,
+    κατακόρυφα γράμματα και μαύρες ζώνες δεν γίνονται με τη γραμματοσειρά του εκτυπωτή — αυτή
+    ξέρει μόνο γραμμές, τη μία κάτω από την άλλη. Οπότε ο διακόπτης «δικός μας / του
+    εκτυπωτή» της ΜΟΡΦΗΣ ΧΑΡΤΙΟΥ <b>παύει να ισχύει για το εισιτήριο</b> — μένει μόνο για το
+    απόκομμα παραγγελίας. Το λέω τώρα, γιατί είναι πραγματική απώλεια και όχι λεπτομέρεια.</p>
+    <p><b>Η ημερομηνία γράφεται ολόκληρη</b> — «ΠΑΡΑΣΚΕΥΗ 15 ΑΥΓΟΥΣΤΟΥ 2026». Στο σκοτάδι δεν
+    διαβάζεται λάθος, και το περσινό χαρτί ξεχωρίζει αμέσως.</p>
     <p><b>Το έμβλημα είναι χοντροκομμένο επίτηδες.</b> Καμία γραμμή του δεν είναι λεπτότερη
-    από 7 κουκκίδες. Ένα σκαναρισμένο σήμα με ψιλές γραμμές και σκιές βγαίνει μουτζούρα, και
-    η οθόνη ΜΟΡΦΗ ΧΑΡΤΙΟΥ θα το λέει με λόγια πριν το ανεβάσει ο σύλλογος.</p>
+    από 7 κουκκίδες. Σκαναρισμένο σήμα με ψιλές γραμμές και σκιές βγαίνει μουτζούρα.</p>
   </section>
 </div>
 
@@ -247,107 +284,130 @@ td { text-align: center; width: 150px; font-weight: 700; }
   <div class="col">
     <header>
       <div class="name">ΠΡΟΤΑΣΗ Α</div>
-      <div class="title">ΑΞΟΝΑΣ</div>
+      <div class="title">ΤΑΜΠΛΟ</div>
+      <div class="size">72 × 48 χιλ. — κάρτα</div>
       <p class="principle">
-        Ένας κατακόρυφος άξονας, τα πάντα κεντραρισμένα πάνω του, και η ιεραρχία μόνο από
-        μέγεθος και βάρος. Η αρχιτεκτονική του επίσημου εγγράφου: δεν έχει τίποτα να χαλάσει,
-        αντέχει οποιοδήποτε όνομα και οποιοδήποτε έμβλημα, και μοιάζει με πρόγραμμα εκδήλωσης.
+        Μαύρη ζώνη σε όλο το <b>ύψος της αριστερής πλευράς</b>, με την ιδιότητα γραμμένη
+        κατακόρυφα — η χειρονομία που κάνει ένα χαρτί να διαβάζεται ως εισιτήριο πριν
+        διαβαστεί λέξη. Ό,τι μένει είναι μια καθαρή, φωτεινή κάρτα: σήμα και όνομα πάνω,
+        αριθμός στη μέση, ημερομηνία και τιμή κάτω.
       </p>
     </header>
 
     <div class="caption">ΕΙΣΟΔΟΣ · ΚΛΗΡΩΣΗ · ΜΕ ΛΟΓΟΤΥΠΟ</div>
-    <div class="paper pad">
-      <div class="c"><svg class="mark" style="margin:0 auto"><use href="#emblem"/></svg></div>
-      <div class="sp2"></div>
-      <div class="c club">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
-      <div class="c fest">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
-      <div class="sp4"></div>
-      <div class="rule"></div>
-      <div class="sp4"></div>
-      <div class="c postbig">ΕΙΣΟΔΟΣ</div>
-      <div class="sp2"></div>
-      <div class="c dateline">ΠΑΡΑΣΚΕΥΗ 15 ΑΥΓΟΥΣΤΟΥ 2026</div>
-      <div class="sp4"></div>
-      <div class="rule"></div>
-      <div class="sp4"></div>
-      <div class="c label">ΑΡΙΘΜΟΣ ΚΛΗΡΩΣΗΣ</div>
-      <div class="c huge">Α΄0128</div>
-      <div class="sp4"></div>
-      <div class="rule-hi"></div>
-      <div class="sp4"></div>
-      <div class="c price">5,00 €</div>
-      <div class="sp4"></div>
-      <div class="c micro">21:14 · Κ4831 · Γιώργος</div>
-      <div class="c sig">ΟΠΑ! POS</div>
+    <div class="card">
+      <div class="sidebar">ΕΙΣΟΔΟΣ</div>
+      <div class="bodyA">
+        <div class="rowmid">
+          <svg class="mark-sm"><use href="#emblem"/></svg>
+          <div>
+            <div class="club">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
+            <div class="fest">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
+          </div>
+        </div>
+        <div class="sp4"></div>
+        <div class="rule"></div>
+        <div class="sp4"></div>
+        <div class="label">ΑΡΙΘΜΟΣ ΚΛΗΡΩΣΗΣ</div>
+        <div class="num">Α΄0128</div>
+        <div class="sp4 push"></div>
+        <div class="rule-hi"></div>
+        <div class="sp2"></div>
+        <div class="split">
+          <div class="date">ΠΑΡΑΣΚΕΥΗ<br>15 ΑΥΓΟΥΣΤΟΥ 2026</div>
+          <div class="price">5,00 €</div>
+        </div>
+        <div class="sp2"></div>
+        <div class="split micro">
+          <div>21:14 · Κ4831 · Γιώργος</div>
+          <div class="sig">ΟΠΑ! POS</div>
+        </div>
+      </div>
     </div>
     <div class="cut"></div>
 
     <div class="caption">ΕΙΣΟΔΟΣ · ΚΛΗΡΩΣΗ · ΜΕ ΓΡΑΜΜΑΤΑ</div>
-    <div class="paper pad">
-      <div class="c club">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
-      <div class="c fest">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
-      <div class="sp4"></div>
-      <div class="rule"></div>
-      <div class="sp4"></div>
-      <div class="c postbig">ΕΙΣΟΔΟΣ</div>
-      <div class="sp2"></div>
-      <div class="c dateline">ΠΑΡΑΣΚΕΥΗ 15 ΑΥΓΟΥΣΤΟΥ 2026</div>
-      <div class="sp4"></div>
-      <div class="rule"></div>
-      <div class="sp4"></div>
-      <div class="c label">ΑΡΙΘΜΟΣ ΚΛΗΡΩΣΗΣ</div>
-      <div class="c huge">Α΄0128</div>
-      <div class="sp4"></div>
-      <div class="rule-hi"></div>
-      <div class="sp4"></div>
-      <div class="c price">5,00 €</div>
-      <div class="sp4"></div>
-      <div class="c micro">21:14 · Κ4831 · Γιώργος</div>
-      <div class="c sig">ΟΠΑ! POS</div>
+    <div class="card">
+      <div class="sidebar">ΕΙΣΟΔΟΣ</div>
+      <div class="bodyA">
+        <div class="club">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
+        <div class="fest">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
+        <div class="sp4"></div>
+        <div class="rule"></div>
+        <div class="sp4"></div>
+        <div class="label">ΑΡΙΘΜΟΣ ΚΛΗΡΩΣΗΣ</div>
+        <div class="num">Α΄0128</div>
+        <div class="sp4 push"></div>
+        <div class="rule-hi"></div>
+        <div class="sp2"></div>
+        <div class="split">
+          <div class="date">ΠΑΡΑΣΚΕΥΗ<br>15 ΑΥΓΟΥΣΤΟΥ 2026</div>
+          <div class="price">5,00 €</div>
+        </div>
+        <div class="sp2"></div>
+        <div class="split micro">
+          <div>21:14 · Κ4831 · Γιώργος</div>
+          <div class="sig">ΟΠΑ! POS</div>
+        </div>
+      </div>
     </div>
     <div class="cut"></div>
 
     <div class="caption">ΕΙΣΟΔΟΣ · ΧΩΡΙΣ ΚΛΗΡΩΣΗ</div>
-    <div class="paper pad">
-      <div class="c"><svg class="mark" style="margin:0 auto"><use href="#emblem"/></svg></div>
-      <div class="sp2"></div>
-      <div class="c club">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
-      <div class="c fest">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
-      <div class="sp4"></div>
-      <div class="rule"></div>
-      <div class="sp8"></div>
-      <div class="c postbig">ΕΙΣΟΔΟΣ</div>
-      <div class="sp2"></div>
-      <div class="c dateline">ΠΑΡΑΣΚΕΥΗ 15 ΑΥΓΟΥΣΤΟΥ 2026</div>
-      <div class="sp8"></div>
-      <div class="rule-hi"></div>
-      <div class="sp4"></div>
-      <div class="c price">5,00 €</div>
-      <div class="sp4"></div>
-      <div class="c micro">21:14 · Κ4831 · Γιώργος</div>
-      <div class="c sig">ΟΠΑ! POS</div>
+    <div class="card">
+      <div class="sidebar">ΕΙΣΟΔΟΣ</div>
+      <div class="bodyA">
+        <div class="rowmid">
+          <svg class="mark-sm"><use href="#emblem"/></svg>
+          <div>
+            <div class="club">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
+            <div class="fest">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
+          </div>
+        </div>
+        <div class="sp4"></div>
+        <div class="rule"></div>
+        <div class="sp8"></div>
+        <div class="date" style="font-size: calc(26 * var(--d))">ΠΑΡΑΣΚΕΥΗ<br>15 ΑΥΓΟΥΣΤΟΥ 2026</div>
+        <div class="sp4 push"></div>
+        <div class="rule-hi"></div>
+        <div class="sp2"></div>
+        <div class="split">
+          <div class="label">ΤΙΜΗ ΕΙΣΟΔΟΥ</div>
+          <div class="price" style="font-size: calc(52 * var(--d))">5,00 €</div>
+        </div>
+        <div class="sp2"></div>
+        <div class="split micro">
+          <div>21:14 · Κ4831 · Γιώργος</div>
+          <div class="sig">ΟΠΑ! POS</div>
+        </div>
+      </div>
     </div>
     <div class="cut"></div>
 
     <div class="caption">ΚΟΥΠΟΝΙ</div>
-    <div class="paper pad">
-      <div class="c club">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
-      <div class="c fest">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
-      <div class="sp4"></div>
-      <div class="rule"></div>
-      <div class="sp4"></div>
-      <div class="c label">ΠΟΤΑ</div>
-      <div class="sp2"></div>
-      <div class="c postbig">ΜΠΥΡΑ</div>
-      <div class="sp2"></div>
-      <div class="c dateline">ΠΑΡΑΣΚΕΥΗ 15 ΑΥΓΟΥΣΤΟΥ 2026</div>
-      <div class="sp4"></div>
-      <div class="rule-hi"></div>
-      <div class="sp4"></div>
-      <div class="c price">4,00 €</div>
-      <div class="sp4"></div>
-      <div class="c micro">21:14 · Κ4831 · Γιώργος</div>
-      <div class="c sig">ΟΠΑ! POS</div>
+    <div class="card">
+      <div class="sidebar">ΜΠΥΡΑ</div>
+      <div class="bodyA">
+        <div class="club">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
+        <div class="fest">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
+        <div class="sp4"></div>
+        <div class="rule"></div>
+        <div class="sp8"></div>
+        <div class="label">ΕΞΑΡΓΥΡΩΝΕΤΑΙ ΣΤΟ ΠΟΣΤΟ</div>
+        <div class="what" style="font-size: calc(40 * var(--d))">ΠΟΤΑ</div>
+        <div class="sp4 push"></div>
+        <div class="rule-hi"></div>
+        <div class="sp2"></div>
+        <div class="split">
+          <div class="date">ΠΑΡΑΣΚΕΥΗ<br>15 ΑΥΓΟΥΣΤΟΥ 2026</div>
+          <div class="price">4,00 €</div>
+        </div>
+        <div class="sp2"></div>
+        <div class="split micro">
+          <div>21:14 · Κ4831 · Γιώργος</div>
+          <div class="sig">ΟΠΑ! POS</div>
+        </div>
+      </div>
     </div>
     <div class="cut"></div>
   </div>
@@ -356,143 +416,151 @@ td { text-align: center; width: 150px; font-weight: 700; }
   <div class="col">
     <header>
       <div class="name">ΠΡΟΤΑΣΗ Β</div>
-      <div class="title">ΣΤΗΛΕΣ</div>
+      <div class="title">ΠΡΟΣΚΛΗΤΗΡΙΟ</div>
+      <div class="size">72 × 48 χιλ. — κάρτα με περίγραμμα</div>
       <p class="principle">
-        Ασύμμετρη, με τα πάντα στοιχισμένα αριστερά και τον αριθμό σε <b>δικό του κουτί</b>
-        δεξιά — η γεωμετρία του μπλοκ εισιτηρίων. Το λογότυπο δένει με το όνομα σε ένα
-        λογότυπο-λογότυπο πάνω αριστερά, όπως σε επιστολόχαρτο. Η πιο «τυπωμένη» από τις
-        τέσσερις χωρίς καθόλου μαύρο φόντο.
+        Τυπωμένο περίγραμμα γύρω-γύρω και <b>δύο στήλες με κατακόρυφη γραμμή ανάμεσα</b>:
+        αριστερά ποιος και τι, δεξιά ο αριθμός με την τιμή από κάτω. Η γεωμετρία του
+        προσκλητηρίου και του μπλοκ εισιτηρίων, χωρίς ούτε μία μαύρη ζώνη — καθαρό, ήσυχο,
+        και το πιο «τυπωμένο» από τα τέσσερα.
       </p>
     </header>
 
     <div class="caption">ΕΙΣΟΔΟΣ · ΚΛΗΡΩΣΗ · ΜΕ ΛΟΓΟΤΥΠΟ</div>
-    <div class="paper pad">
-      <div class="rowmid">
-        <svg class="mark-sm"><use href="#emblem"/></svg>
-        <div>
-          <div class="club" style="font-size: calc(24 * var(--d))">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
-          <div class="fest" style="font-size: calc(18 * var(--d))">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
+    <div class="card">
+      <div class="frameB">
+        <div class="colsB">
+          <div class="l">
+            <div class="rowmid">
+              <svg class="mark-sm"><use href="#emblem"/></svg>
+              <div>
+                <div class="club" style="font-size: calc(20 * var(--d))">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
+                <div class="fest" style="font-size: calc(15 * var(--d))">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
+              </div>
+            </div>
+            <div class="sp8"></div>
+            <div class="what">ΕΙΣΟΔΟΣ</div>
+            <div class="sp2"></div>
+            <div class="date">ΠΑΡΑΣΚΕΥΗ<br>15 ΑΥΓΟΥΣΤΟΥ 2026</div>
+          </div>
+          <div class="vrule"></div>
+          <div class="rgt">
+            <div class="label" style="font-size: calc(12 * var(--d))">ΑΡΙΘΜΟΣ ΚΛΗΡΩΣΗΣ</div>
+            <div class="sp2"></div>
+            <div class="num" style="font-size: calc(52 * var(--d))">Α΄0128</div>
+            <div class="sp4"></div>
+            <div class="rule"></div>
+            <div class="sp4"></div>
+            <div class="price">5,00 €</div>
+          </div>
         </div>
-      </div>
-      <div class="sp4"></div>
-      <div class="rule-hi"></div>
-      <div class="sp4"></div>
-      <div class="split">
-        <div>
-          <div class="postmid">ΕΙΣΟΔΟΣ</div>
-          <div class="sp2"></div>
-          <div class="dateline" style="font-size: calc(19 * var(--d))">ΠΑΡΑΣΚΕΥΗ<br>15 ΑΥΓΟΥΣΤΟΥ 2026</div>
-          <div class="sp2"></div>
-          <div class="price">5,00 €</div>
+        <div class="sp4"></div>
+        <div class="rule"></div>
+        <div class="sp2"></div>
+        <div class="split micro">
+          <div>21:14 · Κ4831 · Γιώργος</div>
+          <div class="sig">ΟΠΑ! POS</div>
         </div>
-        <div class="cell">
-          <div class="label" style="font-size: calc(13 * var(--d))">ΚΛΗΡΩΣΗ</div>
-          <div class="sp2"></div>
-          <div class="cellnum">Α΄0128</div>
-        </div>
-      </div>
-      <div class="sp4"></div>
-      <div class="rule"></div>
-      <div class="sp2"></div>
-      <div class="split micro">
-        <div>21:14 · Κ4831 · Γιώργος</div>
-        <div class="sig">ΟΠΑ! POS</div>
       </div>
     </div>
     <div class="cut"></div>
 
     <div class="caption">ΕΙΣΟΔΟΣ · ΚΛΗΡΩΣΗ · ΜΕ ΓΡΑΜΜΑΤΑ</div>
-    <div class="paper pad">
-      <div class="club" style="font-size: calc(24 * var(--d))">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
-      <div class="fest" style="font-size: calc(18 * var(--d))">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
-      <div class="sp4"></div>
-      <div class="rule-hi"></div>
-      <div class="sp4"></div>
-      <div class="split">
-        <div>
-          <div class="postmid">ΕΙΣΟΔΟΣ</div>
-          <div class="sp2"></div>
-          <div class="dateline" style="font-size: calc(19 * var(--d))">ΠΑΡΑΣΚΕΥΗ<br>15 ΑΥΓΟΥΣΤΟΥ 2026</div>
-          <div class="sp2"></div>
-          <div class="price">5,00 €</div>
+    <div class="card">
+      <div class="frameB">
+        <div class="colsB">
+          <div class="l">
+            <div class="club" style="font-size: calc(20 * var(--d))">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
+            <div class="fest" style="font-size: calc(15 * var(--d))">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
+            <div class="sp8"></div>
+            <div class="what">ΕΙΣΟΔΟΣ</div>
+            <div class="sp2"></div>
+            <div class="date">ΠΑΡΑΣΚΕΥΗ<br>15 ΑΥΓΟΥΣΤΟΥ 2026</div>
+          </div>
+          <div class="vrule"></div>
+          <div class="rgt">
+            <div class="label" style="font-size: calc(12 * var(--d))">ΑΡΙΘΜΟΣ ΚΛΗΡΩΣΗΣ</div>
+            <div class="sp2"></div>
+            <div class="num" style="font-size: calc(52 * var(--d))">Α΄0128</div>
+            <div class="sp4"></div>
+            <div class="rule"></div>
+            <div class="sp4"></div>
+            <div class="price">5,00 €</div>
+          </div>
         </div>
-        <div class="cell">
-          <div class="label" style="font-size: calc(13 * var(--d))">ΚΛΗΡΩΣΗ</div>
-          <div class="sp2"></div>
-          <div class="cellnum">Α΄0128</div>
+        <div class="sp4"></div>
+        <div class="rule"></div>
+        <div class="sp2"></div>
+        <div class="split micro">
+          <div>21:14 · Κ4831 · Γιώργος</div>
+          <div class="sig">ΟΠΑ! POS</div>
         </div>
-      </div>
-      <div class="sp4"></div>
-      <div class="rule"></div>
-      <div class="sp2"></div>
-      <div class="split micro">
-        <div>21:14 · Κ4831 · Γιώργος</div>
-        <div class="sig">ΟΠΑ! POS</div>
       </div>
     </div>
     <div class="cut"></div>
 
     <div class="caption">ΕΙΣΟΔΟΣ · ΧΩΡΙΣ ΚΛΗΡΩΣΗ</div>
-    <div class="paper pad">
-      <div class="rowmid">
-        <svg class="mark-sm"><use href="#emblem"/></svg>
-        <div>
-          <div class="club" style="font-size: calc(24 * var(--d))">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
-          <div class="fest" style="font-size: calc(18 * var(--d))">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
+    <div class="card">
+      <div class="frameB">
+        <div class="colsB">
+          <div class="l">
+            <div class="rowmid">
+              <svg class="mark-sm"><use href="#emblem"/></svg>
+              <div>
+                <div class="club" style="font-size: calc(20 * var(--d))">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
+                <div class="fest" style="font-size: calc(15 * var(--d))">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
+              </div>
+            </div>
+            <div class="sp8"></div>
+            <div class="whatbig" style="font-size: calc(66 * var(--d))">ΕΙΣΟΔΟΣ</div>
+            <div class="sp2"></div>
+            <div class="date">ΠΑΡΑΣΚΕΥΗ 15 ΑΥΓΟΥΣΤΟΥ 2026</div>
+          </div>
+          <div class="vrule"></div>
+          <div class="rgt">
+            <div class="label" style="font-size: calc(12 * var(--d))">ΤΙΜΗ ΕΙΣΟΔΟΥ</div>
+            <div class="sp2"></div>
+            <div class="price" style="font-size: calc(50 * var(--d))">5,00 €</div>
+          </div>
         </div>
-      </div>
-      <div class="sp4"></div>
-      <div class="rule-hi"></div>
-      <div class="sp4"></div>
-      <div class="split">
-        <div>
-          <div class="postbig">ΕΙΣΟΔΟΣ</div>
-          <div class="sp2"></div>
-          <div class="dateline" style="font-size: calc(19 * var(--d))">ΠΑΡΑΣΚΕΥΗ 15 ΑΥΓΟΥΣΤΟΥ 2026</div>
+        <div class="sp4"></div>
+        <div class="rule"></div>
+        <div class="sp2"></div>
+        <div class="split micro">
+          <div>21:14 · Κ4831 · Γιώργος</div>
+          <div class="sig">ΟΠΑ! POS</div>
         </div>
-        <div class="cell">
-          <div class="label" style="font-size: calc(13 * var(--d))">ΤΙΜΗ</div>
-          <div class="sp2"></div>
-          <div class="cellnum">5,00 €</div>
-        </div>
-      </div>
-      <div class="sp4"></div>
-      <div class="rule"></div>
-      <div class="sp2"></div>
-      <div class="split micro">
-        <div>21:14 · Κ4831 · Γιώργος</div>
-        <div class="sig">ΟΠΑ! POS</div>
       </div>
     </div>
     <div class="cut"></div>
 
     <div class="caption">ΚΟΥΠΟΝΙ</div>
-    <div class="paper pad">
-      <div class="club" style="font-size: calc(24 * var(--d))">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
-      <div class="fest" style="font-size: calc(18 * var(--d))">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
-      <div class="sp4"></div>
-      <div class="rule-hi"></div>
-      <div class="sp4"></div>
-      <div class="split">
-        <div>
-          <div class="label">ΠΟΤΑ</div>
-          <div class="sp2"></div>
-          <div class="postbig">ΜΠΥΡΑ</div>
-          <div class="sp2"></div>
-          <div class="dateline" style="font-size: calc(19 * var(--d))">ΠΑΡΑΣΚΕΥΗ 15 ΑΥΓΟΥΣΤΟΥ 2026</div>
+    <div class="card">
+      <div class="frameB">
+        <div class="colsB">
+          <div class="l">
+            <div class="club" style="font-size: calc(20 * var(--d))">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
+            <div class="fest" style="font-size: calc(15 * var(--d))">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
+            <div class="sp8"></div>
+            <div class="label" style="font-size: calc(12 * var(--d))">ΠΟΣΤΟ ΠΟΤΑ</div>
+            <div class="whatbig" style="font-size: calc(66 * var(--d))">ΜΠΥΡΑ</div>
+            <div class="sp2"></div>
+            <div class="date">ΠΑΡΑΣΚΕΥΗ 15 ΑΥΓΟΥΣΤΟΥ 2026</div>
+          </div>
+          <div class="vrule"></div>
+          <div class="rgt">
+            <div class="label" style="font-size: calc(12 * var(--d))">ΑΞΙΑ</div>
+            <div class="sp2"></div>
+            <div class="price" style="font-size: calc(50 * var(--d))">4,00 €</div>
+          </div>
         </div>
-        <div class="cell">
-          <div class="label" style="font-size: calc(13 * var(--d))">ΤΙΜΗ</div>
-          <div class="sp2"></div>
-          <div class="cellnum">4,00 €</div>
+        <div class="sp4"></div>
+        <div class="rule"></div>
+        <div class="sp2"></div>
+        <div class="split micro">
+          <div>21:14 · Κ4831 · Γιώργος</div>
+          <div class="sig">ΟΠΑ! POS</div>
         </div>
-      </div>
-      <div class="sp4"></div>
-      <div class="rule"></div>
-      <div class="sp2"></div>
-      <div class="split micro">
-        <div>21:14 · Κ4831 · Γιώργος</div>
-        <div class="sig">ΟΠΑ! POS</div>
       </div>
     </div>
     <div class="cut"></div>
@@ -502,83 +570,96 @@ td { text-align: center; width: 150px; font-weight: 700; }
   <div class="col">
     <header>
       <div class="name">ΠΡΟΤΑΣΗ Γ</div>
-      <div class="title">ΠΛΑΚΕΣ</div>
+      <div class="title">ΖΩΝΕΣ</div>
+      <div class="size">72 × 50 χιλ. — κάρτα</div>
       <p class="principle">
-        Ο σκελετός είναι <b>μαύρες πλάκες σε όλο το πλάτος</b>: μία για τον σύλλογο, μία για
-        την ιδιότητα του χαρτιού. Το άσπρο σε μαύρο είναι το πιο ευανάγνωστο πράγμα που
-        υπάρχει σε θερμικό χαρτί, μέσα στο σκοτάδι, από απόσταση — και εμείς το
-        <b>ζωγραφίζουμε</b>, δεν το ζητάμε από τον εκτυπωτή, οπότε κανένα μηχάνημα δεν το αρνείται.
+        Η κάρτα χτίζεται από <b>οριζόντιες ζώνες σε όλο το πλάτος</b>: μία λευκή για την
+        ταυτότητα του συλλόγου, μία μαύρη που λέει τι είναι και για πότε, και μία κάτω με τον
+        αριθμό και την τιμή δίπλα-δίπλα. Το άσπρο σε μαύρο είναι το πιο ευανάγνωστο πράγμα
+        που υπάρχει σε θερμικό χαρτί, και το <b>ζωγραφίζουμε</b> — κανένα μηχάνημα δεν το αρνείται.
       </p>
     </header>
 
     <div class="caption">ΕΙΣΟΔΟΣ · ΚΛΗΡΩΣΗ · ΜΕ ΛΟΓΟΤΥΠΟ</div>
-    <div class="paper">
-      <div class="c"><svg class="mark" style="margin:0 auto"><use href="#emblem"/></svg></div>
-      <div class="sp2"></div>
-      <div class="plate" style="font-size: calc(24 * var(--d))">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
-      <div class="sp2"></div>
-      <div class="c fest">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
-      <div class="sp4"></div>
-      <div class="plate" style="font-size: calc(62 * var(--d))">ΕΙΣΟΔΟΣ</div>
-      <div class="sp2"></div>
-      <div class="c dateline">ΠΑΡΑΣΚΕΥΗ 15 ΑΥΓΟΥΣΤΟΥ 2026</div>
-      <div class="sp4"></div>
-      <div class="c huge">Α΄0128</div>
-      <div class="c label">ΑΡΙΘΜΟΣ ΚΛΗΡΩΣΗΣ</div>
-      <div class="sp4"></div>
-      <div class="pad">
-        <div class="rule"></div>
-        <div class="sp2"></div>
-        <div class="split">
-          <div class="price">5,00 €</div>
-          <div class="micro r">21:14 · Κ4831 · Γιώργος<br><span class="sig">ΟΠΑ! POS</span></div>
+    <div class="card">
+      <div class="bodyC">
+        <div class="padC rowmid" style="padding-bottom: calc(10 * var(--d))">
+          <svg class="mark-sm"><use href="#emblem"/></svg>
+          <div>
+            <div class="club">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
+            <div class="fest">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
+          </div>
+        </div>
+        <div class="plate" style="font-size: calc(52 * var(--d))">
+          ΕΙΣΟΔΟΣ
+          <div style="font-size: calc(17 * var(--d)); font-weight: 500; letter-spacing: 0.06em">ΠΑΡΑΣΚΕΥΗ 15 ΑΥΓΟΥΣΤΟΥ 2026</div>
+        </div>
+        <div class="padC split grow" style="align-items: center">
+          <div>
+            <div class="label" style="font-size: calc(12 * var(--d))">ΑΡΙΘΜΟΣ ΚΛΗΡΩΣΗΣ</div>
+            <div class="num" style="font-size: calc(76 * var(--d))">Α΄0128</div>
+          </div>
+          <div class="r">
+            <div class="label" style="font-size: calc(12 * var(--d))">ΤΙΜΗ</div>
+            <div class="price">5,00 €</div>
+          </div>
+        </div>
+        <div class="padC split micro" style="padding-top: 0">
+          <div>21:14 · Κ4831 · Γιώργος</div>
+          <div class="sig">ΟΠΑ! POS</div>
         </div>
       </div>
     </div>
     <div class="cut"></div>
 
     <div class="caption">ΕΙΣΟΔΟΣ · ΚΛΗΡΩΣΗ · ΜΕ ΓΡΑΜΜΑΤΑ</div>
-    <div class="paper">
-      <div class="plate" style="font-size: calc(24 * var(--d))">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
-      <div class="sp2"></div>
-      <div class="c fest">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
-      <div class="sp4"></div>
-      <div class="plate" style="font-size: calc(62 * var(--d))">ΕΙΣΟΔΟΣ</div>
-      <div class="sp2"></div>
-      <div class="c dateline">ΠΑΡΑΣΚΕΥΗ 15 ΑΥΓΟΥΣΤΟΥ 2026</div>
-      <div class="sp4"></div>
-      <div class="c huge">Α΄0128</div>
-      <div class="c label">ΑΡΙΘΜΟΣ ΚΛΗΡΩΣΗΣ</div>
-      <div class="sp4"></div>
-      <div class="pad">
-        <div class="rule"></div>
-        <div class="sp2"></div>
-        <div class="split">
-          <div class="price">5,00 €</div>
-          <div class="micro r">21:14 · Κ4831 · Γιώργος<br><span class="sig">ΟΠΑ! POS</span></div>
+    <div class="card">
+      <div class="bodyC">
+        <div class="padC c" style="padding-bottom: calc(10 * var(--d))">
+          <div class="club">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
+          <div class="fest">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
+        </div>
+        <div class="plate" style="font-size: calc(52 * var(--d))">
+          ΕΙΣΟΔΟΣ
+          <div style="font-size: calc(17 * var(--d)); font-weight: 500; letter-spacing: 0.06em">ΠΑΡΑΣΚΕΥΗ 15 ΑΥΓΟΥΣΤΟΥ 2026</div>
+        </div>
+        <div class="padC split grow" style="align-items: center">
+          <div>
+            <div class="label" style="font-size: calc(12 * var(--d))">ΑΡΙΘΜΟΣ ΚΛΗΡΩΣΗΣ</div>
+            <div class="num" style="font-size: calc(76 * var(--d))">Α΄0128</div>
+          </div>
+          <div class="r">
+            <div class="label" style="font-size: calc(12 * var(--d))">ΤΙΜΗ</div>
+            <div class="price">5,00 €</div>
+          </div>
+        </div>
+        <div class="padC split micro" style="padding-top: 0">
+          <div>21:14 · Κ4831 · Γιώργος</div>
+          <div class="sig">ΟΠΑ! POS</div>
         </div>
       </div>
     </div>
     <div class="cut"></div>
 
     <div class="caption">ΕΙΣΟΔΟΣ · ΧΩΡΙΣ ΚΛΗΡΩΣΗ</div>
-    <div class="paper">
-      <div class="c"><svg class="mark" style="margin:0 auto"><use href="#emblem"/></svg></div>
-      <div class="sp2"></div>
-      <div class="plate" style="font-size: calc(24 * var(--d))">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
-      <div class="sp2"></div>
-      <div class="c fest">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
-      <div class="sp4"></div>
-      <div class="plate" style="font-size: calc(72 * var(--d))">ΕΙΣΟΔΟΣ</div>
-      <div class="sp4"></div>
-      <div class="c dateline">ΠΑΡΑΣΚΕΥΗ 15 ΑΥΓΟΥΣΤΟΥ 2026</div>
-      <div class="sp4"></div>
-      <div class="c big">5,00 €</div>
-      <div class="sp4"></div>
-      <div class="pad">
-        <div class="rule"></div>
-        <div class="sp2"></div>
-        <div class="split micro">
+    <div class="card">
+      <div class="bodyC">
+        <div class="padC rowmid" style="padding-bottom: calc(10 * var(--d))">
+          <svg class="mark-sm"><use href="#emblem"/></svg>
+          <div>
+            <div class="club">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
+            <div class="fest">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
+          </div>
+        </div>
+        <div class="plate" style="font-size: calc(66 * var(--d))">
+          ΕΙΣΟΔΟΣ
+          <div style="font-size: calc(18 * var(--d)); font-weight: 500; letter-spacing: 0.06em">ΠΑΡΑΣΚΕΥΗ 15 ΑΥΓΟΥΣΤΟΥ 2026</div>
+        </div>
+        <div class="padC split grow" style="align-items: center">
+          <div class="label" style="font-size: calc(13 * var(--d))">ΤΙΜΗ ΕΙΣΟΔΟΥ</div>
+          <div class="price" style="font-size: calc(64 * var(--d))">5,00 €</div>
+        </div>
+        <div class="padC split micro" style="padding-top: 0">
           <div>21:14 · Κ4831 · Γιώργος</div>
           <div class="sig">ΟΠΑ! POS</div>
         </div>
@@ -587,23 +668,21 @@ td { text-align: center; width: 150px; font-weight: 700; }
     <div class="cut"></div>
 
     <div class="caption">ΚΟΥΠΟΝΙ</div>
-    <div class="paper">
-      <div class="plate" style="font-size: calc(24 * var(--d))">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
-      <div class="sp2"></div>
-      <div class="c fest">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
-      <div class="sp4"></div>
-      <div class="c label">ΠΟΤΑ</div>
-      <div class="sp2"></div>
-      <div class="plate" style="font-size: calc(72 * var(--d))">ΜΠΥΡΑ</div>
-      <div class="sp4"></div>
-      <div class="c dateline">ΠΑΡΑΣΚΕΥΗ 15 ΑΥΓΟΥΣΤΟΥ 2026</div>
-      <div class="sp4"></div>
-      <div class="c big">4,00 €</div>
-      <div class="sp4"></div>
-      <div class="pad">
-        <div class="rule"></div>
-        <div class="sp2"></div>
-        <div class="split micro">
+    <div class="card">
+      <div class="bodyC">
+        <div class="padC c" style="padding-bottom: calc(10 * var(--d))">
+          <div class="club">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
+          <div class="fest">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
+        </div>
+        <div class="plate" style="font-size: calc(66 * var(--d))">
+          ΜΠΥΡΑ
+          <div style="font-size: calc(18 * var(--d)); font-weight: 500; letter-spacing: 0.06em">ΕΞΑΡΓΥΡΩΝΕΤΑΙ ΣΤΟ ΠΟΣΤΟ ΠΟΤΑ</div>
+        </div>
+        <div class="padC split grow" style="align-items: center">
+          <div class="date">ΠΑΡΑΣΚΕΥΗ<br>15 ΑΥΓΟΥΣΤΟΥ 2026</div>
+          <div class="price" style="font-size: calc(56 * var(--d))">4,00 €</div>
+        </div>
+        <div class="padC split micro" style="padding-top: 0">
           <div>21:14 · Κ4831 · Γιώργος</div>
           <div class="sig">ΟΠΑ! POS</div>
         </div>
@@ -613,112 +692,141 @@ td { text-align: center; width: 150px; font-weight: 700; }
   </div>
 
   <!-- =============================== Δ ================================== -->
-  <div class="col">
+  <div class="col wide">
     <header>
       <div class="name">ΠΡΟΤΑΣΗ Δ</div>
-      <div class="title">ΤΑΥΤΟΤΗΤΑ</div>
+      <div class="title">Η ΜΕΓΑΛΗ ΚΑΡΤΑ</div>
+      <div class="size">108 × 72 χιλ. — τυπώνεται γυρισμένη</div>
       <p class="principle">
-        Το χαρτί απαντά <b>με μία γραμμή, μία φορά</b>: «ΕΙΣΟΔΟΣ — ΠΑΡΑΣΚΕΥΗ 15 ΑΥΓΟΥΣΤΟΥ
-        2026». Τι είναι και για πότε, μαζί, γιατί στην πύλη αυτά τα δύο ελέγχονται πάντα
-        μαζί. Από κάτω μένει ένα μόνο μεγάλο αντικείμενο — ο αριθμός. Το λογότυπο στέκεται
-        δίπλα στο όνομα, μικρό και καθαρό, όπως σε σφραγίδα.
+        Η κάρτα <b>γυρίζει 90°</b>: το φάρδος του ρολού γίνεται το ύψος της, και το μήκος το
+        αποφασίζουμε εμείς. Βγαίνει εισιτήριο σε <b>πραγματικό μέγεθος συναυλίας</b>, με
+        χώρο για σήμα, όνομα, ιδιότητα, ημερομηνία και έναν αριθμό που φαίνεται από μακριά.
+        Μπορούμε να το κάνουμε επειδή ζωγραφίζουμε εμείς την εικόνα — αλλά είναι και το
+        βαρύτερο για ένα φτηνό μηχάνημα.
       </p>
     </header>
 
+    <div class="turned">↻ ΒΓΑΙΝΕΙ ΑΠΟ ΤΟΝ ΕΚΤΥΠΩΤΗ ΓΥΡΙΣΜΕΝΗ — ΕΔΩ ΦΑΙΝΕΤΑΙ ΟΠΩΣ ΤΗΝ ΚΡΑΤΑΕΙ Ο ΠΕΛΑΤΗΣ</div>
+
     <div class="caption">ΕΙΣΟΔΟΣ · ΚΛΗΡΩΣΗ · ΜΕ ΛΟΓΟΤΥΠΟ</div>
-    <div class="paper pad">
-      <div class="rowmid">
-        <svg class="mark-xs"><use href="#emblem"/></svg>
-        <div>
-          <div class="club" style="font-size: calc(21 * var(--d))">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
-          <div class="fest" style="font-size: calc(17 * var(--d))">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
+    <div class="card w">
+      <div class="bodyD">
+        <div class="grow" style="display:flex; flex-direction:column">
+          <div class="rowmid">
+            <svg class="mark-lg"><use href="#emblem"/></svg>
+            <div>
+              <div class="club" style="font-size: calc(30 * var(--d))">ΠΟΛΙΤΙΣΤΙΚΟΣ<br>ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
+              <div class="fest" style="font-size: calc(21 * var(--d))">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
+            </div>
+          </div>
+          <div class="sp8"></div>
+          <div class="rule"></div>
+          <div class="sp8"></div>
+          <div class="whatbig">ΕΙΣΟΔΟΣ</div>
+          <div class="sp2"></div>
+          <div class="date" style="font-size: calc(26 * var(--d))">ΠΑΡΑΣΚΕΥΗ 15 ΑΥΓΟΥΣΤΟΥ 2026</div>
+          <div class="push"></div>
+          <div class="micro">21:14 · Κ4831 · Γιώργος · ΟΠΑ! POS</div>
+        </div>
+        <div class="vrule"></div>
+        <div style="width: calc(300 * var(--d)); flex:none; display:flex; flex-direction:column; justify-content:center; text-align:center">
+          <div class="label">ΑΡΙΘΜΟΣ ΚΛΗΡΩΣΗΣ</div>
+          <div class="sp2"></div>
+          <div class="numbig">Α΄0128</div>
+          <div class="sp8"></div>
+          <div class="rule-hi"></div>
+          <div class="sp4"></div>
+          <div class="price" style="font-size: calc(56 * var(--d))">5,00 €</div>
         </div>
       </div>
-      <div class="sp4"></div>
-      <div class="rule"></div>
-      <div class="sp4"></div>
-      <div class="postsm" style="font-size: calc(27 * var(--d))">ΕΙΣΟΔΟΣ</div>
-      <div class="dateline" style="font-weight: 400">ΠΑΡΑΣΚΕΥΗ 15 ΑΥΓΟΥΣΤΟΥ 2026</div>
-      <div class="sp4"></div>
-      <div class="huge" style="font-size: calc(118 * var(--d))">Α΄0128</div>
-      <div class="label">ΑΡΙΘΜΟΣ ΚΛΗΡΩΣΗΣ</div>
-      <div class="sp4"></div>
-      <div class="rule-hi"></div>
-      <div class="sp2"></div>
-      <div class="split">
-        <div class="price">5,00 €</div>
-        <div class="micro r">21:14 · Κ4831 · Γιώργος<br><span class="sig">ΟΠΑ! POS</span></div>
-      </div>
     </div>
-    <div class="cut"></div>
+    <div class="cut w"></div>
 
     <div class="caption">ΕΙΣΟΔΟΣ · ΚΛΗΡΩΣΗ · ΜΕ ΓΡΑΜΜΑΤΑ</div>
-    <div class="paper pad">
-      <div class="club" style="font-size: calc(21 * var(--d))">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
-      <div class="fest" style="font-size: calc(17 * var(--d))">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
-      <div class="sp4"></div>
-      <div class="rule"></div>
-      <div class="sp4"></div>
-      <div class="postsm" style="font-size: calc(27 * var(--d))">ΕΙΣΟΔΟΣ</div>
-      <div class="dateline" style="font-weight: 400">ΠΑΡΑΣΚΕΥΗ 15 ΑΥΓΟΥΣΤΟΥ 2026</div>
-      <div class="sp4"></div>
-      <div class="huge" style="font-size: calc(118 * var(--d))">Α΄0128</div>
-      <div class="label">ΑΡΙΘΜΟΣ ΚΛΗΡΩΣΗΣ</div>
-      <div class="sp4"></div>
-      <div class="rule-hi"></div>
-      <div class="sp2"></div>
-      <div class="split">
-        <div class="price">5,00 €</div>
-        <div class="micro r">21:14 · Κ4831 · Γιώργος<br><span class="sig">ΟΠΑ! POS</span></div>
-      </div>
-    </div>
-    <div class="cut"></div>
-
-    <div class="caption">ΕΙΣΟΔΟΣ · ΧΩΡΙΣ ΚΛΗΡΩΣΗ</div>
-    <div class="paper pad">
-      <div class="rowmid">
-        <svg class="mark-xs"><use href="#emblem"/></svg>
-        <div>
-          <div class="club" style="font-size: calc(21 * var(--d))">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
-          <div class="fest" style="font-size: calc(17 * var(--d))">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
+    <div class="card w">
+      <div class="bodyD">
+        <div class="grow" style="display:flex; flex-direction:column">
+          <div class="club" style="font-size: calc(30 * var(--d))">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
+          <div class="fest" style="font-size: calc(21 * var(--d))">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
+          <div class="sp8"></div>
+          <div class="rule"></div>
+          <div class="sp8"></div>
+          <div class="whatbig">ΕΙΣΟΔΟΣ</div>
+          <div class="sp2"></div>
+          <div class="date" style="font-size: calc(26 * var(--d))">ΠΑΡΑΣΚΕΥΗ 15 ΑΥΓΟΥΣΤΟΥ 2026</div>
+          <div class="push"></div>
+          <div class="micro">21:14 · Κ4831 · Γιώργος · ΟΠΑ! POS</div>
+        </div>
+        <div class="vrule"></div>
+        <div style="width: calc(300 * var(--d)); flex:none; display:flex; flex-direction:column; justify-content:center; text-align:center">
+          <div class="label">ΑΡΙΘΜΟΣ ΚΛΗΡΩΣΗΣ</div>
+          <div class="sp2"></div>
+          <div class="numbig">Α΄0128</div>
+          <div class="sp8"></div>
+          <div class="rule-hi"></div>
+          <div class="sp4"></div>
+          <div class="price" style="font-size: calc(56 * var(--d))">5,00 €</div>
         </div>
       </div>
-      <div class="sp4"></div>
-      <div class="rule"></div>
-      <div class="sp8"></div>
-      <div class="big" style="font-size: calc(76 * var(--d))">ΕΙΣΟΔΟΣ</div>
-      <div class="sp2"></div>
-      <div class="dateline" style="font-weight: 400">ΠΑΡΑΣΚΕΥΗ 15 ΑΥΓΟΥΣΤΟΥ 2026</div>
-      <div class="sp8"></div>
-      <div class="rule-hi"></div>
-      <div class="sp2"></div>
-      <div class="split">
-        <div class="price">5,00 €</div>
-        <div class="micro r">21:14 · Κ4831 · Γιώργος<br><span class="sig">ΟΠΑ! POS</span></div>
+    </div>
+    <div class="cut w"></div>
+
+    <div class="caption">ΕΙΣΟΔΟΣ · ΧΩΡΙΣ ΚΛΗΡΩΣΗ</div>
+    <div class="card w">
+      <div class="bodyD">
+        <div class="grow" style="display:flex; flex-direction:column">
+          <div class="rowmid">
+            <svg class="mark-lg"><use href="#emblem"/></svg>
+            <div>
+              <div class="club" style="font-size: calc(30 * var(--d))">ΠΟΛΙΤΙΣΤΙΚΟΣ<br>ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
+              <div class="fest" style="font-size: calc(21 * var(--d))">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
+            </div>
+          </div>
+          <div class="sp8"></div>
+          <div class="rule"></div>
+          <div class="sp8"></div>
+          <div class="whatbig" style="font-size: calc(104 * var(--d))">ΕΙΣΟΔΟΣ</div>
+          <div class="sp2"></div>
+          <div class="date" style="font-size: calc(26 * var(--d))">ΠΑΡΑΣΚΕΥΗ 15 ΑΥΓΟΥΣΤΟΥ 2026</div>
+          <div class="push"></div>
+          <div class="micro">21:14 · Κ4831 · Γιώργος · ΟΠΑ! POS</div>
+        </div>
+        <div class="vrule"></div>
+        <div style="width: calc(300 * var(--d)); flex:none; display:flex; flex-direction:column; justify-content:center; text-align:center">
+          <div class="label">ΤΙΜΗ ΕΙΣΟΔΟΥ</div>
+          <div class="sp4"></div>
+          <div class="numbig" style="font-size: calc(84 * var(--d))">5,00 €</div>
+        </div>
       </div>
     </div>
-    <div class="cut"></div>
+    <div class="cut w"></div>
 
     <div class="caption">ΚΟΥΠΟΝΙ</div>
-    <div class="paper pad">
-      <div class="club" style="font-size: calc(21 * var(--d))">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
-      <div class="fest" style="font-size: calc(17 * var(--d))">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
-      <div class="sp4"></div>
-      <div class="rule"></div>
-      <div class="sp4"></div>
-      <div class="postsm" style="font-size: calc(27 * var(--d))">ΠΟΤΑ</div>
-      <div class="dateline" style="font-weight: 400">ΠΑΡΑΣΚΕΥΗ 15 ΑΥΓΟΥΣΤΟΥ 2026</div>
-      <div class="sp4"></div>
-      <div class="big" style="font-size: calc(88 * var(--d))">ΜΠΥΡΑ</div>
-      <div class="sp4"></div>
-      <div class="rule-hi"></div>
-      <div class="sp2"></div>
-      <div class="split">
-        <div class="price">4,00 €</div>
-        <div class="micro r">21:14 · Κ4831 · Γιώργος<br><span class="sig">ΟΠΑ! POS</span></div>
+    <div class="card w">
+      <div class="bodyD">
+        <div class="grow" style="display:flex; flex-direction:column">
+          <div class="club" style="font-size: calc(30 * var(--d))">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
+          <div class="fest" style="font-size: calc(21 * var(--d))">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
+          <div class="sp8"></div>
+          <div class="rule"></div>
+          <div class="sp8"></div>
+          <div class="label">ΕΞΑΡΓΥΡΩΝΕΤΑΙ ΣΤΟ ΠΟΣΤΟ ΠΟΤΑ</div>
+          <div class="sp2"></div>
+          <div class="whatbig" style="font-size: calc(104 * var(--d))">ΜΠΥΡΑ</div>
+          <div class="sp2"></div>
+          <div class="date" style="font-size: calc(26 * var(--d))">ΠΑΡΑΣΚΕΥΗ 15 ΑΥΓΟΥΣΤΟΥ 2026</div>
+          <div class="push"></div>
+          <div class="micro">21:14 · Κ4831 · Γιώργος · ΟΠΑ! POS</div>
+        </div>
+        <div class="vrule"></div>
+        <div style="width: calc(300 * var(--d)); flex:none; display:flex; flex-direction:column; justify-content:center; text-align:center">
+          <div class="label">ΑΞΙΑ</div>
+          <div class="sp4"></div>
+          <div class="numbig" style="font-size: calc(84 * var(--d))">4,00 €</div>
+        </div>
       </div>
     </div>
-    <div class="cut"></div>
+    <div class="cut w"></div>
   </div>
 
 </div>
@@ -726,61 +834,66 @@ td { text-align: center; width: 150px; font-weight: 700; }
 <table>
   <caption>ΠΟΙΑ ΚΕΡΔΙΖΕΙ ΣΕ ΤΙ</caption>
   <thead>
-    <tr><th></th><th>Α — ΑΞΟΝΑΣ</th><th>Β — ΣΤΗΛΕΣ</th><th>Γ — ΠΛΑΚΕΣ</th><th>Δ — ΤΑΥΤΟΤΗΤΑ</th></tr>
+    <tr><th></th><th>Α — ΤΑΜΠΛΟ</th><th>Β — ΠΡΟΣΚΛΗΤΗΡΙΟ</th><th>Γ — ΖΩΝΕΣ</th><th>Δ — Η ΜΕΓΑΛΗ ΚΑΡΤΑ</th></tr>
   </thead>
   <tbody>
     <tr>
+      <th>Φαίνεται εισιτήριο πριν διαβαστεί λέξη</th>
+      <td class="win">★</td><td>ναι</td><td>ναι</td><td class="win">★</td>
+    </tr>
+    <tr>
       <th>Ο πορτιέρης βλέπει τι κρατάει, στο σκοτάδι, χωρίς να το φέρει κοντά</th>
-      <td>ναι</td><td>ναι</td><td class="win">★</td><td>ναι</td>
+      <td class="win">★</td><td class="no">το πιο ήσυχο</td><td class="win">★</td><td class="win">★</td>
     </tr>
     <tr>
       <th>Ο πελάτης βρίσκει τον αριθμό του όταν τον φωνάξουν</th>
-      <td>ναι</td><td class="no">ο μικρότερος αριθμός</td><td class="win">★</td><td class="win">★</td>
+      <td>ναι</td><td class="no">ο μικρότερος αριθμός</td><td>ναι</td><td class="win">★</td>
     </tr>
     <tr>
-      <th>Το λογότυπο κάθεται φυσικά και δεν αλλάζει τη δομή</th>
-      <td class="win">★</td><td class="win">★</td><td>ναι</td><td>ναι</td>
+      <th>Το λογότυπο έχει χώρο να φανεί, όχι απλώς να χωρέσει</th>
+      <td>ναι</td><td>ναι</td><td>ναι</td><td class="win">★</td>
     </tr>
     <tr>
-      <th>Δείχνει έγγραφο εκδήλωσης, όχι απόδειξη ταμείου</th>
+      <th>Μπαίνει σε τσέπη ή πορτοφόλι χωρίς δίπλωμα</th>
+      <td class="win">★</td><td class="win">★</td><td class="win">★</td><td class="no">θέλει δίπλωμα</td>
+    </tr>
+    <tr>
+      <th>Ο ίδιος σκελετός δουλεύει αναλλοίωτος και ως κουπόνι</th>
+      <td class="win">★</td><td>ναι</td><td class="win">★</td><td>ναι</td>
+    </tr>
+    <tr>
+      <th>Χωρίς κλήρωση η κάρτα στέκεται μόνη της</th>
       <td>ναι</td><td class="win">★</td><td class="win">★</td><td>ναι</td>
     </tr>
     <tr>
-      <th>Το ίδιο πρότυπο δουλεύει αναλλοίωτο ως κουπόνι</th>
-      <td>ναι</td><td>ναι</td><td class="win">★</td><td class="win">★</td>
+      <th>Αντέχει σύλλογο με πολύ μακρύ όνομα</th>
+      <td>ναι</td><td class="no">στενεύει η αριστερή στήλη</td><td class="win">★</td><td class="win">★</td>
     </tr>
     <tr>
-      <th>Χωρίς κλήρωση το χαρτί στέκεται μόνο του</th>
-      <td>ναι</td><td class="win">★</td><td class="win">★</td><td>ναι</td>
+      <th>Στέκεται και σε μηχάνημα 512 κουκκίδων</th>
+      <td class="win">★</td><td class="no">στενεύει η δεξιά στήλη</td><td class="win">★</td><td>ναι</td>
     </tr>
     <tr>
-      <th>Αντέχει σύλλογο με πολύ μακρύ όνομα, χωρίς να χαλάσει</th>
-      <td class="win">★</td><td>ναι</td><td>ναι</td><td class="no">στενεύει δίπλα στη σφραγίδα</td>
-    </tr>
-    <tr>
-      <th>Κανείς δεν διαβάζει τον Κ4831 σαν αριθμό κλήρωσης</th>
-      <td class="win">★</td><td class="win">★</td><td class="win">★</td><td class="win">★</td>
-    </tr>
-    <tr>
-      <th>Στέκεται σε 512 κουκκίδες, στα φτηνά μηχανήματα</th>
-      <td class="win">★</td><td class="no">το κουτί στενεύει</td><td>ναι</td><td>ναι</td>
+      <th>Κίνδυνος να μην τα βγάλει πέρα ένα φτηνό μηχάνημα με την εικόνα</th>
+      <td>μικρός</td><td>μικρός</td><td>μικρός</td><td class="no">ο μεγαλύτερος</td>
     </tr>
   </tbody>
 </table>
 
 <div class="rec">
-  <b>Η σύστασή μου: Γ — ΠΛΑΚΕΣ.</b>
-  Ένα εισιτήριο πανηγυριού διαβάζεται σε δύο στιγμές και μόνο σε δύο: <b>στην πύλη</b>, όπου
-  πρέπει να φανεί ότι είναι είσοδος και ότι είναι για απόψε, και <b>στην κλήρωση</b>, όπου
-  πρέπει να βρεθεί ο αριθμός. Και οι δύο συμβαίνουν στο σκοτάδι. Η μαύρη πλάκα είναι το μόνο
-  πράγμα που είναι εξίσου ευανάγνωστο κάτω από μια λάμπα, σε ένα κινητό και σε μια γωνία
-  χωρίς φως — και επειδή το <b>ζωγραφίζουμε εμείς</b> αντί να το ζητήσουμε από τον εκτυπωτή,
-  δεν υπάρχει φτηνό μηχάνημα που να μας το αρνηθεί. Είναι επίσης η μόνη πρόταση όπου ο ίδιος
-  ακριβώς σκελετός δίνει σωστό αποτέλεσμα και στο κουπόνι, χωρίς καμία εξαίρεση: η πλάκα
-  γράφει «ΜΠΥΡΑ» αντί για «ΕΙΣΟΔΟΣ» και τελείωσε.
+  <b>Η σύστασή μου: Α — ΤΑΜΠΛΟ.</b>
+  Η κατακόρυφη μαύρη ζώνη στην άκρη είναι <b>το σήμα κατατεθέν του εισιτηρίου</b> — είναι
+  αυτό που έχουν τα εισιτήρια κινηματογράφου και συναυλίας, και είναι ο λόγος που τα
+  αναγνωρίζεις μέσα σε ένα συρτάρι χωρίς να διαβάσεις τίποτα. Ταυτόχρονα κάνει τρεις
+  δουλειές μαζί: λέει τι είναι το χαρτί, το κάνει ευανάγνωστο στο σκοτάδι, και <b>αδειάζει
+  ολόκληρο το υπόλοιπο πλάτος</b> για το σήμα, το όνομα και τον αριθμό — γι' αυτό είναι η
+  μόνη που δεν στριμώχνεται πουθενά. Στο κουπόνι η ζώνη γράφει «ΜΠΥΡΑ» αντί για «ΕΙΣΟΔΟΣ»
+  και τελείωσε: ίδιος σκελετός, καμία εξαίρεση.
   <br><br>
-  Το <b>Β</b> είναι το πιο κομψό και το επιλέγει ένας σύλλογος που θέλει χαρτί σαν
-  προσκλητήριο· χάνει μόνο στο μέγεθος του αριθμού. Το <b>Α</b> είναι η ασφαλής, συντηρητική
-  απάντηση που δεν χαλάει ποτέ με τίποτα. Το <b>Δ</b> είναι το πιο σύγχρονο και το πιο
-  κατηγορηματικό, και είναι το μόνο που στενεύει με πολύ μακρύ όνομα συλλόγου.
+  Το <b>Δ</b> είναι το εντυπωσιακότερο και το μόνο με πραγματικό μέγεθος εισιτηρίου
+  συναυλίας. Αν το θέλεις, το χτίζω — αλλά με δύο τίμια «αλλά»: <b>δεν μπαίνει σε τσέπη
+  χωρίς δίπλωμα</b>, και είναι η βαρύτερη εικόνα που θα ζητήσουμε ποτέ από φτηνό μηχάνημα,
+  σε ένα σημείο όπου δεν έχουμε ακόμη δοκιμάσει κανένα. Το <b>Γ</b> είναι η ασφαλής και
+  καθαρή απάντηση που δεν χαλάει με τίποτα· το <b>Β</b> είναι το ωραιότερο για σύλλογο που
+  θέλει χαρτί σαν προσκλητήριο, και το μόνο χωρίς καθόλου μαύρο.
 </div>
