@@ -1,0 +1,661 @@
+<meta charset="utf-8">
+<title>ΟΠΑ! POS — Το πρότυπο του εισιτηρίου</title>
+
+<!--
+  The typeface embedded below is Manrope.
+  Copyright 2018 The Manrope Project Authors (https://github.com/sharanda/manrope)
+  Licensed under the SIL Open Font License, Version 1.1 — https://openfontlicense.org
+-->
+
+<style>
+@font-face {
+  font-family: "Manrope";
+  src: url(data:font/ttf;base64,__FONT_MANROPE__) format("truetype");
+  font-weight: 200 800;
+}
+
+/* One dot of the printer's head. Everything on the paper is sized in dots,
+   because that is the only unit the machine has. 576 dots = 72 mm printed. */
+:root {
+  --d: 0.78px;
+  --paper: calc(576 * var(--d));
+  --ink: #101215;
+  --page: #16181c;
+  --panel: #1e2126;
+  --line: #2e333a;
+  --dim: #8b949e;
+  --accent: #e8b04b;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--page);
+  color: #e6e9ee;
+  font-family: "Manrope", system-ui, sans-serif;
+  font-weight: 400;
+  padding: 56px 64px 96px;
+}
+
+h1 {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.lede {
+  max-width: 1180px;
+  margin-top: 14px;
+  font-size: 17px;
+  line-height: 1.6;
+  color: #b8c0cb;
+}
+
+.lede b { color: #fff; font-weight: 700; }
+
+/* ---------- the requirement list every proposal is measured against ------- */
+
+.reqs {
+  margin: 34px 0 0;
+  padding: 26px 30px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  max-width: 1180px;
+}
+
+.reqs h2 {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+
+.reqs ol { columns: 2; column-gap: 44px; padding-left: 20px; }
+
+.reqs li {
+  font-size: 15px;
+  line-height: 1.5;
+  margin-bottom: 9px;
+  break-inside: avoid;
+  color: #ccd3dc;
+}
+
+.reqs li b { color: #fff; font-weight: 700; }
+
+/* ---------- the four columns --------------------------------------------- */
+
+.grid {
+  display: flex;
+  gap: 40px;
+  margin-top: 54px;
+  align-items: flex-start;
+}
+
+.col { width: var(--paper); flex: none; }
+
+.col > header { min-height: 150px; }
+
+.name {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  color: var(--accent);
+}
+
+.title { font-size: 25px; font-weight: 800; margin-top: 6px; }
+
+.principle {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: #a9b2bd;
+  margin-top: 10px;
+}
+
+.caption {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  color: #7d8794;
+  margin: 30px 0 9px;
+}
+
+/* ---------- the paper ----------------------------------------------------- */
+
+.paper {
+  width: var(--paper);
+  background: #fff;
+  color: #000;
+  padding: calc(16 * var(--d)) 0 calc(14 * var(--d));
+  /* A thermal head burns a dot or it does not. Nothing here is grey. */
+  -webkit-font-smoothing: none;
+}
+
+/* The cut. No gap: ten tickets come off as one strip. */
+.cut {
+  width: var(--paper);
+  border-top: 2px dashed #454b54;
+  margin-bottom: 26px;
+}
+
+.c { text-align: center; }
+.r { text-align: right; }
+
+.club   { font-size: calc(27 * var(--d)); font-weight: 800; line-height: 1.15; }
+.fest   { font-size: calc(20 * var(--d)); font-weight: 500; line-height: 1.3; }
+.post   { font-size: calc(72 * var(--d)); font-weight: 800; line-height: 1.06; }
+.postsm { font-size: calc(33 * var(--d)); font-weight: 800; line-height: 1.15; letter-spacing: 0.06em; }
+.serial { font-size: calc(104 * var(--d)); font-weight: 800; line-height: 1.02; letter-spacing: 0.01em; }
+.label  { font-size: calc(16 * var(--d)); font-weight: 700; letter-spacing: 0.2em; }
+.price  { font-size: calc(46 * var(--d)); font-weight: 800; line-height: 1.1; }
+.stamp  { font-size: calc(17 * var(--d)); font-weight: 500; line-height: 1.4; }
+.sig    { font-size: calc(14 * var(--d)); font-weight: 700; letter-spacing: 0.1em; }
+
+.rule    { height: calc(3 * var(--d)); background: #000; }
+.rule-hi { height: calc(6 * var(--d)); background: #000; }
+
+.band {
+  background: #000;
+  color: #fff;
+  font-weight: 800;
+  text-align: center;
+  padding: calc(6 * var(--d)) 0;
+}
+
+.sp2  { height: calc(6 * var(--d)); }
+.sp4  { height: calc(12 * var(--d)); }
+.sp8  { height: calc(22 * var(--d)); }
+
+/* Γ only — the paper drawn as a document. */
+.frame {
+  border: calc(4 * var(--d)) solid #000;
+  margin: 0 calc(10 * var(--d));
+  padding: 0 calc(12 * var(--d)) calc(10 * var(--d));
+}
+
+.boxnum {
+  border: calc(3 * var(--d)) solid #000;
+  padding: calc(5 * var(--d)) calc(12 * var(--d));
+  display: inline-block;
+  font-size: calc(46 * var(--d));
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.split { display: flex; align-items: flex-end; justify-content: space-between; }
+
+/* Δ only — everything on as few lines as the paper allows. */
+.oneline {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: calc(20 * var(--d));
+}
+
+/* ---------- the verdict table -------------------------------------------- */
+
+table {
+  margin-top: 76px;
+  border-collapse: collapse;
+  font-size: 15px;
+  max-width: 1400px;
+}
+
+caption {
+  text-align: left;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: var(--accent);
+  padding-bottom: 16px;
+}
+
+th, td {
+  border-bottom: 1px solid var(--line);
+  padding: 13px 18px;
+  text-align: left;
+}
+
+thead th {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: var(--dim);
+  font-weight: 800;
+}
+
+tbody th { font-weight: 500; color: #ccd3dc; width: 620px; }
+
+td { text-align: center; width: 120px; font-weight: 700; }
+
+.win { color: var(--accent); }
+.no  { color: #6b7480; }
+
+.rec {
+  margin-top: 46px;
+  padding: 26px 30px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent);
+  border-radius: 10px;
+  max-width: 1400px;
+  font-size: 16.5px;
+  line-height: 1.65;
+  color: #ccd3dc;
+}
+
+.rec b { color: #fff; font-weight: 700; }
+</style>
+
+<h1>Το πρότυπο του εισιτηρίου</h1>
+
+<p class="lede">
+  Τέσσερις <b>ολόκληρες</b> προτάσεις. Κάθε μία λύνει και τα έντεκα από κάτω μόνη της —
+  αυτό που αλλάζει είναι <b>ποια απαίτηση κερδίζει όταν δύο συγκρούονται</b>.
+  Και τα τέσσερα χαρτιά είναι στην ίδια κλίμακα, οπότε το ύψος τους συγκρίνεται με το μάτι.
+  Η γραμματοσειρά είναι η Manrope, η ίδια που ταξιδεύει μέσα στο πρόγραμμα, και δεν υπάρχει
+  πουθενά γκρι: η θερμική κεφαλή ή καίει την κουκκίδα ή δεν την καίει.
+</p>
+
+<section class="reqs">
+  <h2>ΤΙ ΠΡΕΠΕΙ ΝΑ ΛΥΝΕΙ ΚΑΘΕ ΜΙΑ</h2>
+  <ol>
+    <li>Ο πελάτης <b>κρατάει</b> το χαρτί — ένα κομμάτι, κανένα στέλεχος.</li>
+    <li>Ο σειριακός φέρει <b>το γράμμα του ταμείου</b>, αλλιώς δύο ταμεία δίνουν το ίδιο 0128.</li>
+    <li>Ο αριθμός κλήρωσης <b>δεν μπερδεύεται</b> με τον αριθμό παραγγελίας.</li>
+    <li>Η <b>ημερομηνία τυπώνεται πάντα</b> — αλλιώς το περσινό εισιτήριο περνάει.</li>
+    <li>Η τιμή είναι <b>ενός</b> εισιτηρίου, ποτέ σύνολο.</li>
+    <li>Εισιτήριο μέσα σε πακέτο <b>δεν τυπώνει τιμή</b>, αντί για 0,00 €.</li>
+    <li>Χωρίς κλήρωση το χαρτί <b>δεν αδειάζει</b>.</li>
+    <li>Στο κουπόνι πρωταγωνιστεί <b>το προϊόν</b>, όχι το πόστο.</li>
+    <li>Το πάνω μέρος ρυθμίζεται <b>χωριστά από το απόκομμα</b> — δέκα εισιτήρια, δέκα εικόνες.</li>
+    <li>Κοπή <b>χωρίς κενό</b>: δέκα εισιτήρια βγαίνουν σαν μία λωρίδα.</li>
+    <li>«ΟΠΑ! POS» μικρό, στο πόδι, με διακόπτη.</li>
+  </ol>
+</section>
+
+<div class="grid">
+
+  <!-- =============================== Α ================================== -->
+  <div class="col">
+    <header>
+      <div class="name">ΠΡΟΤΑΣΗ Α</div>
+      <div class="title">Η ΠΥΛΗ</div>
+      <p class="principle">
+        Κερδίζει ο πορτιέρης. Το πόστο είναι πάντα το ψηλότερο πράγμα, και ο αριθμός
+        κλήρωσης βρίσκεται αμέσως επειδή κάθεται μέσα σε μαύρη λωρίδα — αλλά δεύτερος.
+        Η ουρά είναι στην πύλη· η κλήρωση γίνεται μία φορά.
+      </p>
+    </header>
+
+    <div class="caption">ΕΙΣΟΔΟΣ — ΜΕ ΚΛΗΡΩΣΗ</div>
+    <div class="paper">
+      <div class="c club">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
+      <div class="c fest">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
+      <div class="sp4"></div>
+      <div class="rule-hi"></div>
+      <div class="sp8"></div>
+      <div class="c post">ΕΙΣΟΔΟΣ</div>
+      <div class="sp8"></div>
+      <div class="band" style="font-size: calc(46 * var(--d))">Α΄ 0128</div>
+      <div class="c label" style="margin-top: calc(5 * var(--d))">ΑΡΙΘΜΟΣ ΚΛΗΡΩΣΗΣ</div>
+      <div class="sp8"></div>
+      <div class="c price">5,00 €</div>
+      <div class="sp8"></div>
+      <div class="rule"></div>
+      <div class="sp2"></div>
+      <div class="c stamp">15/08/2026&nbsp;&nbsp; 21:14&nbsp;&nbsp; Ταμίας: Γιώργος</div>
+      <div class="c stamp">ΠΑΡΑΓΓΕΛΙΑ Κ4831</div>
+      <div class="sp2"></div>
+      <div class="c sig">ΟΠΑ! POS</div>
+    </div>
+    <div class="cut"></div>
+
+    <div class="caption">ΕΙΣΟΔΟΣ — ΧΩΡΙΣ ΚΛΗΡΩΣΗ</div>
+    <div class="paper">
+      <div class="c club">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
+      <div class="c fest">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
+      <div class="sp4"></div>
+      <div class="rule-hi"></div>
+      <div class="sp8"></div>
+      <div class="c post">ΕΙΣΟΔΟΣ</div>
+      <div class="sp8"></div>
+      <div class="c price">5,00 €</div>
+      <div class="sp8"></div>
+      <div class="rule"></div>
+      <div class="sp2"></div>
+      <div class="c stamp">15/08/2026&nbsp;&nbsp; 21:14&nbsp;&nbsp; Ταμίας: Γιώργος</div>
+      <div class="c stamp">ΠΑΡΑΓΓΕΛΙΑ Κ4831</div>
+      <div class="sp2"></div>
+      <div class="c sig">ΟΠΑ! POS</div>
+    </div>
+    <div class="cut"></div>
+
+    <div class="caption">ΚΟΥΠΟΝΙ</div>
+    <div class="paper">
+      <div class="c club">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
+      <div class="sp4"></div>
+      <div class="rule-hi"></div>
+      <div class="sp8"></div>
+      <div class="c postsm">ΠΟΤΑ</div>
+      <div class="c post">ΜΠΥΡΑ</div>
+      <div class="sp8"></div>
+      <div class="c price">4,00 €</div>
+      <div class="sp8"></div>
+      <div class="rule"></div>
+      <div class="sp2"></div>
+      <div class="c stamp">15/08/2026&nbsp;&nbsp; 21:14&nbsp;&nbsp; Ταμίας: Γιώργος</div>
+      <div class="c stamp">ΠΑΡΑΓΓΕΛΙΑ Κ4831</div>
+      <div class="sp2"></div>
+      <div class="c sig">ΟΠΑ! POS</div>
+    </div>
+    <div class="cut"></div>
+  </div>
+
+  <!-- =============================== Β ================================== -->
+  <div class="col">
+    <header>
+      <div class="name">ΠΡΟΤΑΣΗ Β</div>
+      <div class="title">Ο ΑΡΙΘΜΟΣ</div>
+      <p class="principle">
+        Κερδίζει αυτός που κρατάει το χαρτί δύο ώρες. Στην πύλη κανείς δεν διαβάζει από
+        τρία μέτρα — ο πορτιέρης το πιάνει στο χέρι. Ό,τι διαβάζεται από απόσταση, στο
+        σκοτάδι και βιαστικά, είναι ο αριθμός που φωνάζουν στο μικρόφωνο.
+      </p>
+    </header>
+
+    <div class="caption">ΕΙΣΟΔΟΣ — ΜΕ ΚΛΗΡΩΣΗ</div>
+    <div class="paper">
+      <div class="c club">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
+      <div class="c fest">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
+      <div class="sp4"></div>
+      <div class="rule-hi"></div>
+      <div class="sp4"></div>
+      <div class="c postsm">ΕΙΣΟΔΟΣ</div>
+      <div class="sp2"></div>
+      <div class="c serial">Α΄0128</div>
+      <div class="c label">ΑΡΙΘΜΟΣ ΚΛΗΡΩΣΗΣ</div>
+      <div class="sp8"></div>
+      <div class="rule"></div>
+      <div class="sp2"></div>
+      <div class="c price">5,00 €</div>
+      <div class="sp4"></div>
+      <div class="c stamp">15/08/2026&nbsp;&nbsp; 21:14&nbsp;&nbsp; Ταμίας: Γιώργος</div>
+      <div class="c stamp">ΠΑΡΑΓΓΕΛΙΑ Κ4831</div>
+      <div class="sp2"></div>
+      <div class="c sig">ΟΠΑ! POS</div>
+    </div>
+    <div class="cut"></div>
+
+    <div class="caption">ΕΙΣΟΔΟΣ — ΧΩΡΙΣ ΚΛΗΡΩΣΗ</div>
+    <div class="paper">
+      <div class="c club">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
+      <div class="c fest">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
+      <div class="sp4"></div>
+      <div class="rule-hi"></div>
+      <div class="sp8"></div>
+      <div class="c post">ΕΙΣΟΔΟΣ</div>
+      <div class="sp8"></div>
+      <div class="rule"></div>
+      <div class="sp2"></div>
+      <div class="c price">5,00 €</div>
+      <div class="sp4"></div>
+      <div class="c stamp">15/08/2026&nbsp;&nbsp; 21:14&nbsp;&nbsp; Ταμίας: Γιώργος</div>
+      <div class="c stamp">ΠΑΡΑΓΓΕΛΙΑ Κ4831</div>
+      <div class="sp2"></div>
+      <div class="c sig">ΟΠΑ! POS</div>
+    </div>
+    <div class="cut"></div>
+
+    <div class="caption">ΚΟΥΠΟΝΙ</div>
+    <div class="paper">
+      <div class="c club">ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ</div>
+      <div class="c fest">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
+      <div class="sp4"></div>
+      <div class="rule-hi"></div>
+      <div class="sp4"></div>
+      <div class="c postsm">ΠΟΤΑ</div>
+      <div class="sp2"></div>
+      <div class="c post">ΜΠΥΡΑ</div>
+      <div class="sp8"></div>
+      <div class="rule"></div>
+      <div class="sp2"></div>
+      <div class="c price">4,00 €</div>
+      <div class="sp4"></div>
+      <div class="c stamp">15/08/2026&nbsp;&nbsp; 21:14&nbsp;&nbsp; Ταμίας: Γιώργος</div>
+      <div class="c stamp">ΠΑΡΑΓΓΕΛΙΑ Κ4831</div>
+      <div class="sp2"></div>
+      <div class="c sig">ΟΠΑ! POS</div>
+    </div>
+    <div class="cut"></div>
+  </div>
+
+  <!-- =============================== Γ ================================== -->
+  <div class="col">
+    <header>
+      <div class="name">ΠΡΟΤΑΣΗ Γ</div>
+      <div class="title">ΤΟ ΕΙΣΙΤΗΡΙΟ</div>
+      <p class="principle">
+        Κερδίζει το ίδιο το έγγραφο. Πλαίσιο γύρω-γύρω, το όνομα του συλλόγου άσπρο σε
+        μαύρο, ο αριθμός μέσα σε δικό του κουτάκι όπως στα μπλοκ εισιτηρίων. Φυλάγεται
+        σαν ενθύμιο και δίνει σοβαρότητα σε σύλλογο χωρίς λογότυπο — με κόστος μελάνι.
+      </p>
+    </header>
+
+    <div class="caption">ΕΙΣΟΔΟΣ — ΜΕ ΚΛΗΡΩΣΗ</div>
+    <div class="paper" style="padding-left: 0; padding-right: 0">
+      <div class="frame">
+        <div class="band" style="font-size: calc(25 * var(--d)); margin: 0 calc(-12 * var(--d))">
+          ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ
+        </div>
+        <div class="sp2"></div>
+        <div class="c fest">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
+        <div class="sp8"></div>
+        <div class="split">
+          <div>
+            <div class="postsm" style="font-size: calc(56 * var(--d))">ΕΙΣΟΔΟΣ</div>
+            <div class="price" style="font-size: calc(40 * var(--d))">5,00 €</div>
+          </div>
+          <div class="r">
+            <div class="label" style="font-size: calc(14 * var(--d))">ΚΛΗΡΩΣΗ</div>
+            <div class="sp2"></div>
+            <div class="boxnum">Α΄0128</div>
+          </div>
+        </div>
+        <div class="sp8"></div>
+        <div class="rule"></div>
+        <div class="sp2"></div>
+        <div class="split stamp">
+          <div>15/08/2026&nbsp; 21:14&nbsp; Γιώργος</div>
+          <div>Κ4831</div>
+        </div>
+      </div>
+      <div class="sp2"></div>
+      <div class="c sig">ΟΠΑ! POS</div>
+    </div>
+    <div class="cut"></div>
+
+    <div class="caption">ΕΙΣΟΔΟΣ — ΧΩΡΙΣ ΚΛΗΡΩΣΗ</div>
+    <div class="paper" style="padding-left: 0; padding-right: 0">
+      <div class="frame">
+        <div class="band" style="font-size: calc(25 * var(--d)); margin: 0 calc(-12 * var(--d))">
+          ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ
+        </div>
+        <div class="sp2"></div>
+        <div class="c fest">ΚΑΛΟΚΑΙΡΙΝΟ ΠΑΝΗΓΥΡΙ 2026</div>
+        <div class="sp8"></div>
+        <div class="c post">ΕΙΣΟΔΟΣ</div>
+        <div class="sp4"></div>
+        <div class="c price">5,00 €</div>
+        <div class="sp8"></div>
+        <div class="rule"></div>
+        <div class="sp2"></div>
+        <div class="split stamp">
+          <div>15/08/2026&nbsp; 21:14&nbsp; Γιώργος</div>
+          <div>Κ4831</div>
+        </div>
+      </div>
+      <div class="sp2"></div>
+      <div class="c sig">ΟΠΑ! POS</div>
+    </div>
+    <div class="cut"></div>
+
+    <div class="caption">ΚΟΥΠΟΝΙ</div>
+    <div class="paper" style="padding-left: 0; padding-right: 0">
+      <div class="frame">
+        <div class="band" style="font-size: calc(25 * var(--d)); margin: 0 calc(-12 * var(--d))">
+          ΠΟΛΙΤΙΣΤΙΚΟΣ ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ
+        </div>
+        <div class="sp8"></div>
+        <div class="split">
+          <div>
+            <div class="label" style="font-size: calc(16 * var(--d))">ΠΟΤΑ</div>
+            <div class="post" style="font-size: calc(56 * var(--d))">ΜΠΥΡΑ</div>
+          </div>
+          <div class="r price" style="font-size: calc(40 * var(--d))">4,00 €</div>
+        </div>
+        <div class="sp8"></div>
+        <div class="rule"></div>
+        <div class="sp2"></div>
+        <div class="split stamp">
+          <div>15/08/2026&nbsp; 21:14&nbsp; Γιώργος</div>
+          <div>Κ4831</div>
+        </div>
+      </div>
+      <div class="sp2"></div>
+      <div class="c sig">ΟΠΑ! POS</div>
+    </div>
+    <div class="cut"></div>
+  </div>
+
+  <!-- =============================== Δ ================================== -->
+  <div class="col">
+    <header>
+      <div class="name">ΠΡΟΤΑΣΗ Δ</div>
+      <div class="title">Η ΣΕΙΡΑ</div>
+      <p class="principle">
+        Κερδίζει η ουρά. Το πιο κοντό χαρτί που εξακολουθεί να λέει τα πάντα: η κεφαλή
+        μαζεύεται σε μία γραμμή, το πόστο και ο αριθμός στέκονται δίπλα-δίπλα. Δέκα
+        εισιτήρια βγαίνουν στον χρόνο που οι άλλες προτάσεις βγάζουν έξι.
+      </p>
+    </header>
+
+    <div class="caption">ΕΙΣΟΔΟΣ — ΜΕ ΚΛΗΡΩΣΗ</div>
+    <div class="paper">
+      <div class="c fest">ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ · ΠΑΝΗΓΥΡΙ 2026</div>
+      <div class="sp2"></div>
+      <div class="rule"></div>
+      <div class="sp4"></div>
+      <div class="oneline">
+        <div class="postsm" style="font-size: calc(52 * var(--d))">ΕΙΣΟΔΟΣ</div>
+        <div class="serial" style="font-size: calc(60 * var(--d))">Α΄0128</div>
+      </div>
+      <div class="c label" style="margin-top: calc(3 * var(--d))">ΑΡΙΘΜΟΣ ΚΛΗΡΩΣΗΣ</div>
+      <div class="sp4"></div>
+      <div class="oneline">
+        <div class="price" style="font-size: calc(38 * var(--d))">5,00 €</div>
+        <div class="stamp">15/08/2026&nbsp; 21:14</div>
+      </div>
+      <div class="sp2"></div>
+      <div class="c stamp" style="font-size: calc(14 * var(--d))">Κ4831 · Γιώργος · ΟΠΑ! POS</div>
+    </div>
+    <div class="cut"></div>
+
+    <div class="caption">ΕΙΣΟΔΟΣ — ΧΩΡΙΣ ΚΛΗΡΩΣΗ</div>
+    <div class="paper">
+      <div class="c fest">ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ · ΠΑΝΗΓΥΡΙ 2026</div>
+      <div class="sp2"></div>
+      <div class="rule"></div>
+      <div class="sp4"></div>
+      <div class="c post" style="font-size: calc(62 * var(--d))">ΕΙΣΟΔΟΣ</div>
+      <div class="sp4"></div>
+      <div class="oneline">
+        <div class="price" style="font-size: calc(38 * var(--d))">5,00 €</div>
+        <div class="stamp">15/08/2026&nbsp; 21:14</div>
+      </div>
+      <div class="sp2"></div>
+      <div class="c stamp" style="font-size: calc(14 * var(--d))">Κ4831 · Γιώργος · ΟΠΑ! POS</div>
+    </div>
+    <div class="cut"></div>
+
+    <div class="caption">ΚΟΥΠΟΝΙ</div>
+    <div class="paper">
+      <div class="c fest">ΣΥΛΛΟΓΟΣ ΚΡΑΝΙΑΣ · ΠΑΝΗΓΥΡΙ 2026</div>
+      <div class="sp2"></div>
+      <div class="rule"></div>
+      <div class="sp4"></div>
+      <div class="oneline">
+        <div class="postsm" style="font-size: calc(22 * var(--d))">ΠΟΤΑ</div>
+        <div class="post" style="font-size: calc(62 * var(--d))">ΜΠΥΡΑ</div>
+      </div>
+      <div class="sp4"></div>
+      <div class="oneline">
+        <div class="price" style="font-size: calc(38 * var(--d))">4,00 €</div>
+        <div class="stamp">15/08/2026&nbsp; 21:14</div>
+      </div>
+      <div class="sp2"></div>
+      <div class="c stamp" style="font-size: calc(14 * var(--d))">Κ4831 · Γιώργος · ΟΠΑ! POS</div>
+    </div>
+    <div class="cut"></div>
+  </div>
+
+</div>
+
+<table>
+  <caption>ΠΟΙΑ ΚΕΡΔΙΖΕΙ ΣΕ ΤΙ</caption>
+  <thead>
+    <tr><th></th><th>Α — Η ΠΥΛΗ</th><th>Β — Ο ΑΡΙΘΜΟΣ</th><th>Γ — ΤΟ ΕΙΣΙΤΗΡΙΟ</th><th>Δ — Η ΣΕΙΡΑ</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Ο πορτιέρης καταλαβαίνει τι κρατάει, με μια ματιά</th>
+      <td class="win">★</td><td>ναι</td><td>ναι</td><td>ναι</td>
+    </tr>
+    <tr>
+      <th>Ο πελάτης βρίσκει τον αριθμό του στο σκοτάδι</th>
+      <td>ναι</td><td class="win">★</td><td>ναι</td><td>ναι</td>
+    </tr>
+    <tr>
+      <th>Δείχνει εισιτήριο εκδήλωσης, όχι απόδειξη ταμείου</th>
+      <td class="no">όχι</td><td class="no">όχι</td><td class="win">★</td><td class="no">όχι</td>
+    </tr>
+    <tr>
+      <th>Δέκα εισιτήρια με ουρά πίσω — ύψος χαρτιού και μελάνι</th>
+      <td>μέτριο</td><td>μέτριο</td><td class="no">το χειρότερο</td><td class="win">★</td>
+    </tr>
+    <tr>
+      <th>Το ίδιο πρότυπο δουλεύει και ως κουπόνι</th>
+      <td>ναι</td><td class="win">★</td><td>ναι</td><td>ναι</td>
+    </tr>
+    <tr>
+      <th>Αντέχει σύλλογο με πολύ μακρύ όνομα</th>
+      <td class="win">★</td><td class="win">★</td><td class="no">το πλαίσιο στενεύει</td><td class="no">σπάει η μία γραμμή</td>
+    </tr>
+    <tr>
+      <th>Αντέχει έμβλημα-εικόνα στην κορυφή, αν το θέλει ο σύλλογος</th>
+      <td class="win">★</td><td class="win">★</td><td class="no">μαλώνει με τη μαύρη λωρίδα</td><td class="no">χαλάει τον λόγο ύπαρξής της</td>
+    </tr>
+    <tr>
+      <th>Κανείς δεν διαβάζει τον Κ4831 σαν αριθμό κλήρωσης</th>
+      <td class="win">★</td><td class="win">★</td><td class="win">★</td><td class="no">κίνδυνος — είναι στην ίδια γραμμή</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="rec">
+  <b>Η σύστασή μου: Β — Ο ΑΡΙΘΜΟΣ.</b>
+  Στο απόκομμα παραγγελίας κάναμε το πόστο τον πρωταγωνιστή επειδή ο πελάτης το διαβάζει
+  <b>από τρία μέτρα</b>, μέσα στο σκοτάδι, ψάχνοντας σε ποιον πάγκο να πάει. Στην πύλη δεν
+  ισχύει τίποτα από αυτά: ο πορτιέρης παίρνει το χαρτί <b>στο χέρι του</b>, και η λέξη
+  ΕΙΣΟΔΟΣ δεν χρειάζεται να είναι μεγαλύτερη από όσο διαβάζεται σε μισό μέτρο. Αυτό που
+  διαβάζεται από απόσταση, βιαστικά και με ένα ποτήρι στο άλλο χέρι, είναι <b>ο αριθμός που
+  φωνάζουν στο μικρόφωνο</b>. Είναι επίσης η μόνη πρόταση όπου ο ίδιος κανόνας —
+  «μεγάλο είναι αυτό που ψάχνει ο άνθρωπος που το κρατάει» — δίνει σωστό αποτέλεσμα και στο
+  κουπόνι χωρίς εξαίρεση, και η ετικέτα ΑΡΙΘΜΟΣ ΚΛΗΡΩΣΗΣ κλείνει το μόνο πραγματικό
+  μπέρδεμα του χαρτιού.
+  <br><br>
+  Το <b>Δ</b> είναι η σωστή απάντηση αν κάποιος σύλλογος πουλάει τριακόσιες εισόδους τη
+  βραδιά· γι' αυτό δεν χάνεται — γίνεται <b>το μέγεθος «μικρό»</b> μέσα στο ίδιο πρότυπο,
+  όχι δεύτερο σχέδιο. Το <b>Γ</b> είναι το ωραιότερο και το πιο ακριβό, και μαλώνει με το
+  έμβλημα-εικόνα που ήδη υποστηρίζουμε.
+</div>
