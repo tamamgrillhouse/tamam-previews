@@ -90,6 +90,21 @@
   .tile.narrow.painted .in{padding-left:13px}
   .tile.narrow svg{width:46px;height:46px}
 
+  /* 2x2 : the biggest a tile gets */
+  .tile.big{width:420px;height:290px}
+  .tile.big .in{padding:20px 22px 20px 30px;gap:26px}
+  .tile.big.painted .in{padding-left:22px}
+  .tile.big svg{width:150px;height:150px}
+  .tile.big .nm{font-size:26px}
+  .tile.big .pr{font-size:34px}
+
+  /* the smallest a tile gets */
+  .tile.tiny{width:128px;height:116px}
+  .tile.tiny .in{flex-direction:column;align-items:flex-start;gap:5px;padding:8px 9px 8px 14px;justify-content:center}
+  .tile.tiny svg{width:36px;height:36px}
+  .tile.tiny .nm{font-size:14px}
+  .tile.tiny .pr{font-size:18px}
+
   /* text-only tile, for the comparison */
   .tile.notext .in{gap:0}
 
@@ -398,10 +413,10 @@
   </div>
 
   <div class="sizes">
-    <div class="s"><svg width="64" height="64" style="color:var(--text)"><use href="#a-souvlaki"/></svg>64 px</div>
-    <div class="s"><svg width="52" height="52" style="color:var(--text)"><use href="#a-souvlaki"/></svg>52 px — φαρδύ πλακίδιο</div>
-    <div class="s"><svg width="46" height="46" style="color:var(--text)"><use href="#a-souvlaki"/></svg>46 px — στενό πλακίδιο</div>
-    <div class="s"><svg width="32" height="32" style="color:var(--text)"><use href="#a-souvlaki"/></svg>32 px — χειρότερη περίπτωση</div>
+    <div class="s"><svg width="240" height="240" style="color:var(--text)"><use href="#a-souvlaki"/></svg>240 px — πλακίδιο 2×2 σε μεγάλη οθόνη</div>
+    <div class="s"><svg width="96" height="96" style="color:var(--text)"><use href="#a-souvlaki"/></svg>96 px — άνετο πλέγμα</div>
+    <div class="s"><svg width="52" height="52" style="color:var(--text)"><use href="#a-souvlaki"/></svg>52 px — <b>η βιβλιοθήκη</b>, πάντα εδώ</div>
+    <div class="s"><svg width="36" height="36" style="color:var(--text)"><use href="#a-souvlaki"/></svg>36 px — 6×5 στα 1280×720</div>
   </div>
 
   <div class="beds">
@@ -510,10 +525,10 @@
   </div>
 
   <div class="sizes">
-    <div class="s"><svg width="64" height="64" style="color:var(--text)"><use href="#b-souvlaki"/></svg>64 px</div>
-    <div class="s"><svg width="52" height="52" style="color:var(--text)"><use href="#b-souvlaki"/></svg>52 px — φαρδύ πλακίδιο</div>
-    <div class="s"><svg width="46" height="46" style="color:var(--text)"><use href="#b-souvlaki"/></svg>46 px — στενό πλακίδιο</div>
-    <div class="s"><svg width="32" height="32" style="color:var(--text)"><use href="#b-souvlaki"/></svg>32 px — χειρότερη περίπτωση</div>
+    <div class="s"><svg width="240" height="240" style="color:var(--text)"><use href="#b-souvlaki"/></svg>240 px — πλακίδιο 2×2 σε μεγάλη οθόνη</div>
+    <div class="s"><svg width="96" height="96" style="color:var(--text)"><use href="#b-souvlaki"/></svg>96 px — άνετο πλέγμα</div>
+    <div class="s"><svg width="52" height="52" style="color:var(--text)"><use href="#b-souvlaki"/></svg>52 px — <b>η βιβλιοθήκη</b>, πάντα εδώ</div>
+    <div class="s"><svg width="36" height="36" style="color:var(--text)"><use href="#b-souvlaki"/></svg>36 px — 6×5 στα 1280×720</div>
   </div>
 
   <div class="beds">
@@ -624,10 +639,10 @@
   </div>
 
   <div class="sizes">
-    <div class="s"><svg width="64" height="64" style="color:var(--text)"><use href="#c-souvlaki"/></svg>64 px</div>
-    <div class="s"><svg width="52" height="52" style="color:var(--text)"><use href="#c-souvlaki"/></svg>52 px — φαρδύ πλακίδιο</div>
-    <div class="s"><svg width="46" height="46" style="color:var(--text)"><use href="#c-souvlaki"/></svg>46 px — στενό πλακίδιο</div>
-    <div class="s"><svg width="32" height="32" style="color:var(--text)"><use href="#c-souvlaki"/></svg>32 px — χειρότερη περίπτωση</div>
+    <div class="s"><svg width="240" height="240" style="color:var(--text)"><use href="#c-souvlaki"/></svg>240 px — πλακίδιο 2×2 σε μεγάλη οθόνη</div>
+    <div class="s"><svg width="96" height="96" style="color:var(--text)"><use href="#c-souvlaki"/></svg>96 px — άνετο πλέγμα</div>
+    <div class="s"><svg width="52" height="52" style="color:var(--text)"><use href="#c-souvlaki"/></svg>52 px — <b>η βιβλιοθήκη</b>, πάντα εδώ</div>
+    <div class="s"><svg width="36" height="36" style="color:var(--text)"><use href="#c-souvlaki"/></svg>36 px — 6×5 στα 1280×720</div>
   </div>
 
   <div class="beds">
@@ -717,6 +732,89 @@
 <div class="rule"></div>
 
 
+<!-- ---------------- ΤΟ ΜΕΓΕΘΟΣ ---------------- -->
+<section>
+  <h2>Το μέγεθος — δύο κόσμοι, όχι ένας</h2>
+  <p style="margin-top:10px;max-width:105ch">
+    <b>Η βιβλιοθήκη έχει πάντα ένα μέγεθος</b>, ώστε πεντακόσια ογδόντα δύο προϊόντα να
+    διαβάζονται ομοιόμορφα καθώς τα τσεκάρεις. <b>Το μενού του συλλόγου δεν έχει</b>: ο
+    ιδιοκτήτης ορίζει μόνος του στήλες, γραμμές, και ποιο πλακίδιο είναι 1×1, 2×1 ή 2×2.
+    Το ίδιο σχέδιο, δηλαδή, πρέπει να στέκει και στα δύο.
+  </p>
+
+  <p style="margin-top:14px;max-width:105ch">
+    Τα νούμερα δεν είναι εκτίμηση — <b>υπολογίστηκαν από τον κώδικα</b>, από το πλάτος του
+    καλαθιού, το ύψος της μπάρας και τις αποστάσεις του πλέγματος:
+  </p>
+
+  <table>
+    <tr><th style="width:300px">Πού</th><th style="width:200px">Πλακίδιο</th><th>Το σχέδιο μέσα του</th></tr>
+    <tr><td><b>Η βιβλιοθήκη</b> — πάντα το ίδιο</td><td>σταθερό</td><td><b>52 px</b>, σε όλα τα 582</td></tr>
+    <tr><td>Μενού · 6×5 στα 1280×720 <span class="muted">(η μικρότερη οθόνη που στηρίζουμε)</span></td>
+        <td>128 × 116 px</td><td><b>≈ 36 px</b></td></tr>
+    <tr><td>Μενού · 5×4 στα 1920×1080</td><td>283 × 237 px</td><td>≈ 80 px</td></tr>
+    <tr><td>Μενού · 2×2 στα 1920×1080, πλέγμα 3×3</td><td>970 × 651 px</td><td><b>≈ 260 px</b></td></tr>
+    <tr><td>Μενού · 2×2 στη δική σου οθόνη 2560×1440</td><td>1396 × 891 px</td><td>≈ 350 px</td></tr>
+  </table>
+
+  <div class="note red">
+    <b>Αυτό είναι σχεδόν δεκαπλάσιο εύρος — 36 px ως 350 px.</b> Και δεν είναι θέμα ποιότητας:
+    τα σχέδια είναι vector, μεγαλώνουν χωρίς να θολώσουν. Είναι θέμα <b>πυκνότητας</b>.
+    Λεπτομέρεια που φαίνεται στα 350 κλείνει στα 36· σχήμα που είναι σωστό στα 36 δείχνει
+    φτωχό και άδειο στα 350.
+    <br><br>
+    <b>Και κάτι ακόμα που βγήκε από το ίδιο μέτρημα:</b> στο 6×5 πλέγμα σε οθόνη 1280×720, το
+    πλακίδιο έχει 116 px ύψος. Αν το όνομα πιάσει δύο γραμμές — «Σουβλάκι χοιρινό σε πίτα» —
+    μένουν <b>κάτω από 20 px</b> για εικόνα, που δεν είναι εικόνα. Άρα η υποδοχή χρειάζεται
+    έναν κανόνα που δεν τον είχαμε: <b>κάτω από ένα ύψος, το πλακίδιο δείχνει μόνο κείμενο</b>,
+    ακόμη κι αν ο διακόπτης λέει «με εικόνα». Δεν είναι βλάβη — είναι το ίδιο πράγμα που κάνει
+    ήδη όταν λείπει το αρχείο.
+  </div>
+
+  <div class="beds">
+    <div class="bed dark">
+      <div class="bedcap">ΤΑ ΔΥΟ ΑΚΡΑ, ΜΕ ΤΗΝ ΚΑΤΕΥΘΥΝΣΗ Γ</div>
+      <div class="row" style="align-items:center">
+        <div class="tile big" style="background:#201E1C;border:1px solid #2E2A27">
+          <div class="stripe" style="background:var(--red)"></div>
+          <div class="in"><svg style="color:#F4F1ED"><use href="#c-souvlaki"/></svg>
+            <div class="txt"><div class="nm" style="color:#F4F1ED">Σουβλάκι χοιρινό</div>
+            <div class="pr" style="color:#E5776A">2,50 €</div></div></div>
+        </div>
+        <div class="tile big painted" style="background:var(--turq)">
+          <div class="in"><svg style="color:#fff"><use href="#c-loukoumades"/></svg>
+            <div class="txt"><div class="nm" style="color:#fff">Λουκουμάδες</div>
+            <div class="pr" style="color:#fff">3,00 €</div></div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:11px">
+          <div class="tile tiny" style="background:#201E1C;border:1px solid #2E2A27">
+            <div class="stripe" style="background:var(--orange)"></div>
+            <div class="in"><svg style="color:#F4F1ED"><use href="#c-patates"/></svg>
+              <div class="txt"><div class="nm" style="color:#F4F1ED">Πατάτες</div>
+              <div class="pr" style="color:#EFB84E">2,00 €</div></div></div>
+          </div>
+          <div class="tile tiny painted" style="background:var(--blue)">
+            <div class="in"><svg style="color:#fff"><use href="#c-eisitirio"/></svg>
+              <div class="txt"><div class="nm" style="color:#fff">Εισιτήριο</div>
+              <div class="pr" style="color:#fff">5,00 €</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note green">
+    <b>Τι σημαίνει αυτό για την παραγωγή, και είναι ο λόγος που τα σχέδια γίνονται από script:</b>
+    κάθε σύμβολο θα έχει <b>ελάχιστο πάχος γραμμής και ελάχιστο άνοιγμα κενού</b> γραμμένα ως
+    κανόνας, όχι ως γούστο — αρκετά μεγάλα ώστε στα 36 px να μη κλείσουν. Αυτό <b>ελέγχεται με
+    τεστ</b>, όπως ελέγχονται σήμερα τα αρχεία του <code>brand/</code>: σύμβολο που παραβιάζει
+    το όριο δεν περνάει. Δεν χρειάζεται να το κρίνει κανείς με το μάτι, ούτε εσύ ούτε εγώ.
+  </div>
+</section>
+
+<div class="rule"></div>
+
+
 <!-- ---------------- ΤΟ ΕΥΡΗΜΑ ---------------- -->
 <section>
   <h2>Κάτι που βρέθηκε φτιάχνοντας το δείγμα</h2>
@@ -743,21 +841,26 @@
 
   <table>
     <tr><th style="width:220px">Κατεύθυνση</th><th style="width:260px">Πού κερδίζει</th><th>Πού χάνει</th></tr>
-    <tr><td><b>Α — Γεμάτο σχήμα</b></td><td>Νύχτα, απόσταση, μικρό μέγεθος</td>
-        <td>Ισοπεδώνει τα όμοια. Το μπιφτέκι είναι ένα οβάλ</td></tr>
-    <tr><td><b>Β — Γραμμή</b></td><td>Διάκριση, ελαφρότητα</td>
-        <td>Ακριβώς στη συνθήκη που φτιάχνουμε το πρόγραμμα: χαμηλό φως, βαμμένο πλακίδιο, μικρό κελί</td></tr>
-    <tr><td><b>Γ — Γεμάτο με κενά</b></td><td>Και τα δύο, και δικό του ύφος</td>
-        <td>Η ακριβότερη παραγωγή, και τα κενά χάνονται στα πολύ μικρά</td></tr>
+    <tr><td><b>Α — Γεμάτο σχήμα</b></td><td>Νύχτα, απόσταση, τα 36 px</td>
+        <td>Ισοπεδώνει τα όμοια — το μπιφτέκι είναι ένα οβάλ. Και <b>στα 350 px δείχνει άδειο</b>:
+            μια τεράστια μαύρη μάζα χωρίς τίποτα μέσα</td></tr>
+    <tr><td><b>Β — Γραμμή</b></td><td>Διάκριση, ελαφρότητα, τα μεγάλα πλακίδια</td>
+        <td>Ακριβώς στη συνθήκη που φτιάχνουμε το πρόγραμμα: χαμηλό φως, βαμμένο πλακίδιο,
+            και <b>στα 36 px οι γραμμές ενώνονται</b></td></tr>
+    <tr><td><b>Γ — Γεμάτο με κενά</b></td><td>Και στα δύο άκρα, και δικό του ύφος</td>
+        <td>Η ακριβότερη παραγωγή. Τα κενά θέλουν <b>ελάχιστο άνοιγμα με κανόνα</b>, αλλιώς
+            κλείνουν στα μικρά</td></tr>
   </table>
 
   <div class="note green" style="margin-top:28px">
-    <b>Προτείνω τη Γ.</b> Ο λόγος δεν είναι αισθητικός: το πλακίδιο του προγράμματος έχει
-    <b>δύο θέματα και δύο φωτεινότητες και οποιοδήποτε χρώμα κατηγορίας</b>. Η Γ είναι η μόνη
-    που δίνει λεπτομέρεια <b>χωρίς να χρειάζεται να ξέρει τι υπάρχει από πίσω</b> — γιατί η
-    λεπτομέρειά της <i>είναι</i> αυτό που υπάρχει από πίσω. Η Β χρειάζεται λεπτή γραμμή που
-    πεθαίνει στη νύχτα· η Α είναι ασφαλής αλλά τα σαράντα σύμβολα θα αρχίσουν να μοιάζουν
-    μεταξύ τους.
+    <b>Προτείνω τη Γ, και η διόρθωσή σου για τα μεγέθη το κάνει πιο καθαρό απ' ό,τι ήταν.</b>
+    <br><br>
+    Δύο λόγοι, κανένας αισθητικός. <b>Πρώτος:</b> το πλακίδιο έχει δύο θέματα, δύο φωτεινότητες
+    και οποιοδήποτε χρώμα κατηγορίας. Η Γ είναι η μόνη που δίνει λεπτομέρεια <b>χωρίς να
+    χρειάζεται να ξέρει τι υπάρχει από πίσω</b> — γιατί η λεπτομέρειά της <i>είναι</i> αυτό που
+    υπάρχει από πίσω. <b>Δεύτερος, και είναι δικός σου:</b> το ίδιο σχέδιο ζει από τα 36 px ως
+    τα 350. Η Α αντέχει το μικρό αλλά αδειάζει στο μεγάλο· η Β γεμίζει το μεγάλο αλλά σβήνει
+    στο μικρό. <b>Η Γ είναι η μόνη που δεν καταρρέει σε κανένα από τα δύο άκρα.</b>
     <br><br>
     <b>Και ένα δίχτυ που δεν κοστίζει τίποτα:</b> όπου ένα κενό δεν στέκει σε μικρό μέγεθος,
     το σύμβολο πέφτει μόνο του στην Α — γιατί η Γ <b>είναι</b> η Α με τρύπες. Δεν υπάρχει
