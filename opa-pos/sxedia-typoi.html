@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<title>ΟΠΑ! POS — Τύποι σχεδίου</title>
+<style>
+  :root{
+    --bg:#121110; --panel:#1A1817; --tile:#201E1C; --line:#2E2A27;
+    --text:#F4F1ED; --muted:#A2988E;
+    --red:#D24B3E; --blue:#2E6FD9; --turq:#0F8C7D; --orange:#E09B12;
+    --warn:#C98A16; --pay:#1E9E57; --danger:#D4402C;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:"Segoe UI",system-ui,sans-serif;
+    font-size:17px; line-height:1.55; padding:56px 64px 120px;
+  }
+  .wrap{max-width:2280px;margin:0 auto}
+  h1{font-size:40px;line-height:1.15;font-weight:800;letter-spacing:-0.5px}
+  h2{font-size:26px;font-weight:800}
+  p{max-width:105ch}
+  .lead{color:var(--muted);font-size:19px;margin-top:12px}
+  .muted{color:var(--muted)}
+  .rule{height:1px;background:var(--line);margin:40px 0}
+
+  .note{border-left:5px solid var(--warn);background:#1A1817;padding:16px 22px;
+        border-radius:0 10px 10px 0;margin:22px 0;max-width:105ch}
+  .note.green{border-left-color:var(--pay)}
+  .note.red{border-left-color:var(--danger)}
+
+  /* ---------- one type ---------- */
+  .type{
+    background:var(--panel);border:1px solid var(--line);border-radius:16px;
+    padding:24px 28px 26px;margin:22px 0;
+    display:grid;grid-template-columns:330px 1fr 300px;gap:34px;align-items:center;
+  }
+  .type .who .n{display:flex;align-items:baseline;gap:12px}
+  .type .who .num{
+    font-size:13px;font-weight:800;letter-spacing:1.5px;background:var(--line);
+    color:var(--text);padding:5px 11px;border-radius:6px;
+  }
+  .type .who h2{font-size:24px}
+  .type .who p{font-size:15px;color:var(--muted);margin-top:9px;max-width:44ch}
+
+  .set{display:flex;gap:30px;align-items:flex-end;flex-wrap:wrap}
+  .one{text-align:center}
+  .one svg{color:var(--text);display:block}
+  .one .cap{font-size:12px;color:var(--muted);margin-top:8px}
+
+  .ctx{display:flex;flex-direction:column;gap:10px;align-items:flex-end}
+  .small{display:flex;gap:14px;align-items:center;
+         background:#121110;border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+  .small .lbl{font-size:11px;color:var(--muted);letter-spacing:.8px}
+
+  /* real tile */
+  .tile{border-radius:12px;overflow:hidden;position:relative;display:flex;
+        width:262px;height:96px}
+  .tile .stripe{position:absolute;left:0;top:0;bottom:0;width:7px}
+  .tile .in{display:flex;align-items:center;gap:13px;width:100%;padding:11px 12px 11px 18px}
+  .tile.painted .in{padding-left:13px}
+  .tile svg{width:48px;height:48px;flex:0 0 auto}
+  .tile .nm{font-size:16px;font-weight:700;line-height:1.15}
+  .tile .pr{font-size:21px;font-weight:700;line-height:1.1;margin-top:2px}
+
+  /* ---------- the 36px table ---------- */
+  .grid36{border-collapse:collapse;margin-top:22px}
+  .grid36 th,.grid36 td{border:1px solid var(--line);padding:12px 18px;text-align:center}
+  .grid36 th{background:var(--panel);font-size:13px;letter-spacing:.8px;font-weight:800}
+  .grid36 th.left,.grid36 td.left{text-align:left}
+  .grid36 svg{color:var(--text);display:block;margin:0 auto}
+
+  .foot{margin-top:18px;font-size:15px;color:var(--muted)}
+  code{background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 7px;font-size:15px}
+  b,strong{font-weight:800}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Οκτώ τύποι σχεδίου — διάλεξε γλώσσα, όχι σχέδιο</h1>
+<p class="lead">
+  Τα ίδια τέσσερα πράγματα, σχεδιασμένα με οκτώ διαφορετικούς τρόπους. Το ζητούμενο εδώ δεν
+  είναι αν το σουβλάκι είναι το τέλειο σουβλάκι — είναι <b>ποια γλώσσα σου αρέσει</b>. Μόλις
+  διαλέξεις, τα πενήντα σύμβολα σχεδιάζονται όλα σε αυτήν.
+</p>
+
+<div class="note">
+  <b>Τέσσερα δείγματα, διαλεγμένα για να δυσκολέψουν:</b> το <b>σουβλάκι</b> είναι λεπτό και
+  επαναλαμβανόμενο, η <b>πίτα γύρο</b> γίνεται εύκολα μουτζούρα, οι <b>πατάτες</b> έχουν δοχείο
+  και περιεχόμενο μαζί, και το <b>ποτήρι κρασί</b> είναι το πιο κομψό σχήμα της παρέας. Αν
+  στέκουν αυτά σε έναν τύπο, στέκουν όλα.
+</div>
+
+<div class="note red">
+  <b>Δύο περιορισμοί που δεν αίρονται, και γι' αυτό λείπουν κάποιοι τύποι που θα περίμενες.</b>
+  Το πλακίδιο μπορεί να είναι βαμμένο σε <b>οποιοδήποτε χρώμα</b> διάλεξε ο σύλλογος, σε φωτεινό
+  ή σκοτεινό θέμα — άρα κανένα σχέδιο δεν έχει δικό του χρώμα, παίρνει το χρώμα του κειμένου.
+  Και το ίδιο σχέδιο ζει <b>από τα 36 px ως τα 350</b>. Γι' αυτό δεν υπάρχει εδώ ούτε πολύχρωμο,
+  ούτε φωτορεαλιστικό, ούτε τίποτα με σκιές και ντεγκραντέ: θα εξαφανιζόταν σε μισές οθόνες.
+</div>
+
+<!-- ============================ ΟΡΙΣΜΟΙ ============================ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+
+<!-- masks for type 8 (badge) -->
+<mask id="mk-souvlaki"><rect width="64" height="64" fill="#fff"/>
+  <g transform="translate(10,10) scale(0.69)" fill="#000">
+    <g transform="rotate(-45 32 32)">
+      <rect x="4" y="30" width="56" height="4" rx="2"/>
+      <rect x="8"  y="23" width="10" height="18" rx="3"/>
+      <rect x="21" y="23" width="10" height="18" rx="3"/>
+      <rect x="34" y="23" width="10" height="18" rx="3"/>
+      <rect x="47" y="23" width="10" height="18" rx="3"/>
+    </g>
+  </g>
+</mask>
+<mask id="mk-gyros"><rect width="64" height="64" fill="#fff"/>
+  <g transform="translate(10,10) scale(0.69)" fill="#000">
+    <path d="M19,15 L20,11 L24,6 L28,12 L32,6 L36,12 L40,6 L44,11 L45,15 L36.5,54 Q32,60 27.5,54 Z"/>
+  </g>
+</mask>
+<mask id="mk-patates"><rect width="64" height="64" fill="#fff"/>
+  <g transform="translate(10,10) scale(0.69)" fill="#000">
+    <rect x="14" y="7"  width="7" height="26" rx="3.5" transform="rotate(-15 17.5 20)"/>
+    <rect x="24" y="3"  width="7" height="30" rx="3.5" transform="rotate(-4 27.5 18)"/>
+    <rect x="34" y="4"  width="7" height="29" rx="3.5" transform="rotate(7 37.5 18)"/>
+    <rect x="43" y="9"  width="7" height="24" rx="3.5" transform="rotate(16 46.5 21)"/>
+    <path d="M14,31 L50,31 L45,58 Q45,61 42,61 L22,61 Q19,61 19,58 Z"/>
+  </g>
+</mask>
+<mask id="mk-krasi"><rect width="64" height="64" fill="#fff"/>
+  <g transform="translate(10,10) scale(0.69)" fill="#000">
+    <path d="M16,7 L48,7 C48,27 42,38 32,38 C22,38 16,27 16,7 Z"/>
+    <rect x="29.5" y="37" width="5" height="17" rx="1.5"/>
+    <rect x="17" y="53" width="30" height="5.5" rx="2.75"/>
+  </g>
+</mask>
+
+<!-- ======== 1 · ΣΙΛΟΥΕΤΑ ======== -->
+<symbol id="t1-souvlaki" viewBox="0 0 64 64"><g transform="rotate(-45 32 32)" fill="currentColor">
+  <rect x="4" y="30" width="56" height="4" rx="2"/>
+  <rect x="8"  y="23" width="10" height="18" rx="3"/>
+  <rect x="21" y="23" width="10" height="18" rx="3"/>
+  <rect x="34" y="23" width="10" height="18" rx="3"/>
+  <rect x="47" y="23" width="10" height="18" rx="3"/>
+</g></symbol>
+<symbol id="t1-gyros" viewBox="0 0 64 64"><path fill="currentColor"
+  d="M19,15 L20,11 L24,6 L28,12 L32,6 L36,12 L40,6 L44,11 L45,15 L36.5,54 Q32,60 27.5,54 Z"/></symbol>
+<symbol id="t1-patates" viewBox="0 0 64 64"><g fill="currentColor">
+  <rect x="14" y="7"  width="7" height="26" rx="3.5" transform="rotate(-15 17.5 20)"/>
+  <rect x="24" y="3"  width="7" height="30" rx="3.5" transform="rotate(-4 27.5 18)"/>
+  <rect x="34" y="4"  width="7" height="29" rx="3.5" transform="rotate(7 37.5 18)"/>
+  <rect x="43" y="9"  width="7" height="24" rx="3.5" transform="rotate(16 46.5 21)"/>
+  <path d="M14,31 L50,31 L45,58 Q45,61 42,61 L22,61 Q19,61 19,58 Z"/>
+</g></symbol>
+<symbol id="t1-krasi" viewBox="0 0 64 64"><g fill="currentColor">
+  <path d="M16,7 L48,7 C48,27 42,38 32,38 C22,38 16,27 16,7 Z"/>
+  <rect x="29.5" y="37" width="5" height="17" rx="1.5"/>
+  <rect x="17" y="53" width="30" height="5.5" rx="2.75"/>
+</g></symbol>
+
+<!-- ======== 2 · ΛΕΠΤΗ ΓΡΑΜΜΗ ======== -->
+<symbol id="t2-souvlaki" viewBox="0 0 64 64"><g transform="rotate(-45 32 32)" fill="none"
+  stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M5,32 H8 M18,32 H21 M31,32 H34 M44,32 H47 M57,32 H59"/>
+  <rect x="8"  y="23" width="10" height="18" rx="3"/>
+  <rect x="21" y="23" width="10" height="18" rx="3"/>
+  <rect x="34" y="23" width="10" height="18" rx="3"/>
+  <rect x="47" y="23" width="10" height="18" rx="3"/>
+</g></symbol>
+<symbol id="t2-gyros" viewBox="0 0 64 64"><g fill="none" stroke="currentColor"
+  stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M19,15 L20,11 L24,6 L28,12 L32,6 L36,12 L40,6 L44,11 L45,15 L36.5,54 Q32,60 27.5,54 Z"/>
+  <path d="M22,25 L42,31"/>
+</g></symbol>
+<symbol id="t2-patates" viewBox="0 0 64 64"><g fill="none" stroke="currentColor"
+  stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M17,9 V31 M27,5 V31 M37,6 V31 M47,11 V31"/>
+  <path d="M14,31 L50,31 L45,58 Q45,61 42,61 L22,61 Q19,61 19,58 Z"/>
+  <path d="M17,41 H47"/>
+</g></symbol>
+<symbol id="t2-krasi" viewBox="0 0 64 64"><g fill="none" stroke="currentColor"
+  stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M16,7 L48,7 C48,27 42,38 32,38 C22,38 16,27 16,7 Z"/>
+  <path d="M32,38 V54"/><path d="M19,56 H45"/>
+</g></symbol>
+
+<!-- ======== 3 · ΧΟΝΤΡΗ ΓΡΑΜΜΗ ======== -->
+<symbol id="t3-souvlaki" viewBox="0 0 64 64"><g transform="rotate(-45 32 32)" fill="none"
+  stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M7,32 H9 M19.5,32 H20.5 M32.5,32 H33.5 M45.5,32 H46.5 M56,32 H57"/>
+  <rect x="9"  y="24" width="10" height="16" rx="4"/>
+  <rect x="22" y="24" width="10" height="16" rx="4"/>
+  <rect x="35" y="24" width="10" height="16" rx="4"/>
+  <rect x="48" y="24" width="8"  height="16" rx="4"/>
+</g></symbol>
+<symbol id="t3-gyros" viewBox="0 0 64 64"><g fill="none" stroke="currentColor"
+  stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M20,16 L24,9 L28,15 L32,9 L36,15 L40,9 L44,16 L36,53 Q32,58 28,53 Z"/>
+</g></symbol>
+<symbol id="t3-patates" viewBox="0 0 64 64"><g fill="none" stroke="currentColor"
+  stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M18,12 V29 M28,8 V29 M38,9 V29 M47,14 V29"/>
+  <path d="M15,31 L49,31 L44,57 Q44,59 42,59 L22,59 Q20,59 20,57 Z"/>
+</g></symbol>
+<symbol id="t3-krasi" viewBox="0 0 64 64"><g fill="none" stroke="currentColor"
+  stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M17,9 L47,9 C47,27 41,37 32,37 C23,37 17,27 17,9 Z"/>
+  <path d="M32,37 V53"/><path d="M20,55 H44"/>
+</g></symbol>
+
+<!-- ======== 4 · ΓΡΑΜΜΗ ΜΕ ΓΕΜΙΣΜΑ ======== -->
+<symbol id="t4-souvlaki" viewBox="0 0 64 64"><g transform="rotate(-45 32 32)"
+  stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M5,32 H8 M18,32 H21 M31,32 H34 M44,32 H47 M57,32 H59" fill="none"/>
+  <rect x="8"  y="23" width="10" height="18" rx="3" fill="currentColor" fill-opacity="0.3"/>
+  <rect x="21" y="23" width="10" height="18" rx="3" fill="currentColor" fill-opacity="0.3"/>
+  <rect x="34" y="23" width="10" height="18" rx="3" fill="currentColor" fill-opacity="0.3"/>
+  <rect x="47" y="23" width="10" height="18" rx="3" fill="currentColor" fill-opacity="0.3"/>
+</g></symbol>
+<symbol id="t4-gyros" viewBox="0 0 64 64"><g stroke="currentColor" stroke-width="3.5"
+  stroke-linecap="round" stroke-linejoin="round">
+  <path fill="currentColor" fill-opacity="0.3"
+    d="M19,15 L20,11 L24,6 L28,12 L32,6 L36,12 L40,6 L44,11 L45,15 L36.5,54 Q32,60 27.5,54 Z"/>
+  <path fill="none" d="M22,26 L42,32"/>
+</g></symbol>
+<symbol id="t4-patates" viewBox="0 0 64 64"><g stroke="currentColor" stroke-width="3.5"
+  stroke-linecap="round" stroke-linejoin="round">
+  <path fill="none" d="M17,9 V31 M27,5 V31 M37,6 V31 M47,11 V31"/>
+  <path fill="currentColor" fill-opacity="0.3"
+        d="M14,31 L50,31 L45,58 Q45,61 42,61 L22,61 Q19,61 19,58 Z"/>
+</g></symbol>
+<symbol id="t4-krasi" viewBox="0 0 64 64"><g stroke="currentColor" stroke-width="3.5"
+  stroke-linecap="round" stroke-linejoin="round">
+  <path fill="currentColor" fill-opacity="0.3"
+        d="M16,7 L48,7 C48,27 42,38 32,38 C22,38 16,27 16,7 Z"/>
+  <path fill="none" d="M32,38 V54"/><path fill="none" d="M19,56 H45"/>
+</g></symbol>
+
+<!-- ======== 5 · ΓΕΜΑΤΟ ΜΕ ΚΕΝΑ ======== -->
+<symbol id="t5-souvlaki" viewBox="0 0 64 64"><g transform="rotate(-45 32 32)"
+  fill="currentColor" fill-rule="evenodd">
+  <path d="M4,30 h56 v4 h-56 Z M8,23 h10 v18 h-10 Z M21,23 h10 v18 h-10 Z
+           M34,23 h10 v18 h-10 Z M47,23 h10 v18 h-10 Z"/>
+</g></symbol>
+<symbol id="t5-gyros" viewBox="0 0 64 64"><path fill="currentColor" fill-rule="evenodd"
+  d="M19,15 L20,11 L24,6 L28,12 L32,6 L36,12 L40,6 L44,11 L45,15 L36.5,54 Q32,60 27.5,54 Z
+     M22,25 L42,31 L41,36.5 L23,31 Z"/></symbol>
+<symbol id="t5-patates" viewBox="0 0 64 64"><g fill="currentColor">
+  <rect x="14" y="7"  width="7" height="24" rx="3.5" transform="rotate(-15 17.5 19)"/>
+  <rect x="24" y="3"  width="7" height="28" rx="3.5" transform="rotate(-4 27.5 17)"/>
+  <rect x="34" y="4"  width="7" height="27" rx="3.5" transform="rotate(7 37.5 17)"/>
+  <rect x="43" y="9"  width="7" height="22" rx="3.5" transform="rotate(16 46.5 20)"/>
+  <path fill-rule="evenodd" d="M14,31 L50,31 L45,58 Q45,61 42,61 L22,61 Q19,61 19,58 Z
+     M17.6,39 L46.4,39 L45.6,44 L18.4,44 Z"/>
+</g></symbol>
+<symbol id="t5-krasi" viewBox="0 0 64 64"><g fill="currentColor">
+  <path fill-rule="evenodd" d="M16,7 L48,7 C48,27 42,38 32,38 C22,38 16,27 16,7 Z
+     M17.4,17 C22,21.5 27,13 32,17.5 C37,22 42,13.5 46.6,17 L45.7,22.5
+     C41,19 36,27 31,22.5 C26,18 22.2,26 18.4,22.5 Z"/>
+  <rect x="29.5" y="37" width="5" height="17" rx="1.5"/>
+  <rect x="17" y="53" width="30" height="5.5" rx="2.75"/>
+</g></symbol>
+
+<!-- ======== 6 · ΓΕΩΜΕΤΡΙΚΟ ======== -->
+<symbol id="t6-souvlaki" viewBox="0 0 64 64"><g transform="rotate(-45 32 32)">
+  <rect x="6" y="30.5" width="52" height="3" fill="currentColor"/>
+  <circle cx="16" cy="32" r="7" fill="currentColor"/>
+  <circle cx="32" cy="32" r="7" fill="currentColor"/>
+  <circle cx="48" cy="32" r="7" fill="currentColor"/>
+</g></symbol>
+<symbol id="t6-gyros" viewBox="0 0 64 64"><g fill="currentColor">
+  <path d="M32,4 A14,14 0 0 1 46,18 L18,18 A14,14 0 0 1 32,4 Z"/>
+  <path d="M19,22 L45,22 L35,58 L29,58 Z"/>
+</g></symbol>
+<symbol id="t6-patates" viewBox="0 0 64 64"><g fill="currentColor">
+  <rect x="16" y="6" width="6" height="24"/><rect x="26" y="4" width="6" height="26"/>
+  <rect x="36" y="6" width="6" height="24"/><rect x="46" y="10" width="6" height="20"/>
+  <path d="M13,32 L51,32 L45,60 L19,60 Z"/>
+</g></symbol>
+<symbol id="t6-krasi" viewBox="0 0 64 64"><g fill="currentColor">
+  <path d="M15,8 L49,8 A17,17 0 0 1 15,8 Z"/>
+  <rect x="30" y="25" width="4" height="29"/>
+  <rect x="17" y="54" width="30" height="5"/>
+</g></symbol>
+
+<!-- ======== 7 · ΣΦΡΑΓΙΔΑ ======== -->
+<symbol id="t7-souvlaki" viewBox="0 0 64 64"><g transform="rotate(-45 32 32)"
+  fill="currentColor" fill-rule="evenodd">
+  <path d="M4,30 h56 v4 h-56 Z
+           M8,23 h10 v18 h-10 Z M9.5,26 h7 v1.6 h-7 Z M9.5,30 h7 v1.6 h-7 Z M9.5,34 h7 v1.6 h-7 Z
+           M21,23 h10 v18 h-10 Z M22.5,26 h7 v1.6 h-7 Z M22.5,30 h7 v1.6 h-7 Z M22.5,34 h7 v1.6 h-7 Z
+           M34,23 h10 v18 h-10 Z M35.5,26 h7 v1.6 h-7 Z M35.5,30 h7 v1.6 h-7 Z M35.5,34 h7 v1.6 h-7 Z
+           M47,23 h10 v18 h-10 Z M48.5,26 h7 v1.6 h-7 Z M48.5,30 h7 v1.6 h-7 Z M48.5,34 h7 v1.6 h-7 Z"/>
+</g></symbol>
+<symbol id="t7-gyros" viewBox="0 0 64 64"><path fill="currentColor" fill-rule="evenodd"
+  d="M19,15 L20,11 L24,6 L28,12 L32,6 L36,12 L40,6 L44,11 L45,15 L36.5,54 Q32,60 27.5,54 Z
+     M22.2,24 L42,29.6 L41.5,31.8 L21.8,26.2 Z
+     M23.4,30 L41,35 L40.5,37.2 L23,32.2 Z
+     M24.6,36 L39.6,40.3 L39.1,42.5 L24.2,38.2 Z"/></symbol>
+<symbol id="t7-patates" viewBox="0 0 64 64"><g fill="currentColor">
+  <rect x="14" y="7"  width="7" height="24" rx="1" transform="rotate(-15 17.5 19)"/>
+  <rect x="24" y="3"  width="7" height="28" rx="1" transform="rotate(-4 27.5 17)"/>
+  <rect x="34" y="4"  width="7" height="27" rx="1" transform="rotate(7 37.5 17)"/>
+  <rect x="43" y="9"  width="7" height="22" rx="1" transform="rotate(16 46.5 20)"/>
+  <path fill-rule="evenodd" d="M14,31 L50,31 L45,58 Q45,61 42,61 L22,61 Q19,61 19,58 Z
+     M18,36 h28 v2 h-28 Z M18.6,41 h26.8 v2 h-26.8 Z M19.2,46 h25.6 v2 h-25.6 Z
+     M19.8,51 h24.4 v2 h-24.4 Z"/>
+</g></symbol>
+<symbol id="t7-krasi" viewBox="0 0 64 64"><g fill="currentColor">
+  <path fill-rule="evenodd" d="M16,7 L48,7 C48,27 42,38 32,38 C22,38 16,27 16,7 Z
+     M18,13 h28 v2 h-28 Z M18.6,18 h26.8 v2 h-26.8 Z M20,23 h24 v2 h-24 Z M22.5,28 h19 v2 h-19 Z"/>
+  <rect x="29.5" y="37" width="5" height="17"/>
+  <rect x="17" y="53" width="30" height="5.5"/>
+</g></symbol>
+
+<!-- ======== 8 · ΜΕΣΑ ΣΕ ΚΥΚΛΟ ======== -->
+<symbol id="t8-souvlaki" viewBox="0 0 64 64">
+  <circle cx="32" cy="32" r="31" fill="currentColor" mask="url(#mk-souvlaki)"/></symbol>
+<symbol id="t8-gyros" viewBox="0 0 64 64">
+  <circle cx="32" cy="32" r="31" fill="currentColor" mask="url(#mk-gyros)"/></symbol>
+<symbol id="t8-patates" viewBox="0 0 64 64">
+  <circle cx="32" cy="32" r="31" fill="currentColor" mask="url(#mk-patates)"/></symbol>
+<symbol id="t8-krasi" viewBox="0 0 64 64">
+  <circle cx="32" cy="32" r="31" fill="currentColor" mask="url(#mk-krasi)"/></symbol>
+
+</defs></svg>
+
+
+<!-- ============================ ΟΙ ΟΚΤΩ ============================ -->
+
+<div class="type">
+  <div class="who"><div class="n"><span class="num">1</span><h2>Σιλουέτα</h2></div>
+    <p>Γεμάτο σχήμα, ένα χρώμα, τίποτα μέσα. Ό,τι λέει, το λέει το περίγραμμα.</p></div>
+  <div class="set">
+    <div class="one"><svg width="88" height="88"><use href="#t1-souvlaki"/></svg><div class="cap">Σουβλάκι</div></div>
+    <div class="one"><svg width="88" height="88"><use href="#t1-gyros"/></svg><div class="cap">Πίτα γύρο</div></div>
+    <div class="one"><svg width="88" height="88"><use href="#t1-patates"/></svg><div class="cap">Πατάτες</div></div>
+    <div class="one"><svg width="88" height="88"><use href="#t1-krasi"/></svg><div class="cap">Κρασί ποτήρι</div></div>
+  </div>
+  <div class="ctx">
+    <div class="tile" style="background:#201E1C;border:1px solid #2E2A27">
+      <div class="stripe" style="background:var(--red)"></div>
+      <div class="in"><svg style="color:#F4F1ED"><use href="#t1-souvlaki"/></svg>
+        <div><div class="nm" style="color:#F4F1ED">Σουβλάκι χοιρινό</div>
+        <div class="pr" style="color:#E5776A">2,50 €</div></div></div>
+    </div>
+    <div class="tile painted" style="background:var(--orange)">
+      <div class="in"><svg style="color:#17110A"><use href="#t1-patates"/></svg>
+        <div><div class="nm" style="color:#17110A">Πατάτες τηγανητές</div>
+        <div class="pr" style="color:#17110A">2,00 €</div></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="type">
+  <div class="who"><div class="n"><span class="num">2</span><h2>Λεπτή γραμμή</h2></div>
+    <p>Περίγραμμα, τίποτα γεμάτο. Το ύφος που έχουν τα περισσότερα σύγχρονα προγράμματα.</p></div>
+  <div class="set">
+    <div class="one"><svg width="88" height="88"><use href="#t2-souvlaki"/></svg><div class="cap">Σουβλάκι</div></div>
+    <div class="one"><svg width="88" height="88"><use href="#t2-gyros"/></svg><div class="cap">Πίτα γύρο</div></div>
+    <div class="one"><svg width="88" height="88"><use href="#t2-patates"/></svg><div class="cap">Πατάτες</div></div>
+    <div class="one"><svg width="88" height="88"><use href="#t2-krasi"/></svg><div class="cap">Κρασί ποτήρι</div></div>
+  </div>
+  <div class="ctx">
+    <div class="tile" style="background:#201E1C;border:1px solid #2E2A27">
+      <div class="stripe" style="background:var(--red)"></div>
+      <div class="in"><svg style="color:#F4F1ED"><use href="#t2-souvlaki"/></svg>
+        <div><div class="nm" style="color:#F4F1ED">Σουβλάκι χοιρινό</div>
+        <div class="pr" style="color:#E5776A">2,50 €</div></div></div>
+    </div>
+    <div class="tile painted" style="background:var(--orange)">
+      <div class="in"><svg style="color:#17110A"><use href="#t2-patates"/></svg>
+        <div><div class="nm" style="color:#17110A">Πατάτες τηγανητές</div>
+        <div class="pr" style="color:#17110A">2,00 €</div></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="type">
+  <div class="who"><div class="n"><span class="num">3</span><h2>Χοντρή γραμμή</h2></div>
+    <p>Ίδια ιδέα με το 2, αλλά με διπλάσιο πάχος και στρογγυλεμένες άκρες. Πιο ζεστό, πιο δυνατό στο σκοτάδι.</p></div>
+  <div class="set">
+    <div class="one"><svg width="88" height="88"><use href="#t3-souvlaki"/></svg><div class="cap">Σουβλάκι</div></div>
+    <div class="one"><svg width="88" height="88"><use href="#t3-gyros"/></svg><div class="cap">Πίτα γύρο</div></div>
+    <div class="one"><svg width="88" height="88"><use href="#t3-patates"/></svg><div class="cap">Πατάτες</div></div>
+    <div class="one"><svg width="88" height="88"><use href="#t3-krasi"/></svg><div class="cap">Κρασί ποτήρι</div></div>
+  </div>
+  <div class="ctx">
+    <div class="tile" style="background:#201E1C;border:1px solid #2E2A27">
+      <div class="stripe" style="background:var(--red)"></div>
+      <div class="in"><svg style="color:#F4F1ED"><use href="#t3-souvlaki"/></svg>
+        <div><div class="nm" style="color:#F4F1ED">Σουβλάκι χοιρινό</div>
+        <div class="pr" style="color:#E5776A">2,50 €</div></div></div>
+    </div>
+    <div class="tile painted" style="background:var(--orange)">
+      <div class="in"><svg style="color:#17110A"><use href="#t3-patates"/></svg>
+        <div><div class="nm" style="color:#17110A">Πατάτες τηγανητές</div>
+        <div class="pr" style="color:#17110A">2,00 €</div></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="type">
+  <div class="who"><div class="n"><span class="num">4</span><h2>Γραμμή με γέμισμα</h2></div>
+    <p>Περίγραμμα και από μέσα ένα ξεθωριασμένο γέμισμα στο ίδιο χρώμα. Δύο τόνοι χωρίς δεύτερο χρώμα.</p></div>
+  <div class="set">
+    <div class="one"><svg width="88" height="88"><use href="#t4-souvlaki"/></svg><div class="cap">Σουβλάκι</div></div>
+    <div class="one"><svg width="88" height="88"><use href="#t4-gyros"/></svg><div class="cap">Πίτα γύρο</div></div>
+    <div class="one"><svg width="88" height="88"><use href="#t4-patates"/></svg><div class="cap">Πατάτες</div></div>
+    <div class="one"><svg width="88" height="88"><use href="#t4-krasi"/></svg><div class="cap">Κρασί ποτήρι</div></div>
+  </div>
+  <div class="ctx">
+    <div class="tile" style="background:#201E1C;border:1px solid #2E2A27">
+      <div class="stripe" style="background:var(--red)"></div>
+      <div class="in"><svg style="color:#F4F1ED"><use href="#t4-souvlaki"/></svg>
+        <div><div class="nm" style="color:#F4F1ED">Σουβλάκι χοιρινό</div>
+        <div class="pr" style="color:#E5776A">2,50 €</div></div></div>
+    </div>
+    <div class="tile painted" style="background:var(--orange)">
+      <div class="in"><svg style="color:#17110A"><use href="#t4-patates"/></svg>
+        <div><div class="nm" style="color:#17110A">Πατάτες τηγανητές</div>
+        <div class="pr" style="color:#17110A">2,00 €</div></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="type">
+  <div class="who"><div class="n"><span class="num">5</span><h2>Γεμάτο με κενά</h2></div>
+    <p>Γεμάτο σαν το 1, αλλά η λεπτομέρεια δεν ζωγραφίζεται — κόβεται, και φαίνεται το πλακίδιο από πίσω.</p></div>
+  <div class="set">
+    <div class="one"><svg width="88" height="88"><use href="#t5-souvlaki"/></svg><div class="cap">Σουβλάκι</div></div>
+    <div class="one"><svg width="88" height="88"><use href="#t5-gyros"/></svg><div class="cap">Πίτα γύρο</div></div>
+    <div class="one"><svg width="88" height="88"><use href="#t5-patates"/></svg><div class="cap">Πατάτες</div></div>
+    <div class="one"><svg width="88" height="88"><use href="#t5-krasi"/></svg><div class="cap">Κρασί ποτήρι</div></div>
+  </div>
+  <div class="ctx">
+    <div class="tile" style="background:#201E1C;border:1px solid #2E2A27">
+      <div class="stripe" style="background:var(--red)"></div>
+      <div class="in"><svg style="color:#F4F1ED"><use href="#t5-souvlaki"/></svg>
+        <div><div class="nm" style="color:#F4F1ED">Σουβλάκι χοιρινό</div>
+        <div class="pr" style="color:#E5776A">2,50 €</div></div></div>
+    </div>
+    <div class="tile painted" style="background:var(--orange)">
+      <div class="in"><svg style="color:#17110A"><use href="#t5-patates"/></svg>
+        <div><div class="nm" style="color:#17110A">Πατάτες τηγανητές</div>
+        <div class="pr" style="color:#17110A">2,00 €</div></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="type">
+  <div class="who"><div class="n"><span class="num">6</span><h2>Γεωμετρικό</h2></div>
+    <p>Μόνο κύκλοι, ορθογώνια και ίσιες γραμμές — τίποτα ελεύθερο. Η γλώσσα των σημάτων σε αεροδρόμια και σταθμούς.</p></div>
+  <div class="set">
+    <div class="one"><svg width="88" height="88"><use href="#t6-souvlaki"/></svg><div class="cap">Σουβλάκι</div></div>
+    <div class="one"><svg width="88" height="88"><use href="#t6-gyros"/></svg><div class="cap">Πίτα γύρο</div></div>
+    <div class="one"><svg width="88" height="88"><use href="#t6-patates"/></svg><div class="cap">Πατάτες</div></div>
+    <div class="one"><svg width="88" height="88"><use href="#t6-krasi"/></svg><div class="cap">Κρασί ποτήρι</div></div>
+  </div>
+  <div class="ctx">
+    <div class="tile" style="background:#201E1C;border:1px solid #2E2A27">
+      <div class="stripe" style="background:var(--red)"></div>
+      <div class="in"><svg style="color:#F4F1ED"><use href="#t6-souvlaki"/></svg>
+        <div><div class="nm" style="color:#F4F1ED">Σουβλάκι χοιρινό</div>
+        <div class="pr" style="color:#E5776A">2,50 €</div></div></div>
+    </div>
+    <div class="tile painted" style="background:var(--orange)">
+      <div class="in"><svg style="color:#17110A"><use href="#t6-patates"/></svg>
+        <div><div class="nm" style="color:#17110A">Πατάτες τηγανητές</div>
+        <div class="pr" style="color:#17110A">2,00 €</div></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="type">
+  <div class="who"><div class="n"><span class="num">7</span><h2>Σφραγίδα</h2></div>
+    <p>Γεμάτο σχήμα με λεπτές χαρακιές μέσα, σαν ξυλογραφία ή σφραγίδα σε χαρτί. Χωριάτικος χαρακτήρας.</p></div>
+  <div class="set">
+    <div class="one"><svg width="88" height="88"><use href="#t7-souvlaki"/></svg><div class="cap">Σουβλάκι</div></div>
+    <div class="one"><svg width="88" height="88"><use href="#t7-gyros"/></svg><div class="cap">Πίτα γύρο</div></div>
+    <div class="one"><svg width="88" height="88"><use href="#t7-patates"/></svg><div class="cap">Πατάτες</div></div>
+    <div class="one"><svg width="88" height="88"><use href="#t7-krasi"/></svg><div class="cap">Κρασί ποτήρι</div></div>
+  </div>
+  <div class="ctx">
+    <div class="tile" style="background:#201E1C;border:1px solid #2E2A27">
+      <div class="stripe" style="background:var(--red)"></div>
+      <div class="in"><svg style="color:#F4F1ED"><use href="#t7-souvlaki"/></svg>
+        <div><div class="nm" style="color:#F4F1ED">Σουβλάκι χοιρινό</div>
+        <div class="pr" style="color:#E5776A">2,50 €</div></div></div>
+    </div>
+    <div class="tile painted" style="background:var(--orange)">
+      <div class="in"><svg style="color:#17110A"><use href="#t7-patates"/></svg>
+        <div><div class="nm" style="color:#17110A">Πατάτες τηγανητές</div>
+        <div class="pr" style="color:#17110A">2,00 €</div></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="type">
+  <div class="who"><div class="n"><span class="num">8</span><h2>Μέσα σε κύκλο</h2></div>
+    <p>Ο δίσκος είναι γεμάτος και το σχήμα είναι το κενό μέσα του. Η πιο δυνατή παρουσία — και η πιο βαριά.</p></div>
+  <div class="set">
+    <div class="one"><svg width="88" height="88"><use href="#t8-souvlaki"/></svg><div class="cap">Σουβλάκι</div></div>
+    <div class="one"><svg width="88" height="88"><use href="#t8-gyros"/></svg><div class="cap">Πίτα γύρο</div></div>
+    <div class="one"><svg width="88" height="88"><use href="#t8-patates"/></svg><div class="cap">Πατάτες</div></div>
+    <div class="one"><svg width="88" height="88"><use href="#t8-krasi"/></svg><div class="cap">Κρασί ποτήρι</div></div>
+  </div>
+  <div class="ctx">
+    <div class="tile" style="background:#201E1C;border:1px solid #2E2A27">
+      <div class="stripe" style="background:var(--red)"></div>
+      <div class="in"><svg style="color:#F4F1ED"><use href="#t8-souvlaki"/></svg>
+        <div><div class="nm" style="color:#F4F1ED">Σουβλάκι χοιρινό</div>
+        <div class="pr" style="color:#E5776A">2,50 €</div></div></div>
+    </div>
+    <div class="tile painted" style="background:var(--orange)">
+      <div class="in"><svg style="color:#17110A"><use href="#t8-patates"/></svg>
+        <div><div class="nm" style="color:#17110A">Πατάτες τηγανητές</div>
+        <div class="pr" style="color:#17110A">2,00 €</div></div></div>
+    </div>
+  </div>
+</div>
+
+
+<div class="rule"></div>
+
+<!-- ---------------- ΤΟ ΤΕΣΤ ΤΩΝ 36 ---------------- -->
+<section>
+  <h2>Και οι οκτώ στα 36 px — η μικρότερη οθόνη, το πυκνότερο πλέγμα</h2>
+  <p class="muted" style="margin-top:8px">
+    Εδώ πεθαίνουν οι μισοί. Είναι το πραγματικό μέγεθος σε πλέγμα 6×5 σε οθόνη 1280×720,
+    υπολογισμένο από τον κώδικα. Δίπλα, τα 88 px για σύγκριση.
+  </p>
+
+  <table class="grid36">
+    <tr>
+      <th class="left" style="width:230px">Τύπος</th>
+      <th colspan="4">στα 36 px</th>
+      <th style="width:120px">στα 88 px</th>
+    </tr>
+    <tr><td class="left"><b>1</b> · Σιλουέτα</td>
+      <td><svg width="36" height="36"><use href="#t1-souvlaki"/></svg></td>
+      <td><svg width="36" height="36"><use href="#t1-gyros"/></svg></td>
+      <td><svg width="36" height="36"><use href="#t1-patates"/></svg></td>
+      <td><svg width="36" height="36"><use href="#t1-krasi"/></svg></td>
+      <td><svg width="88" height="88"><use href="#t1-souvlaki"/></svg></td></tr>
+    <tr><td class="left"><b>2</b> · Λεπτή γραμμή</td>
+      <td><svg width="36" height="36"><use href="#t2-souvlaki"/></svg></td>
+      <td><svg width="36" height="36"><use href="#t2-gyros"/></svg></td>
+      <td><svg width="36" height="36"><use href="#t2-patates"/></svg></td>
+      <td><svg width="36" height="36"><use href="#t2-krasi"/></svg></td>
+      <td><svg width="88" height="88"><use href="#t2-souvlaki"/></svg></td></tr>
+    <tr><td class="left"><b>3</b> · Χοντρή γραμμή</td>
+      <td><svg width="36" height="36"><use href="#t3-souvlaki"/></svg></td>
+      <td><svg width="36" height="36"><use href="#t3-gyros"/></svg></td>
+      <td><svg width="36" height="36"><use href="#t3-patates"/></svg></td>
+      <td><svg width="36" height="36"><use href="#t3-krasi"/></svg></td>
+      <td><svg width="88" height="88"><use href="#t3-souvlaki"/></svg></td></tr>
+    <tr><td class="left"><b>4</b> · Γραμμή με γέμισμα</td>
+      <td><svg width="36" height="36"><use href="#t4-souvlaki"/></svg></td>
+      <td><svg width="36" height="36"><use href="#t4-gyros"/></svg></td>
+      <td><svg width="36" height="36"><use href="#t4-patates"/></svg></td>
+      <td><svg width="36" height="36"><use href="#t4-krasi"/></svg></td>
+      <td><svg width="88" height="88"><use href="#t4-souvlaki"/></svg></td></tr>
+    <tr><td class="left"><b>5</b> · Γεμάτο με κενά</td>
+      <td><svg width="36" height="36"><use href="#t5-souvlaki"/></svg></td>
+      <td><svg width="36" height="36"><use href="#t5-gyros"/></svg></td>
+      <td><svg width="36" height="36"><use href="#t5-patates"/></svg></td>
+      <td><svg width="36" height="36"><use href="#t5-krasi"/></svg></td>
+      <td><svg width="88" height="88"><use href="#t5-souvlaki"/></svg></td></tr>
+    <tr><td class="left"><b>6</b> · Γεωμετρικό</td>
+      <td><svg width="36" height="36"><use href="#t6-souvlaki"/></svg></td>
+      <td><svg width="36" height="36"><use href="#t6-gyros"/></svg></td>
+      <td><svg width="36" height="36"><use href="#t6-patates"/></svg></td>
+      <td><svg width="36" height="36"><use href="#t6-krasi"/></svg></td>
+      <td><svg width="88" height="88"><use href="#t6-souvlaki"/></svg></td></tr>
+    <tr><td class="left"><b>7</b> · Σφραγίδα</td>
+      <td><svg width="36" height="36"><use href="#t7-souvlaki"/></svg></td>
+      <td><svg width="36" height="36"><use href="#t7-gyros"/></svg></td>
+      <td><svg width="36" height="36"><use href="#t7-patates"/></svg></td>
+      <td><svg width="36" height="36"><use href="#t7-krasi"/></svg></td>
+      <td><svg width="88" height="88"><use href="#t7-souvlaki"/></svg></td></tr>
+    <tr><td class="left"><b>8</b> · Μέσα σε κύκλο</td>
+      <td><svg width="36" height="36"><use href="#t8-souvlaki"/></svg></td>
+      <td><svg width="36" height="36"><use href="#t8-gyros"/></svg></td>
+      <td><svg width="36" height="36"><use href="#t8-patates"/></svg></td>
+      <td><svg width="36" height="36"><use href="#t8-krasi"/></svg></td>
+      <td><svg width="88" height="88"><use href="#t8-souvlaki"/></svg></td></tr>
+  </table>
+</section>
+
+<div class="rule"></div>
+
+<section>
+  <h2>Πώς να το διαβάσεις</h2>
+  <p style="margin-top:10px">
+    Κοίτα <b>τη γλώσσα, όχι το σχέδιο</b>. Το ερώτημα δεν είναι «είναι καλό αυτό το σουβλάκι»
+    — είναι «θέλω το πρόγραμμά μου να μιλάει έτσι». Μόλις διαλέξεις τύπο, και τα <b>πενήντα</b>
+    σύμβολα ξανασχεδιάζονται από την αρχή σε αυτόν, με χρόνο στο καθένα, και τα βλέπεις όλα
+    πριν μπουν πουθενά.
+  </p>
+  <div class="note green">
+    <b>Μπορείς και να μη διαλέξεις κανέναν.</b> Αν κανένας από τους οκτώ δεν σου κάνει, πες
+    <b>τι σε ενοχλεί</b> — «πολύ παιδικά», «πολύ αυστηρά», «θέλω να μοιάζουν πιο αληθινά»,
+    «πολύ μαύρα» — και βγαίνει νέος γύρος. Οι οκτώ είναι για να έχεις κάτι να δείξεις με το
+    δάχτυλο, όχι για να διαλέξεις υποχρεωτικά ανάμεσά τους.
+  </div>
+  <p class="foot">
+    Οι γραμματοσειρές είναι του υπολογιστή σου, όχι της εφαρμογής. Τα χρώματα των πλακιδίων,
+    το πάχος της λωρίδας, τα δύο θέματα και τα μεγέθη είναι τα πραγματικά, διαβασμένα από τον
+    κώδικα. Οι στοιχίσεις της σελίδας δεν έχουν σημασία.
+  </p>
+</section>
+
+</div>
+</body>
+</html>
