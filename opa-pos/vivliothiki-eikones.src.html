@@ -1,0 +1,163 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Η ΒΙΒΛΙΟΘΗΚΗ — με εικόνες</title>
+<style>
+  :root{--bg:#121110;--panel:#1A1817;--tile:#201E1C;--line:#2E2A27;--text:#F4F1ED;--muted:#A2988E;--pay:#1E9E57}
+  @font-face{font-family:"Manrope";src:url(__FONT__) format("truetype");font-weight:200 800;font-display:block}
+  *{box-sizing:border-box}
+  body{margin:0;background:#0d0c0b;color:var(--text);font-family:"Manrope","Segoe UI",system-ui,sans-serif}
+  .wrap{max-width:1360px;margin:0 auto;padding:26px 20px 60px}
+  h1{font-size:19px;margin:0 0 4px}
+  .lead{color:var(--muted);font-size:13.5px;margin:0 0 18px;line-height:1.55;max-width:900px}
+  .tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+  .tab{background:var(--panel);border:1px solid var(--line);color:var(--muted);border-radius:9px;
+       padding:9px 15px;font-size:13.5px;cursor:pointer;font-family:inherit}
+  .tab.on{border-color:var(--pay);color:var(--text);box-shadow:inset 0 0 0 1px var(--pay)}
+  .note{color:var(--muted);font-size:13px;line-height:1.6;margin:0 0 14px;min-height:42px;max-width:900px}
+  .note b{color:var(--text);font-weight:600}
+  .screen{background:var(--bg);border:1px solid var(--line);border-radius:12px;overflow:hidden;
+          height:742px;display:flex;flex-direction:column}
+  .bar{display:flex;align-items:center;gap:12px;padding:13px 16px;background:var(--panel);
+       border-bottom:1px solid var(--line)}
+  .bar .ttl{font-size:15.5px;font-weight:700}
+  .bar .sub{font-size:12.5px;color:var(--muted)}
+  .field{width:320px;background:var(--tile);border:1px solid var(--line);border-radius:8px;
+         padding:8px 11px;font-size:13px;color:var(--muted)}
+  .btn{border-radius:8px;padding:8px 14px;font-size:13px;font-weight:600}
+  .btn.ghost{color:var(--muted)}
+  .btn.go{background:var(--pay);color:#fff}
+  .sets{display:flex;gap:10px;padding:11px 16px;border-bottom:1px solid var(--line);align-items:center}
+  .set{border:1px solid var(--line);border-radius:20px;padding:7px 15px;font-size:13px;color:var(--muted)}
+  .set.on{border-color:var(--pay);color:var(--text)}
+  .split{flex:1;display:flex;min-height:0}
+  .cats{width:212px;border-right:1px solid var(--line);background:var(--panel);padding:8px 0;flex:none}
+  .cat{padding:10px 14px;font-size:13px;color:var(--muted);display:flex;justify-content:space-between}
+  .cat.on{background:var(--tile);color:var(--text);box-shadow:inset 3px 0 0 var(--pay)}
+  .cat .n{color:var(--pay);font-size:12px}
+  .list{flex:1;overflow:auto;padding:10px 16px 24px}
+  .gh{display:flex;align-items:center;gap:10px;padding:14px 4px 8px;border-bottom:1px solid var(--line);
+      margin-bottom:4px}
+  .gh .name{font-size:13px;font-weight:700;letter-spacing:.4px}
+  .gh .cnt{font-size:12px;color:var(--muted)}
+  .gh .acts{margin-left:auto;font-size:12px;color:var(--muted);display:flex;gap:12px}
+  .box{width:21px;height:21px;border-radius:4px;border:2px solid var(--line);flex:none;position:relative}
+  .box.on{border-color:var(--pay);background:var(--pay)}
+  .box.on::after{content:"";position:absolute;left:6px;top:2px;width:5px;height:10px;
+                 border:solid #fff;border-width:0 2px 2px 0;transform:rotate(43deg)}
+  .row{display:flex;align-items:center;gap:11px;padding:6px 4px;border-radius:8px}
+  .row:hover{background:var(--tile)}
+  .pic{background:#ffffff08;border:1px solid var(--line);border-radius:8px;flex:none;
+       display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .pic img{width:100%;height:100%;object-fit:contain}
+  .pic.lend{border-style:dashed;opacity:.85}
+  .nm{font-size:14px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .row.off .nm{color:var(--muted)}
+  .row.on .nm{font-weight:600}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(152px,1fr));gap:12px;padding:8px 0 4px}
+  .card{background:var(--tile);border:1px solid var(--line);border-radius:11px;padding:10px;
+        position:relative;text-align:center}
+  .card.on{border-color:var(--pay);box-shadow:inset 0 0 0 1px var(--pay)}
+  .card .ph{height:96px;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+  .card .ph img{max-width:100%;max-height:100%;object-fit:contain}
+  .card .nm2{font-size:12.5px;line-height:1.25;height:32px;overflow:hidden}
+  .card .box{position:absolute;left:8px;top:8px;background:#0009}
+  .card.on .box{background:var(--pay)}
+</style>
+<div class="wrap">
+  <h1>Η ΒΙΒΛΙΟΘΗΚΗ — πώς θα δείχνει με τις εικόνες</h1>
+  <p class="lead">Τρεις τρόποι, η ίδια οθόνη κάθε φορά: ΔΙΑΧΕΙΡΙΣΗ → ΠΡΟΪΟΝΤΑ → ΑΠΟ ΤΗ ΒΙΒΛΙΟΘΗΚΗ.
+  Οι εικόνες και τα ονόματα είναι τα αληθινά, από τον δίσκο. Πάτα τις τρεις καρτέλες και σύγκρινε.
+  Η διακεκομμένη κορνίζα σημαίνει «δανεική εικόνα» — τρία κεμπάπ, μία πιατέλα.</p>
+  <div class="tabs">
+    <button class="tab on" data-v="a">Α — μικρή μινιατούρα</button>
+    <button class="tab" data-v="b">Β — μεγάλη μινιατούρα</button>
+    <button class="tab" data-v="c">Γ — πλέγμα με κάρτες</button>
+  </div>
+  <p class="note" id="note"></p>
+  <div class="screen">
+    <div class="bar">
+      <div><div class="ttl">Η ΒΙΒΛΙΟΘΗΚΗ</div><div class="sub">14 επιλεγμένα</div></div>
+      <div class="field" style="margin-left:18px">Αναζήτηση…</div>
+      <div style="flex:1"></div>
+      <div class="btn ghost">ΑΚΥΡΟ</div>
+      <div class="btn go">ΕΠΟΜΕΝΟ</div>
+    </div>
+    <div class="sets">
+      <div class="set on">ΨΗΣΤΑΡΙΑ</div><div class="set">ΜΠΑΡ</div><div class="set">ΓΛΥΚΑ</div>
+      <div style="color:var(--muted);font-size:12.5px;margin-left:8px">Έτοιμα τσεκαρίσματα — τσεκάρουν, δεν γράφουν.</div>
+    </div>
+    <div class="split">
+      <div class="cats" id="cats"></div>
+      <div class="list" id="list"></div>
+    </div>
+  </div>
+</div>
+<script>
+const PICS = __PICS__;
+const CATS = [["ΚΡΕΑΤΙΚΑ",9],["ΣΥΝΟΔΕΥΤΙΚΑ",2],["ΑΝΑΨΥΚΤΙΚΑ",0],["ΜΠΥΡΕΣ",3],
+               ["ΚΡΑΣΙΑ",0],["ΠΟΤΑ",0],["ΓΛΥΚΑ",0],["ΕΙΔΙΚΑ",0]];
+const GROUPS = [
+ ["Σουβλάκια",[
+   ["Σουβλάκι χοιρινό","meat_souvlaki_xoirino",0,1],
+   ["Σουβλάκι κοτόπουλο","meat_souvlaki_kotopoulo",0,1],
+   ["Σουβλάκι πρόβειο","meat_souvlaki_proveio",0,0],
+   ["Σουβλάκι χοιρινό σε πίτα","meat_souvlaki_xoirino",1,1],
+   ["Σουβλάκι κοτόπουλο σε πίτα","meat_souvlaki_kotopoulo",1,0]]],
+ ["Γύρος",[
+   ["Μερίδα γύρο χοιρινό","meat_merida_gyro_xoirino",0,1],
+   ["Πίτα γύρο χοιρινό","meat_merida_gyro_xoirino",1,1]]],
+ ["Κρέατα σούβλας",[
+   ["Κεμπάπ χοιρινό μερίδα","meat_kebap_xoirino_merida",0,1],
+   ["Κεμπάπ χοιρινό μισό κιλό","meat_kebap_xoirino_merida",1,0],
+   ["Κεμπάπ χοιρινό κιλό","meat_kebap_xoirino_merida",1,0]]],
+ ["Μπύρες φιάλη / κουτί",[
+   ["ΑΛΦΑ 330ml γυάλινη","beer_alfa_330ml_gyalini",0,1],
+   ["ΑΛΦΑ 500ml κουτάκι","beer_alfa_500ml_koutaki",0,0],
+   ["AMSTEL 330ml κουτάκι","beer_amstel_330ml_koutaki",0,1],
+   ["CORONA 330ml γυάλινη","beer_corona_330ml_gyalini",0,0],
+   ["Μπύρα βαρέλι 500ml","beer_byra_vareli_500ml",0,1]]]
+];
+const NOTES = {
+ a:"<b>Α — μικρή μινιατούρα, 40 πίξελ.</b> Η λίστα μένει λίστα: χωράνε περίπου 13 σειρές μαζί, το όνομα διαβάζεται πρώτο και η εικόνα το επιβεβαιώνει. Σε μια κατηγορία με 240 προϊόντα αυτό μετράει. <b>Η πρότασή μου.</b>",
+ b:"<b>Β — μεγάλη μινιατούρα, 64 πίξελ.</b> Η ετικέτα στη φιάλη διαβάζεται πραγματικά, αλλά χωράνε οι μισές σειρές — για τα κρεατικά είναι ωραίο, για τα 240 αναψυκτικά είναι πολύ σκρολάρισμα.",
+ c:"<b>Γ — πλέγμα με κάρτες.</b> Το πιο όμορφο και το πιο κοντά στο ταμείο, αλλά το τσεκάρισμα 200 προϊόντων γίνεται περιήγηση: λιγότερα ανά οθόνη, τα ονόματα κόβονται, και οι επικεφαλίδες χάνονται."
+};
+function box(on){return '<div class="box ' + (on?'on':'') + '"></div>'}
+function img(p){return PICS[p] ? '<img src="' + PICS[p] + '">' : ''}
+function render(v){
+  document.getElementById('cats').innerHTML = CATS.map(function(c,i){
+    return '<div class="cat ' + (i==0?'on':'') + '"><span>' + c[0] + '</span><span class="n">' + (c[1]||'') + '</span></div>';
+  }).join('');
+  const side = v=='a' ? 40 : 64;
+  let html = '';
+  GROUPS.forEach(function(entry){
+    const g = entry[0], ps = entry[1];
+    const on = ps.filter(function(p){return p[3]}).length;
+    html += '<div class="gh">' + box(false) + '<span class="name">' + g + '</span>' +
+      '<span class="cnt">' + on + '/' + ps.length + '</span>' +
+      '<span class="acts"><span>ΟΛΑ</span><span>ΚΑΝΕΝΑ</span><span>▾</span></span></div>';
+    if(v=='c'){
+      html += '<div class="grid">' + ps.map(function(p){
+        return '<div class="card ' + (p[3]?'on':'off') + '">' + box(p[3]) +
+               '<div class="ph">' + img(p[1]) + '</div><div class="nm2">' + p[0] + '</div></div>';
+      }).join('') + '</div>';
+    } else {
+      html += ps.map(function(p){
+        return '<div class="row ' + (p[3]?'on':'off') + '">' + box(p[3]) +
+               '<div class="pic ' + (p[2]?'lend':'') + '" style="width:' + side + 'px;height:' + side + 'px">' +
+               img(p[1]) + '</div><div class="nm">' + p[0] + '</div></div>';
+      }).join('');
+    }
+  });
+  document.getElementById('list').innerHTML = html;
+  document.getElementById('note').innerHTML = NOTES[v];
+}
+document.querySelectorAll('.tab').forEach(function(t){
+  t.onclick = function(){
+    document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on')});
+    t.classList.add('on');
+    render(t.dataset.v);
+  };
+});
+render('a');
+</script>
