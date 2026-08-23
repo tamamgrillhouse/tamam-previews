@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Λίστες που ανοίγουν — Τώρα vs Προτάσεις | TAMAM</title>
+<style>
+  :root{
+    --accent:#f59e0b; --accent-text:#9c6406; --danger-text:#b91c1c; --success-text:#15803d;
+    --text:#1e293b; --muted:#5d6b7f; --border:#e2e8f0; --bg:#f1f5f9; --white:#fff;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+       font-size:14px;color:var(--text);background:var(--bg);line-height:1.55;padding:26px 20px 80px}
+  .wrap{max-width:1240px;margin:0 auto}
+
+  .head{background:#fff;border:1px solid var(--border);border-radius:14px;padding:24px 28px;margin-bottom:22px;
+        box-shadow:0 1px 3px rgba(0,0,0,.06)}
+  .head h1{font-size:23px;margin-bottom:8px}
+  .head p{color:var(--muted);font-size:14px;max-width:960px}
+  .head p + p{margin-top:9px}
+  .head b{color:var(--text)}
+
+  .sec-h{font-size:15px;font-weight:800;margin:32px 0 12px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  .sec-h .n{background:#1e2d3d;color:#fff;width:24px;height:24px;border-radius:7px;display:inline-flex;
+            align-items:center;justify-content:center;font-size:12px;flex:none}
+  .sec-h .where{font-weight:600;font-size:12.5px;color:var(--muted);margin-left:auto;text-align:right}
+
+  .card{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  .card + .card{margin-top:14px}
+  .card-h{font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;
+          padding:10px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;
+          align-items:center;gap:10px;background:#f8fafc;color:var(--muted)}
+  .card-b{padding:18px}
+
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media (max-width:1050px){.grid4{grid-template-columns:repeat(2,1fr)}.grid3{grid-template-columns:1fr}}
+  @media (max-width:600px){.grid4{grid-template-columns:1fr}}
+
+  .col.now{border-color:#f3c7c7}
+  .col.new{border-color:#b7e3c6}
+  .col.now .card-h{background:#fef2f2;color:#991b1b}
+  .col.new .card-h{background:#f0fdf4;color:#166534}
+  .tag{font-family:ui-monospace,Consolas,monospace;font-weight:800;font-size:11.5px}
+
+  label.fld{display:block;font-size:12px;font-weight:600;color:var(--text);margin-bottom:5px}
+  .sw{position:relative}
+  .sw::after{content:'\25BC';position:absolute;right:11px;top:50%;transform:translateY(-50%);
+             pointer-events:none;color:var(--muted);font-size:11px}
+  .sw select{width:100%;padding:8px 32px 8px 11px;appearance:none;-webkit-appearance:none;
+             border:1.5px solid var(--border);border-radius:7px;color:var(--text);background:#fff;
+             cursor:pointer;outline:none;font-family:inherit;font-size:13.5px}
+  .sw select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(245,158,11,.12)}
+
+  /* ── ΟΙ ΤΡΕΙΣ ΠΡΟΤΑΣΕΙΣ ── */
+  .p-a select option{padding:6px 10px}
+  .p-b select{font-size:15px;padding:10px 32px 10px 11px}
+  .p-b select option{padding:6px 10px}
+  .p-c select option{padding:6px 10px}
+  .p-c.wide select{font-size:15px;padding:10px 32px 10px 11px}
+
+  .lb{width:100%;border:1.5px solid var(--border);border-radius:7px;font-family:inherit;
+      font-size:13.5px;color:var(--text);background:#fff;outline:none}
+  .p-a .lb option{padding:6px 10px}
+  .p-b .lb{font-size:15px} .p-b .lb option{padding:6px 10px}
+  .p-c .lb option{padding:6px 10px}
+
+  .meas{margin-top:10px;font-size:11.5px;color:var(--muted);font-family:ui-monospace,Consolas,monospace}
+  .meas b{color:var(--text);font-size:12.5px}
+
+  .tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+  .tbl th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.3px;color:var(--muted);
+          padding:8px 10px;border-bottom:2px solid var(--border)}
+  .tbl td{padding:9px 10px;border-bottom:1px solid #eef2f7}
+  .tbl tr:last-child td{border-bottom:none}
+  .tbl .r{text-align:right;font-variant-numeric:tabular-nums}
+  .tbl .hot{background:#fffbeb}
+  .bad{color:var(--danger-text);font-weight:800}
+  .good{color:var(--success-text);font-weight:800}
+  .amb{color:var(--accent-text);font-weight:800}
+
+  .bar{display:inline-block;width:100%;height:11px;border-radius:6px;background:#e2e8f0;overflow:hidden;min-width:70px}
+  .bar i{display:block;height:100%;border-radius:6px}
+
+  .tip{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:13px 16px;
+       font-size:13px;line-height:1.6;margin-bottom:18px}
+  .tip b{color:var(--accent-text)}
+  .warn{background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:13px 16px;
+        font-size:13px;line-height:1.6}
+  .warn b{color:var(--danger-text)}
+  .ok{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:13px 16px;
+      font-size:13px;line-height:1.6}
+  .ok b{color:var(--success-text)}
+
+  .q{background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-top:14px}
+  .q .qt{font-weight:800;font-size:14.5px;margin-bottom:10px;display:flex;gap:9px;align-items:center}
+  .q .qt .n{background:var(--accent);color:#1e293b;width:23px;height:23px;border-radius:7px;
+            display:inline-flex;align-items:center;justify-content:center;font-size:12px;flex:none;font-weight:900}
+  .q ul{list-style:none;font-size:13.5px}
+  .q li{padding:7px 0 7px 26px;position:relative;border-bottom:1px solid #f1f5f9;line-height:1.6}
+  .q li:last-child{border-bottom:none}
+  .q li::before{content:'\25CB';position:absolute;left:6px;color:var(--muted)}
+  .q li.rec::before{content:'\25CF';color:var(--accent)}
+  .q li b{color:var(--text)}
+  .q li .why{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+
+  .foot{margin-top:34px;font-size:11.5px;color:var(--muted);text-align:center;line-height:1.7;
+        border-top:1px solid var(--border);padding-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <h1>📜 Οι λίστες που ανοίγουν προς τα κάτω — Τώρα vs 3 προτάσεις</h1>
+    <p>Είπες ότι οι λίστες ανοίγουν <b>«μαζεμένες και μικρές»</b>. Το μέτρησα σε πραγματικό Chrome:
+       πέρασα <b>396 σελίδες</b> και μέτρησα <b>439 λίστες</b>. Οι <b>393 από αυτές</b> έχουν γράμμα
+       <b>13,5 px</b> — και ο Chrome φτιάχνει το ύψος κάθε γραμμής της ανοιχτής λίστας από αυτό ακριβώς το νούμερο.
+       Βγαίνει <b>περίπου 17 px ανά γραμμή</b>. (Ο πίνακας πιο κάτω το ξαναμετράει ζωντανά, στον <b>δικό σου</b> browser.)</p>
+    <p>Για να καταλάβεις πόσο μικρό είναι: κάθε <b>κουμπί</b> στην εφαρμογή το έχουμε στα <b>44 px</b>
+       για να πατιέται άνετα. Οι γραμμές των λιστών είναι στο <b>ένα τρίτο</b>.</p>
+    <p style="margin-top:12px"><b>⚠️ Όλα τα ονόματα εδώ μέσα είναι φανταστικά δείγματα</b> — καμία πραγματική τιμή, κανένας πραγματικός προμηθευτής.</p>
+  </div>
+
+  <div class="tip">
+    <b>👉 Τι θέλω να κάνεις (30 δευτερόλεπτα):</b> πιο κάτω υπάρχουν <b>4 αληθινές λίστες</b>.
+    <b>Άνοιξέ τες μία-μία</b> και δες ποια σου αρέσει. Δεν είναι φωτογραφίες — είναι πραγματικές λίστες,
+    ίδιες με της εφαρμογής. Πες μου μετά μόνο ένα γράμμα: <b>α</b>, <b>β</b> ή <b>γ</b>.
+  </div>
+
+  <!-- ══════════ 1. Η ΖΩΝΤΑΝΗ ΔΟΚΙΜΗ ══════════ -->
+  <div class="sec-h"><span class="n">1</span> Άνοιξε και τις 4 — ποια διαβάζεται καλύτερα;
+    <span class="where">Δείγμα: λίστα υλικών, όπως στη Γέφυρα</span></div>
+
+  <div class="grid4">
+
+    <div class="card col now">
+      <div class="card-h"><span>Τώρα</span><span class="tag">13,5 px</span></div>
+      <div class="card-b">
+        <label class="fld" for="d0">Υλικό</label>
+        <div class="sw"><select id="d0">
+          <option>— διάλεξε —</option>
+          <option>Αλάτι χοντρό</option><option>Αλεύρι για όλες τις χρήσεις</option>
+          <option>Γάλα φρέσκο</option><option>Ελαιόλαδο</option><option>Κρεμμύδια ξερά</option>
+          <option>Λαδόκολλα</option><option>Μαϊντανός</option><option>Ντομάτες</option>
+          <option>Πατάτες</option><option>Πιπεριές Φλωρίνης</option><option>Ρίγανη</option>
+          <option>Σακούλες μεταφοράς</option><option>Τυρί φέτα</option><option>Ψωμί πίτα</option>
+        </select></div>
+        <div class="meas">ύψος γραμμής<br><b id="m0">—</b></div>
+      </div>
+    </div>
+
+    <div class="card col new p-a">
+      <div class="card-h"><span>Πρόταση α</span><span class="tag">αέρας</span></div>
+      <div class="card-b">
+        <label class="fld" for="da">Υλικό</label>
+        <div class="sw"><select id="da">
+          <option>— διάλεξε —</option>
+          <option>Αλάτι χοντρό</option><option>Αλεύρι για όλες τις χρήσεις</option>
+          <option>Γάλα φρέσκο</option><option>Ελαιόλαδο</option><option>Κρεμμύδια ξερά</option>
+          <option>Λαδόκολλα</option><option>Μαϊντανός</option><option>Ντομάτες</option>
+          <option>Πατάτες</option><option>Πιπεριές Φλωρίνης</option><option>Ρίγανη</option>
+          <option>Σακούλες μεταφοράς</option><option>Τυρί φέτα</option><option>Ψωμί πίτα</option>
+        </select></div>
+        <div class="meas">ύψος γραμμής<br><b id="ma">—</b></div>
+      </div>
+    </div>
+
+    <div class="card col new p-b">
+      <div class="card-h"><span>Πρόταση β</span><span class="tag">αέρας + 15 px</span></div>
+      <div class="card-b">
+        <label class="fld" for="db">Υλικό</label>
+        <div class="sw"><select id="db">
+          <option>— διάλεξε —</option>
+          <option>Αλάτι χοντρό</option><option>Αλεύρι για όλες τις χρήσεις</option>
+          <option>Γάλα φρέσκο</option><option>Ελαιόλαδο</option><option>Κρεμμύδια ξερά</option>
+          <option>Λαδόκολλα</option><option>Μαϊντανός</option><option>Ντομάτες</option>
+          <option>Πατάτες</option><option>Πιπεριές Φλωρίνης</option><option>Ρίγανη</option>
+          <option>Σακούλες μεταφοράς</option><option>Τυρί φέτα</option><option>Ψωμί πίτα</option>
+        </select></div>
+        <div class="meas">ύψος γραμμής<br><b id="mb">—</b></div>
+      </div>
+    </div>
+
+    <div class="card col new p-c wide">
+      <div class="card-h"><span>Πρόταση γ</span><span class="tag">μόνο οι τεράστιες</span></div>
+      <div class="card-b">
+        <label class="fld" for="dc">Υλικό <span style="color:#9c6406;font-weight:700">(87 υλικά)</span></label>
+        <div class="sw"><select id="dc">
+          <option>— διάλεξε —</option>
+          <option>Αλάτι χοντρό</option><option>Αλεύρι για όλες τις χρήσεις</option>
+          <option>Γάλα φρέσκο</option><option>Ελαιόλαδο</option><option>Κρεμμύδια ξερά</option>
+          <option>Λαδόκολλα</option><option>Μαϊντανός</option><option>Ντομάτες</option>
+          <option>Πατάτες</option><option>Πιπεριές Φλωρίνης</option><option>Ρίγανη</option>
+          <option>Σακούλες μεταφοράς</option><option>Τυρί φέτα</option><option>Ψωμί πίτα</option>
+        </select></div>
+        <div class="meas">ύψος γραμμής<br><b id="mc">—</b></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="warn" style="margin-top:16px">
+    <b>Να το ξέρεις — μια αβεβαιότητα, με το όνομά της:</b> τον «αέρα» τον μέτρησα σε λίστα-πλαίσιο,
+    <b>όχι</b> στο παραθυράκι που ανοίγει κάτω από το κουτί — ο υπολογιστής δεν με αφήνει να
+    φωτογραφίσω το αναδυόμενο παραθυράκι. Γι' αυτό σου ζητάω να τις ανοίξεις εσύ.
+    <b>Αν και οι 4 σου φανούν ίδιες</b>, σημαίνει ότι ο Chrome σου δεν δέχεται τον αέρα → πάμε στο
+    σίγουρο, που είναι το <b>μεγαλύτερο γράμμα</b> (πρόταση β).
+  </div>
+
+  <!-- ══════════ 2. ΞΕΔΙΠΛΩΜΕΝΕΣ ══════════ -->
+  <div class="sec-h"><span class="n">2</span> Οι ίδιες λίστες, ανοιχτές μόνιμα — για σύγκριση δίπλα-δίπλα
+    <span class="where">Αυτό δουλεύει σίγουρα σε κάθε Chrome</span></div>
+
+  <div class="grid4">
+    <div class="card col now">
+      <div class="card-h"><span>Τώρα</span><span class="tag">13,5 px</span></div>
+      <div class="card-b">
+        <select class="lb" id="l0" size="8">
+          <option>Αλάτι χοντρό</option><option>Αλεύρι για όλες τις χρήσεις</option>
+          <option>Γάλα φρέσκο</option><option>Ελαιόλαδο</option><option>Κρεμμύδια ξερά</option>
+          <option>Λαδόκολλα</option><option>Μαϊντανός</option><option>Ντομάτες</option>
+        </select>
+      </div>
+    </div>
+    <div class="card col new p-a">
+      <div class="card-h"><span>Πρόταση α</span><span class="tag">αέρας</span></div>
+      <div class="card-b">
+        <select class="lb" id="la" size="8">
+          <option>Αλάτι χοντρό</option><option>Αλεύρι για όλες τις χρήσεις</option>
+          <option>Γάλα φρέσκο</option><option>Ελαιόλαδο</option><option>Κρεμμύδια ξερά</option>
+          <option>Λαδόκολλα</option><option>Μαϊντανός</option><option>Ντομάτες</option>
+        </select>
+      </div>
+    </div>
+    <div class="card col new p-b">
+      <div class="card-h"><span>Πρόταση β</span><span class="tag">αέρας + 15 px</span></div>
+      <div class="card-b">
+        <select class="lb" id="lbx" size="8">
+          <option>Αλάτι χοντρό</option><option>Αλεύρι για όλες τις χρήσεις</option>
+          <option>Γάλα φρέσκο</option><option>Ελαιόλαδο</option><option>Κρεμμύδια ξερά</option>
+          <option>Λαδόκολλα</option><option>Μαϊντανός</option><option>Ντομάτες</option>
+        </select>
+      </div>
+    </div>
+    <div class="card col new p-c">
+      <div class="card-h"><span>Πρόταση γ</span><span class="tag">= α στις απλές</span></div>
+      <div class="card-b">
+        <select class="lb" id="lc" size="8">
+          <option>Αλάτι χοντρό</option><option>Αλεύρι για όλες τις χρήσεις</option>
+          <option>Γάλα φρέσκο</option><option>Ελαιόλαδο</option><option>Κρεμμύδια ξερά</option>
+          <option>Λαδόκολλα</option><option>Μαϊντανός</option><option>Ντομάτες</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ 3. ΤΑ ΝΟΥΜΕΡΑ ══════════ -->
+  <div class="sec-h"><span class="n">3</span> Τι μέτρησα — τα νούμερα, χωρίς ωραιοποίηση</div>
+
+  <div class="card">
+    <div class="card-h"><span>Πόσο ψηλή είναι κάθε γραμμή της ανοιχτής λίστας</span></div>
+    <div class="card-b">
+      <table class="tbl">
+        <tr><th>Ρύθμιση</th><th class="r">Ύψος γραμμής</th><th style="width:190px">Οπτικά</th><th class="r">Διαφορά</th></tr>
+        <tr class="hot"><td><b>Τώρα</b> — γράμμα 13,5 px</td><td class="r bad" id="t0">16,9 px</td>
+            <td><span class="bar"><i id="b0" style="width:38%;background:#ef4444"></i></span></td><td class="r">—</td></tr>
+        <tr><td><b>α</b> — αέρας στις γραμμές</td><td class="r good" id="ta">27,9 px</td>
+            <td><span class="bar"><i id="ba" style="width:63%;background:#10b981"></i></span></td><td class="r good" id="pa">+65 %</td></tr>
+        <tr><td><b>β</b> — αέρας + γράμμα 15 px</td><td class="r good" id="tb">27,7 px</td>
+            <td><span class="bar"><i id="bb" style="width:63%;background:#10b981"></i></span></td><td class="r good" id="pb">+64 %</td></tr>
+        <tr><td style="color:#5d6b7f">Για σύγκριση: ένα κουμπί της εφαρμογής</td><td class="r" style="color:#5d6b7f">44 px</td>
+            <td><span class="bar"><i style="width:100%;background:#94a3b8"></i></span></td><td class="r" style="color:#5d6b7f">—</td></tr>
+      </table>
+      <p style="margin-top:12px;font-size:12.5px;color:#5d6b7f">
+        Η <b>β</b> βγάζει σχεδόν ίδιο ύψος γραμμής με την <b>α</b> — αλλά με <b>μεγαλύτερα γράμματα</b>,
+        άρα διαβάζεται πιο εύκολα. Το τίμημα: μεγαλώνουν και τα κουτιά μέσα στη σελίδα.
+      </p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><span>Πού πονάει πιο πολύ — μεγάλες λίστες με μικρά γράμματα</span></div>
+    <div class="card-b">
+      <table class="tbl">
+        <tr><th>Σελίδα</th><th class="r">Επιλογές μέσα</th><th class="r">Γράμμα σήμερα</th><th>Τι σημαίνει</th></tr>
+        <tr class="hot"><td><b>Γέφυρα</b> (21 λίστες στην ίδια σελίδα)</td><td class="r bad">87</td><td class="r bad">13 px</td>
+            <td>87 υλικά σε γραμμές των 17 px</td></tr>
+        <tr class="hot"><td><b>Νέο τιμολόγιο</b></td><td class="r bad">87</td><td class="r">13,5 px</td>
+            <td>το διαλέγεις σε κάθε γραμμή τιμολογίου</td></tr>
+        <tr class="hot"><td><b>Είδη φύρας</b></td><td class="r bad">86</td><td class="r">13,5 px</td><td>ίδιο πρόβλημα</td></tr>
+        <tr><td><b>«Τι-αν» στα έξοδα</b></td><td class="r amb">48</td><td class="r">13,5 px</td><td>μεγάλη λίστα</td></tr>
+        <tr><td>Εργατικό κόστος · Μισθός ιδιοκτήτη</td><td class="r">15</td><td class="r">13,5 px</td><td>μέτρια</td></tr>
+        <tr class="hot"><td><b>Απόφαση διανομής</b></td><td class="r">3</td><td class="r bad">12 px</td>
+            <td>το μικρότερο όλης της εφαρμογής — ξεχασμένο</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><span>Πόσες λίστες έχει η εφαρμογή, ανά μέγεθος</span></div>
+    <div class="card-b">
+      <table class="tbl">
+        <tr><th>Μέγεθος γράμματος</th><th class="r">Πόσες λίστες</th><th style="width:260px">Οπτικά</th></tr>
+        <tr><td class="bad">12 px — πολύ μικρό</td><td class="r">8</td><td><span class="bar"><i style="width:2%;background:#ef4444"></i></span></td></tr>
+        <tr><td class="bad">13 px</td><td class="r">21</td><td><span class="bar"><i style="width:5%;background:#ef4444"></i></span></td></tr>
+        <tr class="hot"><td class="amb"><b>13,5 px — ο κανόνας σήμερα</b></td><td class="r"><b>393</b></td><td><span class="bar"><i style="width:100%;background:#f59e0b"></i></span></td></tr>
+        <tr><td>14 px</td><td class="r">13</td><td><span class="bar"><i style="width:3%;background:#94a3b8"></i></span></td></tr>
+        <tr><td>16 px</td><td class="r">4</td><td><span class="bar"><i style="width:1%;background:#94a3b8"></i></span></td></tr>
+      </table>
+      <p style="margin-top:12px;font-size:12.5px;color:#5d6b7f">
+        Τα <b>12 px</b> και τα <b>13 px</b> είναι απλώς <b>ξεχασμένα</b> — δεν υπάρχει λόγος να διαφέρουν.
+      </p>
+    </div>
+  </div>
+
+  <!-- ══════════ 4. ΤΙ ΑΛΛΑΖΕΙ / ΤΙ ΔΕΝ ΑΛΛΑΖΕΙ ══════════ -->
+  <div class="sec-h"><span class="n">4</span> Τι αλλάζει και τι <u>δεν</u> αλλάζει σε κάθε πρόταση</div>
+
+  <div class="grid3">
+    <div class="card col new p-a">
+      <div class="card-h"><span>α · μόνο αέρας</span></div>
+      <div class="card-b" style="font-size:13px;line-height:1.65">
+        <p class="good" style="margin-bottom:8px">✓ Η ανοιχτή λίστα ανασαίνει (17 → 28 px)</p>
+        <p class="good" style="margin-bottom:8px">✓ <b>Κανένα κουτί δεν μεγαλώνει</b> — καμία σελίδα δεν κουνιέται</p>
+        <p class="good" style="margin-bottom:8px">✓ Το πιο ασφαλές· τίποτα δεν μπορεί να χαλάσει</p>
+        <p class="bad">✗ Τα γράμματα μένουν 13,5 px — μικρά</p>
+        <p style="margin-top:10px;color:#5d6b7f">Πιάνει και τις 439 λίστες, από ένα σημείο.</p>
+      </div>
+    </div>
+    <div class="card col new p-b">
+      <div class="card-h"><span>β · αέρας + 15 px</span></div>
+      <div class="card-b" style="font-size:13px;line-height:1.65">
+        <p class="good" style="margin-bottom:8px">✓ Ανασαίνει <b>και</b> διαβάζεται</p>
+        <p class="good" style="margin-bottom:8px">✓ Δουλεύει ακόμα κι αν ο Chrome σου δεν δέχεται τον αέρα</p>
+        <p class="bad" style="margin-bottom:8px">✗ <b>Μεγαλώνουν και τα κουτιά</b> (36 → 44 px ύψος)</p>
+        <p class="bad">✗ Σε γεμάτες φόρμες μπορεί να «σπρώξει» κάτι — θέλει έλεγχο σε όλες τις σελίδες</p>
+        <p style="margin-top:10px;color:#5d6b7f">Το μεγάλωμα των κουτιών <b>δεν</b> είναι κακό από μόνο του — 44 px είναι ίδιο με τα κουμπιά μας.</p>
+      </div>
+    </div>
+    <div class="card col new p-c">
+      <div class="card-h"><span>γ · μεικτό</span></div>
+      <div class="card-b" style="font-size:13px;line-height:1.65">
+        <p style="margin-bottom:8px">Αέρας <b>παντού</b> (= α) <b>+</b> γράμμα 15 px <b>μόνο</b> στις 4 τεράστιες:
+           Γέφυρα · Νέο τιμολόγιο · Είδη φύρας · Τι-αν.</p>
+        <p class="good" style="margin-bottom:8px">✓ Το μεγάλο πρόβλημα λύνεται εκεί που πονάει</p>
+        <p class="good" style="margin-bottom:8px">✓ Οι υπόλοιπες σελίδες δεν κουνιούνται καθόλου</p>
+        <p class="bad">✗ Δύο μεγέθη στην εφαρμογή — σπάει λίγο το «ίδιο παντού»</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ 5. ΟΙ ΕΡΩΤΗΣΕΙΣ ══════════ -->
+  <div class="sec-h"><span class="n">5</span> Τι χρειάζομαι από σένα για να ξεκινήσω</div>
+
+  <div class="q">
+    <div class="qt"><span class="n">1</span> Ποια πρόταση;</div>
+    <ul>
+      <li><b>α — μόνο αέρας.</b> Το πιο ασφαλές, καμία σελίδα δεν αλλάζει σχήμα.
+          <span class="why">Αν οι 4 λίστες πιο πάνω σου φάνηκαν διαφορετικές, αυτή φτάνει.</span></li>
+      <li class="rec"><b>β — αέρας + γράμμα 15 px.</b> <b>Η πρότασή μου.</b>
+          <span class="why">Λύνει και το «μαζεμένα» και το «μικρά», και δουλεύει σίγουρα ό,τι Chrome κι αν έχεις. Θα ελέγξω μετά όλες τις σελίδες με τον αυτόματο σαρωτή για να μη σπρώξει τίποτα.</span></li>
+      <li><b>γ — μεικτό.</b> Αν θες να μην κουνηθεί απολύτως τίποτα εκτός από τις 4 προβληματικές.</li>
+    </ul>
+  </div>
+
+  <div class="q">
+    <div class="qt"><span class="n">2</span> Να διορθώσω και τις «ξεχασμένες»;</div>
+    <ul>
+      <li class="rec"><b>Ναι</b> — τα 12 px (Απόφαση διανομής) και τα 13 px (Γέφυρα) να γίνουν ίδια με τις υπόλοιπες.
+          <span class="why">Η πρότασή μου: το ίδιο πράγμα πρέπει να δείχνει ίδιο παντού.</span></li>
+      <li><b>Όχι</b> — άφησέ τα όπως είναι.</li>
+    </ul>
+  </div>
+
+  <div class="q">
+    <div class="qt"><span class="n">3</span> Τα κουτιά που ήδη είναι μεγάλα;</div>
+    <ul>
+      <li class="rec"><b>Άφησέ τα.</b> Οι λίστες των Προμηθευτών (46 px) και του ταμείου στο κινητό έχουν <b>δικό τους σχέδιο, σκόπιμα</b>.
+          <span class="why">Είναι ήδη μεγάλες και άνετες — δεν τις πειράζω.</span></li>
+      <li><b>Ισοπέδωσέ τα όλα</b> στο ίδιο μέγεθος.</li>
+    </ul>
+  </div>
+
+  <div class="ok" style="margin-top:18px">
+    <b>Πες μου απλά:</b> «<b>β</b>, ναι στις ξεχασμένες, άσε τους προμηθευτές» — και ξεκινάω.
+    <b>Δεν έχω αλλάξει τίποτα ακόμα</b> στην εφαρμογή.
+  </div>
+
+  <div class="foot">
+    TAMAM Grill House · Προεπισκόπηση σχεδίου — 23-08-2026<br>
+    Όλα τα ονόματα υλικών είναι φανταστικά δείγματα. Καμία πραγματική τιμή, κανένα πραγματικό στοιχείο του μαγαζιού.
+  </div>
+</div>
+
+<script>
+(function(){
+  // Μετράει το ΠΡΑΓΜΑΤΙΚΟ ύψος γραμμής κάθε πρότασης: φτιάχνει ένα κρυφό αντίγραφο
+  // της λίστας ξεδιπλωμένο και γράφει το αποτέλεσμα κάτω από κάθε κουτί.
+  function rowHeight(sel){
+    try{
+      var c = sel.cloneNode(true);
+      c.size = 6;
+      c.style.position = 'absolute';
+      c.style.visibility = 'hidden';
+      c.style.left = '-9999px';
+      c.style.width = sel.offsetWidth + 'px';
+      c.style.padding = '0';   // το padding του ΚΟΥΤΙΟΥ δεν μετράει — μετράμε τη γραμμή
+      sel.parentNode.appendChild(c);
+      var h = c.getBoundingClientRect().height;
+      c.parentNode.removeChild(c);
+      return (h - 4) / 6;
+    }catch(e){ return null; }
+  }
+  var pairs = [['d0','m0'], ['da','ma'], ['db','mb'], ['dc','mc']];
+  var base = null, heights = {};
+  pairs.forEach(function(p){
+    var s = document.getElementById(p[0]), out = document.getElementById(p[1]);
+    if(!s || !out) return;
+    var h = rowHeight(s);
+    if(h === null){ out.textContent = '—'; return; }
+    if(base === null) base = h;
+    var pct = Math.round((h / base - 1) * 100);
+    out.textContent = h.toFixed(1) + ' px' + (pct > 0 ? '  (+' + pct + '%)' : '');
+    out.style.color = pct > 0 ? '#15803d' : '#b91c1c';
+    heights[p[0]] = h;
+  });
+
+  // Ο πίνακας παρακάτω γεμίζει από ΤΗΝ ΙΔΙΑ μέτρηση, στον δικό σου browser,
+  // ώστε η σελίδα να μη λέει πουθενά δύο διαφορετικά νούμερα.
+  function fill(id, txt){ var e = document.getElementById(id); if(e) e.textContent = txt; }
+  function bar(id, h){ var e = document.getElementById(id); if(e) e.style.width = Math.min(100, h / 44 * 100) + '%'; }
+  if(base){
+    fill('t0', base.toFixed(1) + ' px'); bar('b0', base);
+    [['da','ta','pa','ba'], ['db','tb','pb','bb']].forEach(function(q){
+      var h = heights[q[0]];
+      if(!h) return;
+      fill(q[1], h.toFixed(1) + ' px');
+      fill(q[2], '+' + Math.round((h / base - 1) * 100) + ' %');
+      bar(q[3], h);
+    });
+  }
+})();
+</script>
+</body>
+</html>
