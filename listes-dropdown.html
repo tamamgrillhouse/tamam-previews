@@ -44,7 +44,7 @@
   .col.new .card-h{background:#f0fdf4;color:#166534}
   .tag{font-family:ui-monospace,Consolas,monospace;font-weight:800;font-size:11.5px}
 
-  label.fld{display:block;font-size:12px;font-weight:600;color:var(--text);margin-bottom:5px}
+  .fld{display:block;font-size:12px;font-weight:600;color:var(--text);margin-bottom:5px}
   .sw{position:relative}
   .sw::after{content:'\25BC';position:absolute;right:11px;top:50%;transform:translateY(-50%);
              pointer-events:none;color:var(--muted);font-size:11px}
@@ -68,6 +68,38 @@
 
   .meas{margin-top:10px;font-size:11.5px;color:var(--muted);font-family:ui-monospace,Consolas,monospace}
   .meas b{color:var(--text);font-size:12.5px}
+
+  /* ── ΖΩΓΡΑΦΙΣΜΕΝΗ ΛΙΣΤΑ ──────────────────────────────────────────────
+     Στο κινητό ο Android βάζει τη ΔΙΚΗ ΤΟΥ οθόνη αντί για τη λίστα και αγνοεί
+     κάθε σχέδιο. Οπότε τη ζωγραφίζουμε εδώ, στα ΜΕΤΡΗΜΕΝΑ μεγέθη, ώστε να
+     φαίνεται ίδια σε κινητό και σε υπολογιστή. */
+  .fk{margin-top:2px}
+  .fk .box{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;
+           border:1.5px solid var(--border);border-radius:7px;background:#fff;color:var(--text);
+           font-family:inherit;cursor:default;text-align:left}
+  .fk .box .ar{color:var(--muted);font-size:10px;flex:none}
+  .fk .pop{margin-top:4px;border:1px solid #cbd2dc;border-radius:6px;background:#fff;
+           box-shadow:0 6px 18px rgba(15,23,42,.16);overflow:hidden}
+  .fk .pop .it{display:flex;align-items:center;white-space:nowrap;overflow:hidden;
+               text-overflow:ellipsis;color:var(--text)}
+  .fk .pop .it.sel{background:#0b57d0;color:#fff}
+  .fk .rule{display:flex;align-items:center;gap:7px;margin-top:9px;font-size:11.5px;color:var(--muted);
+            font-family:ui-monospace,Consolas,monospace}
+  .fk .rule .px{display:inline-block;background:#eef2f7;border-radius:4px;padding:1px 6px;
+                color:var(--text);font-weight:800;font-size:11.5px}
+
+  /* ΤΩΡΑ */
+  .fk.now  .box{height:36px;padding:0 11px;font-size:13.5px}
+  .fk.now  .pop .it{height:16.9px;padding:0 10px;font-size:13.5px}
+  /* α — αέρας στις γραμμές */
+  .fk.pa   .box{height:36px;padding:0 11px;font-size:13.5px}
+  .fk.pa   .pop .it{height:27.9px;padding:0 10px;font-size:13.5px}
+  /* β — αέρας + γράμμα 15 px */
+  .fk.pb   .box{height:44px;padding:0 11px;font-size:15px}
+  .fk.pb   .pop .it{height:27.7px;padding:0 10px;font-size:15px}
+  /* γ — ίδιο με το β, αλλά μόνο στις τεράστιες λίστες */
+  .fk.pc   .box{height:44px;padding:0 11px;font-size:15px}
+  .fk.pc   .pop .it{height:27.7px;padding:0 10px;font-size:15px}
 
   .tbl{width:100%;border-collapse:collapse;font-size:13.5px}
   .tbl th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.3px;color:var(--muted);
@@ -124,14 +156,133 @@
   </div>
 
   <div class="tip">
-    <b>👉 Τι θέλω να κάνεις (30 δευτερόλεπτα):</b> πιο κάτω υπάρχουν <b>4 αληθινές λίστες</b>.
-    <b>Άνοιξέ τες μία-μία</b> και δες ποια σου αρέσει. Δεν είναι φωτογραφίες — είναι πραγματικές λίστες,
-    ίδιες με της εφαρμογής. Πες μου μετά μόνο ένα γράμμα: <b>α</b>, <b>β</b> ή <b>γ</b>.
+    <b>👉 Τι θέλω να κάνεις (30 δευτερόλεπτα):</b> πιο κάτω βλέπεις τις <b>4 λίστες ήδη ανοιχτές</b>,
+    στα ακριβή μεγέθη — <b>δεν χρειάζεται να πατήσεις τίποτα</b>. Κοίτα τες και πες μου ποια διαβάζεται
+    καλύτερα: <b>α</b>, <b>β</b> ή <b>γ</b>.<br>
+    <b>Διαβάζεται σωστά και από το κινητό</b> — γι' αυτό τις ζωγράφισα μέσα στη σελίδα αντί να βάλω
+    αληθινές: στο Android ο Chrome πετάει τη λίστα της σελίδας και βάζει τη <b>δική του</b> οθόνη,
+    οπότε τα σχέδια δεν φαίνονταν καθόλου.
   </div>
 
-  <!-- ══════════ 1. Η ΖΩΝΤΑΝΗ ΔΟΚΙΜΗ ══════════ -->
-  <div class="sec-h"><span class="n">1</span> Άνοιξε και τις 4 — ποια διαβάζεται καλύτερα;
+  <!-- ══════════ 1. ΟΙ ΖΩΓΡΑΦΙΣΜΕΝΕΣ ΛΙΣΤΕΣ (δουλεύουν και στο κινητό) ══════════ -->
+  <div class="sec-h"><span class="n">1</span> Οι 4 λίστες, ανοιχτές — έτσι ακριβώς ανοίγουν στον υπολογιστή
     <span class="where">Δείγμα: λίστα υλικών, όπως στη Γέφυρα</span></div>
+
+  <div class="grid4">
+
+    <div class="card col now">
+      <div class="card-h"><span>Τώρα</span><span class="tag">13,5 px</span></div>
+      <div class="card-b">
+        <div class="fld">Υλικό</div>
+        <div class="fk now">
+          <div class="box"><span>Ελαιόλαδο</span><span class="ar">▼</span></div>
+          <div class="pop">
+            <div class="it">Αλάτι χοντρό</div>
+            <div class="it">Αλεύρι για όλες τις χρήσεις</div>
+            <div class="it">Γάλα φρέσκο</div>
+            <div class="it sel">Ελαιόλαδο</div>
+            <div class="it">Κρεμμύδια ξερά</div>
+            <div class="it">Λαδόκολλα</div>
+            <div class="it">Μαϊντανός</div>
+            <div class="it">Ντομάτες</div>
+            <div class="it">Πατάτες</div>
+            <div class="it">Ρίγανη</div>
+          </div>
+          <div class="rule">κάθε γραμμή <span class="px">16,9 px</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card col new">
+      <div class="card-h"><span>Πρόταση α</span><span class="tag">αέρας</span></div>
+      <div class="card-b">
+        <div class="fld">Υλικό</div>
+        <div class="fk pa">
+          <div class="box"><span>Ελαιόλαδο</span><span class="ar">▼</span></div>
+          <div class="pop">
+            <div class="it">Αλάτι χοντρό</div>
+            <div class="it">Αλεύρι για όλες τις χρήσεις</div>
+            <div class="it">Γάλα φρέσκο</div>
+            <div class="it sel">Ελαιόλαδο</div>
+            <div class="it">Κρεμμύδια ξερά</div>
+            <div class="it">Λαδόκολλα</div>
+            <div class="it">Μαϊντανός</div>
+            <div class="it">Ντομάτες</div>
+            <div class="it">Πατάτες</div>
+            <div class="it">Ρίγανη</div>
+          </div>
+          <div class="rule">κάθε γραμμή <span class="px">27,9 px</span> <span class="good">+65 %</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card col new">
+      <div class="card-h"><span>Πρόταση β</span><span class="tag">αέρας + 15 px</span></div>
+      <div class="card-b">
+        <div class="fld">Υλικό</div>
+        <div class="fk pb">
+          <div class="box"><span>Ελαιόλαδο</span><span class="ar">▼</span></div>
+          <div class="pop">
+            <div class="it">Αλάτι χοντρό</div>
+            <div class="it">Αλεύρι για όλες τις χρήσεις</div>
+            <div class="it">Γάλα φρέσκο</div>
+            <div class="it sel">Ελαιόλαδο</div>
+            <div class="it">Κρεμμύδια ξερά</div>
+            <div class="it">Λαδόκολλα</div>
+            <div class="it">Μαϊντανός</div>
+            <div class="it">Ντομάτες</div>
+            <div class="it">Πατάτες</div>
+            <div class="it">Ρίγανη</div>
+          </div>
+          <div class="rule">κάθε γραμμή <span class="px">27,7 px</span> <span class="good">+64 %</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card col new">
+      <div class="card-h"><span>Πρόταση γ</span><span class="tag">μόνο οι τεράστιες</span></div>
+      <div class="card-b">
+        <div class="fld">Υλικό <span style="color:#9c6406;font-weight:700">(87 υλικά)</span></div>
+        <div class="fk pc">
+          <div class="box"><span>Ελαιόλαδο</span><span class="ar">▼</span></div>
+          <div class="pop">
+            <div class="it">Αλάτι χοντρό</div>
+            <div class="it">Αλεύρι για όλες τις χρήσεις</div>
+            <div class="it">Γάλα φρέσκο</div>
+            <div class="it sel">Ελαιόλαδο</div>
+            <div class="it">Κρεμμύδια ξερά</div>
+            <div class="it">Λαδόκολλα</div>
+            <div class="it">Μαϊντανός</div>
+            <div class="it">Ντομάτες</div>
+            <div class="it">Πατάτες</div>
+            <div class="it">Ρίγανη</div>
+          </div>
+          <div class="rule">ίδιο με το <b style="color:#1e293b">β</b>, μόνο στις 4 μεγάλες σελίδες</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="ok" style="margin-top:16px">
+    <b>Τι βλέπεις εδώ:</b> αυτές είναι <b>ζωγραφισμένες</b> λίστες, στημένες στα <b>ακριβή μεγέθη που μέτρησα</b>
+    σε πραγματικό Chrome υπολογιστή. Τις ζωγράφισα γιατί στο <b>κινητό</b> ο Android δεν δείχνει τη λίστα της
+    σελίδας — βάζει τη <b>δική του</b> οθόνη και αγνοεί κάθε σχέδιο. Έτσι τώρα βλέπεις το ίδιο πράγμα
+    <b>και από το κινητό και από τον υπολογιστή</b>.
+  </div>
+
+  <div class="warn" style="margin-top:12px">
+    <b>Δύο πράγματα να τα ξέρεις καθαρά:</b><br>
+    • Στο <b>κινητό</b> τίποτα από αυτά <b>δεν αλλάζει</b> — η οθόνη του Android θα μείνει όπως είναι
+      ό,τι κι αν διαλέξεις. Η αλλαγή αφορά τον <b>υπολογιστή του μαγαζιού</b>, εκεί που δουλεύεις.<br>
+    • Τα νούμερα της πρότασης <b>α</b> τα μέτρησα σε λίστα-πλαίσιο, όχι στο ίδιο το παραθυράκι που ανοίγει
+      (ο υπολογιστής δεν με αφήνει να το φωτογραφίσω). Θα το <b>επιβεβαιώσω στον υπολογιστή σου</b> πριν
+      κλειδώσουμε την α. Η <b>β</b> δεν έχει αυτή την αβεβαιότητα — δουλεύει σίγουρα παντού.
+  </div>
+
+  <!-- ══════════ 1β. ΟΙ ΑΛΗΘΙΝΕΣ ΛΙΣΤΕΣ (μόνο σε υπολογιστή) ══════════ -->
+  <div class="sec-h"><span class="n">1β</span> Οι αληθινές λίστες — άνοιξέ τες <u>μόνο</u> από τον υπολογιστή
+    <span class="where">Στο κινητό εδώ θα δεις την οθόνη του Android — αγνόησέ το</span></div>
 
   <div class="grid4">
 
@@ -201,17 +352,9 @@
 
   </div>
 
-  <div class="warn" style="margin-top:16px">
-    <b>Να το ξέρεις — μια αβεβαιότητα, με το όνομά της:</b> τον «αέρα» τον μέτρησα σε λίστα-πλαίσιο,
-    <b>όχι</b> στο παραθυράκι που ανοίγει κάτω από το κουτί — ο υπολογιστής δεν με αφήνει να
-    φωτογραφίσω το αναδυόμενο παραθυράκι. Γι' αυτό σου ζητάω να τις ανοίξεις εσύ.
-    <b>Αν και οι 4 σου φανούν ίδιες</b>, σημαίνει ότι ο Chrome σου δεν δέχεται τον αέρα → πάμε στο
-    σίγουρο, που είναι το <b>μεγαλύτερο γράμμα</b> (πρόταση β).
-  </div>
-
   <!-- ══════════ 2. ΞΕΔΙΠΛΩΜΕΝΕΣ ══════════ -->
-  <div class="sec-h"><span class="n">2</span> Οι ίδιες λίστες, ανοιχτές μόνιμα — για σύγκριση δίπλα-δίπλα
-    <span class="where">Αυτό δουλεύει σίγουρα σε κάθε Chrome</span></div>
+  <div class="sec-h"><span class="n">2</span> Ο σταυρωτός έλεγχος — <u>αληθινές</u> λίστες, όχι ζωγραφισμένες
+    <span class="where">Δουλεύει και στο κινητό · έτσι επιβεβαιώνεις ότι δεν σου ζωγράφισα ψέματα</span></div>
 
   <div class="grid4">
     <div class="card col now">
