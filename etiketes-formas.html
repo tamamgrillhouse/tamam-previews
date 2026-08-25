@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏷️</text></svg>">
+<title>Ετικέτες φορμών — TAMAM Preview</title>
+<style>
+  :root{
+    --black:#0d0f14; --deep:#1c2554; --yellow:#f5c842; --white:#eef1f8; --muted:#8b93b8; --bd:#2a3580;
+    /* παλέτα εφαρμογής */
+    --app-bg:#f7f8fa; --app-card:#ffffff; --app-bd:#e2e5ec; --app-text:#1f2430; --app-muted:#6b7280;
+    --accent:#f59e0b; --accent-text:#9c6406; --ok:#15803d; --bad:#b91c1c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Segoe UI','Noto Sans',system-ui,sans-serif;
+    background:radial-gradient(ellipse at top,#1a1f3a,var(--black) 70%);
+    color:var(--white); min-height:100vh; padding:26px 16px 60px;
+    -webkit-text-size-adjust:100%;
+  }
+  .wrap{max-width:1000px;margin:0 auto}
+
+  /* ---------- κεφαλίδα ---------- */
+  .logo{font-size:26px;font-weight:800;letter-spacing:.5px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .logo .tag{font-size:11px;background:var(--yellow);color:#1a1206;padding:3px 9px;border-radius:20px;font-weight:800}
+  .lead{color:var(--muted);margin-top:12px;font-size:15px;line-height:1.75;max-width:820px}
+  .lead b{color:var(--white)}
+  .back{display:inline-block;margin-top:16px;color:var(--yellow);text-decoration:none;font-size:13.5px;font-weight:700}
+
+  /* ---------- ενότητες ---------- */
+  h2{font-size:19px;margin:38px 0 6px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  h2 .n{background:var(--yellow);color:#1a1206;width:26px;height:26px;border-radius:50%;display:inline-flex;
+        align-items:center;justify-content:center;font-size:14px;font-weight:800;flex:none}
+  .note{color:var(--muted);font-size:13.5px;line-height:1.7;margin:8px 0 16px;max-width:820px}
+  .note b{color:var(--white)}
+
+  /* ---------- «οθόνη» εφαρμογής ---------- */
+  .screens{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media (max-width:760px){ .screens{grid-template-columns:1fr} }
+  .screen{background:var(--app-card);border-radius:14px;overflow:hidden;border:1px solid var(--bd)}
+  .screen .hd{padding:10px 14px;font-size:12.5px;font-weight:800;letter-spacing:.3px;
+              display:flex;align-items:center;gap:8px;justify-content:space-between}
+  .hd-now{background:#3a2020;color:#ffb4b4}
+  .hd-new{background:#17351f;color:#a9e6bd}
+  .screen .body{padding:16px 16px 18px;color:var(--app-text);background:var(--app-bg)}
+
+  /* ---------- πεδία φόρμας (μιμούνται την εφαρμογή) ---------- */
+  .fld{margin-bottom:13px}
+  .fld .lb{display:block;font-size:13px;font-weight:700;color:#374151;margin-bottom:5px}
+  .fld input,.fld select{
+    width:100%;height:42px;border:1px solid #cfd4de;border-radius:9px;background:#fff;
+    padding:0 11px;font-size:14.5px;font-family:inherit;color:var(--app-text);
+  }
+  .fld input:focus,.fld select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(245,158,11,.18)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+
+  /* κούμπωμα ενεργό: η ετικέτα δείχνει «είμαι μαζί σου» */
+  .lit .lb{cursor:pointer}
+  .lit.on-2 .lb.act,.lit.on-3 .lb.act{color:var(--accent-text)}
+
+  /* τικ */
+  .tick{display:flex;align-items:flex-start;gap:10px;padding:9px 10px;border-radius:9px;margin-bottom:7px;border:1px solid transparent}
+  .tick input{width:19px;height:19px;margin-top:1px;flex:none;accent-color:var(--accent)}
+  .tick .tx{font-size:14px;line-height:1.45}
+  .tick .tx small{display:block;color:var(--app-muted);font-size:12px;margin-top:2px}
+  .tick.bound{cursor:pointer}
+  .tick.wide{background:#fff;border-color:#e6e9f0}
+  .tick.wide:hover{background:#fffaf0;border-color:#f3d9a4}
+
+  /* ---------- δείκτης «τι έγινε» ---------- */
+  .hint{margin-top:12px;font-size:12.5px;border-radius:9px;padding:9px 11px;line-height:1.55;min-height:38px}
+  .hint-bad{background:#fef2f2;color:var(--bad);border:1px solid #f6cfcf}
+  .hint-ok{background:#f0fdf4;color:var(--ok);border:1px solid #c9ecd4}
+
+  .try{background:#fff8e8;border:1px dashed #e6c469;color:#6b4c05;border-radius:11px;
+       padding:12px 14px;font-size:13.5px;line-height:1.65;margin:14px 0}
+  .try b{color:#4a3400}
+
+  /* ---------- κάρτες επιλογών ---------- */
+  .opts{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+  @media (max-width:860px){ .opts{grid-template-columns:1fr} }
+  .opt{background:var(--deep);border:2px solid var(--bd);border-radius:14px;padding:16px;cursor:pointer;
+       transition:border-color .15s,transform .12s;display:flex;flex-direction:column;gap:8px}
+  .opt:hover{border-color:#4457c9}
+  .opt.sel{border-color:var(--yellow);box-shadow:0 0 0 4px rgba(245,200,66,.12)}
+  .opt .ttl{font-weight:800;font-size:15px;display:flex;align-items:center;gap:8px}
+  .opt .ttl .badge{font-size:10.5px;background:#0f1533;color:var(--muted);border:1px solid var(--bd);
+                   padding:2px 7px;border-radius:20px;font-weight:700;margin-left:auto}
+  .opt .dsc{font-size:13px;color:var(--muted);line-height:1.65}
+  .opt ul{margin:2px 0 0 16px;font-size:12.5px;color:var(--muted);line-height:1.6}
+  .opt .pick{margin-top:auto;font-size:12px;font-weight:800;color:var(--yellow);opacity:0;transition:opacity .15s}
+  .opt.sel .pick{opacity:1}
+
+  .live{background:var(--deep);border:1px solid var(--bd);border-radius:14px;padding:16px;margin-top:16px}
+  .live .cap{font-size:12.5px;color:var(--muted);margin-bottom:12px;line-height:1.6}
+
+  table{width:100%;border-collapse:collapse;margin-top:12px;font-size:13.5px}
+  th,td{padding:10px 11px;text-align:left;border-bottom:1px solid var(--bd);vertical-align:top}
+  th:last-child,td:last-child{text-align:right;white-space:nowrap}
+  th{color:var(--muted);font-size:12px;font-weight:700}
+  td.y{color:#a9e6bd;font-weight:700}
+  td.n{color:#ffb4b4;font-weight:700}
+
+  .foot{margin-top:44px;font-size:11.5px;color:var(--muted);text-align:center;line-height:1.8;
+        border-top:1px solid var(--bd);padding-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="logo">🏷️ Ετικέτες φορμών <span class="tag">PREVIEW</span></div>
+  <p class="lead">
+    Η εκκρεμότητα λέγεται «σύνδεση ετικέτας με το κουτί». Είναι το <b>μόνο</b> πράγμα που μένει από τη μεριά του κώδικα.
+    Εδώ θα το <b>δοκιμάσεις με τα δάχτυλά σου</b> — και στο τέλος διαλέγεις πόσο μακριά θέλεις να το πάμε.
+    <br><br>
+    ⚠️ Όλα τα νούμερα &amp; ονόματα εδώ είναι <b>φανταστικά</b> (δείγμα).
+  </p>
+  <a class="back" href="index.html">‹ Πίσω στη λίστα</a>
+
+  <!-- ══════════════ 1 ══════════════ -->
+  <h2><span class="n">1</span> Τι είναι — με μια εικόνα</h2>
+  <p class="note">
+    Σε κάθε φόρμα υπάρχουν δύο πράγματα δίπλα-δίπλα: η <b>λέξη</b> («Ποσό») και το <b>κουτί</b> όπου γράφεις.
+    Στον κώδικα μπορεί να είναι δύο <b>ξένα</b> πράγματα που απλώς ζωγραφίζονται κοντά, ή <b>επίσημα δεμένα</b>.
+    <br><br>
+    <b>Η αναλογία:</b> ταμπελίτσα «Αλάτι» πάνω από ένα βαζάκι. Στη μία περίπτωση είναι <b>κολλημένη στο βαζάκι</b>·
+    στην άλλη είναι απλώς <b>κρεμασμένη στον τοίχο δίπλα του</b>. Με το μάτι, ίδιο. Στη χρήση, όχι.
+  </p>
+
+  <!-- ══════════════ 2 ══════════════ -->
+  <h2><span class="n">2</span> Δοκίμασέ το — πάτα πάνω στις <u>λέξεις</u>, όχι στα κουτιά</h2>
+  <p class="note">Δύο ίδιες φόρμες «Νέο Τιμολόγιο». Αριστερά όπως είναι σήμερα, δεξιά κουμπωμένη.</p>
+
+  <div class="screens">
+    <!-- ΤΩΡΑ -->
+    <div class="screen">
+      <div class="hd hd-now"><span>❌ ΟΠΩΣ ΕΙΝΑΙ ΣΗΜΕΡΑ</span><span>ξεκούμπωτο</span></div>
+      <div class="body">
+        <div class="fld">
+          <span class="lb" onclick="miss('a')">Προμηθευτής</span>
+          <select id="a1"><option>Κρεοπωλείο Γεωργίου</option><option>ΑΦΟΙ Δημητρίου</option><option>Φούρνος Ψωμάς</option></select>
+        </div>
+        <div class="row2">
+          <div class="fld">
+            <span class="lb" onclick="miss('a')">Αριθμός</span>
+            <input id="a2" type="text" value="4471">
+          </div>
+          <div class="fld">
+            <span class="lb" onclick="miss('a')">Ημερομηνία</span>
+            <input id="a3" type="text" value="12-08-2026">
+          </div>
+        </div>
+        <div class="fld">
+          <span class="lb" onclick="miss('a')">Καθαρή αξία (€)</span>
+          <input id="a4" type="text" value="248,60">
+        </div>
+        <div id="hint-a" class="hint hint-bad">👆 Πάτα μια λέξη παραπάνω και δες τι γίνεται.</div>
+      </div>
+    </div>
+
+    <!-- ΜΕ ΚΟΥΜΠΩΜΑ -->
+    <div class="screen">
+      <div class="hd hd-new"><span>✅ ΜΕ ΚΟΥΜΠΩΜΑ</span><span>label ↔ κουτί</span></div>
+      <div class="body lit" id="demoB">
+        <div class="fld">
+          <label class="lb" for="b1">Προμηθευτής</label>
+          <select id="b1"><option>Κρεοπωλείο Γεωργίου</option><option>ΑΦΟΙ Δημητρίου</option><option>Φούρνος Ψωμάς</option></select>
+        </div>
+        <div class="row2">
+          <div class="fld">
+            <label class="lb" for="b2">Αριθμός</label>
+            <input id="b2" type="text" value="4471">
+          </div>
+          <div class="fld">
+            <label class="lb" for="b3">Ημερομηνία</label>
+            <input id="b3" type="text" value="12-08-2026">
+          </div>
+        </div>
+        <div class="fld">
+          <label class="lb" for="b4">Καθαρή αξία (€)</label>
+          <input id="b4" type="text" value="248,60">
+        </div>
+        <div id="hint-b" class="hint hint-ok">👆 Πάτα την ίδια λέξη εδώ και σύγκρινε.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="try">
+    <b>Τι θα δεις:</b> αριστερά η λέξη είναι «νεκρή» — πρέπει να σημαδέψεις το κουτάκι.
+    Δεξιά η λέξη <b>είναι</b> το κουτί: πατάς οπουδήποτε πάνω της και ο κέρσορας μπαίνει μέσα, έτοιμος για γράψιμο.
+  </div>
+
+  <!-- ══════════════ 3 ══════════════ -->
+  <h2><span class="n">3</span> Εκεί που μετράει πραγματικά: τα ✅ τικ</h2>
+  <p class="note">
+    Στα τικ το κέρδος είναι <b>πολύ μεγαλύτερο</b>, γιατί το τετραγωνάκι είναι μικροσκοπικό — ειδικά σε κινητό ή με βρεγμένα/λαδωμένα χέρια.
+    Δοκίμασε να πατήσεις πάνω στη <b>φράση</b> (όχι στο τετραγωνάκι) και στις δύο μεριές:
+  </p>
+
+  <div class="screens">
+    <div class="screen">
+      <div class="hd hd-now"><span>❌ ΣΗΜΕΡΑ</span><span>μόνο το τετραγωνάκι</span></div>
+      <div class="body">
+        <div class="tick"><input type="checkbox" id="c1"><span class="tx" onclick="miss('c')">Το τιμολόγιο είναι πληρωμένο<small>Πάτα ακριβώς πάνω στο κουτάκι</small></span></div>
+        <div class="tick"><input type="checkbox" id="c2"><span class="tx" onclick="miss('c')">Να μπει και στο ταμείο (μετρητά)<small>Η φράση δεν κάνει τίποτα</small></span></div>
+        <div class="tick"><input type="checkbox" id="c3"><span class="tx" onclick="miss('c')">Έχω το χαρτί στα χέρια μου<small>—</small></span></div>
+        <div id="hint-c" class="hint hint-bad">👆 Πάτα πάνω σε μια φράση.</div>
+      </div>
+    </div>
+    <div class="screen">
+      <div class="hd hd-new"><span>✅ ΜΕ ΚΟΥΜΠΩΜΑ</span><span>όλη η φράση</span></div>
+      <div class="body">
+        <label class="tick bound wide" for="d1"><input type="checkbox" id="d1"><span class="tx">Το τιμολόγιο είναι πληρωμένο<small>Πάτα οπουδήποτε στη γραμμή</small></span></label>
+        <label class="tick bound wide" for="d2"><input type="checkbox" id="d2"><span class="tx">Να μπει και στο ταμείο (μετρητά)<small>Στόχος 8× μεγαλύτερος</small></span></label>
+        <label class="tick bound wide" for="d3"><input type="checkbox" id="d3"><span class="tx">Έχω το χαρτί στα χέρια μου<small>—</small></span></label>
+        <div class="hint hint-ok">✅ Ολόκληρη η γραμμή είναι το κουμπί.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ 4 ══════════════ -->
+  <h2><span class="n">4</span> Διάλεξε πόσο μακριά το πάμε</h2>
+  <p class="note">Και οι τρεις εκδοχές έχουν <b>μηδενικό ρίσκο</b> — δεν αγγίζουν κανένα νούμερο, καμία αποθήκευση, κανέναν υπολογισμό. Πάτα μια κάρτα και δες αμέσως από κάτω το αποτέλεσμα:</p>
+
+  <div class="opts">
+    <div class="opt" id="o1" onclick="pick(1)">
+      <div class="ttl">🅰️ Σκέτο κούμπωμα <span class="badge">αόρατο</span></div>
+      <div class="dsc">Δένουμε λέξη ↔ κουτί. <b>Τίποτα δεν αλλάζει οπτικά.</b> Απλώς η λέξη γίνεται πατητή.</div>
+      <ul><li>Καμία αλλαγή στην εμφάνιση</li><li>Πατάς τη λέξη → μπαίνεις στο κουτί</li></ul>
+      <div class="pick">✓ Επιλεγμένο</div>
+    </div>
+    <div class="opt sel" id="o2" onclick="pick(2)">
+      <div class="ttl">🅱️ + Φωτεινή ετικέτα <span class="badge">προτείνω</span></div>
+      <div class="dsc">Ό,τι και το Α, <b>και</b> η ετικέτα του κουτιού που γράφεις τώρα γίνεται πορτοκαλί.</div>
+      <ul><li>Σε μεγάλη φόρμα ξέρεις πάντα «πού είμαι»</li><li>Βοηθά στα τιμολόγια με 12+ κουτιά</li></ul>
+      <div class="pick">✓ Επιλεγμένο</div>
+    </div>
+    <div class="opt" id="o3" onclick="pick(3)">
+      <div class="ttl">🅲 + Ολόκληρη γραμμή <span class="badge">μέγιστο</span></div>
+      <div class="dsc">Ό,τι και το Β, <b>και</b> στα ✅ τικ ολόκληρη η γραμμή γίνεται κουμπί με πλαίσιο.</div>
+      <ul><li>Ο μεγαλύτερος στόχος για το δάχτυλο</li><li>Μικρή οπτική αλλαγή στα τικ</li></ul>
+      <div class="pick">✓ Επιλεγμένο</div>
+    </div>
+  </div>
+
+  <div class="live">
+    <div class="cap">🔎 <b>Ζωντανή δοκιμή της επιλογής σου</b> — φόρμα «Βάρδια υπαλλήλου». Πάτα λέξεις και τικ:</div>
+    <div class="screen">
+      <div class="hd hd-new"><span>👤 Εργατικό κόστος → Νέα βάρδια</span><span id="modeName">Εκδοχή Β</span></div>
+      <div class="body lit on-2" id="liveForm">
+        <div class="fld"><label class="lb" for="e1">Υπάλληλος</label>
+          <select id="e1"><option>Γιώργος Π.</option><option>Μαρία Κ.</option><option>Νίκος Δ.</option></select></div>
+        <div class="row2">
+          <div class="fld"><label class="lb" for="e2">Ώρα έναρξης</label><input id="e2" type="text" value="17:00"></div>
+          <div class="fld"><label class="lb" for="e3">Ώρα λήξης</label><input id="e3" type="text" value="01:30"></div>
+        </div>
+        <div class="fld"><label class="lb" for="e4">Αμοιβή (€ / ώρα)</label><input id="e4" type="text" value="6,20"></div>
+        <label class="tick bound" id="tk1" for="e5"><input type="checkbox" id="e5"><span class="tx">Μετράει ως νυχτερινή<small>Προσαύξηση μετά τις 22:00</small></span></label>
+        <label class="tick bound" id="tk2" for="e6"><input type="checkbox" id="e6"><span class="tx">Έκανε και διανομή<small>Υπολογίζεται χωριστά</small></span></label>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ 5 ══════════════ -->
+  <h2><span class="n">5</span> Τι ΔΕΝ αλλάζει — καθόλου</h2>
+  <table>
+    <tr><th>Θέμα</th><th>Επηρεάζεται;</th></tr>
+    <tr><td>Νούμερα, κόστη, ΦΠΑ, κέρδος</td><td class="y">ΟΧΙ</td></tr>
+    <tr><td>Τι αποθηκεύεται στη βάση</td><td class="y">ΟΧΙ</td></tr>
+    <tr><td>Διάταξη σελίδας / πού βρίσκεται το κάθε κουτί</td><td class="y">ΟΧΙ</td></tr>
+    <tr><td>Ταχύτητα εφαρμογής</td><td class="y">ΟΧΙ</td></tr>
+    <tr><td>Χρώμα ετικέτας ενεργού κουτιού</td><td class="n">μόνο σε Β / Γ</td></tr>
+    <tr><td>Πλαίσιο γύρω από τα ✅ τικ</td><td class="n">μόνο σε Γ</td></tr>
+  </table>
+
+  <h2><span class="n">6</span> Πού θα εφαρμοστεί</h2>
+  <p class="note">
+    Στις <b>4 μεγάλες φόρμες</b> που έμειναν πίσω: <b>Εργατικό κόστος</b> · <b>Τιμολόγια</b> · <b>Προμηθευτές</b> · <b>Ταμείο</b>.
+    Σε όλες τις υπόλοιπες σελίδες το κούμπωμα υπάρχει ήδη — γι' αυτό και σε κάποιες οθόνες
+    η λέξη ήδη «δουλεύει» ενώ σε άλλες όχι. Μετά από αυτό, <b>όλη η εφαρμογή θα συμπεριφέρεται το ίδιο παντού</b>.
+  </p>
+
+  <div class="foot">TAMAM Grill House · ιδιωτικό εργαλείο · μη ευρετηριάσιμο<br>Δείγμα δεδομένων — κανένα πραγματικό στοιχείο</div>
+</div>
+
+<script>
+  var missTimer = {};
+  function miss(which){
+    var el = document.getElementById('hint-'+which);
+    if(!el) return;
+    el.textContent = '❌ Τίποτα. Η λέξη είναι απλό κείμενο — πρέπει να σημαδέψεις το ίδιο το κουτί.';
+    clearTimeout(missTimer[which]);
+    missTimer[which] = setTimeout(function(){
+      el.textContent = '👆 Πάτα ξανά μια λέξη παραπάνω.';
+    }, 2600);
+  }
+
+  var okB = document.getElementById('hint-b');
+  ['b1','b2','b3','b4'].forEach(function(id){
+    document.getElementById(id).addEventListener('focus', function(){
+      okB.textContent = '✅ Πάτησες τη λέξη και ο κέρσορας μπήκε στο κουτί — έτοιμος να γράψεις.';
+    });
+  });
+
+  var live = document.getElementById('liveForm');
+  var names = {1:'Εκδοχή Α — σκέτο κούμπωμα', 2:'Εκδοχή Β — + φωτεινή ετικέτα', 3:'Εκδοχή Γ — + ολόκληρη γραμμή'};
+  function pick(n){
+    [1,2,3].forEach(function(i){ document.getElementById('o'+i).classList.toggle('sel', i===n); });
+    live.classList.remove('on-1','on-2','on-3');
+    live.classList.add('on-'+n);
+    ['tk1','tk2'].forEach(function(id){ document.getElementById(id).classList.toggle('wide', n===3); });
+    document.getElementById('modeName').textContent = names[n];
+  }
+
+  // φωτεινή ετικέτα: μαρκάρει το label του ενεργού πεδίου
+  live.addEventListener('focusin', function(e){
+    live.querySelectorAll('.lb').forEach(function(l){ l.classList.remove('act'); });
+    var lb = live.querySelector('label[for="'+e.target.id+'"]');
+    if(lb) lb.classList.add('act');
+  });
+  live.addEventListener('focusout', function(){
+    setTimeout(function(){
+      if(!live.contains(document.activeElement)){
+        live.querySelectorAll('.lb').forEach(function(l){ l.classList.remove('act'); });
+      }
+    }, 0);
+  });
+
+  // ίδιο εφέ και στο demo της ενότητας 2
+  var demoB = document.getElementById('demoB');
+  demoB.classList.add('on-2');
+  demoB.addEventListener('focusin', function(e){
+    demoB.querySelectorAll('.lb').forEach(function(l){ l.classList.remove('act'); });
+    var lb = demoB.querySelector('label[for="'+e.target.id+'"]');
+    if(lb) lb.classList.add('act');
+  });
+</script>
+</body>
+</html>
