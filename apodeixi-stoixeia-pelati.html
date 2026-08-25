@@ -100,7 +100,9 @@
   .paper{
     width:var(--pw); background:#fff; color:#000;
     font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.35;
-    padding:8px 7px 12px; zoom:var(--z);
+    /* ΧΩΡΙΣ οριζόντιο padding: το @page margin έχει ΗΔΗ αφαιρεθεί από το πλάτος,
+       άρα το κουτί περιεχομένου ξεκινά στην άκρη — όπως στο αληθινό χαρτί. */
+    padding:8px 0 12px; zoom:var(--z);
     box-shadow:0 0 0 1px rgba(0,0,0,.08);
   }
 
@@ -138,6 +140,23 @@
   /* ── QR δείγμα ── */
   .qr canvas{display:block;image-rendering:pixelated}
   .qr .lbl{font-size:8px;line-height:1.1;text-align:center;margin-top:1px;font-weight:700;letter-spacing:.3px}
+  .custblk .qr .lbl{font-weight:400;letter-spacing:normal}
+
+  /* ══ ΑΚΡΙΒΕΙΣ ΤΙΜΕΣ — μετρημένες στο ΠΡΑΓΜΑΤΙΚΟ print DOM (25-08-2026) ══
+     Δεν είναι εκτίμηση: όλο το χαρτί τυπώνεται ΕΝΤΟΝΟ (body.rcpt-bold),
+     με line-height «normal» (πιο σφιχτό από κάθε χειροκίνητη τιμή). */
+  .paper{font-weight:700}
+  .paper[data-mm="80"]{font-size:12px}
+  .paper[data-mm="58"]{font-size:10px;font-weight:600}
+  .paper[data-mm="80"] .p-type{font-size:15px}
+  .paper[data-mm="58"] .p-type{font-size:9px}
+  .paper[data-mm="58"] .p-shop{font-size:13px}
+  .paper[data-mm="58"] .p-store{font-size:9px}
+  .custblk{line-height:normal}
+  .paper[data-mm="80"] .custblk{font-size:11px;font-weight:700}
+  .paper[data-mm="58"] .custblk{font-size:9px;font-weight:700}
+  .paper[data-mm="80"] .custblk .cur-phone{font-size:14px}
+  .paper[data-mm="58"] .custblk .cur-phone{font-size:11px}
 
   /* ═══════════ ΤΩΡΑ ═══════════ */
   .cur-wrap{display:flex;align-items:flex-start;gap:8px}
@@ -268,6 +287,20 @@
 <div class="wrap">
 
   <h1>Στοιχεία πελάτη στην απόδειξη</h1>
+  <div class="panel" style="background:rgba(56,217,122,.08);border-color:rgba(56,217,122,.35);margin-bottom:20px">
+    <h2 style="margin:0 0 6px">✅ Βαθμονομημένο στο πραγματικό χαρτί</h2>
+    <p class="note" style="margin:0;color:#cfe9d9">
+      Το χαρτί «ΤΩΡΑ» δεν είναι σχέδιο — είναι <b>αντίγραφο μετρημένο στο ίδιο το πρόγραμμα</b>
+      (25-08-2026). Ύψος μπλοκ <b>18,52 mm</b> στα 80&nbsp;mm και <b>23,28 mm</b> στα 58&nbsp;mm,
+      και τα δύο ταιριάζουν με το αληθινό <b>στο δεύτερο δεκαδικό</b>· ακόμα και τα ύψη των
+      12 γραμμών κειμένου βγαίνουν ίδια, ένα προς ένα.
+      <b>Δύο πράγματα που είχα πει και αποδείχθηκαν λάθος</b>, τα διόρθωσα:
+      (α) «κόβεται στα 58 mm» — <b>δεν κόβεται</b>· έφταιγε ότι το δικό μου αντίγραφο ήταν
+      4&nbsp;mm στενότερο από το αληθινό·
+      (β) «το Γ είναι και το πιο οικονομικό σε χαρτί» — <b>δεν είναι</b>.
+    </p>
+  </div>
+
   <p class="sub">
     Το <b>πάνω μέρος</b> του αποκόμματος — αυτό που κοιτάει ο διανομέας στο σκοτεινό κλιμακοστάσιο
     με το ένα χέρι. Δείχνω τι τυπώνεται <b>σήμερα</b> και <b>4 προτάσεις</b>. Η κεφαλίδα, τα προϊόντα
@@ -291,27 +324,69 @@
       <li><span class="num">4</span><span><b>Ο όροφος τυπώνεται γυμνός.</b>
         Ένα σκέτο «<b>2</b>» στη γραμμή. Στην πόρτα, το «2» μόνο του δεν λέει αν είναι όροφος,
         διαμέρισμα ή αριθμός κουδουνιού.</span></li>
-      <li><span class="num">5</span><span><b>Το QR κλέβει πλάτος από τη διεύθυνση.</b>
-        Κάθεται δεξιά <b>ολόκληρου</b> του μπλοκ, οπότε στενεύει τη γραμμή που δεν πρέπει ποτέ να
-        σπάσει — τη διεύθυνση. Και βρίσκεται πάνω-δεξιά, εκεί που πέφτει πρώτα το μάτι, ενώ είναι
-        το <b>λιγότερο</b> σημαντικό στοιχείο (το σκανάρεις μόνο αν χαθείς).</span></li>
-      <li><span class="num">7</span><span><b>Στο στενό χαρτί κόβεται.</b>
-        Με 58&nbsp;mm και μακρύ επώνυμο, το QR αφήνει στα στοιχεία μόλις <b>94&nbsp;px</b> πλάτος και
-        η λέξη ξεχειλίζει — <b>μετρημένο</b>, όχι εκτίμηση. Άλλαξε παρακάτω σε «58 mm» + «Δύσκολος»
-        και το βλέπεις με κόκκινη ένδειξη κάτω από το χαρτί «ΤΩΡΑ».</span></li>
+      <li><span class="num">5</span><span><b>Το QR στενεύει τη γραμμή που δεν πρέπει να σπάσει.</b>
+        Κάθεται δεξιά <b>ολόκληρου</b> του μπλοκ — άρα κόβει πλάτος και από τη <b>διεύθυνση</b>,
+        που είναι ακριβώς η γραμμή που ο διανομέας πρέπει να διαβάσει μονοκοπανιά.</span></li>
+      <li><span class="num">7</span><span><b>Το QR τρώει το ένα τρίτο του στενού χαρτιού.</b>
+        Έχει <b>σταθερό</b> μέγεθος 15,64&nbsp;mm — δεν μικραίνει ποτέ. Στα 80&nbsp;mm πιάνει το
+        22,3&nbsp;% του πλάτους· στα 58&nbsp;mm το <b>32,6&nbsp;%</b>, αφήνοντας για ΟΛΑ τα στοιχεία
+        του πελάτη μόλις <b>30,24&nbsp;mm</b>. Και κάθεται πάνω-δεξιά, εκεί που πέφτει πρώτο το
+        μάτι — ενώ το σκανάρεις μόνο αν χαθείς.</span></li>
       <li><span class="num">6</span><span><b>Το μπλοκ δεν έχει όρια.</b>
         Δεν χωρίζεται από τη γραμμή «DELIVERY» από πάνω ούτε από τα προϊόντα από κάτω —
         χύνεται μέσα στην υπόλοιπη απόδειξη.</span></li>
     </ul>
 
+
+    <h2 style="margin:22px 0 8px;font-size:15px">📐 Τα ακριβή μετρημένα — από το ίδιο το πρόγραμμα</h2>
+    <p class="note" style="margin:0 0 12px;max-width:880px">
+      Δεν τα διάβασα από το CSS· <b>έτρεξα τον POS</b>, καταχώρησα delivery παραγγελία, άνοιξα το ταμείο
+      και ρώτησα τον browser σε <b>κατάσταση εκτύπωσης</b> τι ακριβώς αποδίδει. Τα παρακάτω είναι
+      μετρήσεις της 25-08-2026, όχι εκτιμήσεις.
+    </p>
+    <table class="cmp">
+      <tr><th>Τι</th><th>80 mm</th><th>58 mm</th></tr>
+      <tr><td>Ωφέλιμο πλάτος <span class="note">(@page margin 3mm 5mm)</span></td>
+          <td>70,00 mm</td><td>48,00 mm</td></tr>
+      <tr><td>Γραμματοσειρά</td><td colspan="2">Arial &mdash; <b>όλο το χαρτί σε έντονη γραφή</b> (<code>body.rcpt-bold</code>)</td></tr>
+      <tr><td>Μπλοκ πελάτη</td><td>11 px / βάρος 700</td><td class="n">9 px / βάρος 700</td></tr>
+      <tr><td>Τηλέφωνο</td><td>14 px / 900</td><td>11 px / 900</td></tr>
+      <tr><td>Απόσταση γραμμών</td><td colspan="2"><b>normal</b> &mdash; καμία χειροκίνητη τιμή, το πιο σφιχτό που γίνεται</td></tr>
+      <tr><td>Περιθώριο / πλαίσιο μπλοκ</td><td colspan="2">4 px πάνω, <b>0 κάτω</b> &mdash; μηδέν padding, μηδέν γραμμή</td></tr>
+      <tr><td>Γραμμή «DELIVERY»</td><td>15 px</td><td class="n">9 px &mdash; όσο και τα ψιλά</td></tr>
+      <tr><td>QR κλήσης</td><td colspan="2"><b>15,64 mm σταθερό</b> (canvas 125×125) &mdash; δεν μικραίνει στο στενό χαρτί</td></tr>
+      <tr><td>Ποσοστό πλάτους που πιάνει το QR</td><td>22,3 %</td><td class="n">32,6 %</td></tr>
+      <tr><td>Πλάτος που μένει στα στοιχεία</td><td>52,24 mm</td><td class="n">30,24 mm</td></tr>
+      <tr><td>Ύψος μπλοκ <span class="note">(το παράδειγμα του preview)</span></td>
+          <td>18,52 mm</td><td>23,28 mm</td></tr>
+    </table>
+
+    <div class="bug" style="background:rgba(245,200,66,.08);border-color:rgba(245,200,66,.4);color:#ffeec2">
+      <b>🟡 Δεύτερο εύρημα, από τη μέτρηση:</b> υπάρχει κανόνας που δίνει στα στοιχεία πελάτη
+      <b>+1px στο στενό χαρτί</b> (<code>font-size:10px !important</code>) με σχόλιο «η αναγνωσιμότητα
+      εδώ δεν είναι αισθητική — είναι <i>θα βρει το σπίτι;</i>».
+      <b>Είναι νεκρός.</b> Δεκατρείς γραμμές πιο κάτω, ένας ομαδικός κανόνας με ίδια ειδικότητα
+      και επίσης <code>!important</code> τα ρίχνει σε <b>9px</b> — και κερδίζει επειδή είναι
+      τελευταίος. Μετρημένο: <b>9px</b>. Η πρόθεση του κώδικα δεν εφαρμόζεται ποτέ.
+    </div>
+
+    <div class="bug" style="background:rgba(122,167,255,.08);border-color:rgba(122,167,255,.4);color:#dbe7ff">
+      <b>🔵 Τρίτο: το «έντονο» δεν ξεχωρίζει τίποτα.</b> Όλο το χαρτί τυπώνεται ήδη σε βάρος
+      <b>700</b>. Όταν τα πάντα είναι έντονα, το έντονο παύει να είναι έμφαση — γι' αυτό το όνομα
+      του πελάτη δεν «βγαίνει» όσο κι αν το κάνεις bold. Η ιεραρχία πρέπει να έρθει από
+      <b>μέγεθος, κενό και γραμμές</b> — ακριβώς αυτό κάνουν οι 4 προτάσεις.
+    </div>
+
     <div class="bug">
-      <b>🔴 Βρήκα και ένα πραγματικό ελάττωμα ενώ κοιτούσα τον κώδικα.</b>
+      <b>🔴 Πρώτο εύρημα — επαληθευμένο ζωντανά, όχι από ανάγνωση κώδικα.</b>
       Η ετικέτα κάτω από το QR είναι γραμμένη στο CSS ως <code>content:'📞 Κλήση'</code>.
       Ο θερμικός <b>δεν τυπώνει έγχρωμα emoji</b> — τα βγάζει <b>κουτάκι</b>. Δηλαδή σε κάθε απόδειξη
       delivery τυπώνεται σήμερα «<b>▨ Κλήση</b>».
       Ο φρουρός μας που ελέγχει «κανένα emoji στο χαρτί» <b>δεν μπορεί να το δει</b>: διαβάζει το
       κείμενο του DOM, και το CSS <code>::after</code> δεν είναι κείμενο του DOM — ήταν
-      <b>δομικά κενός</b> έλεγχος. Το βλέπεις αυτούσιο στο πρώτο χαρτί («ΤΩΡΑ»).
+      <b>δομικά κενός</b> έλεγχος.
+      <b>Το ρώτησα απευθείας τον browser σε κατάσταση εκτύπωσης:</b> το ψευδοστοιχείο αποδίδεται
+      κανονικά με περιεχόμενο <code>"📞 Κλήση"</code> στα 8px. Δεν είναι υπόθεση.
       Διορθώνεται ούτως ή άλλως, όποια πρόταση κι αν διαλέξεις.
     </div>
   </div>
@@ -367,7 +442,7 @@
       δεξιά 58&nbsp;mm. Αν θέλεις να συγκρίνεις τις προτάσεις μεταξύ τους, διάλεξε «Μόνο 80» ή «Μόνο 58»
       και μπαίνουν σε σειρά.<br>
       <b>Κάτω από κάθε χαρτί μετράω ζωντανά</b> το ύψος του μπλοκ σε χιλιοστά και αν κάτι δεν χωράει
-      στο πλάτος. Να το ξέρεις καθαρά: οι προτάσεις πιάνουν <b>50–57&nbsp;mm</b> έναντι <b>17&nbsp;mm</b>
+      στο πλάτος. Να το ξέρεις καθαρά: οι προτάσεις πιάνουν <b>50–65&nbsp;mm</b> έναντι <b>18,5&nbsp;mm</b>
       σήμερα — τριπλάσιο χαρτί για το μπλοκ του πελάτη. Το είπες ότι δεν σε νοιάζει, το γράφω για να
       το ξέρεις μετρημένο και όχι να το ανακαλύψεις στο ρολό.
     </p>
@@ -419,12 +494,12 @@
         <td class="y">Ναι</td><td class="y">Ναι</td><td class="y">Ναι</td><td class="y">Ναι</td>
       </tr>
       <tr>
-        <td>Ύψος μπλοκ στα 80&nbsp;mm <span class="note">(μετρημένο· σήμερα 17&nbsp;mm)</span></td>
-        <td class="y">50&nbsp;mm</td><td>56&nbsp;mm</td><td>57&nbsp;mm</td><td>54&nbsp;mm</td>
+        <td>Ύψος μπλοκ στα 80&nbsp;mm <span class="note">(σήμερα 18,5&nbsp;mm)</span></td>
+        <td>59&nbsp;mm</td><td class="y">50&nbsp;mm</td><td class="n">65&nbsp;mm</td><td>59&nbsp;mm</td>
       </tr>
       <tr>
-        <td>Ύψος μπλοκ στα 58&nbsp;mm <span class="note">(μετρημένο· σήμερα 34&nbsp;mm)</span></td>
-        <td>82&nbsp;mm</td><td class="n">83&nbsp;mm</td><td class="y">72&nbsp;mm</td><td class="y">72&nbsp;mm</td>
+        <td>Ύψος μπλοκ στα 58&nbsp;mm <span class="note">(σήμερα 23,3&nbsp;mm)</span></td>
+        <td class="n">82&nbsp;mm</td><td class="y">72&nbsp;mm</td><td>74&nbsp;mm</td><td>76&nbsp;mm</td>
       </tr>
       <tr>
         <td>Μελάνι / ταχύτητα εκτύπωσης</td>
@@ -459,10 +534,11 @@
         χωρίς μαύρες μπάρες (που εξαρτώνται από την ποιότητα του χαρτιού σου) και χωρίς
         στήλη ετικετών (που στενεύει τα 58 mm).</span></li>
       <li><span class="num" style="background:rgba(56,217,122,.16);color:var(--green)">✓</span><span>
-        <b>Είναι το πιο οικονομικό στο στενό χαρτί</b> — δεν χρειάζεται δεύτερο σχέδιο για το 58&nbsp;mm.
-        Μετρημένο στα 58&nbsp;mm: <b>Γ 72&nbsp;mm</b> και <b>Δ 72&nbsp;mm</b>, ενώ το <b>Β φτάνει 83&nbsp;mm</b>
-        (η στήλη με τα ονόματα πεδίων τρώει πλάτος, οπότε όλα σπάνε σε περισσότερες γραμμές).
-        Στα 80&nbsp;mm η διαφορά είναι αμελητέα — φαίνεται μόνο στο στενό.</span></li>
+        <b>Διόρθωση:</b> είχα πει ότι το Γ είναι και το πιο οικονομικό σε χαρτί. <b>Δεν ισχύει.</b>
+        Με τα σωστά πλάτη είναι το <b>ψηλότερο</b> στα 80&nbsp;mm (65&nbsp;mm έναντι 50 του Β).
+        Στο στενό χαρτί με δύσκολο πελάτη ανατρέπεται πάλι: Δ&nbsp;80 · <b>Γ&nbsp;82</b> · Α&nbsp;94 ·
+        Β&nbsp;96&nbsp;mm. Δηλαδή <b>κανένα δεν κερδίζει και στα δύο</b> — το χαρτί δεν μπορεί να
+        είναι το κριτήριο επιλογής.</span></li>
       <li><span class="num" style="background:rgba(245,200,66,.16);color:var(--yellow)">!</span><span>
         <b>Αν όμως θέλεις το «wow» στο χέρι του πελάτη</b>, το <b>Α</b> είναι σαφώς το πιο εντυπωσιακό:
         μοιάζει με ετικέτα αποστολής courier. Θέλει όμως <b>μία δοκιμαστική εκτύπωση</b> στον δικό σου
@@ -484,11 +560,13 @@
 
   // ── δείγμα δεδομένα (ΠΟΤΕ αληθινός πελάτης σε public preview) ──────────────
   var DATA = {
+    // ΑΚΡΙΒΩΣ τα δεδομένα που μετρήθηκαν στο πραγματικό πρόγραμμα (25-08-2026),
+    // ώστε το «ΤΩΡΑ» να συγκρίνεται 1:1 με το αληθινό χαρτί.
     short: {
-      phone:'6970 123 456',
-      name:'ΓΙΩΡΓΟΣ ΠΑΠΑΔΟΠΟΥΛΟΣ',
+      phone:'6970123456',
+      name:'ΠΑΠΑΔΟΠΟΥΛΟΣ ΓΙΩΡΓΟΣ',
       addr:'ΑΓΙΟΥ ΔΗΜΗΤΡΙΟΥ 145',
-      floor:'2', bell:'ΠΑΠΑΔΟΠΟΥΛΟΣ', notes:''
+      floor:'2', bell:'ΠΑΠΑΔΟΠΟΥΛΟΣ', notes:'Το κουδούνι δεν δουλεύει'
     },
     long: {
       phone:'6970 123 456',
@@ -503,8 +581,11 @@
 
   // ── ψεύτικο (αλλά ρεαλιστικό) QR για κρίση διάταξης ────────────────────────
   function drawQR(cv, px){
+    // Όπως ακριβώς στην παραγωγή: εσωτερικό πλέγμα σε ακέραιες κουκκίδες,
+    // αλλά το ΕΜΦΑΝΙΖΟΜΕΝΟ μέγεθος ορίζεται ρητά (μετρημένο: 59,11px = 15,64mm).
     var N = 25, cell = Math.max(2, Math.floor(px / N));
     cv.width = N * cell; cv.height = N * cell;
+    cv.style.width = px + 'px'; cv.style.height = px + 'px';
     var g = cv.getContext('2d');
     g.fillStyle = '#fff'; g.fillRect(0,0,cv.width,cv.height);
     g.fillStyle = '#000';
@@ -564,12 +645,12 @@
     if (d.notes) lines.push('Σημ: '+d.notes);
     var txt = lines.join('<br>');
     if (S.qr==='1' && S.type==='delivery'){
-      return '<div style="margin-top:4px"><div class="cur-wrap">'
+      return '<div class="cur-wrap">'
            +   '<div class="cur-info">'+txt+'</div>'
-           +   qrHtml('▨ Κλήση', 46)
-           + '</div></div>';
+           +   qrHtml('▨ Κλήση', 59.11)
+           + '</div>';
     }
-    return '<div style="margin-top:4px">'+txt+'</div>';
+    return txt;
   }
 
   // ═══════════════ Α — ΕΤΙΚΕΤΑ ΑΠΟΣΤΟΛΗΣ ═══════════════
@@ -710,15 +791,17 @@
 
   var grid = document.getElementById('grid');
 
-  var WIDTHS = { '80': 257, '58': 166 };
+  // ΑΚΡΙΒΗ πλάτη: @page margin 3mm 5mm → περιεχόμενο = χαρτί − 10mm.
+  // 80mm→70mm=264,57px · 58mm→48mm=181,42px (μετρημένα στο πραγματικό print DOM).
+  var WIDTHS = { '80': 264.57, '58': 181.42 };
 
   function paperCol(c, d, mm){
     var narrow = (mm === '58');
     return '<div class="pcol" data-mm="'+mm+'">'
       +      '<div class="pw-lbl'+(narrow?' narrow':'')+'"><i></i>'+mm+' mm</div>'
-      +      '<div class="paperbox"><div class="paper" data-paper style="width:'+WIDTHS[mm]+'px">'
+      +      '<div class="paperbox"><div class="paper" data-paper data-mm="'+mm+'" style="width:'+WIDTHS[mm]+'px">'
       +         head()
-      +         '<div data-block>'+c.fn(d)+'</div>'
+      +         '<div data-block class="'+(c.id==='now'?'custblk':'')+'">'+c.fn(d)+'</div>'
       +         tail()
       +      '</div></div>'
       +      '<div class="meas" data-meas></div>'
@@ -753,6 +836,10 @@
   // ── ΜΕΤΡΑΕΙ, δεν μαντεύει: ύψος μπλοκ σε mm + έλεγχος κοψίματος ────────────
   function measure(){
     var PX_PER_MM = 3.7795;
+    // 🔴 ΜΕΤΡΑΜΕ ΠΑΝΤΑ ΣΤΟ ×1. Η μεγέθυνση της οθόνης στρογγυλοποιεί τα κουτιά γραμμής
+    // (μετρημένο: +1px ανά γραμμή στο ×1,6) και το αποτέλεσμα αποκλίνει ~1mm από το χαρτί.
+    var _prevZ = document.documentElement.style.getPropertyValue('--z');
+    document.documentElement.style.setProperty('--z', '1');
     Array.prototype.forEach.call(grid.querySelectorAll('.pcol'), function(col){
       var slot  = col.closest('.slot');
       var block = col.querySelector('[data-block]');
@@ -760,8 +847,7 @@
       var box   = col.querySelector('[data-meas]');
       if (!block || !box) return;
 
-      var z = parseFloat(S.zoom) || 1;
-      var h = block.getBoundingClientRect().height / z;   // αφαιρούμε τη μεγέθυνση οθόνης
+      var h = block.getBoundingClientRect().height;      // ήδη στο ×1
       var mm = h / PX_PER_MM;
 
       // κόβεται κάτι οριζόντια; (η ίδια λογική με το autofit του POS)
@@ -780,6 +866,7 @@
       }
       box.innerHTML = html;
     });
+    document.documentElement.style.setProperty('--z', _prevZ || S.zoom);
   }
 
   // ── χειριστήρια ───────────────────────────────────────────────────────────
