@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+<title>Στοιχεία πελάτη στην απόδειξη — Τώρα vs 4 προτάσεις</title>
+<style>
+  :root{
+    --black:#0d0f14; --card:#1c2554; --card2:#141a3d; --yellow:#f5c842;
+    --white:#eef1f8; --muted:#8b93b8; --border:#2a3580; --red:#e05a5a; --green:#38d97a;
+    --pw:257px;   /* ωφέλιμο πλάτος χαρτιού σε CSS px */
+    --z:1.6;      /* μεγέθυνση προβολής */
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; padding:22px 16px 80px;
+    background:linear-gradient(170deg,#0b0e18,#121936 60%,#0d1228);
+    color:var(--white); font-family:Arial,Helvetica,sans-serif; line-height:1.55;
+  }
+  .wrap{max-width:1280px;margin:0 auto}
+
+  h1{font-size:26px;margin:0 0 6px;letter-spacing:.3px}
+  .sub{color:var(--muted);font-size:14px;margin:0 0 22px;max-width:820px}
+
+  .panel{
+    background:var(--card);border:1px solid var(--border);border-radius:14px;
+    padding:16px 18px;margin-bottom:18px;
+  }
+  .panel h2{font-size:16px;margin:0 0 10px;letter-spacing:.3px}
+  .panel h2 .n{color:var(--yellow)}
+
+  /* ── λίστα προβλημάτων ── */
+  .probs{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+  .probs li{
+    display:grid;grid-template-columns:26px 1fr;gap:10px;align-items:start;
+    background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;
+  }
+  .probs .num{
+    width:22px;height:22px;border-radius:6px;background:rgba(224,90,90,.16);
+    color:var(--red);font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center;
+  }
+  .probs b{color:var(--white)}
+  .probs span{color:var(--muted);font-size:13.5px}
+
+  .bug{
+    margin-top:12px;background:rgba(224,90,90,.09);border:1px solid rgba(224,90,90,.4);
+    border-radius:10px;padding:11px 13px;font-size:13.5px;color:#ffd9d9;
+  }
+  .bug b{color:#fff}
+  .bug code{background:rgba(0,0,0,.35);padding:1px 5px;border-radius:4px;font-size:12.5px}
+
+  /* ── controls ── */
+  .ctrl{display:flex;flex-wrap:wrap;gap:18px;align-items:center}
+  .grp{display:flex;align-items:center;gap:8px}
+  .grp>label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+  .seg{display:flex;background:var(--card2);border:1px solid var(--border);border-radius:9px;overflow:hidden}
+  .seg button{
+    background:none;border:0;color:var(--muted);font:inherit;font-size:13px;
+    padding:7px 13px;cursor:pointer;min-height:38px;
+  }
+  .seg button.on{background:var(--yellow);color:#1a1a1a;font-weight:700}
+  .seg button:not(.on):hover{color:var(--white);background:rgba(255,255,255,.05)}
+
+  /* ── καμβάς χαρτιών ── */
+  .grid{display:flex;flex-wrap:wrap;gap:26px;align-items:flex-start}
+  .slot{flex:0 0 auto}
+  .slot .cap{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+  .slot .cap .tag{
+    font-size:11px;font-weight:800;letter-spacing:1px;padding:3px 9px;border-radius:20px;
+    background:rgba(245,200,66,.14);color:var(--yellow);text-transform:uppercase;
+  }
+  .slot.now .cap .tag{background:rgba(224,90,90,.15);color:var(--red)}
+  .slot .cap .name{font-size:15px;font-weight:700}
+  .slot .why{
+    color:var(--muted);font-size:12.5px;margin:0 0 10px;max-width:var(--paperbox);
+    line-height:1.5;
+  }
+  .paperbox{
+    background:#e9e9e9;padding:14px 12px;border-radius:8px;
+    box-shadow:0 10px 26px rgba(0,0,0,.45);display:inline-block;
+  }
+  .paper{
+    width:var(--pw); background:#fff; color:#000;
+    font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:1.35;
+    padding:8px 7px 12px; zoom:var(--z);
+    box-shadow:0 0 0 1px rgba(0,0,0,.08);
+  }
+
+  /* ── μετρήσεις κάτω από κάθε χαρτί ── */
+  .meas{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;max-width:var(--paperbox)}
+  .chip{
+    font-size:11.5px;padding:3px 9px;border-radius:20px;
+    background:var(--card2);border:1px solid var(--border);color:var(--muted);
+  }
+  .chip b{color:var(--white);font-weight:700}
+  .chip.warn{background:rgba(224,90,90,.14);border-color:rgba(224,90,90,.45);color:#ffcaca}
+  .chip.ok{background:rgba(56,217,122,.12);border-color:rgba(56,217,122,.35);color:#b6f5d2}
+
+  /* ── κοινά στοιχεία χαρτιού ── */
+  .p-logo{
+    text-align:center;font-weight:900;font-size:17px;letter-spacing:3px;
+    border:2px solid #000;padding:5px 0;margin:0 8px 5px;
+  }
+  .p-shop{text-align:center;font-size:13px;font-weight:700;letter-spacing:1px;margin-bottom:2px}
+  .p-store{text-align:center;font-size:9px;line-height:1.3;margin-bottom:5px}
+  .p-order{text-align:center;font-size:11px;margin-bottom:2px}
+  .p-num{font-size:13px;font-weight:900;letter-spacing:1px}
+  .p-type{
+    text-align:center;font-size:15px;font-weight:900;letter-spacing:1px;margin:6px 0;
+  }
+  .p-sep{border-top:1px dashed #000;margin:6px 0}
+  .p-sep-solid{border-top:1px solid #000;margin:6px 0}
+
+  .p-item{display:flex;justify-content:space-between;gap:8px;margin-bottom:2px}
+  .p-item .nm{font-size:12px;font-weight:700}
+  .p-item .pr{font-size:12px;font-weight:700;white-space:nowrap}
+  .p-det{font-size:10px;font-weight:600;padding-left:6px;margin-bottom:3px}
+  .p-tot{display:flex;justify-content:space-between;font-size:14px;font-weight:900;margin-top:4px}
+
+  /* ── QR δείγμα ── */
+  .qr canvas{display:block;image-rendering:pixelated}
+  .qr .lbl{font-size:8px;line-height:1.1;text-align:center;margin-top:1px;font-weight:700;letter-spacing:.3px}
+
+  /* ═══════════ ΤΩΡΑ ═══════════ */
+  .cur-wrap{display:flex;align-items:flex-start;gap:8px}
+  .cur-info{flex:1 1 auto;min-width:0}
+  .cur-phone{font-weight:900;font-size:14px;letter-spacing:.5px}
+
+  /* ═══════════ Α — ΕΤΙΚΕΤΑ ΑΠΟΣΤΟΛΗΣ ═══════════ */
+  .a-box{border:2px solid #000;margin:6px 0 2px}
+  .a-bar{
+    background:#000;color:#fff;font-size:10px;font-weight:900;letter-spacing:2px;
+    padding:3px 7px;text-align:center;
+  }
+  .a-body{padding:7px 8px 8px}
+  .a-addr{font-size:16px;font-weight:900;line-height:1.2;letter-spacing:.2px;overflow-wrap:anywhere;}
+  .a-where{
+    display:flex;gap:6px;flex-wrap:wrap;margin-top:5px;
+  }
+  .a-cell{border:1px solid #000;padding:2px 6px;flex:1 1 auto;min-width:0}
+  .a-cell .k{font-size:8px;font-weight:700;letter-spacing:1.2px}
+  .a-cell .v{font-size:13px;font-weight:900;line-height:1.2;word-break:break-word}
+  .a-hr{border-top:1px dashed #000;margin:7px 0 6px}
+  .a-name{font-size:13px;font-weight:900;line-height:1.25;overflow-wrap:anywhere;}
+  .a-bot{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin-top:5px}
+  .a-tel .k{font-size:8px;font-weight:700;letter-spacing:1.2px}
+  .a-tel .v{font-size:15px;font-weight:900;letter-spacing:.5px;line-height:1.15}
+  .a-note{
+    margin-top:7px;border-top:1px dashed #000;padding-top:5px;font-size:10.5px;font-weight:700;line-height:1.35;
+  }
+  .a-note .k{font-size:8px;letter-spacing:1.2px;display:block}
+
+  /* ═══════════ Β — ΠΙΝΑΚΑΣ ΠΕΔΙΩΝ ═══════════ */
+  .b-tbl{margin:6px 0 2px;border-top:2px solid #000;border-bottom:2px solid #000;padding:5px 0}
+  .b-row{display:grid;grid-template-columns:64px 1fr;gap:6px;align-items:baseline;padding:3.5px 2px}
+  .b-row+.b-row{border-top:1px dotted #000}
+  .b-k{font-size:8.5px;font-weight:700;letter-spacing:1.1px;text-align:right;padding-top:2px}
+  .b-v{font-size:12.5px;font-weight:900;line-height:1.25;word-break:break-word}
+  .b-v.big{font-size:14.5px}
+  .b-v.tel{font-size:15px;letter-spacing:.5px}
+  .b-v.note{font-size:11px;font-weight:700}
+  .b-qrrow{display:grid;grid-template-columns:64px 1fr auto;gap:6px;align-items:center}
+
+  /* ═══════════ Γ — ΙΕΡΑΡΧΙΑ ΟΔΗΓΟΥ ═══════════ */
+  .c-block{margin:7px 0 3px;border-top:2px solid #000;border-bottom:2px solid #000;padding:8px 2px 9px}
+  .c-cap{font-size:8.5px;font-weight:700;letter-spacing:2px;margin-bottom:4px}
+  .c-addr{font-size:17px;font-weight:900;line-height:1.15;letter-spacing:.2px;overflow-wrap:anywhere;}
+  .c-where{font-size:13px;font-weight:900;margin-top:6px;letter-spacing:.3px;overflow-wrap:anywhere;}
+  .c-name{font-size:13.5px;font-weight:900;margin-top:9px;line-height:1.25;overflow-wrap:anywhere;}
+  .c-name .k{font-size:8.5px;font-weight:700;letter-spacing:1.6px;display:block;margin-bottom:1px}
+  .c-tel{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin-top:9px}
+  .c-tel .k{font-size:8.5px;font-weight:700;letter-spacing:1.6px;display:block;margin-bottom:1px}
+  .c-tel .v{font-size:15px;font-weight:900;letter-spacing:.5px;line-height:1.15}
+  .c-note{margin-top:9px;font-size:11px;font-weight:700;line-height:1.4}
+  .c-note .k{font-size:8.5px;font-weight:700;letter-spacing:1.6px;display:block;margin-bottom:1px}
+
+  /* ═══════════ Δ — ΔΥΟ ΖΩΝΕΣ ═══════════ */
+  .d-zone{border:1px solid #000;margin:6px 0 0}
+  .d-zone+.d-zone{margin-top:5px}
+  .d-head{
+    border-bottom:1px solid #000;font-size:8.5px;font-weight:900;letter-spacing:2px;
+    padding:2.5px 7px;
+  }
+  .d-in{padding:6px 7px 7px}
+  .d-l1{font-size:14.5px;font-weight:900;line-height:1.2;overflow-wrap:anywhere;}
+  .d-l2{font-size:12px;font-weight:900;margin-top:4px;letter-spacing:.3px;overflow-wrap:anywhere;}
+  .d-tel{display:flex;align-items:flex-end;justify-content:space-between;gap:8px}
+  .d-tel .v{font-size:15px;font-weight:900;letter-spacing:.5px;line-height:1.15}
+  .d-sub{font-size:8.5px;font-weight:700;letter-spacing:1.2px;margin-bottom:1px}
+  .d-note{margin-top:6px;border-top:1px dashed #000;padding-top:5px;font-size:10.5px;font-weight:700;line-height:1.35}
+
+  /* ── κάτω ενότητες ── */
+  table.cmp{width:100%;border-collapse:collapse;font-size:13.5px}
+  table.cmp th,table.cmp td{padding:9px 11px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
+  table.cmp th{color:var(--yellow);font-size:12px;text-transform:uppercase;letter-spacing:.8px}
+  table.cmp td:first-child{font-weight:700;white-space:nowrap}
+  table.cmp .y{color:var(--green)}
+  table.cmp .n{color:var(--red)}
+  table.cmp tr:last-child td{border-bottom:0}
+
+  .note{color:var(--muted);font-size:13px}
+  .foot{margin-top:26px;color:var(--muted);font-size:12.5px;text-align:center}
+  @media (max-width:700px){
+    body{padding:16px 10px 60px}
+    h1{font-size:21px}
+    .grid{gap:20px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Στοιχεία πελάτη στην απόδειξη</h1>
+  <p class="sub">
+    Το <b>πάνω μέρος</b> του αποκόμματος — αυτό που κοιτάει ο διανομέας στο σκοτεινό κλιμακοστάσιο
+    με το ένα χέρι. Δείχνω τι τυπώνεται <b>σήμερα</b> και <b>4 προτάσεις</b>. Η κεφαλίδα, τα προϊόντα
+    και τα σύνολα είναι <b>ίδια παντού</b> επίτηδες — αλλάζει μόνο το μπλοκ του πελάτη, ώστε να
+    συγκρίνεις το ένα πράγμα που συζητάμε.
+  </p>
+
+  <!-- ═══════════ ΤΙ ΦΤΑΙΕΙ ΣΗΜΕΡΑ ═══════════ -->
+  <div class="panel">
+    <h2><span class="n">1.</span> Τι φταίει σήμερα — μετρημένο, όχι «δεν μου αρέσει»</h2>
+    <ul class="probs">
+      <li><span class="num">1</span><span><b>Όλα το ίδιο μέγεθος.</b>
+        Όνομα, διεύθυνση, όροφος και σημείωση τυπώνονται <b>όλα στα 11px κανονικά</b>.
+        Το μάτι δεν έχει πού να προσγειωθεί — διαβάζεις 5 γραμμές για να βρεις μία.</span></li>
+      <li><span class="num">2</span><span><b>Καμία απόσταση.</b>
+        Οι γραμμές χωρίζονται με σκέτο αλλαγή γραμμής. Στα 203 κουκκίδες ανά ίντσα του θερμικού,
+        γραμμές των 11px <b>ακουμπάνε μεταξύ τους</b> και μοιάζουν με ένα μπλοκ κειμένου.</span></li>
+      <li><span class="num">3</span><span><b>Κανένα όνομα πεδίου.</b>
+        Δεν γράφει πουθενά «ΟΝΟΜΑ» ή «ΔΙΕΥΘΥΝΣΗ» — τα καταλαβαίνεις <b>μόνο από τη σειρά τους</b>.
+        Αν λείπει το όνομα, η διεύθυνση ανεβαίνει μια γραμμή και διαβάζεται ως όνομα.</span></li>
+      <li><span class="num">4</span><span><b>Ο όροφος τυπώνεται γυμνός.</b>
+        Ένα σκέτο «<b>2</b>» στη γραμμή. Στην πόρτα, το «2» μόνο του δεν λέει αν είναι όροφος,
+        διαμέρισμα ή αριθμός κουδουνιού.</span></li>
+      <li><span class="num">5</span><span><b>Το QR κλέβει πλάτος από τη διεύθυνση.</b>
+        Κάθεται δεξιά <b>ολόκληρου</b> του μπλοκ, οπότε στενεύει τη γραμμή που δεν πρέπει ποτέ να
+        σπάσει — τη διεύθυνση. Και βρίσκεται πάνω-δεξιά, εκεί που πέφτει πρώτα το μάτι, ενώ είναι
+        το <b>λιγότερο</b> σημαντικό στοιχείο (το σκανάρεις μόνο αν χαθείς).</span></li>
+      <li><span class="num">7</span><span><b>Στο στενό χαρτί κόβεται.</b>
+        Με 58&nbsp;mm και μακρύ επώνυμο, το QR αφήνει στα στοιχεία μόλις <b>94&nbsp;px</b> πλάτος και
+        η λέξη ξεχειλίζει — <b>μετρημένο</b>, όχι εκτίμηση. Άλλαξε παρακάτω σε «58 mm» + «Δύσκολος»
+        και το βλέπεις με κόκκινη ένδειξη κάτω από το χαρτί «ΤΩΡΑ».</span></li>
+      <li><span class="num">6</span><span><b>Το μπλοκ δεν έχει όρια.</b>
+        Δεν χωρίζεται από τη γραμμή «DELIVERY» από πάνω ούτε από τα προϊόντα από κάτω —
+        χύνεται μέσα στην υπόλοιπη απόδειξη.</span></li>
+    </ul>
+
+    <div class="bug">
+      <b>🔴 Βρήκα και ένα πραγματικό ελάττωμα ενώ κοιτούσα τον κώδικα.</b>
+      Η ετικέτα κάτω από το QR είναι γραμμένη στο CSS ως <code>content:'📞 Κλήση'</code>.
+      Ο θερμικός <b>δεν τυπώνει έγχρωμα emoji</b> — τα βγάζει <b>κουτάκι</b>. Δηλαδή σε κάθε απόδειξη
+      delivery τυπώνεται σήμερα «<b>▨ Κλήση</b>».
+      Ο φρουρός μας που ελέγχει «κανένα emoji στο χαρτί» <b>δεν μπορεί να το δει</b>: διαβάζει το
+      κείμενο του DOM, και το CSS <code>::after</code> δεν είναι κείμενο του DOM — ήταν
+      <b>δομικά κενός</b> έλεγχος. Το βλέπεις αυτούσιο στο πρώτο χαρτί («ΤΩΡΑ»).
+      Διορθώνεται ούτως ή άλλως, όποια πρόταση κι αν διαλέξεις.
+    </div>
+  </div>
+
+  <!-- ═══════════ ΧΕΙΡΙΣΤΗΡΙΑ ═══════════ -->
+  <div class="panel">
+    <h2><span class="n">2.</span> Δοκίμασέ τα — άλλαξε συνθήκες και δες ποιο αντέχει</h2>
+    <div class="ctrl">
+      <div class="grp">
+        <label>Χαρτί</label>
+        <div class="seg" id="seg-paper">
+          <button data-v="80" class="on">80&nbsp;mm</button>
+          <button data-v="58">58&nbsp;mm</button>
+        </div>
+      </div>
+      <div class="grp">
+        <label>Μεγέθυνση</label>
+        <div class="seg" id="seg-zoom">
+          <button data-v="1">×1 (αληθινό)</button>
+          <button data-v="1.6" class="on">×1,6</button>
+          <button data-v="2.4">×2,4</button>
+        </div>
+      </div>
+      <div class="grp">
+        <label>Πελάτης</label>
+        <div class="seg" id="seg-data">
+          <button data-v="short" class="on">Κανονικός</button>
+          <button data-v="long">Δύσκολος</button>
+        </div>
+      </div>
+      <div class="grp">
+        <label>Τύπος</label>
+        <div class="seg" id="seg-type">
+          <button data-v="delivery" class="on">Delivery</button>
+          <button data-v="takeaway">Take away</button>
+        </div>
+      </div>
+      <div class="grp">
+        <label>QR κλήσης</label>
+        <div class="seg" id="seg-qr">
+          <button data-v="1" class="on">Ναι</button>
+          <button data-v="0">Όχι</button>
+        </div>
+      </div>
+    </div>
+    <p class="note" style="margin:12px 0 0">
+      <b>«Δύσκολος»</b> = μακρύ επώνυμο, μεγάλη διεύθυνση με αριθμό-γράμμα και σημείωση δύο γραμμών.
+      Εκεί σπάνε τα σχέδια — όχι στο εύκολο παράδειγμα.
+      Το <b>×1</b> είναι το πραγματικό μέγεθος στο χαρτί· τα άλλα δύο μεγεθύνουν μόνο την οθόνη
+      (οι αναλογίες μένουν ίδιες).<br>
+      <b>Κάτω από κάθε χαρτί μετράω ζωντανά</b> το ύψος του μπλοκ σε χιλιοστά και αν κάτι δεν χωράει
+      στο πλάτος. Να το ξέρεις καθαρά: οι προτάσεις πιάνουν <b>50–56&nbsp;mm</b> έναντι <b>17&nbsp;mm</b>
+      σήμερα — τριπλάσιο χαρτί για το μπλοκ του πελάτη. Το είπες ότι δεν σε νοιάζει, το γράφω για να
+      το ξέρεις μετρημένο και όχι να το ανακαλύψεις στο ρολό.
+    </p>
+  </div>
+
+  <!-- ═══════════ ΤΑ ΧΑΡΤΙΑ ═══════════ -->
+  <div class="grid" id="grid"></div>
+
+  <!-- ═══════════ ΣΥΓΚΡΙΣΗ ═══════════ -->
+  <div class="panel" style="margin-top:26px">
+    <h2><span class="n">3.</span> Σύγκριση με μια ματιά</h2>
+    <table class="cmp">
+      <tr>
+        <th>&nbsp;</th><th>Α — Ετικέτα</th><th>Β — Πεδία</th><th>Γ — Ιεραρχία</th><th>Δ — Δύο ζώνες</th>
+      </tr>
+      <tr>
+        <td>Πόσο γρήγορα βρίσκεις τη διεύθυνση</td>
+        <td class="y">Ακαριαία</td><td>Γρήγορα</td><td class="y">Ακαριαία</td><td>Γρήγορα</td>
+      </tr>
+      <tr>
+        <td>Μπερδεύεται ποτέ πεδίο με πεδίο;</td>
+        <td>Όχι</td><td class="y">Ποτέ (όλα ονομασμένα)</td><td>Όχι</td><td>Όχι</td>
+      </tr>
+      <tr>
+        <td>Αντέχει μεγάλη διεύθυνση</td>
+        <td class="y">Ναι</td><td class="y">Ναι</td><td class="y">Ναι</td><td>Ναι</td>
+      </tr>
+      <tr>
+        <td>Αντέχει στα 58&nbsp;mm <span class="note">(μετρημένο)</span></td>
+        <td class="y">Ναι</td><td class="y">Ναι</td><td class="y">Ναι</td><td class="y">Ναι</td>
+      </tr>
+      <tr>
+        <td>Ύψος μπλοκ στα 80&nbsp;mm <span class="note">(μετρημένο· σήμερα 17&nbsp;mm)</span></td>
+        <td class="y">50&nbsp;mm</td><td>56&nbsp;mm</td><td>54&nbsp;mm</td><td>54&nbsp;mm</td>
+      </tr>
+      <tr>
+        <td>Μελάνι / ταχύτητα εκτύπωσης</td>
+        <td class="n">Το πιο βαρύ (μαύρη μπάρα)</td><td>Μέτριο</td><td class="y">Το πιο ελαφρύ</td><td>Μέτριο</td>
+      </tr>
+      <tr>
+        <td>Πόσο «επαγγελματικό» φαίνεται</td>
+        <td class="y">Σαν ετικέτα courier</td><td>Σαν έντυπο/τιμολόγιο</td><td>Σαν καλή απόδειξη</td><td class="y">Σαν δελτίο αποστολής</td>
+      </tr>
+      <tr>
+        <td>Ρίσκο</td>
+        <td class="n">Η μαύρη μπάρα θέλει δοκιμή στο δικό σου χαρτί (μπορεί να «μουτζουρώσει»)</td>
+        <td>Η στήλη ετικετών τρώει πλάτος — χωράει, αλλά το πιο ψηλό μπλοκ</td>
+        <td>Χωρίς πλαίσιο — λιγότερο «λαμπερό» με την πρώτη ματιά</td>
+        <td class="n">Δύο πλαίσια = πιο ψηλό μπλοκ</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ═══════════ ΠΡΟΤΑΣΗ ═══════════ -->
+  <div class="panel">
+    <h2><span class="n">4.</span> Τι θα διάλεγα και γιατί</h2>
+    <p class="note" style="margin:0 0 10px">
+      Αν με ρωτάς ως ειδικό και όχι ως «διάλεξε ένα»: <b>το Γ («Ιεραρχία Οδηγού»)</b> για καθημερινή
+      χρήση, με <b>ένα δανεικό στοιχείο από το Α</b> — τα δύο κουτάκια ΟΡΟΦΟΣ/ΚΟΥΔΟΥΝΙ.
+    </p>
+    <ul class="probs">
+      <li><span class="num" style="background:rgba(56,217,122,.16);color:var(--green)">✓</span><span>
+        <b>Δίνει το μεγαλύτερο κέρδος με το μικρότερο ρίσκο.</b> Λύνει και τα 6 προβλήματα
+        χωρίς μαύρες μπάρες (που εξαρτώνται από την ποιότητα του χαρτιού σου) και χωρίς
+        στήλη ετικετών (που στενεύει τα 58 mm).</span></li>
+      <li><span class="num" style="background:rgba(56,217,122,.16);color:var(--green)">✓</span><span>
+        <b>Είναι το μόνο που δουλεύει το ίδιο καλά και στα δύο πλάτη χαρτιού</b> — δεν χρειάζεται
+        δεύτερο σχέδιο για το 58 mm.</span></li>
+      <li><span class="num" style="background:rgba(245,200,66,.16);color:var(--yellow)">!</span><span>
+        <b>Αν όμως θέλεις το «wow» στο χέρι του πελάτη</b>, το <b>Α</b> είναι σαφώς το πιο εντυπωσιακό:
+        μοιάζει με ετικέτα αποστολής courier. Θέλει όμως <b>μία δοκιμαστική εκτύπωση</b> στον δικό σου
+        θερμικό για τη μαύρη μπάρα, πριν το κλειδώσουμε.</span></li>
+    </ul>
+    <p class="note" style="margin:12px 0 0">
+      Και στις δύο περιπτώσεις φεύγει το <b>▨</b> κάτω από το QR, ο όροφος αποκτά όνομα, και
+      το QR σταματά να στενεύει τη διεύθυνση.
+      Πες μου <b>ποιο γράμμα</b> — ή «το Γ αλλά με το πλαίσιο του Α» — και το υλοποιώ στην πραγματική απόδειξη.
+    </p>
+  </div>
+
+  <p class="foot">TAMAM POS · preview στοιχείων πελάτη · δείγμα δεδομένα, κανένα πραγματικό στοιχείο πελάτη</p>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  // ── δείγμα δεδομένα (ΠΟΤΕ αληθινός πελάτης σε public preview) ──────────────
+  var DATA = {
+    short: {
+      phone:'6970 123 456',
+      name:'ΓΙΩΡΓΟΣ ΠΑΠΑΔΟΠΟΥΛΟΣ',
+      addr:'ΑΓΙΟΥ ΔΗΜΗΤΡΙΟΥ 145',
+      floor:'2', bell:'ΠΑΠΑΔΟΠΟΥΛΟΣ', notes:''
+    },
+    long: {
+      phone:'6970 123 456',
+      name:'ΚΩΝΣΤΑΝΤΙΝΟΣ ΧΑΤΖΗΑΝΑΣΤΑΣΙΟΥ',
+      addr:'ΛΕΩΦ. ΕΛ. ΒΕΝΙΖΕΛΟΥ 218Α',
+      floor:'4', bell:'ΧΑΤΖΗΑΝΑΣΤΑΣΙΟΥ Κ.',
+      notes:'Το κουδούνι δεν δουλεύει — χτυπήστε τηλέφωνο. Είσοδος από την πίσω πόρτα.'
+    }
+  };
+
+  var S = { paper:'80', zoom:'1.6', data:'short', type:'delivery', qr:'1' };
+
+  // ── ψεύτικο (αλλά ρεαλιστικό) QR για κρίση διάταξης ────────────────────────
+  function drawQR(cv, px){
+    var N = 25, cell = Math.max(2, Math.floor(px / N));
+    cv.width = N * cell; cv.height = N * cell;
+    var g = cv.getContext('2d');
+    g.fillStyle = '#fff'; g.fillRect(0,0,cv.width,cv.height);
+    g.fillStyle = '#000';
+    var seed = 7;
+    function rnd(){ seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; }
+    function finder(ox, oy){
+      for (var y=0;y<7;y++) for (var x=0;x<7;x++){
+        var edge = (x===0||x===6||y===0||y===6);
+        var core = (x>=2&&x<=4&&y>=2&&y<=4);
+        if (edge || core) g.fillRect((ox+x)*cell,(oy+y)*cell,cell,cell);
+      }
+    }
+    for (var y=0;y<N;y++) for (var x=0;x<N;x++){
+      var inF = (x<8&&y<8)||(x>N-9&&y<8)||(x<8&&y>N-9);
+      if (inF) continue;
+      if (rnd() > .5) g.fillRect(x*cell,y*cell,cell,cell);
+    }
+    finder(0,0); finder(N-7,0); finder(0,N-7);
+  }
+
+  function qrHtml(label, px){
+    if (S.qr !== '1' || S.type !== 'delivery') return '';
+    return '<div class="qr" data-qr="'+px+'"><canvas></canvas>'
+         + '<div class="lbl">'+label+'</div></div>';
+  }
+
+  // ── κοινή κεφαλίδα / ποδαρικό (ΙΔΙΑ σε όλα — αλλάζει μόνο το μπλοκ πελάτη) ──
+  function head(){
+    return ''
+      + '<div class="p-logo">TAMAM</div>'
+      + '<div class="p-shop">TAMAM GRILL HOUSE</div>'
+      + '<div class="p-store">Λ. Παραδείγματος 12 · 2310 000 000<br>ΑΦΜ 000000000</div>'
+      + '<div class="p-order"><span class="p-num">#D-14</span></div>'
+      + '<div class="p-order">25-08-2026 · 20:41</div>'
+      + '<div class="p-type">'+(S.type==='delivery' ? 'DELIVERY' : 'TAKE AWAY')+'</div>';
+  }
+  function tail(){
+    return ''
+      + '<div class="p-sep"></div>'
+      + '<div class="p-item"><span class="nm">1× Κεμπαπάκι Πίτα</span><span class="pr">3,80 €</span></div>'
+      + '<div class="p-det">Απ\'Όλα Ταμάμ (Λάχανο-Καρότο, Ντομάτα, Πατάτες)</div>'
+      + '<div class="p-item"><span class="nm">2× Ντόνερ Αραβική</span><span class="pr">9,00 €</span></div>'
+      + '<div class="p-det">-Κρεμμύδι · +Τζατζίκι</div>'
+      + '<div class="p-sep-solid"></div>'
+      + '<div class="p-tot"><span>ΣΥΝΟΛΟ</span><span>12,80 €</span></div>';
+  }
+
+  // ═══════════════ ΤΩΡΑ ═══════════════
+  function nowBlock(d){
+    var lines = [];
+    lines.push('<span class="cur-phone">'+d.phone+'</span>');
+    if (d.name) lines.push(d.name);
+    if (S.type==='delivery'){
+      if (d.addr) lines.push(d.addr);
+      if (d.floor || d.bell) lines.push(d.floor + (d.bell ? ' · Κουδ: <b>'+d.bell+'</b>' : ''));
+    }
+    if (d.notes) lines.push('Σημ: '+d.notes);
+    var txt = lines.join('<br>');
+    if (S.qr==='1' && S.type==='delivery'){
+      return '<div style="margin-top:4px"><div class="cur-wrap">'
+           +   '<div class="cur-info">'+txt+'</div>'
+           +   qrHtml('▨ Κλήση', 46)
+           + '</div></div>';
+    }
+    return '<div style="margin-top:4px">'+txt+'</div>';
+  }
+
+  // ═══════════════ Α — ΕΤΙΚΕΤΑ ΑΠΟΣΤΟΛΗΣ ═══════════════
+  function blockA(d){
+    if (S.type!=='delivery'){
+      return '<div class="a-box"><div class="a-bar">ΠΑΡΑΛΑΒΗ ΑΠΟ ΤΟ ΚΑΤΑΣΤΗΜΑ</div>'
+           + '<div class="a-body">'
+           +   '<div class="a-name">'+(d.name||'—')+'</div>'
+           +   '<div class="a-bot"><div class="a-tel"><div class="k">ΤΗΛΕΦΩΝΟ</div>'
+           +   '<div class="v">'+d.phone+'</div></div></div>'
+           +   (d.notes ? '<div class="a-note"><span class="k">ΣΗΜΕΙΩΣΗ</span>'+d.notes+'</div>' : '')
+           + '</div></div>';
+    }
+    return ''
+      + '<div class="a-box">'
+      +   '<div class="a-bar">ΠΑΡΑΔΟΣΗ ΣΤΗ ΔΙΕΥΘΥΝΣΗ</div>'
+      +   '<div class="a-body">'
+      +     '<div class="a-addr">'+d.addr+'</div>'
+      +     '<div class="a-where">'
+      +       '<div class="a-cell"><div class="k">ΟΡΟΦΟΣ</div><div class="v">'+(d.floor||'—')+'</div></div>'
+      +       '<div class="a-cell"><div class="k">ΚΟΥΔΟΥΝΙ</div><div class="v">'+(d.bell||'—')+'</div></div>'
+      +     '</div>'
+      +     '<div class="a-hr"></div>'
+      +     '<div class="a-name">'+d.name+'</div>'
+      +     '<div class="a-bot">'
+      +       '<div class="a-tel"><div class="k">ΤΗΛΕΦΩΝΟ</div><div class="v">'+d.phone+'</div></div>'
+      +       qrHtml('ΚΛΗΣΗ', 44)
+      +     '</div>'
+      +     (d.notes ? '<div class="a-note"><span class="k">ΣΗΜΕΙΩΣΗ</span>'+d.notes+'</div>' : '')
+      +   '</div>'
+      + '</div>';
+  }
+
+  // ═══════════════ Β — ΠΙΝΑΚΑΣ ΠΕΔΙΩΝ ═══════════════
+  function row(k, v, cls){
+    return '<div class="b-row"><div class="b-k">'+k+'</div>'
+         + '<div class="b-v '+(cls||'')+'">'+v+'</div></div>';
+  }
+  function blockB(d){
+    var h = '<div class="b-tbl">';
+    if (S.type==='delivery'){
+      h += row('ΔΙΕΥΘΥΝΣΗ', d.addr, 'big');
+      h += row('ΟΡΟΦΟΣ', d.floor || '—');
+      h += row('ΚΟΥΔΟΥΝΙ', d.bell || '—');
+    }
+    h += row('ΟΝΟΜΑ', d.name || '—');
+    if (S.qr==='1' && S.type==='delivery'){
+      h += '<div class="b-row b-qrrow" style="grid-template-columns:64px 1fr auto">'
+        +    '<div class="b-k">ΤΗΛΕΦΩΝΟ</div>'
+        +    '<div class="b-v tel">'+d.phone+'</div>'
+        +    qrHtml('ΚΛΗΣΗ', 40)
+        +  '</div>';
+    } else {
+      h += row('ΤΗΛΕΦΩΝΟ', d.phone, 'tel');
+    }
+    if (d.notes) h += row('ΣΗΜΕΙΩΣΗ', d.notes, 'note');
+    return h + '</div>';
+  }
+
+  // ═══════════════ Γ — ΙΕΡΑΡΧΙΑ ΟΔΗΓΟΥ ═══════════════
+  function blockC(d){
+    var h = '<div class="c-block">';
+    if (S.type==='delivery'){
+      h += '<div class="c-cap">ΠΑΡΑΔΟΣΗ ΣΕ</div>';
+      h += '<div class="c-addr">'+d.addr+'</div>';
+      h += '<div class="c-where">ΟΡΟΦΟΣ '+(d.floor||'—')+'&nbsp; ·&nbsp; ΚΟΥΔΟΥΝΙ '+(d.bell||'—')+'</div>';
+      h += '<div class="c-name"><span class="k">ΟΝΟΜΑ</span>'+d.name+'</div>';
+    } else {
+      h += '<div class="c-cap">ΠΑΡΑΛΑΒΗ</div>';
+      h += '<div class="c-addr" style="font-size:15px">'+(d.name||'—')+'</div>';
+    }
+    h += '<div class="c-tel">'
+      +    '<div><span class="k">ΤΗΛΕΦΩΝΟ</span><span class="v">'+d.phone+'</span></div>'
+      +    qrHtml('ΚΛΗΣΗ', 42)
+      +  '</div>';
+    if (d.notes) h += '<div class="c-note"><span class="k">ΣΗΜΕΙΩΣΗ</span>'+d.notes+'</div>';
+    return h + '</div>';
+  }
+
+  // ═══════════════ Δ — ΔΥΟ ΖΩΝΕΣ ═══════════════
+  function blockD(d){
+    var h = '';
+    h += '<div class="d-zone"><div class="d-head">ΠΕΛΑΤΗΣ</div><div class="d-in">'
+      +    '<div class="d-l1">'+(d.name||'—')+'</div>'
+      +    '<div class="d-tel" style="margin-top:5px">'
+      +      '<div><div class="d-sub">ΤΗΛΕΦΩΝΟ</div><div class="v">'+d.phone+'</div></div>'
+      +      qrHtml('ΚΛΗΣΗ', 40)
+      +    '</div>'
+      +  '</div></div>';
+    if (S.type==='delivery'){
+      h += '<div class="d-zone"><div class="d-head">ΠΑΡΑΔΟΣΗ</div><div class="d-in">'
+        +    '<div class="d-l1">'+d.addr+'</div>'
+        +    '<div class="d-l2">ΟΡΟΦΟΣ '+(d.floor||'—')+'&nbsp; ·&nbsp; ΚΟΥΔΟΥΝΙ '+(d.bell||'—')+'</div>'
+        +    (d.notes ? '<div class="d-note">ΣΗΜΕΙΩΣΗ: '+d.notes+'</div>' : '')
+        +  '</div></div>';
+    } else if (d.notes){
+      h += '<div class="d-zone"><div class="d-head">ΣΗΜΕΙΩΣΗ</div>'
+        +  '<div class="d-in"><div class="d-note" style="margin:0;border:0;padding:0">'+d.notes+'</div></div></div>';
+    }
+    return h;
+  }
+
+  // ── ορισμοί καρτών ────────────────────────────────────────────────────────
+  var CARDS = [
+    { id:'now', tag:'ΤΩΡΑ', name:'Έτσι τυπώνεται σήμερα', cls:'now',
+      why:'Πέντε γραμμές ίδιου μεγέθους, χωρίς αποστάσεις, χωρίς ονόματα πεδίων. Το «2» είναι ο όροφος — αλλά δεν το λέει πουθενά. Κάτω από το QR βλέπεις το κουτάκι που τυπώνει σήμερα ο θερμικός.',
+      fn: nowBlock },
+    { id:'a', tag:'Α', name:'Ετικέτα Αποστολής',
+      why:'Το μπλοκ γίνεται πλαισιωμένη ετικέτα, όπως των courier. Μαύρη μπάρα-τίτλος, διεύθυνση στα 16px, όροφος και κουδούνι σε δικά τους κουτάκια με ονόματα. Το πιο εντυπωσιακό στο χέρι του πελάτη· θέλει μία δοκιμή για τη μαύρη μπάρα.',
+      fn: blockA },
+    { id:'b', tag:'Β', name:'Πίνακας Πεδίων',
+      why:'Κάθε γραμμή έχει το όνομά της στα αριστερά και την τιμή της στα δεξιά, χωρισμένες με λεπτές διάστικτες γραμμές. Μηδέν πιθανότητα να μπερδέψεις πεδίο με πεδίο — ακόμα κι αν λείπει ένα.',
+      fn: blockB },
+    { id:'c', tag:'Γ', name:'Ιεραρχία Οδηγού',
+      why:'Χωρίς πλαίσια — μόνο τυπογραφία και δύο χοντρές γραμμές που απομονώνουν το μπλοκ. Η διεύθυνση στα 17px κυριαρχεί, από κάτω όροφος/κουδούνι, μετά όνομα, και τελευταίο το τηλέφωνο με το QR. Το ελαφρύτερο σε μελάνι και το πιο ανθεκτικό στο στενό χαρτί.',
+      fn: blockC },
+    { id:'d', tag:'Δ', name:'Δύο Ζώνες',
+      why:'Δύο ξεχωριστά κουτιά με τίτλο: «ΠΕΛΑΤΗΣ» (ποιος) και «ΠΑΡΑΔΟΣΗ» (πού). Ακολουθεί τον τρόπο που χρησιμοποιείται η πληροφορία, και η μεγάλη σημείωση δεν μπερδεύεται ποτέ με τα στοιχεία.',
+      fn: blockD }
+  ];
+
+  var grid = document.getElementById('grid');
+
+  function render(){
+    var d = DATA[S.data];
+    var pw = (S.paper === '80') ? 257 : 166;
+    document.documentElement.style.setProperty('--pw', pw + 'px');
+    document.documentElement.style.setProperty('--z', S.zoom);
+
+    grid.innerHTML = CARDS.map(function(c){
+      return '<div class="slot '+(c.cls||'')+'" data-id="'+c.id+'">'
+        +      '<div class="cap"><span class="tag">'+c.tag+'</span>'
+        +        '<span class="name">'+c.name+'</span></div>'
+        +      '<p class="why">'+c.why+'</p>'
+        +      '<div class="paperbox"><div class="paper" data-paper>'
+        +         head()
+        +         '<div data-block>'+c.fn(d)+'</div>'
+        +         tail()
+        +      '</div></div>'
+        +      '<div class="meas" data-meas></div>'
+        +    '</div>';
+    }).join('');
+
+    // ψεύτικα QR
+    Array.prototype.forEach.call(grid.querySelectorAll('[data-qr]'), function(w){
+      drawQR(w.querySelector('canvas'), parseInt(w.getAttribute('data-qr'), 10));
+    });
+
+    measure();
+  }
+
+  // ── ΜΕΤΡΑΕΙ, δεν μαντεύει: ύψος μπλοκ σε mm + έλεγχος κοψίματος ────────────
+  function measure(){
+    var PX_PER_MM = 3.7795;
+    Array.prototype.forEach.call(grid.querySelectorAll('.slot'), function(slot){
+      var block = slot.querySelector('[data-block]');
+      var paper = slot.querySelector('[data-paper]');
+      var box   = slot.querySelector('[data-meas]');
+      if (!block || !box) return;
+
+      var z = parseFloat(S.zoom) || 1;
+      var h = block.getBoundingClientRect().height / z;   // αφαιρούμε τη μεγέθυνση οθόνης
+      var mm = h / PX_PER_MM;
+
+      // κόβεται κάτι οριζόντια; (η ίδια λογική με το autofit του POS)
+      var over = false;
+      Array.prototype.forEach.call(block.querySelectorAll('*'), function(el){
+        if (el.scrollWidth > el.clientWidth + 1) over = true;
+      });
+      if (block.scrollWidth > paper.clientWidth + 1) over = true;
+
+      var html = '<span class="chip">ύψος μπλοκ <b>'+mm.toFixed(1).replace('.', ',')+' mm</b></span>';
+      html += over
+        ? '<span class="chip warn">⚠ κάτι δεν χωράει στο πλάτος</span>'
+        : '<span class="chip ok">χωράει στο πλάτος</span>';
+      if (slot.getAttribute('data-id') === 'now'){
+        html += '<span class="chip warn">τυπώνει ▨ αντί για εικονίδιο</span>';
+      }
+      box.innerHTML = html;
+    });
+  }
+
+  // ── χειριστήρια ───────────────────────────────────────────────────────────
+  function wire(id, key){
+    var seg = document.getElementById(id);
+    seg.addEventListener('click', function(e){
+      var b = e.target.closest('button');
+      if (!b) return;
+      Array.prototype.forEach.call(seg.querySelectorAll('button'), function(x){ x.classList.remove('on'); });
+      b.classList.add('on');
+      S[key] = b.getAttribute('data-v');
+      render();
+    });
+  }
+  wire('seg-paper','paper');
+  wire('seg-zoom','zoom');
+  wire('seg-data','data');
+  wire('seg-type','type');
+  wire('seg-qr','qr');
+
+  render();
+  window.addEventListener('resize', measure);
+})();
+</script>
+</body>
+</html>
