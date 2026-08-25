@@ -72,9 +72,27 @@
   .slot.now .cap .tag{background:rgba(224,90,90,.15);color:var(--red)}
   .slot .cap .name{font-size:15px;font-weight:700}
   .slot .why{
-    color:var(--muted);font-size:12.5px;margin:0 0 10px;max-width:var(--paperbox);
+    color:var(--muted);font-size:12.5px;margin:0 0 12px;max-width:760px;
     line-height:1.5;
   }
+  /* Τα δύο πλάτη χαρτιού δίπλα-δίπλα, ώστε να συγκρίνονται στο ίδιο βλέμμα */
+  .papers{display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start}
+  .pcol{flex:0 0 auto}
+  .pw-lbl{
+    display:inline-flex;align-items:center;gap:6px;margin-bottom:7px;
+    font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;
+    color:var(--white);background:var(--card2);border:1px solid var(--border);
+    border-radius:20px;padding:3px 11px;
+  }
+  .pw-lbl i{
+    font-style:normal;width:7px;height:7px;border-radius:50%;background:var(--yellow);
+  }
+  .pw-lbl.narrow i{background:#7aa7ff}
+  .grid.stack{flex-direction:column;gap:34px}
+  .grid.stack .slot{
+    border-top:1px solid var(--border);padding-top:20px;width:100%;
+  }
+  .grid.stack .slot:first-child{border-top:0;padding-top:0}
   .paperbox{
     background:#e9e9e9;padding:14px 12px;border-radius:8px;
     box-shadow:0 10px 26px rgba(0,0,0,.45);display:inline-block;
@@ -266,8 +284,9 @@
       <div class="grp">
         <label>Χαρτί</label>
         <div class="seg" id="seg-paper">
-          <button data-v="80" class="on">80&nbsp;mm</button>
-          <button data-v="58">58&nbsp;mm</button>
+          <button data-v="both" class="on">Και τα δύο</button>
+          <button data-v="80">Μόνο 80&nbsp;mm</button>
+          <button data-v="58">Μόνο 58&nbsp;mm</button>
         </div>
       </div>
       <div class="grp">
@@ -305,6 +324,9 @@
       Εκεί σπάνε τα σχέδια — όχι στο εύκολο παράδειγμα.
       Το <b>×1</b> είναι το πραγματικό μέγεθος στο χαρτί· τα άλλα δύο μεγεθύνουν μόνο την οθόνη
       (οι αναλογίες μένουν ίδιες).<br>
+      <b>Προεπιλογή: βλέπεις και τα δύο πλάτη δίπλα-δίπλα</b> για κάθε πρόταση — αριστερά 80&nbsp;mm,
+      δεξιά 58&nbsp;mm. Αν θέλεις να συγκρίνεις τις προτάσεις μεταξύ τους, διάλεξε «Μόνο 80» ή «Μόνο 58»
+      και μπαίνουν σε σειρά.<br>
       <b>Κάτω από κάθε χαρτί μετράω ζωντανά</b> το ύψος του μπλοκ σε χιλιοστά και αν κάτι δεν χωράει
       στο πλάτος. Να το ξέρεις καθαρά: οι προτάσεις πιάνουν <b>50–56&nbsp;mm</b> έναντι <b>17&nbsp;mm</b>
       σήμερα — τριπλάσιο χαρτί για το μπλοκ του πελάτη. Το είπες ότι δεν σε νοιάζει, το γράφω για να
@@ -343,6 +365,10 @@
         <td class="y">50&nbsp;mm</td><td>56&nbsp;mm</td><td>54&nbsp;mm</td><td>54&nbsp;mm</td>
       </tr>
       <tr>
+        <td>Ύψος μπλοκ στα 58&nbsp;mm <span class="note">(μετρημένο· σήμερα 34&nbsp;mm)</span></td>
+        <td>82&nbsp;mm</td><td class="n">83&nbsp;mm</td><td class="y">73&nbsp;mm</td><td class="y">72&nbsp;mm</td>
+      </tr>
+      <tr>
         <td>Μελάνι / ταχύτητα εκτύπωσης</td>
         <td class="n">Το πιο βαρύ (μαύρη μπάρα)</td><td>Μέτριο</td><td class="y">Το πιο ελαφρύ</td><td>Μέτριο</td>
       </tr>
@@ -373,8 +399,10 @@
         χωρίς μαύρες μπάρες (που εξαρτώνται από την ποιότητα του χαρτιού σου) και χωρίς
         στήλη ετικετών (που στενεύει τα 58 mm).</span></li>
       <li><span class="num" style="background:rgba(56,217,122,.16);color:var(--green)">✓</span><span>
-        <b>Είναι το μόνο που δουλεύει το ίδιο καλά και στα δύο πλάτη χαρτιού</b> — δεν χρειάζεται
-        δεύτερο σχέδιο για το 58 mm.</span></li>
+        <b>Είναι το πιο οικονομικό στο στενό χαρτί</b> — δεν χρειάζεται δεύτερο σχέδιο για το 58&nbsp;mm.
+        Μετρημένο στα 58&nbsp;mm: <b>Γ 73&nbsp;mm</b> και <b>Δ 72&nbsp;mm</b>, ενώ το <b>Β φτάνει 83&nbsp;mm</b>
+        (η στήλη με τα ονόματα πεδίων τρώει πλάτος, οπότε όλα σπάνε σε περισσότερες γραμμές).
+        Στα 80&nbsp;mm η διαφορά είναι αμελητέα — φαίνεται μόνο στο στενό.</span></li>
       <li><span class="num" style="background:rgba(245,200,66,.16);color:var(--yellow)">!</span><span>
         <b>Αν όμως θέλεις το «wow» στο χέρι του πελάτη</b>, το <b>Α</b> είναι σαφώς το πιο εντυπωσιακό:
         μοιάζει με ετικέτα αποστολής courier. Θέλει όμως <b>μία δοκιμαστική εκτύπωση</b> στον δικό σου
@@ -411,7 +439,7 @@
     }
   };
 
-  var S = { paper:'80', zoom:'1.6', data:'short', type:'delivery', qr:'1' };
+  var S = { paper:'both', zoom:'1.6', data:'short', type:'delivery', qr:'1' };
 
   // ── ψεύτικο (αλλά ρεαλιστικό) QR για κρίση διάταξης ────────────────────────
   function drawQR(cv, px){
@@ -605,23 +633,35 @@
 
   var grid = document.getElementById('grid');
 
+  var WIDTHS = { '80': 257, '58': 166 };
+
+  function paperCol(c, d, mm){
+    var narrow = (mm === '58');
+    return '<div class="pcol" data-mm="'+mm+'">'
+      +      '<div class="pw-lbl'+(narrow?' narrow':'')+'"><i></i>'+mm+' mm</div>'
+      +      '<div class="paperbox"><div class="paper" data-paper style="width:'+WIDTHS[mm]+'px">'
+      +         head()
+      +         '<div data-block>'+c.fn(d)+'</div>'
+      +         tail()
+      +      '</div></div>'
+      +      '<div class="meas" data-meas></div>'
+      +    '</div>';
+  }
+
   function render(){
     var d = DATA[S.data];
-    var pw = (S.paper === '80') ? 257 : 166;
-    document.documentElement.style.setProperty('--pw', pw + 'px');
+    var list = (S.paper === 'both') ? ['80','58'] : [S.paper];
     document.documentElement.style.setProperty('--z', S.zoom);
+    grid.className = 'grid' + (S.paper === 'both' ? ' stack' : '');
 
     grid.innerHTML = CARDS.map(function(c){
       return '<div class="slot '+(c.cls||'')+'" data-id="'+c.id+'">'
         +      '<div class="cap"><span class="tag">'+c.tag+'</span>'
         +        '<span class="name">'+c.name+'</span></div>'
         +      '<p class="why">'+c.why+'</p>'
-        +      '<div class="paperbox"><div class="paper" data-paper>'
-        +         head()
-        +         '<div data-block>'+c.fn(d)+'</div>'
-        +         tail()
-        +      '</div></div>'
-        +      '<div class="meas" data-meas></div>'
+        +      '<div class="papers">'
+        +         list.map(function(mm){ return paperCol(c, d, mm); }).join('')
+        +      '</div>'
         +    '</div>';
     }).join('');
 
@@ -636,10 +676,11 @@
   // ── ΜΕΤΡΑΕΙ, δεν μαντεύει: ύψος μπλοκ σε mm + έλεγχος κοψίματος ────────────
   function measure(){
     var PX_PER_MM = 3.7795;
-    Array.prototype.forEach.call(grid.querySelectorAll('.slot'), function(slot){
-      var block = slot.querySelector('[data-block]');
-      var paper = slot.querySelector('[data-paper]');
-      var box   = slot.querySelector('[data-meas]');
+    Array.prototype.forEach.call(grid.querySelectorAll('.pcol'), function(col){
+      var slot  = col.closest('.slot');
+      var block = col.querySelector('[data-block]');
+      var paper = col.querySelector('[data-paper]');
+      var box   = col.querySelector('[data-meas]');
       if (!block || !box) return;
 
       var z = parseFloat(S.zoom) || 1;
