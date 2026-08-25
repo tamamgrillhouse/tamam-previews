@@ -206,15 +206,26 @@
   /* ΟΡΟΦΟΣ = ένας χαρακτήρας που κρίνει «πόσες σκάλες» → δικό του κουτί, μεγάλο ψηφίο.
      ΚΟΥΔΟΥΝΙ = όνομα που διαβάζεις στην πόρτα → ετικέτα + κείμενο δίπλα. */
   .c-where2{display:flex;gap:8px;margin-top:7px;align-items:stretch}
+  /* 🔒 ΣΤΑΘΕΡΟ ΠΛΑΤΟΣ. Με «auto» το κουτί άλλαζε 62→92px ανάλογα με την τιμή:
+     το μάτι του διανομέα δεν μαθαίνει ποτέ πού να κοιτάξει, και στο στενό χαρτί
+     το «Ημιόροφος» έπιανε το 51% του πλάτους στριμώχνοντας το κουδούνι σε 81px. */
   .c-fl{
-    border:2px solid #000;flex:0 0 auto;min-width:56px;padding:2px 7px 3px;
+    border:2px solid #000;flex:0 0 74px;width:74px;padding:2px 5px 3px;
     display:flex;flex-direction:column;justify-content:center;text-align:center;
   }
   .c-fl .k{font-size:8px;font-weight:700;letter-spacing:1.4px;line-height:1.25}
   .c-fl .v{font-weight:900;line-height:.95;margin-top:1px;white-space:nowrap}
   .c-fl .fl-num{font-size:27px}
   .c-fl .fl-suf{font-size:12px;margin-left:1px}
-  .c-fl .fl-word{font-size:12.5px;line-height:1.15;display:inline-block;padding:5px 0}
+  /* Οι λέξεις (Ισόγειο/Υπόγειο/Ημιόροφος) στα 11px χωράνε σε ΜΙΑ γραμμή μέσα στα 72px·
+     ό,τι δεν χωρέσει τυλίγεται μέσα στο κουτί — ΠΟΤΕ δεν το φαρδαίνει. */
+  .c-fl .fl-word{font-size:11px;line-height:1.2;display:inline-block;padding:4px 0;
+    /* ⚠️ break-word, ΟΧΙ anywhere: το «anywhere» μετράει το ελάχιστο πλάτος ως ΕΝΑ
+       γράμμα, οπότε το inline-block συρρικνώνεται και η λέξη σπάει ενώ ΧΩΡΑΕΙ. */
+    white-space:normal;overflow-wrap:break-word}
+  /* Ένα σκαλί κάτω για τη μακρύτερη λέξη («Ημιόροφος») ώστε να μένει σε ΜΙΑ γραμμή.
+     10px = το κατώτατο όριο του POS — δεν κατεβαίνει άλλο· ό,τι δεν χωρέσει τυλίγεται. */
+  .c-fl .fl-word.long{font-size:10px}
   .c-bell{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;justify-content:center}
   .c-bell .k{font-size:8.5px;font-weight:700;letter-spacing:1.6px;margin-bottom:1px}
   .c-bell .v{font-size:13px;font-weight:900;line-height:1.2;overflow-wrap:anywhere}
@@ -231,6 +242,11 @@
     display:inline-block;font-size:10.5px;padding:2px 8px;border-radius:20px;margin-bottom:5px;
     background:var(--card2);border:1px solid var(--border);color:var(--muted);
   }
+  .fgrid{display:flex;flex-wrap:wrap;gap:12px;background:#e9e9e9;padding:14px 12px;border-radius:8px}
+  .fcell{text-align:center}
+  .fcell .c-fl{font-family:Arial,Helvetica,sans-serif;color:#000;background:#fff;font-weight:700}
+  .fcap{font-size:11px;color:#4a4a55;margin-top:5px;font-weight:700}
+
   /* Γ2 — γεμάτο μαύρο chip */
   .c-flinv{
     display:inline-flex;align-items:baseline;gap:6px;background:#000;color:#fff;
@@ -754,7 +770,7 @@
     var m = /^(\d{1,2})(.*)$/.exec(f);
     if (m) return '<span class="fl-num">'+m[1]+'</span>'
                  + (m[2] ? '<span class="fl-suf">'+m[2]+'</span>' : '');
-    return '<span class="fl-word">'+f+'</span>';
+    return '<span class="fl-word'+(f.length > 7 ? ' long' : '')+'">'+f+'</span>';
   }
   function floorRow(d){
     var f = (d.floor || '').trim();
@@ -956,6 +972,23 @@
       +  '<div class="pair">'+fMini('box','Ισόγειο','ΠΑΠΑΔΟΠΟΥΛΟΣ','80')
       +    fMini('box','10ος+','ΠΑΠΑΔΟΠΟΥΛΟΣ','80')
       +    fMini('box','','ΠΑΠΑΔΟΠΟΥΛΟΣ','80')+'</div></div>';
+    // ΟΛΕΣ οι τιμές που μπορεί να δώσει ο επιλογέας — για να μη μείνει καμία «στη φαντασία»
+    var ALL = ['Υπόγειο','Ημιόροφος','Ισόγειο','1ος','2ος','3ος','4ος','5ος',
+               '6ος','7ος','8ος','9ος','10ος+'];
+    h += '<div class="fv" style="flex:1 1 100%;border-top:1px solid var(--border);padding-top:16px">'
+      +  '<h3>Και οι 13 τιμές του επιλογέα, όπως θα τυπωθούν</h3>'
+      +  '<p>Το κουτί έχει <b>σταθερό πλάτος 74px</b> σε όλες — ο διανομέας μαθαίνει μία θέση '
+      +  'και την κοιτάει πάντα εκεί. Τα ψηφία στα 27px· οι λέξεις στα 11px (το «Ημιόροφος» '
+      +  'κατεβαίνει ένα σκαλί στα 10px ώστε να μείνει σε μία γραμμή). Καμία δεν τυλίγεται, '
+      +  'κανένα κουτί δεν αλλάζει μέγεθος.</p>'
+      +  '<div class="fgrid">'
+      +    ALL.map(function(f){
+             return '<div class="fcell"><div class="c-fl"><div class="k">ΟΡΟΦΟΣ</div>'
+                  + '<div class="v">'+floorValueHtml(f)+'</div></div>'
+                  + '<div class="fcap">'+f+'</div></div>';
+           }).join('')
+      +  '</div></div>';
+
     box.innerHTML = h;
   }
 
