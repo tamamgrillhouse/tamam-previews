@@ -205,7 +205,11 @@
   .c-where{font-size:13px;font-weight:900;margin-top:6px;letter-spacing:.3px;overflow-wrap:anywhere;}
   /* ΟΡΟΦΟΣ = ένας χαρακτήρας που κρίνει «πόσες σκάλες» → δικό του κουτί, μεγάλο ψηφίο.
      ΚΟΥΔΟΥΝΙ = όνομα που διαβάζεις στην πόρτα → ετικέτα + κείμενο δίπλα. */
-  .c-where2{display:flex;gap:8px;margin-top:7px;align-items:stretch}
+  /* 🔑 Το κουδούνι κάθεται ΔΙΠΛΑ στο κουτί όσο το όνομα χωράει· αν δεν χωράει,
+     ΚΑΤΕΒΑΙΝΕΙ σε δική του σειρά και παίρνει ΟΛΟ το πλάτος για να μείνει σε μία
+     γραμμή. Το κρίνει το ΙΔΙΟ ΤΟ ΟΝΟΜΑ (min-content = το μακρύτερο κομμάτι του),
+     όχι σταθερό όριο — αλλιώς θα κατέβαινε και όταν χωρούσε. */
+  .c-where2{display:flex;gap:8px;margin-top:7px;align-items:stretch;flex-wrap:wrap}
   /* 🔒 ΣΤΑΘΕΡΟ ΠΛΑΤΟΣ. Με «auto» το κουτί άλλαζε 62→92px ανάλογα με την τιμή:
      το μάτι του διανομέα δεν μαθαίνει ποτέ πού να κοιτάξει, και στο στενό χαρτί
      το «Ημιόροφος» έπιανε το 51% του πλάτους στριμώχνοντας το κουδούνι σε 81px. */
@@ -226,9 +230,16 @@
   /* Ένα σκαλί κάτω για τη μακρύτερη λέξη («Ημιόροφος») ώστε να μένει σε ΜΙΑ γραμμή.
      10px = το κατώτατο όριο του POS — δεν κατεβαίνει άλλο· ό,τι δεν χωρέσει τυλίγεται. */
   .c-fl .fl-word.long{font-size:10px}
-  .c-bell{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;justify-content:center}
+  .c-bell{flex:1 1 auto;min-width:min-content;display:flex;flex-direction:column;justify-content:center}
   .c-bell .k{font-size:8.5px;font-weight:700;letter-spacing:1.6px;margin-bottom:1px}
-  .c-bell .v{font-size:13px;font-weight:900;line-height:1.2;overflow-wrap:anywhere}
+  /* break-word ΟΧΙ anywhere: με «anywhere» το min-content γίνεται ΕΝΑ γράμμα,
+     οπότε το κουδούνι δεν κατεβαίνει ΠΟΤΕ — απλώς στριμώχνεται και σπάει. */
+  .c-bell .v{font-size:13px;font-weight:900;line-height:1.2;overflow-wrap:break-word}
+  /* Ένα σκαλί κάτω ΜΟΝΟ στο στενό χαρτί, για τα πολύ μεγάλα επώνυμα:
+     «ΚΩΝΣΤΑΝΤΙΝΟΠΟΥΛΟΣ Α.» = 189px στα 13px (δεν χωρά στα 181) → 175px στα 12px ✓.
+     Στα 80mm δεν χρειάζεται ποτέ — μετρημένο. */
+  .paper[data-mm="58"] .c-bell .v.long,
+  .fgrid58 .c-bell .v.long{font-size:12px}
 
   /* ── πίνακας εναλλακτικών για τον όροφο ── */
   .fvar{display:flex;flex-wrap:wrap;gap:22px;margin-top:6px}
@@ -243,6 +254,8 @@
     background:var(--card2);border:1px solid var(--border);color:var(--muted);
   }
   .fgrid{display:flex;flex-wrap:wrap;gap:12px;background:#e9e9e9;padding:14px 12px;border-radius:8px}
+  .fgrid58{gap:16px}
+  .fgrid58 .fcell .paper{background:#fff;border-radius:4px;padding:6px 0}
   .fcell{text-align:center}
   .fcell .c-fl{font-family:Arial,Helvetica,sans-serif;color:#000;background:#fff;font-weight:700}
   .fcap{font-size:11px;color:#4a4a55;margin-top:5px;font-weight:700}
@@ -781,8 +794,10 @@
       h += '<div class="c-fl"><div class="k">ΟΡΟΦΟΣ</div>'
         +  '<div class="v">'+floorValueHtml(f)+'</div></div>';
     }
+    // >18 χαρακτήρες = το όριο πέρα από το οποίο δεν χωρά σε μία γραμμή στα 58mm
+    // (μετρημένο: 18 χαρ. → 165px · 20 χαρ. → 189px, με διαθέσιμα 181px).
     h += '<div class="c-bell"><div class="k">ΚΟΥΔΟΥΝΙ</div>'
-      +  '<div class="v">'+(bell || '—')+'</div></div>';
+      +  '<div class="v'+(bell.length > 18 ? ' long' : '')+'">'+(bell || '—')+'</div></div>';
     return h + '</div>';
   }
 
@@ -986,6 +1001,30 @@
              return '<div class="fcell"><div class="c-fl"><div class="k">ΟΡΟΦΟΣ</div>'
                   + '<div class="v">'+floorValueHtml(f)+'</div></div>'
                   + '<div class="fcap">'+f+'</div></div>';
+           }).join('')
+      +  '</div></div>';
+
+    // ── ΤΟ ΚΟΥΔΟΥΝΙ ΟΤΑΝ ΤΟ ΟΝΟΜΑ ΕΙΝΑΙ ΜΕΓΑΛΟ (στενό χαρτί) ──
+    var BELLS = ['ΠΑΠΑΣ', 'ΠΑΠΑΔΟΠΟΥΛΟΣ', 'ΧΑΤΖΗΑΝΑΣΤΑΣΙΟΥ Κ.',
+                 'ΚΩΝΣΤΑΝΤΙΝΟΠΟΥΛΟΣ Α.', 'ΠΑΠΑΓΕΩΡΓΙΟΥ-ΑΝΤΩΝΟΠΟΥΛΟΥ'];
+    h += '<div class="fv" style="flex:1 1 100%;border-top:1px solid var(--border);padding-top:16px">'
+      +  '<h3>Το κουδούνι στα 58 mm — κατεβαίνει σειρά μόνο όταν χρειάζεται</h3>'
+      +  '<p>Όσο το όνομα χωράει δίπλα στον όροφο, μένει δίπλα. Μόλις δεν χωράει, '
+      +  '<b>κατεβαίνει σε δική του σειρά και παίρνει όλο το πλάτος</b> ώστε να μείνει σε '
+      +  '<b>μία γραμμή</b>. Το κρίνει το ίδιο το όνομα, όχι σταθερό όριο. '
+      +  'Τα πολύ μεγάλα κατεβαίνουν κι ένα σκαλί στα 12px. Το τελευταίο (25 γράμματα) '
+      +  'δεν χωράει με κανένα μέγεθος — σπάει στην παύλα, που είναι φυσικό σημείο.</p>'
+      +  '<div class="fgrid fgrid58">'
+      +    BELLS.map(function(n){
+             return '<div class="fcell"><div class="paper" data-mm="58" '
+                  + 'style="width:181.42px;zoom:1;padding:6px 0;box-shadow:none">'
+                  + '<div class="c-where2">'
+                  +   '<div class="c-fl"><div class="k">ΟΡΟΦΟΣ</div>'
+                  +     '<div class="v">' + floorValueHtml('2ος') + '</div></div>'
+                  +   '<div class="c-bell"><div class="k">ΚΟΥΔΟΥΝΙ</div>'
+                  +     '<div class="v' + (n.length > 18 ? ' long' : '') + '">' + n + '</div></div>'
+                  + '</div></div>'
+                  + '<div class="fcap">' + n.length + ' γράμματα</div></div>';
            }).join('')
       +  '</div></div>';
 
