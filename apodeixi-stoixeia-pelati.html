@@ -184,6 +184,45 @@
   .c-cap{font-size:8.5px;font-weight:700;letter-spacing:2px;margin-bottom:4px}
   .c-addr{font-size:17px;font-weight:900;line-height:1.15;letter-spacing:.2px;overflow-wrap:anywhere;}
   .c-where{font-size:13px;font-weight:900;margin-top:6px;letter-spacing:.3px;overflow-wrap:anywhere;}
+  /* ΟΡΟΦΟΣ = ένας χαρακτήρας που κρίνει «πόσες σκάλες» → δικό του κουτί, μεγάλο ψηφίο.
+     ΚΟΥΔΟΥΝΙ = όνομα που διαβάζεις στην πόρτα → ετικέτα + κείμενο δίπλα. */
+  .c-where2{display:flex;gap:8px;margin-top:7px;align-items:stretch}
+  .c-fl{
+    border:2px solid #000;flex:0 0 auto;min-width:56px;padding:2px 7px 3px;
+    display:flex;flex-direction:column;justify-content:center;text-align:center;
+  }
+  .c-fl .k{font-size:8px;font-weight:700;letter-spacing:1.4px;line-height:1.25}
+  .c-fl .v{font-size:27px;font-weight:900;line-height:.95;margin-top:1px}
+  .c-fl .v.sm{font-size:12.5px;line-height:1.15;margin-top:2px;overflow-wrap:anywhere}
+  .c-bell{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;justify-content:center}
+  .c-bell .k{font-size:8.5px;font-weight:700;letter-spacing:1.6px;margin-bottom:1px}
+  .c-bell .v{font-size:13px;font-weight:900;line-height:1.2;overflow-wrap:anywhere}
+
+  /* ── πίνακας εναλλακτικών για τον όροφο ── */
+  .fvar{display:flex;flex-wrap:wrap;gap:22px;margin-top:6px}
+  .fvar .fv{flex:0 0 auto}
+  .fv h3{font-size:13.5px;margin:0 0 3px;font-weight:700}
+  .fv p{color:var(--muted);font-size:12.5px;margin:0 0 9px;max-width:330px;line-height:1.5}
+  .fv .pair{display:flex;gap:14px;align-items:flex-start}
+  .fv .mini{background:#e9e9e9;padding:10px 9px;border-radius:7px}
+  .fv .mini .paper{zoom:1.5}
+  .fvchip{
+    display:inline-block;font-size:10.5px;padding:2px 8px;border-radius:20px;margin-bottom:5px;
+    background:var(--card2);border:1px solid var(--border);color:var(--muted);
+  }
+  /* Γ2 — γεμάτο μαύρο chip */
+  .c-flinv{
+    display:inline-flex;align-items:baseline;gap:6px;background:#000;color:#fff;
+    padding:2px 9px 3px;margin-top:7px;
+  }
+  .c-flinv .k{font-size:8.5px;font-weight:700;letter-spacing:1.4px}
+  .c-flinv .v{font-size:18px;font-weight:900;line-height:1}
+  /* Γ3 — inline με μεγάλο ψηφίο */
+  .c-flin{margin-top:7px;display:flex;align-items:baseline;gap:5px;flex-wrap:wrap}
+  .c-flin .k{font-size:8.5px;font-weight:700;letter-spacing:1.4px}
+  .c-flin .big{font-size:21px;font-weight:900;line-height:1}
+  .c-flin .sep{font-size:13px;font-weight:900}
+  .c-flin .bell{font-size:12.5px;font-weight:900;overflow-wrap:anywhere}
   .c-name{font-size:13.5px;font-weight:900;margin-top:9px;line-height:1.25;overflow-wrap:anywhere;}
   .c-name .k{font-size:8.5px;font-weight:700;letter-spacing:1.6px;display:block;margin-bottom:1px}
   .c-tel{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin-top:9px}
@@ -328,7 +367,7 @@
       δεξιά 58&nbsp;mm. Αν θέλεις να συγκρίνεις τις προτάσεις μεταξύ τους, διάλεξε «Μόνο 80» ή «Μόνο 58»
       και μπαίνουν σε σειρά.<br>
       <b>Κάτω από κάθε χαρτί μετράω ζωντανά</b> το ύψος του μπλοκ σε χιλιοστά και αν κάτι δεν χωράει
-      στο πλάτος. Να το ξέρεις καθαρά: οι προτάσεις πιάνουν <b>50–56&nbsp;mm</b> έναντι <b>17&nbsp;mm</b>
+      στο πλάτος. Να το ξέρεις καθαρά: οι προτάσεις πιάνουν <b>50–57&nbsp;mm</b> έναντι <b>17&nbsp;mm</b>
       σήμερα — τριπλάσιο χαρτί για το μπλοκ του πελάτη. Το είπες ότι δεν σε νοιάζει, το γράφω για να
       το ξέρεις μετρημένο και όχι να το ανακαλύψεις στο ρολό.
     </p>
@@ -337,9 +376,28 @@
   <!-- ═══════════ ΤΑ ΧΑΡΤΙΑ ═══════════ -->
   <div class="grid" id="grid"></div>
 
+  <!-- ═══════════ Ο ΟΡΟΦΟΣ ═══════════ -->
+  <div class="panel" style="margin-top:26px">
+    <h2><span class="n">3.</span> Ο όροφος — γιατί τον έβγαλα από τη γραμμή του κουδουνιού</h2>
+    <p class="note" style="margin:0 0 14px;max-width:860px">
+      Είναι <b>δύο διαφορετικά είδη πληροφορίας</b> και τα είχα βάλει να μοιράζονται γραμμή και μέγεθος.
+      Ο <b>όροφος</b> είναι ένας χαρακτήρας που απαντά «πόσες σκάλες» — τον θέλεις με το <b>βλέμμα</b>,
+      χωρίς διάβασμα. Το <b>κουδούνι</b> είναι όνομα μεταβλητού μήκους που το διαβάζεις στην πόρτα.
+      Όταν μοιράζονται γραμμή, το μακρύ επώνυμο <b>καταπίνει οπτικά</b> το ψηφίο.
+      Παρακάτω τρεις τρόποι — ο πρώτος είναι αυτός που έβαλα στο Γ.
+    </p>
+    <div class="fvar" id="fvar"></div>
+    <p class="note" style="margin:16px 0 0;max-width:860px">
+      <b>Και όταν δεν είναι αριθμός;</b> «ΙΣΟΓΕΙΟ», «ΗΜΙΩΡΟΦΟΣ» ή κενό πεδίο δεν πρέπει να σπάνε το σχέδιο.
+      Το κουτί <b>μικραίνει μόνο του τα γράμματα</b> όταν η τιμή είναι μεγάλη, και <b>εξαφανίζεται</b>
+      όταν δεν υπάρχει όροφος (take away ή άγνωστος) — το κουδούνι παίρνει τότε όλο το πλάτος.
+      Τα βλέπεις στην τελευταία σειρά.
+    </p>
+  </div>
+
   <!-- ═══════════ ΣΥΓΚΡΙΣΗ ═══════════ -->
   <div class="panel" style="margin-top:26px">
-    <h2><span class="n">3.</span> Σύγκριση με μια ματιά</h2>
+    <h2><span class="n">4.</span> Σύγκριση με μια ματιά</h2>
     <table class="cmp">
       <tr>
         <th>&nbsp;</th><th>Α — Ετικέτα</th><th>Β — Πεδία</th><th>Γ — Ιεραρχία</th><th>Δ — Δύο ζώνες</th>
@@ -362,11 +420,11 @@
       </tr>
       <tr>
         <td>Ύψος μπλοκ στα 80&nbsp;mm <span class="note">(μετρημένο· σήμερα 17&nbsp;mm)</span></td>
-        <td class="y">50&nbsp;mm</td><td>56&nbsp;mm</td><td>54&nbsp;mm</td><td>54&nbsp;mm</td>
+        <td class="y">50&nbsp;mm</td><td>56&nbsp;mm</td><td>57&nbsp;mm</td><td>54&nbsp;mm</td>
       </tr>
       <tr>
         <td>Ύψος μπλοκ στα 58&nbsp;mm <span class="note">(μετρημένο· σήμερα 34&nbsp;mm)</span></td>
-        <td>82&nbsp;mm</td><td class="n">83&nbsp;mm</td><td class="y">73&nbsp;mm</td><td class="y">72&nbsp;mm</td>
+        <td>82&nbsp;mm</td><td class="n">83&nbsp;mm</td><td class="y">72&nbsp;mm</td><td class="y">72&nbsp;mm</td>
       </tr>
       <tr>
         <td>Μελάνι / ταχύτητα εκτύπωσης</td>
@@ -388,10 +446,12 @@
 
   <!-- ═══════════ ΠΡΟΤΑΣΗ ═══════════ -->
   <div class="panel">
-    <h2><span class="n">4.</span> Τι θα διάλεγα και γιατί</h2>
+    <h2><span class="n">5.</span> Τι θα διάλεγα και γιατί</h2>
     <p class="note" style="margin:0 0 10px">
-      Αν με ρωτάς ως ειδικό και όχι ως «διάλεξε ένα»: <b>το Γ («Ιεραρχία Οδηγού»)</b> για καθημερινή
-      χρήση, με <b>ένα δανεικό στοιχείο από το Α</b> — τα δύο κουτάκια ΟΡΟΦΟΣ/ΚΟΥΔΟΥΝΙ.
+      <b>Το Γ («Ιεραρχία Οδηγού»)</b>, με τον όροφο στο δικό του κουτί (§3).
+      Η διόρθωση του ορόφου <b>δεν κόστισε χαρτί</b>: στα 58&nbsp;mm το Γ έπεσε από 73 σε
+      <b>72&nbsp;mm</b>, επειδή η παλιά ενιαία γραμμή «ΟΡΟΦΟΣ · ΚΟΥΔΟΥΝΙ» τυλιγόταν σε τρεις σειρές
+      ενώ τώρα το κουτί και το όνομα κάθονται <b>δίπλα</b>.
     </p>
     <ul class="probs">
       <li><span class="num" style="background:rgba(56,217,122,.16);color:var(--green)">✓</span><span>
@@ -400,7 +460,7 @@
         στήλη ετικετών (που στενεύει τα 58 mm).</span></li>
       <li><span class="num" style="background:rgba(56,217,122,.16);color:var(--green)">✓</span><span>
         <b>Είναι το πιο οικονομικό στο στενό χαρτί</b> — δεν χρειάζεται δεύτερο σχέδιο για το 58&nbsp;mm.
-        Μετρημένο στα 58&nbsp;mm: <b>Γ 73&nbsp;mm</b> και <b>Δ 72&nbsp;mm</b>, ενώ το <b>Β φτάνει 83&nbsp;mm</b>
+        Μετρημένο στα 58&nbsp;mm: <b>Γ 72&nbsp;mm</b> και <b>Δ 72&nbsp;mm</b>, ενώ το <b>Β φτάνει 83&nbsp;mm</b>
         (η στήλη με τα ονόματα πεδίων τρώει πλάτος, οπότε όλα σπάνε σε περισσότερες γραμμές).
         Στα 80&nbsp;mm η διαφορά είναι αμελητέα — φαίνεται μόνο στο στενό.</span></li>
       <li><span class="num" style="background:rgba(245,200,66,.16);color:var(--yellow)">!</span><span>
@@ -575,7 +635,7 @@
     if (S.type==='delivery'){
       h += '<div class="c-cap">ΠΑΡΑΔΟΣΗ ΣΕ</div>';
       h += '<div class="c-addr">'+d.addr+'</div>';
-      h += '<div class="c-where">ΟΡΟΦΟΣ '+(d.floor||'—')+'&nbsp; ·&nbsp; ΚΟΥΔΟΥΝΙ '+(d.bell||'—')+'</div>';
+      h += floorRow(d);
       h += '<div class="c-name"><span class="k">ΟΝΟΜΑ</span>'+d.name+'</div>';
     } else {
       h += '<div class="c-cap">ΠΑΡΑΛΑΒΗ</div>';
@@ -586,6 +646,23 @@
       +    qrHtml('ΚΛΗΣΗ', 42)
       +  '</div>';
     if (d.notes) h += '<div class="c-note"><span class="k">ΣΗΜΕΙΩΣΗ</span>'+d.notes+'</div>';
+    return h + '</div>';
+  }
+
+  // Ο όροφος σε δικό του κουτί· μικρή τιμή (π.χ. «2») → τεράστιο ψηφίο,
+  // μεγάλη τιμή (π.χ. «ΙΣΟΓΕΙΟ») → μικρότερα γράμματα ΜΕΣΑ στο ίδιο κουτί.
+  function floorRow(d){
+    var f = (d.floor || '').trim();
+    var bell = (d.bell || '').trim();
+    if (!f && !bell) return '';
+    var h = '<div class="c-where2">';
+    if (f){
+      var sm = (f.length > 2) ? ' sm' : '';
+      h += '<div class="c-fl"><div class="k">ΟΡΟΦΟΣ</div>'
+        +  '<div class="v'+sm+'">'+f+'</div></div>';
+    }
+    h += '<div class="c-bell"><div class="k">ΚΟΥΔΟΥΝΙ</div>'
+      +  '<div class="v">'+(bell || '—')+'</div></div>';
     return h + '</div>';
   }
 
@@ -624,7 +701,7 @@
       why:'Κάθε γραμμή έχει το όνομά της στα αριστερά και την τιμή της στα δεξιά, χωρισμένες με λεπτές διάστικτες γραμμές. Μηδέν πιθανότητα να μπερδέψεις πεδίο με πεδίο — ακόμα κι αν λείπει ένα.',
       fn: blockB },
     { id:'c', tag:'Γ', name:'Ιεραρχία Οδηγού',
-      why:'Χωρίς πλαίσια — μόνο τυπογραφία και δύο χοντρές γραμμές που απομονώνουν το μπλοκ. Η διεύθυνση στα 17px κυριαρχεί, από κάτω όροφος/κουδούνι, μετά όνομα, και τελευταίο το τηλέφωνο με το QR. Το ελαφρύτερο σε μελάνι και το πιο ανθεκτικό στο στενό χαρτί.',
+      why:'Χωρίς πλαίσια — μόνο τυπογραφία και δύο χοντρές γραμμές που απομονώνουν το μπλοκ. Η διεύθυνση στα 17px κυριαρχεί. <b>Ο ΟΡΟΦΟΣ βγήκε από τη γραμμή του κουδουνιού</b> και πήρε δικό του πλαισιωμένο κουτί με ψηφίο <b>27px</b> — τον βρίσκεις χωρίς να διαβάσεις τίποτα. Το κουδούνι δίπλα, με ετικέτα. Το ελαφρύτερο σε μελάνι και το πιο ανθεκτικό στο στενό χαρτί.',
       fn: blockC },
     { id:'d', tag:'Δ', name:'Δύο Ζώνες',
       why:'Δύο ξεχωριστά κουτιά με τίτλο: «ΠΕΛΑΤΗΣ» (ποιος) και «ΠΑΡΑΔΟΣΗ» (πού). Ακολουθεί τον τρόπο που χρησιμοποιείται η πληροφορία, και η μεγάλη σημείωση δεν μπερδεύεται ποτέ με τα στοιχεία.',
@@ -723,6 +800,53 @@
   wire('seg-type','type');
   wire('seg-qr','qr');
 
+  // ── οι τρεις τρόποι για τον όροφο (στατικό, εστιασμένο) ───────────────────
+  function fMini(kind, f, bell, mm){
+    var addr = 'ΑΓΙΟΥ ΔΗΜΗΤΡΙΟΥ 145';
+    var body = '<div class="c-cap">ΠΑΡΑΔΟΣΗ ΣΕ</div><div class="c-addr">'+addr+'</div>';
+    if (kind === 'box'){
+      body += floorRow({ floor:f, bell:bell });
+    } else if (kind === 'inv'){
+      if (f) body += '<div class="c-flinv"><span class="k">ΟΡΟΦΟΣ</span><span class="v">'+f+'</span></div>';
+      body += '<div class="c-bell" style="margin-top:5px"><div class="k">ΚΟΥΔΟΥΝΙ</div>'
+           +  '<div class="v">'+(bell||'—')+'</div></div>';
+    } else {
+      body += '<div class="c-flin"><span class="k">ΟΡΟΦΟΣ</span><span class="big">'+(f||'—')+'</span>'
+           +  '<span class="sep">·</span><span class="k">ΚΟΥΔΟΥΝΙ</span>'
+           +  '<span class="bell">'+(bell||'—')+'</span></div>';
+    }
+    return '<div><div class="fvchip">'+mm+' mm</div>'
+      +    '<div class="mini"><div class="paper" style="width:'+WIDTHS[mm]+'px;padding:7px 7px 9px">'
+      +      '<div class="c-block" style="margin:0">'+body+'</div>'
+      +    '</div></div></div>';
+  }
+
+  function renderFloorVariants(){
+    var box = document.getElementById('fvar');
+    if (!box) return;
+    var V = [
+      { k:'box', t:'Γ1 — Κουτί με μεγάλο ψηφίο <b>(αυτό έβαλα)</b>',
+        d:'Ο όροφος βγαίνει από τη ροή του κειμένου. Πλαίσιο + ψηφίο 27px: το μάτι το βρίσκει πριν διαβάσει λέξη. Το κουδούνι δίπλα με τη δική του ετικέτα, και μπορεί να τυλιχτεί ελεύθερα χωρίς να αγγίξει τον όροφο.' },
+      { k:'inv', t:'Γ2 — Μαύρο γεμάτο σήμα',
+        d:'Η μέγιστη δυνατή αντίθεση στο χαρτί. Ξεχωρίζει ακόμα και σε μισοσβησμένο ρολό — αλλά είναι το ίδιο ρίσκο με τη μαύρη μπάρα του Α: σε φθηνό χαρτί μπορεί να «γεμίσει» και να μουτζουρώσει. Θέλει δοκιμή στον δικό σου θερμικό.' },
+      { k:'inline', t:'Γ3 — Ίδια γραμμή, μεγάλο ψηφίο',
+        d:'Κρατά τη μία γραμμή (το χαμηλότερο ύψος) και απλώς μεγαλώνει το ψηφίο. Πιο διακριτικό — αλλά με μακρύ επώνυμο στο κουδούνι το ψηφίο ξαναχάνεται μέσα στο κείμενο, δηλαδή επιστρέφει το ίδιο πρόβλημα.' }
+    ];
+    var h = V.map(function(v){
+      return '<div class="fv"><h3>'+v.t+'</h3><p>'+v.d+'</p>'
+        +    '<div class="pair">'+fMini(v.k,'2','ΠΑΠΑΔΟΠΟΥΛΟΣ','80')
+        +      fMini(v.k,'2','ΧΑΤΖΗΑΝΑΣΤΑΣΙΟΥ Κ.','58')+'</div></div>';
+    }).join('');
+    h += '<div class="fv" style="flex:1 1 100%;border-top:1px solid var(--border);padding-top:16px">'
+      +  '<h3>Οι δύσκολες περιπτώσεις του Γ1</h3>'
+      +  '<p>Αριστερά: όροφος με λέξη αντί για αριθμό — τα γράμματα μικραίνουν μέσα στο ίδιο κουτί. '
+      +  'Δεξιά: χωρίς όροφο — το κουτί φεύγει εντελώς και το κουδούνι παίρνει όλο το πλάτος.</p>'
+      +  '<div class="pair">'+fMini('box','ΙΣΟΓΕΙΟ','ΠΑΠΑΔΟΠΟΥΛΟΣ','80')
+      +    fMini('box','','ΠΑΠΑΔΟΠΟΥΛΟΣ','80')+'</div></div>';
+    box.innerHTML = h;
+  }
+
+  renderFloorVariants();
   render();
   window.addEventListener('resize', measure);
 })();
