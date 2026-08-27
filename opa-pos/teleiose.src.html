@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ΟΠΑ! POS — «ΤΕΛΕΙΩΣΕ», πού πάει η ταινία</title>
+<title>ΟΠΑ! POS — «ΤΕΛΕΙΩΣΕ», το φύλλο του κρατήματος</title>
 <style>
 @font-face{font-family:'Manrope';src:url(__FONT__) format('truetype');font-weight:200 800;font-display:block}
 :root{
@@ -99,31 +99,17 @@ main{flex:1;display:flex;min-width:0}
 .t .fill{position:absolute;left:0;bottom:0;height:6px;width:0;background:var(--warn);pointer-events:none;z-index:4}
 .t.tapped{outline:2px solid var(--pay);outline-offset:-2px}
 
-/* ---------- ΤΕΛΕΙΩΜΕΝΟ — η ταινία, σε τρεις θέσεις ----------
-   Κοινό και στις τρεις: **το όνομα μένει άθικτο**. Σβήνει η φωτογραφία, όχι
-   η λέξη που λέει στον ταμία τι ακριβώς τελείωσε. */
-.t .band{display:none;position:absolute;background:var(--danger);color:#fff;text-align:center;
-  font-weight:800;letter-spacing:2.2px;pointer-events:none;z-index:3;white-space:nowrap}
-.out img{filter:grayscale(1);opacity:.32}
+/* ---------- ΤΕΛΕΙΩΜΕΝΟ — η σφραγίδα Γ, διαλεγμένη 27/08/2026 ----------
+   Λωρίδα στο πάνω χείλος: δεν καλύπτει ούτε το όνομα, ούτε την τιμή, ούτε το
+   φαγητό. **Το όνομα δεν δίνει ποτέ χώρο** — τον δίνει η φωτογραφία, 64 → 44,
+   γιατί με τη στήλη ελεύθερη το «Χωριάτικη σαλάτα» έχανε τη δεύτερη γραμμή του. */
+.t .band{display:none;position:absolute;left:0;right:0;top:0;background:var(--band,var(--danger));
+  color:#fff;text-align:center;font-weight:800;font-size:13px;letter-spacing:2.4px;padding:4px 0;
+  pointer-events:none;z-index:3;white-space:nowrap}
+.out img{filter:grayscale(1);opacity:.32;width:44px;height:44px}
 .out .stripe{opacity:.25}
 .out .band{display:block}
-
-/* Α — λοξή, πάνω από τη φωτογραφία. Το όνομα και η τιμή δεν αγγίζονται. */
-.out.b1 .band{left:-16px;right:-16px;top:36px;transform:rotate(-9deg);font-size:14px;padding:4px 0}
-
-/* Β — στη θέση της τιμής. Η τιμή φεύγει: δεν πουλιέται, δεν έχει τιμή.
-   **Η ταινία μπαίνει στη ροή, δεν κάθεται από πάνω.** Καρφωμένη στο κάτω χείλος
-   έκοβε 38 πίξελ από τη «Χωριάτικη σαλάτα»: το δίγραμμο όνομα κατεβάζει τη
-   στήλη και η ταινία δάγκωνε τη δεύτερη γραμμή. Έτσι το πλακίδιο της δίνει
-   τη θέση της τιμής, και το όνομα δεν την ακουμπάει ποτέ — τα αρνητικά
-   περιθώρια είναι που τη φτάνουν ως τις άκρες. */
-.out.b2 .pr{display:none}
-.out.b2 img{width:52px;height:52px}
-.out.b2 .band{position:static;margin:3px -12px -11px -18px;font-size:15px;padding:6px 0;letter-spacing:2.6px}
-
-/* Γ — σφραγίδα στο πάνω χείλος. Τίποτα από το κείμενο δεν κουνιέται. */
-.out.b3 .band{left:0;right:0;top:0;font-size:13px;padding:4px 0;letter-spacing:2.4px}
-.out.b3 img{width:44px;height:44px}
+.yellow{--band:var(--warn)}
 
 /* ---------- cart ---------- */
 .cart{width:430px;flex:none;background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column}
@@ -141,16 +127,48 @@ main{flex:1;display:flex;min-width:0}
 .btn{flex:1;height:46px;border:1px solid var(--line);background:transparent;color:var(--text);border-radius:10px;
   font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;overflow:hidden}
 .pay{height:76px;background:var(--pay);color:#fff;border:0;border-radius:12px;font-size:28px;font-weight:700;font-family:inherit;cursor:pointer}
-/* ---------- η ερώτηση του κρατήματος ---------- */
-.veil{position:absolute;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:9}
-.sheet{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:30px 34px;width:580px;text-align:center;
-  box-shadow:0 24px 70px rgba(0,0,0,.55)}
-.sheet .q{font-size:26px;font-weight:700;color:var(--text);line-height:1.3}
-.sheet .sub{font-size:15px;color:var(--muted);margin-top:10px;line-height:1.4}
-.sheet .row{display:flex;gap:12px;margin-top:26px}
-.sheet .row button{flex:1;height:66px;border-radius:12px;font-size:20px;font-weight:700;font-family:inherit;
+
+/* ================= Φ1 — η κάρτα του προϊόντος ================= */
+.veil{position:absolute;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:9}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;width:520px;overflow:hidden;
+  box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.card .head{display:flex;align-items:center;gap:20px;padding:26px 28px 22px}
+.card .head img{width:132px;height:132px;object-fit:contain;flex:none}
+.card .who{flex:1;min-width:0;text-align:left}
+.card .who .lead{font-size:12px;font-weight:800;letter-spacing:2.4px;color:var(--muted);margin-bottom:6px}
+.card .who .nm{font-size:30px;font-weight:700;line-height:1.15;color:var(--text)}
+.card .who .pr{font-size:22px;font-weight:700;color:var(--muted);margin-top:6px}
+.card .note{padding:0 28px 20px;font-size:15px;color:var(--muted);line-height:1.45;text-align:left}
+.card .row{display:flex;gap:12px;padding:0 20px 20px}
+.card .row button{flex:1;height:76px;border-radius:12px;font-size:20px;font-weight:700;font-family:inherit;
   cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--text)}
-.sheet .row .ok{background:var(--warn);border-color:var(--warn);color:#fff}
+.card .row .ok{background:var(--warn);border-color:var(--warn);color:#fff;flex:1.4}
+
+/* ================= Φ2 — το πλακίδιο μεγαλώνει στη θέση του ================= */
+.spot{position:absolute;background:var(--tile);border:1px solid var(--line);border-radius:16px;
+  overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+  padding:20px 18px 18px 24px;text-align:center;box-shadow:0 24px 70px rgba(0,0,0,.65)}
+.spot .stripe{position:absolute;left:0;top:0;bottom:0;width:11px}
+.spot img{width:104px;height:104px;object-fit:contain}
+.spot .nm{font-size:22px;font-weight:700;line-height:1.15;margin-top:10px;color:var(--text)}
+.spot .pr{font-size:18px;font-weight:700;color:var(--muted);margin-top:4px}
+.spot .row{display:flex;gap:10px;width:100%;margin-top:auto;padding-top:14px}
+.spot .row button{flex:1;height:60px;border-radius:11px;font-size:16px;font-weight:700;font-family:inherit;
+  cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--text)}
+.spot .row .ok{background:var(--warn);border-color:var(--warn);color:#fff}
+
+/* ================= Φ3 — καμία ερώτηση, μια λωρίδα με ΑΝΑΙΡΕΣΗ ================= */
+.toast{position:absolute;left:15px;right:445px;bottom:15px;z-index:9;background:var(--panel);
+  border:1px solid var(--line);border-radius:14px;padding:16px 18px 16px 22px;display:flex;align-items:center;gap:16px;
+  box-shadow:0 18px 50px rgba(0,0,0,.55);overflow:hidden}
+.toast img{width:52px;height:52px;object-fit:contain;flex:none;filter:grayscale(1);opacity:.5}
+.toast .what{flex:1;min-width:0;text-align:left}
+.toast .what .lead{font-size:12px;font-weight:800;letter-spacing:2.4px;color:var(--band,var(--danger))}
+.toast .what .nm{font-size:24px;font-weight:700;color:var(--text);margin-top:3px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.toast button{flex:none;height:62px;padding:0 30px;border-radius:11px;font-size:18px;font-weight:700;
+  font-family:inherit;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--text)}
+.toast .drain{position:absolute;left:0;bottom:0;height:4px;background:var(--muted);width:100%}
 </style>
 </head>
 <body>
@@ -163,13 +181,19 @@ main{flex:1;display:flex;min-width:0}
 
 <div class="app">
   <aside>
-    <div class="done"><b>ΔΙΑΛΕΓΜΕΝΑ</b>Μ1 · παρατεταμένο πάτημα στο πλακίδιο &nbsp;·&nbsp; Ο2 · ταινία με τη λέξη</div>
+    <div class="done"><b>ΔΙΑΛΕΓΜΕΝΑ</b>Μ1 · κράτημα στο πλακίδιο &nbsp;·&nbsp; ταινία &nbsp;·&nbsp; Γ · σφραγίδα στο πάνω χείλος</div>
 
-    <h3>ΠΟΥ ΠΑΕΙ Η ΤΑΙΝΙΑ</h3>
+    <h3>ΤΙ ΑΝΟΙΓΕΙ ΤΟ ΚΡΑΤΗΜΑ</h3>
     <div class="opts">
-    <button class="opt on" data-b="1"><b>Α · Λοξή, πάνω στη φωτογραφία</b><span class="d">Όνομα και τιμή δεν αγγίζονται καθόλου</span></button>
-    <button class="opt" data-b="2"><b>Β · Στη θέση της τιμής</b><span class="d">Όλο το πλάτος χαμηλά· η τιμή φεύγει</span></button>
-    <button class="opt" data-b="3"><b>Γ · Σφραγίδα στο πάνω χείλος</b><span class="d">Ίσια λωρίδα στην κορυφή, τίποτα δεν κουνιέται</span></button>
+    <button class="opt on" data-f="1"><b>Φ1 · Η κάρτα του προϊόντος</b><span class="d">Η φωτογραφία μεγάλη, το όνομα, η τιμή</span></button>
+    <button class="opt" data-f="2"><b>Φ2 · Το πλακίδιο μεγαλώνει</b><span class="d">Στη θέση του, εκεί που ήταν το δάχτυλο</span></button>
+    <button class="opt" data-f="3"><b>Φ3 · Καμία ερώτηση, ΑΝΑΙΡΕΣΗ</b><span class="d">Γίνεται αμέσως, λωρίδα για 5 δευτερόλεπτα</span></button>
+    </div>
+
+    <h3>ΧΡΩΜΑ ΤΗΣ ΤΑΙΝΙΑΣ</h3>
+    <div class="mini">
+      <button class="opt on" data-c="red">Κόκκινο</button>
+      <button class="opt" data-c="yellow">Κίτρινο</button>
     </div>
 
     <h3>ΘΕΜΑ</h3>
@@ -185,7 +209,7 @@ main{flex:1;display:flex;min-width:0}
     </div>
 
     <h3>ΔΟΚΙΜΑΣΕ ΤΟ</h3>
-    <p style="font-size:11.5px;color:#8b837b;line-height:1.5">Κράτα ένα πλακίδιο πατημένο — γεμίζει η μπάρα και ρωτάει. Άγγιξέ το γρήγορα — πουλάει.</p>
+    <p style="font-size:11.5px;color:#8b837b;line-height:1.5">Κράτα ένα πλακίδιο πατημένο — γεμίζει η μπάρα και ανοίγει το φύλλο. Άγγιξέ το γρήγορα — πουλάει.</p>
   </aside>
 
   <main>
@@ -202,7 +226,7 @@ main{flex:1;display:flex;min-width:0}
           <button class="chip">ΔΙΑΧΕΙΡΙΣΗ</button>
         </div>
         <div class="main">
-          <div class="gridwrap">
+          <div class="gridwrap" id="gridwrap">
             <div class="grid" id="grid"></div>
           </div>
           <div class="cart">
@@ -220,14 +244,7 @@ main{flex:1;display:flex;min-width:0}
             </div>
           </div>
         </div>
-
-        <div class="veil" id="ask" style="display:none">
-          <div class="sheet">
-            <div class="q" id="askName">ΤΕΛΕΙΩΣΕ: ΜΠΡΙΖΟΛΑ ΧΟΙΡΙΝΗ;</div>
-            <div class="sub">Το πλακίδιο μένει στη θέση του και δεν πουλάει, μέχρι να το ξαναφέρεις.</div>
-            <div class="row"><button id="askNo">ΑΚΥΡΟ</button><button class="ok" id="askYes">ΝΑΙ</button></div>
-          </div>
-        </div>
+        <div id="over"></div>
       </div>
       </div>
     </div>
@@ -264,17 +281,16 @@ const euro = c => (c/100).toFixed(2).replace('.',',') + ' €';
 // Κεφαλαία ελληνικά: ο τόνος φεύγει. «ΜΠΡΙΖΌΛΑ» δεν γράφεται πουθενά.
 const KEF = s => s.toUpperCase().normalize('NFD').replace(/[̀-ͅ]/g,'').normalize('NFC');
 
-// Τρία τελειωμένα, διαλεγμένα ώστε να δοκιμάζουν και τα δύο σχήματα ονόματος:
-// «Μπριζόλα χοιρινή» και «Χωριάτικη σαλάτα» πιάνουν δύο γραμμές, «Παγωτό» μία.
 const out = new Set([2,10,19]);
-let band = 1, pending = null;
-
+let shape = 1;
+const over = document.getElementById('over');
 const grid = document.getElementById('grid');
+
 function paint(){
   grid.innerHTML = '';
   P.forEach((p,i)=>{
     const b = document.createElement('button');
-    b.className = 't' + (out.has(i) ? ' out b'+band : '');
+    b.className = 't' + (out.has(i) ? ' out' : '');
     b.innerHTML =
       '<span class="stripe" style="background:'+p[3]+'"></span>' +
       '<img src="'+PICS[p[1]]+'" alt="">' +
@@ -300,13 +316,14 @@ function bar(el, to, ms){
 function arm(el, i){
   el.addEventListener('contextmenu', e=>e.preventDefault());
   el.addEventListener('pointerdown', e=>{
+    if(over.firstChild) return;      // το φύλλο είναι ήδη ανοιχτό
     e.preventDefault();
     // Το δάχτυλο μένει δικό μας κι αν μετακινηθεί λίγο: ένα κρατημένο δάχτυλο
     // σε οθόνη αφής σέρνεται, και το προϊόν ανέχεται ακριβώς το ίδιο.
     el.setPointerCapture?.(e.pointerId);
     held = el; bar(el,'100%',HOLD);
     timer = setTimeout(()=>{ timer=null; bar(el,'0',0); held=null;
-      navigator.vibrate?.(30); ask(i); }, HOLD);
+      navigator.vibrate?.(30); fire(i, el); }, HOLD);
   });
   const stop = ()=>{
     if(timer){ // σηκώθηκε νωρίς: αυτό ήταν πώληση, όχι σήμανση
@@ -319,65 +336,139 @@ function arm(el, i){
   el.addEventListener('pointercancel', stop);
   el.addEventListener('pointerleave', stop);
 }
-function ask(i){
-  pending=i;
-  document.getElementById('askName').textContent =
-    (out.has(i) ? 'ΞΑΝΑ ΣΤΟ ΤΑΜΕΙΟ: ' : 'ΤΕΛΕΙΩΣΕ: ') + KEF(P[i][0]) + ';';
-  document.getElementById('ask').style.display='flex';
-}
-document.getElementById('askNo').onclick=()=>document.getElementById('ask').style.display='none';
-document.getElementById('askYes').onclick=()=>{
-  out.has(pending)?out.delete(pending):out.add(pending);
-  document.getElementById('ask').style.display='none'; paint();
-};
 
-const BANDS = {
-1:['Α — Λοξή, πάνω στη φωτογραφία',
-   'Η ταινία περνάει λοξά στο ύψος της φωτογραφίας. <b>Το όνομα και η τιμή δεν αγγίζονται καθόλου</b> — μένουν εκεί που ήταν, στην ένταση που ήταν. Ό,τι σβήνει είναι το φαγητό από πίσω.',
-   ['Η λοξή γραμμή δεν μοιάζει με τίποτα άλλο στο ταμείο: το μάτι την πιάνει πριν διαβάσει.',
-    'Η μόνη από τις τρεις που δεν ακουμπάει καθόλου το μέγεθος της φωτογραφίας — μένει στα 64.',
-    'Το όνομα είναι ολόκληρο και σε πλήρη δύναμη — ο ταμίας διαβάζει τι τελείωσε.',
-    'Δεν αλλάζει τίποτα στη διάταξη του πλακιδίου.'],
-   ['Καλύπτει τη μέση της φωτογραφίας — αν κάποια στιγμή θελήσεις να ξεχωρίζεις δύο προϊόντα από την εικόνα τους, εδώ δεν γίνεται.',
-    'Σε πολύ κοντό πλακίδιο η λοξή ταινία πλησιάζει την πρώτη γραμμή του ονόματος.']],
-2:['Β — Στη θέση της τιμής',
-   'Ίσια ταινία σε όλο το πλάτος, στο κάτω χείλος, ακριβώς εκεί που ήταν η τιμή — και <b>η τιμή φεύγει</b>: δεν πουλιέται, δεν έχει τιμή. Το όνομα από πάνω της, ολόκληρο.',
-   ['Λέει δύο πράγματα με μία κίνηση: «τελείωσε» και «δεν έχει τιμή».',
-    'Η φωτογραφία μένει ακάλυπτη, μόνο ξεθωριασμένη.',
-    'Το πιο πλατύ γράψιμο από τα τρία — διαβάζεται από πιο μακριά.'],
-   ['Η τιμή χάνεται, και υπάρχει περίπτωση να τη θέλει ο ταμίας για να απαντήσει «πόσο έκανε;».',
-    'Πέφτει πάνω στη μπάρα του κρατήματος, που ζει στο ίδιο χείλος — θέλει να μετακινηθεί η μία από τις δύο.',
-    'Η φωτογραφία μικραίνει 64 → 52 για να χωρέσει η ταινία χωρίς να ζουληχτεί το όνομα.']],
-3:['Γ — Σφραγίδα στο πάνω χείλος',
-   'Ίσια λωρίδα στην κορυφή του πλακιδίου, σαν σφραγίδα. <b>Τίποτα από το κείμενο δεν κουνιέται και τίποτα δεν καλύπτεται</b> — ούτε το όνομα, ούτε η τιμή, ούτε το φαγητό.',
-   ['Το μόνο από τα τρία που δεν κρύβει απολύτως τίποτα.',
-    'Η κορυφή του πλακιδίου είναι άδεια σε κάθε προϊόν — η ταινία δεν συναγωνίζεται τίποτα.',
-    'Το όνομα, η τιμή και η φωτογραφία μένουν όπως τα ξέρει το χέρι.'],
-   ['Είναι η πιο ήσυχη από τις τρεις: μια λωρίδα στην κορυφή μοιάζει με διακόσμηση, όχι με άρνηση.',
-    'Είναι η πιο ακριβή σε χώρο: η φωτογραφία μικραίνει 64 → 44, γιατί η λωρίδα παίρνει ύψος και το όνομα δεν επιτρέπεται να δώσει ούτε πίξελ.']]
+function shut(){ over.innerHTML=''; }
+function toggle(i){ out.has(i)?out.delete(i):out.add(i); paint(); }
+function lead(i){ return out.has(i) ? 'ΞΑΝΑ ΣΤΟ ΤΑΜΕΙΟ' : 'ΤΕΛΕΙΩΣΕ'; }
+function verb(i){ return out.has(i) ? 'ΝΑΙ, ΥΠΑΡΧΕΙ ΞΑΝΑ' : 'ΝΑΙ, ΤΕΛΕΙΩΣΕ'; }
+
+function fire(i, el){
+  if(shape===1) return card(i);
+  if(shape===2) return spot(i, el);
+  return instant(i);
+}
+
+// Φ1 — η κάρτα: η φωτογραφία απαντάει στο «ποιο;» πριν διαβαστεί λέξη.
+function card(i){
+  const p = P[i];
+  const v = document.createElement('div'); v.className='veil';
+  v.innerHTML =
+    '<div class="card">'+
+      '<div class="head">'+
+        '<img src="'+PICS[p[1]]+'" alt="">'+
+        '<div class="who"><div class="lead">'+lead(i)+'</div>'+
+          '<div class="nm">'+p[0]+'</div><div class="pr">'+euro(p[2])+'</div></div>'+
+      '</div>'+
+      '<div class="note">Το πλακίδιο μένει στη θέση του και δεν πουλάει, μέχρι να το ξαναφέρεις με το ίδιο κράτημα.</div>'+
+      '<div class="row"><button data-no>ΑΚΥΡΟ</button><button class="ok" data-yes>'+verb(i)+'</button></div>'+
+    '</div>';
+  open(v, i);
+}
+
+// Φ2 — το ίδιο πλακίδιο, μεγαλωμένο εκεί που είναι: το μάτι δεν ταξιδεύει.
+function spot(i, el){
+  const p = P[i];
+  const till = document.getElementById('till').getBoundingClientRect();
+  const cell = el.getBoundingClientRect();
+  const s = getScale();
+  const W = 330, H = 320, pad = 12;
+  // Κέντρο στο κελί, και μετά μέσα στα όρια της οθόνης — ένα πλακίδιο στη
+  // γωνία δεν επιτρέπεται να σπρώξει το φύλλο έξω από το ταμείο.
+  const cx = (cell.left + cell.width/2 - till.left)/s;
+  const cy = (cell.top + cell.height/2 - till.top)/s;
+  const left = Math.min(Math.max(cx - W/2, pad), 1280 - 430 - W - pad);
+  const top  = Math.min(Math.max(cy - H/2, 70 + pad), 720 - H - pad);
+
+  const v = document.createElement('div'); v.className='veil';
+  v.innerHTML =
+    '<div class="spot" style="left:'+left+'px;top:'+top+'px;width:'+W+'px;height:'+H+'px">'+
+      '<span class="stripe" style="background:'+p[3]+'"></span>'+
+      '<img src="'+PICS[p[1]]+'" alt="">'+
+      '<div class="nm">'+p[0]+'</div><div class="pr">'+euro(p[2])+'</div>'+
+      '<div class="row"><button data-no>ΑΚΥΡΟ</button><button class="ok" data-yes>'+lead(i)+'</button></div>'+
+    '</div>';
+  open(v, i);
+}
+
+// Φ3 — καμία ερώτηση. Γίνεται, και για πέντε δευτερόλεπτα αναιρείται.
+let toastTimer = null;
+function instant(i){
+  const was = out.has(i);
+  toggle(i);
+  clearTimeout(toastTimer);
+  const p = P[i];
+  const t = document.createElement('div'); t.className='toast';
+  t.innerHTML =
+    '<img src="'+PICS[p[1]]+'" alt="">'+
+    '<div class="what"><div class="lead">'+(was?'ΞΑΝΑ ΣΤΟ ΤΑΜΕΙΟ':'ΤΕΛΕΙΩΣΕ')+'</div>'+
+      '<div class="nm">'+p[0]+'</div></div>'+
+    '<button data-undo>ΑΝΑΙΡΕΣΗ</button><span class="drain"></span>';
+  over.innerHTML=''; over.appendChild(t);
+  const drain = t.querySelector('.drain');
+  requestAnimationFrame(()=>{ drain.style.transition='width 5000ms linear'; drain.style.width='0'; });
+  t.querySelector('[data-undo]').onclick = ()=>{ toggle(i); shut(); };
+  toastTimer = setTimeout(shut, 5000);
+}
+
+function open(v, i){
+  over.innerHTML=''; over.appendChild(v);
+  v.querySelector('[data-no]').onclick = shut;
+  v.querySelector('[data-yes]').onclick = ()=>{ toggle(i); shut(); };
+  // Έξω από το φύλλο κλείνει, όπως κάθε φύλλο του ταμείου.
+  v.addEventListener('pointerdown', e=>{ if(e.target===v) shut(); });
+}
+function getScale(){
+  const m = getComputedStyle(document.getElementById('till')).transform;
+  return m==='none' ? 1 : +m.split('(')[1].split(',')[0];
+}
+
+const SHAPES = {
+1:['Φ1 — Η κάρτα του προϊόντος','ΤΟ ΜΑΤΙ ΑΝΑΓΝΩΡΙΖΕΙ, ΔΕΝ ΔΙΑΒΑΖΕΙ',
+  'Η φωτογραφία στα 132 πίξελ, το όνομα στα 30, η τιμή από κάτω, και δύο κουμπιά 76 πίξελ ψηλά. <b>Απαντάει στο «ποιο;» πριν διαβαστεί λέξη</b> — και αν το δάχτυλο έπεσε ένα πλακίδιο δίπλα, το λάθος φαίνεται από τη φωτογραφία, όχι από το να ξαναδιαβάσεις ένα όνομα.',
+  ['Ο μεγαλύτερος στόχος για το «ναι» — 76 πίξελ ύψος, όσο η ΠΛΗΡΩΜΗ.',
+   'Ένα λάθος πλακίδιο πιάνεται στο δευτερόλεπτο, από την εικόνα.',
+   'Είναι το σχήμα που ήδη ξέρει ο ταμίας: φύλλο στη μέση, δύο κουμπιά.',
+   'Η φωτογραφία εδώ δεν είναι διακόσμηση — είναι η ταυτότητα του προϊόντος.'],
+  ['Το μάτι φεύγει από το πλακίδιο στη μέση της οθόνης και ξαναγυρίζει.',
+   'Σκοτεινιάζει όλη η οθόνη, δηλαδή σταματάει η πώληση για δύο δευτερόλεπτα.']],
+2:['Φ2 — Το πλακίδιο μεγαλώνει στη θέση του','ΤΟ ΧΕΡΙ ΔΕΝ ΤΑΞΙΔΕΥΕΙ',
+  'Δεν ανοίγει φύλλο στη μέση. <b>Το ίδιο το πλακίδιο μεγαλώνει εκεί που είναι</b> — 330×320 αντί 155×147 — και τα δύο κουμπιά εμφανίζονται μέσα του. Ό,τι κρατούσες, αυτό μεγάλωσε: δεν χρειάζεται να επιβεβαιώσεις ότι διάλεξες σωστά, το βλέπεις.',
+  ['Καμία διαδρομή για το μάτι: η απάντηση είναι εκεί που ήταν το δάχτυλο.',
+   'Η σύνδεση «κράτησα αυτό → αυτό μεγάλωσε» δεν θέλει εξήγηση σε κανέναν.',
+   'Το υπόλοιπο πλέγμα φαίνεται γύρω του — δεν χάνεται η αίσθηση πού είσαι.',
+   'Στη γωνία δεν βγαίνει έξω: μπαίνει μέσα στα όρια της οθόνης, μετρημένα.'],
+  ['<b>Το δάχτυλο είναι ακόμα κάτω όταν κλειδώνει το κράτημα</b> — και τα κουμπιά ανοίγουν από κάτω του. Θέλει να «ζωντανεύουν» μόνο αφού σηκωθεί το δάχτυλο, αλλιώς το σήκωμα πατάει ένα από τα δύο.',
+   'Τα κουμπιά είναι 60 πίξελ, όχι 76 — μικρότερος στόχος από το Φ1.',
+   'Είναι σχήμα που δεν υπάρχει αλλού στο ταμείο: κάτι καινούργιο να μάθει ο εθελοντής.']],
+3:['Φ3 — Καμία ερώτηση, μόνο ΑΝΑΙΡΕΣΗ','ΤΟ ΛΑΘΟΣ ΔΙΟΡΘΩΝΕΤΑΙ, ΔΕΝ ΠΡΟΛΑΜΒΑΝΕΤΑΙ',
+  'Το κράτημα <b>το κάνει</b>. Η σφραγίδα μπαίνει αμέσως και μια λωρίδα ανεβαίνει από κάτω για πέντε δευτερόλεπτα: τι έγινε, και ΑΝΑΙΡΕΣΗ. Καμία ερώτηση, κανένα σκοτείνιασμα, καμία διακοπή.',
+  ['<b>Μηδέν αγγίγματα στη σωστή περίπτωση</b> — και η σωστή περίπτωση είναι το 99%.',
+   'Η πώληση δεν σταματάει ούτε στιγμή: η οθόνη μένει ζωντανή από πίσω.',
+   'Το κράτημα των 600 ms είναι ήδη η προστασία από το κατά λάθος — μια ερώτηση από πάνω του είναι δεύτερη κλειδαριά στην ίδια πόρτα.',
+   'Η λωρίδα λέει τι ακριβώς έγινε, με το όνομα και τη φωτογραφία.'],
+  ['Αν η λωρίδα χαθεί μέσα στη φασαρία, το λάθος μένει — και το βρίσκεις όταν ένας πελάτης ζητήσει κάτι που «δεν υπάρχει».',
+   'Πέντε δευτερόλεπτα σε ουρά περνάνε πριν καν κοιτάξεις κάτω.',
+   'Η λωρίδα κάθεται πάνω από την τελευταία σειρά: για πέντε δευτερόλεπτα, πέντε πλακίδια είναι μισοκρυμμένα.']]
 };
 function notes(){
-  const b = BANDS[band];
+  const s = SHAPES[shape];
   document.getElementById('notes').innerHTML =
-   '<div class="kicker">ΤΟ ΕΡΩΤΗΜΑ ΠΟΥ ΜΕΝΕΙ</div><h2>Πού κάθεται η ταινία;</h2>'+
-   '<p>Διάλεξες <b style="color:#7fd3a3">Μ1</b> — το κράτημα πάνω στο πλακίδιο — και <b style="color:#7fd3a3">την ταινία</b>. '+
-   'Έμεινε ένα: πού μπαίνει, τώρα που <b>το όνομα πρέπει να μένει διαβαστό</b>. Και στα τρία, το όνομα είναι άθικτο· '+
-   'αυτό που σβήνει είναι η φωτογραφία.</p><hr>'+
-   '<h2>'+b[0]+'</h2><p>'+b[1]+'</p>'+
-   '<ul>'+b[2].map(x=>'<li class="pro"><i>+</i>'+x+'</li>').join('')+
-   b[3].map(x=>'<li class="con"><i>−</i>'+x+'</li>').join('')+'</ul>'+
+   '<div class="kicker">'+s[1]+'</div><h2>'+s[0]+'</h2><p>'+s[2]+'</p>'+
+   '<ul>'+s[3].map(x=>'<li class="pro"><i>+</i>'+x+'</li>').join('')+
+   s[4].map(x=>'<li class="con"><i>−</i>'+x+'</li>').join('')+'</ul>'+
    '<hr>'+
-   '<div class="rulebox"><b>Το πλακίδιο δεν φεύγει ποτέ από το πλέγμα.</b> Αν έφευγε, θα μετακινούνταν όλα τα υπόλοιπα — και το χέρι που έμαθε πού είναι το νερό θα χτυπούσε μπύρα. Μένει στη θέση του, δεν πουλάει, και γυρίζει.</div>'+
-   '<div class="rulebox"><b>Κανένα δικαίωμα, όπως το ζήτησες.</b> Όποιος στέκεται στο ταμείο μπορεί να το πει: δεν είναι λεφτά, δεν είναι ακύρωση, και δεν χάνεται τίποτα αν γίνει λάθος — γυρίζει με το ίδιο κράτημα.</div>'+
-   '<div class="rulebox"><b>Τρία που δεν φαίνονται στο σχέδιο.</b> (α) Καθαρίζει στο ΑΝΟΙΓΜΑ ΒΑΡΔΙΑΣ — ό,τι τελείωσε το Σάββατο υπάρχει ξανά την Κυριακή. (β) Αν είναι ήδη μέσα σε ανοιχτή παραγγελία, η γραμμή μένει· ο ταμίας τη σβήνει αν θέλει. (γ) Το Ζ μπορεί να τυπώνει τι τελείωσε και τι ώρα — είναι ακριβώς το χαρτί που θέλει ο σύλλογος για να παραγγείλει του χρόνου.</div>'+
-   '<div class="rulebox"><b>Το όνομα δεν δίνει ποτέ χώρο.</b> Και στις τρεις, όταν η ταινία ζήτησε ύψος, τον έδωσε η φωτογραφία. Μετρήθηκε: με τη στήλη ελεύθερη, το «Χωριάτικη σαλάτα» έχανε 10 πίξελ στη Γ και 6 στη Β — δηλαδή τη δεύτερη γραμμή του, ακριβώς τη λέξη που ζήτησες να μένει διαβαστή.</div>'+
-   '<div class="rulebox"><b>Το κόκκινο θέλει απόφαση.</b> Στο ταμείο είναι κρατημένο για ένα κουμπί, την ΑΚΥΡΩΣΗ ΟΛΩΝ (UI-DESIGN §5). Αν κρατήσουμε το κόκκινο και εδώ, το χρώμα σταματάει να σημαίνει «προσοχή, χάνεις κάτι». Η εναλλακτική είναι το κίτρινο της ειδοποίησης. Πες μου ποιο θες και το αλλάζω στην ίδια σελίδα.</div>';
+   '<div class="rulebox"><b>Διαλεγμένα ως εδώ.</b> Το κράτημα πάνω στο πλακίδιο — 600 ms, με τη μπάρα — και η σφραγίδα <b>Γ</b> στο πάνω χείλος, που δεν καλύπτει ούτε όνομα, ούτε τιμή, ούτε φαγητό. Τον χώρο τον δίνει η φωτογραφία, 64 → 44· <b>το όνομα δεν δίνει ποτέ</b>.</div>'+
+   '<div class="rulebox"><b>Το χρώμα μένει ανοιχτό.</b> Η ταινία είναι κόκκινη, αλλά στο ταμείο το κόκκινο ανήκει σε ένα κουμπί, την ΑΚΥΡΩΣΗ ΟΛΩΝ (UI-DESIGN §5): αν το ξοδέψουμε κι εδώ, παύει να σημαίνει «χάνεις κάτι». Δοκίμασε το κίτρινο από τα κουμπιά αριστερά και πες μου ποιο κρατάμε.</div>'+
+   '<div class="rulebox"><b>Τρία που δεν φαίνονται στο σχέδιο.</b> (α) Καθαρίζει στο ΑΝΟΙΓΜΑ ΒΑΡΔΙΑΣ. (β) Αν είναι ήδη μέσα σε ανοιχτή παραγγελία, η γραμμή μένει· ο ταμίας τη σβήνει αν θέλει. (γ) Το Ζ μπορεί να τυπώνει τι τελείωσε και τι ώρα — το χαρτί που θέλει ο σύλλογος για να παραγγείλει του χρόνου.</div>';
 }
 
-function apply(){ paint(); notes(); }
-document.querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{
-  document.querySelectorAll('[data-b]').forEach(x=>x.classList.remove('on')); b.classList.add('on');
-  band=+b.dataset.b; apply();});
+function apply(){ shut(); paint(); notes(); }
+document.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('[data-f]').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+  shape=+b.dataset.f; apply();});
+document.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('[data-c]').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+  document.getElementById('till').classList.toggle('yellow', b.dataset.c==='yellow');});
 document.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('[data-t]').forEach(x=>x.classList.remove('on')); b.classList.add('on');
   document.getElementById('till').classList.toggle('light', b.dataset.t==='light');});
@@ -398,11 +489,9 @@ function zoom(mode){
     s===1 ? 'πραγματικό μέγεθος' : 'σμίκρυνση '+Math.round(s*100)+'% — πάτα 100% και σύρε';
 }
 function fits(){ return document.getElementById('stage').clientWidth >= 1300; }
-function syncZoomButtons(mode){
-  document.querySelectorAll('[data-z]').forEach(x=>x.classList.toggle('on', x.dataset.z===mode));
-}
 let zoomMode = fits() ? '1' : 'fit';
-apply(); syncZoomButtons(zoomMode); zoom(zoomMode);
+document.querySelectorAll('[data-z]').forEach(x=>x.classList.toggle('on', x.dataset.z===zoomMode));
+apply(); zoom(zoomMode);
 // Γύρισμα του κινητού ή αλλαγή παραθύρου: ξαναμετριέται.
 addEventListener('resize', ()=>zoom(zoomMode));
 </script>
