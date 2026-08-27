@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<title>ΟΠΑ! POS — «ΤΕΛΕΙΩΣΕ», προτάσεις</title>
+<style>
+@font-face{font-family:'Manrope';src:url(__FONT__) format('truetype');font-weight:200 800;font-display:block}
+:root{
+  --bg:#121110; --panel:#1A1817; --tile:#201E1C; --line:#2E2A27;
+  --text:#F4F1ED; --muted:#A2988E; --pay:#1E9E57; --danger:#D4402C; --warn:#C98A16; --on:#fff;
+}
+.light{
+  --bg:#F7F4EF; --panel:#FFFDFB; --tile:#FFFDFB; --line:#E5DED4;
+  --text:#191614; --muted:#776E64; --pay:#1B7A47; --danger:#C43A28; --warn:#A8710F; --on:#fff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:#0c0b0b;color:#e8e4df;font-family:"Segoe UI",system-ui,sans-serif;display:flex;flex-direction:column;overflow:hidden}
+header{padding:10px 16px;background:#171514;border-bottom:1px solid #2b2724;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+header h1{font-size:15px;font-weight:800;letter-spacing:.4px}
+header .sub{font-size:12px;color:#9c948c}
+header .spacer{flex:1}
+.app{flex:1;display:flex;min-height:0}
+aside{width:236px;flex:none;background:#141312;border-right:1px solid #2b2724;padding:12px;overflow:auto}
+aside h3{font-size:10px;letter-spacing:1.6px;color:#8b837b;margin:16px 0 6px;font-weight:800}
+aside h3:first-child{margin-top:0}
+.opt{display:block;width:100%;text-align:left;background:#1e1c1a;border:1px solid #322e2a;color:#ddd8d2;
+  padding:8px 10px;border-radius:7px;font-size:12px;margin-bottom:5px;cursor:pointer;font-family:inherit;line-height:1.35}
+.opt b{display:block;font-size:13px;color:#fff;margin-bottom:1px}
+.opt:hover{border-color:#4a443e}
+.opt.on{background:#1E9E57;border-color:#1E9E57;color:#e7f7ee}
+.opt.on b{color:#fff}
+.mini{display:flex;gap:5px}
+.mini .opt{margin-bottom:0;text-align:center;padding:6px 4px;font-size:11.5px}
+main{flex:1;display:flex;min-width:0}
+.stage{flex:1;min-width:0;display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow:auto;background:#0c0b0b}
+.till{width:1280px;height:720px;flex:none;background:var(--bg);color:var(--text);position:relative;overflow:hidden;font-family:'Manrope','Segoe UI',system-ui,sans-serif;
+  display:flex;flex-direction:column;box-shadow:0 0 0 1px #3a3530,0 18px 50px rgba(0,0,0,.6);transform-origin:top center}
+.notes{width:340px;flex:none;background:#141312;border-left:1px solid #2b2724;padding:16px;overflow:auto;font-size:12.5px;line-height:1.55}
+.notes h2{font-size:15px;color:#fff;margin-bottom:3px}
+.notes .kicker{font-size:10.5px;letter-spacing:1.6px;color:#8b837b;font-weight:800;margin-bottom:10px}
+.notes p{margin:10px 0;color:#a89f97}
+.notes ul{list-style:none;margin:8px 0}
+.notes li{margin-bottom:8px;padding-left:22px;position:relative;color:#c9c3bc}
+.notes li i{position:absolute;left:0;top:1px;font-style:normal;font-weight:900;font-size:13px}
+.pro i{color:#7fd3a3}.con i{color:#e0a08c}
+.notes hr{border:0;border-top:1px solid #2b2724;margin:14px 0}
+.rulebox{background:#1a1817;border:1px solid #322e2a;border-left:3px solid #C98A16;border-radius:8px;padding:10px 12px;margin:12px 0;color:#bdb6ae}
+.rulebox b{color:#fff}
+/* ---------- till furniture ---------- */
+.topbar{height:70px;flex:none;background:var(--panel);border-bottom:1px solid var(--line);
+  display:flex;align-items:center;padding:0 22px;gap:8px}
+.title{font-size:24px;font-weight:700;color:var(--text)}
+.event{font-size:16px;color:var(--muted)}
+.grow{flex:1;display:flex;align-items:baseline;gap:11px;min-width:0}
+.chip{border:1px solid var(--line);border-radius:10px;padding:9px 15px;font-size:14px;font-weight:700;
+  color:var(--text);background:transparent;cursor:pointer;font-family:inherit;white-space:nowrap}
+.chip.lit{background:var(--warn);border-color:var(--warn);color:#fff}
+.main{flex:1;display:flex;min-height:0}
+.gridwrap{flex:1;min-width:0;padding:13px 15px 15px 15px;position:relative}
+.grid{width:100%;height:100%;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(4,1fr);gap:11px}
+/* ---------- product tile ---------- */
+.t{position:relative;background:var(--tile);border:1px solid var(--line);border-radius:12px;overflow:hidden;
+  cursor:pointer;color:var(--text);padding:11px 12px 11px 18px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;font-family:inherit;text-align:center}
+.t .stripe{position:absolute;left:0;top:0;bottom:0;width:7px}
+.t img{width:64px;height:64px;object-fit:contain;margin-bottom:7px;display:block}
+.t .nm{font-size:14px;line-height:1.15;font-weight:700;max-height:32px;overflow:hidden;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.t .pr{font-size:17px;line-height:1.1;font-weight:700;margin-top:3px}
+/* ---- ΟΨΗ 1 — σβησμένο ---- */
+.out.o1 img{filter:grayscale(1);opacity:.3}
+.out.o1 .nm,.out.o1 .pr{opacity:.32}
+.out.o1 .stripe{opacity:.25}
+/* ---- ΟΨΗ 2 — ταινία ---- */
+.out.o2 img{filter:grayscale(1);opacity:.34}
+.out.o2 .nm,.out.o2 .pr{opacity:.34}
+.out.o2 .stripe{opacity:.25}
+.out.o2::after{content:"ΤΕΛΕΙΩΣΕ";position:absolute;left:-14px;right:-14px;top:50%;transform:translateY(-50%) rotate(-9deg);
+  background:var(--danger);color:#fff;font-size:15px;font-weight:800;letter-spacing:2.4px;padding:5px 0;text-align:center}
+/* ---- ΟΨΗ 3 — η λέξη στη θέση της τιμής ---- */
+.out.o3 img{filter:grayscale(1);opacity:.42}
+.out.o3 .nm{opacity:.45}
+.out.o3 .stripe{opacity:.25}
+.out.o3 .pr{visibility:hidden}
+.t .word{display:none}
+.out.o3 .word{display:block;position:absolute;left:18px;right:12px;bottom:11px;font-size:15px;font-weight:800;
+  letter-spacing:1.6px;color:var(--danger);line-height:1.1}
+/* ---------- cart ---------- */
+.cart{width:430px;flex:none;background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column}
+.chead{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;font-weight:800;letter-spacing:1.9px;padding:15px 20px 9px}
+.list{flex:1;padding:0 16px;overflow:hidden}
+.ln{display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line);padding:9px 4px}
+.ln .n{flex:1;min-width:0;font-size:18px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ln .q{width:34px;text-align:center;font-size:20px;font-weight:700;color:var(--muted)}
+.ln .a{width:82px;text-align:right;font-size:19px;font-weight:700}
+.total{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--line);padding:14px 20px}
+.total .l{color:var(--muted);font-size:12px;font-weight:800;letter-spacing:1.9px}
+.total .v{font-size:44px;font-weight:700;letter-spacing:-1.2px}
+.acts{padding:0 16px 14px;display:flex;flex-direction:column;gap:9px}
+.brow{display:flex;gap:8px}
+.btn{flex:1;height:46px;border:1px solid var(--line);background:transparent;color:var(--text);border-radius:10px;
+  font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;overflow:hidden}
+.pay{height:76px;background:var(--pay);color:#fff;border:0;border-radius:12px;font-size:28px;font-weight:700;font-family:inherit;cursor:pointer}
+/* ---------- overlays ---------- */
+.veil{position:absolute;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:9}
+.sheet{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:30px 34px;width:580px;text-align:center;
+  box-shadow:0 24px 70px rgba(0,0,0,.55)}
+.sheet .q{font-size:26px;font-weight:700;color:var(--text);line-height:1.3}
+.sheet .sub{font-size:15px;color:var(--muted);margin-top:10px;line-height:1.4}
+.sheet .row{display:flex;gap:12px;margin-top:26px}
+.sheet .row button{flex:1;height:66px;border-radius:12px;font-size:20px;font-weight:700;font-family:inherit;
+  cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--text)}
+.sheet .row .ok{background:var(--warn);border-color:var(--warn);color:#fff}
+/* mode banner */
+.banner{position:absolute;left:0;right:0;top:0;bottom:0;border:4px solid var(--warn);pointer-events:none;z-index:8}
+.banner span{position:absolute;left:50%;transform:translateX(-50%);top:0;background:var(--warn);color:#fff;
+  font-size:14px;font-weight:800;letter-spacing:2.2px;padding:7px 22px;border-radius:0 0 10px 10px;white-space:nowrap}
+/* list sheet */
+.lsheet{position:absolute;inset:0;background:var(--bg);z-index:9;display:flex;flex-direction:column}
+.lhead{height:70px;flex:none;background:var(--panel);border-bottom:1px solid var(--line);display:flex;align-items:center;
+  justify-content:space-between;padding:0 22px}
+.lhead b{font-size:22px;font-weight:700}
+.lbody{flex:1;overflow:auto;padding:12px 22px}
+.lr{display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--line);padding:11px 4px;cursor:pointer}
+.lr .sw{width:64px;height:34px;border-radius:17px;background:var(--line);flex:none;position:relative}
+.lr .sw i{position:absolute;top:3px;left:3px;width:28px;height:28px;border-radius:50%;background:var(--muted)}
+.lr.on .sw{background:var(--danger)}
+.lr.on .sw i{left:33px;background:#fff}
+.lr .n{flex:1;font-size:19px;font-weight:700;color:var(--text)}
+.lr.on .n{color:var(--muted);text-decoration:line-through}
+.lr .p{font-size:17px;color:var(--muted);font-weight:700}
+.lsep{font-size:11px;letter-spacing:2px;font-weight:800;color:var(--muted);padding:18px 4px 6px}
+/* admin */
+.adm{position:absolute;inset:0;background:var(--bg);z-index:9;display:flex;flex-direction:column}
+.admbody{flex:1;display:flex;min-height:0}
+.admnav{width:250px;flex:none;background:var(--panel);border-right:1px solid var(--line);padding:14px 10px}
+.admnav div{padding:12px 14px;border-radius:9px;font-size:16px;font-weight:700;color:var(--muted)}
+.admnav div.on{background:var(--tile);color:var(--text)}
+.admmain{flex:1;padding:18px 24px;overflow:auto}
+.steps{position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.74);padding:14px 24px;display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.steps b{background:var(--danger);color:#fff;border-radius:6px;padding:2px 8px;font-size:13px;font-weight:800}
+.steps span{font-size:15px;color:#f0ebe6;margin-right:6px}
+</style>
+</head>
+<body>
+<header>
+  <h1>ΟΠΑ! POS — «ΤΕΛΕΙΩΣΕ»</h1>
+  <span class="sub">Πραγματικό μέγεθος, οθόνη 1280×720, πλέγμα 5×4 — τα μεγέθη είναι του ταμείου, όχι σκίτσο</span>
+  <span class="spacer"></span>
+  <span class="sub" id="scaleInfo"></span>
+</header>
+
+<div class="app">
+  <aside>
+    <h3>ΜΗΧΑΝΙΣΜΟΣ — ΠΩΣ ΤΟ ΔΗΛΩΝΕΙΣ</h3>
+    <button class="opt on" data-m="1"><b>Μ1 · Παρατεταμένο πάτημα</b>Κρατάς το πλακίδιο ένα δευτερόλεπτο</button>
+    <button class="opt" data-m="2"><b>Μ2 · Λειτουργία σήμανσης</b>Κουμπί ΤΕΛΕΙΩΣΕ στην πάνω μπάρα</button>
+    <button class="opt" data-m="3"><b>Μ3 · Φύλλο με λίστα</b>Όλα τα προϊόντα, ένας διακόπτης το καθένα</button>
+    <button class="opt" data-m="4"><b>Μ4 · Από τη ΔΙΑΧΕΙΡΙΣΗ</b>Ο φθηνός δρόμος — και γιατί δεν γράφεται ποτέ</button>
+
+    <h3>ΟΨΗ — ΠΩΣ ΦΑΙΝΕΤΑΙ ΤΟ ΤΕΛΕΙΩΜΕΝΟ</h3>
+    <button class="opt on" data-o="1"><b>Ο1 · Σβησμένο</b>Χάνει χρώμα και δύναμη, τίποτα από πάνω του</button>
+    <button class="opt" data-o="2"><b>Ο2 · Ταινία</b>Η λέξη περνάει πάνω από το πλακίδιο</button>
+    <button class="opt" data-o="3"><b>Ο3 · Η λέξη αντί για τιμή</b>Δεν καλύπτεται τίποτα, φεύγει η τιμή</button>
+
+    <h3>ΘΕΜΑ</h3>
+    <div class="mini">
+      <button class="opt on" data-t="dark">Σκοτεινό</button>
+      <button class="opt" data-t="light">Φωτεινό</button>
+    </div>
+
+    <h3>ΜΕΓΕΘΟΣ</h3>
+    <div class="mini">
+      <button class="opt on" data-z="1">100%</button>
+      <button class="opt" data-z="fit">Να χωρέσει</button>
+    </div>
+
+    <h3>ΔΟΚΙΜΑΣΕ ΤΟ</h3>
+    <p style="font-size:11.5px;color:#8b837b;line-height:1.5">Τα πλακίδια πατιούνται. Στο Μ1 ρωτάει, στο Μ2 άναψε πρώτα το ΤΕΛΕΙΩΣΕ επάνω, στο Μ3 άνοιξε τη λίστα.</p>
+  </aside>
+
+  <main>
+    <div class="stage" id="stage">
+      <div class="till" id="till">
+        <div class="topbar">
+          <div class="grow">
+            <span class="title">ΤΑΜΕΙΟ Α</span>
+            <span class="event">Πανηγύρι Αγίου Δημητρίου</span>
+          </div>
+          <button class="chip" id="chipMark" style="display:none">ΤΕΛΕΙΩΣΕ</button>
+          <button class="chip">ΤΑΜΙΑΣ: Γιώργος</button>
+          <button class="chip">ΤΑΜΕΙΟ</button>
+          <button class="chip">ΔΙΑΧΕΙΡΙΣΗ</button>
+        </div>
+        <div class="main">
+          <div class="gridwrap">
+            <div class="grid" id="grid"></div>
+            <div class="banner" id="banner" style="display:none"><span>ΑΓΓΙΞΕ Ο,ΤΙ ΤΕΛΕΙΩΣΕ — ΞΑΝΑ ΓΙΑ ΝΑ ΕΠΑΝΕΛΘΕΙ</span></div>
+          </div>
+          <div class="cart">
+            <div class="chead"><span>ΠΑΡΑΓΓΕΛΙΑ 47</span><span>21:14</span></div>
+            <div class="list">
+              <div class="ln"><span class="n">Σουβλάκι χοιρινό</span><span class="q">×3</span><span class="a">7,50 €</span></div>
+              <div class="ln"><span class="n">Πατάτες τηγανητές</span><span class="q">×1</span><span class="a">3,00 €</span></div>
+              <div class="ln"><span class="n">Μπύρα Άλφα 500ml</span><span class="q">×2</span><span class="a">6,00 €</span></div>
+            </div>
+            <div class="total"><span class="l">ΣΥΝΟΛΟ</span><span class="v">16,50 €</span></div>
+            <div class="acts">
+              <div class="brow"><button class="btn">+</button><button class="btn">−</button><button class="btn">ΚΕΡΑΣΜΑ</button><button class="btn">ΑΝΑΜΟΝΗ</button><button class="btn">ΑΝΑΤΥΠΩΣΗ</button></div>
+              <button class="btn">ΔΙΑΓΡΑΦΗ ΓΡΑΜΜΗΣ</button>
+              <button class="pay">ΠΛΗΡΩΜΗ</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="veil" id="ask" style="display:none">
+          <div class="sheet">
+            <div class="q" id="askName">ΤΕΛΕΙΩΣΕ: ΜΠΡΙΖΟΛΑ ΧΟΙΡΙΝΗ;</div>
+            <div class="sub">Το πλακίδιο μένει στη θέση του και δεν πουλάει, μέχρι να το ξαναφέρεις.</div>
+            <div class="row"><button id="askNo">ΑΚΥΡΟ</button><button class="ok" id="askYes">ΝΑΙ</button></div>
+          </div>
+        </div>
+
+        <div class="lsheet" id="lsheet" style="display:none">
+          <div class="lhead"><b>ΤΙ ΤΕΛΕΙΩΣΕ</b><button class="chip" id="lclose">ΚΛΕΙΣΙΜΟ</button></div>
+          <div class="lbody" id="lbody"></div>
+        </div>
+
+        <div class="adm" id="adm" style="display:none">
+          <div class="topbar"><div class="grow"><span class="title">ΔΙΑΧΕΙΡΙΣΗ</span></div><button class="chip">ΕΞΟΔΟΣ</button></div>
+          <div class="admbody">
+            <div class="admnav">
+              <div>ΒΑΡΔΙΑ</div><div>ΠΑΡΑΓΓΕΛΙΕΣ</div><div class="on">ΠΡΟΪΟΝΤΑ</div><div>ΚΑΤΗΓΟΡΙΕΣ</div>
+              <div>ΔΙΑΤΑΞΗ</div><div>ΤΑΜΙΕΣ</div><div>ΕΚΤΥΠΩΤΕΣ</div><div>ΡΥΘΜΙΣΕΙΣ</div>
+            </div>
+            <div class="admmain" id="admlist"></div>
+          </div>
+          <div class="steps">
+            <b>1</b><span>ΔΙΑΧΕΙΡΙΣΗ</span>
+            <b>2</b><span>έξι ψηφία PIN</span>
+            <b>3</b><span>ΠΡΟΪΟΝΤΑ</span>
+            <b>4</b><span>βρες το όνομα στις 559 γραμμές</span>
+            <b>5</b><span>διακόπτης</span>
+            <b>6</b><span>ΕΞΟΔΟΣ</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="notes" id="notes"></div>
+  </main>
+</div>
+
+<script>
+const P = [
+ ['Σουβλάκι χοιρινό','meat_souvlaki_xoirino',250,'#B4472E'],
+ ['Σουβλάκι κοτόπουλο','meat_souvlaki_kotopoulo',250,'#B4472E'],
+ ['Μπριζόλα χοιρινή','meat_brizola_xoirini',600,'#B4472E'],
+ ['Λουκάνικο χωριάτικο','meat_loukaniko_xoriatiko',350,'#B4472E'],
+ ['Γύρος χοιρινός μερίδα','meat_merida_gyro_xoirino',650,'#B4472E'],
+ ['Κοτόπουλο μισό','meat_kotopoulo_miso',700,'#B4472E'],
+ ['Σουβλάκι πρόβειο','meat_souvlaki_proveio',300,'#B4472E'],
+ ['Κεμπάπ μερίδα','meat_kebap_xoirino_merida',650,'#B4472E'],
+ ['Πατάτες τηγανητές','sides_patates_tiganites',300,'#6E8C3A'],
+ ['Τζατζίκι','sides_tzatziki',300,'#6E8C3A'],
+ ['Χωριάτικη σαλάτα','sides_xoriatiki_salata',500,'#6E8C3A'],
+ ['Πατατοσαλάτα','sides_patatosalata',350,'#6E8C3A'],
+ ['Ψωμί','sides_psomi',50,'#6E8C3A'],
+ ['Νερό 500ml','soft_nero_500ml',50,'#2F6FB0'],
+ ['Coca-Cola 330ml','soft_coca_cola_330ml_koutaki',150,'#2F6FB0'],
+ ['Σόδα 330ml','soft_anthrakoyxo_nero_330ml',100,'#2F6FB0'],
+ ['Μπύρα Άλφα 500ml','beer_alfa_500ml_gyalini',300,'#7A4E9E'],
+ ['Μπύρα Άμστελ 330ml','beer_amstel_330ml_gyalini',250,'#7A4E9E'],
+ ['Κρασί κόκκινο 250ml','wine_krasi_kokkino_xyma_250ml',300,'#7A4E9E'],
+ ['Παγωτό','sweets_pagoto',200,'#C08A2E'],
+];
+const PICS = __PICS__;
+const euro = c => (c/100).toFixed(2).replace('.',',') + ' €';
+// Κεφαλαία ελληνικά: ο τόνος φεύγει. «ΜΠΡΙΖΌΛΑ» δεν γράφεται πουθενά.
+const KEF = s => s.toUpperCase().normalize('NFD').replace(/[̀-́͂-ͅ]/g,'').normalize('NFC');
+const out = new Set([2,10]);
+let mech = 1, look = 1, marking = false, pending = null;
+
+const grid = document.getElementById('grid');
+function paint(){
+  grid.innerHTML = '';
+  P.forEach((p,i)=>{
+    const b = document.createElement('button');
+    b.className = 't' + (out.has(i) ? ' out o'+look : '');
+    b.innerHTML =
+      '<span class="stripe" style="background:'+p[3]+'"></span>' +
+      '<img src="'+PICS[p[1]]+'" alt="">' +
+      '<span class="nm">'+p[0]+'</span>' +
+      '<span class="pr">'+euro(p[2])+'</span>' +
+      '<span class="word">ΤΕΛΕΙΩΣΕ</span>';
+    b.onclick = ()=>tap(i);
+    grid.appendChild(b);
+  });
+  drawList(); drawAdmin();
+}
+function tap(i){
+  if(mech===1){
+    pending=i;
+    document.getElementById('askName').textContent =
+      (out.has(i) ? 'ΞΑΝΑ ΣΤΟ ΤΑΜΕΙΟ: ' : 'ΤΕΛΕΙΩΣΕ: ') + KEF(P[i][0]) + ';';
+    document.getElementById('ask').style.display='flex';
+    return;
+  }
+  if(mech===2 && marking){ out.has(i)?out.delete(i):out.add(i); paint(); }
+}
+document.getElementById('askNo').onclick=()=>document.getElementById('ask').style.display='none';
+document.getElementById('askYes').onclick=()=>{
+  out.has(pending)?out.delete(pending):out.add(pending);
+  document.getElementById('ask').style.display='none'; paint();
+};
+
+function drawList(){
+  const box = document.getElementById('lbody'); box.innerHTML='';
+  const order = [...P.keys()].sort((a,b)=> (out.has(b)?1:0)-(out.has(a)?1:0));
+  let sep=false;
+  order.forEach(i=>{
+    if(!out.has(i) && !sep){ sep=true;
+      const s=document.createElement('div'); s.className='lsep'; s.textContent='ΟΛΑ ΤΑ ΥΠΟΛΟΙΠΑ'; box.appendChild(s); }
+    const r=document.createElement('div'); r.className='lr'+(out.has(i)?' on':'');
+    r.innerHTML='<span class="sw"><i></i></span><span class="n">'+P[i][0]+'</span><span class="p">'+euro(P[i][2])+'</span>';
+    r.onclick=()=>{ out.has(i)?out.delete(i):out.add(i); paint(); };
+    box.appendChild(r);
+  });
+}
+function drawAdmin(){
+  const box=document.getElementById('admlist'); box.innerHTML='';
+  P.slice(0,7).forEach((p,i)=>{
+    const r=document.createElement('div'); r.className='lr'+(out.has(i)?' on':'');
+    r.innerHTML='<span class="n">'+p[0]+'</span><span class="p">'+euro(p[2])+'</span><span class="sw"><i></i></span>';
+    box.appendChild(r);
+  });
+}
+
+const NOTES = {
+1:{t:'Μ1 — Παρατεταμένο πάτημα', k:'ΤΟ ΠΛΑΚΙΔΙΟ ΤΟ ΞΕΡΕΙ ΜΟΝΟ ΤΟΥ',
+ b:'Κρατάς πατημένο το πλακίδιο ένα δευτερόλεπτο. Ρωτάει μία φορά, απαντάς, σβήνει. Η ίδια ακριβώς κίνηση το φέρνει πίσω όταν βγει η επόμενη ταψιά.',
+ pro:['Δύο κινήσεις, χωρίς να φύγεις από την οθόνη πώλησης ούτε βήμα.',
+      'Κανένα καινούργιο έπιπλο — η πάνω μπάρα δεν φορτώνεται άλλο κουμπί.',
+      'Η χειρονομία υπάρχει ήδη στο προϊόν: η ΑΚΥΡΩΣΗ ΟΛΩΝ θέλει κράτημα.',
+      'Αδύνατο να γίνει κατά λάθος μέσα στην ουρά — το γρήγορο άγγιγμα πουλάει, όπως πάντα.'],
+ con:['<b>Κρυφό.</b> Ο εθελοντής που έμαθε το πρόγραμμα σε πέντε λεπτά δεν πρόκειται να το ανακαλύψει, και τίποτα στην οθόνη δεν το λέει.',
+      'Δεν βλέπεις πουθενά μαζεμένο τι λείπει αυτή τη στιγμή.',
+      'Ένα πλακίδιο, δύο πράγματα — ανάλογα με το πόσο κρατάς το δάχτυλο.']},
+2:{t:'Μ2 — Λειτουργία σήμανσης', k:'Η ΛΕΞΗ ΠΑΝΩ ΣΤΗΝ ΜΠΑΡΑ',
+ b:'Πατάς ΤΕΛΕΙΩΣΕ στην πάνω μπάρα. Το πλέγμα μπαίνει σε κίτρινη κορνίζα και για όση ώρα είναι εκεί, κάθε άγγιγμα σβήνει ή επαναφέρει ένα πλακίδιο. Ξαναπατάς και τελείωσε.',
+ pro:['<b>Φαίνεται.</b> Η λέξη στέκεται στην μπάρα, όπως το ΤΑΜΕΙΟ — κανείς δεν χρειάζεται να του το πουν.',
+      'Τρία πράγματα τελειώνουν μαζί στη ψησταριά: τα σβήνεις με τρία αγγίγματα.',
+      'Καμία σύγκρουση με την πώληση — είναι άλλη κατάσταση, με δικό της χρώμα σε όλη την οθόνη.',
+      'Ίδια κίνηση για το σβήσιμο και για την επαναφορά.'],
+ con:['<b>Είναι κατάσταση, και οι καταστάσεις ξεχνιούνται.</b> Αν φύγεις χωρίς να την κλείσεις, το επόμενο άγγιγμα δεν πουλάει — γι’ αυτό η κορνίζα είναι τόσο έντονη, και γι’ αυτό πρέπει να βγαίνει μόνη της μόλις σταματήσεις να την πειράζεις.',
+      'Ένα ακόμα κουμπί σε μια μπάρα που σε στενή οθόνη είναι ήδη γεμάτη.']},
+3:{t:'Μ3 — Φύλλο με λίστα', k:'ΕΝΑ ΜΕΡΟΣ ΠΟΥ ΛΕΕΙ ΤΙ ΛΕΙΠΕΙ',
+ b:'Πατάς ΤΕΛΕΙΩΣΕ και ανοίγει ολόκληρο φύλλο: κάθε προϊόν του μενού μια γραμμή, ένας διακόπτης. Ό,τι έχει τελειώσει ανεβαίνει στην κορυφή.',
+ pro:['Με μια ματιά ξέρεις τι λείπει — και το λες στον πελάτη χωρίς να ψάχνεις το πλέγμα.',
+      'Το σχήμα το ξέρει ήδη: είναι το φύλλο μετρήματος του ταμείου.',
+      'Η επαναφορά είναι το ίδιο εύκολη με το σβήσιμο.'],
+ con:['<b>Ψάχνεις όνομα σε λίστα εξήντα γραμμών</b>, αντί να αγγίξεις το πλακίδιο που το χέρι σου ξέρει πού είναι — και το ψάχνεις ακριβώς την ώρα που βιάζεσαι.',
+      'Σε μεγάλο μενού θέλει κύλιση, δηλαδή δεύτερη κίνηση πριν καν αρχίσεις.',
+      'Φεύγεις από την οθόνη πώλησης, έστω και για λίγο.']},
+4:{t:'Μ4 — Από τη ΔΙΑΧΕΙΡΙΣΗ', k:'Ο ΦΘΗΝΟΣ ΔΡΟΜΟΣ',
+ b:'Ένας διακόπτης δίπλα σε κάθε προϊόν, στη σελίδα ΠΡΟΪΟΝΤΑ του πίνακα. Δεν αλλάζει τίποτα στην οθόνη πώλησης και δεν κοστίζει σχεδόν τίποτα να γίνει.',
+ pro:['Καμία αλλαγή στην οθόνη πώλησης, καμία καινούργια χειρονομία.',
+      'Μηδενικός κίνδυνος να πατηθεί κατά λάθος μέσα στη βιασύνη.'],
+ con:['<b>Έξι βήματα και έξοδος από την οθόνη πώλησης, με ουρά από πίσω.</b> Στις 23:30 αυτό σημαίνει «μετά», δηλαδή ποτέ — και μια σήμανση που δεν γράφεται δεν αξίζει τίποτα.',
+      'Θέλει PIN και δικαίωμα να μπεις στον πίνακα, ενώ εσύ είπες ότι αυτή η ενέργεια είναι όλων, ανεξαρτήτως κάρτας.',
+      'Είναι ακριβώς το επιχείρημα που έκρινε το ΤΑΜΕΙΟ στις 27/08: το κουμπί μπήκε στην μπάρα και όχι στον πίνακα, για τον ίδιο λόγο.']}
+};
+const LOOKS = {
+1:['Ο1 — Σβησμένο','Το πλακίδιο χάνει χρώμα και δύναμη και τίποτα δεν μπαίνει από πάνω του. Το πιο ήσυχο: δεν σπάει τη γραμμή του πλέγματος και δεν κρύβει τη φωτογραφία. Το ρίσκο είναι ότι από ένα μέτρο μακριά, μέσα στη νύχτα, «ξεθωριασμένο» και «κανονικό» μοιάζουν.'],
+2:['Ο2 — Ταινία','Η λέξη περνάει πλάγια πάνω από το πλακίδιο. Διαβάζεται όρθιος, με την άκρη του ματιού, μέσα στο σκοτάδι — κανένα λάθος. Κόστος: καλύπτει τη φωτογραφία, και το κόκκινο είναι κρατημένο για την ΑΚΥΡΩΣΗ ΟΛΩΝ (UI-DESIGN §5) — αν διαλεγεί, το χρώμα το ξανακοιτάμε.'],
+3:['Ο3 — Η λέξη αντί για τιμή','Δεν καλύπτεται τίποτα: εκεί που ήταν η τιμή γράφει ΤΕΛΕΙΩΣΕ. Λέει το σωστό πράγμα στο σωστό σημείο — δεν έχει τιμή γιατί δεν πουλιέται. Στα πολύ μικρά πλακίδια όμως η λέξη είναι πιο αδύναμη από μια ταινία και θέλει δεύτερο κοίταγμα.']
+};
+function notes(){
+  const n = NOTES[mech], l = LOOKS[look];
+  document.getElementById('notes').innerHTML =
+   '<div class="kicker">'+n.k+'</div><h2>'+n.t+'</h2><p>'+n.b+'</p>'+
+   '<ul>'+n.pro.map(x=>'<li class="pro"><i>+</i>'+x+'</li>').join('')+
+   n.con.map(x=>'<li class="con"><i>−</i>'+x+'</li>').join('')+'</ul>'+
+   '<hr><div class="kicker">Η ΟΨΗ ΠΟΥ ΒΛΕΠΕΙΣ ΤΩΡΑ</div><h2>'+l[0]+'</h2><p>'+l[1]+'</p>'+
+   '<hr>'+
+   '<div class="rulebox"><b>Το πλακίδιο δεν φεύγει ποτέ από το πλέγμα.</b> Αν έφευγε, θα μετακινούνταν όλα τα υπόλοιπα — και το χέρι που έμαθε πού είναι το νερό θα χτυπούσε μπύρα. Μένει στη θέση του, δεν πουλάει, και γυρίζει.</div>'+
+   '<div class="rulebox"><b>Κανένα δικαίωμα, όπως το ζήτησες.</b> Όποιος στέκεται στο ταμείο μπορεί να το πει: δεν είναι λεφτά, δεν είναι ακύρωση, και δεν χάνεται τίποτα αν γίνει λάθος — γυρίζει με την ίδια κίνηση.</div>'+
+   '<div class="rulebox"><b>Τρία που δεν φαίνονται στο σχέδιο.</b> (α) Καθαρίζει στο ΑΝΟΙΓΜΑ ΒΑΡΔΙΑΣ — ό,τι τελείωσε το Σάββατο υπάρχει ξανά την Κυριακή. (β) Αν είναι ήδη μέσα σε ανοιχτή παραγγελία, η γραμμή μένει· ο ταμίας τη σβήνει αν θέλει. (γ) Το Ζ μπορεί να τυπώνει τι τελείωσε και τι ώρα — είναι ακριβώς το χαρτί που θέλει ο σύλλογος για να παραγγείλει του χρόνου.</div>';
+}
+function apply(){
+  document.getElementById('chipMark').style.display = (mech===2||mech===3)?'block':'none';
+  document.getElementById('ask').style.display='none';
+  document.getElementById('lsheet').style.display='none';
+  document.getElementById('adm').style.display = mech===4?'flex':'none';
+  document.getElementById('banner').style.display = (mech===2&&marking)?'block':'none';
+  document.getElementById('chipMark').className = 'chip'+((mech===2&&marking)?' lit':'');
+  paint(); notes();
+}
+document.getElementById('chipMark').onclick=()=>{
+  if(mech===2){ marking=!marking; apply(); }
+  else { document.getElementById('lsheet').style.display='flex'; }
+};
+document.getElementById('lclose').onclick=()=>document.getElementById('lsheet').style.display='none';
+
+document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('[data-m]').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+  mech=+b.dataset.m; marking=false; apply();});
+document.querySelectorAll('[data-o]').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('[data-o]').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+  look=+b.dataset.o; apply();});
+document.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('[data-t]').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+  document.getElementById('till').classList.toggle('light', b.dataset.t==='light');});
+document.querySelectorAll('[data-z]').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('[data-z]').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+  zoom(b.dataset.z);});
+function zoom(mode){
+  const till=document.getElementById('till'), stage=document.getElementById('stage');
+  const s = mode==='1' ? 1 : Math.min(1,(stage.clientWidth-32)/1280);
+  till.style.transform='scale('+s+')';
+  till.style.marginBottom = (s<1 ? (720*s-720)+'px' : '0');
+  document.getElementById('scaleInfo').textContent = s===1 ? 'πραγματικό μέγεθος' : 'σμίκρυνση '+Math.round(s*100)+'%';
+}
+apply(); zoom('1');
+</script>
+</body>
+</html>
