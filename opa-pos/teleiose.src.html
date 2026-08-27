@@ -80,7 +80,10 @@ main{flex:1;display:flex;min-width:0}
 .gridwrap{flex:1;min-width:0;padding:13px 15px 15px 15px;position:relative}
 .grid{width:100%;height:100%;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(4,1fr);gap:11px}
 /* ---------- product tile ---------- */
-.t{position:relative;background:var(--tile);border:1px solid var(--line);border-radius:12px;overflow:hidden;
+/* Χωρίς αυτά, το παρατεταμένο πάτημα σε κινητό το αρπάζει το ίδιο το Android:
+   βγάζει το μενού του ή διαλέγει το κείμενο, και η σελίδα δεν παίρνει τίποτα. */
+.t{touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;
+  position:relative;background:var(--tile);border:1px solid var(--line);border-radius:12px;overflow:hidden;
   cursor:pointer;color:var(--text);padding:11px 12px 11px 18px;display:flex;flex-direction:column;
   align-items:center;justify-content:center;font-family:inherit;text-align:center}
 .t .stripe{position:absolute;left:0;top:0;bottom:0;width:7px}
@@ -104,6 +107,11 @@ main{flex:1;display:flex;min-width:0}
 .out.o3 .stripe{opacity:.25}
 .out.o3 .pr{visibility:hidden}
 .t .word{display:none}
+/* Η μπάρα του κρατήματος — hold_button.dart: «χωρίς αυτήν, ο ταμίας που το
+   πρώτο του πάτημα δεν έκανε τίποτα μαθαίνει ότι το κουμπί χάλασε, όχι ότι
+   θέλει πιο πολύ κράτημα». Στο πλακίδιο πάει χαμηλά, για να μην κρύψει το φαγητό. */
+.t .fill{position:absolute;left:0;right:auto;bottom:0;height:6px;width:0;background:var(--warn);pointer-events:none}
+.t.tapped{outline:2px solid var(--pay);outline-offset:-2px}
 .out.o3 .word{display:block;position:absolute;left:18px;right:12px;bottom:11px;font-size:15px;font-weight:800;
   letter-spacing:1.6px;color:var(--danger);line-height:1.1}
 /* ---------- cart ---------- */
@@ -174,7 +182,7 @@ main{flex:1;display:flex;min-width:0}
 <div class="app">
   <aside>
     <h3>ΜΗΧΑΝΙΣΜΟΣ — ΠΩΣ ΤΟ ΔΗΛΩΝΕΙΣ</h3>
-    <div class="opts"><button class="opt on" data-m="1"><b>Μ1 · Παρατεταμένο πάτημα</b><span class="d">Κρατάς το πλακίδιο ένα δευτερόλεπτο</span></button>
+    <div class="opts"><button class="opt on" data-m="1"><b>Μ1 · Παρατεταμένο πάτημα</b><span class="d">Κρατάς το πλακίδιο πατημένο, 600 ms</span></button>
     <button class="opt" data-m="2"><b>Μ2 · Λειτουργία σήμανσης</b><span class="d">Κουμπί ΤΕΛΕΙΩΣΕ στην πάνω μπάρα</span></button>
     <button class="opt" data-m="3"><b>Μ3 · Φύλλο με λίστα</b><span class="d">Όλα τα προϊόντα, ένας διακόπτης το καθένα</span></button>
     <button class="opt" data-m="4"><b>Μ4 · Από τη ΔΙΑΧΕΙΡΙΣΗ</b><span class="d">Ο φθηνός δρόμος — και γιατί δεν γράφεται ποτέ</span></button></div>
@@ -315,20 +323,54 @@ function paint(){
       '<img src="'+PICS[p[1]]+'" alt="">' +
       '<span class="nm">'+p[0]+'</span>' +
       '<span class="pr">'+euro(p[2])+'</span>' +
-      '<span class="word">ΤΕΛΕΙΩΣΕ</span>';
-    b.onclick = ()=>tap(i);
+      '<span class="word">ΤΕΛΕΙΩΣΕ</span>' +
+      '<span class="fill"></span>';
+    if(mech===1) arm(b,i); else b.onclick = ()=>tap(i);
     grid.appendChild(b);
   });
   drawList(); drawAdmin();
 }
+// 600 ms — ο ίδιος αριθμός που έχει η ΑΚΥΡΩΣΗ ΟΛΩΝ στο προϊόν
+// (`holdToConfirmDuration`, D-062).
+const HOLD = 600;
+let timer = null, held = null;
+
+function bar(el, to, ms){
+  const f = el.querySelector('.fill');
+  f.style.transition = 'width '+ms+'ms linear';
+  f.style.width = to;
+}
+function arm(el, i){
+  el.addEventListener('contextmenu', e=>e.preventDefault());
+  el.addEventListener('pointerdown', e=>{
+    e.preventDefault();
+    // Το δάχτυλο μένει δικό μας κι αν μετακινηθεί λίγο: ένα κρατημένο δάχτυλο
+    // σε οθόνη αφής σέρνεται, και το προϊόν ανέχεται ακριβώς το ίδιο.
+    el.setPointerCapture?.(e.pointerId);
+    held = el; bar(el,'100%',HOLD);
+    timer = setTimeout(()=>{ timer=null; bar(el,'0',0); held=null;
+      navigator.vibrate?.(30); ask(i); }, HOLD);
+  });
+  const stop = ()=>{
+    if(timer){ // σηκώθηκε νωρίς: αυτό ήταν πώληση, όχι σήμανση
+      clearTimeout(timer); timer=null;
+      el.classList.add('tapped'); setTimeout(()=>el.classList.remove('tapped'),160);
+    }
+    if(held){ bar(held,'0',160); held=null; }
+  };
+  el.addEventListener('pointerup', stop);
+  el.addEventListener('pointercancel', stop);
+  el.addEventListener('pointerleave', stop);
+}
+function ask(i){
+  pending=i;
+  document.getElementById('askName').textContent =
+    (out.has(i) ? 'ΞΑΝΑ ΣΤΟ ΤΑΜΕΙΟ: ' : 'ΤΕΛΕΙΩΣΕ: ') + KEF(P[i][0]) + ';';
+  document.getElementById('ask').style.display='flex';
+}
+
 function tap(i){
-  if(mech===1){
-    pending=i;
-    document.getElementById('askName').textContent =
-      (out.has(i) ? 'ΞΑΝΑ ΣΤΟ ΤΑΜΕΙΟ: ' : 'ΤΕΛΕΙΩΣΕ: ') + KEF(P[i][0]) + ';';
-    document.getElementById('ask').style.display='flex';
-    return;
-  }
+  if(mech===1){ ask(i); return; }
   if(mech===2 && marking){ out.has(i)?out.delete(i):out.add(i); paint(); }
 }
 document.getElementById('askNo').onclick=()=>document.getElementById('ask').style.display='none';
@@ -361,7 +403,7 @@ function drawAdmin(){
 
 const NOTES = {
 1:{t:'Μ1 — Παρατεταμένο πάτημα', k:'ΤΟ ΠΛΑΚΙΔΙΟ ΤΟ ΞΕΡΕΙ ΜΟΝΟ ΤΟΥ',
- b:'Κρατάς πατημένο το πλακίδιο ένα δευτερόλεπτο. Ρωτάει μία φορά, απαντάς, σβήνει. Η ίδια ακριβώς κίνηση το φέρνει πίσω όταν βγει η επόμενη ταψιά.',
+ b:'Κρατάς πατημένο το πλακίδιο — 600 ms, ο ίδιος χρόνος που θέλει η ΑΚΥΡΩΣΗ ΟΛΩΝ. Μια μπάρα γεμίζει από κάτω όσο κρατάς, όπως εκεί· αν σηκώσεις νωρίς, το πλακίδιο απλώς πούλησε. Δοκίμασέ το: κράτα, και μετά άγγιξε γρήγορα. Ρωτάει μία φορά, απαντάς, σβήνει. Η ίδια ακριβώς κίνηση το φέρνει πίσω όταν βγει η επόμενη ταψιά.',
  pro:['Δύο κινήσεις, χωρίς να φύγεις από την οθόνη πώλησης ούτε βήμα.',
       'Κανένα καινούργιο έπιπλο — η πάνω μπάρα δεν φορτώνεται άλλο κουμπί.',
       'Η χειρονομία υπάρχει ήδη στο προϊόν: η ΑΚΥΡΩΣΗ ΟΛΩΝ θέλει κράτημα.',
