@@ -1,0 +1,1007 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<title>ΟΠΑ! POS — Το ταμείο: ρέστα, αναλήψεις, καταμέτρηση</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#121110; --panel:#1A1817; --tile:#201E1C; --line:#2E2A27;
+  --text:#F4F1ED; --muted:#A2988E; --pay:#1E9E57; --danger:#D4402C; --warn:#C98A16;
+  --page:#0A0908; --card:#171514;
+}
+*{box-sizing:border-box; margin:0; padding:0}
+body{
+  background:var(--page); color:var(--text);
+  font-family:Manrope,system-ui,Segoe UI,sans-serif;
+  padding:56px 40px 120px;
+}
+.wrap{max-width:2260px; margin:0 auto}
+
+/* ---------- κείμενο σελίδας ---------- */
+h1{font-size:44px; font-weight:800; letter-spacing:-0.5px}
+.sub{color:var(--muted); font-size:21px; margin-top:14px; max-width:1100px; line-height:1.5}
+h2{font-size:34px; font-weight:800}
+h3{font-size:19px; font-weight:700; letter-spacing:0.4px; text-transform:uppercase; color:var(--muted)}
+p{line-height:1.55}
+.intro{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:34px 38px; margin-top:38px}
+table.req{border-collapse:collapse; width:100%; margin-top:20px; font-size:17px}
+table.req th{text-align:left; color:var(--muted); font-weight:600; padding:10px 14px; border-bottom:1px solid var(--line); font-size:15px; text-transform:uppercase; letter-spacing:.5px}
+table.req td{padding:11px 14px; border-bottom:1px solid #221F1D; vertical-align:top; line-height:1.45}
+table.req td:first-child{color:var(--muted); width:52px}
+table.req td b{color:#fff}
+
+/* ---------- μπλοκ πρότασης ---------- */
+.prop{margin-top:74px; border-top:2px solid var(--line); padding-top:34px}
+.phead{display:flex; align-items:baseline; gap:20px; flex-wrap:wrap}
+.badge{width:54px; height:54px; border-radius:14px; background:var(--text); color:#111;
+  font-weight:800; font-size:28px; display:flex; align-items:center; justify-content:center; align-self:center}
+.principle{color:var(--warn); font-size:20px; font-weight:600; margin-top:6px; width:100%}
+.row{display:flex; gap:40px; margin-top:28px; align-items:flex-start}
+.screens{display:flex; flex-direction:column; gap:34px}
+figure{margin:0}
+figcaption{color:var(--muted); font-size:16px; margin-bottom:10px; letter-spacing:.3px}
+figcaption b{color:var(--text); font-weight:700}
+aside.notes{width:860px; position:sticky; top:24px; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:28px 30px}
+aside.notes h3{margin-bottom:10px}
+aside.notes ul{margin:0 0 22px 20px; font-size:17.5px; line-height:1.62}
+aside.notes li{margin-bottom:7px}
+.win{color:#7BD8A4}
+.lose{color:#E8927F}
+
+/* ---------- η οθόνη του ταμείου ---------- */
+.till{width:1280px; height:720px; background:var(--bg); border-radius:8px; overflow:hidden;
+  display:flex; flex-direction:column; border:1px solid #000; box-shadow:0 18px 50px rgba(0,0,0,.55)}
+.topbar{height:58px; background:var(--panel); border-bottom:1px solid var(--line);
+  display:flex; align-items:center; gap:14px; padding:0 16px; flex:none}
+.letter{width:38px; height:38px; border-radius:9px; background:var(--tile); border:1px solid var(--line);
+  display:flex; align-items:center; justify-content:center; font-weight:800; font-size:22px}
+.ev{font-size:16px; color:var(--muted); letter-spacing:.4px}
+.spacer{flex:1}
+.chip{height:38px; padding:0 14px; border-radius:9px; background:var(--tile); border:1px solid var(--line);
+  display:flex; align-items:center; gap:9px; font-size:15px; color:var(--muted)}
+.chip b{color:var(--text); font-size:17px; font-weight:700}
+.chip.live{border-color:#4a3f22; background:#241f14}
+.chip.live b{color:#F2C766}
+.who{font-size:16px; font-weight:600}
+.lock{width:38px; height:38px; border-radius:9px; background:var(--tile); border:1px solid var(--line);
+  display:flex; align-items:center; justify-content:center; font-size:13px; color:var(--muted)}
+.body{flex:1; display:flex; min-height:0}
+.grid{flex:1; padding:12px; display:grid; grid-template-columns:repeat(5,1fr); grid-template-rows:repeat(4,1fr); gap:10px}
+.t{background:var(--tile); border-radius:10px; border-left:7px solid var(--c,#555);
+  padding:10px 12px; display:flex; flex-direction:column; justify-content:flex-end; gap:3px}
+.t span{font-size:15px; line-height:1.15; font-weight:600}
+.t em{font-style:normal; font-size:17px; font-weight:700; color:var(--muted)}
+.col{width:392px; background:var(--panel); border-left:1px solid var(--line); display:flex; flex-direction:column; padding:14px; flex:none}
+.colhead{display:flex; justify-content:space-between; align-items:baseline; font-size:15px; color:var(--muted); letter-spacing:.5px}
+.lines{flex:1; margin-top:10px; display:flex; flex-direction:column; gap:8px; min-height:0}
+.ln{display:flex; align-items:center; gap:10px; background:#1E1B19; border-radius:9px; padding:10px 12px}
+.ln.sel{background:#252119; border:1px solid #4a3f22}
+.qty{min-width:30px; height:30px; border-radius:7px; background:var(--pay); color:#fff; font-weight:800;
+  font-size:16px; display:flex; align-items:center; justify-content:center; padding:0 7px}
+.ln span{flex:1; font-size:17px; font-weight:600; line-height:1.2}
+.ln em{font-style:normal; font-size:18px; font-weight:700}
+.acts{display:flex; gap:7px; margin-top:12px}
+.acts div{height:52px; border:1px solid var(--line); border-radius:10px; display:flex; align-items:center;
+  justify-content:center; font-size:10.5px; font-weight:700; min-width:0; color:var(--text);
+  text-align:center; line-height:1.06; padding:0 3px; overflow:hidden}
+.acts div:nth-child(1){flex:108}
+.acts div:nth-child(2){flex:92}
+.acts div:nth-child(3){flex:116}
+.acts div:nth-child(4){flex:106}
+.acts div:nth-child(5){flex:100}
+.acts div.red{background:var(--danger); border-color:var(--danger); color:#fff}
+.paybtn{margin-top:12px; height:118px; background:var(--pay); border-radius:12px; color:#fff;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px}
+.paybtn b{font-size:44px; font-weight:800}
+.paybtn i{font-style:normal; font-size:19px; font-weight:700; letter-spacing:2px}
+
+/* ---------- κεντρικές οθόνες (άνοιγμα / κλείσιμο) ---------- */
+.center{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; padding:24px 40px}
+.bigletter{font-size:120px; font-weight:800; line-height:1}
+.meta{color:var(--muted); font-size:19px; text-align:center; line-height:1.6}
+.greenbtn{height:82px; min-width:420px; background:var(--pay); color:#fff; border-radius:12px;
+  display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:800; letter-spacing:1px; padding:0 34px}
+.ghostbtn{height:62px; min-width:200px; border:1px solid var(--line); border-radius:11px;
+  display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:700; padding:0 26px; color:var(--text)}
+.floatrow{display:flex; align-items:center; gap:18px; background:var(--panel); border:1px solid var(--line);
+  border-radius:14px; padding:16px 22px; min-width:620px; justify-content:space-between}
+.floatrow .lab{font-size:16px; color:var(--muted); letter-spacing:.6px}
+.floatrow .amt{font-size:40px; font-weight:800}
+
+/* πάνω μπάρα διαχείρισης */
+.admbar{height:64px; background:var(--panel); border-bottom:1px solid var(--line); display:flex;
+  align-items:center; gap:16px; padding:0 20px; flex:none}
+.admbar .back{width:46px; height:40px; border:1px solid var(--line); border-radius:9px; display:flex;
+  align-items:center; justify-content:center; color:var(--muted); font-size:15px}
+.admbar h4{font-size:21px; font-weight:800; letter-spacing:.6px}
+.admbody{flex:1; padding:22px 26px; display:flex; flex-direction:column; gap:16px; min-height:0}
+
+/* ταμπλό μετρητών */
+.board{display:flex; flex-direction:column; gap:9px}
+.coins{display:grid; grid-template-columns:repeat(6,1fr); gap:9px}
+.notes6{display:grid; grid-template-columns:repeat(3,1fr); gap:9px}
+.den{background:var(--tile); border-radius:10px; border-left:8px solid var(--c);
+  display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:800; height:64px}
+.den.small{height:46px; font-size:17px}
+
+/* φύλλο καταμέτρησης */
+.sheet{display:grid; grid-template-columns:repeat(2,1fr); gap:10px 26px}
+.srow{display:flex; align-items:center; gap:12px; background:var(--tile); border-radius:10px; padding:8px 12px; border-left:8px solid var(--c)}
+.srow .d{width:74px; font-size:20px; font-weight:800}
+.srow .x{color:var(--muted); font-size:16px}
+.srow .n{width:78px; height:44px; border:1px solid var(--line); border-radius:9px; background:#0f0e0d;
+  display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:800}
+.srow .eq{flex:1; text-align:right; font-size:20px; font-weight:700; color:var(--muted)}
+
+/* αποτέλεσμα */
+.result{display:flex; gap:14px}
+.rbox{flex:1; background:var(--tile); border-radius:12px; padding:16px 18px; border:1px solid var(--line)}
+.rbox .lab{font-size:14px; color:var(--muted); letter-spacing:.8px}
+.rbox .val{font-size:38px; font-weight:800; margin-top:6px}
+.rbox.diff{border-color:#5a3a2a; background:#241715}
+.rbox.diff .val{color:#F0907C}
+.rbox.ok{border-color:#2a5a3f; background:#14231a}
+.rbox.ok .val{color:#7BD8A4}
+
+/* χαρτί */
+.paper{width:360px; background:#F6F3EE; color:#141210; border-radius:4px; padding:18px 20px;
+  font-family:"Consolas",ui-monospace,monospace; font-size:14px; line-height:1.5}
+.paper .c{text-align:center; font-weight:700}
+.paper hr{border:none; border-top:1px dashed #9a938a; margin:8px 0}
+.paper .r{display:flex; justify-content:space-between}
+
+/* διάλογος πάνω από το ταμείο */
+.scrim{position:absolute; inset:0; background:rgba(0,0,0,.62); display:flex; align-items:center; justify-content:center}
+.dlg{width:640px; background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:26px 28px;
+  display:flex; flex-direction:column; gap:16px; box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.dlg h5{font-size:24px; font-weight:800; letter-spacing:.5px}
+.dlg .hint{color:var(--muted); font-size:16px; line-height:1.5}
+.two{display:flex; gap:12px}
+.two > div{flex:1; height:76px; border-radius:12px; display:flex; align-items:center; justify-content:center;
+  font-size:20px; font-weight:800; border:1px solid var(--line)}
+.two .out{background:#2a1c19; border-color:#5a3a2a; color:#F0907C}
+.two .in{background:#14231a; border-color:#2a5a3f; color:#7BD8A4}
+.rel{position:relative}
+.pinrow{display:flex; gap:10px; justify-content:center}
+.pinrow div{width:54px; height:64px; border:1px solid var(--line); border-radius:10px; background:#0f0e0d;
+  display:flex; align-items:center; justify-content:center; font-size:28px; font-weight:800; color:var(--muted)}
+.reasons{display:flex; gap:9px; flex-wrap:wrap}
+.reasons span{border:1px solid var(--line); border-radius:9px; padding:10px 14px; font-size:16px; font-weight:600; color:var(--muted)}
+.reasons span.on{border-color:var(--warn); color:#F2C766; background:#241f14}
+
+/* τελικός πίνακας */
+.final{margin-top:80px; border-top:2px solid var(--line); padding-top:34px}
+table.cmp{border-collapse:collapse; width:100%; margin-top:24px; font-size:18px}
+table.cmp th{text-align:left; padding:14px 16px; border-bottom:1px solid var(--line); color:var(--muted); font-size:15px; text-transform:uppercase; letter-spacing:.6px}
+table.cmp td{padding:14px 16px; border-bottom:1px solid #221F1D; vertical-align:top; line-height:1.5}
+table.cmp td:first-child{font-weight:700}
+.rec{margin-top:34px; background:#14231a; border:1px solid #2a5a3f; border-radius:16px; padding:28px 32px; font-size:20px; line-height:1.6}
+.rec b{color:#7BD8A4}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Το ταμείο — ρέστα έναρξης, αναλήψεις, καταμέτρηση στο κλείσιμο</h1>
+<p class="sub">Τέσσερις ολοκληρωμένες προτάσεις. Η κάθε μία λύνει και τα οκτώ από κάτω μόνη της — δεν είναι
+«λίγο / πολύ» της ίδιας ιδέας. Αυτό που αλλάζει είναι <b>ποια αρχή κερδίζει όταν δύο απαιτήσεις συγκρούονται</b>.
+Διάλεξε ένα γράμμα. Οι οθόνες είναι σε πραγματικό μέγεθος ταμπλέτας 1280×720 — ό,τι βλέπεις εδώ, τόσο μεγάλο είναι
+και στο μηχάνημα.</p>
+
+<div class="intro">
+<h3>Ο κατάλογος — τι πρέπει να λύνει η κάθε πρόταση</h3>
+<table class="req">
+<tr><th>#</th><th>Απαίτηση</th></tr>
+<tr><td>1</td><td><b>Τα ρέστα της έναρξης μπαίνουν κάπου.</b> Χωρίς αυτά, το «πόσα έπρεπε να έχει το συρτάρι» είναι λάθος από την πρώτη πώληση. Η βάρδια είναι <b>ενός ταμείου</b>, όχι ενός ανθρώπου — οι ταμίες αλλάζουν μέσα της, το συρτάρι είναι ένα</td></tr>
+<tr><td>2</td><td><b>Τυφλή καταμέτρηση.</b> Αν η οθόνη δείξει «πρέπει να έχεις 1.847,30» πριν μετρήσουν, αυτό θα γράψουν. Μετράς πρώτα, η διαφορά φαίνεται μετά</td></tr>
+<tr><td>3</td><td><b>Ποτέ δεν μπλοκάρει.</b> Διαφορά 40 € δεν εμποδίζει το κλείσιμο και δεν κλειδώνει κανέναν έξω (D-020). Γράφεται και τυπώνεται</td></tr>
+<tr><td>4</td><td><b>Μετράνε με λεφτά, όχι με αριθμομηχανή.</b> Χρησιμοποιείται το ταμπλό χαρτονομισμάτων που ήδη υπάρχει στην πληρωμή (D-063) — καμία εικόνα χαρτονομίσματος, ίδιες θέσεις πάντα</td></tr>
+<tr><td>5</td><td><b>Ανάληψη μέσα στη βραδιά.</b> Στις 12 κάποιος παίρνει 1.000 € στο αυτοκίνητο. Και το αντίστροφο: φέρνουν ψιλά για ρέστα. Με <b>δικαίωμα</b> και PIN, και γραμμή με όνομα, ώρα, ποσό</td></tr>
+<tr><td>6</td><td><b>Η αριθμητική:</b> ρέστα + πωλήσεις − αναλήψεις + καταθέσεις = αναμενόμενο. Κάρτες δεν υπάρχουν· κεράσματα, ακυρώσεις και διορθώσεις δεν αγγίζουν το συρτάρι</td></tr>
+<tr><td>7</td><td><b>Σβήνει ολόκληρο.</b> Σύλλογος που δεν το θέλει, διακόπτης στις ΡΥΘΜΙΣΕΙΣ ΤΑΜΕΙΟΥ — όπως οι ΤΑΜΙΕΣ</td></tr>
+<tr><td>8</td><td><b>Ρεύμα στη μέση της καταμέτρησης:</b> γράφεται μία φορά, στο τέλος. Ξαναρχίζει — είναι λεπτά δουλειάς, όχι η βραδιά</td></tr>
+</table>
+</div>
+
+
+<!-- ================= Α ================= -->
+<section class="prop">
+<div class="phead">
+  <div class="badge">Α</div>
+  <h2>ΤΟ ΚΟΥΤΙ</h2>
+  <p class="principle">Κερδίζει η ταχύτητα: το ταμείο δεν αλλάζει ούτε κατά ένα κουμπί. Όλα γίνονται στην αρχή και στο τέλος.</p>
+</div>
+<div class="row">
+<div class="screens">
+
+  <figure>
+    <figcaption><b>1.</b> Άνοιγμα βάρδιας — μία γραμμή παραπάνω, και προσπερνιέται</figcaption>
+    <div class="till">
+      <div class="body">
+        <div class="center">
+          <div class="bigletter">Κ</div>
+          <div class="meta">Κρεάτων<br>Κ0000 · 4 ψηφία<br>Τετάρτη 27 Αυγούστου 2026 · 20:41</div>
+          <div class="floatrow">
+            <div class="lab">ΡΕΣΤΑ ΣΤΟ ΣΥΡΤΑΡΙ</div>
+            <div class="amt">200,00 €</div>
+            <div class="ghostbtn" style="min-width:150px;height:54px">ΑΛΛΑΓΗ</div>
+          </div>
+          <div class="greenbtn">ΑΝΟΙΓΜΑ ΒΑΡΔΙΑΣ</div>
+          <div class="meta" style="font-size:16px">Αν δεν την αγγίξεις, η βάρδια ανοίγει με 0,00 €</div>
+        </div>
+      </div>
+    </div>
+  </figure>
+
+  <figure>
+    <figcaption><b>2.</b> Μέσα στη βραδιά — <b>τίποτα</b>. Η ανάληψη ζει στη ΔΙΑΧΕΙΡΙΣΗ, κάρτα ΤΑΜΕΙΟ</figcaption>
+    <div class="till">
+      <div class="topbar">
+        <div class="letter">Κ</div>
+        <div class="ev">ΠΑΝΗΓΥΡΙ ΑΓΙΟΥ ΝΙΚΟΛΑΟΥ · Κρεάτων</div>
+        <div class="spacer"></div>
+        <div class="who">ΓΙΩΡΓΟΣ</div>
+        <div class="lock">ΚΛΕΙΔ.</div>
+      </div>
+      <div class="body">
+        <div class="grid">
+          <div class="t" style="--c:#B4462F"><span>ΣΟΥΒΛΑΚΙ ΧΟΙΡΙΝΟ</span><em>2,50</em></div>
+          <div class="t" style="--c:#B4462F"><span>ΚΟΝΤΟΣΟΥΒΛΙ</span><em>4,00</em></div>
+          <div class="t" style="--c:#B4462F"><span>ΚΕΜΠΑΠ</span><em>4,00</em></div>
+          <div class="t" style="--c:#B4462F"><span>ΠΙΤΑ ΓΥΡΟ</span><em>3,50</em></div>
+          <div class="t" style="--c:#B4462F"><span>ΜΠΡΙΖΟΛΑ</span><em>7,00</em></div>
+          <div class="t" style="--c:#7A8C3A"><span>ΤΖΑΤΖΙΚΙ</span><em>3,00</em></div>
+          <div class="t" style="--c:#7A8C3A"><span>ΠΑΤΑΤΕΣ</span><em>3,00</em></div>
+          <div class="t" style="--c:#7A8C3A"><span>ΧΩΡΙΑΤΙΚΗ</span><em>5,00</em></div>
+          <div class="t" style="--c:#7A8C3A"><span>ΨΩΜΙ</span><em>0,50</em></div>
+          <div class="t" style="--c:#7A8C3A"><span>ΤΥΡΟΠΙΤΑ</span><em>2,00</em></div>
+          <div class="t" style="--c:#2F6FB4"><span>ΝΕΡΟ</span><em>0,50</em></div>
+          <div class="t" style="--c:#2F6FB4"><span>ΑΝΑΨΥΚΤΙΚΟ</span><em>1,50</em></div>
+          <div class="t" style="--c:#2F6FB4"><span>ΜΠΥΡΑ</span><em>3,00</em></div>
+          <div class="t" style="--c:#2F6FB4"><span>ΚΡΑΣΙ ΚΑΡΑΦΑ</span><em>5,00</em></div>
+          <div class="t" style="--c:#2F6FB4"><span>ΤΣΙΠΟΥΡΟ</span><em>5,00</em></div>
+          <div class="t" style="--c:#8A4FA8"><span>ΓΛΥΚΟ ΤΑΨΙΟΥ</span><em>3,00</em></div>
+          <div class="t" style="--c:#8A4FA8"><span>ΠΑΓΩΤΟ</span><em>2,00</em></div>
+          <div class="t" style="--c:#C98A16"><span>ΕΙΣΟΔΟΣ</span><em>5,00</em></div>
+          <div class="t" style="--c:#C98A16"><span>ΕΙΣΟΔΟΣ ΠΑΙΔΙΚΟ</span><em>3,00</em></div>
+          <div class="t" style="--c:#C98A16"><span>ΚΟΥΠΟΝΙ ΦΑΓΗΤΟΥ</span><em>10,00</em></div>
+        </div>
+        <div class="col">
+          <div class="colhead"><span>ΠΑΡΑΓΓΕΛΙΑ</span><span>3 είδη</span></div>
+          <div class="lines">
+            <div class="ln"><div class="qty">2</div><span>Σουβλάκι χοιρινό</span><em>5,00</em></div>
+            <div class="ln"><div class="qty">1</div><span>Πατάτες</span><em>3,00</em></div>
+            <div class="ln"><div class="qty">3</div><span>Μπύρα</span><em>9,00</em></div>
+          </div>
+          <div class="acts">
+            <div>ΚΕΡΑΣΜΑ</div><div>ΔΙΑΦΟΡΑ</div><div>ΑΝΑΤΥΠΩΣΗ</div><div>ΔΙΟΡΘΩΣΗ</div><div class="red">ΑΚΥΡΩΣΗ ΟΛΩΝ</div>
+          </div>
+          <div class="paybtn"><b>17,00 €</b><i>ΠΛΗΡΩΜΗ</i></div>
+        </div>
+      </div>
+    </div>
+  </figure>
+
+  <figure>
+    <figcaption><b>3.</b> Κλείσιμο — «πόσα έχει το συρτάρι;». Ένα νούμερο, χτισμένο με λεφτά. Τίποτα δεν προδίδει το αναμενόμενο</figcaption>
+    <div class="till">
+      <div class="admbar"><div class="back">ΠΙΣΩ</div><h4>ΚΛΕΙΣΙΜΟ ΒΡΑΔΙΑΣ · ΚΑΤΑΜΕΤΡΗΣΗ</h4></div>
+      <div class="admbody">
+        <div class="meta" style="text-align:left;font-size:18px">Μέτρησε ό,τι υπάρχει στο συρτάρι και χτύπα το εδώ. Το πρόγραμμα δεν σου λέει τι περιμένει.</div>
+        <div class="floatrow" style="min-width:0;justify-content:space-between">
+          <div class="lab">ΜΕΤΡΗΘΗΚΑΝ</div>
+          <div class="amt" style="font-size:56px">1.815,00 €</div>
+          <div class="ghostbtn" style="height:56px;min-width:120px">ΣΒΗΣΕ</div>
+        </div>
+        <div class="board">
+          <div class="coins">
+            <div class="den small" style="--c:#8a7f6a">0,10</div>
+            <div class="den small" style="--c:#8a7f6a">0,20</div>
+            <div class="den small" style="--c:#a89263">0,50</div>
+            <div class="den small" style="--c:#a89263">1 €</div>
+            <div class="den small" style="--c:#a89263">2 €</div>
+            <div class="den small" style="--c:#5c554c">ΠΙΣΩ</div>
+          </div>
+          <div class="notes6">
+            <div class="den" style="--c:#9a9a9a">5 €</div>
+            <div class="den" style="--c:#C0392B">10 €</div>
+            <div class="den" style="--c:#2F6FB4">20 €</div>
+            <div class="den" style="--c:#C98A16">50 €</div>
+            <div class="den" style="--c:#1E9E57">100 €</div>
+            <div class="den" style="--c:#C9B416">200 €</div>
+          </div>
+        </div>
+        <div class="greenbtn" style="width:100%;min-width:0">ΤΕΛΟΣ ΚΑΤΑΜΕΤΡΗΣΗΣ</div>
+      </div>
+    </div>
+  </figure>
+
+  <figure>
+    <figcaption><b>4.</b> Μετά το ΤΕΛΟΣ — η διαφορά, και τι κρατάει το χαρτί</figcaption>
+    <div class="till">
+      <div class="admbar"><div class="back">ΠΙΣΩ</div><h4>ΚΛΕΙΣΙΜΟ ΒΡΑΔΙΑΣ · ΑΝΑΦΟΡΑ Ζ</h4></div>
+      <div class="admbody" style="flex-direction:row;gap:26px">
+        <div style="flex:1;display:flex;flex-direction:column;gap:16px">
+          <div class="result">
+            <div class="rbox"><div class="lab">ΑΝΑΜΕΝΟΜΕΝΟ ΣΤΟ ΣΥΡΤΑΡΙ</div><div class="val">1.847,30 €</div></div>
+            <div class="rbox"><div class="lab">ΜΕΤΡΗΘΗΚΑΝ</div><div class="val">1.815,00 €</div></div>
+            <div class="rbox diff"><div class="lab">ΔΙΑΦΟΡΑ</div><div class="val">−32,30 €</div></div>
+          </div>
+          <div class="meta" style="text-align:left;font-size:17px">
+            Ρέστα έναρξης 200,00 &nbsp;+&nbsp; Πωλήσεις 2.647,30 &nbsp;−&nbsp; Αναλήψεις 1.000,00 &nbsp;=&nbsp; 1.847,30
+          </div>
+          <div class="ghostbtn" style="width:100%;min-width:0;height:56px">ΑΙΤΙΑ ΤΗΣ ΔΙΑΦΟΡΑΣ (προαιρετικά)</div>
+          <div class="spacer"></div>
+          <div class="greenbtn" style="width:100%;min-width:0">ΚΡΑΤΑ ΠΑΤΗΜΕΝΟ ΓΙΑ ΚΛΕΙΣΙΜΟ</div>
+        </div>
+        <div class="paper">
+          <div class="c">ΑΝΑΦΟΡΑ Ζ</div>
+          <div class="c">ΠΑΝΗΓΥΡΙ ΑΓ. ΝΙΚΟΛΑΟΥ</div>
+          <hr>
+          <div class="r"><span>ΣΥΝΟΛΟ</span><span>2.647,30</span></div>
+          <hr>
+          <div class="c">ΤΟ ΣΥΡΤΑΡΙ</div>
+          <div class="r"><span>Ρέστα έναρξης</span><span>200,00</span></div>
+          <div class="r"><span>Αναλήψεις</span><span>-1.000,00</span></div>
+          <div class="r"><span>Αναμενόμενο</span><span>1.847,30</span></div>
+          <div class="r"><span>Μετρήθηκαν</span><span>1.815,00</span></div>
+          <div class="r"><b>ΔΙΑΦΟΡΑ</b><b>-32,30</b></div>
+        </div>
+      </div>
+    </div>
+  </figure>
+
+</div>
+<aside class="notes">
+  <h3>Τι κερδίζεις</h3>
+  <ul>
+    <li class="win">Η οθόνη της πώλησης μένει <b>ακριβώς όπως είναι σήμερα</b>. Καμία νέα ένδειξη, κανένα νέο κουμπί, τίποτα να μάθει ο εθελοντής.</li>
+    <li class="win">Το κλείσιμο είναι <b>ένα νούμερο</b>: πατάς τα λεφτά που μέτρησες και τελείωσες. Δύο λεπτά.</li>
+    <li class="win">Τα ρέστα της έναρξης προσπερνιούνται με μηδέν πατήματα — ο σύλλογος που δεν κρατάει ρέστα δεν βλέπει διαφορά.</li>
+  </ul>
+  <h3>Τι χάνεις</h3>
+  <ul>
+    <li class="lose">Η ανάληψη θέλει <b>έξοδο από το ταμείο</b>: ΔΙΑΧΕΙΡΙΣΗ, PIN, κάρτα ΤΑΜΕΙΟ, ποσό. Με ουρά μπροστά δεν γίνεται — θα την κάνουν αργότερα «από μνήμης», ή καθόλου. Και τότε η διαφορά στο τέλος δεν εξηγείται.</li>
+    <li class="lose">Η διαφορά είναι <b>της βραδιάς</b>. Δεν ξέρεις σε ποιανού τη βάρδια χάθηκαν.</li>
+    <li class="lose">Ένα σύνολο δεν λέει <b>πού</b> έγινε το λάθος. Τα 32 € μπορεί να είναι ένα 50άρικο που δόθηκε αντί για 20άρικο, ή δέκα λάθος ρέστα.</li>
+  </ul>
+  <h3>Το δικαίωμα</h3>
+  <ul><li>Ένα νέο, το 19ο: <b>ΑΝΑΛΗΨΗ ΜΕΤΡΗΤΩΝ</b> — ΚΛΕΙΣΤΟ / ΜΕ PIN / ΑΝΟΙΧΤΟ, όπως τα υπόλοιπα.</li></ul>
+</aside>
+</div>
+</section>
+
+
+<!-- ================= Β ================= -->
+<section class="prop">
+<div class="phead">
+  <div class="badge">Β</div>
+  <h2>ΤΟ ΦΥΛΛΟ</h2>
+  <p class="principle">Κερδίζει το ίχνος: την επόμενη μέρα, το χαρτί εξηγεί κάθε ευρώ — πόσα 50άρικα υπήρχαν και ποιος πήρε τι, με υπογραφή.</p>
+</div>
+<div class="row">
+<div class="screens">
+
+  <figure>
+    <figcaption><b>1.</b> Άνοιγμα — τα ρέστα μετριούνται ανά κουπούρα, όπως θα μετρηθούν και στο τέλος</figcaption>
+    <div class="till">
+      <div class="admbar"><div class="back">ΠΙΣΩ</div><h4>ΑΝΟΙΓΜΑ ΒΑΡΔΙΑΣ · ΡΕΣΤΑ ΕΝΑΡΞΗΣ</h4></div>
+      <div class="admbody">
+        <div class="sheet">
+          <div class="srow" style="--c:#C9B416"><div class="d">200 €</div><div class="x">×</div><div class="n">0</div><div class="eq">0,00</div></div>
+          <div class="srow" style="--c:#a89263"><div class="d">2 €</div><div class="x">×</div><div class="n">10</div><div class="eq">20,00</div></div>
+          <div class="srow" style="--c:#1E9E57"><div class="d">100 €</div><div class="x">×</div><div class="n">0</div><div class="eq">0,00</div></div>
+          <div class="srow" style="--c:#a89263"><div class="d">1 €</div><div class="x">×</div><div class="n">20</div><div class="eq">20,00</div></div>
+          <div class="srow" style="--c:#C98A16"><div class="d">50 €</div><div class="x">×</div><div class="n">1</div><div class="eq">50,00</div></div>
+          <div class="srow" style="--c:#a89263"><div class="d">0,50</div><div class="x">×</div><div class="n">20</div><div class="eq">10,00</div></div>
+          <div class="srow" style="--c:#2F6FB4"><div class="d">20 €</div><div class="x">×</div><div class="n">3</div><div class="eq">60,00</div></div>
+          <div class="srow" style="--c:#8a7f6a"><div class="d">0,20</div><div class="x">×</div><div class="n">0</div><div class="eq">0,00</div></div>
+          <div class="srow" style="--c:#C0392B"><div class="d">10 €</div><div class="x">×</div><div class="n">3</div><div class="eq">30,00</div></div>
+          <div class="srow" style="--c:#8a7f6a"><div class="d">0,10</div><div class="x">×</div><div class="n">0</div><div class="eq">0,00</div></div>
+          <div class="srow" style="--c:#9a9a9a"><div class="d">5 €</div><div class="x">×</div><div class="n">2</div><div class="eq">10,00</div></div>
+          <div class="srow" style="--c:#5c554c"><div class="d" style="width:auto">ΣΥΝΟΛΟ</div><div class="eq" style="font-size:26px;color:#F4F1ED">200,00 €</div></div>
+        </div>
+        <div class="spacer" style="flex:1"></div>
+        <div class="greenbtn" style="width:100%;min-width:0">ΑΝΟΙΓΜΑ ΒΑΡΔΙΑΣ</div>
+      </div>
+    </div>
+  </figure>
+
+  <figure>
+    <figcaption><b>2.</b> Μέσα στη βραδιά — κουμπί <b>ΤΑΜΕΙΟ</b> στην πάνω μπάρα· αιτία από λίστα, PIN, και αποδεικτικό στο χαρτί</figcaption>
+    <div class="till rel">
+      <div class="topbar">
+        <div class="letter">Κ</div>
+        <div class="ev">ΠΑΝΗΓΥΡΙ ΑΓΙΟΥ ΝΙΚΟΛΑΟΥ · Κρεάτων</div>
+        <div class="spacer"></div>
+        <div class="chip"><b>ΤΑΜΕΙΟ</b></div>
+        <div class="who">ΓΙΩΡΓΟΣ</div>
+        <div class="lock">ΚΛΕΙΔ.</div>
+      </div>
+      <div class="body">
+        <div class="grid">
+          <div class="t" style="--c:#B4462F"><span>ΣΟΥΒΛΑΚΙ ΧΟΙΡΙΝΟ</span><em>2,50</em></div>
+          <div class="t" style="--c:#B4462F"><span>ΚΟΝΤΟΣΟΥΒΛΙ</span><em>4,00</em></div>
+          <div class="t" style="--c:#B4462F"><span>ΚΕΜΠΑΠ</span><em>4,00</em></div>
+          <div class="t" style="--c:#B4462F"><span>ΠΙΤΑ ΓΥΡΟ</span><em>3,50</em></div>
+          <div class="t" style="--c:#B4462F"><span>ΜΠΡΙΖΟΛΑ</span><em>7,00</em></div>
+          <div class="t" style="--c:#7A8C3A"><span>ΤΖΑΤΖΙΚΙ</span><em>3,00</em></div>
+          <div class="t" style="--c:#7A8C3A"><span>ΠΑΤΑΤΕΣ</span><em>3,00</em></div>
+          <div class="t" style="--c:#7A8C3A"><span>ΧΩΡΙΑΤΙΚΗ</span><em>5,00</em></div>
+          <div class="t" style="--c:#7A8C3A"><span>ΨΩΜΙ</span><em>0,50</em></div>
+          <div class="t" style="--c:#7A8C3A"><span>ΤΥΡΟΠΙΤΑ</span><em>2,00</em></div>
+          <div class="t" style="--c:#2F6FB4"><span>ΝΕΡΟ</span><em>0,50</em></div>
+          <div class="t" style="--c:#2F6FB4"><span>ΑΝΑΨΥΚΤΙΚΟ</span><em>1,50</em></div>
+          <div class="t" style="--c:#2F6FB4"><span>ΜΠΥΡΑ</span><em>3,00</em></div>
+          <div class="t" style="--c:#2F6FB4"><span>ΚΡΑΣΙ ΚΑΡΑΦΑ</span><em>5,00</em></div>
+          <div class="t" style="--c:#2F6FB4"><span>ΤΣΙΠΟΥΡΟ</span><em>5,00</em></div>
+          <div class="t" style="--c:#8A4FA8"><span>ΓΛΥΚΟ ΤΑΨΙΟΥ</span><em>3,00</em></div>
+          <div class="t" style="--c:#8A4FA8"><span>ΠΑΓΩΤΟ</span><em>2,00</em></div>
+          <div class="t" style="--c:#C98A16"><span>ΕΙΣΟΔΟΣ</span><em>5,00</em></div>
+          <div class="t" style="--c:#C98A16"><span>ΕΙΣΟΔΟΣ ΠΑΙΔΙΚΟ</span><em>3,00</em></div>
+          <div class="t" style="--c:#C98A16"><span>ΚΟΥΠΟΝΙ ΦΑΓΗΤΟΥ</span><em>10,00</em></div>
+        </div>
+        <div class="col">
+          <div class="colhead"><span>ΠΑΡΑΓΓΕΛΙΑ</span><span>0 είδη</span></div>
+          <div class="lines"></div>
+          <div class="acts">
+            <div>ΚΕΡΑΣΜΑ</div><div>ΔΙΑΦΟΡΑ</div><div>ΑΝΑΤΥΠΩΣΗ</div><div>ΔΙΟΡΘΩΣΗ</div><div class="red">ΑΚΥΡΩΣΗ ΟΛΩΝ</div>
+          </div>
+          <div class="paybtn"><b>0,00 €</b><i>ΠΛΗΡΩΜΗ</i></div>
+        </div>
+      </div>
+      <div class="scrim">
+        <div class="dlg">
+          <h5>ΑΝΑΛΗΨΗ ΑΠΟ ΤΟ ΤΑΜΕΙΟ</h5>
+          <div class="two"><div class="out">ΒΓΑΖΩ</div><div>ΒΑΖΩ</div></div>
+          <div class="floatrow" style="min-width:0"><div class="lab">ΠΟΣΟ</div><div class="amt">1.000,00 €</div></div>
+          <div class="hint">Αιτία</div>
+          <div class="reasons">
+            <span class="on">ΣΤΟ ΧΡΗΜΑΤΟΚΙΒΩΤΙΟ</span><span>ΨΙΛΑ ΓΙΑ ΡΕΣΤΑ</span><span>ΠΡΟΜΗΘΕΥΤΗΣ</span><span>ΑΛΛΟ</span>
+          </div>
+          <div class="hint">PIN — η ανάληψη γράφεται στο όνομά σου και τυπώνεται αποδεικτικό για υπογραφή</div>
+          <div class="pinrow"><div>•</div><div>•</div><div>•</div><div>•</div></div>
+          <div class="two"><div>ΑΚΥΡΟ</div><div class="in" style="background:#1E9E57;color:#fff;border-color:#1E9E57">ΚΑΤΑΧΩΡΗΣΗ</div></div>
+        </div>
+      </div>
+    </div>
+  </figure>
+
+  <figure>
+    <figcaption><b>3.</b> Κλείσιμο — το ίδιο φύλλο, τυφλό. Κανένα σύνολο δεν φαίνεται μέχρι το ΤΕΛΟΣ</figcaption>
+    <div class="till">
+      <div class="admbar"><div class="back">ΠΙΣΩ</div><h4>ΚΛΕΙΣΙΜΟ ΒΡΑΔΙΑΣ · ΦΥΛΛΟ ΚΑΤΑΜΕΤΡΗΣΗΣ</h4></div>
+      <div class="admbody">
+        <div class="sheet">
+          <div class="srow" style="--c:#C9B416"><div class="d">200 €</div><div class="x">×</div><div class="n">2</div><div class="eq">400,00</div></div>
+          <div class="srow" style="--c:#a89263"><div class="d">2 €</div><div class="x">×</div><div class="n">37</div><div class="eq">74,00</div></div>
+          <div class="srow" style="--c:#1E9E57"><div class="d">100 €</div><div class="x">×</div><div class="n">4</div><div class="eq">400,00</div></div>
+          <div class="srow" style="--c:#a89263"><div class="d">1 €</div><div class="x">×</div><div class="n">51</div><div class="eq">51,00</div></div>
+          <div class="srow" style="--c:#C98A16"><div class="d">50 €</div><div class="x">×</div><div class="n">9</div><div class="eq">450,00</div></div>
+          <div class="srow" style="--c:#a89263"><div class="d">0,50</div><div class="x">×</div><div class="n">0</div><div class="eq">0,00</div></div>
+          <div class="srow" style="--c:#2F6FB4"><div class="d">20 €</div><div class="x">×</div><div class="n">14</div><div class="eq">280,00</div></div>
+          <div class="srow" style="--c:#8a7f6a"><div class="d">0,20</div><div class="x">×</div><div class="n">0</div><div class="eq">0,00</div></div>
+          <div class="srow" style="--c:#C0392B"><div class="d">10 €</div><div class="x">×</div><div class="n">11</div><div class="eq">110,00</div></div>
+          <div class="srow" style="--c:#8a7f6a"><div class="d">0,10</div><div class="x">×</div><div class="n">0</div><div class="eq">0,00</div></div>
+          <div class="srow" style="--c:#9a9a9a"><div class="d">5 €</div><div class="x">×</div><div class="n">10</div><div class="eq">50,00</div></div>
+          <div class="srow" style="--c:#5c554c"><div class="d" style="width:auto">ΣΥΝΟΛΟ</div><div class="eq" style="font-size:26px;color:#F4F1ED">1.815,00 €</div></div>
+        </div>
+        <div class="spacer" style="flex:1"></div>
+        <div class="greenbtn" style="width:100%;min-width:0">ΤΕΛΟΣ ΚΑΤΑΜΕΤΡΗΣΗΣ</div>
+      </div>
+    </div>
+  </figure>
+
+  <figure>
+    <figcaption><b>4.</b> Το αποτέλεσμα, και το χαρτί που το εξηγεί ολόκληρο</figcaption>
+    <div class="till">
+      <div class="admbar"><div class="back">ΠΙΣΩ</div><h4>ΚΛΕΙΣΙΜΟ ΒΡΑΔΙΑΣ · ΑΝΑΦΟΡΑ Ζ</h4></div>
+      <div class="admbody" style="flex-direction:row;gap:26px">
+        <div style="flex:1;display:flex;flex-direction:column;gap:16px">
+          <div class="result">
+            <div class="rbox"><div class="lab">ΑΝΑΜΕΝΟΜΕΝΟ</div><div class="val">1.847,30 €</div></div>
+            <div class="rbox"><div class="lab">ΜΕΤΡΗΘΗΚΑΝ</div><div class="val">1.815,00 €</div></div>
+            <div class="rbox diff"><div class="lab">ΔΙΑΦΟΡΑ</div><div class="val">−32,30 €</div></div>
+          </div>
+          <div style="background:var(--tile);border:1px solid var(--line);border-radius:12px;padding:16px 18px">
+            <div class="lab" style="font-size:14px;color:var(--muted);letter-spacing:.8px">ΚΙΝΗΣΕΙΣ ΤΟΥ ΣΥΡΤΑΡΙΟΥ</div>
+            <div class="meta" style="text-align:left;font-size:17px;margin-top:10px;line-height:1.9">
+              20:41 · Ρέστα έναρξης · ΓΙΩΡΓΟΣ · +200,00<br>
+              23:12 · Στο χρηματοκιβώτιο · ΓΙΩΡΓΟΣ · −1.000,00<br>
+              00:35 · Ψιλά για ρέστα · ΜΑΡΙΑ · +100,00<br>
+              01:50 · Στο χρηματοκιβώτιο · ΜΑΡΙΑ · −100,00
+            </div>
+          </div>
+          <div class="spacer" style="flex:1"></div>
+          <div class="greenbtn" style="width:100%;min-width:0">ΚΡΑΤΑ ΠΑΤΗΜΕΝΟ ΓΙΑ ΚΛΕΙΣΙΜΟ</div>
+        </div>
+        <div class="paper">
+          <div class="c">ΑΝΑΦΟΡΑ Ζ</div>
+          <hr>
+          <div class="c">ΚΑΤΑΜΕΤΡΗΣΗ</div>
+          <div class="r"><span>200 x 2</span><span>400,00</span></div>
+          <div class="r"><span>100 x 4</span><span>400,00</span></div>
+          <div class="r"><span>50 x 9</span><span>450,00</span></div>
+          <div class="r"><span>20 x 14</span><span>280,00</span></div>
+          <div class="r"><span>10 x 11</span><span>110,00</span></div>
+          <div class="r"><span>5 x 10</span><span>50,00</span></div>
+          <div class="r"><span>Κερματα</span><span>125,00</span></div>
+          <hr>
+          <div class="r"><span>Αναμενομενο</span><span>1.847,30</span></div>
+          <div class="r"><span>Μετρηθηκαν</span><span>1.815,00</span></div>
+          <div class="r"><b>ΔΙΑΦΟΡΑ</b><b>-32,30</b></div>
+          <hr>
+          <div class="r"><span>Αναληψεις</span><span>-1.100,00</span></div>
+          <div class="r"><span>Καταθεσεις</span><span>+100,00</span></div>
+        </div>
+      </div>
+    </div>
+  </figure>
+
+</div>
+<aside class="notes">
+  <h3>Τι κερδίζεις</h3>
+  <ul>
+    <li class="win">Την επόμενη μέρα το χαρτί απαντάει <b>μόνο του</b>: πόσα χαρτονομίσματα κάθε είδους, ποιος σήκωσε, πότε και γιατί. Κανείς δεν χρειάζεται να θυμηθεί τίποτα.</li>
+    <li class="win">Η καταμέτρηση ανά κουπούρα <b>βρίσκει το λάθος</b>: λείπει ένα 50άρικο, δεν λείπουν «32 ευρώ από κάπου».</li>
+    <li class="win">Το αποδεικτικό ανάληψης με υπογραφή είναι ό,τι ζητάει ένα διοικητικό συμβούλιο για να μην τσακωθεί κανείς.</li>
+  </ul>
+  <h3>Τι χάνεις</h3>
+  <ul>
+    <li class="lose">Είναι το <b>πιο αργό</b> από τα τέσσερα: έντεκα πεδία στο άνοιγμα και έντεκα στο κλείσιμο.</li>
+    <li class="lose">Στις 3 τα ξημερώματα, ένα φύλλο με έντεκα κουτάκια γεμίζεται πρόχειρα — και ένα πρόχειρο φύλλο είναι χειρότερο από ένα σύνολο, γιατί <b>φαίνεται</b> ακριβές.</li>
+    <li class="lose">Η διαφορά παραμένει της βραδιάς, όχι του ταμία.</li>
+  </ul>
+  <h3>Το δικαίωμα</h3>
+  <ul><li>Το 19ο, <b>ΑΝΑΛΗΨΗ ΜΕΤΡΗΤΩΝ</b>. Το κουμπί ΤΑΜΕΙΟ στην πάνω μπάρα δεν σχεδιάζεται καν σε όποιον δεν το έχει.</li></ul>
+</aside>
+</div>
+</section>
+
+
+<!-- ================= Γ ================= -->
+<section class="prop">
+<div class="phead">
+  <div class="badge">Γ</div>
+  <h2>Η ΠΑΡΑΔΟΣΗ</h2>
+  <p class="principle">Κερδίζει η προσωπική ευθύνη: το συρτάρι δεν είναι της βραδιάς, είναι κάθε φορά κάποιου. Η διαφορά αποκτάει όνομα.</p>
+</div>
+<div class="row">
+<div class="screens">
+
+  <figure>
+    <figcaption><b>1.</b> Άνοιγμα = η πρώτη παραλαβή. Ο Γιώργος παραλαμβάνει το συρτάρι, δεν «ανοίγει βάρδια»</figcaption>
+    <div class="till">
+      <div class="body">
+        <div class="center">
+          <div class="bigletter">Κ</div>
+          <div class="meta">Κρεάτων · Κ0000 · 4 ψηφία<br>Τετάρτη 27 Αυγούστου 2026 · 20:41</div>
+          <div class="floatrow" style="flex-direction:column;align-items:stretch;gap:12px">
+            <div class="lab" style="text-align:center">Ο ΓΙΩΡΓΟΣ ΠΑΡΑΛΑΜΒΑΝΕΙ ΤΟ ΣΥΡΤΑΡΙ ΜΕ</div>
+            <div class="amt" style="text-align:center;font-size:56px">200,00 €</div>
+            <div class="board">
+              <div class="notes6">
+                <div class="den small" style="--c:#9a9a9a">5 €</div>
+                <div class="den small" style="--c:#C0392B">10 €</div>
+                <div class="den small" style="--c:#2F6FB4">20 €</div>
+                <div class="den small" style="--c:#C98A16">50 €</div>
+                <div class="den small" style="--c:#1E9E57">100 €</div>
+                <div class="den small" style="--c:#a89263">ΚΕΡΜΑΤΑ</div>
+              </div>
+            </div>
+          </div>
+          <div class="greenbtn">ΠΑΡΑΛΑΜΒΑΝΩ ΚΑΙ ΑΝΟΙΓΩ</div>
+        </div>
+      </div>
+    </div>
+  </figure>
+
+  <figure>
+    <figcaption><b>2.</b> Αλλαγή ταμία — το ΚΛΕΙΔΩΜΑ που ήδη υπάρχει γίνεται παράδοση. Εδώ ζει και η ανάληψη</figcaption>
+    <div class="till rel">
+      <div class="topbar">
+        <div class="letter">Κ</div>
+        <div class="ev">ΠΑΝΗΓΥΡΙ ΑΓΙΟΥ ΝΙΚΟΛΑΟΥ · Κρεάτων</div>
+        <div class="spacer"></div>
+        <div class="who">ΓΙΩΡΓΟΣ</div>
+        <div class="lock">ΚΛΕΙΔ.</div>
+      </div>
+      <div class="body">
+        <div class="grid">
+          <div class="t" style="--c:#B4462F"><span>ΣΟΥΒΛΑΚΙ ΧΟΙΡΙΝΟ</span><em>2,50</em></div>
+          <div class="t" style="--c:#B4462F"><span>ΚΟΝΤΟΣΟΥΒΛΙ</span><em>4,00</em></div>
+          <div class="t" style="--c:#B4462F"><span>ΚΕΜΠΑΠ</span><em>4,00</em></div>
+          <div class="t" style="--c:#B4462F"><span>ΠΙΤΑ ΓΥΡΟ</span><em>3,50</em></div>
+          <div class="t" style="--c:#B4462F"><span>ΜΠΡΙΖΟΛΑ</span><em>7,00</em></div>
+          <div class="t" style="--c:#7A8C3A"><span>ΤΖΑΤΖΙΚΙ</span><em>3,00</em></div>
+          <div class="t" style="--c:#7A8C3A"><span>ΠΑΤΑΤΕΣ</span><em>3,00</em></div>
+          <div class="t" style="--c:#7A8C3A"><span>ΧΩΡΙΑΤΙΚΗ</span><em>5,00</em></div>
+          <div class="t" style="--c:#7A8C3A"><span>ΨΩΜΙ</span><em>0,50</em></div>
+          <div class="t" style="--c:#7A8C3A"><span>ΤΥΡΟΠΙΤΑ</span><em>2,00</em></div>
+          <div class="t" style="--c:#2F6FB4"><span>ΝΕΡΟ</span><em>0,50</em></div>
+          <div class="t" style="--c:#2F6FB4"><span>ΑΝΑΨΥΚΤΙΚΟ</span><em>1,50</em></div>
+          <div class="t" style="--c:#2F6FB4"><span>ΜΠΥΡΑ</span><em>3,00</em></div>
+          <div class="t" style="--c:#2F6FB4"><span>ΚΡΑΣΙ ΚΑΡΑΦΑ</span><em>5,00</em></div>
+          <div class="t" style="--c:#2F6FB4"><span>ΤΣΙΠΟΥΡΟ</span><em>5,00</em></div>
+          <div class="t" style="--c:#8A4FA8"><span>ΓΛΥΚΟ ΤΑΨΙΟΥ</span><em>3,00</em></div>
+          <div class="t" style="--c:#8A4FA8"><span>ΠΑΓΩΤΟ</span><em>2,00</em></div>
+          <div class="t" style="--c:#C98A16"><span>ΕΙΣΟΔΟΣ</span><em>5,00</em></div>
+          <div class="t" style="--c:#C98A16"><span>ΕΙΣΟΔΟΣ ΠΑΙΔΙΚΟ</span><em>3,00</em></div>
+          <div class="t" style="--c:#C98A16"><span>ΚΟΥΠΟΝΙ ΦΑΓΗΤΟΥ</span><em>10,00</em></div>
+        </div>
+        <div class="col">
+          <div class="colhead"><span>ΠΑΡΑΓΓΕΛΙΑ</span><span>0 είδη</span></div>
+          <div class="lines"></div>
+          <div class="acts">
+            <div>ΚΕΡΑΣΜΑ</div><div>ΔΙΑΦΟΡΑ</div><div>ΑΝΑΤΥΠΩΣΗ</div><div>ΔΙΟΡΘΩΣΗ</div><div class="red">ΑΚΥΡΩΣΗ ΟΛΩΝ</div>
+          </div>
+          <div class="paybtn"><b>0,00 €</b><i>ΠΛΗΡΩΜΗ</i></div>
+        </div>
+      </div>
+      <div class="scrim">
+        <div class="dlg" style="width:760px">
+          <h5>ΚΛΕΙΔΩΜΑ — ΠΑΡΑΔΟΣΗ ΣΥΡΤΑΡΙΟΥ</h5>
+          <div class="hint">Ο ΓΙΩΡΓΟΣ παραδίδει. Μέτρησε ό,τι υπάρχει τώρα στο συρτάρι.</div>
+          <div class="floatrow" style="min-width:0"><div class="lab">ΜΕΤΡΗΘΗΚΑΝ</div><div class="amt">1.240,00 €</div></div>
+          <div class="board">
+            <div class="notes6">
+              <div class="den small" style="--c:#9a9a9a">5 €</div>
+              <div class="den small" style="--c:#C0392B">10 €</div>
+              <div class="den small" style="--c:#2F6FB4">20 €</div>
+              <div class="den small" style="--c:#C98A16">50 €</div>
+              <div class="den small" style="--c:#1E9E57">100 €</div>
+              <div class="den small" style="--c:#a89263">ΚΕΡΜΑΤΑ</div>
+            </div>
+          </div>
+          <div class="two">
+            <div class="out">ΒΓΑΖΩ ΧΡΗΜΑΤΑ ΠΡΙΝ ΠΑΡΑΔΩΣΩ</div>
+            <div class="in" style="background:#1E9E57;color:#fff;border-color:#1E9E57">ΠΑΡΑΔΙΔΩ</div>
+          </div>
+          <div class="hint">Ο επόμενος ταμίας θα δει το ποσό και θα πατήσει ΠΑΡΑΛΑΜΒΑΝΩ. Ό,τι λείπει μένει στο όνομα του ΓΙΩΡΓΟΥ.</div>
+        </div>
+      </div>
+    </div>
+  </figure>
+
+  <figure>
+    <figcaption><b>3.</b> Κλείσιμο — η τελευταία παράδοση, στον σύλλογο</figcaption>
+    <div class="till">
+      <div class="admbar"><div class="back">ΠΙΣΩ</div><h4>ΚΛΕΙΣΙΜΟ ΒΡΑΔΙΑΣ · ΤΕΛΕΥΤΑΙΑ ΠΑΡΑΔΟΣΗ</h4></div>
+      <div class="admbody">
+        <div class="meta" style="text-align:left;font-size:18px">Η ΜΑΡΙΑ κρατάει το συρτάρι από τις 00:20. Μέτρησέ το.</div>
+        <div class="floatrow" style="min-width:0"><div class="lab">ΜΕΤΡΗΘΗΚΑΝ</div><div class="amt" style="font-size:56px">1.815,00 €</div><div class="ghostbtn" style="height:56px;min-width:120px">ΣΒΗΣΕ</div></div>
+        <div class="board">
+          <div class="coins">
+            <div class="den small" style="--c:#8a7f6a">0,10</div>
+            <div class="den small" style="--c:#8a7f6a">0,20</div>
+            <div class="den small" style="--c:#a89263">0,50</div>
+            <div class="den small" style="--c:#a89263">1 €</div>
+            <div class="den small" style="--c:#a89263">2 €</div>
+            <div class="den small" style="--c:#5c554c">ΠΙΣΩ</div>
+          </div>
+          <div class="notes6">
+            <div class="den" style="--c:#9a9a9a">5 €</div>
+            <div class="den" style="--c:#C0392B">10 €</div>
+            <div class="den" style="--c:#2F6FB4">20 €</div>
+            <div class="den" style="--c:#C98A16">50 €</div>
+            <div class="den" style="--c:#1E9E57">100 €</div>
+            <div class="den" style="--c:#C9B416">200 €</div>
+          </div>
+        </div>
+        <div class="greenbtn" style="width:100%;min-width:0">ΤΕΛΟΣ — ΠΑΡΑΔΟΣΗ ΣΤΟΝ ΣΥΛΛΟΓΟ</div>
+      </div>
+    </div>
+  </figure>
+
+  <figure>
+    <figcaption><b>4.</b> Το αποτέλεσμα — η βραδιά είναι μια αλυσίδα, και κάθε κρίκος έχει όνομα</figcaption>
+    <div class="till">
+      <div class="admbar"><div class="back">ΠΙΣΩ</div><h4>ΚΛΕΙΣΙΜΟ ΒΡΑΔΙΑΣ · ΑΝΑΦΟΡΑ Ζ</h4></div>
+      <div class="admbody" style="flex-direction:row;gap:26px">
+        <div style="flex:1;display:flex;flex-direction:column;gap:16px">
+          <div class="result">
+            <div class="rbox diff"><div class="lab">ΔΙΑΦΟΡΑ ΒΡΑΔΙΑΣ</div><div class="val">−32,30 €</div></div>
+            <div class="rbox"><div class="lab">ΠΑΡΑΔΟΣΕΙΣ</div><div class="val">3</div></div>
+          </div>
+          <div style="background:var(--tile);border:1px solid var(--line);border-radius:12px;padding:16px 18px">
+            <div style="font-size:14px;color:var(--muted);letter-spacing:.8px">ΑΝΑ ΤΑΜΙΑ</div>
+            <div class="meta" style="text-align:left;font-size:17px;margin-top:12px;line-height:2">
+              ΓΙΩΡΓΟΣ · 20:41 → 00:20 · παρέδωσε 1.240,00 · <span style="color:#7BD8A4">διαφορά 0,00</span><br>
+              ΜΑΡΙΑ · 00:20 → 02:10 · παρέδωσε 1.815,00 · <span style="color:#F0907C">διαφορά −32,30</span>
+            </div>
+          </div>
+          <div class="spacer" style="flex:1"></div>
+          <div class="greenbtn" style="width:100%;min-width:0">ΚΡΑΤΑ ΠΑΤΗΜΕΝΟ ΓΙΑ ΚΛΕΙΣΙΜΟ</div>
+        </div>
+        <div class="paper">
+          <div class="c">ΑΝΑΦΟΡΑ Ζ</div>
+          <hr>
+          <div class="c">ΤΟ ΣΥΡΤΑΡΙ</div>
+          <div class="r"><span>Ρεστα εναρξης</span><span>200,00</span></div>
+          <div class="r"><span>Αναληψεις</span><span>-1.000,00</span></div>
+          <div class="r"><span>Αναμενομενο</span><span>1.847,30</span></div>
+          <div class="r"><span>Μετρηθηκαν</span><span>1.815,00</span></div>
+          <div class="r"><b>ΔΙΑΦΟΡΑ</b><b>-32,30</b></div>
+          <hr>
+          <div class="c">ΑΝΑ ΤΑΜΙΑ</div>
+          <div class="r"><span>ΓΙΩΡΓΟΣ</span><span>0,00</span></div>
+          <div class="r"><span>ΜΑΡΙΑ</span><span>-32,30</span></div>
+        </div>
+      </div>
+    </div>
+  </figure>
+
+</div>
+<aside class="notes">
+  <h3>Τι κερδίζεις</h3>
+  <ul>
+    <li class="win">Η διαφορά έχει <b>όνομα και ώρα</b>. Είναι το μόνο από τα τέσσερα που απαντάει «ποιος».</li>
+    <li class="win">Το λάθος βρίσκεται <b>την ώρα που γίνεται</b>, όχι στις 3 τα ξημερώματα: αν λείπουν λεφτά στις 00:20, ψάχνεις τρεις ώρες, όχι έξι.</li>
+    <li class="win">Δεν προσθέτει κουμπί πουθενά — μπαίνει μέσα στο <b>ΚΛΕΙΔΩΜΑ</b> που ήδη υπάρχει και ήδη πατιέται σε κάθε αλλαγή.</li>
+    <li class="win">Ο εθελοντής που φεύγει στη 1 φεύγει <b>ξεκάθαρος</b>. Αυτό το θέλουν οι ίδιοι πιο πολύ από τον σύλλογο.</li>
+  </ul>
+  <h3>Τι χάνεις</h3>
+  <ul>
+    <li class="lose">Κάθε αλλαγή ταμία γίνεται <b>τελετή δύο λεπτών</b>. Με ουρά μπροστά, θα την προσπερνούν: «κράτα εσύ, θα το κάνουμε μετά» — και τότε η αλυσίδα σπάει και δεν αξίζει τίποτα.</li>
+    <li class="lose">Δύο ταμίες που δουλεύουν <b>εναλλάξ στο ίδιο συρτάρι</b> (πολύ συνηθισμένο) δεν χωράνε σε αυτό το μοντέλο.</li>
+    <li class="lose">Το πιο βαρύ σε κώδικα και σε κανόνες από τα τέσσερα.</li>
+  </ul>
+  <h3>Το δικαίωμα</h3>
+  <ul><li>Το 19ο, <b>ΑΝΑΛΗΨΗ ΜΕΤΡΗΤΩΝ</b>, μέσα στην παράδοση. Η καταμέτρηση της παράδοσης δεν θέλει δικαίωμα — την κάνει όποιος κρατάει το συρτάρι.</li></ul>
+</aside>
+</div>
+</section>
+
+
+<!-- ================= Δ ================= -->
+<section class="prop">
+<div class="phead">
+  <div class="badge">Δ</div>
+  <h2>ΤΟ ΣΥΡΤΑΡΙ ΕΙΝΑΙ ΠΑΝΤΑ ΟΡΑΤΟ</h2>
+  <p class="principle">Κερδίζει η ροή: τα μετρητά είναι ζωντανό νούμερο μέσα στη βραδιά, όχι τελετή στο τέλος. Η ανάληψη γίνεται με δύο πατήματα, την ώρα που πρέπει.</p>
+</div>
+<div class="row">
+<div class="screens">
+
+  <figure>
+    <figcaption><b>1.</b> Άνοιγμα — τα ρέστα χτίζονται με λεφτά, όχι με πληκτρολόγιο</figcaption>
+    <div class="till">
+      <div class="body">
+        <div class="center">
+          <div class="bigletter" style="font-size:90px">Κ</div>
+          <div class="meta">Κρεάτων · Κ0000 · 4 ψηφία · Τετάρτη 27 Αυγούστου 2026 · 20:41</div>
+          <div class="floatrow" style="flex-direction:column;align-items:stretch;gap:14px;min-width:760px">
+            <div class="lab" style="text-align:center">ΡΕΣΤΑ ΣΤΟ ΣΥΡΤΑΡΙ</div>
+            <div class="amt" style="text-align:center;font-size:64px">200,00 €</div>
+            <div class="board">
+              <div class="notes6">
+                <div class="den" style="--c:#9a9a9a">5 €</div>
+                <div class="den" style="--c:#C0392B">10 €</div>
+                <div class="den" style="--c:#2F6FB4">20 €</div>
+                <div class="den" style="--c:#C98A16">50 €</div>
+                <div class="den" style="--c:#1E9E57">100 €</div>
+                <div class="den" style="--c:#a89263">ΚΕΡΜΑΤΑ</div>
+              </div>
+            </div>
+          </div>
+          <div class="greenbtn">ΑΝΟΙΓΜΑ ΒΑΡΔΙΑΣ</div>
+        </div>
+      </div>
+    </div>
+  </figure>
+
+  <figure>
+    <figcaption><b>2.</b> Όλη τη βραδιά — ένα τσιπάκι στην πάνω μπάρα: <b>ΣΥΡΤΑΡΙ 1.240 €</b>. Ο υπεύθυνος το βλέπει από τρία μέτρα</figcaption>
+    <div class="till">
+      <div class="topbar">
+        <div class="letter">Κ</div>
+        <div class="ev">ΠΑΝΗΓΥΡΙ ΑΓΙΟΥ ΝΙΚΟΛΑΟΥ · Κρεάτων</div>
+        <div class="spacer"></div>
+        <div class="chip live">ΣΥΡΤΑΡΙ <b>1.240 €</b></div>
+        <div class="who">ΓΙΩΡΓΟΣ</div>
+        <div class="lock">ΚΛΕΙΔ.</div>
+      </div>
+      <div class="body">
+        <div class="grid">
+          <div class="t" style="--c:#B4462F"><span>ΣΟΥΒΛΑΚΙ ΧΟΙΡΙΝΟ</span><em>2,50</em></div>
+          <div class="t" style="--c:#B4462F"><span>ΚΟΝΤΟΣΟΥΒΛΙ</span><em>4,00</em></div>
+          <div class="t" style="--c:#B4462F"><span>ΚΕΜΠΑΠ</span><em>4,00</em></div>
+          <div class="t" style="--c:#B4462F"><span>ΠΙΤΑ ΓΥΡΟ</span><em>3,50</em></div>
+          <div class="t" style="--c:#B4462F"><span>ΜΠΡΙΖΟΛΑ</span><em>7,00</em></div>
+          <div class="t" style="--c:#7A8C3A"><span>ΤΖΑΤΖΙΚΙ</span><em>3,00</em></div>
+          <div class="t" style="--c:#7A8C3A"><span>ΠΑΤΑΤΕΣ</span><em>3,00</em></div>
+          <div class="t" style="--c:#7A8C3A"><span>ΧΩΡΙΑΤΙΚΗ</span><em>5,00</em></div>
+          <div class="t" style="--c:#7A8C3A"><span>ΨΩΜΙ</span><em>0,50</em></div>
+          <div class="t" style="--c:#7A8C3A"><span>ΤΥΡΟΠΙΤΑ</span><em>2,00</em></div>
+          <div class="t" style="--c:#2F6FB4"><span>ΝΕΡΟ</span><em>0,50</em></div>
+          <div class="t" style="--c:#2F6FB4"><span>ΑΝΑΨΥΚΤΙΚΟ</span><em>1,50</em></div>
+          <div class="t" style="--c:#2F6FB4"><span>ΜΠΥΡΑ</span><em>3,00</em></div>
+          <div class="t" style="--c:#2F6FB4"><span>ΚΡΑΣΙ ΚΑΡΑΦΑ</span><em>5,00</em></div>
+          <div class="t" style="--c:#2F6FB4"><span>ΤΣΙΠΟΥΡΟ</span><em>5,00</em></div>
+          <div class="t" style="--c:#8A4FA8"><span>ΓΛΥΚΟ ΤΑΨΙΟΥ</span><em>3,00</em></div>
+          <div class="t" style="--c:#8A4FA8"><span>ΠΑΓΩΤΟ</span><em>2,00</em></div>
+          <div class="t" style="--c:#C98A16"><span>ΕΙΣΟΔΟΣ</span><em>5,00</em></div>
+          <div class="t" style="--c:#C98A16"><span>ΕΙΣΟΔΟΣ ΠΑΙΔΙΚΟ</span><em>3,00</em></div>
+          <div class="t" style="--c:#C98A16"><span>ΚΟΥΠΟΝΙ ΦΑΓΗΤΟΥ</span><em>10,00</em></div>
+        </div>
+        <div class="col">
+          <div class="colhead"><span>ΠΑΡΑΓΓΕΛΙΑ</span><span>3 είδη</span></div>
+          <div class="lines">
+            <div class="ln"><div class="qty">2</div><span>Σουβλάκι χοιρινό</span><em>5,00</em></div>
+            <div class="ln"><div class="qty">1</div><span>Πατάτες</span><em>3,00</em></div>
+            <div class="ln"><div class="qty">3</div><span>Μπύρα</span><em>9,00</em></div>
+          </div>
+          <div class="acts">
+            <div>ΚΕΡΑΣΜΑ</div><div>ΔΙΑΦΟΡΑ</div><div>ΑΝΑΤΥΠΩΣΗ</div><div>ΔΙΟΡΘΩΣΗ</div><div class="red">ΑΚΥΡΩΣΗ ΟΛΩΝ</div>
+          </div>
+          <div class="paybtn"><b>17,00 €</b><i>ΠΛΗΡΩΜΗ</i></div>
+        </div>
+      </div>
+    </div>
+  </figure>
+
+  <figure>
+    <figcaption><b>3.</b> Ένα πάτημα στο τσιπάκι — ανάληψη με λεφτά, δύο πατήματα και τέλος</figcaption>
+    <div class="till rel">
+      <div class="topbar">
+        <div class="letter">Κ</div>
+        <div class="ev">ΠΑΝΗΓΥΡΙ ΑΓΙΟΥ ΝΙΚΟΛΑΟΥ · Κρεάτων</div>
+        <div class="spacer"></div>
+        <div class="chip live">ΣΥΡΤΑΡΙ <b>1.240 €</b></div>
+        <div class="who">ΓΙΩΡΓΟΣ</div>
+        <div class="lock">ΚΛΕΙΔ.</div>
+      </div>
+      <div class="body">
+        <div class="grid">
+          <div class="t" style="--c:#B4462F"><span>ΣΟΥΒΛΑΚΙ ΧΟΙΡΙΝΟ</span><em>2,50</em></div>
+          <div class="t" style="--c:#B4462F"><span>ΚΟΝΤΟΣΟΥΒΛΙ</span><em>4,00</em></div>
+          <div class="t" style="--c:#B4462F"><span>ΚΕΜΠΑΠ</span><em>4,00</em></div>
+          <div class="t" style="--c:#B4462F"><span>ΠΙΤΑ ΓΥΡΟ</span><em>3,50</em></div>
+          <div class="t" style="--c:#B4462F"><span>ΜΠΡΙΖΟΛΑ</span><em>7,00</em></div>
+          <div class="t" style="--c:#7A8C3A"><span>ΤΖΑΤΖΙΚΙ</span><em>3,00</em></div>
+          <div class="t" style="--c:#7A8C3A"><span>ΠΑΤΑΤΕΣ</span><em>3,00</em></div>
+          <div class="t" style="--c:#7A8C3A"><span>ΧΩΡΙΑΤΙΚΗ</span><em>5,00</em></div>
+          <div class="t" style="--c:#7A8C3A"><span>ΨΩΜΙ</span><em>0,50</em></div>
+          <div class="t" style="--c:#7A8C3A"><span>ΤΥΡΟΠΙΤΑ</span><em>2,00</em></div>
+          <div class="t" style="--c:#2F6FB4"><span>ΝΕΡΟ</span><em>0,50</em></div>
+          <div class="t" style="--c:#2F6FB4"><span>ΑΝΑΨΥΚΤΙΚΟ</span><em>1,50</em></div>
+          <div class="t" style="--c:#2F6FB4"><span>ΜΠΥΡΑ</span><em>3,00</em></div>
+          <div class="t" style="--c:#2F6FB4"><span>ΚΡΑΣΙ ΚΑΡΑΦΑ</span><em>5,00</em></div>
+          <div class="t" style="--c:#2F6FB4"><span>ΤΣΙΠΟΥΡΟ</span><em>5,00</em></div>
+          <div class="t" style="--c:#8A4FA8"><span>ΓΛΥΚΟ ΤΑΨΙΟΥ</span><em>3,00</em></div>
+          <div class="t" style="--c:#8A4FA8"><span>ΠΑΓΩΤΟ</span><em>2,00</em></div>
+          <div class="t" style="--c:#C98A16"><span>ΕΙΣΟΔΟΣ</span><em>5,00</em></div>
+          <div class="t" style="--c:#C98A16"><span>ΕΙΣΟΔΟΣ ΠΑΙΔΙΚΟ</span><em>3,00</em></div>
+          <div class="t" style="--c:#C98A16"><span>ΚΟΥΠΟΝΙ ΦΑΓΗΤΟΥ</span><em>10,00</em></div>
+        </div>
+        <div class="col">
+          <div class="colhead"><span>ΠΑΡΑΓΓΕΛΙΑ</span><span>0 είδη</span></div>
+          <div class="lines"></div>
+          <div class="acts">
+            <div>ΚΕΡΑΣΜΑ</div><div>ΔΙΑΦΟΡΑ</div><div>ΑΝΑΤΥΠΩΣΗ</div><div>ΔΙΟΡΘΩΣΗ</div><div class="red">ΑΚΥΡΩΣΗ ΟΛΩΝ</div>
+          </div>
+          <div class="paybtn"><b>0,00 €</b><i>ΠΛΗΡΩΜΗ</i></div>
+        </div>
+      </div>
+      <div class="scrim">
+        <div class="dlg" style="width:720px">
+          <h5>ΤΟ ΣΥΡΤΑΡΙ · 1.240,00 €</h5>
+          <div class="two"><div class="out">ΒΓΑΖΩ</div><div class="in">ΒΑΖΩ</div></div>
+          <div class="floatrow" style="min-width:0"><div class="lab">ΠΟΣΟ</div><div class="amt">1.000,00 €</div></div>
+          <div class="board">
+            <div class="notes6">
+              <div class="den" style="--c:#9a9a9a">5 €</div>
+              <div class="den" style="--c:#C0392B">10 €</div>
+              <div class="den" style="--c:#2F6FB4">20 €</div>
+              <div class="den" style="--c:#C98A16">50 €</div>
+              <div class="den" style="--c:#1E9E57">100 €</div>
+              <div class="den" style="--c:#a89263">ΚΕΡΜΑΤΑ</div>
+            </div>
+          </div>
+          <div class="hint">Γράφεται στο όνομα του ΓΙΩΡΓΟΥ, με την ώρα. Το τσιπάκι θα δείξει 240 €.</div>
+          <div class="two"><div>ΑΚΥΡΟ</div><div class="in" style="background:#1E9E57;color:#fff;border-color:#1E9E57">ΚΑΤΑΧΩΡΗΣΗ</div></div>
+        </div>
+      </div>
+    </div>
+  </figure>
+
+  <figure>
+    <figcaption><b>4.</b> Κλείσιμο — τυφλή καταμέτρηση, και το τσιπάκι σβήνει μέχρι να πατηθεί το ΤΕΛΟΣ</figcaption>
+    <div class="till">
+      <div class="admbar"><div class="back">ΠΙΣΩ</div><h4>ΚΛΕΙΣΙΜΟ ΒΡΑΔΙΑΣ · ΚΑΤΑΜΕΤΡΗΣΗ</h4></div>
+      <div class="admbody" style="flex-direction:row;gap:26px">
+        <div style="flex:1;display:flex;flex-direction:column;gap:14px">
+          <div class="floatrow" style="min-width:0"><div class="lab">ΜΕΤΡΗΘΗΚΑΝ</div><div class="amt" style="font-size:52px">1.815,00 €</div></div>
+          <div class="board">
+            <div class="coins">
+              <div class="den small" style="--c:#8a7f6a">0,10</div>
+              <div class="den small" style="--c:#8a7f6a">0,20</div>
+              <div class="den small" style="--c:#a89263">0,50</div>
+              <div class="den small" style="--c:#a89263">1 €</div>
+              <div class="den small" style="--c:#a89263">2 €</div>
+              <div class="den small" style="--c:#5c554c">ΠΙΣΩ</div>
+            </div>
+            <div class="notes6">
+              <div class="den" style="--c:#9a9a9a">5 €</div>
+              <div class="den" style="--c:#C0392B">10 €</div>
+              <div class="den" style="--c:#2F6FB4">20 €</div>
+              <div class="den" style="--c:#C98A16">50 €</div>
+              <div class="den" style="--c:#1E9E57">100 €</div>
+              <div class="den" style="--c:#C9B416">200 €</div>
+            </div>
+          </div>
+          <div class="greenbtn" style="width:100%;min-width:0">ΤΕΛΟΣ ΚΑΤΑΜΕΤΡΗΣΗΣ</div>
+        </div>
+        <div style="width:420px;display:flex;flex-direction:column;gap:12px">
+          <div class="rbox" style="opacity:.35"><div class="lab">ΑΝΑΜΕΝΟΜΕΝΟ</div><div class="val">— — —</div></div>
+          <div class="rbox" style="opacity:.35"><div class="lab">ΔΙΑΦΟΡΑ</div><div class="val">— — —</div></div>
+          <div class="meta" style="text-align:left;font-size:16px">Φαίνονται μόνο αφού πατηθεί το ΤΕΛΟΣ. Μέχρι τότε τίποτα στην οθόνη δεν λέει τι περιμένει το πρόγραμμα — ούτε το τσιπάκι της πάνω μπάρας.</div>
+          <div class="spacer" style="flex:1"></div>
+          <div style="background:var(--tile);border:1px solid var(--line);border-radius:12px;padding:16px 18px">
+            <div style="font-size:14px;color:var(--muted);letter-spacing:.8px">ΟΙ ΚΙΝΗΣΕΙΣ ΤΗΣ ΒΡΑΔΙΑΣ</div>
+            <div class="meta" style="text-align:left;font-size:16px;margin-top:10px;line-height:1.85">
+              20:41 · Ρέστα · ΓΙΩΡΓΟΣ · +200,00<br>
+              23:12 · Έβγαλε · ΓΙΩΡΓΟΣ · −1.000,00<br>
+              00:35 · Έβαλε ψιλά · ΜΑΡΙΑ · +100,00<br>
+              01:50 · Έβγαλε · ΜΑΡΙΑ · −100,00
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </figure>
+
+</div>
+<aside class="notes">
+  <h3>Τι κερδίζεις</h3>
+  <ul>
+    <li class="win">Η ανάληψη γίνεται <b>την ώρα που πρέπει</b>, χωρίς να βγει κανείς από το ταμείο: πατάς το τσιπάκι, χτυπάς τα λεφτά, τέλος. Αυτό είναι η διαφορά ανάμεσα σε ένα ίχνος που υπάρχει και σε ένα που θα «γραφτεί μετά».</li>
+    <li class="win">Ο υπεύθυνος <b>βλέπει</b> πότε φούσκωσε το συρτάρι και σηκώνει πριν γίνει πρόβλημα — αυτό είναι ασφάλεια, όχι λογιστική.</li>
+    <li class="win">Το κλείσιμο μένει ένα νούμερο, δύο λεπτά.</li>
+    <li class="win">Ένα νούμερο που φαίνεται όλη νύχτα είναι <b>έλεγχος από μόνο του</b>: μια απόκλιση φαίνεται νωρίς, όχι στις 3.</li>
+  </ul>
+  <h3>Τι χάνεις</h3>
+  <ul>
+    <li class="lose">Το ποσό είναι <b>ορατό και σε όποιον στέκεται απέναντι</b>. Στη μία τα ξημερώματα, σε ένα πανηγύρι, αυτό δεν το θέλουν όλοι. (Λύνεται με διακόπτη «να φαίνεται το ποσό: ναι / όχι» — με όχι, το τσιπάκι λέει μόνο ΤΑΜΕΙΟ και το ποσό φαίνεται αφού πατηθεί.)</li>
+    <li class="lose">Μια ένδειξη παραπάνω σε μια οθόνη που είναι σχεδιασμένη να μην έχει τίποτα περιττό.</li>
+    <li class="lose">Η διαφορά μένει <b>της βραδιάς</b>, όχι του ταμία — μόνο οι αναλήψεις έχουν όνομα.</li>
+  </ul>
+  <h3>Το δικαίωμα</h3>
+  <ul><li>Το 19ο, <b>ΑΝΑΛΗΨΗ ΜΕΤΡΗΤΩΝ</b>. Χωρίς αυτό, το τσιπάκι δείχνει το ποσό αλλά δεν ανοίγει τίποτα.</li></ul>
+</aside>
+</div>
+</section>
+
+
+<!-- ================= σύγκριση ================= -->
+<section class="final">
+<h2>Ποια κερδίζει σε τι</h2>
+<table class="cmp">
+<tr><th></th><th>Α · ΤΟ ΚΟΥΤΙ</th><th>Β · ΤΟ ΦΥΛΛΟ</th><th>Γ · Η ΠΑΡΑΔΟΣΗ</th><th>Δ · ΤΟ ΣΥΡΤΑΡΙ</th></tr>
+<tr><td>Ταχύτητα στο κλείσιμο</td><td>Ένα νούμερο · <b>2 λεπτά</b></td><td>Έντεκα πεδία · 6-8 λεπτά</td><td>Ένα νούμερο ανά παράδοση</td><td>Ένα νούμερο · <b>2 λεπτά</b></td></tr>
+<tr><td>Θα γίνει όντως η ανάληψη;</td><td>Δύσκολα — θέλει έξοδο από το ταμείο</td><td>Ναι, από την πάνω μπάρα</td><td>Ναι, στην παράδοση</td><td><b>Ναι, δύο πατήματα</b></td></tr>
+<tr><td>Ποιος ευθύνεται</td><td>Κανείς — η βραδιά</td><td>Η βραδιά</td><td><b>Ο ταμίας, με ώρα</b></td><td>Η βραδιά· οι αναλήψεις με όνομα</td></tr>
+<tr><td>Βρίσκεις πού έγινε το λάθος</td><td>Όχι</td><td><b>Ναι — ανά κουπούρα</b></td><td>Ναι — σε ποια βάρδια</td><td>Ναι — σε ποια ώρα</td></tr>
+<tr><td>Τι μαθαίνει ο εθελοντής</td><td><b>Τίποτα</b></td><td>Ένα κουμπί</td><td>Μια συνήθεια σε κάθε αλλαγή</td><td>Ένα τσιπάκι</td></tr>
+<tr><td>Κίνδυνος να το προσπεράσουν</td><td>Χαμηλός (δεν υπάρχει τίποτα)</td><td>Μεσαίος (το φύλλο γεμίζεται πρόχειρα)</td><td><b>Υψηλός</b> (με ουρά, «θα το κάνουμε μετά»)</td><td>Χαμηλός</td></tr>
+<tr><td>Τι δείχνει σε ξένα μάτια</td><td>Τίποτα</td><td>Τίποτα</td><td>Τίποτα</td><td>Το ποσό — εκτός αν σβηστεί από ρύθμιση</td></tr>
+<tr><td>Βάρος σε κώδικα</td><td>Μικρό</td><td>Μεσαίο</td><td><b>Μεγάλο</b></td><td>Μεσαίο</td></tr>
+</table>
+
+<div class="rec">
+<b>Η σύστασή μου: Δ.</b> Και τα τέσσερα κλείνουν το ίδιο πράγμα στο τέλος της βραδιάς· το ερώτημα είναι αν οι
+αναλήψεις θα γραφτούν <b>όντως</b>. Στο Α δεν θα γραφτούν, και τότε η διαφορά που θα δεις στις 3 δεν εξηγείται από
+τίποτα — δηλαδή η ίδια η καταμέτρηση χάνει το νόημά της. Το Δ βάζει την ανάληψη εκεί που είναι το χέρι, κρατάει το
+κλείσιμο στα δύο λεπτά, και το ζωντανό νούμερο είναι ασφάλεια σε ένα χωράφι όπου τα μετρητά στοιβάζονται σε ένα
+συρτάρι.<br><br>
+Αν αυτό που σε καίει είναι <b>ποιος</b> και όχι <b>πόσα</b>, τότε Γ — αλλά μόνο αν το ΚΛΕΙΔΩΜΑ πατιέται πραγματικά
+σε κάθε αλλαγή στα πανηγύρια σου. Αυτό το ξέρεις εσύ καλύτερα από μένα, και είναι το μόνο που κρίνει το Γ.
+</div>
+</section>
+
+</div>
+</body>
+</html>
