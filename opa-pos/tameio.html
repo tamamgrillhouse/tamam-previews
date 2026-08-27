@@ -123,6 +123,13 @@ aside.notes li{margin-bottom:7px}
 .board{display:flex; flex-direction:column; gap:9px}
 .coins{display:grid; grid-template-columns:repeat(6,1fr); gap:9px}
 .notes6{display:grid; grid-template-columns:repeat(3,1fr); gap:9px}
+.notes3{display:grid; grid-template-columns:repeat(3,1fr); gap:9px}
+.den.open{position:relative}
+.den.open::after{content:"›"; position:absolute; right:10px; top:6px; font-size:15px; color:var(--muted); font-weight:700}
+.coinwin{position:absolute; inset:0; background:rgba(0,0,0,.62); display:flex; align-items:center; justify-content:center}
+.coinbox{width:720px; background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:24px 26px;
+  display:flex; flex-direction:column; gap:14px; box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.coins5{display:grid; grid-template-columns:repeat(5,1fr); gap:9px}
 .den{background:var(--tile); border-radius:10px; border-left:8px solid var(--c);
   display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:800; height:64px}
 .den.small{height:46px; font-size:17px}
@@ -158,6 +165,12 @@ aside.notes li{margin-bottom:7px}
 .dlg{width:640px; background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:26px 28px;
   display:flex; flex-direction:column; gap:16px; box-shadow:0 20px 60px rgba(0,0,0,.6)}
 .dlg h5{font-size:24px; font-weight:800; letter-spacing:.5px}
+.dlg.tight{gap:10px; padding:18px 22px}
+.dlg.tight .floatrow{padding:10px 18px}
+.dlg.tight .amt{font-size:30px}
+.dlg.tight .two > div{height:60px; font-size:18px}
+.dlg.tight .pinrow div{height:52px}
+.dlg.tight .hint{font-size:15px}
 .dlg .hint{color:var(--muted); font-size:16px; line-height:1.5}
 .two{display:flex; gap:12px}
 .two > div{flex:1; height:76px; border-radius:12px; display:flex; align-items:center; justify-content:center;
@@ -171,6 +184,7 @@ aside.notes li{margin-bottom:7px}
 .reasons{display:flex; gap:9px; flex-wrap:wrap}
 .reasons span{border:1px solid var(--line); border-radius:9px; padding:10px 14px; font-size:16px; font-weight:600; color:var(--muted)}
 .reasons span.on{border-color:var(--warn); color:#F2C766; background:#241f14}
+.reasons span.open{color:var(--text)}
 
 /* τελικός πίνακας */
 .final{margin-top:80px; border-top:2px solid var(--line); padding-top:34px}
@@ -207,6 +221,72 @@ table.cmp td:first-child{font-weight:700}
 </div>
 
 
+<section class="prop" style="border-top:none;margin-top:52px;padding-top:0">
+<div class="phead">
+  <div class="badge" style="background:var(--warn);color:#1a1408">€</div>
+  <h2>ΤΟ ΤΑΜΠΛΟ ΤΩΝ ΧΡΗΜΑΤΩΝ — ΕΝΑ, ΙΔΙΟ ΚΑΙ ΣΤΙΣ ΤΕΣΣΕΡΙΣ</h2>
+  <p class="principle">Όπου ζητιέται ποσό — ρέστα έναρξης, ανάληψη, καταμέτρηση — ανοίγει αυτό. Είναι το ταμπλό της πληρωμής που ήδη υπάρχει (D-063): τα πατήματα προσθέτουν, οι θέσεις δεν μετακινούνται ποτέ.</p>
+</div>
+<div class="row">
+<div class="screens">
+  <figure>
+    <figcaption><b>Το ΚΕΡΜΑΤΑ ανοίγει αυτό.</b> Πέντε κέρματα που προσθέτουν, ή ένα σκέτο ποσό για όποιον τα μέτρησε αλλού — και ΠΙΣΩ, γιατί κάθε πληκτρολόγιο έχει έξοδο (§6a)</figcaption>
+    <div class="till rel">
+      <div class="admbar"><div class="back">ΠΙΣΩ</div><h4>ΚΑΤΑΜΕΤΡΗΣΗ · ΚΕΡΜΑΤΑ</h4></div>
+      <div class="admbody">
+        <div class="floatrow" style="min-width:0"><div class="lab">ΜΕΤΡΗΘΗΚΑΝ</div><div class="amt" style="font-size:52px">1.690,00 €</div></div>
+        <div class="board">
+          <div class="notes6">
+            <div class="den" style="--c:#9a9a9a">5 €</div>
+            <div class="den" style="--c:#C0392B">10 €</div>
+            <div class="den" style="--c:#2F6FB4">20 €</div>
+            <div class="den" style="--c:#C98A16">50 €</div>
+            <div class="den" style="--c:#1E9E57">100 €</div>
+            <div class="den" style="--c:#C9B416">200 €</div>
+          </div>
+          <div class="notes3">
+            <div class="den open" style="--c:#a89263">ΚΕΡΜΑΤΑ</div>
+            <div class="den open" style="--c:#5c554c">ΑΛΛΟ ΠΟΣΟ</div>
+            <div class="den" style="--c:#5c554c">ΣΒΗΣΕ</div>
+          </div>
+        </div>
+      </div>
+      <div class="coinwin">
+        <div class="coinbox">
+          <h5 style="font-size:22px;font-weight:800;letter-spacing:.5px">ΚΕΡΜΑΤΑ</h5>
+          <div class="floatrow" style="min-width:0"><div class="lab">ΣΕ ΚΕΡΜΑΤΑ</div><div class="amt">125,00 €</div></div>
+          <div class="coins5">
+            <div class="den" style="--c:#8a7f6a">0,10</div>
+            <div class="den" style="--c:#8a7f6a">0,20</div>
+            <div class="den" style="--c:#a89263">0,50</div>
+            <div class="den" style="--c:#a89263">1 €</div>
+            <div class="den" style="--c:#a89263">2 €</div>
+          </div>
+          <div class="hint">Ή, αν τα μέτρησες αλλού και ξέρεις το ποσό:</div>
+          <div class="two">
+            <div class="open" style="border-color:var(--line)">ΑΛΛΟ ΠΟΣΟ</div>
+            <div>ΣΒΗΣΕ ΤΑ ΚΕΡΜΑΤΑ</div>
+          </div>
+          <div class="two"><div>ΠΙΣΩ</div><div class="in" style="background:#1E9E57;color:#fff;border-color:#1E9E57">ΕΝΤΑΞΕΙ</div></div>
+        </div>
+      </div>
+    </div>
+  </figure>
+</div>
+<aside class="notes">
+  <h3>Γιατί έτσι</h3>
+  <ul>
+    <li>Τα χαρτονομίσματα είναι το 95% των χρημάτων και μετριούνται με το χέρι — <b>είναι πάνω, μεγάλα, πάντα στην ίδια θέση</b>.</li>
+    <li>Τα κέρματα είναι μικρά ποσά και πολλά κομμάτια. Ένα δεύτερο επίπεδο τα βγάζει από τα μάτια χωρίς να τα χάνει: <b>ένα πάτημα και είναι εκεί</b>.</li>
+    <li><b>ΑΛΛΟ ΠΟΣΟ</b> είναι το αριθμητικό πληκτρολόγιο που ήδη υπάρχει στην πληρωμή. Υπάρχει γιατί κάποιοι μετράνε τα ψιλά σε σακουλάκι ή σε ζυγαριά και ξέρουν το ποσό — τους ζητάει το πρόγραμμα να πατήσουν 250 φορές το 0,50 και το κλείνουν.</li>
+    <li><b>ΣΒΗΣΕ</b> μηδενίζει, δεν αφαιρεί. Το λάθος στις 3 τα ξημερώματα διορθώνεται ξαναμετρώντας, όχι υπολογίζοντας.</li>
+    <li>Καμία εικόνα χαρτονομίσματος, πουθενά — λωρίδα στο χρώμα του, όπως στην πληρωμή (D-063).</li>
+  </ul>
+</aside>
+</div>
+</section>
+
+
 <!-- ================= Α ================= -->
 <section class="prop">
 <div class="phead">
@@ -227,10 +307,10 @@ table.cmp td:first-child{font-weight:700}
           <div class="floatrow">
             <div class="lab">ΡΕΣΤΑ ΣΤΟ ΣΥΡΤΑΡΙ</div>
             <div class="amt">200,00 €</div>
-            <div class="ghostbtn" style="min-width:150px;height:54px">ΑΛΛΑΓΗ</div>
+            <div class="ghostbtn" style="min-width:150px;height:54px">ΑΛΛΑΓΗ ›</div>
           </div>
           <div class="greenbtn">ΑΝΟΙΓΜΑ ΒΑΡΔΙΑΣ</div>
-          <div class="meta" style="font-size:16px">Αν δεν την αγγίξεις, η βάρδια ανοίγει με 0,00 €</div>
+          <div class="meta" style="font-size:16px">Η ΑΛΛΑΓΗ ανοίγει το ταμπλό των χρημάτων. Αν δεν την αγγίξεις, η βάρδια ανοίγει με 0,00 €</div>
         </div>
       </div>
     </div>
@@ -297,21 +377,18 @@ table.cmp td:first-child{font-weight:700}
           <div class="ghostbtn" style="height:56px;min-width:120px">ΣΒΗΣΕ</div>
         </div>
         <div class="board">
-          <div class="coins">
-            <div class="den small" style="--c:#8a7f6a">0,10</div>
-            <div class="den small" style="--c:#8a7f6a">0,20</div>
-            <div class="den small" style="--c:#a89263">0,50</div>
-            <div class="den small" style="--c:#a89263">1 €</div>
-            <div class="den small" style="--c:#a89263">2 €</div>
-            <div class="den small" style="--c:#5c554c">ΠΙΣΩ</div>
-          </div>
           <div class="notes6">
-            <div class="den" style="--c:#9a9a9a">5 €</div>
-            <div class="den" style="--c:#C0392B">10 €</div>
-            <div class="den" style="--c:#2F6FB4">20 €</div>
-            <div class="den" style="--c:#C98A16">50 €</div>
-            <div class="den" style="--c:#1E9E57">100 €</div>
-            <div class="den" style="--c:#C9B416">200 €</div>
+            <div class="den small" style="--c:#9a9a9a">5 €</div>
+            <div class="den small" style="--c:#C0392B">10 €</div>
+            <div class="den small" style="--c:#2F6FB4">20 €</div>
+            <div class="den small" style="--c:#C98A16">50 €</div>
+            <div class="den small" style="--c:#1E9E57">100 €</div>
+            <div class="den small" style="--c:#C9B416">200 €</div>
+          </div>
+          <div class="notes3">
+            <div class="den small open" style="--c:#a89263">ΚΕΡΜΑΤΑ</div>
+            <div class="den small open" style="--c:#5c554c">ΑΛΛΟ ΠΟΣΟ</div>
+            <div class="den small" style="--c:#5c554c">ΣΒΗΣΕ</div>
           </div>
         </div>
         <div class="greenbtn" style="width:100%;min-width:0">ΤΕΛΟΣ ΚΑΤΑΜΕΤΡΗΣΗΣ</div>
@@ -333,7 +410,7 @@ table.cmp td:first-child{font-weight:700}
           <div class="meta" style="text-align:left;font-size:17px">
             Ρέστα έναρξης 200,00 &nbsp;+&nbsp; Πωλήσεις 2.647,30 &nbsp;−&nbsp; Αναλήψεις 1.000,00 &nbsp;=&nbsp; 1.847,30
           </div>
-          <div class="ghostbtn" style="width:100%;min-width:0;height:56px">ΑΙΤΙΑ ΤΗΣ ΔΙΑΦΟΡΑΣ (προαιρετικά)</div>
+          <div class="ghostbtn" style="width:100%;min-width:0;height:56px">ΑΙΤΙΑ ΤΗΣ ΔΙΑΦΟΡΑΣ — ΓΡΑΨΕ ⌨ (προαιρετικά)</div>
           <div class="spacer"></div>
           <div class="greenbtn" style="width:100%;min-width:0">ΚΡΑΤΑ ΠΑΤΗΜΕΝΟ ΓΙΑ ΚΛΕΙΣΙΜΟ</div>
         </div>
@@ -454,13 +531,28 @@ table.cmp td:first-child{font-weight:700}
         </div>
       </div>
       <div class="scrim">
-        <div class="dlg">
+        <div class="dlg tight">
           <h5>ΑΝΑΛΗΨΗ ΑΠΟ ΤΟ ΤΑΜΕΙΟ</h5>
           <div class="two"><div class="out">ΒΓΑΖΩ</div><div>ΒΑΖΩ</div></div>
           <div class="floatrow" style="min-width:0"><div class="lab">ΠΟΣΟ</div><div class="amt">1.000,00 €</div></div>
+          <div class="board">
+            <div class="notes6">
+              <div class="den small" style="--c:#9a9a9a">5 €</div>
+              <div class="den small" style="--c:#C0392B">10 €</div>
+              <div class="den small" style="--c:#2F6FB4">20 €</div>
+              <div class="den small" style="--c:#C98A16">50 €</div>
+              <div class="den small" style="--c:#1E9E57">100 €</div>
+              <div class="den small" style="--c:#C9B416">200 €</div>
+            </div>
+            <div class="notes3">
+              <div class="den small open" style="--c:#a89263">ΚΕΡΜΑΤΑ</div>
+              <div class="den small open" style="--c:#5c554c">ΑΛΛΟ ΠΟΣΟ</div>
+              <div class="den small" style="--c:#5c554c">ΣΒΗΣΕ</div>
+            </div>
+          </div>
           <div class="hint">Αιτία</div>
           <div class="reasons">
-            <span class="on">ΣΤΟ ΧΡΗΜΑΤΟΚΙΒΩΤΙΟ</span><span>ΨΙΛΑ ΓΙΑ ΡΕΣΤΑ</span><span>ΠΡΟΜΗΘΕΥΤΗΣ</span><span>ΑΛΛΟ</span>
+            <span class="on">ΣΤΟ ΧΡΗΜΑΤΟΚΙΒΩΤΙΟ</span><span>ΨΙΛΑ ΓΙΑ ΡΕΣΤΑ</span><span>ΠΡΟΜΗΘΕΥΤΗΣ</span><span class="open">ΑΛΛΟ ⌨</span>
           </div>
           <div class="hint">PIN — η ανάληψη γράφεται στο όνομά σου και τυπώνεται αποδεικτικό για υπογραφή</div>
           <div class="pinrow"><div>•</div><div>•</div><div>•</div><div>•</div></div>
@@ -583,15 +675,20 @@ table.cmp td:first-child{font-weight:700}
             <div class="lab" style="text-align:center">Ο ΓΙΩΡΓΟΣ ΠΑΡΑΛΑΜΒΑΝΕΙ ΤΟ ΣΥΡΤΑΡΙ ΜΕ</div>
             <div class="amt" style="text-align:center;font-size:56px">200,00 €</div>
             <div class="board">
-              <div class="notes6">
-                <div class="den small" style="--c:#9a9a9a">5 €</div>
-                <div class="den small" style="--c:#C0392B">10 €</div>
-                <div class="den small" style="--c:#2F6FB4">20 €</div>
-                <div class="den small" style="--c:#C98A16">50 €</div>
-                <div class="den small" style="--c:#1E9E57">100 €</div>
-                <div class="den small" style="--c:#a89263">ΚΕΡΜΑΤΑ</div>
-              </div>
-            </div>
+          <div class="notes6">
+            <div class="den small" style="--c:#9a9a9a">5 €</div>
+            <div class="den small" style="--c:#C0392B">10 €</div>
+            <div class="den small" style="--c:#2F6FB4">20 €</div>
+            <div class="den small" style="--c:#C98A16">50 €</div>
+            <div class="den small" style="--c:#1E9E57">100 €</div>
+            <div class="den small" style="--c:#C9B416">200 €</div>
+          </div>
+          <div class="notes3">
+            <div class="den small open" style="--c:#a89263">ΚΕΡΜΑΤΑ</div>
+            <div class="den small open" style="--c:#5c554c">ΑΛΛΟ ΠΟΣΟ</div>
+            <div class="den small" style="--c:#5c554c">ΣΒΗΣΕ</div>
+          </div>
+        </div>
           </div>
           <div class="greenbtn">ΠΑΡΑΛΑΜΒΑΝΩ ΚΑΙ ΑΝΟΙΓΩ</div>
         </div>
@@ -647,15 +744,20 @@ table.cmp td:first-child{font-weight:700}
           <div class="hint">Ο ΓΙΩΡΓΟΣ παραδίδει. Μέτρησε ό,τι υπάρχει τώρα στο συρτάρι.</div>
           <div class="floatrow" style="min-width:0"><div class="lab">ΜΕΤΡΗΘΗΚΑΝ</div><div class="amt">1.240,00 €</div></div>
           <div class="board">
-            <div class="notes6">
-              <div class="den small" style="--c:#9a9a9a">5 €</div>
-              <div class="den small" style="--c:#C0392B">10 €</div>
-              <div class="den small" style="--c:#2F6FB4">20 €</div>
-              <div class="den small" style="--c:#C98A16">50 €</div>
-              <div class="den small" style="--c:#1E9E57">100 €</div>
-              <div class="den small" style="--c:#a89263">ΚΕΡΜΑΤΑ</div>
-            </div>
+          <div class="notes6">
+            <div class="den small" style="--c:#9a9a9a">5 €</div>
+            <div class="den small" style="--c:#C0392B">10 €</div>
+            <div class="den small" style="--c:#2F6FB4">20 €</div>
+            <div class="den small" style="--c:#C98A16">50 €</div>
+            <div class="den small" style="--c:#1E9E57">100 €</div>
+            <div class="den small" style="--c:#C9B416">200 €</div>
           </div>
+          <div class="notes3">
+            <div class="den small open" style="--c:#a89263">ΚΕΡΜΑΤΑ</div>
+            <div class="den small open" style="--c:#5c554c">ΑΛΛΟ ΠΟΣΟ</div>
+            <div class="den small" style="--c:#5c554c">ΣΒΗΣΕ</div>
+          </div>
+        </div>
           <div class="two">
             <div class="out">ΒΓΑΖΩ ΧΡΗΜΑΤΑ ΠΡΙΝ ΠΑΡΑΔΩΣΩ</div>
             <div class="in" style="background:#1E9E57;color:#fff;border-color:#1E9E57">ΠΑΡΑΔΙΔΩ</div>
@@ -674,21 +776,18 @@ table.cmp td:first-child{font-weight:700}
         <div class="meta" style="text-align:left;font-size:18px">Η ΜΑΡΙΑ κρατάει το συρτάρι από τις 00:20. Μέτρησέ το.</div>
         <div class="floatrow" style="min-width:0"><div class="lab">ΜΕΤΡΗΘΗΚΑΝ</div><div class="amt" style="font-size:56px">1.815,00 €</div><div class="ghostbtn" style="height:56px;min-width:120px">ΣΒΗΣΕ</div></div>
         <div class="board">
-          <div class="coins">
-            <div class="den small" style="--c:#8a7f6a">0,10</div>
-            <div class="den small" style="--c:#8a7f6a">0,20</div>
-            <div class="den small" style="--c:#a89263">0,50</div>
-            <div class="den small" style="--c:#a89263">1 €</div>
-            <div class="den small" style="--c:#a89263">2 €</div>
-            <div class="den small" style="--c:#5c554c">ΠΙΣΩ</div>
-          </div>
           <div class="notes6">
-            <div class="den" style="--c:#9a9a9a">5 €</div>
-            <div class="den" style="--c:#C0392B">10 €</div>
-            <div class="den" style="--c:#2F6FB4">20 €</div>
-            <div class="den" style="--c:#C98A16">50 €</div>
-            <div class="den" style="--c:#1E9E57">100 €</div>
-            <div class="den" style="--c:#C9B416">200 €</div>
+            <div class="den small" style="--c:#9a9a9a">5 €</div>
+            <div class="den small" style="--c:#C0392B">10 €</div>
+            <div class="den small" style="--c:#2F6FB4">20 €</div>
+            <div class="den small" style="--c:#C98A16">50 €</div>
+            <div class="den small" style="--c:#1E9E57">100 €</div>
+            <div class="den small" style="--c:#C9B416">200 €</div>
+          </div>
+          <div class="notes3">
+            <div class="den small open" style="--c:#a89263">ΚΕΡΜΑΤΑ</div>
+            <div class="den small open" style="--c:#5c554c">ΑΛΛΟ ΠΟΣΟ</div>
+            <div class="den small" style="--c:#5c554c">ΣΒΗΣΕ</div>
           </div>
         </div>
         <div class="greenbtn" style="width:100%;min-width:0">ΤΕΛΟΣ — ΠΑΡΑΔΟΣΗ ΣΤΟΝ ΣΥΛΛΟΓΟ</div>
@@ -760,8 +859,8 @@ table.cmp td:first-child{font-weight:700}
 <section class="prop">
 <div class="phead">
   <div class="badge">Δ</div>
-  <h2>ΤΟ ΣΥΡΤΑΡΙ ΕΙΝΑΙ ΠΑΝΤΑ ΟΡΑΤΟ</h2>
-  <p class="principle">Κερδίζει η ροή: τα μετρητά είναι ζωντανό νούμερο μέσα στη βραδιά, όχι τελετή στο τέλος. Η ανάληψη γίνεται με δύο πατήματα, την ώρα που πρέπει.</p>
+  <h2>ΤΟ ΤΑΜΕΙΟ ΣΤΟ ΧΕΡΙ</h2>
+  <p class="principle">Κερδίζει η ροή: η ανάληψη γίνεται εκεί που είναι το χέρι, την ώρα που πρέπει, χωρίς να βγει κανείς από την οθόνη της πώλησης. <b>Το ποσό δεν φαίνεται σε κανέναν</b> — ανοίγει με PIN, σαν τα υπόλοιπα.</p>
 </div>
 <div class="row">
 <div class="screens">
@@ -777,15 +876,20 @@ table.cmp td:first-child{font-weight:700}
             <div class="lab" style="text-align:center">ΡΕΣΤΑ ΣΤΟ ΣΥΡΤΑΡΙ</div>
             <div class="amt" style="text-align:center;font-size:64px">200,00 €</div>
             <div class="board">
-              <div class="notes6">
-                <div class="den" style="--c:#9a9a9a">5 €</div>
-                <div class="den" style="--c:#C0392B">10 €</div>
-                <div class="den" style="--c:#2F6FB4">20 €</div>
-                <div class="den" style="--c:#C98A16">50 €</div>
-                <div class="den" style="--c:#1E9E57">100 €</div>
-                <div class="den" style="--c:#a89263">ΚΕΡΜΑΤΑ</div>
-              </div>
-            </div>
+          <div class="notes6">
+            <div class="den" style="--c:#9a9a9a">5 €</div>
+            <div class="den" style="--c:#C0392B">10 €</div>
+            <div class="den" style="--c:#2F6FB4">20 €</div>
+            <div class="den" style="--c:#C98A16">50 €</div>
+            <div class="den" style="--c:#1E9E57">100 €</div>
+            <div class="den" style="--c:#C9B416">200 €</div>
+          </div>
+          <div class="notes3">
+            <div class="den open" style="--c:#a89263">ΚΕΡΜΑΤΑ</div>
+            <div class="den open" style="--c:#5c554c">ΑΛΛΟ ΠΟΣΟ</div>
+            <div class="den" style="--c:#5c554c">ΣΒΗΣΕ</div>
+          </div>
+        </div>
           </div>
           <div class="greenbtn">ΑΝΟΙΓΜΑ ΒΑΡΔΙΑΣ</div>
         </div>
@@ -794,13 +898,13 @@ table.cmp td:first-child{font-weight:700}
   </figure>
 
   <figure>
-    <figcaption><b>2.</b> Όλη τη βραδιά — ένα τσιπάκι στην πάνω μπάρα: <b>ΣΥΡΤΑΡΙ 1.240 €</b>. Ο υπεύθυνος το βλέπει από τρία μέτρα</figcaption>
+    <figcaption><b>2.</b> Όλη τη βραδιά — ένα κουμπί <b>ΤΑΜΕΙΟ</b> στην πάνω μπάρα, χωρίς κανένα ποσό πάνω του. Ούτε ο ταμίας ούτε ο πελάτης βλέπει τι έχει το συρτάρι</figcaption>
     <div class="till">
       <div class="topbar">
         <div class="letter">Κ</div>
         <div class="ev">ΠΑΝΗΓΥΡΙ ΑΓΙΟΥ ΝΙΚΟΛΑΟΥ · Κρεάτων</div>
         <div class="spacer"></div>
-        <div class="chip live">ΣΥΡΤΑΡΙ <b>1.240 €</b></div>
+        <div class="chip">ΤΑΜΕΙΟ</div>
         <div class="who">ΓΙΩΡΓΟΣ</div>
         <div class="lock">ΚΛΕΙΔ.</div>
       </div>
@@ -844,13 +948,13 @@ table.cmp td:first-child{font-weight:700}
   </figure>
 
   <figure>
-    <figcaption><b>3.</b> Ένα πάτημα στο τσιπάκι — ανάληψη με λεφτά, δύο πατήματα και τέλος</figcaption>
+    <figcaption><b>3.</b> ΤΑΜΕΙΟ → <b>PIN</b> → το ποσό. Χωρίς το δικαίωμα, το κουμπί δεν σχεδιάζεται καν</figcaption>
     <div class="till rel">
       <div class="topbar">
         <div class="letter">Κ</div>
         <div class="ev">ΠΑΝΗΓΥΡΙ ΑΓΙΟΥ ΝΙΚΟΛΑΟΥ · Κρεάτων</div>
         <div class="spacer"></div>
-        <div class="chip live">ΣΥΡΤΑΡΙ <b>1.240 €</b></div>
+        <div class="chip">ΤΑΜΕΙΟ</div>
         <div class="who">ΓΙΩΡΓΟΣ</div>
         <div class="lock">ΚΛΕΙΔ.</div>
       </div>
@@ -888,20 +992,26 @@ table.cmp td:first-child{font-weight:700}
       </div>
       <div class="scrim">
         <div class="dlg" style="width:720px">
-          <h5>ΤΟ ΣΥΡΤΑΡΙ · 1.240,00 €</h5>
+          <h5>ΤΟ ΤΑΜΕΙΟ · 1.240,00 €</h5>
+          <div class="hint">Άνοιξε με το PIN του ΓΙΩΡΓΟΥ · <b>ΠΡΟΒΟΛΗ ΤΑΜΕΙΟΥ</b> ✓ &nbsp;·&nbsp; <b>ΑΝΑΛΗΨΗ</b> ✓</div>
           <div class="two"><div class="out">ΒΓΑΖΩ</div><div class="in">ΒΑΖΩ</div></div>
           <div class="floatrow" style="min-width:0"><div class="lab">ΠΟΣΟ</div><div class="amt">1.000,00 €</div></div>
           <div class="board">
-            <div class="notes6">
-              <div class="den" style="--c:#9a9a9a">5 €</div>
-              <div class="den" style="--c:#C0392B">10 €</div>
-              <div class="den" style="--c:#2F6FB4">20 €</div>
-              <div class="den" style="--c:#C98A16">50 €</div>
-              <div class="den" style="--c:#1E9E57">100 €</div>
-              <div class="den" style="--c:#a89263">ΚΕΡΜΑΤΑ</div>
-            </div>
+          <div class="notes6">
+            <div class="den" style="--c:#9a9a9a">5 €</div>
+            <div class="den" style="--c:#C0392B">10 €</div>
+            <div class="den" style="--c:#2F6FB4">20 €</div>
+            <div class="den" style="--c:#C98A16">50 €</div>
+            <div class="den" style="--c:#1E9E57">100 €</div>
+            <div class="den" style="--c:#C9B416">200 €</div>
           </div>
-          <div class="hint">Γράφεται στο όνομα του ΓΙΩΡΓΟΥ, με την ώρα. Το τσιπάκι θα δείξει 240 €.</div>
+          <div class="notes3">
+            <div class="den open" style="--c:#a89263">ΚΕΡΜΑΤΑ</div>
+            <div class="den open" style="--c:#5c554c">ΑΛΛΟ ΠΟΣΟ</div>
+            <div class="den" style="--c:#5c554c">ΣΒΗΣΕ</div>
+          </div>
+        </div>
+          <div class="hint">Γράφεται στο όνομα του ΓΙΩΡΓΟΥ, με την ώρα. Το παράθυρο κλείνει και η οθόνη ξαναγίνεται σκέτο ταμείο.</div>
           <div class="two"><div>ΑΚΥΡΟ</div><div class="in" style="background:#1E9E57;color:#fff;border-color:#1E9E57">ΚΑΤΑΧΩΡΗΣΗ</div></div>
         </div>
       </div>
@@ -909,36 +1019,33 @@ table.cmp td:first-child{font-weight:700}
   </figure>
 
   <figure>
-    <figcaption><b>4.</b> Κλείσιμο — τυφλή καταμέτρηση, και το τσιπάκι σβήνει μέχρι να πατηθεί το ΤΕΛΟΣ</figcaption>
+    <figcaption><b>4.</b> Κλείσιμο — τυφλή καταμέτρηση· τίποτα στην οθόνη δεν προδίδει το αναμενόμενο</figcaption>
     <div class="till">
       <div class="admbar"><div class="back">ΠΙΣΩ</div><h4>ΚΛΕΙΣΙΜΟ ΒΡΑΔΙΑΣ · ΚΑΤΑΜΕΤΡΗΣΗ</h4></div>
       <div class="admbody" style="flex-direction:row;gap:26px">
         <div style="flex:1;display:flex;flex-direction:column;gap:14px">
           <div class="floatrow" style="min-width:0"><div class="lab">ΜΕΤΡΗΘΗΚΑΝ</div><div class="amt" style="font-size:52px">1.815,00 €</div></div>
           <div class="board">
-            <div class="coins">
-              <div class="den small" style="--c:#8a7f6a">0,10</div>
-              <div class="den small" style="--c:#8a7f6a">0,20</div>
-              <div class="den small" style="--c:#a89263">0,50</div>
-              <div class="den small" style="--c:#a89263">1 €</div>
-              <div class="den small" style="--c:#a89263">2 €</div>
-              <div class="den small" style="--c:#5c554c">ΠΙΣΩ</div>
-            </div>
-            <div class="notes6">
-              <div class="den" style="--c:#9a9a9a">5 €</div>
-              <div class="den" style="--c:#C0392B">10 €</div>
-              <div class="den" style="--c:#2F6FB4">20 €</div>
-              <div class="den" style="--c:#C98A16">50 €</div>
-              <div class="den" style="--c:#1E9E57">100 €</div>
-              <div class="den" style="--c:#C9B416">200 €</div>
-            </div>
+          <div class="notes6">
+            <div class="den small" style="--c:#9a9a9a">5 €</div>
+            <div class="den small" style="--c:#C0392B">10 €</div>
+            <div class="den small" style="--c:#2F6FB4">20 €</div>
+            <div class="den small" style="--c:#C98A16">50 €</div>
+            <div class="den small" style="--c:#1E9E57">100 €</div>
+            <div class="den small" style="--c:#C9B416">200 €</div>
           </div>
+          <div class="notes3">
+            <div class="den small open" style="--c:#a89263">ΚΕΡΜΑΤΑ</div>
+            <div class="den small open" style="--c:#5c554c">ΑΛΛΟ ΠΟΣΟ</div>
+            <div class="den small" style="--c:#5c554c">ΣΒΗΣΕ</div>
+          </div>
+        </div>
           <div class="greenbtn" style="width:100%;min-width:0">ΤΕΛΟΣ ΚΑΤΑΜΕΤΡΗΣΗΣ</div>
         </div>
         <div style="width:420px;display:flex;flex-direction:column;gap:12px">
           <div class="rbox" style="opacity:.35"><div class="lab">ΑΝΑΜΕΝΟΜΕΝΟ</div><div class="val">— — —</div></div>
           <div class="rbox" style="opacity:.35"><div class="lab">ΔΙΑΦΟΡΑ</div><div class="val">— — —</div></div>
-          <div class="meta" style="text-align:left;font-size:16px">Φαίνονται μόνο αφού πατηθεί το ΤΕΛΟΣ. Μέχρι τότε τίποτα στην οθόνη δεν λέει τι περιμένει το πρόγραμμα — ούτε το τσιπάκι της πάνω μπάρας.</div>
+          <div class="meta" style="text-align:left;font-size:16px">Φαίνονται μόνο αφού πατηθεί το ΤΕΛΟΣ. Και το ΤΑΜΕΙΟ της πάνω μπάρας δεν ανοίγει όσο τρέχει η καταμέτρηση — αλλιώς θα ήταν παραθυράκι να δει κανείς την απάντηση πριν μετρήσει.</div>
           <div class="spacer" style="flex:1"></div>
           <div style="background:var(--tile);border:1px solid var(--line);border-radius:12px;padding:16px 18px">
             <div style="font-size:14px;color:var(--muted);letter-spacing:.8px">ΟΙ ΚΙΝΗΣΕΙΣ ΤΗΣ ΒΡΑΔΙΑΣ</div>
@@ -958,19 +1065,23 @@ table.cmp td:first-child{font-weight:700}
 <aside class="notes">
   <h3>Τι κερδίζεις</h3>
   <ul>
-    <li class="win">Η ανάληψη γίνεται <b>την ώρα που πρέπει</b>, χωρίς να βγει κανείς από το ταμείο: πατάς το τσιπάκι, χτυπάς τα λεφτά, τέλος. Αυτό είναι η διαφορά ανάμεσα σε ένα ίχνος που υπάρχει και σε ένα που θα «γραφτεί μετά».</li>
-    <li class="win">Ο υπεύθυνος <b>βλέπει</b> πότε φούσκωσε το συρτάρι και σηκώνει πριν γίνει πρόβλημα — αυτό είναι ασφάλεια, όχι λογιστική.</li>
+    <li class="win">Η ανάληψη γίνεται <b>την ώρα που πρέπει</b>, χωρίς να βγει κανείς από το ταμείο: ΤΑΜΕΙΟ, PIN, χτυπάς τα λεφτά, τέλος. Αυτό είναι η διαφορά ανάμεσα σε ένα ίχνος που υπάρχει και σε ένα που θα «γραφτεί μετά».</li>
+    <li class="win">Το ποσό <b>δεν φαίνεται πουθενά</b> — ούτε στον ταμία, ούτε στον πελάτη απέναντι, ούτε σε όποιον περνάει. Ανοίγει με PIN, όπως ο πίνακας διαχείρισης.</li>
+    <li class="win">Ο υπεύθυνος το ελέγχει <b>από το ίδιο το ταμείο</b> όποτε περάσει, σε τρία δευτερόλεπτα, χωρίς να διακόψει πώληση και χωρίς να ανοίξει ΔΙΑΧΕΙΡΙΣΗ.</li>
     <li class="win">Το κλείσιμο μένει ένα νούμερο, δύο λεπτά.</li>
-    <li class="win">Ένα νούμερο που φαίνεται όλη νύχτα είναι <b>έλεγχος από μόνο του</b>: μια απόκλιση φαίνεται νωρίς, όχι στις 3.</li>
   </ul>
   <h3>Τι χάνεις</h3>
   <ul>
-    <li class="lose">Το ποσό είναι <b>ορατό και σε όποιον στέκεται απέναντι</b>. Στη μία τα ξημερώματα, σε ένα πανηγύρι, αυτό δεν το θέλουν όλοι. (Λύνεται με διακόπτη «να φαίνεται το ποσό: ναι / όχι» — με όχι, το τσιπάκι λέει μόνο ΤΑΜΕΙΟ και το ποσό φαίνεται αφού πατηθεί.)</li>
-    <li class="lose">Μια ένδειξη παραπάνω σε μια οθόνη που είναι σχεδιασμένη να μην έχει τίποτα περιττό.</li>
+    <li class="lose">Ένα κουμπί παραπάνω στην πάνω μπάρα — αν και σε όποιον δεν έχει το δικαίωμα δεν σχεδιάζεται καθόλου, οπότε ο εθελοντής δεν βλέπει τίποτα νέο.</li>
+    <li class="lose">Το «πόσα έχει τώρα» θέλει PIN κάθε φορά. Ο υπεύθυνος που περνάει δέκα φορές τη βραδιά θα χτυπήσει δέκα φορές τέσσερα ψηφία.</li>
     <li class="lose">Η διαφορά μένει <b>της βραδιάς</b>, όχι του ταμία — μόνο οι αναλήψεις έχουν όνομα.</li>
   </ul>
-  <h3>Το δικαίωμα</h3>
-  <ul><li>Το 19ο, <b>ΑΝΑΛΗΨΗ ΜΕΤΡΗΤΩΝ</b>. Χωρίς αυτό, το τσιπάκι δείχνει το ποσό αλλά δεν ανοίγει τίποτα.</li></ul>
+  <h3>Τα δικαιώματα — δύο, όχι ένα</h3>
+  <ul>
+    <li><b>ΠΡΟΒΟΛΗ ΤΑΜΕΙΟΥ</b> — βλέπει πόσα υπάρχουν. Προεπιλογή: <b>ΜΕ PIN</b>.</li>
+    <li><b>ΑΝΑΛΗΨΗ ΜΕΤΡΗΤΩΝ</b> — βγάζει και βάζει. Προεπιλογή: <b>ΜΕ PIN</b>.</li>
+    <li>Ο σύλλογος που θέλει το ποσό μονίμως στα μάτια του ταμία βάζει το πρώτο σε ΑΝΟΙΧΤΟ, και τότε — και μόνο τότε — το κουμπί δείχνει το ποσό πάνω του.</li>
+  </ul>
 </aside>
 </div>
 </section>
@@ -980,23 +1091,24 @@ table.cmp td:first-child{font-weight:700}
 <section class="final">
 <h2>Ποια κερδίζει σε τι</h2>
 <table class="cmp">
-<tr><th></th><th>Α · ΤΟ ΚΟΥΤΙ</th><th>Β · ΤΟ ΦΥΛΛΟ</th><th>Γ · Η ΠΑΡΑΔΟΣΗ</th><th>Δ · ΤΟ ΣΥΡΤΑΡΙ</th></tr>
+<tr><th></th><th>Α · ΤΟ ΚΟΥΤΙ</th><th>Β · ΤΟ ΦΥΛΛΟ</th><th>Γ · Η ΠΑΡΑΔΟΣΗ</th><th>Δ · ΤΟ ΤΑΜΕΙΟ ΣΤΟ ΧΕΡΙ</th></tr>
 <tr><td>Ταχύτητα στο κλείσιμο</td><td>Ένα νούμερο · <b>2 λεπτά</b></td><td>Έντεκα πεδία · 6-8 λεπτά</td><td>Ένα νούμερο ανά παράδοση</td><td>Ένα νούμερο · <b>2 λεπτά</b></td></tr>
 <tr><td>Θα γίνει όντως η ανάληψη;</td><td>Δύσκολα — θέλει έξοδο από το ταμείο</td><td>Ναι, από την πάνω μπάρα</td><td>Ναι, στην παράδοση</td><td><b>Ναι, δύο πατήματα</b></td></tr>
 <tr><td>Ποιος ευθύνεται</td><td>Κανείς — η βραδιά</td><td>Η βραδιά</td><td><b>Ο ταμίας, με ώρα</b></td><td>Η βραδιά· οι αναλήψεις με όνομα</td></tr>
 <tr><td>Βρίσκεις πού έγινε το λάθος</td><td>Όχι</td><td><b>Ναι — ανά κουπούρα</b></td><td>Ναι — σε ποια βάρδια</td><td>Ναι — σε ποια ώρα</td></tr>
-<tr><td>Τι μαθαίνει ο εθελοντής</td><td><b>Τίποτα</b></td><td>Ένα κουμπί</td><td>Μια συνήθεια σε κάθε αλλαγή</td><td>Ένα τσιπάκι</td></tr>
+<tr><td>Τι μαθαίνει ο εθελοντής</td><td><b>Τίποτα</b></td><td>Ένα κουμπί</td><td>Μια συνήθεια σε κάθε αλλαγή</td><td>Ένα κουμπί, μόνο αν το έχει</td></tr>
 <tr><td>Κίνδυνος να το προσπεράσουν</td><td>Χαμηλός (δεν υπάρχει τίποτα)</td><td>Μεσαίος (το φύλλο γεμίζεται πρόχειρα)</td><td><b>Υψηλός</b> (με ουρά, «θα το κάνουμε μετά»)</td><td>Χαμηλός</td></tr>
-<tr><td>Τι δείχνει σε ξένα μάτια</td><td>Τίποτα</td><td>Τίποτα</td><td>Τίποτα</td><td>Το ποσό — εκτός αν σβηστεί από ρύθμιση</td></tr>
+<tr><td>Τι δείχνει σε ξένα μάτια</td><td>Τίποτα</td><td>Τίποτα</td><td>Τίποτα</td><td><b>Τίποτα</b> — το ποσό θέλει PIN</td></tr>
+<tr><td>Πώς βλέπει ο υπεύθυνος πόσα υπάρχουν <b>τώρα</b></td><td>ΔΙΑΧΕΙΡΙΣΗ · αργό</td><td>ΔΙΑΧΕΙΡΙΣΗ · αργό</td><td>Μόνο στην επόμενη παράδοση</td><td><b>ΤΑΜΕΙΟ + PIN · 3 δευτερόλεπτα</b></td></tr>
 <tr><td>Βάρος σε κώδικα</td><td>Μικρό</td><td>Μεσαίο</td><td><b>Μεγάλο</b></td><td>Μεσαίο</td></tr>
 </table>
 
 <div class="rec">
 <b>Η σύστασή μου: Δ.</b> Και τα τέσσερα κλείνουν το ίδιο πράγμα στο τέλος της βραδιάς· το ερώτημα είναι αν οι
-αναλήψεις θα γραφτούν <b>όντως</b>. Στο Α δεν θα γραφτούν, και τότε η διαφορά που θα δεις στις 3 δεν εξηγείται από
-τίποτα — δηλαδή η ίδια η καταμέτρηση χάνει το νόημά της. Το Δ βάζει την ανάληψη εκεί που είναι το χέρι, κρατάει το
-κλείσιμο στα δύο λεπτά, και το ζωντανό νούμερο είναι ασφάλεια σε ένα χωράφι όπου τα μετρητά στοιβάζονται σε ένα
-συρτάρι.<br><br>
+αναλήψεις θα γραφτούν <b>όντως</b>. Στο Α δεν θα γραφτούν — θέλουν έξοδο από την οθόνη της πώλησης με ουρά μπροστά —
+και τότε η διαφορά που θα δεις στις 3 δεν εξηγείται από τίποτα, δηλαδή η ίδια η καταμέτρηση χάνει το νόημά της.
+Το Δ βάζει την ανάληψη εκεί που είναι το χέρι, κρατάει το κλείσιμο στα δύο λεπτά, και <b>το ποσό δεν το βλέπει
+κανείς χωρίς PIN</b> — ο υπεύθυνος το ελέγχει όποτε περάσει, από το ίδιο το ταμείο, χωρίς να ανοίξει ΔΙΑΧΕΙΡΙΣΗ.<br><br>
 Αν αυτό που σε καίει είναι <b>ποιος</b> και όχι <b>πόσα</b>, τότε Γ — αλλά μόνο αν το ΚΛΕΙΔΩΜΑ πατιέται πραγματικά
 σε κάθε αλλαγή στα πανηγύρια σου. Αυτό το ξέρεις εσύ καλύτερα από μένα, και είναι το μόνο που κρίνει το Γ.
 </div>
