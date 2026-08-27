@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ΟΠΑ! POS — «ΤΕΛΕΙΩΣΕ», προτάσεις</title>
+<title>ΟΠΑ! POS — «ΤΕΛΕΙΩΣΕ», πού πάει η ταινία</title>
 <style>
 @font-face{font-family:'Manrope';src:url(__FONT__) format('truetype');font-weight:200 800;font-display:block}
 :root{
@@ -22,7 +22,7 @@ header h1{font-size:15px;font-weight:800;letter-spacing:.4px}
 header .sub{font-size:12px;color:#9c948c}
 header .spacer{flex:1}
 .app{flex:1;display:flex;min-height:0}
-aside{width:236px;flex:none;background:#141312;border-right:1px solid #2b2724;padding:12px;overflow:auto}
+aside{width:250px;flex:none;background:#141312;border-right:1px solid #2b2724;padding:12px;overflow:auto}
 aside h3{font-size:10px;letter-spacing:1.6px;color:#8b837b;margin:16px 0 6px;font-weight:800}
 aside h3:first-child{margin-top:0}
 .opt{display:block;width:100%;text-align:left;background:#1e1c1a;border:1px solid #322e2a;color:#ddd8d2;
@@ -33,12 +33,16 @@ aside h3:first-child{margin-top:0}
 .opt.on b{color:#fff}
 .mini{display:flex;gap:5px}
 .mini .opt{margin-bottom:0;text-align:center;padding:6px 4px;font-size:11.5px}
+.done{background:#16241c;border:1px solid #24402f;border-radius:8px;padding:9px 11px;font-size:11.5px;
+  color:#9fc9ae;line-height:1.5}
+.done b{color:#7fd3a3;display:block;font-size:12px;margin-bottom:3px}
 main{flex:1;display:flex;min-width:0}
 .stage{flex:1;min-width:0;display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow:auto;background:#0c0b0b}
 .frame{flex:none;overflow:hidden;position:relative}
-.till{width:1280px;height:720px;flex:none;background:var(--bg);color:var(--text);position:relative;overflow:hidden;font-family:'Manrope','Segoe UI',system-ui,sans-serif;
+.till{width:1280px;height:720px;flex:none;background:var(--bg);color:var(--text);position:relative;overflow:hidden;
+  font-family:'Manrope','Segoe UI',system-ui,sans-serif;
   display:flex;flex-direction:column;box-shadow:0 0 0 1px #3a3530,0 18px 50px rgba(0,0,0,.6);transform-origin:top left}
-.notes{width:340px;flex:none;background:#141312;border-left:1px solid #2b2724;padding:16px;overflow:auto;font-size:12.5px;line-height:1.55}
+.notes{width:350px;flex:none;background:#141312;border-left:1px solid #2b2724;padding:16px;overflow:auto;font-size:12.5px;line-height:1.55}
 .notes h2{font-size:15px;color:#fff;margin-bottom:3px}
 .notes .kicker{font-size:10.5px;letter-spacing:1.6px;color:#8b837b;font-weight:800;margin-bottom:10px}
 .notes p{margin:10px 0;color:#a89f97}
@@ -59,13 +63,12 @@ main{flex:1;display:flex;min-width:0}
   aside .opts .opt{margin-bottom:0;width:auto;padding:7px 11px}
   aside .opt .d{display:none}
   aside .opt b{margin-bottom:0;font-size:12.5px;white-space:nowrap}
-  aside .mini{gap:5px}
-  aside > p{display:none}
+  aside .done{font-size:11px;padding:6px 9px}
+  aside .done b{display:inline;margin:0}
   main{flex-direction:column}
   .stage{padding:10px;align-items:flex-start;overflow:auto}
   .notes{width:auto;border-left:0;border-top:1px solid #2b2724}
   header .sub{display:none}
-  header #scaleInfo{display:inline}
 }
 /* ---------- till furniture ---------- */
 .topbar{height:70px;flex:none;background:var(--panel);border-bottom:1px solid var(--line);
@@ -75,7 +78,6 @@ main{flex:1;display:flex;min-width:0}
 .grow{flex:1;display:flex;align-items:baseline;gap:11px;min-width:0}
 .chip{border:1px solid var(--line);border-radius:10px;padding:9px 15px;font-size:14px;font-weight:700;
   color:var(--text);background:transparent;cursor:pointer;font-family:inherit;white-space:nowrap}
-.chip.lit{background:var(--warn);border-color:var(--warn);color:#fff}
 .main{flex:1;display:flex;min-height:0}
 .gridwrap{flex:1;min-width:0;padding:13px 15px 15px 15px;position:relative}
 .grid{width:100%;height:100%;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(4,1fr);gap:11px}
@@ -87,33 +89,42 @@ main{flex:1;display:flex;min-width:0}
   cursor:pointer;color:var(--text);padding:11px 12px 11px 18px;display:flex;flex-direction:column;
   align-items:center;justify-content:center;font-family:inherit;text-align:center}
 .t .stripe{position:absolute;left:0;top:0;bottom:0;width:7px}
-.t img{width:64px;height:64px;object-fit:contain;margin-bottom:7px;display:block}
-.t .nm{font-size:14px;line-height:1.15;font-weight:700;max-height:32px;overflow:hidden;
+.t img{flex:none;width:64px;height:64px;object-fit:contain;margin-bottom:7px;display:block}
+.t .nm{flex:none;font-size:14px;line-height:1.15;font-weight:700;max-height:32px;overflow:hidden;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 .t .pr{font-size:17px;line-height:1.1;font-weight:700;margin-top:3px}
-/* ---- ΟΨΗ 1 — σβησμένο ---- */
-.out.o1 img{filter:grayscale(1);opacity:.3}
-.out.o1 .nm,.out.o1 .pr{opacity:.32}
-.out.o1 .stripe{opacity:.25}
-/* ---- ΟΨΗ 2 — ταινία ---- */
-.out.o2 img{filter:grayscale(1);opacity:.34}
-.out.o2 .nm,.out.o2 .pr{opacity:.34}
-.out.o2 .stripe{opacity:.25}
-.out.o2::after{content:"ΤΕΛΕΙΩΣΕ";position:absolute;left:-14px;right:-14px;top:50%;transform:translateY(-50%) rotate(-9deg);
-  background:var(--danger);color:#fff;font-size:15px;font-weight:800;letter-spacing:2.4px;padding:5px 0;text-align:center}
-/* ---- ΟΨΗ 3 — η λέξη στη θέση της τιμής ---- */
-.out.o3 img{filter:grayscale(1);opacity:.42}
-.out.o3 .nm{opacity:.45}
-.out.o3 .stripe{opacity:.25}
-.out.o3 .pr{visibility:hidden}
-.t .word{display:none}
 /* Η μπάρα του κρατήματος — hold_button.dart: «χωρίς αυτήν, ο ταμίας που το
    πρώτο του πάτημα δεν έκανε τίποτα μαθαίνει ότι το κουμπί χάλασε, όχι ότι
    θέλει πιο πολύ κράτημα». Στο πλακίδιο πάει χαμηλά, για να μην κρύψει το φαγητό. */
-.t .fill{position:absolute;left:0;right:auto;bottom:0;height:6px;width:0;background:var(--warn);pointer-events:none}
+.t .fill{position:absolute;left:0;bottom:0;height:6px;width:0;background:var(--warn);pointer-events:none;z-index:4}
 .t.tapped{outline:2px solid var(--pay);outline-offset:-2px}
-.out.o3 .word{display:block;position:absolute;left:18px;right:12px;bottom:11px;font-size:15px;font-weight:800;
-  letter-spacing:1.6px;color:var(--danger);line-height:1.1}
+
+/* ---------- ΤΕΛΕΙΩΜΕΝΟ — η ταινία, σε τρεις θέσεις ----------
+   Κοινό και στις τρεις: **το όνομα μένει άθικτο**. Σβήνει η φωτογραφία, όχι
+   η λέξη που λέει στον ταμία τι ακριβώς τελείωσε. */
+.t .band{display:none;position:absolute;background:var(--danger);color:#fff;text-align:center;
+  font-weight:800;letter-spacing:2.2px;pointer-events:none;z-index:3;white-space:nowrap}
+.out img{filter:grayscale(1);opacity:.32}
+.out .stripe{opacity:.25}
+.out .band{display:block}
+
+/* Α — λοξή, πάνω από τη φωτογραφία. Το όνομα και η τιμή δεν αγγίζονται. */
+.out.b1 .band{left:-16px;right:-16px;top:36px;transform:rotate(-9deg);font-size:14px;padding:4px 0}
+
+/* Β — στη θέση της τιμής. Η τιμή φεύγει: δεν πουλιέται, δεν έχει τιμή.
+   **Η ταινία μπαίνει στη ροή, δεν κάθεται από πάνω.** Καρφωμένη στο κάτω χείλος
+   έκοβε 38 πίξελ από τη «Χωριάτικη σαλάτα»: το δίγραμμο όνομα κατεβάζει τη
+   στήλη και η ταινία δάγκωνε τη δεύτερη γραμμή. Έτσι το πλακίδιο της δίνει
+   τη θέση της τιμής, και το όνομα δεν την ακουμπάει ποτέ — τα αρνητικά
+   περιθώρια είναι που τη φτάνουν ως τις άκρες. */
+.out.b2 .pr{display:none}
+.out.b2 img{width:52px;height:52px}
+.out.b2 .band{position:static;margin:3px -12px -11px -18px;font-size:15px;padding:6px 0;letter-spacing:2.6px}
+
+/* Γ — σφραγίδα στο πάνω χείλος. Τίποτα από το κείμενο δεν κουνιέται. */
+.out.b3 .band{left:0;right:0;top:0;font-size:13px;padding:4px 0;letter-spacing:2.4px}
+.out.b3 img{width:44px;height:44px}
+
 /* ---------- cart ---------- */
 .cart{width:430px;flex:none;background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column}
 .chead{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;font-weight:800;letter-spacing:1.9px;padding:15px 20px 9px}
@@ -130,7 +141,7 @@ main{flex:1;display:flex;min-width:0}
 .btn{flex:1;height:46px;border:1px solid var(--line);background:transparent;color:var(--text);border-radius:10px;
   font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;overflow:hidden}
 .pay{height:76px;background:var(--pay);color:#fff;border:0;border-radius:12px;font-size:28px;font-weight:700;font-family:inherit;cursor:pointer}
-/* ---------- overlays ---------- */
+/* ---------- η ερώτηση του κρατήματος ---------- */
 .veil{position:absolute;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:9}
 .sheet{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:30px 34px;width:580px;text-align:center;
   box-shadow:0 24px 70px rgba(0,0,0,.55)}
@@ -140,35 +151,6 @@ main{flex:1;display:flex;min-width:0}
 .sheet .row button{flex:1;height:66px;border-radius:12px;font-size:20px;font-weight:700;font-family:inherit;
   cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--text)}
 .sheet .row .ok{background:var(--warn);border-color:var(--warn);color:#fff}
-/* mode banner */
-.banner{position:absolute;left:0;right:0;top:0;bottom:0;border:4px solid var(--warn);pointer-events:none;z-index:8}
-.banner span{position:absolute;left:50%;transform:translateX(-50%);top:0;background:var(--warn);color:#fff;
-  font-size:14px;font-weight:800;letter-spacing:2.2px;padding:7px 22px;border-radius:0 0 10px 10px;white-space:nowrap}
-/* list sheet */
-.lsheet{position:absolute;inset:0;background:var(--bg);z-index:9;display:flex;flex-direction:column}
-.lhead{height:70px;flex:none;background:var(--panel);border-bottom:1px solid var(--line);display:flex;align-items:center;
-  justify-content:space-between;padding:0 22px}
-.lhead b{font-size:22px;font-weight:700}
-.lbody{flex:1;overflow:auto;padding:12px 22px}
-.lr{display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--line);padding:11px 4px;cursor:pointer}
-.lr .sw{width:64px;height:34px;border-radius:17px;background:var(--line);flex:none;position:relative}
-.lr .sw i{position:absolute;top:3px;left:3px;width:28px;height:28px;border-radius:50%;background:var(--muted)}
-.lr.on .sw{background:var(--danger)}
-.lr.on .sw i{left:33px;background:#fff}
-.lr .n{flex:1;font-size:19px;font-weight:700;color:var(--text)}
-.lr.on .n{color:var(--muted);text-decoration:line-through}
-.lr .p{font-size:17px;color:var(--muted);font-weight:700}
-.lsep{font-size:11px;letter-spacing:2px;font-weight:800;color:var(--muted);padding:18px 4px 6px}
-/* admin */
-.adm{position:absolute;inset:0;background:var(--bg);z-index:9;display:flex;flex-direction:column}
-.admbody{flex:1;display:flex;min-height:0}
-.admnav{width:250px;flex:none;background:var(--panel);border-right:1px solid var(--line);padding:14px 10px}
-.admnav div{padding:12px 14px;border-radius:9px;font-size:16px;font-weight:700;color:var(--muted)}
-.admnav div.on{background:var(--tile);color:var(--text)}
-.admmain{flex:1;padding:18px 24px;overflow:auto}
-.steps{position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.74);padding:14px 24px;display:flex;gap:9px;align-items:center;flex-wrap:wrap}
-.steps b{background:var(--danger);color:#fff;border-radius:6px;padding:2px 8px;font-size:13px;font-weight:800}
-.steps span{font-size:15px;color:#f0ebe6;margin-right:6px}
 </style>
 </head>
 <body>
@@ -181,16 +163,14 @@ main{flex:1;display:flex;min-width:0}
 
 <div class="app">
   <aside>
-    <h3>ΜΗΧΑΝΙΣΜΟΣ — ΠΩΣ ΤΟ ΔΗΛΩΝΕΙΣ</h3>
-    <div class="opts"><button class="opt on" data-m="1"><b>Μ1 · Παρατεταμένο πάτημα</b><span class="d">Κρατάς το πλακίδιο πατημένο, 600 ms</span></button>
-    <button class="opt" data-m="2"><b>Μ2 · Λειτουργία σήμανσης</b><span class="d">Κουμπί ΤΕΛΕΙΩΣΕ στην πάνω μπάρα</span></button>
-    <button class="opt" data-m="3"><b>Μ3 · Φύλλο με λίστα</b><span class="d">Όλα τα προϊόντα, ένας διακόπτης το καθένα</span></button>
-    <button class="opt" data-m="4"><b>Μ4 · Από τη ΔΙΑΧΕΙΡΙΣΗ</b><span class="d">Ο φθηνός δρόμος — και γιατί δεν γράφεται ποτέ</span></button></div>
+    <div class="done"><b>ΔΙΑΛΕΓΜΕΝΑ</b>Μ1 · παρατεταμένο πάτημα στο πλακίδιο &nbsp;·&nbsp; Ο2 · ταινία με τη λέξη</div>
 
-    <h3>ΟΨΗ — ΠΩΣ ΦΑΙΝΕΤΑΙ ΤΟ ΤΕΛΕΙΩΜΕΝΟ</h3>
-    <div class="opts"><button class="opt on" data-o="1"><b>Ο1 · Σβησμένο</b><span class="d">Χάνει χρώμα και δύναμη, τίποτα από πάνω του</span></button>
-    <button class="opt" data-o="2"><b>Ο2 · Ταινία</b><span class="d">Η λέξη περνάει πάνω από το πλακίδιο</span></button>
-    <button class="opt" data-o="3"><b>Ο3 · Η λέξη αντί για τιμή</b><span class="d">Δεν καλύπτεται τίποτα, φεύγει η τιμή</span></button></div>
+    <h3>ΠΟΥ ΠΑΕΙ Η ΤΑΙΝΙΑ</h3>
+    <div class="opts">
+    <button class="opt on" data-b="1"><b>Α · Λοξή, πάνω στη φωτογραφία</b><span class="d">Όνομα και τιμή δεν αγγίζονται καθόλου</span></button>
+    <button class="opt" data-b="2"><b>Β · Στη θέση της τιμής</b><span class="d">Όλο το πλάτος χαμηλά· η τιμή φεύγει</span></button>
+    <button class="opt" data-b="3"><b>Γ · Σφραγίδα στο πάνω χείλος</b><span class="d">Ίσια λωρίδα στην κορυφή, τίποτα δεν κουνιέται</span></button>
+    </div>
 
     <h3>ΘΕΜΑ</h3>
     <div class="mini">
@@ -205,7 +185,7 @@ main{flex:1;display:flex;min-width:0}
     </div>
 
     <h3>ΔΟΚΙΜΑΣΕ ΤΟ</h3>
-    <p style="font-size:11.5px;color:#8b837b;line-height:1.5">Τα πλακίδια πατιούνται. Στο Μ1 ρωτάει, στο Μ2 άναψε πρώτα το ΤΕΛΕΙΩΣΕ επάνω, στο Μ3 άνοιξε τη λίστα.</p>
+    <p style="font-size:11.5px;color:#8b837b;line-height:1.5">Κράτα ένα πλακίδιο πατημένο — γεμίζει η μπάρα και ρωτάει. Άγγιξέ το γρήγορα — πουλάει.</p>
   </aside>
 
   <main>
@@ -217,7 +197,6 @@ main{flex:1;display:flex;min-width:0}
             <span class="title">ΤΑΜΕΙΟ Α</span>
             <span class="event">Πανηγύρι Αγίου Δημητρίου</span>
           </div>
-          <button class="chip" id="chipMark" style="display:none">ΤΕΛΕΙΩΣΕ</button>
           <button class="chip">ΤΑΜΙΑΣ: Γιώργος</button>
           <button class="chip">ΤΑΜΕΙΟ</button>
           <button class="chip">ΔΙΑΧΕΙΡΙΣΗ</button>
@@ -225,7 +204,6 @@ main{flex:1;display:flex;min-width:0}
         <div class="main">
           <div class="gridwrap">
             <div class="grid" id="grid"></div>
-            <div class="banner" id="banner" style="display:none"><span>ΑΓΓΙΞΕ Ο,ΤΙ ΤΕΛΕΙΩΣΕ — ΞΑΝΑ ΓΙΑ ΝΑ ΕΠΑΝΕΛΘΕΙ</span></div>
           </div>
           <div class="cart">
             <div class="chead"><span>ΠΑΡΑΓΓΕΛΙΑ 47</span><span>21:14</span></div>
@@ -250,30 +228,6 @@ main{flex:1;display:flex;min-width:0}
             <div class="row"><button id="askNo">ΑΚΥΡΟ</button><button class="ok" id="askYes">ΝΑΙ</button></div>
           </div>
         </div>
-
-        <div class="lsheet" id="lsheet" style="display:none">
-          <div class="lhead"><b>ΤΙ ΤΕΛΕΙΩΣΕ</b><button class="chip" id="lclose">ΚΛΕΙΣΙΜΟ</button></div>
-          <div class="lbody" id="lbody"></div>
-        </div>
-
-        <div class="adm" id="adm" style="display:none">
-          <div class="topbar"><div class="grow"><span class="title">ΔΙΑΧΕΙΡΙΣΗ</span></div><button class="chip">ΕΞΟΔΟΣ</button></div>
-          <div class="admbody">
-            <div class="admnav">
-              <div>ΒΑΡΔΙΑ</div><div>ΠΑΡΑΓΓΕΛΙΕΣ</div><div class="on">ΠΡΟΪΟΝΤΑ</div><div>ΚΑΤΗΓΟΡΙΕΣ</div>
-              <div>ΔΙΑΤΑΞΗ</div><div>ΤΑΜΙΕΣ</div><div>ΕΚΤΥΠΩΤΕΣ</div><div>ΡΥΘΜΙΣΕΙΣ</div>
-            </div>
-            <div class="admmain" id="admlist"></div>
-          </div>
-          <div class="steps">
-            <b>1</b><span>ΔΙΑΧΕΙΡΙΣΗ</span>
-            <b>2</b><span>έξι ψηφία PIN</span>
-            <b>3</b><span>ΠΡΟΪΟΝΤΑ</span>
-            <b>4</b><span>βρες το όνομα στις 559 γραμμές</span>
-            <b>5</b><span>διακόπτης</span>
-            <b>6</b><span>ΕΞΟΔΟΣ</span>
-          </div>
-        </div>
       </div>
       </div>
     </div>
@@ -283,6 +237,7 @@ main{flex:1;display:flex;min-width:0}
 </div>
 
 <script>
+const PICS = __PICS__;
 const P = [
  ['Σουβλάκι χοιρινό','meat_souvlaki_xoirino',250,'#B4472E'],
  ['Σουβλάκι κοτόπουλο','meat_souvlaki_kotopoulo',250,'#B4472E'],
@@ -305,31 +260,33 @@ const P = [
  ['Κρασί κόκκινο 250ml','wine_krasi_kokkino_xyma_250ml',300,'#7A4E9E'],
  ['Παγωτό','sweets_pagoto',200,'#C08A2E'],
 ];
-const PICS = __PICS__;
 const euro = c => (c/100).toFixed(2).replace('.',',') + ' €';
 // Κεφαλαία ελληνικά: ο τόνος φεύγει. «ΜΠΡΙΖΌΛΑ» δεν γράφεται πουθενά.
-const KEF = s => s.toUpperCase().normalize('NFD').replace(/[̀-́͂-ͅ]/g,'').normalize('NFC');
-const out = new Set([2,10]);
-let mech = 1, look = 1, marking = false, pending = null;
+const KEF = s => s.toUpperCase().normalize('NFD').replace(/[̀-ͅ]/g,'').normalize('NFC');
+
+// Τρία τελειωμένα, διαλεγμένα ώστε να δοκιμάζουν και τα δύο σχήματα ονόματος:
+// «Μπριζόλα χοιρινή» και «Χωριάτικη σαλάτα» πιάνουν δύο γραμμές, «Παγωτό» μία.
+const out = new Set([2,10,19]);
+let band = 1, pending = null;
 
 const grid = document.getElementById('grid');
 function paint(){
   grid.innerHTML = '';
   P.forEach((p,i)=>{
     const b = document.createElement('button');
-    b.className = 't' + (out.has(i) ? ' out o'+look : '');
+    b.className = 't' + (out.has(i) ? ' out b'+band : '');
     b.innerHTML =
       '<span class="stripe" style="background:'+p[3]+'"></span>' +
       '<img src="'+PICS[p[1]]+'" alt="">' +
       '<span class="nm">'+p[0]+'</span>' +
       '<span class="pr">'+euro(p[2])+'</span>' +
-      '<span class="word">ΤΕΛΕΙΩΣΕ</span>' +
+      '<span class="band">ΤΕΛΕΙΩΣΕ</span>' +
       '<span class="fill"></span>';
-    if(mech===1) arm(b,i); else b.onclick = ()=>tap(i);
+    arm(b,i);
     grid.appendChild(b);
   });
-  drawList(); drawAdmin();
 }
+
 // 600 ms — ο ίδιος αριθμός που έχει η ΑΚΥΡΩΣΗ ΟΛΩΝ στο προϊόν
 // (`holdToConfirmDuration`, D-062).
 const HOLD = 600;
@@ -368,111 +325,59 @@ function ask(i){
     (out.has(i) ? 'ΞΑΝΑ ΣΤΟ ΤΑΜΕΙΟ: ' : 'ΤΕΛΕΙΩΣΕ: ') + KEF(P[i][0]) + ';';
   document.getElementById('ask').style.display='flex';
 }
-
-function tap(i){
-  if(mech===1){ ask(i); return; }
-  if(mech===2 && marking){ out.has(i)?out.delete(i):out.add(i); paint(); }
-}
 document.getElementById('askNo').onclick=()=>document.getElementById('ask').style.display='none';
 document.getElementById('askYes').onclick=()=>{
   out.has(pending)?out.delete(pending):out.add(pending);
   document.getElementById('ask').style.display='none'; paint();
 };
 
-function drawList(){
-  const box = document.getElementById('lbody'); box.innerHTML='';
-  const order = [...P.keys()].sort((a,b)=> (out.has(b)?1:0)-(out.has(a)?1:0));
-  let sep=false;
-  order.forEach(i=>{
-    if(!out.has(i) && !sep){ sep=true;
-      const s=document.createElement('div'); s.className='lsep'; s.textContent='ΟΛΑ ΤΑ ΥΠΟΛΟΙΠΑ'; box.appendChild(s); }
-    const r=document.createElement('div'); r.className='lr'+(out.has(i)?' on':'');
-    r.innerHTML='<span class="sw"><i></i></span><span class="n">'+P[i][0]+'</span><span class="p">'+euro(P[i][2])+'</span>';
-    r.onclick=()=>{ out.has(i)?out.delete(i):out.add(i); paint(); };
-    box.appendChild(r);
-  });
-}
-function drawAdmin(){
-  const box=document.getElementById('admlist'); box.innerHTML='';
-  P.slice(0,7).forEach((p,i)=>{
-    const r=document.createElement('div'); r.className='lr'+(out.has(i)?' on':'');
-    r.innerHTML='<span class="n">'+p[0]+'</span><span class="p">'+euro(p[2])+'</span><span class="sw"><i></i></span>';
-    box.appendChild(r);
-  });
-}
-
-const NOTES = {
-1:{t:'Μ1 — Παρατεταμένο πάτημα', k:'ΤΟ ΠΛΑΚΙΔΙΟ ΤΟ ΞΕΡΕΙ ΜΟΝΟ ΤΟΥ',
- b:'Κρατάς πατημένο το πλακίδιο — 600 ms, ο ίδιος χρόνος που θέλει η ΑΚΥΡΩΣΗ ΟΛΩΝ. Μια μπάρα γεμίζει από κάτω όσο κρατάς, όπως εκεί· αν σηκώσεις νωρίς, το πλακίδιο απλώς πούλησε. Δοκίμασέ το: κράτα, και μετά άγγιξε γρήγορα. Ρωτάει μία φορά, απαντάς, σβήνει. Η ίδια ακριβώς κίνηση το φέρνει πίσω όταν βγει η επόμενη ταψιά.',
- pro:['Δύο κινήσεις, χωρίς να φύγεις από την οθόνη πώλησης ούτε βήμα.',
-      'Κανένα καινούργιο έπιπλο — η πάνω μπάρα δεν φορτώνεται άλλο κουμπί.',
-      'Η χειρονομία υπάρχει ήδη στο προϊόν: η ΑΚΥΡΩΣΗ ΟΛΩΝ θέλει κράτημα.',
-      'Αδύνατο να γίνει κατά λάθος μέσα στην ουρά — το γρήγορο άγγιγμα πουλάει, όπως πάντα.'],
- con:['<b>Κρυφό.</b> Ο εθελοντής που έμαθε το πρόγραμμα σε πέντε λεπτά δεν πρόκειται να το ανακαλύψει, και τίποτα στην οθόνη δεν το λέει.',
-      'Δεν βλέπεις πουθενά μαζεμένο τι λείπει αυτή τη στιγμή.',
-      'Ένα πλακίδιο, δύο πράγματα — ανάλογα με το πόσο κρατάς το δάχτυλο.']},
-2:{t:'Μ2 — Λειτουργία σήμανσης', k:'Η ΛΕΞΗ ΠΑΝΩ ΣΤΗΝ ΜΠΑΡΑ',
- b:'Πατάς ΤΕΛΕΙΩΣΕ στην πάνω μπάρα. Το πλέγμα μπαίνει σε κίτρινη κορνίζα και για όση ώρα είναι εκεί, κάθε άγγιγμα σβήνει ή επαναφέρει ένα πλακίδιο. Ξαναπατάς και τελείωσε.',
- pro:['<b>Φαίνεται.</b> Η λέξη στέκεται στην μπάρα, όπως το ΤΑΜΕΙΟ — κανείς δεν χρειάζεται να του το πουν.',
-      'Τρία πράγματα τελειώνουν μαζί στη ψησταριά: τα σβήνεις με τρία αγγίγματα.',
-      'Καμία σύγκρουση με την πώληση — είναι άλλη κατάσταση, με δικό της χρώμα σε όλη την οθόνη.',
-      'Ίδια κίνηση για το σβήσιμο και για την επαναφορά.'],
- con:['<b>Είναι κατάσταση, και οι καταστάσεις ξεχνιούνται.</b> Αν φύγεις χωρίς να την κλείσεις, το επόμενο άγγιγμα δεν πουλάει — γι’ αυτό η κορνίζα είναι τόσο έντονη, και γι’ αυτό πρέπει να βγαίνει μόνη της μόλις σταματήσεις να την πειράζεις.',
-      'Ένα ακόμα κουμπί σε μια μπάρα που σε στενή οθόνη είναι ήδη γεμάτη.']},
-3:{t:'Μ3 — Φύλλο με λίστα', k:'ΕΝΑ ΜΕΡΟΣ ΠΟΥ ΛΕΕΙ ΤΙ ΛΕΙΠΕΙ',
- b:'Πατάς ΤΕΛΕΙΩΣΕ και ανοίγει ολόκληρο φύλλο: κάθε προϊόν του μενού μια γραμμή, ένας διακόπτης. Ό,τι έχει τελειώσει ανεβαίνει στην κορυφή.',
- pro:['Με μια ματιά ξέρεις τι λείπει — και το λες στον πελάτη χωρίς να ψάχνεις το πλέγμα.',
-      'Το σχήμα το ξέρει ήδη: είναι το φύλλο μετρήματος του ταμείου.',
-      'Η επαναφορά είναι το ίδιο εύκολη με το σβήσιμο.'],
- con:['<b>Ψάχνεις όνομα σε λίστα εξήντα γραμμών</b>, αντί να αγγίξεις το πλακίδιο που το χέρι σου ξέρει πού είναι — και το ψάχνεις ακριβώς την ώρα που βιάζεσαι.',
-      'Σε μεγάλο μενού θέλει κύλιση, δηλαδή δεύτερη κίνηση πριν καν αρχίσεις.',
-      'Φεύγεις από την οθόνη πώλησης, έστω και για λίγο.']},
-4:{t:'Μ4 — Από τη ΔΙΑΧΕΙΡΙΣΗ', k:'Ο ΦΘΗΝΟΣ ΔΡΟΜΟΣ',
- b:'Ένας διακόπτης δίπλα σε κάθε προϊόν, στη σελίδα ΠΡΟΪΟΝΤΑ του πίνακα. Δεν αλλάζει τίποτα στην οθόνη πώλησης και δεν κοστίζει σχεδόν τίποτα να γίνει.',
- pro:['Καμία αλλαγή στην οθόνη πώλησης, καμία καινούργια χειρονομία.',
-      'Μηδενικός κίνδυνος να πατηθεί κατά λάθος μέσα στη βιασύνη.'],
- con:['<b>Έξι βήματα και έξοδος από την οθόνη πώλησης, με ουρά από πίσω.</b> Στις 23:30 αυτό σημαίνει «μετά», δηλαδή ποτέ — και μια σήμανση που δεν γράφεται δεν αξίζει τίποτα.',
-      'Θέλει PIN και δικαίωμα να μπεις στον πίνακα, ενώ εσύ είπες ότι αυτή η ενέργεια είναι όλων, ανεξαρτήτως κάρτας.',
-      'Είναι ακριβώς το επιχείρημα που έκρινε το ΤΑΜΕΙΟ στις 27/08: το κουμπί μπήκε στην μπάρα και όχι στον πίνακα, για τον ίδιο λόγο.']}
-};
-const LOOKS = {
-1:['Ο1 — Σβησμένο','Το πλακίδιο χάνει χρώμα και δύναμη και τίποτα δεν μπαίνει από πάνω του. Το πιο ήσυχο: δεν σπάει τη γραμμή του πλέγματος και δεν κρύβει τη φωτογραφία. Το ρίσκο είναι ότι από ένα μέτρο μακριά, μέσα στη νύχτα, «ξεθωριασμένο» και «κανονικό» μοιάζουν.'],
-2:['Ο2 — Ταινία','Η λέξη περνάει πλάγια πάνω από το πλακίδιο. Διαβάζεται όρθιος, με την άκρη του ματιού, μέσα στο σκοτάδι — κανένα λάθος. Κόστος: καλύπτει τη φωτογραφία, και το κόκκινο είναι κρατημένο για την ΑΚΥΡΩΣΗ ΟΛΩΝ (UI-DESIGN §5) — αν διαλεγεί, το χρώμα το ξανακοιτάμε.'],
-3:['Ο3 — Η λέξη αντί για τιμή','Δεν καλύπτεται τίποτα: εκεί που ήταν η τιμή γράφει ΤΕΛΕΙΩΣΕ. Λέει το σωστό πράγμα στο σωστό σημείο — δεν έχει τιμή γιατί δεν πουλιέται. Στα πολύ μικρά πλακίδια όμως η λέξη είναι πιο αδύναμη από μια ταινία και θέλει δεύτερο κοίταγμα.']
+const BANDS = {
+1:['Α — Λοξή, πάνω στη φωτογραφία',
+   'Η ταινία περνάει λοξά στο ύψος της φωτογραφίας. <b>Το όνομα και η τιμή δεν αγγίζονται καθόλου</b> — μένουν εκεί που ήταν, στην ένταση που ήταν. Ό,τι σβήνει είναι το φαγητό από πίσω.',
+   ['Η λοξή γραμμή δεν μοιάζει με τίποτα άλλο στο ταμείο: το μάτι την πιάνει πριν διαβάσει.',
+    'Η μόνη από τις τρεις που δεν ακουμπάει καθόλου το μέγεθος της φωτογραφίας — μένει στα 64.',
+    'Το όνομα είναι ολόκληρο και σε πλήρη δύναμη — ο ταμίας διαβάζει τι τελείωσε.',
+    'Δεν αλλάζει τίποτα στη διάταξη του πλακιδίου.'],
+   ['Καλύπτει τη μέση της φωτογραφίας — αν κάποια στιγμή θελήσεις να ξεχωρίζεις δύο προϊόντα από την εικόνα τους, εδώ δεν γίνεται.',
+    'Σε πολύ κοντό πλακίδιο η λοξή ταινία πλησιάζει την πρώτη γραμμή του ονόματος.']],
+2:['Β — Στη θέση της τιμής',
+   'Ίσια ταινία σε όλο το πλάτος, στο κάτω χείλος, ακριβώς εκεί που ήταν η τιμή — και <b>η τιμή φεύγει</b>: δεν πουλιέται, δεν έχει τιμή. Το όνομα από πάνω της, ολόκληρο.',
+   ['Λέει δύο πράγματα με μία κίνηση: «τελείωσε» και «δεν έχει τιμή».',
+    'Η φωτογραφία μένει ακάλυπτη, μόνο ξεθωριασμένη.',
+    'Το πιο πλατύ γράψιμο από τα τρία — διαβάζεται από πιο μακριά.'],
+   ['Η τιμή χάνεται, και υπάρχει περίπτωση να τη θέλει ο ταμίας για να απαντήσει «πόσο έκανε;».',
+    'Πέφτει πάνω στη μπάρα του κρατήματος, που ζει στο ίδιο χείλος — θέλει να μετακινηθεί η μία από τις δύο.',
+    'Η φωτογραφία μικραίνει 64 → 52 για να χωρέσει η ταινία χωρίς να ζουληχτεί το όνομα.']],
+3:['Γ — Σφραγίδα στο πάνω χείλος',
+   'Ίσια λωρίδα στην κορυφή του πλακιδίου, σαν σφραγίδα. <b>Τίποτα από το κείμενο δεν κουνιέται και τίποτα δεν καλύπτεται</b> — ούτε το όνομα, ούτε η τιμή, ούτε το φαγητό.',
+   ['Το μόνο από τα τρία που δεν κρύβει απολύτως τίποτα.',
+    'Η κορυφή του πλακιδίου είναι άδεια σε κάθε προϊόν — η ταινία δεν συναγωνίζεται τίποτα.',
+    'Το όνομα, η τιμή και η φωτογραφία μένουν όπως τα ξέρει το χέρι.'],
+   ['Είναι η πιο ήσυχη από τις τρεις: μια λωρίδα στην κορυφή μοιάζει με διακόσμηση, όχι με άρνηση.',
+    'Είναι η πιο ακριβή σε χώρο: η φωτογραφία μικραίνει 64 → 44, γιατί η λωρίδα παίρνει ύψος και το όνομα δεν επιτρέπεται να δώσει ούτε πίξελ.']]
 };
 function notes(){
-  const n = NOTES[mech], l = LOOKS[look];
+  const b = BANDS[band];
   document.getElementById('notes').innerHTML =
-   '<div class="kicker">'+n.k+'</div><h2>'+n.t+'</h2><p>'+n.b+'</p>'+
-   '<ul>'+n.pro.map(x=>'<li class="pro"><i>+</i>'+x+'</li>').join('')+
-   n.con.map(x=>'<li class="con"><i>−</i>'+x+'</li>').join('')+'</ul>'+
-   '<hr><div class="kicker">Η ΟΨΗ ΠΟΥ ΒΛΕΠΕΙΣ ΤΩΡΑ</div><h2>'+l[0]+'</h2><p>'+l[1]+'</p>'+
+   '<div class="kicker">ΤΟ ΕΡΩΤΗΜΑ ΠΟΥ ΜΕΝΕΙ</div><h2>Πού κάθεται η ταινία;</h2>'+
+   '<p>Διάλεξες <b style="color:#7fd3a3">Μ1</b> — το κράτημα πάνω στο πλακίδιο — και <b style="color:#7fd3a3">την ταινία</b>. '+
+   'Έμεινε ένα: πού μπαίνει, τώρα που <b>το όνομα πρέπει να μένει διαβαστό</b>. Και στα τρία, το όνομα είναι άθικτο· '+
+   'αυτό που σβήνει είναι η φωτογραφία.</p><hr>'+
+   '<h2>'+b[0]+'</h2><p>'+b[1]+'</p>'+
+   '<ul>'+b[2].map(x=>'<li class="pro"><i>+</i>'+x+'</li>').join('')+
+   b[3].map(x=>'<li class="con"><i>−</i>'+x+'</li>').join('')+'</ul>'+
    '<hr>'+
    '<div class="rulebox"><b>Το πλακίδιο δεν φεύγει ποτέ από το πλέγμα.</b> Αν έφευγε, θα μετακινούνταν όλα τα υπόλοιπα — και το χέρι που έμαθε πού είναι το νερό θα χτυπούσε μπύρα. Μένει στη θέση του, δεν πουλάει, και γυρίζει.</div>'+
-   '<div class="rulebox"><b>Κανένα δικαίωμα, όπως το ζήτησες.</b> Όποιος στέκεται στο ταμείο μπορεί να το πει: δεν είναι λεφτά, δεν είναι ακύρωση, και δεν χάνεται τίποτα αν γίνει λάθος — γυρίζει με την ίδια κίνηση.</div>'+
-   '<div class="rulebox"><b>Τρία που δεν φαίνονται στο σχέδιο.</b> (α) Καθαρίζει στο ΑΝΟΙΓΜΑ ΒΑΡΔΙΑΣ — ό,τι τελείωσε το Σάββατο υπάρχει ξανά την Κυριακή. (β) Αν είναι ήδη μέσα σε ανοιχτή παραγγελία, η γραμμή μένει· ο ταμίας τη σβήνει αν θέλει. (γ) Το Ζ μπορεί να τυπώνει τι τελείωσε και τι ώρα — είναι ακριβώς το χαρτί που θέλει ο σύλλογος για να παραγγείλει του χρόνου.</div>';
+   '<div class="rulebox"><b>Κανένα δικαίωμα, όπως το ζήτησες.</b> Όποιος στέκεται στο ταμείο μπορεί να το πει: δεν είναι λεφτά, δεν είναι ακύρωση, και δεν χάνεται τίποτα αν γίνει λάθος — γυρίζει με το ίδιο κράτημα.</div>'+
+   '<div class="rulebox"><b>Τρία που δεν φαίνονται στο σχέδιο.</b> (α) Καθαρίζει στο ΑΝΟΙΓΜΑ ΒΑΡΔΙΑΣ — ό,τι τελείωσε το Σάββατο υπάρχει ξανά την Κυριακή. (β) Αν είναι ήδη μέσα σε ανοιχτή παραγγελία, η γραμμή μένει· ο ταμίας τη σβήνει αν θέλει. (γ) Το Ζ μπορεί να τυπώνει τι τελείωσε και τι ώρα — είναι ακριβώς το χαρτί που θέλει ο σύλλογος για να παραγγείλει του χρόνου.</div>'+
+   '<div class="rulebox"><b>Το όνομα δεν δίνει ποτέ χώρο.</b> Και στις τρεις, όταν η ταινία ζήτησε ύψος, τον έδωσε η φωτογραφία. Μετρήθηκε: με τη στήλη ελεύθερη, το «Χωριάτικη σαλάτα» έχανε 10 πίξελ στη Γ και 6 στη Β — δηλαδή τη δεύτερη γραμμή του, ακριβώς τη λέξη που ζήτησες να μένει διαβαστή.</div>'+
+   '<div class="rulebox"><b>Το κόκκινο θέλει απόφαση.</b> Στο ταμείο είναι κρατημένο για ένα κουμπί, την ΑΚΥΡΩΣΗ ΟΛΩΝ (UI-DESIGN §5). Αν κρατήσουμε το κόκκινο και εδώ, το χρώμα σταματάει να σημαίνει «προσοχή, χάνεις κάτι». Η εναλλακτική είναι το κίτρινο της ειδοποίησης. Πες μου ποιο θες και το αλλάζω στην ίδια σελίδα.</div>';
 }
-function apply(){
-  document.getElementById('chipMark').style.display = (mech===2||mech===3)?'block':'none';
-  document.getElementById('ask').style.display='none';
-  document.getElementById('lsheet').style.display='none';
-  document.getElementById('adm').style.display = mech===4?'flex':'none';
-  document.getElementById('banner').style.display = (mech===2&&marking)?'block':'none';
-  document.getElementById('chipMark').className = 'chip'+((mech===2&&marking)?' lit':'');
-  paint(); notes();
-}
-document.getElementById('chipMark').onclick=()=>{
-  if(mech===2){ marking=!marking; apply(); }
-  else { document.getElementById('lsheet').style.display='flex'; }
-};
-document.getElementById('lclose').onclick=()=>document.getElementById('lsheet').style.display='none';
 
-document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{
-  document.querySelectorAll('[data-m]').forEach(x=>x.classList.remove('on')); b.classList.add('on');
-  mech=+b.dataset.m; marking=false; apply();});
-document.querySelectorAll('[data-o]').forEach(b=>b.onclick=()=>{
-  document.querySelectorAll('[data-o]').forEach(x=>x.classList.remove('on')); b.classList.add('on');
-  look=+b.dataset.o; apply();});
+function apply(){ paint(); notes(); }
+document.querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('[data-b]').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+  band=+b.dataset.b; apply();});
 document.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('[data-t]').forEach(x=>x.classList.remove('on')); b.classList.add('on');
   document.getElementById('till').classList.toggle('light', b.dataset.t==='light');});
