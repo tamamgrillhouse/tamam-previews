@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<title>ΟΠΑ! POS — το πλάτος της φωτογραφίας στο πλακίδιο</title>
+<style>
+@font-face { font-family: 'Manrope'; src: url('__FONT__') format('truetype'); }
+:root {
+  --bg: #F7F4EF; --panel: #FFFDFB; --tile: #FFFDFB; --line: #E5DED4;
+  --ink: #191614; --muted: #776E64; --red: #D24B3E; --green: #3F8F4A;
+  --orange: #E09B12; --pay: #1B7A47; --danger: #C43A28;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 40px 44px 90px; background: var(--bg); color: var(--ink);
+  font-family: 'Manrope', system-ui, sans-serif;
+}
+h1 { font-size: 30px; margin: 0 0 6px; }
+h2 { font-size: 22px; margin: 54px 0 4px; }
+h3 { font-size: 17px; margin: 0 0 14px; color: var(--muted); font-weight: 700; }
+p { max-width: 980px; line-height: 1.55; font-size: 15px; }
+.lead { font-size: 16px; }
+b { font-weight: 800; }
+.note { color: var(--muted); font-size: 14px; }
+hr { border: 0; border-top: 1px solid var(--line); margin: 40px 0 0; }
+
+.box { background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+       padding: 18px 22px; max-width: 980px; margin: 14px 0; }
+.box ul { margin: 8px 0 0; padding-left: 20px; }
+.box li { line-height: 1.6; font-size: 15px; }
+
+table { border-collapse: collapse; margin: 16px 0 0; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 8px 12px; text-align: left; vertical-align: top; }
+th { background: var(--panel); font-weight: 800; }
+td.ok { color: var(--pay); font-weight: 800; }
+td.no { color: var(--danger); font-weight: 800; }
+
+.case { margin-top: 22px; }
+.row { display: flex; gap: 26px; align-items: flex-start; flex-wrap: wrap; }
+.col { display: flex; flex-direction: column; gap: 8px; }
+.tag { font-size: 13px; font-weight: 800; letter-spacing: .3px; }
+.tag.now { color: var(--danger); }
+.tag.opt { color: var(--pay); }
+.measure { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* --- the tile, drawn the way the program draws it ---------------------- */
+.tile { position: relative; overflow: hidden; border-radius: 12px; background: var(--tile); }
+.tile .edge { position: absolute; inset: 0; border: 1px solid var(--line);
+              border-radius: 12px; pointer-events: none; z-index: 3; }
+.tile .stripe { position: absolute; left: 0; top: 0; bottom: 0; width: 7px; z-index: 2; }
+.tile .grad { position: absolute; inset: 0; z-index: 1; }
+.tile .body { position: absolute; inset: 0; padding: 11px 12px 11px 18px; display: flex; z-index: 2; }
+.tile .body.wide { flex-direction: row; align-items: center; }
+.tile .body.tall { flex-direction: column; align-items: center; justify-content: center; }
+.pic { flex: none; }
+.pic img { width: 100%; height: 100%; object-fit: contain; display: block; }
+/* `min-width` and `max-width` are not decoration: a Flutter `Expanded` handed
+   no room passes `maxWidth: 0` down, and the text inside it disappears. Without
+   them the browser lets the name spill out of its own box and the fault draws
+   milder than it is. */
+.txt { min-width: 0; overflow: hidden; display: flex; flex-direction: column;
+       justify-content: center; }
+.txt.wide { flex: 1 1 0; align-items: flex-start; text-align: left; }
+.txt.tall { flex: 0 1 auto; align-items: center; text-align: center; }
+.name { font-weight: 700; overflow: hidden; display: -webkit-box; max-width: 100%;
+        -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.price { font-weight: 700; white-space: nowrap; margin-top: 3px; max-width: 100%;
+         overflow: hidden; }
+</style>
+</head>
+<body>
+
+<h1>Το πλάτος της φωτογραφίας στο πλακίδιο</h1>
+<p class="lead">Ένα λάθος στο ταμείο, και τρεις τρόποι να διορθωθεί. Όλα τα πλακίδια
+παρακάτω είναι στο <b>πραγματικό τους μέγεθος</b> — αν η οθόνη είναι στο 100%, αυτό ακριβώς
+θα δεις στο ταμείο.</p>
+
+<h2>Τι φταίει</h2>
+<p>Όταν το κελί είναι αρκετά φαρδύ, το πλακίδιο βάζει τη φωτογραφία <b>αριστερά</b> και το
+όνομα με την τιμή <b>δεξιά</b>. Το μέγεθος της φωτογραφίας όμως υπολογίζεται
+<b>μόνο από το ύψος</b> του κελιού — το πλάτος δεν ρωτιέται καθόλου. Όταν λοιπόν το κελί
+είναι πιο ψηλό παρά φαρδύ, η φωτογραφία γίνεται πιο φαρδιά κι από το ίδιο το πλακίδιο:
+κόβεται δεξιά, και στο όνομα μένουν μηδέν εικονοστοιχεία.</p>
+
+<div class="box">
+<h3>Το κελί, μετρημένο — δεν σε χτυπάει μόνο στο 6×3</h3>
+<table>
+<tr><th>Οθόνη</th><th>Πλέγμα</th><th>Κελί</th><th>Φωτογραφία</th><th>Μένει για το όνομα</th></tr>
+<tr><td>2560×1440 <span class="note">(η δική σου)</span></td><td>6×3</td><td>309 × 440</td><td>350</td><td class="no">−82 → 0</td></tr>
+<tr><td>2560×1440</td><td>6×5</td><td>309 × 260</td><td>238</td><td class="no">31</td></tr>
+<tr><td>1920×1080</td><td>5×4</td><td>246 × 237</td><td>215</td><td class="no">−10 → 0</td></tr>
+<tr><td>1280×720</td><td>4×3</td><td>197 × 200</td><td>178</td><td class="no">−22 → 0</td></tr>
+</table>
+<p class="note" style="margin-bottom:0">Το «Κοντοσούβλι» θέλει 120 για να χωρέσει σε μία
+γραμμή. Σε κάθε τετράγωνο κελί, σήμερα, δεν παίρνει τίποτα.</p>
+</div>
+
+<h2>Τι πρέπει να λύνει η διόρθωση</h2>
+<div class="box">
+<ul>
+<li>Το <b>όνομα</b> διαβάζεται σε κάθε κελί όπου το πλακίδιο δείχνει φωτογραφία.</li>
+<li>Η <b>τιμή</b> διαβάζεται — είναι το μεγαλύτερο γράμμα του πλακιδίου.</li>
+<li>Η <b>φωτογραφία</b> αναγνωρίζεται· κάτω από 30 εικονοστοιχεία το πλακίδιο δεν βάζει
+    καμία, δείχνει μόνο κείμενο.</li>
+<li>Ο ταμίας μαθαίνει <b>ένα σχήμα</b>, όχι δύο.</li>
+<li><b>Δεν χαλάει</b> ό,τι σήμερα είναι σωστό — τα φαρδιά πλακίδια 2×1.</li>
+</ul>
+</div>
+
+<h2>Οι τρεις προτάσεις</h2>
+<div class="box">
+<ul>
+<li><b>Α — Το όνομα παίρνει πρώτο.</b> Η φωτογραφία μεγαλώνει όσο θέλει, αλλά ποτέ τόσο ώστε
+    να μείνουν λιγότερα από 120 για το όνομα. Το 120 δεν είναι διαλεγμένο: είναι το πλάτος
+    που χρειάζεται το «Κοντοσούβλι», και είναι το ίδιο νούμερο που ορίζει ήδη πότε το
+    πλακίδιο αλλάζει σχήμα.</li>
+<li><b>Β — Σταθερή μοιρασιά.</b> Η φωτογραφία δεν περνάει ποτέ το 40% του πλάτους. Απλός
+    κανόνας, ίδιος παντού· αλλά μικραίνει και τα φαρδιά 2×1 πλακίδια, που σήμερα είναι σωστά.</li>
+<li><b>Γ — Ψηλό κελί, φωτογραφία από πάνω.</b> Όταν το κελί είναι πιο ψηλό παρά φαρδύ, το
+    πλακίδιο γυρίζει στη διάταξη του tablet: φωτογραφία πάνω, όνομα και τιμή από κάτω,
+    κεντραρισμένα. Η φωτογραφία βγαίνει η μεγαλύτερη απ' όλες τις προτάσεις.</li>
+</ul>
+</div>
+
+<div id="cases"></div>
+
+<hr>
+<h2>Ποια κερδίζει σε τι</h2>
+<table>
+<tr><th>Απαίτηση</th><th>ΤΩΡΑ</th><th>Α — όνομα πρώτο</th><th>Β — 40%</th><th>Γ — ψηλό κελί, φωτό πάνω</th></tr>
+<tr><td>Διαβάζεται το όνομα στο 6×3</td><td class="no">όχι</td><td class="ok">ναι</td><td class="ok">ναι</td><td class="ok">ναι</td></tr>
+<tr><td>Φωτογραφία στο 6×3 <span class="note">(309×440)</span></td><td class="no">350, κομμένη</td><td>148</td><td>112</td><td class="ok">279</td></tr>
+<tr><td>Φωτογραφία στο μικρό μηχάνημα <span class="note">(197×200)</span></td><td class="no">178, κομμένη</td><td class="no">36 — μόλις πάνω από το όριο</td><td>67</td><td class="ok">117</td></tr>
+<tr><td>Δεν αγγίζει τα φαρδιά 2×1</td><td class="ok">—</td><td class="ok">ναι</td><td class="no">τα μικραίνει</td><td class="ok">ναι</td></tr>
+<tr><td>Ένα σχήμα, όχι δύο</td><td class="ok">ναι</td><td class="ok">ναι</td><td class="ok">ναι</td><td class="no">δύο, ανάλογα με το κελί</td></tr>
+<tr><td>Τα σήματα (κρέας, πίτα) μένουν ευδιάκριτα</td><td>—</td><td class="ok">ναι</td><td>μικραίνουν</td><td class="ok">ναι</td></tr>
+<tr><td>Πόσο κώδικα αλλάζει</td><td>—</td><td class="ok">μία γραμμή</td><td class="ok">μία γραμμή</td><td>μία συνθήκη</td></tr>
+</table>
+
+<p class="note">Το «Α» κρατάει πάντα 120 για το όνομα, όσο μικρή κι αν είναι η οθόνη — και σε
+μικρό μηχάνημα αυτό αφήνει φωτογραφία 36, δηλαδή σχεδόν τίποτα. Το «Β» και το «Γ» μοιράζουν
+αναλογικά, οπότε μικραίνουν μαζί με το κελί.</p>
+
+<p class="note">Το «Γ» έχει δύο σχήματα επειδή ακριβώς αυτό θέλει: το ψηλό κελί το
+αντιμετωπίζει σαν tablet. Δεν είναι σφάλμα του — είναι η τιμή που πληρώνει για τη μεγάλη
+φωτογραφία, και είναι δική σου απόφαση αν αξίζει.</p>
+
+<script>
+const PICS = __PICS__;
+
+const MAX_PIC = 350, MIN_PIC = 30, NARROW_AT = 190;
+const NAME_MIN = 120;                      // «Κοντοσούβλι»
+const TALL_TEXT = 32 + 3 + 19, TALL_GAP = 7;   // two lines + price, narrow sizes
+
+function inner(w, h) { return { w: w - 30, h: h - 22 }; }
+
+// Exactly what the program does today.
+function shapeNow(w, h) {
+  const box = inner(w, h);
+  if (w < NARROW_AT) return tallShape(box);
+  return { kind: 'wide', side: Math.min(box.h, MAX_PIC), box };
+}
+function shapeA(w, h) {
+  const box = inner(w, h);
+  if (w < NARROW_AT) return tallShape(box);
+  const side = Math.min(box.h, MAX_PIC, box.w - 11 - NAME_MIN);
+  return side < MIN_PIC ? { kind: 'text', side: 0, box }
+                        : { kind: 'wide', side, box };
+}
+function shapeB(w, h) {
+  const box = inner(w, h);
+  if (w < NARROW_AT) return tallShape(box);
+  const side = Math.min(box.h, MAX_PIC, box.w * 0.40);
+  return side < MIN_PIC ? { kind: 'text', side: 0, box }
+                        : { kind: 'wide', side, box };
+}
+function shapeC(w, h) {
+  const box = inner(w, h);
+  if (w < NARROW_AT || h > w) return tallShape(box);
+  return { kind: 'wide', side: Math.min(box.h, MAX_PIC), box };
+}
+function tallShape(box) {
+  const side = Math.min(box.h - TALL_TEXT - TALL_GAP, box.w, MAX_PIC);
+  return side < MIN_PIC ? { kind: 'text', side: 0, box }
+                        : { kind: 'tall', side, box };
+}
+
+function tile(w, h, product, shape, stripe) {
+  const el = document.createElement('div');
+  el.className = 'tile';
+  el.style.width = w + 'px';
+  el.style.height = h + 'px';
+
+  const narrowText = shape.kind === 'tall';
+  const pic = shape.side > 0
+    ? `<div class="pic" style="width:${shape.side}px;height:${shape.side}px">
+         <img src="${PICS[product.pic]}" alt=""></div>`
+    : '';
+  const gap = shape.side > 0
+    ? (narrowText ? `<div style="height:${TALL_GAP}px;flex:none"></div>`
+                  : `<div style="width:11px;flex:none"></div>`)
+    : '';
+  const nameSize = narrowText ? 14 : 17, priceSize = narrowText ? 17 : 22;
+  const txt = `<div class="txt ${narrowText ? 'tall' : 'wide'}">
+      <div class="name" style="font-size:${nameSize}px;line-height:1.15">${product.name}</div>
+      <div class="price" style="font-size:${priceSize}px;line-height:1.1">${product.price}</div>
+    </div>`;
+
+  el.innerHTML = `
+    <div class="grad" style="background:linear-gradient(180deg, ${stripe}17 0%, transparent 55%)"></div>
+    <div class="stripe" style="background:${stripe}"></div>
+    <div class="body ${narrowText ? 'tall' : 'wide'}">${pic}${gap}${txt}</div>
+    <div class="edge"></div>`;
+  return el;
+}
+
+const CASES = [
+  {
+    title: 'Η δική σου οθόνη — 2560×1440, πλέγμα 6×3',
+    sub: 'Κελί 309 × 440. Πιο ψηλό παρά φαρδύ, και εκεί σπάει.',
+    w: 309.17, h: 440,
+    product: { pic: 'meat_souvlaki_xoirino', name: 'Σουβλάκι χοιρινό σε πίτα', price: '3,00 €' },
+    stripe: '#D24B3E',
+  },
+  {
+    title: 'Μικρό μηχάνημα — 1280×720, πλέγμα 4×3',
+    sub: 'Κελί 197 × 200. Σχεδόν τετράγωνο, και σπάει κι εδώ.',
+    w: 196.75, h: 200,
+    product: { pic: 'sweets_loukoumades', name: 'Λουκουμάδες', price: '3,50 €' },
+    stripe: '#E09B12',
+  },
+  {
+    title: 'Εκεί που σήμερα είναι σωστό — φαρδύ πλακίδιο 2×1 στα 2560×1440',
+    sub: 'Κελί 629 × 440. Η απόδειξη ότι η διόρθωση δεν χαλάει ό,τι δουλεύει.',
+    w: 629.33, h: 440, stack: true,
+    product: { pic: 'meat_merida_gyro_xoirino', name: 'Πίτα γύρο χοιρινό', price: '4,00 €' },
+    stripe: '#3F8F4A',
+  },
+];
+
+const OPTIONS = [
+  { tag: 'ΤΩΡΑ', cls: 'now', fn: shapeNow },
+  { tag: 'Α — το όνομα παίρνει πρώτο', cls: 'opt', fn: shapeA },
+  { tag: 'Β — φωτογραφία στο 40%', cls: 'opt', fn: shapeB },
+  { tag: 'Γ — ψηλό κελί, φωτογραφία πάνω', cls: 'opt', fn: shapeC },
+];
+
+const host = document.getElementById('cases');
+for (const c of CASES) {
+  const h2 = document.createElement('h2'); h2.textContent = c.title;
+  const h3 = document.createElement('h3'); h3.textContent = c.sub;
+  const row = document.createElement('div');
+  row.className = 'row';
+  if (c.stack) row.style.flexDirection = 'column';
+
+  for (const opt of OPTIONS) {
+    const shape = opt.fn(c.w, c.h);
+    const col = document.createElement('div');
+    col.className = 'col';
+    const tag = document.createElement('div');
+    tag.className = 'tag ' + opt.cls; tag.textContent = opt.tag;
+    col.appendChild(tag);
+    col.appendChild(tile(c.w, c.h, c.product, shape, c.stripe));
+    const m = document.createElement('div');
+    m.className = 'measure';
+    const left = shape.kind === 'tall' ? shape.box.w
+               : Math.max(0, shape.box.w - shape.side - (shape.side > 0 ? 11 : 0));
+    m.textContent = shape.kind === 'text'
+      ? 'χωρίς φωτογραφία — μόνο κείμενο'
+      : `φωτογραφία ${Math.round(shape.side)} · για το όνομα ${Math.round(left)}`;
+    col.appendChild(m);
+    row.appendChild(col);
+  }
+  host.appendChild(h2); host.appendChild(h3); host.appendChild(row);
+}
+</script>
+</body>
+</html>
