@@ -2,6 +2,7 @@
 <html lang="el">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ΟΠΑ! POS — «ΤΕΛΕΙΩΣΕ», προτάσεις</title>
 <style>
 @font-face{font-family:'Manrope';src:url(__FONT__) format('truetype');font-weight:200 800;font-display:block}
@@ -34,8 +35,9 @@ aside h3:first-child{margin-top:0}
 .mini .opt{margin-bottom:0;text-align:center;padding:6px 4px;font-size:11.5px}
 main{flex:1;display:flex;min-width:0}
 .stage{flex:1;min-width:0;display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow:auto;background:#0c0b0b}
+.frame{flex:none;overflow:hidden;position:relative}
 .till{width:1280px;height:720px;flex:none;background:var(--bg);color:var(--text);position:relative;overflow:hidden;font-family:'Manrope','Segoe UI',system-ui,sans-serif;
-  display:flex;flex-direction:column;box-shadow:0 0 0 1px #3a3530,0 18px 50px rgba(0,0,0,.6);transform-origin:top center}
+  display:flex;flex-direction:column;box-shadow:0 0 0 1px #3a3530,0 18px 50px rgba(0,0,0,.6);transform-origin:top left}
 .notes{width:340px;flex:none;background:#141312;border-left:1px solid #2b2724;padding:16px;overflow:auto;font-size:12.5px;line-height:1.55}
 .notes h2{font-size:15px;color:#fff;margin-bottom:3px}
 .notes .kicker{font-size:10.5px;letter-spacing:1.6px;color:#8b837b;font-weight:800;margin-bottom:10px}
@@ -47,6 +49,24 @@ main{flex:1;display:flex;min-width:0}
 .notes hr{border:0;border-top:1px solid #2b2724;margin:14px 0}
 .rulebox{background:#1a1817;border:1px solid #322e2a;border-left:3px solid #C98A16;border-radius:8px;padding:10px 12px;margin:12px 0;color:#bdb6ae}
 .rulebox b{color:#fff}
+@media (max-width:1700px){
+  body{overflow:auto}
+  .app{flex-direction:column;min-height:0}
+  aside{width:auto;border-right:0;border-bottom:1px solid #2b2724;padding:8px 10px;
+    display:flex;align-items:center;gap:8px;flex-wrap:wrap;overflow:visible}
+  aside h3{margin:0;white-space:nowrap}
+  aside .opts{display:flex;gap:5px;flex-wrap:wrap}
+  aside .opts .opt{margin-bottom:0;width:auto;padding:7px 11px}
+  aside .opt .d{display:none}
+  aside .opt b{margin-bottom:0;font-size:12.5px;white-space:nowrap}
+  aside .mini{gap:5px}
+  aside > p{display:none}
+  main{flex-direction:column}
+  .stage{padding:10px;align-items:flex-start;overflow:auto}
+  .notes{width:auto;border-left:0;border-top:1px solid #2b2724}
+  header .sub{display:none}
+  header #scaleInfo{display:inline}
+}
 /* ---------- till furniture ---------- */
 .topbar{height:70px;flex:none;background:var(--panel);border-bottom:1px solid var(--line);
   display:flex;align-items:center;padding:0 22px;gap:8px}
@@ -154,15 +174,15 @@ main{flex:1;display:flex;min-width:0}
 <div class="app">
   <aside>
     <h3>ΜΗΧΑΝΙΣΜΟΣ — ΠΩΣ ΤΟ ΔΗΛΩΝΕΙΣ</h3>
-    <button class="opt on" data-m="1"><b>Μ1 · Παρατεταμένο πάτημα</b>Κρατάς το πλακίδιο ένα δευτερόλεπτο</button>
-    <button class="opt" data-m="2"><b>Μ2 · Λειτουργία σήμανσης</b>Κουμπί ΤΕΛΕΙΩΣΕ στην πάνω μπάρα</button>
-    <button class="opt" data-m="3"><b>Μ3 · Φύλλο με λίστα</b>Όλα τα προϊόντα, ένας διακόπτης το καθένα</button>
-    <button class="opt" data-m="4"><b>Μ4 · Από τη ΔΙΑΧΕΙΡΙΣΗ</b>Ο φθηνός δρόμος — και γιατί δεν γράφεται ποτέ</button>
+    <div class="opts"><button class="opt on" data-m="1"><b>Μ1 · Παρατεταμένο πάτημα</b><span class="d">Κρατάς το πλακίδιο ένα δευτερόλεπτο</span></button>
+    <button class="opt" data-m="2"><b>Μ2 · Λειτουργία σήμανσης</b><span class="d">Κουμπί ΤΕΛΕΙΩΣΕ στην πάνω μπάρα</span></button>
+    <button class="opt" data-m="3"><b>Μ3 · Φύλλο με λίστα</b><span class="d">Όλα τα προϊόντα, ένας διακόπτης το καθένα</span></button>
+    <button class="opt" data-m="4"><b>Μ4 · Από τη ΔΙΑΧΕΙΡΙΣΗ</b><span class="d">Ο φθηνός δρόμος — και γιατί δεν γράφεται ποτέ</span></button></div>
 
     <h3>ΟΨΗ — ΠΩΣ ΦΑΙΝΕΤΑΙ ΤΟ ΤΕΛΕΙΩΜΕΝΟ</h3>
-    <button class="opt on" data-o="1"><b>Ο1 · Σβησμένο</b>Χάνει χρώμα και δύναμη, τίποτα από πάνω του</button>
-    <button class="opt" data-o="2"><b>Ο2 · Ταινία</b>Η λέξη περνάει πάνω από το πλακίδιο</button>
-    <button class="opt" data-o="3"><b>Ο3 · Η λέξη αντί για τιμή</b>Δεν καλύπτεται τίποτα, φεύγει η τιμή</button>
+    <div class="opts"><button class="opt on" data-o="1"><b>Ο1 · Σβησμένο</b><span class="d">Χάνει χρώμα και δύναμη, τίποτα από πάνω του</span></button>
+    <button class="opt" data-o="2"><b>Ο2 · Ταινία</b><span class="d">Η λέξη περνάει πάνω από το πλακίδιο</span></button>
+    <button class="opt" data-o="3"><b>Ο3 · Η λέξη αντί για τιμή</b><span class="d">Δεν καλύπτεται τίποτα, φεύγει η τιμή</span></button></div>
 
     <h3>ΘΕΜΑ</h3>
     <div class="mini">
@@ -182,6 +202,7 @@ main{flex:1;display:flex;min-width:0}
 
   <main>
     <div class="stage" id="stage">
+      <div class="frame" id="frame">
       <div class="till" id="till">
         <div class="topbar">
           <div class="grow">
@@ -245,6 +266,7 @@ main{flex:1;display:flex;min-width:0}
             <b>6</b><span>ΕΞΟΔΟΣ</span>
           </div>
         </div>
+      </div>
       </div>
     </div>
 
@@ -416,13 +438,26 @@ document.querySelectorAll('[data-z]').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('[data-z]').forEach(x=>x.classList.remove('on')); b.classList.add('on');
   zoom(b.dataset.z);});
 function zoom(mode){
-  const till=document.getElementById('till'), stage=document.getElementById('stage');
-  const s = mode==='1' ? 1 : Math.min(1,(stage.clientWidth-32)/1280);
-  till.style.transform='scale('+s+')';
-  till.style.marginBottom = (s<1 ? (720*s-720)+'px' : '0');
-  document.getElementById('scaleInfo').textContent = s===1 ? 'πραγματικό μέγεθος' : 'σμίκρυνση '+Math.round(s*100)+'%';
+  zoomMode = mode;
+  const till=document.getElementById('till'), frame=document.getElementById('frame'), stage=document.getElementById('stage');
+  const room = stage.clientWidth - 20;
+  const s = mode==='1' ? 1 : Math.min(1, room/1280);
+  till.style.transform = 'scale('+s+')';
+  // Το κουτί παίρνει το πραγματικό μέγεθος της σμικρυμένης οθόνης, αλλιώς
+  // η σελίδα κρατάει χώρο για 1280 και ξεχειλίζει δεξιά.
+  frame.style.width = (1280*s)+'px';
+  frame.style.height = (720*s)+'px';
+  document.getElementById('scaleInfo').textContent =
+    s===1 ? 'πραγματικό μέγεθος' : 'σμίκρυνση '+Math.round(s*100)+'% — πάτα 100% και σύρε';
 }
-apply(); zoom('1');
+function fits(){ return document.getElementById('stage').clientWidth >= 1300; }
+function syncZoomButtons(mode){
+  document.querySelectorAll('[data-z]').forEach(x=>x.classList.toggle('on', x.dataset.z===mode));
+}
+let zoomMode = fits() ? '1' : 'fit';
+apply(); syncZoomButtons(zoomMode); zoom(zoomMode);
+// Γύρισμα του κινητού ή αλλαγή παραθύρου: ξαναμετριέται.
+addEventListener('resize', ()=>zoom(zoomMode));
 </script>
 </body>
 </html>
