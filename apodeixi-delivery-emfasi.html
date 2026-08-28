@@ -3,30 +3,32 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Απόδειξη Delivery — 4 προτάσεις</title>
+<title>Απόδειξη Delivery — τελικό σχέδιο</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#0e1330;color:#e8ecff;font-family:Arial,sans-serif;padding:18px}
-h1{font-size:19px;margin:0 0 6px}
+h1{font-size:20px;margin:0 0 6px}
+h2{font-size:15px;margin:34px 0 4px;color:#f5c842;letter-spacing:.5px}
+h2 .num{display:inline-block;background:#f5c842;color:#141a3d;border-radius:6px;
+        padding:1px 8px;margin-right:8px;font-size:13px}
 .sub{font-size:12.5px;color:#93a0dd;max-width:900px;line-height:1.55;margin:0 0 12px}
 .sub b{color:#e8ecff}
-.warn{font-size:12px;color:#f5c842;background:rgba(245,200,66,.08);border-left:3px solid #f5c842;
-      padding:9px 12px;border-radius:6px;max-width:900px;line-height:1.5;margin:0 0 16px}
-.bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 18px;
+.bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 18px;position:sticky;top:0;z-index:9;
      background:#1c2554;border:1px solid #2a3580;border-radius:10px;padding:10px 12px}
 .bar b{font-size:12px;color:#93a0dd;letter-spacing:1px}
 .pbtn{background:#141a3d;border:1.5px solid #2a3580;color:#e8ecff;border-radius:8px;
       padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;min-height:40px}
 .pbtn.on{background:#f5c842;color:#141a3d;border-color:#f5c842}
-.row{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap}
+.row{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap;margin-top:12px}
 .col{display:flex;flex-direction:column;align-items:center;gap:8px}
 .tag{font-size:12px;font-weight:800;letter-spacing:1.2px;color:#f5c842;text-align:center}
 .tag small{display:block;font-weight:600;letter-spacing:0;color:#93a0dd;font-size:11px;
-           margin-top:4px;max-width:250px;line-height:1.5}
+           margin-top:4px;max-width:220px;line-height:1.5}
 .tag.old{color:#93a0dd}
 .tag.rec{color:#38d97a}
 .paper{background:#fff;color:#000;font-family:Arial,sans-serif;
        padding:10px 8px 14px;box-shadow:0 6px 22px rgba(0,0,0,.5);font-weight:600}
+.paper.snip{padding:8px}
 body[data-w="58"] .paper{width:181px;font-size:9px}
 body[data-w="80"] .paper{width:264px;font-size:11px}
 .paper *{color:#000}
@@ -40,6 +42,7 @@ body[data-w="80"] .shop{font-size:16px}
 body[data-w="58"] .efs{font-size:13px}
 body[data-w="80"] .efs{font-size:15px}
 .efi{font-size:9px;margin-top:1px}
+.efi.tiny{font-size:7.5px;letter-spacing:.3px}
 .k{font-size:8.5px;font-weight:700;letter-spacing:1.6px;display:block;line-height:1.2}
 .blk{border-top:2px solid #000;border-bottom:2px solid #000;padding:8px 0 9px;margin:7px 0 3px}
 .cap{font-size:8.5px;font-weight:700;letter-spacing:2px;margin-bottom:4px;line-height:1.2}
@@ -68,7 +71,7 @@ body[data-w="80"] .pay{font-size:13px}
 .qr{display:block;image-rendering:pixelated;margin:0 auto}
 .qrlbl{font-size:8px;line-height:1.1;margin-top:1px;text-align:center;letter-spacing:1px}
 
-/* ── κοινά νέων ── */
+/* κοινά */
 .n-name{text-align:center;border-bottom:1px solid #000;padding-bottom:5px;margin-bottom:6px}
 .n-name .v{font-weight:900;line-height:1.15;display:block;letter-spacing:.3px}
 body[data-w="58"] .n-name .v{font-size:14px}
@@ -77,32 +80,9 @@ body[data-w="80"] .n-name .v{font-size:17px}
 .n-bell .v{font-weight:900;line-height:1.15;display:block;overflow-wrap:break-word}
 body[data-w="58"] .n-bell .v{font-size:13px}
 body[data-w="80"] .n-bell .v{font-size:16px}
-/* Υπάρχον σκαλί (pc-long): μακρύ κουδούνι → μικρότερα γράμματα, ΜΙΑ γραμμή */
-body[data-w="58"] .n-bell .v.long,
-body[data-w="58"] .b-r .v.long{font-size:11px}
-body[data-w="58"] .o-bell .v.long{font-size:12px}
 .n-ph{font-weight:900;letter-spacing:1px;line-height:1.1;white-space:nowrap;display:block}
 body[data-w="58"] .n-ph{font-size:18px}
 body[data-w="80"] .n-ph{font-size:22px}
-.n-tel{margin-top:8px}
-
-/* ── ΤΩΡΑ ── */
-.o-where{display:flex;gap:8px;margin-top:7px;align-items:stretch;flex-wrap:wrap}
-.o-fl{flex:0 0 74px;width:74px;border:2px solid #000;padding:2px 5px 3px;
-      display:flex;flex-direction:column;justify-content:center;text-align:center}
-.o-flv{font-weight:900;line-height:.95;margin-top:1px;white-space:nowrap}
-.o-fnum{font-size:27px}
-.o-bell{flex:1 1 auto;min-width:min-content;display:flex;flex-direction:column;justify-content:center}
-.o-bell .v{font-size:13px;font-weight:900;line-height:1.2}
-.o-name{margin-top:9px}
-.o-name .v{font-size:13.5px;font-weight:900;line-height:1.25;display:block}
-.o-tel{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin-top:9px}
-.o-ph{font-weight:900;font-size:11px;letter-spacing:.5px;display:block;line-height:1.15}
-.o-fin{font-weight:900;border-top:1px solid #000;padding-top:4px;margin-top:2px}
-body[data-w="58"] .o-fin{font-size:12px}
-body[data-w="80"] .o-fin{font-size:14px}
-
-/* ── Α: όροφος + QR δίπλα ── */
 .a-row{display:flex;gap:8px;margin-top:7px;align-items:stretch}
 .a-fl{flex:0 0 72px;border:2px solid #000;padding:2px 4px 3px;
       display:flex;flex-direction:column;justify-content:center;text-align:center}
@@ -110,86 +90,82 @@ body[data-w="80"] .o-fin{font-size:14px}
 .a-fnum{font-size:28px}
 .a-fsuf{font-size:11px}
 .a-qr{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;align-items:center}
-.a-fin{display:flex;justify-content:space-between;align-items:center;gap:8px;
-       background:#000;padding:5px 7px;margin-top:4px}
-.a-fin span{color:#fff}
-.a-fin .l{font-weight:900;letter-spacing:1.5px}
-.a-fin .n{font-weight:900;white-space:nowrap}
-body[data-w="58"] .a-fin .l{font-size:11px}
-body[data-w="58"] .a-fin .n{font-size:21px}
-body[data-w="80"] .a-fin .l{font-size:13px}
-body[data-w="80"] .a-fin .n{font-size:26px}
 
-/* ── Β: κάρτα 2 σειρών ── */
-.b-box{border:2px solid #000;margin-top:7px}
-.b-r{display:flex;align-items:center;gap:8px;padding:3px 6px 4px}
-.b-r+.b-r{border-top:2px solid #000}
-.b-r .k{flex:0 0 56px}
-.b-fnum{font-size:26px;font-weight:900;line-height:1}
-.b-fsuf{font-size:11px;font-weight:900}
-.b-r .v{font-weight:900;line-height:1.15;overflow-wrap:break-word;min-width:0}
-body[data-w="58"] .b-r .v{font-size:13px}
-body[data-w="80"] .b-r .v{font-size:16px}
-.b-tel{margin-top:8px;border:2px solid #000;padding:4px 6px 5px;text-align:center}
-.b-fin{border:3px solid #000;padding:5px 7px;margin-top:5px;
-       display:flex;justify-content:space-between;align-items:center;gap:8px}
-.b-fin .l{font-weight:900;letter-spacing:1.5px}
-.b-fin .n{font-weight:900;white-space:nowrap}
-body[data-w="58"] .b-fin .l{font-size:11px}
-body[data-w="58"] .b-fin .n{font-size:22px}
-body[data-w="80"] .b-fin .l{font-size:13px}
-body[data-w="80"] .b-fin .n{font-size:27px}
+/* ── οι 4 εκδοχές τηλεφώνου ── */
+.t-blackbg{margin-top:8px;background:#000;padding:3px 7px 5px;text-align:center}
+.t-blackbg span{color:#fff}
+.t-thin{margin-top:8px;border:2px solid #000;padding:3px 7px 5px;text-align:center}
+.t-thick{margin-top:8px;border:3px solid #000;padding:4px 7px 6px;text-align:center}
+.t-rules{margin-top:8px;border-top:3px solid #000;border-bottom:3px solid #000;
+         padding:4px 0 5px;text-align:center}
 
-/* ── Γ: inverse πλακίδια ── */
-.c-fl{display:flex;align-items:center;gap:8px;margin-top:7px;background:#000;padding:3px 8px 4px}
-.c-fl span,.c-fl div{color:#fff}
-.c-fl .k{flex:0 0 auto;letter-spacing:1.5px}
-.c-flnum{font-size:28px;font-weight:900;line-height:1}
-.c-flsuf{font-size:11px;font-weight:900}
-.c-tel{margin-top:8px;text-align:center}
-.c-fin{background:#000;text-align:center;padding:5px 6px 7px;margin-top:4px}
-.c-fin span{color:#fff}
-.c-fin .l{font-weight:900;letter-spacing:2.5px;display:block}
-.c-fin .n{font-weight:900;display:block;line-height:1}
-body[data-w="58"] .c-fin .l{font-size:10px}
-body[data-w="58"] .c-fin .n{font-size:27px}
-body[data-w="80"] .c-fin .l{font-size:12px}
-body[data-w="80"] .c-fin .n{font-size:34px}
+/* ΤΕΛΙΚΟ + πληρωμή μαζί */
+.pay-box{border:3px solid #000;margin-top:5px;padding:4px 7px 6px}
+.pay-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.pay-top .l{font-weight:900;letter-spacing:1.5px}
+.pay-top .n{font-weight:900;white-space:nowrap}
+/* 58mm: 145px ωφέλιμα μέσα στο κουτί — «ΣΥΝΟΛΟ»(62) + «123,50 €»(24px) δεν χωράνε
+   δίπλα-δίπλα. Στοίβα: ετικέτα πάνω, ποσό κάτω, μεγαλύτερο απ' ό,τι σε μία σειρά. */
+body[data-w="58"] .pay-top{flex-direction:column;gap:0;text-align:center}
+body[data-w="58"] .pay-top .l{font-size:10px;letter-spacing:1px}
+body[data-w="58"] .pay-top .n{font-size:25px;line-height:1.05}
+body[data-w="80"] .pay-top .l{font-size:13px}
+body[data-w="80"] .pay-top .n{font-size:27px}
+.pay-way{text-align:center;font-weight:900;letter-spacing:2px;margin-top:3px;
+         border-top:1px solid #000;padding-top:3px}
+body[data-w="58"] .pay-way{font-size:12px}
+body[data-w="80"] .pay-way{font-size:14px}
+.pay-paid{background:#000;margin-top:3px;padding:3px 4px;text-align:center}
+.pay-paid span{color:#fff;font-weight:900;letter-spacing:2px;line-height:1.15}
+/* «ΠΛΗΡΩΜΕΝΗ ONLINE» = 147px στα 11px — δεν χωράει σε 145. Δύο γραμμές ΣΚΟΠΙΜΑ. */
+body[data-w="58"] .pay-paid span{font-size:13px;letter-spacing:1.5px}
+body[data-w="80"] .pay-paid span{font-size:14px}
+.chg{text-align:center;font-weight:900;margin-top:3px;border-top:1px solid #000;padding-top:3px}
+body[data-w="58"] .chg{font-size:12px}
+body[data-w="80"] .chg{font-size:14px}
 
-/* ── Δ: όροφος+QR δίπλα, τηλέφωνο inverse ── */
-.d-tel{margin-top:8px;background:#000;padding:3px 7px 5px;text-align:center}
-.d-tel span{color:#fff}
-.d-fin{display:flex;justify-content:space-between;align-items:center;gap:8px;
-       border-top:3px solid #000;border-bottom:3px solid #000;padding:5px 2px;margin-top:4px}
-.d-fin .l{font-weight:900;letter-spacing:1.5px}
-.d-fin .n{font-weight:900;white-space:nowrap}
-body[data-w="58"] .d-fin .l{font-size:11px}
-body[data-w="58"] .d-fin .n{font-size:22px}
-body[data-w="80"] .d-fin .l{font-size:13px}
-body[data-w="80"] .d-fin .n{font-size:27px}
+/* ώρα παράδοσης */
+.eta{display:flex;justify-content:center;align-items:baseline;gap:6px;
+     border:2px solid #000;padding:2px 6px 3px;margin-top:5px}
+.eta .k{letter-spacing:1.5px}
+.eta .v{font-weight:900;line-height:1}
+body[data-w="58"] .eta .v{font-size:17px}
+body[data-w="80"] .eta .v{font-size:20px}
+
+.pair{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
+.mini{font-size:11px;color:#93a0dd;text-align:center;margin-top:6px}
+.mini b{color:#e8ecff}
+.foot{margin-top:34px;font-size:11.5px;color:#8b93b8;border-top:1px solid #2a3580;padding-top:14px;line-height:1.7}
 </style>
 </head>
 <body data-w="58">
 
-<h1>Απόδειξη Delivery — 4 προτάσεις σχεδίου</h1>
-<p class="sub">Πραγματικά πλάτη χαρτιού (58mm = 181px ωφέλιμα · 80mm = 264px), ίδια παραγγελία με το απόκομμα που έστειλες. Το QR είναι εικονικό — μετράει μόνο το <b>μέγεθός</b> του. Και στις 4: όνομα κεντραρισμένο πάνω από «ΠΑΡΑΔΟΣΗ ΣΕ», κουδούνι <b>κάτω</b> από τον όροφο, μεγάλο τηλέφωνο, μεγαλύτερο QR, έμφαση στο ΤΕΛΙΚΟ.</p>
-
-<p class="warn"><b>Μετρημένο όριο 58mm:</b> «6971234567» πιάνει 117px στα 16px και 130px στα 18px, σε <b>165px</b> ωφέλιμα. Άρα τηλέφωνο <b>και</b> μεγάλο QR στην ίδια γραμμή <b>δεν χωράνε ποτέ</b> (117+8+84 = 209px). Το QR είτε ανεβαίνει δίπλα στον όροφο (Α, Δ), είτε κατεβαίνει μόνο του (Β, Γ).</p>
+<h1>Απόδειξη Delivery — τελικό σχέδιο</h1>
+<p class="sub">Δείγμα παραγγελίας (πλασματικός πελάτης, στρογγυλές τιμές). Πραγματικά πλάτη χαρτιού: 58mm = 181px · 80mm = 264px. Το QR είναι εικονικό — μετράει μόνο το <b>μέγεθός</b> του.</p>
 
 <div class="bar">
   <b>ΧΑΡΤΙ</b>
   <button class="pbtn on" data-w="58">58 mm</button>
   <button class="pbtn" data-w="80">80 mm</button>
-  <span style="width:14px"></span>
-  <b>ΔΕΔΟΜΕΝΑ</b>
-  <button class="pbtn on" id="d-short">Κανονικά</button>
-  <button class="pbtn" id="d-long">Μακριά (χειρότερη περίπτωση)</button>
 </div>
 
-<div class="row" id="row"></div>
+<h2><span class="num">1</span>Το τηλέφωνο — 4 εκδοχές</h2>
+<p class="sub">Το μαύρο φόντο «κλείνει» τα γράμματα. Ορίστε οι εναλλακτικές, στο ίδιο μπλοκ:</p>
+<div class="row" id="tel-row"></div>
+
+<h2><span class="num">2</span>Τι άλλο θα διόρθωνα</h2>
+<p class="sub">Τέσσερα πράγματα που <b>λείπουν</b> από το απόκομμα — και τα τρία πρώτα τα στέλνει ήδη η e-food σε κάθε παραγγελία, απλώς δεν τυπώνονται.</p>
+<div class="row" id="fix-row"></div>
+
+<h2><span class="num">3</span>Το πλήρες απόκομμα με όλα μαζί</h2>
+<p class="sub">Σχέδιο <b>Δ</b> + χοντρό πλαίσιο στο τηλέφωνο + οι 4 διορθώσεις.</p>
+<div class="row" id="full-row"></div>
+
+<div class="foot">
+  Τα δεδομένα είναι δείγματα. Κρίνεται η <b>διάταξη</b> και τα <b>μεγέθη</b>, όχι τα ποσά.
+</div>
 
 <script>
-/* Εικονικό QR (finder patterns + ντετερμινιστικός θόρυβος) — μόνο για μέγεθος. */
 function qr(px){
   var mods=29;
   var c=document.createElement('canvas');c.width=c.height=mods;
@@ -203,10 +179,83 @@ function qr(px){
 }
 function qrBox(px){return '<div>'+qr(px)+'<div class="qrlbl">ΚΛΗΣΗ</div></div>';}
 
-var HEAD =
+var NAME = '<div class="n-name"><span class="k">ΟΝΟΜΑ ΠΕΛΑΤΗ</span><span class="v">ΓΕΩΡΓΙΟΥ ΜΑΡΙΑ</span></div>';
+var ADDR = '<div class="cap">ΠΑΡΑΔΟΣΗ ΣΕ</div><div class="addr">ΑΝΘΕΩΝ 12</div>';
+var BELL = '<div class="n-bell"><span class="k">ΚΟΥΔΟΥΝΙ</span><span class="v">ΓΕΩΡΓΙΟΥ</span></div>';
+var FLQR = '<div class="a-row">'+
+  '<div class="a-fl"><span class="k">ΟΡΟΦΟΣ</span>'+
+    '<div class="a-flv"><span class="a-fnum">1</span><span class="a-fsuf">ος</span></div></div>'+
+  '<div class="a-qr">'+qrBox(84)+'</div></div>';
+var NOTE = '<div class="note"><span class="k">ΣΗΜΕΙΩΣΗ</span><span class="v">ΔΕΝ ΕΧΕΙ ΤΙΡ ΓΙΑ ΤΟΝ ΔΙΑΝΟΜΕΑ</span></div>';
+function tel(cls){
+  return '<div class="'+cls+'"><span class="k">ΤΗΛΕΦΩΝΟ</span><span class="n-ph">6971234567</span></div>';
+}
+function custBlock(telCls){
+  return '<div class="blk">'+NAME+ADDR+FLQR+BELL+tel(telCls)+NOTE+'</div>';
+}
+
+/* ── 1. εκδοχές τηλεφώνου ── */
+var TELS=[
+ ['ΜΑΥΡΟ ΦΟΝΤΟ','Αυτό είδες — το μελάνι «κλείνει» τα γράμματα.','old','t-blackbg'],
+ ['ΛΕΠΤΟ ΠΛΑΙΣΙΟ','Ίδιο πάχος με τον όροφο — ήσυχο, ενιαίο.','','t-thin'],
+ ['ΧΟΝΤΡΟ ΠΛΑΙΣΙΟ','Πιο έντονο από τα άλλα κουτιά — ξεχωρίζει χωρίς μελάνι.','rec','t-thick'],
+ ['ΔΙΠΛΗ ΓΡΑΜΜΗ','Χωρίς πλάγια — αέρινο, ίδιο ύφος με το ΤΕΛΙΚΟ.','','t-rules']
+];
+document.getElementById('tel-row').innerHTML = TELS.map(function(t){
+  return '<div class="col"><div class="tag '+t[2]+'">'+t[0]+'<small>'+t[1]+'</small></div>'+
+         '<div class="paper snip">'+custBlock(t[3])+'</div></div>';
+}).join('');
+
+/* ── 2. οι 4 διορθώσεις (πριν / μετά) ── */
+var FIXES=[
+ ['ΠΛΗΡΩΜΗ + ΣΥΝΟΛΟ ΜΑΖΙ',
+  'Σήμερα το ποσό είναι πάνω και ο τρόπος πληρωμής χωριστά, μικρός, από κάτω. Ο διανομέας θέλει <b>και τα δύο μαζί</b>.',
+  '<div class="tr"><span>ΣΥΝΟΛΟ:</span><span>12,00 &euro;</span></div>'+
+  '<div class="tr"><span>ΧΡΕΩΣΗ ΠΕΡΙΟΧΗΣ:</span><span>+1,00 &euro;</span></div>'+
+  '<div class="tr" style="font-weight:900;border-top:1px solid #000;padding-top:4px"><span>ΤΕΛΙΚΟ:</span><span>13,00 &euro;</span></div>'+
+  '<div class="pay">Τρόπος πληρωμής:<br>Μετρητά</div>',
+  '<div class="tr"><span>ΣΥΝΟΛΟ:</span><span>12,00 &euro;</span></div>'+
+  '<div class="tr"><span>ΧΡΕΩΣΗ ΠΕΡΙΟΧΗΣ:</span><span>+1,00 &euro;</span></div>'+
+  '<div class="pay-box"><div class="pay-top"><span class="l">ΤΕΛΙΚΟ</span><span class="n">13,00 &euro;</span></div>'+
+  '<div class="pay-way">ΜΕΤΡΗΤΑ</div></div>'],
+
+ ['ΟΤΑΝ ΕΙΝΑΙ ΠΛΗΡΩΜΕΝΗ',
+  'Η e-food στέλνει <b>paid</b> και <b>collectAtDropoff</b> (πόσα εισπράττει ο διανομέας). Σε πληρωμένη online το «Μετρητά» είναι <b>λάθος</b>.',
+  '<div class="pay">Τρόπος πληρωμής:<br>Μετρητά</div>'+
+  '<div style="font-size:9px;margin-top:6px;text-align:center">(ίδιο κείμενο, ό,τι κι αν συμβαίνει)</div>',
+  '<div class="pay-box"><div class="pay-top"><span class="l">ΣΥΝΟΛΟ</span><span class="n">13,00 &euro;</span></div>'+
+  '<div class="pay-paid"><span>ΠΛΗΡΩΜΕΝΗ<br>ONLINE</span></div>'+
+  '<div class="chg" style="font-weight:700;font-size:10px">ΜΗΝ ΕΙΣΠΡΑΞΕΙΣ ΤΙΠΟΤΑ</div></div>'],
+
+ ['ΡΕΣΤΑ',
+  'Η e-food στέλνει <b>provideChangeFor</b> — με πόσα θα πληρώσει ο πελάτης. Σήμερα δεν τυπώνεται <b>πουθενά</b>.',
+  '<div class="pay">Τρόπος πληρωμής:<br>Μετρητά</div>'+
+  '<div style="font-size:9px;margin-top:6px;text-align:center">(η πληροφορία χάνεται)</div>',
+  '<div class="pay-box"><div class="pay-top"><span class="l">ΤΕΛΙΚΟ</span><span class="n">13,00 &euro;</span></div>'+
+  '<div class="pay-way">ΜΕΤΡΗΤΑ</div>'+
+  '<div class="chg">ΡΕΣΤΑ ΑΠΟ 20 &euro;</div></div>'],
+
+ ['ΩΡΑ ΠΑΡΑΔΟΣΗΣ',
+  'Η e-food στέλνει <b>promisedTime</b> — υπάρχει σε όλες τις καταγραφές. Ο διανομέας δεν ξέρει τι έχει υποσχεθεί το μαγαζί.',
+  '<div class="ctr" style="font-size:9px">#D-1 &middot; Delivery &middot; 28-08-2026 15:29</div>'+
+  '<div style="font-size:9px;margin-top:6px;text-align:center">(μόνο η ώρα καταχώρησης)</div>',
+  '<div class="ctr" style="font-size:9px">#D-1 &middot; Delivery &middot; 28-08-2026 15:29</div>'+
+  '<div class="eta"><span class="k">ΠΑΡΑΔΟΣΗ ΕΩΣ</span><span class="v">16:05</span></div>']
+];
+document.getElementById('fix-row').innerHTML = FIXES.map(function(f){
+  return '<div class="col" style="max-width:430px"><div class="tag">'+f[0]+'<small>'+f[1]+'</small></div>'+
+         '<div class="pair">'+
+           '<div><div class="paper snip">'+f[2]+'</div><div class="mini">ΤΩΡΑ</div></div>'+
+           '<div><div class="paper snip">'+f[3]+'</div><div class="mini"><b>ΠΡΟΤΑΣΗ</b></div></div>'+
+         '</div></div>';
+}).join('');
+
+/* ── 3. πλήρες ── */
+var HEAD_NEW =
  '<div class="ctr shop">TAMAM Grill House</div>'+
  '<div class="ctr tl">#D-1 &middot; Delivery &middot; 28-08-2026 15:29</div>'+
- '<div class="efb"><div class="efs">e-food #1234</div><div class="efi">Κωδ. παραγγελίας: 600123456</div></div>';
+ '<div class="eta"><span class="k">ΠΑΡΑΔΟΣΗ ΕΩΣ</span><span class="v">16:05</span></div>'+
+ '<div class="efb"><div class="efs">e-food #1234</div><div class="efi tiny">Κωδ. 600123456</div></div>';
 
 var ITEMS =
  '<div class="sep"></div>'+
@@ -216,120 +265,27 @@ var ITEMS =
  '<div class="det">Απ&rsquo;Όλα Ταμάμ (Λάχανο-Καρότο, Ντομάτα, Πατάτες, Σως Γιαούρτι)</div>'+
  '<div class="sep"></div>'+
  '<div class="it"><span>1&times; Coca-Cola 330ml</span><span>2,00 &euro;</span></div>'+
- '<div class="sep"></div>';
-
-var TOT =
+ '<div class="sep"></div>'+
  '<div class="tr"><span>ΣΥΝΟΛΟ:</span><span>12,00 &euro;</span></div>'+
  '<div class="tr"><span>ΧΡΕΩΣΗ ΠΕΡΙΟΧΗΣ:</span><span>+1,00 &euro;</span></div>';
 
-var PAY = '<div class="pay">Τρόπος πληρωμής:<br>Μετρητά</div><div class="thx">Ευχαριστούμε! Ελάτε ξανά!</div>';
-var NOTE = '<div class="note"><span class="k">ΣΗΜΕΙΩΣΗ</span><span class="v">ΔΕΝ ΕΧΕΙ ΤΙΡ ΓΙΑ ΤΟΝ ΔΙΑΝΟΜΕΑ</span></div>';
-var NAME = '<div class="n-name"><span class="k">ΟΝΟΜΑ ΠΕΛΑΤΗ</span><span class="v">ΓΕΩΡΓΙΟΥ ΜΑΡΙΑ</span></div>';
-var ADDR = '<div class="cap">ΠΑΡΑΔΟΣΗ ΣΕ</div><div class="addr">ΑΝΘΕΩΝ 12</div>';
-var BELL = '<div class="n-bell"><span class="k">ΚΟΥΔΟΥΝΙ</span><span class="v">ΓΕΩΡΓΙΟΥ</span></div>';
+var FULL_CASH = HEAD_NEW + custBlock('t-thick') + ITEMS +
+ '<div class="pay-box"><div class="pay-top"><span class="l">ΤΕΛΙΚΟ</span><span class="n">13,00 &euro;</span></div>'+
+ '<div class="pay-way">ΜΕΤΡΗΤΑ</div><div class="chg">ΡΕΣΤΑ ΑΠΟ 20 &euro;</div></div>'+
+ '<div class="thx">Ευχαριστούμε! Ελάτε ξανά!</div>';
 
-/* ═══ ΤΩΡΑ ═══ */
-var OLD = HEAD+
- '<div class="blk">'+ADDR+
- '<div class="o-where">'+
-   '<div class="o-fl"><span class="k">ΟΡΟΦΟΣ</span><div class="o-flv"><span class="o-fnum">1</span></div></div>'+
-   '<div class="o-bell"><span class="k">ΚΟΥΔΟΥΝΙ</span><div class="v">ΓΕΩΡΓΙΟΥ</div></div>'+
- '</div>'+
- '<div class="o-name"><span class="k">ΟΝΟΜΑ</span><span class="v">ΓΕΩΡΓΙΟΥ ΜΑΡΙΑ</span></div>'+
- '<div class="o-tel"><div><span class="k">ΤΗΛΕΦΩΝΟ</span><span class="o-ph">6971234567</span></div>'+
-   qrBox(64)+'</div>'+
- NOTE+'</div>'+
- ITEMS+TOT+'<div class="tr o-fin"><span>ΤΕΛΙΚΟ:</span><span>13,00 &euro;</span></div>'+PAY;
+var FULL_PAID = HEAD_NEW + custBlock('t-thick') + ITEMS +
+ '<div class="pay-box"><div class="pay-top"><span class="l">ΣΥΝΟΛΟ</span><span class="n">13,00 &euro;</span></div>'+
+ '<div class="pay-paid"><span>ΠΛΗΡΩΜΕΝΗ<br>ONLINE</span></div>'+
+ '<div class="chg" style="font-weight:700;font-size:10px">ΜΗΝ ΕΙΣΠΡΑΞΕΙΣ ΤΙΠΟΤΑ</div></div>'+
+ '<div class="thx">Ευχαριστούμε! Ελάτε ξανά!</div>';
 
-/* ═══ Α — ΣΤΟΙΒΑ ═══ */
-var A = HEAD+
- '<div class="blk">'+NAME+ADDR+
- '<div class="a-row">'+
-   '<div class="a-fl"><span class="k">ΟΡΟΦΟΣ</span>'+
-     '<div class="a-flv"><span class="a-fnum">1</span><span class="a-fsuf">ος</span></div></div>'+
-   '<div class="a-qr">'+qrBox(84)+'</div>'+
- '</div>'+
- BELL+
- '<div class="n-tel"><span class="k">ΤΗΛΕΦΩΝΟ</span><span class="n-ph">6971234567</span></div>'+
- NOTE+'</div>'+
- ITEMS+TOT+
- '<div class="a-fin"><span class="l">ΤΕΛΙΚΟ</span><span class="n">13,00 &euro;</span></div>'+PAY;
+document.getElementById('full-row').innerHTML =
+ '<div class="col"><div class="tag rec">ΜΕΤΡΗΤΑ<small>Ο διανομέας ξέρει τι θα πάρει και τι θα δώσει.</small></div>'+
+ '<div class="paper">'+FULL_CASH+'</div></div>'+
+ '<div class="col"><div class="tag rec">ΠΛΗΡΩΜΕΝΗ ONLINE<small>Το ίδιο απόκομμα όταν ο πελάτης έχει ήδη πληρώσει.</small></div>'+
+ '<div class="paper">'+FULL_PAID+'</div></div>';
 
-/* ═══ Β — ΚΑΡΤΑ ═══ */
-var B = HEAD+
- '<div class="blk">'+NAME+ADDR+
- '<div class="b-box">'+
-   '<div class="b-r"><span class="k">ΟΡΟΦΟΣ</span><span class="b-fnum">1</span><span class="b-fsuf">ος</span></div>'+
-   '<div class="b-r"><span class="k">ΚΟΥΔΟΥΝΙ</span><span class="v">ΓΕΩΡΓΙΟΥ</span></div>'+
- '</div>'+
- '<div class="b-tel"><span class="k">ΤΗΛΕΦΩΝΟ</span><span class="n-ph">6971234567</span>'+
-   '<div style="margin-top:4px">'+qrBox(88)+'</div></div>'+
- NOTE+'</div>'+
- ITEMS+TOT+
- '<div class="b-fin"><span class="l">ΤΕΛΙΚΟ</span><span class="n">13,00 &euro;</span></div>'+PAY;
-
-/* ═══ Γ — ΜΕΓΙΣΤΗ ΑΝΑΓΝΩΣΗ ═══ */
-var C = HEAD+
- '<div class="blk">'+NAME+ADDR+
- '<div class="c-fl"><span class="k">ΟΡΟΦΟΣ</span>'+
-   '<div><span class="c-flnum">1</span><span class="c-flsuf">ος</span></div></div>'+
- BELL+
- '<div class="c-tel"><span class="k">ΤΗΛΕΦΩΝΟ</span><span class="n-ph">6971234567</span>'+
-   '<div style="margin-top:4px">'+qrBox(96)+'</div></div>'+
- NOTE+'</div>'+
- ITEMS+TOT+
- '<div class="c-fin"><span class="l">ΤΕΛΙΚΟ</span><span class="n">13,00 &euro;</span></div>'+PAY;
-
-/* ═══ Δ — ΙΣΟΡΡΟΠΙΑ ═══ */
-var D = HEAD+
- '<div class="blk">'+NAME+ADDR+
- '<div class="a-row">'+
-   '<div class="a-fl"><span class="k">ΟΡΟΦΟΣ</span>'+
-     '<div class="a-flv"><span class="a-fnum">1</span><span class="a-fsuf">ος</span></div></div>'+
-   '<div class="a-qr">'+qrBox(84)+'</div>'+
- '</div>'+
- BELL+
- '<div class="d-tel"><span class="k">ΤΗΛΕΦΩΝΟ</span><span class="n-ph">6971234567</span></div>'+
- NOTE+'</div>'+
- ITEMS+TOT+
- '<div class="d-fin"><span class="l">ΤΕΛΙΚΟ</span><span class="n">13,00 &euro;</span></div>'+PAY;
-
-var DATA=[
- ['ΤΩΡΑ','Το σημερινό απόκομμα, για σύγκριση.','old',OLD],
- ['Α &middot; ΣΤΟΙΒΑ','Το QR ανεβαίνει δίπλα στον όροφο, ώστε το τηλέφωνο να πάρει ΟΛΟ το πλάτος στα 18px. Κουδούνι από κάτω. ΤΕΛΙΚΟ σε μαύρη μπάρα.','',A],
- ['Β &middot; ΚΑΡΤΑ','Όροφος + κουδούνι σε ΕΝΑ πλαίσιο δύο σειρών. Τηλέφωνο + QR μαζί σε δικό τους πλαίσιο, κεντραρισμένα. Το πιο τακτοποιημένο.','',B],
- ['Γ &middot; ΜΕΓΙΣΤΗ ΑΝΑΓΝΩΣΗ','Όροφος σε μαύρη λωρίδα. Τηλέφωνο κεντραρισμένο με το μεγαλύτερο QR (96px). ΤΕΛΙΚΟ γίγας σε μαύρο. Το πιο ευανάγνωστο, το πιο ψηλό.','',C],
- ['Δ &middot; ΙΣΟΡΡΟΠΙΑ','Σαν το Α, αλλά το τηλέφωνο σε μαύρη λωρίδα — το μάτι πάει κατευθείαν εκεί. ΤΕΛΙΚΟ σε διπλή γραμμή. Μηδέν επιπλέον χαρτί.','rec',D]
-];
-var row=document.getElementById('row');
-function build(){
-  row.innerHTML=DATA.map(function(d){
-    return '<div class="col"><div class="tag '+d[2]+'">'+d[0]+'<small>'+d[1]+'</small></div>'+
-           '<div class="paper">'+d[3]+'</div></div>';
-  }).join('');
-}
-build();
-
-/* Χειρότερη περίπτωση: μακρύ όνομα, μακριά οδός, 10ος όροφος, μακρύ κουδούνι, σταθερό τηλ. */
-function longData(){
-  document.querySelectorAll('.paper').forEach(function(p){
-    p.querySelectorAll('.n-name .v, .o-name .v').forEach(function(e){e.textContent='ΠΑΠΑΔΟΠΟΥΛΟΣ ΚΩΝΣΤΑΝΤΙΝΟΣ';});
-    p.querySelectorAll('.addr').forEach(function(e){e.textContent='ΛΕΩΦ. ΑΓΙΟΥ ΔΗΜΗΤΡΙΟΥ 145Α';});
-    p.querySelectorAll('.n-bell .v, .o-bell .v, .b-r .v').forEach(function(e){
-      if(e.classList.contains('b-fnum'))return;
-      e.textContent='ΚΩΝΣΤΑΝΤΙΝΟΠΟΥΛΟΣ';e.classList.add('long');
-    });
-    p.querySelectorAll('.a-fnum, .b-fnum, .c-flnum, .o-fnum').forEach(function(e){e.textContent='10';});
-    p.querySelectorAll('.n-ph, .o-ph').forEach(function(e){e.textContent='2103456789';});
-  });
-}
-document.getElementById('d-long').onclick=function(){
-  document.getElementById('d-short').classList.remove('on');this.classList.add('on');longData();};
-document.getElementById('d-short').onclick=function(){
-  document.getElementById('d-long').classList.remove('on');this.classList.add('on');build();};
-
-/* ⚠️ ΜΟΝΟ τα κουμπιά χαρτιού — τα κουμπιά δεδομένων είναι κι αυτά .pbtn και ο
-   γενικός selector θα έσβηνε τον handler τους (και θα έγραφε data-w="undefined"). */
 document.querySelectorAll('.pbtn[data-w]').forEach(function(b){
   b.onclick=function(){
     document.querySelectorAll('.pbtn[data-w]').forEach(function(x){x.classList.remove('on')});
