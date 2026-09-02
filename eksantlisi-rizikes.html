@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Εξάντληση — 4 ριζικές προτάσεις (χωρίς μικρό modal)</title>
+<style>
+:root{
+  --black:#0e1330; --dark:#12183a; --card:#1c2554; --card2:#243068;
+  --yellow:#f5c400; --yellow2:#d4a900; --white:#e8eaf6; --muted:#93a0dd;
+  --red:#ef5350; --green:#26c281; --blue:#4a9ef0;
+  --so-today:#ef5350; --so-indef:#a06cff; --efood:#ff6a3d; --efood-dim:rgba(255,106,61,.14);
+  --border:#2a3580; --radius:14px; --rc:10px; --rb:8px; --pill:999px;
+  --gy:rgba(245,200,66,.12); --gyr:rgba(245,200,66,.55);
+}
+*{box-sizing:border-box}
+body{margin:0;background:#080b1e;color:var(--white);
+  font-family:'Segoe UI',system-ui,-apple-system,sans-serif;padding:26px 16px 80px}
+h1{font-size:23px;margin:0 0 8px;line-height:1.3}
+.lead{color:var(--muted);font-size:13.5px;max-width:980px;line-height:1.7;margin:0 0 12px}
+.lead b{color:var(--yellow)}
+.callout{max-width:980px;background:rgba(38,194,129,.08);border:1px solid rgba(38,194,129,.35);
+  border-left:3px solid var(--green);border-radius:0 10px 10px 0;padding:12px 15px;font-size:12.5px;
+  color:#bdf0d8;line-height:1.7;margin:0 0 30px}
+.callout b{color:#fff}
+
+.sec{max-width:1320px;margin:0 auto 52px}
+.sec-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;
+  border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:8px}
+.sec-num{font-size:11px;font-weight:900;letter-spacing:1px;color:#0e1330;background:var(--yellow);
+  padding:4px 9px;border-radius:var(--pill)}
+.sec-num.now{background:#3a4790;color:var(--white)}
+.sec-t{font-size:19px;font-weight:800;margin:0}
+.sec-why{color:var(--muted);font-size:13px;line-height:1.75;margin:10px 0 16px;max-width:980px}
+.sec-why b{color:var(--white)}
+.tagrow{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 14px}
+.tag{font-size:11px;font-weight:700;padding:4px 10px;border-radius:var(--pill);
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--muted)}
+.tag.win{background:rgba(38,194,129,.12);border-color:rgba(38,194,129,.45);color:#7ee9bd}
+.note{background:rgba(74,158,240,.07);border:1px solid rgba(74,158,240,.3);border-left:3px solid var(--blue);
+  border-radius:0 10px 10px 0;padding:12px 15px;font-size:12.5px;color:#cfe4fb;line-height:1.75;margin-top:16px}
+.note b{color:#fff}
+.capt{font-size:11px;font-weight:800;letter-spacing:.6px;color:var(--muted);margin:16px 0 7px;
+  text-transform:uppercase}
+
+/* ══ ΚΕΛΥΦΟΣ ΤΑΜΕΙΟΥ (mock POS) ══ */
+.shell{display:flex;height:560px;border-radius:16px;overflow:hidden;border:1px solid var(--border);
+  background:var(--black);box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.shell.tall{height:620px}
+.nav{width:74px;flex:0 0 74px;background:#090d24;border-right:1px solid var(--border);
+  display:flex;flex-direction:column;align-items:center;padding:12px 0;gap:5px}
+.nav .logo{width:40px;height:40px;border-radius:11px;background:linear-gradient(160deg,var(--yellow),var(--yellow2));
+  display:grid;place-items:center;color:#221a00;font-weight:900;font-size:15px;margin-bottom:9px}
+.nav .ni{width:52px;height:48px;border-radius:11px;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:2px;color:var(--muted);font-size:8.5px;font-weight:700}
+.nav .ni .e{font-size:19px;line-height:1}
+.nav .ni.on{background:var(--gy);color:var(--yellow)}
+.nav .ni.alarm{background:rgba(239,83,80,.16);color:#ff9d9a}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{height:50px;flex:0 0 50px;display:flex;align-items:center;gap:9px;padding:0 14px;
+  border-bottom:1px solid var(--border);background:var(--dark)}
+.chip{padding:5px 11px;border-radius:var(--pill);font-size:11.5px;font-weight:700;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.11);color:var(--muted)}
+.chip.on{background:var(--gy);border-color:var(--gyr);color:var(--yellow)}
+.cats{display:flex;gap:5px;padding:9px 14px;border-bottom:1px solid var(--border);overflow:hidden}
+.ct{padding:7px 12px;border-radius:var(--rb);font-size:11.5px;font-weight:700;white-space:nowrap;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--muted)}
+.ct.on{background:var(--gy);border-color:var(--yellow);color:var(--yellow)}
+.grid{flex:1;overflow:hidden;padding:12px 14px;display:grid;gap:9px;
+  grid-template-columns:repeat(auto-fill,minmax(130px,1fr));align-content:start}
+.pc{border-radius:11px;background:var(--card);border:1.5px solid rgba(255,255,255,.08);
+  padding:11px 9px 10px;text-align:center;min-height:92px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:5px;position:relative;cursor:pointer}
+.pc .em{font-size:23px;line-height:1}
+.pc .nm{font-size:11.5px;font-weight:700;line-height:1.2;color:rgba(255,255,255,.86)}
+.pc .pr{font-size:10.5px;font-weight:800;color:var(--yellow)}
+.side{width:300px;flex:0 0 300px;background:var(--dark);border-left:1px solid var(--border);
+  display:flex;flex-direction:column}
+.side-h{padding:12px 14px;font-size:13px;font-weight:800;border-bottom:1px solid var(--border)}
+.side-b{flex:1;padding:12px 14px;color:var(--muted);font-size:12px;line-height:1.6}
+
+/* καταστάσεις κάρτας */
+.pc.out{background:rgba(239,83,80,.13);border-color:var(--so-today)}
+.pc.out .nm{color:#ffb0ae;text-decoration:line-through}
+.pc.out .em{filter:grayscale(1);opacity:.6}
+.pc.out::after{content:'⏳';position:absolute;top:5px;right:6px;font-size:12px}
+.pc.perm{background:rgba(160,108,255,.13);border-color:var(--so-indef)}
+.pc.perm .nm{color:#d6bcff;text-decoration:line-through}
+.pc.perm .em{filter:grayscale(1);opacity:.6}
+.pc.perm::after{content:'🔒';position:absolute;top:5px;right:6px;font-size:12px}
+
+/* ══ Π1 — ΛΕΙΤΟΥΡΓΙΑ ΕΞΑΝΤΛΗΣΗΣ ══ */
+.modebar{display:flex;align-items:center;gap:12px;padding:11px 16px;
+  background:linear-gradient(90deg,rgba(239,83,80,.28),rgba(239,83,80,.12));
+  border-bottom:2px solid var(--so-today)}
+.modebar .md{font-size:13.5px;font-weight:900;letter-spacing:.4px;color:#ffd3d1;display:flex;align-items:center;gap:8px}
+.modebar .md .blip{width:9px;height:9px;border-radius:99px;background:var(--red);
+  box-shadow:0 0 0 4px rgba(239,83,80,.25)}
+.modebar .hint{font-size:11.5px;color:rgba(255,211,209,.8)}
+.modebar .x{margin-left:auto;min-height:34px;padding:0 13px;border-radius:var(--pill);font-size:11.5px;
+  font-weight:800;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.18);color:#fff}
+.mode-grid .pc{cursor:crosshair}
+.mode-grid .pc:not(.out):not(.perm){box-shadow:inset 0 0 0 1px rgba(239,83,80,.12)}
+.tray{flex:0 0 auto;border-top:2px solid var(--so-today);background:#160d1e;padding:11px 14px;
+  display:flex;align-items:center;gap:12px}
+.tray .cnt{width:46px;height:46px;flex:0 0 46px;border-radius:13px;display:grid;place-items:center;
+  background:var(--red);color:#fff;font-size:21px;font-weight:900}
+.tray .picked{flex:1;min-width:0;display:flex;gap:6px;flex-wrap:wrap;align-content:center;max-height:56px;overflow:hidden}
+.tk{display:inline-flex;align-items:center;gap:6px;padding:5px 8px 5px 10px;border-radius:var(--pill);
+  font-size:11.5px;font-weight:700;background:rgba(239,83,80,.2);border:1px solid rgba(239,83,80,.55);color:#ffd3d1}
+.tk .rm{width:17px;height:17px;border-radius:99px;background:rgba(255,255,255,.16);display:grid;
+  place-items:center;font-size:10px}
+.dur{display:flex;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.16);flex:0 0 auto}
+.dur button{min-height:46px;padding:0 14px;font-size:12px;font-weight:800;border:none;font-family:inherit;
+  background:rgba(255,255,255,.05);color:var(--muted);border-right:1px solid rgba(255,255,255,.12)}
+.dur button:last-child{border-right:none}
+.dur button.on.td{background:var(--so-today);color:#fff}
+.dur button.on.id{background:var(--so-indef);color:#1a0533}
+.apply{min-height:50px;padding:0 20px;border-radius:12px;border:none;font-family:inherit;font-size:14.5px;
+  font-weight:900;background:linear-gradient(180deg,var(--yellow),var(--yellow2));color:#221a00;
+  box-shadow:0 6px 18px rgba(245,196,0,.3);flex:0 0 auto}
+
+/* ══ Π2 — ΠΙΝΑΚΑΣ ΑΠΟΘΕΜΑΤΟΣ ══ */
+.board{flex:1;display:flex;flex-direction:column;min-height:0;background:var(--black)}
+.bh{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border);
+  background:var(--dark)}
+.bh h3{margin:0;font-size:16px;font-weight:800}
+.bsearch{flex:1;max-width:340px;position:relative}
+.bsearch input{width:100%;height:40px;border-radius:10px;background:rgba(255,255,255,.05);
+  border:1.5px solid rgba(255,255,255,.12);color:var(--white);font-size:14px;padding:0 12px 0 36px;
+  font-family:inherit;outline:none}
+.bsearch .m{position:absolute;left:12px;top:11px;color:var(--muted);font-size:14px}
+.bfil{display:flex;gap:5px}
+.bf{min-height:36px;padding:0 12px;border-radius:var(--pill);font-size:11.5px;font-weight:800;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.11);color:var(--muted)}
+.bf.on{background:var(--yellow);border-color:var(--yellow);color:#221a00}
+.bf.red.on{background:var(--so-today);border-color:var(--so-today);color:#fff}
+.bcols{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);min-height:0}
+.bcol{background:var(--black);display:flex;flex-direction:column;min-height:0}
+.bcol-h{padding:9px 11px;font-size:11px;font-weight:900;letter-spacing:.4px;color:var(--yellow);
+  background:#131a3d;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.bcol-h .k{font-size:10px;font-weight:800;padding:2px 6px;border-radius:var(--pill);
+  background:rgba(239,83,80,.2);color:#ffb0ae}
+.bcol-h .k.zero{background:rgba(38,194,129,.16);color:#7ee9bd}
+.bcol-b{flex:1;overflow-y:auto;padding:7px;display:flex;flex-direction:column;gap:4px}
+.br{display:flex;align-items:center;gap:8px;min-height:44px;padding:6px 9px;border-radius:9px;
+  background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);font-size:12.5px;cursor:pointer}
+.br .bn{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.br .sw{width:38px;height:22px;flex:0 0 38px;border-radius:99px;background:rgba(38,194,129,.35);
+  position:relative;border:1px solid rgba(38,194,129,.6)}
+.br .sw::after{content:'';position:absolute;top:2px;right:2px;width:16px;height:16px;border-radius:99px;background:#7ee9bd}
+.br.off{background:rgba(239,83,80,.11);border-color:rgba(239,83,80,.4)}
+.br.off .bn{color:#ffb0ae;text-decoration:line-through}
+.br.off .sw{background:rgba(239,83,80,.3);border-color:rgba(239,83,80,.6)}
+.br.off .sw::after{right:auto;left:2px;background:#ff8a87}
+.br.perm{background:rgba(160,108,255,.11);border-color:rgba(160,108,255,.4)}
+.br.perm .bn{color:#d6bcff;text-decoration:line-through}
+.br.perm .sw{background:rgba(160,108,255,.3);border-color:rgba(160,108,255,.6)}
+.br.perm .sw::after{right:auto;left:2px;background:#c9a8ff}
+.bfoot{flex:0 0 auto;padding:10px 16px;border-top:1px solid var(--border);background:var(--dark);
+  display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted)}
+.bfoot b{color:#ff8a87}
+
+/* ══ Π3 — SPLIT ══ */
+.split{flex:1;display:grid;grid-template-columns:1fr 360px;min-height:0}
+.spl-l{min-width:0;display:flex;flex-direction:column;border-right:1px solid var(--border)}
+.spl-r{background:#150d1a;display:flex;flex-direction:column;min-height:0}
+.spl-rh{padding:13px 15px;border-bottom:1px solid rgba(239,83,80,.3);
+  background:linear-gradient(180deg,rgba(239,83,80,.18),transparent)}
+.spl-rh .ttl{font-size:14px;font-weight:900;color:#ffd3d1;display:flex;align-items:center;gap:8px}
+.spl-rh .sb{font-size:11px;color:rgba(255,211,209,.72);margin-top:4px;line-height:1.45}
+.spl-rb{flex:1;overflow-y:auto;padding:11px;display:flex;flex-direction:column;gap:6px}
+.oit{display:flex;align-items:center;gap:9px;min-height:48px;padding:7px 10px;border-radius:10px;
+  background:rgba(239,83,80,.14);border:1px solid rgba(239,83,80,.45)}
+.oit.ing{background:rgba(160,108,255,.13);border-color:rgba(160,108,255,.45)}
+.oit .ie{font-size:17px;flex:0 0 auto}
+.oit .it{flex:1;min-width:0;font-size:12.5px;font-weight:700;color:#ffd9d8}
+.oit.ing .it{color:#e2cfff}
+.oit .it small{display:block;font-weight:600;font-size:10px;color:rgba(255,255,255,.5);margin-top:2px}
+.oit .rmv{width:30px;height:30px;flex:0 0 30px;border-radius:8px;display:grid;place-items:center;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);font-size:13px}
+.spl-empty{padding:34px 18px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.75;font-style:italic}
+.spl-rf{flex:0 0 auto;padding:12px;border-top:1px solid rgba(255,255,255,.1);display:flex;flex-direction:column;gap:8px}
+.big{width:100%;min-height:56px;border-radius:12px;border:none;font-family:inherit;font-size:15px;
+  font-weight:900;background:linear-gradient(180deg,var(--yellow),var(--yellow2));color:#221a00;
+  box-shadow:0 6px 18px rgba(245,196,0,.28)}
+.gsel{display:flex;gap:5px;padding:9px 14px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.gs{min-height:36px;padding:0 12px;border-radius:var(--pill);font-size:11.5px;font-weight:800;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.11);color:var(--muted);
+  display:inline-flex;align-items:center;gap:6px}
+.gs.on{background:var(--gy);border-color:var(--yellow);color:var(--yellow)}
+.gs .n{font-size:10px;opacity:.8}
+
+/* ══ Π4 — ΔΥΟ ΤΑΜΠΛΟ (προϊόντα | υλικά) ══ */
+.duo{flex:1;display:grid;grid-template-columns:1fr 1fr;min-height:0;gap:1px;background:var(--border)}
+.dp{background:var(--black);display:flex;flex-direction:column;min-height:0}
+.dp-h{padding:11px 14px;font-size:13px;font-weight:900;background:#131a3d;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:9px}
+.dp-h .cn{margin-left:auto;font-size:10.5px;font-weight:800;padding:3px 8px;border-radius:var(--pill);
+  background:rgba(239,83,80,.2);color:#ffb0ae}
+.dp-b{flex:1;overflow-y:auto;padding:11px}
+.igrid{display:flex;flex-wrap:wrap;gap:7px}
+.ig{min-height:46px;padding:10px 13px;border-radius:11px;font-size:13px;font-weight:600;
+  background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);color:var(--white);cursor:pointer}
+.ig.out{background:rgba(239,83,80,.14);border-color:var(--so-today);color:#ffb0ae;text-decoration:line-through}
+.ig.out::before{content:'⏳ ';text-decoration:none}
+.ig.perm{background:rgba(160,108,255,.14);border-color:var(--so-indef);color:#d6bcff;text-decoration:line-through}
+.ig.perm::before{content:'🔒 ';text-decoration:none}
+.gtitle{font-size:11px;font-weight:800;letter-spacing:.4px;color:var(--yellow);margin:0 0 8px}
+.gtitle+.igrid{margin-bottom:16px}
+
+/* ══ responsive ladder demo ══ */
+.ladder{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+.step{background:var(--dark);border:1px solid var(--border);border-radius:12px;padding:12px;font-size:11.5px}
+.step h4{margin:0 0 5px;font-size:12px;color:var(--yellow)}
+.step p{margin:0;color:var(--muted);line-height:1.6}
+.step .bp{font-size:10px;font-weight:800;color:#7ee9bd;letter-spacing:.4px;display:block;margin-bottom:5px}
+.mini-frames{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;margin-top:14px}
+.mf{border:1px solid var(--border);border-radius:10px;background:var(--black);overflow:hidden}
+.mf .cap{font-size:10px;font-weight:800;color:var(--muted);padding:5px 8px;background:var(--dark);
+  border-bottom:1px solid var(--border);letter-spacing:.3px}
+.mf .in{padding:7px;display:grid;gap:4px}
+.mf .cell{height:26px;border-radius:5px;background:var(--card);border:1px solid rgba(255,255,255,.07)}
+.mf .cell.r{background:rgba(239,83,80,.2);border-color:rgba(239,83,80,.5)}
+.mf .bar{height:22px;border-radius:5px;background:linear-gradient(90deg,var(--yellow),var(--yellow2))}
+
+.cmp{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:10px}
+.cmp th,.cmp td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top}
+.cmp th{background:rgba(255,255,255,.05);font-size:11.5px}
+.cmp td:first-child{font-weight:800;color:var(--yellow)}
+.ok{color:#5fe0ab;font-weight:700}.no{color:#ff8a87;font-weight:700}
+.tblwrap{overflow-x:auto}
+@media(max-width:1100px){
+  .bcols{grid-template-columns:repeat(2,1fr)}
+  .split{grid-template-columns:1fr}
+  .duo{grid-template-columns:1fr}
+  .side{display:none}
+  .ladder{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){.bcols{grid-template-columns:1fr}.ladder{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<h1>Εξάντληση προϊόντων &amp; υλικών — 4 ριζικές προτάσεις</h1>
+<p class="lead">Καμία από τις 4 <b>δεν είναι κουτάκι 380px</b>. Όλες χρησιμοποιούν <b>ολόκληρη την οθόνη</b> και ανεβοκατεβαίνουν με σκαλοπάτια: 27΄΄ → 4 στήλες, tablet → 2, κινητό → 1. Ο στόχος που ζήτησες: <b>να βλέπεις εύκολα και να αφαιρείς γρήγορα</b> προϊόν ή υλικό — πολλά μαζί, όχι ένα-ένα μέσα σε παράθυρα.</p>
+<div class="callout"><b>Η κοινή ιδέα και στις 4:</b> σταματάει το «ένα προϊόν = ένα modal = μία απόφαση». Αντί γι' αυτό <b>μαζεύεις ό,τι τελείωσε</b> με απλά πατήματα πάνω σε μεγάλη επιφάνεια, το βλέπεις συγκεντρωμένο, και <b>πατάς μία φορά</b> για να κλείσουν όλα μαζί. Ο χρωματικός κώδικας μένει ο ίδιος: <b style="color:#ff8a87">κόκκινο = σήμερα</b> · <b style="color:#c9a8ff">μωβ = επ' αόριστον</b>.</p></div>
+
+<!-- ══════════ Π1 ══════════ -->
+<div class="sec">
+  <div class="sec-head"><span class="sec-num">Π1</span><h2 class="sec-t">«Λειτουργία Εξάντλησης» — πάνω στο ίδιο το μενού, χωρίς κανένα παράθυρο</h2></div>
+  <p class="sec-why">Η πιο ριζική: <b>δεν ανοίγει τίποτα</b>. Πατάς μία φορά το 🚫 στο πλαϊνό μενού και <b>όλη η οθόνη μπαίνει σε λειτουργία εξάντλησης</b> — κόκκινη κορδέλα πάνω, ο κατάλογος όπως τον ξέρεις, και κάθε πάτημα σε κάρτα την <b>σβήνει επιτόπου</b>. Αλλάζεις κατηγορία κανονικά, σβήνεις ό,τι τελείωσε από παντού, και κάτω μαζεύονται σε μια λωρίδα. Ένα πάτημα «Εφαρμογή» και τελείωσε. <b>Μηδέν παράθυρα, μηδέν λίστες κειμένου</b> — δουλεύεις πάνω στην οθόνη που ήδη ξέρεις απ' έξω.</p>
+  <div class="tagrow"><span class="tag win">10 προϊόντα σε 10 πατήματα</span><span class="tag win">καμία εκμάθηση — ίδιο μενού</span><span class="tag win">όλες οι κατηγορίες σε μία συνεδρία</span><span class="tag win">ακύρωση πριν εφαρμοστεί</span></div>
+  <div class="shell tall">
+    <div class="nav">
+      <div class="logo">T</div>
+      <div class="ni"><span class="e">🍔</span>Μενού</div>
+      <div class="ni"><span class="e">🪑</span>Τραπέζια</div>
+      <div class="ni"><span class="e">🛵</span>Delivery</div>
+      <div class="ni alarm"><span class="e">🚫</span>Εξάντληση</div>
+      <div class="ni"><span class="e">👥</span>Πελάτες</div>
+      <div class="ni"><span class="e">⚙</span>Ρυθμίσεις</div>
+    </div>
+    <div class="main">
+      <div class="modebar">
+        <span class="md"><span class="blip"></span>ΛΕΙΤΟΥΡΓΙΑ ΕΞΑΝΤΛΗΣΗΣ</span>
+        <span class="hint">Πάτα ό,τι τελείωσε — αλλάζεις κατηγορίες ελεύθερα. Τίποτα δεν κλείνει πριν πατήσεις «Εφαρμογή».</span>
+        <span class="x">✕ Έξοδος</span>
+      </div>
+      <div class="cats">
+        <span class="ct">Ορεκτικά</span><span class="ct">Αλοιφές</span><span class="ct">Τεμάχια</span>
+        <span class="ct on">Πίτα</span><span class="ct">Αραβική</span><span class="ct">Λαβάς</span>
+        <span class="ct">XXL</span><span class="ct">Μερίδες</span><span class="ct">Club</span><span class="ct">Box</span>
+      </div>
+      <div class="grid mode-grid">
+        <div class="pc out"><span class="em">🌯</span><span class="nm">Πίτα Κοτόπουλο</span><span class="pr">3,40 €</span></div>
+        <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Γύρος</span><span class="pr">3,40 €</span></div>
+        <div class="pc out"><span class="em">🌯</span><span class="nm">Πίτα Κεμπαπάκι</span><span class="pr">3,60 €</span></div>
+        <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Σουβλάκι</span><span class="pr">3,40 €</span></div>
+        <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Λουκάνικο</span><span class="pr">3,50 €</span></div>
+        <div class="pc perm"><span class="em">🌯</span><span class="nm">Πίτα Πανσέτα</span><span class="pr">3,80 €</span></div>
+        <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Σνίτσελ</span><span class="pr">3,60 €</span></div>
+        <div class="pc out"><span class="em">🥔</span><span class="nm">Πατατόπιτα</span><span class="pr">3,00 €</span></div>
+        <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Φιλέτο</span><span class="pr">3,90 €</span></div>
+        <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Ντόνερ</span><span class="pr">3,60 €</span></div>
+        <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Μπιφτέκι</span><span class="pr">3,60 €</span></div>
+        <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Falafel</span><span class="pr">3,40 €</span></div>
+      </div>
+      <div class="tray">
+        <span class="cnt">4</span>
+        <span class="picked">
+          <span class="tk">Πίτα Κοτόπουλο<span class="rm">✕</span></span>
+          <span class="tk">Πίτα Κεμπαπάκι<span class="rm">✕</span></span>
+          <span class="tk">Πατατόπιτα<span class="rm">✕</span></span>
+          <span class="tk">🥬 Ουγγαρέζα<span class="rm">✕</span></span>
+        </span>
+        <span class="dur"><button class="on td">⏳ Σήμερα</button><button class="id">🔒 Αόριστον</button><button>🛵 Μόνο e-food</button></span>
+        <button class="apply">Εφαρμογή →</button>
+      </div>
+    </div>
+  </div>
+  <div class="note"><b>Έξυπνη λειτουργία:</b> επειδή τίποτα δεν εκτελείται πριν την «Εφαρμογή», μπορείς να <b>αλλάξεις γνώμη ελεύθερα</b> — βγάζεις ένα από τη λωρίδα με ✕. Και η <b>διάρκεια επιλέγεται μία φορά για όλη τη σύναξη</b>: σβήνεις 8 προϊόντα, πατάς «Σήμερα», τέλος. Σήμερα αυτό είναι 8 παρατεταμένα πατήματα × 3 βήματα το καθένα.</div>
+  <div class="capt">Σκαλοπάτια οθόνης</div>
+  <div class="ladder">
+    <div class="step"><span class="bp">≥1400px · 27΄΄</span><h4>6 κάρτες ανά σειρά</h4><p>Η λωρίδα κάτω δείχνει και τα 12 μαζεμένα χωρίς σκρολ. Οι 3 διάρκειες πλήρεις με λεκτικό.</p></div>
+    <div class="step"><span class="bp">961–1399px</span><h4>5 κάρτες ανά σειρά</h4><p>Ίδια λωρίδα· η συμβουλή στην κορδέλα κόβεται σε σύντομη μορφή.</p></div>
+    <div class="step"><span class="bp">701–960px · tablet</span><h4>3–4 κάρτες</h4><p>Η λωρίδα γίνεται δίγραμμη: πάνω τα μαζεμένα, κάτω διάρκεια + Εφαρμογή.</p></div>
+    <div class="step"><span class="bp">≤700px · κινητό</span><h4>2 κάρτες</h4><p>Η λωρίδα κολλάει στο κάτω μέρος (safe-area) και δείχνει «4 επιλεγμένα ▲» — ανοίγει με πάτημα.</p></div>
+  </div>
+</div>
+
+<!-- ══════════ Π2 ══════════ -->
+<div class="sec">
+  <div class="sec-head"><span class="sec-num">Π2</span><h2 class="sec-t">«Πίνακας Αποθέματος» — όλο το μαγαζί σε μία οθόνη, με διακόπτες</h2></div>
+  <p class="sec-why">Πλήρης οθόνη, <b>στήλες ανά κατηγορία</b>, κάθε είδος μια γραμμή με <b>διακόπτη</b>. Πράσινος = πουλάμε, κόκκινος = τελείωσε, μωβ = μόνιμο. Βλέπεις <b>ολόκληρο τον κατάλογο ταυτόχρονα</b> και σβήνεις με ένα πάτημα ανά γραμμή — χωρίς να αλλάξεις οθόνη, χωρίς να ψάξεις. Η κεφαλίδα κάθε στήλης λέει <b>πόσα λείπουν από αυτή την κατηγορία</b>. Πάνω, μία αναζήτηση που φιλτράρει ταυτόχρονα προϊόντα ΚΑΙ υλικά.</p>
+  <div class="tagrow"><span class="tag win">όλος ο κατάλογος ταυτόχρονα</span><span class="tag win">1 πάτημα ανά είδος</span><span class="tag win">μετρητής ανά κατηγορία</span><span class="tag win">αναζήτηση σε όλα</span><span class="tag">θέλει μεγάλη οθόνη για να λάμψει</span></div>
+  <div class="shell tall">
+    <div class="nav">
+      <div class="logo">T</div>
+      <div class="ni"><span class="e">🍔</span>Μενού</div>
+      <div class="ni"><span class="e">🪑</span>Τραπέζια</div>
+      <div class="ni"><span class="e">🛵</span>Delivery</div>
+      <div class="ni on"><span class="e">🚫</span>Απόθεμα</div>
+      <div class="ni"><span class="e">👥</span>Πελάτες</div>
+      <div class="ni"><span class="e">⚙</span>Ρυθμίσεις</div>
+    </div>
+    <div class="board">
+      <div class="bh">
+        <h3>🚫 Πίνακας Αποθέματος</h3>
+        <div class="bsearch"><span class="m">🔍</span><input placeholder="Γράψε προϊόν ή υλικό…"></div>
+        <div class="bfil">
+          <span class="bf on">Όλα</span><span class="bf red">⏳ Κλειστά 7</span><span class="bf">🔒 Μόνιμα 2</span><span class="bf">🛵 Μόνο e-food 1</span>
+        </div>
+      </div>
+      <div class="bcols">
+        <div class="bcol">
+          <div class="bcol-h"><span>🌯 ΠΙΤΑ</span><span class="k">2</span></div>
+          <div class="bcol-b">
+            <div class="br off"><span class="bn">Πίτα Κοτόπουλο</span><span class="sw"></span></div>
+            <div class="br"><span class="bn">Πίτα Γύρος</span><span class="sw"></span></div>
+            <div class="br off"><span class="bn">Πίτα Κεμπαπάκι</span><span class="sw"></span></div>
+            <div class="br"><span class="bn">Πίτα Σουβλάκι</span><span class="sw"></span></div>
+            <div class="br"><span class="bn">Πίτα Λουκάνικο</span><span class="sw"></span></div>
+            <div class="br"><span class="bn">Πίτα Σνίτσελ</span><span class="sw"></span></div>
+            <div class="br"><span class="bn">Πίτα Φιλέτο</span><span class="sw"></span></div>
+          </div>
+        </div>
+        <div class="bcol">
+          <div class="bcol-h"><span>🍽 ΜΕΡΙΔΕΣ</span><span class="k">1</span></div>
+          <div class="bcol-b">
+            <div class="br"><span class="bn">Μερίδα Γύρος</span><span class="sw"></span></div>
+            <div class="br"><span class="bn">Μερίδα Κοτόπουλο</span><span class="sw"></span></div>
+            <div class="br perm"><span class="bn">Μερίδα Σνίτσελ</span><span class="sw"></span></div>
+            <div class="br"><span class="bn">Μερίδα Κεμπαπάκι</span><span class="sw"></span></div>
+            <div class="br"><span class="bn">Μερίδα Πανσέτα</span><span class="sw"></span></div>
+            <div class="br"><span class="bn">Μερίδα Λουκάνικο</span><span class="sw"></span></div>
+          </div>
+        </div>
+        <div class="bcol">
+          <div class="bcol-h"><span>🥫 ΣΑΛΤΣΕΣ &amp; ΥΛΙΚΑ</span><span class="k">3</span></div>
+          <div class="bcol-b">
+            <div class="br off"><span class="bn">Ουγγαρέζα</span><span class="sw"></span></div>
+            <div class="br"><span class="bn">Τζατζίκι</span><span class="sw"></span></div>
+            <div class="br"><span class="bn">Τυροκαυτερή</span><span class="sw"></span></div>
+            <div class="br off"><span class="bn">Πατάτες</span><span class="sw"></span></div>
+            <div class="br off"><span class="bn">Μπέικον</span><span class="sw"></span></div>
+            <div class="br"><span class="bn">Ντομάτα</span><span class="sw"></span></div>
+            <div class="br"><span class="bn">Κρεμμύδι</span><span class="sw"></span></div>
+          </div>
+        </div>
+        <div class="bcol">
+          <div class="bcol-h"><span>🥤 ΠΟΤΑ</span><span class="k zero">0</span></div>
+          <div class="bcol-b">
+            <div class="br"><span class="bn">Coca-Cola 330</span><span class="sw"></span></div>
+            <div class="br"><span class="bn">Fanta 330</span><span class="sw"></span></div>
+            <div class="br"><span class="bn">Sprite 330</span><span class="sw"></span></div>
+            <div class="br"><span class="bn">Νερό 500</span><span class="sw"></span></div>
+            <div class="br"><span class="bn">Amstel 500</span><span class="sw"></span></div>
+            <div class="br"><span class="bn">Heineken 330</span><span class="sw"></span></div>
+          </div>
+        </div>
+      </div>
+      <div class="bfoot">
+        <span>Λείπουν <b>7 σήμερα</b> · 2 επ' αόριστον · 1 μόνο στην e-food</span>
+        <span style="margin-left:auto">↺ Άνοιξέ τα ημερήσια</span>
+      </div>
+    </div>
+  </div>
+  <div class="note"><b>Έξυπνη λειτουργία:</b> ο διακόπτης <b>εκτελεί αμέσως</b> (καμία «Εφαρμογή») — αυτό ταιριάζει στη ρουτίνα «τσεκάρω το ψυγείο πριν ανοίξω». Το κλείσιμο ενός <b>υλικού</b> κάνει τα προϊόντα που παρασύρει να αναβοσβήσουν στη στήλη τους, ώστε να δεις <u>στην ίδια οθόνη</u> τι έπεσε μαζί — χωρίς να ανοίξει κανένα παράθυρο επιβεβαίωσης.</div>
+  <div class="capt">Σκαλοπάτια οθόνης</div>
+  <div class="mini-frames">
+    <div class="mf" style="width:250px"><div class="cap">≥1400px — 5 στήλες</div><div class="in" style="grid-template-columns:repeat(5,1fr)">
+      <div class="cell r"></div><div class="cell"></div><div class="cell"></div><div class="cell r"></div><div class="cell"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell r"></div><div class="cell"></div><div class="cell"></div></div></div>
+    <div class="mf" style="width:200px"><div class="cap">961–1399 — 4 στήλες</div><div class="in" style="grid-template-columns:repeat(4,1fr)">
+      <div class="cell r"></div><div class="cell"></div><div class="cell"></div><div class="cell r"></div>
+      <div class="cell"></div><div class="cell"></div><div class="cell r"></div><div class="cell"></div></div></div>
+    <div class="mf" style="width:140px"><div class="cap">701–960 — 2</div><div class="in" style="grid-template-columns:repeat(2,1fr)">
+      <div class="cell r"></div><div class="cell"></div><div class="cell"></div><div class="cell r"></div></div></div>
+    <div class="mf" style="width:92px"><div class="cap">≤700 — 1</div><div class="in">
+      <div class="cell r"></div><div class="cell"></div><div class="cell r"></div><div class="cell"></div></div></div>
+  </div>
+</div>
+
+<!-- ══════════ Π3 ══════════ -->
+<div class="sec">
+  <div class="sec-head"><span class="sec-num">Π3</span><h2 class="sec-t">«Καλάθι Εξάντλησης» — μενού αριστερά, ό,τι τελείωσε δεξιά</h2></div>
+  <p class="sec-why">Το μοντέλο που ο ταμίας <b>ήδη ξέρει από την παραγγελία</b>: πατάς προϊόντα αριστερά, μπαίνουν στο «καλάθι» δεξιά, πατάς μία φορά στο τέλος. Μόνο που εδώ το καλάθι δεν είναι παραγγελία — είναι <b>τι λείπει</b>. Αφαιρείς με ✕ πάνω σε κάθε γραμμή. Πάνω από τον κατάλογο υπάρχουν <b>κουμπιά-συντομεύσεις</b> («όλο το κοτόπουλο», «όλη η πίτα»), οπότε το ομαδικό κλείσιμο γίνεται με ένα πάτημα αντί για έξι.</p>
+  <div class="tagrow"><span class="tag win">γνώριμο μοτίβο (καλάθι)</span><span class="tag win">προϊόντα &amp; υλικά μαζί</span><span class="tag win">ομαδικά με 1 πάτημα</span><span class="tag win">αναίρεση πριν το τέλος</span></div>
+  <div class="shell tall">
+    <div class="nav">
+      <div class="logo">T</div>
+      <div class="ni"><span class="e">🍔</span>Μενού</div>
+      <div class="ni"><span class="e">🪑</span>Τραπέζια</div>
+      <div class="ni on"><span class="e">🚫</span>Εξάντληση</div>
+      <div class="ni"><span class="e">👥</span>Πελάτες</div>
+      <div class="ni"><span class="e">⚙</span>Ρυθμίσεις</div>
+    </div>
+    <div class="split">
+      <div class="spl-l">
+        <div class="cats">
+          <span class="ct on">Πίτα</span><span class="ct">Αραβική</span><span class="ct">Λαβάς</span>
+          <span class="ct">Μερίδες</span><span class="ct">Box</span><span class="ct">🥬 Υλικά</span><span class="ct">🥤 Ποτά</span>
+        </div>
+        <div class="gsel">
+          <span class="gs">⚡ Συντομεύσεις:</span>
+          <span class="gs on">🥩 Όλο το κοτόπουλο <span class="n">6</span></span>
+          <span class="gs">🥖 Όλη η πίτα <span class="n">11</span></span>
+          <span class="gs">🥔 Ό,τι έχει πατάτα <span class="n">4</span></span>
+        </div>
+        <div class="grid">
+          <div class="pc out"><span class="em">🌯</span><span class="nm">Πίτα Κοτόπουλο</span><span class="pr">3,40 €</span></div>
+          <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Γύρος</span><span class="pr">3,40 €</span></div>
+          <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Κεμπαπάκι</span><span class="pr">3,60 €</span></div>
+          <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Σουβλάκι</span><span class="pr">3,40 €</span></div>
+          <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Λουκάνικο</span><span class="pr">3,50 €</span></div>
+          <div class="pc out"><span class="em">🥔</span><span class="nm">Πατατόπιτα</span><span class="pr">3,00 €</span></div>
+          <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Σνίτσελ</span><span class="pr">3,60 €</span></div>
+          <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Φιλέτο</span><span class="pr">3,90 €</span></div>
+          <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Ντόνερ</span><span class="pr">3,60 €</span></div>
+        </div>
+      </div>
+      <div class="spl-r">
+        <div class="spl-rh">
+          <div class="ttl">🚫 Τελείωσαν — 5</div>
+          <div class="sb">Πάτα ✕ για να βγάλεις κάτι από τη λίστα. Τίποτα δεν κλείνει πριν πατήσεις το κίτρινο κουμπί.</div>
+        </div>
+        <div class="spl-rb">
+          <div class="oit"><span class="ie">🌯</span><span class="it">Πίτα Κοτόπουλο<small>Πίτα · 3,40 €</small></span><span class="rmv">✕</span></div>
+          <div class="oit"><span class="ie">🫓</span><span class="it">Αραβική Κοτόπουλο<small>από «όλο το κοτόπουλο»</small></span><span class="rmv">✕</span></div>
+          <div class="oit"><span class="ie">🌮</span><span class="it">Λαβάς Κοτόπουλο<small>από «όλο το κοτόπουλο»</small></span><span class="rmv">✕</span></div>
+          <div class="oit"><span class="ie">🥔</span><span class="it">Πατατόπιτα<small>Πίτα · 3,00 €</small></span><span class="rmv">✕</span></div>
+          <div class="oit ing"><span class="ie">🥬</span><span class="it">Ουγγαρέζα<small>υλικό — κλείνει σε όλα τα προϊόντα</small></span><span class="rmv">✕</span></div>
+        </div>
+        <div class="spl-rf">
+          <span class="dur" style="width:100%"><button class="on td" style="flex:1">⏳ Σήμερα</button><button class="id" style="flex:1">🔒 Αόριστον</button></span>
+          <button class="big">🚫 Κλείσε τα 5 →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="note"><b>Έξυπνη λειτουργία:</b> κάθε γραμμή στο καλάθι λέει <b>από πού μπήκε</b> — «από όλο το κοτόπουλο». Έτσι, όταν πατήσεις τη συντόμευση και δεις 6 γραμμές, ξέρεις ποιες ήρθαν ομαδικά και μπορείς να βγάλεις μόνο τη μία που ακόμα έχεις. Σήμερα το ομαδικό είναι «όλα ή τίποτα με checkboxes σε λίστα κειμένου».</div>
+  <div class="capt">Σκαλοπάτια οθόνης</div>
+  <div class="ladder">
+    <div class="step"><span class="bp">≥1400px</span><h4>Κατάλογος + καλάθι 420px</h4><p>6 κάρτες ανά σειρά, το καλάθι δείχνει 8 γραμμές χωρίς σκρολ.</p></div>
+    <div class="step"><span class="bp">961–1399px</span><h4>Καλάθι 360px</h4><p>4–5 κάρτες. Οι συντομεύσεις σε μία σειρά με σκρολ.</p></div>
+    <div class="step"><span class="bp">701–960px</span><h4>Καλάθι → κάτω λωρίδα</h4><p>Ο κατάλογος πιάνει όλο το πλάτος· το καλάθι γίνεται λωρίδα 2 σειρών στο κάτω μέρος.</p></div>
+    <div class="step"><span class="bp">≤700px</span><h4>Bottom sheet</h4><p>«🚫 5 τελείωσαν ▲» — ανεβαίνει με πάτημα, κατεβαίνει με σύρσιμο.</p></div>
+  </div>
+</div>
+
+<!-- ══════════ Π4 ══════════ -->
+<div class="sec">
+  <div class="sec-head"><span class="sec-num">Π4</span><h2 class="sec-t">«Δύο ταμπλό» — προϊόντα αριστερά, υλικά δεξιά, μεγάλα κουμπιά</h2></div>
+  <p class="sec-why">Η απλούστερη νοητικά: η οθόνη <b>κόβεται στα δύο</b> γιατί αυτά είναι τα δύο πράγματα που κλείνουν. Αριστερά <b>κάρτες προϊόντων</b> (τις αναγνωρίζεις, δεν τις διαβάζεις), δεξιά <b>μεγάλα chips υλικών</b> ομαδοποιημένα. Πατάς — σβήνει. Ξαναπατάς — γυρίζει. <b>Καμία λίστα κειμένου πουθενά</b>, μηδέν σκρολ σε μεγάλη οθόνη. Είναι επίσης η μοναδική πρόταση όπου <b>βλέπεις προϊόντα και υλικά ταυτόχρονα</b> — που είναι ακριβώς η ερώτηση «τι δεν πουλάω τώρα;».</p>
+  <div class="tagrow"><span class="tag win">προϊόντα &amp; υλικά μαζί</span><span class="tag win">μηδέν κείμενο-λίστα</span><span class="tag win">τεράστιοι στόχοι αφής</span><span class="tag win">άμεσο toggle</span><span class="tag">δεν κάνει ομαδικά (κρέας/ψωμί)</span></div>
+  <div class="shell tall">
+    <div class="nav">
+      <div class="logo">T</div>
+      <div class="ni"><span class="e">🍔</span>Μενού</div>
+      <div class="ni"><span class="e">🪑</span>Τραπέζια</div>
+      <div class="ni on"><span class="e">🚫</span>Εξάντληση</div>
+      <div class="ni"><span class="e">👥</span>Πελάτες</div>
+      <div class="ni"><span class="e">⚙</span>Ρυθμίσεις</div>
+    </div>
+    <div class="duo">
+      <div class="dp">
+        <div class="dp-h"><span>🍽 ΠΡΟΪΟΝΤΑ</span><span class="cn">3 κλειστά</span></div>
+        <div class="cats" style="border-top:none">
+          <span class="ct on">Πίτα</span><span class="ct">Μερίδες</span><span class="ct">Box</span><span class="ct">Ποτά</span>
+        </div>
+        <div class="dp-b">
+          <div class="grid" style="padding:0;overflow:visible;grid-template-columns:repeat(auto-fill,minmax(115px,1fr))">
+            <div class="pc out"><span class="em">🌯</span><span class="nm">Πίτα Κοτόπουλο</span></div>
+            <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Γύρος</span></div>
+            <div class="pc out"><span class="em">🌯</span><span class="nm">Πίτα Κεμπαπάκι</span></div>
+            <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Σουβλάκι</span></div>
+            <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Λουκάνικο</span></div>
+            <div class="pc perm"><span class="em">🌯</span><span class="nm">Πίτα Πανσέτα</span></div>
+            <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Σνίτσελ</span></div>
+            <div class="pc"><span class="em">🥔</span><span class="nm">Πατατόπιτα</span></div>
+            <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Φιλέτο</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="dp">
+        <div class="dp-h"><span>🥬 ΥΛΙΚΑ</span><span class="cn">3 κλειστά</span></div>
+        <div class="dp-b">
+          <div class="gtitle">🥫 ΣΑΛΤΣΕΣ</div>
+          <div class="igrid">
+            <span class="ig">Μαγιονέζα</span><span class="ig">Τζατζίκι</span><span class="ig">Τυροκαυτερή</span>
+            <span class="ig out">Ουγγαρέζα</span><span class="ig">Μελιτζανοσαλάτα</span><span class="ig">Σως Ταμάμ</span>
+            <span class="ig">Σως BBQ</span><span class="ig">Σως Caesar's</span><span class="ig">Σως Γιαούρτι</span>
+          </div>
+          <div class="gtitle">🥗 ΛΑΧΑΝΙΚΑ</div>
+          <div class="igrid">
+            <span class="ig">Ντομάτα</span><span class="ig">Κρεμμύδι</span><span class="ig">Κέτσαπ</span>
+            <span class="ig">Λάχανο &amp; καρότο</span><span class="ig out">Πατάτες</span><span class="ig">Πράσινη Σαλάτα</span>
+          </div>
+          <div class="gtitle">🧀 EXTRAS</div>
+          <div class="igrid">
+            <span class="ig">Κασέρι</span><span class="ig">Παρμεζάνα</span><span class="ig out">Μπέικον</span>
+            <span class="ig perm">Καλαμπόκι</span><span class="ig">Κρουτόν</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="note"><b>Έξυπνη λειτουργία:</b> όταν κλείνεις <b>υλικό</b> δεξιά, τα προϊόντα που παρασύρει <b>σβήνουν μπροστά στα μάτια σου</b> αριστερά. Δεν χρειάζεται να στο πει κανένα παράθυρο — <b>το βλέπεις</b>. Και αντίστροφα: αν κλείσεις όλα τα προϊόντα μιας σάλτσας, το υλικό δεξιά παίρνει διακριτικό περίγραμμα «μήπως τελείωσε κι αυτό;».</div>
+  <div class="capt">Σκαλοπάτια οθόνης</div>
+  <div class="ladder">
+    <div class="step"><span class="bp">≥1400px</span><h4>50 / 50</h4><p>Προϊόντα 5 ανά σειρά, υλικά 4 chips ανά σειρά. Μηδέν σκρολ.</p></div>
+    <div class="step"><span class="bp">961–1399px</span><h4>55 / 45</h4><p>Προϊόντα 3–4, υλικά 3. Ελαφρύ σκρολ στα υλικά.</p></div>
+    <div class="step"><span class="bp">701–960px</span><h4>Καρτέλες</h4><p>Δύο μεγάλες καρτέλες πάνω: «🍽 Προϊόντα» / «🥬 Υλικά» — μία φαίνεται κάθε φορά.</p></div>
+    <div class="step"><span class="bp">≤700px</span><h4>Καρτέλες + 2 στήλες</h4><p>Ίδιο, με 2 κάρτες ανά σειρά και chips 50% πλάτος.</p></div>
+  </div>
+</div>
+
+<!-- ══════════ ΣΥΓΚΡΙΣΗ ══════════ -->
+<div class="sec">
+  <div class="sec-head"><span class="sec-num">ΣΥΓΚΡΙΣΗ</span><h2 class="sec-t">Ποιο λύνει τι</h2></div>
+  <div class="tblwrap"><table class="cmp">
+    <tr><th>Κριτήριο</th><th>ΤΩΡΑ (modal)</th><th>Π1 · Λειτουργία</th><th>Π2 · Πίνακας</th><th>Π3 · Καλάθι</th><th>Π4 · Δύο ταμπλό</th></tr>
+    <tr><td>Κλείσιμο 8 προϊόντων</td><td class="no">8 modal × 3 βήματα</td><td class="ok">8 πατήματα + 1</td><td class="ok">8 πατήματα</td><td class="ok">8 + 1</td><td class="ok">8 πατήματα</td></tr>
+    <tr><td>Βλέπω προϊόντα &amp; υλικά μαζί</td><td class="no">όχι</td><td class="ok">ναι (καρτέλα υλικών)</td><td class="ok">ναι (στήλη)</td><td class="ok">ναι (καλάθι)</td><td class="ok">ναι, δίπλα-δίπλα</td></tr>
+    <tr><td>Αναίρεση πριν εκτελεστεί</td><td class="no">όχι</td><td class="ok">ναι</td><td class="no">όχι (άμεσο)</td><td class="ok">ναι</td><td class="no">όχι (άμεσο)</td></tr>
+    <tr><td>Ομαδικά (όλο το κρέας/ψωμί)</td><td class="ok">ναι</td><td>χειροκίνητα</td><td>χειροκίνητα</td><td class="ok">ναι, συντομεύσεις</td><td class="no">όχι</td></tr>
+    <tr><td>Εκμάθηση για νέο υπάλληλο</td><td>μέτρια</td><td class="ok">μηδενική (ίδιο μενού)</td><td class="ok">μηδενική (διακόπτες)</td><td class="ok">μηδενική (καλάθι)</td><td class="ok">μηδενική</td></tr>
+    <tr><td>Αξιοποίηση οθόνης 27΄΄</td><td class="no">380px στη μέση</td><td class="ok">πλήρης</td><td class="ok">πλήρης</td><td class="ok">πλήρης</td><td class="ok">πλήρης</td></tr>
+    <tr><td>Σε κινητό</td><td class="ok">ΟΚ</td><td class="ok">λωρίδα κάτω</td><td>πολύ σκρολ</td><td class="ok">bottom sheet</td><td class="ok">καρτέλες</td></tr>
+    <tr><td>Κόστος υλοποίησης</td><td>—</td><td>μεσαίο</td><td class="no">μεγάλο</td><td class="no">μεγάλο</td><td class="ok">μικρό-μεσαίο</td></tr>
+  </table></div>
+  <div class="note"><b>Η πρότασή μου: Π1 (Λειτουργία Εξάντλησης) ως κύρια, με Π4 ως «Πίνακα» στο flyout.</b> Το <b>Π1</b> είναι το πιο ριζικό και ταυτόχρονα το πιο εύκολο για τον υπάλληλο: δουλεύει πάνω στην <u>ίδια</u> οθόνη που ξέρει απ' έξω, δεν μαθαίνει τίποτα καινούριο, και κλείνει 10 πράγματα σε 10 πατήματα με δυνατότητα αναίρεσης. Το <b>Π4</b> καλύπτει τη δεύτερη ανάγκη — «δείξε μου τι δεν πουλάω τώρα» — και αντικαθιστά τη σημερινή λίστα «🚫 Εξαντλημένα». Μαζί καλύπτουν και τις δύο στιγμές: <b>την ώρα που κάτι τελειώνει</b> (Π1) και <b>την ώρα που ελέγχω</b> (Π4).</div>
+</div>
+
+</body>
+</html>
