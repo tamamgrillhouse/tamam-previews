@@ -232,7 +232,8 @@ header.pv p{margin:0;color:var(--muted);font-size:12.5px;line-height:1.5;max-wid
 .b-lock label{font-size:11.5px;color:#d9c8ff;line-height:1.4;cursor:pointer}
 
 /* ══ Γ — ΠΛΕΓΜΑ ════════════════════════════════════════════════════════ */
-#v-c .box{width:100%;max-width:720px}
+/* ΒΑΣΗ = Desktop (961–1399px) */
+#v-c .box{width:100%;max-width:880px}
 .c-head{padding:16px 18px 10px}
 .c-body{padding:0 18px;overflow-y:auto;flex:1;min-height:0}
 .c-pills{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
@@ -273,15 +274,50 @@ header.pv p{margin:0;color:var(--muted);font-size:12.5px;line-height:1.5;max-wid
 .c-tile.ing .nm{padding-right:0}
 .c-foot{padding:12px 18px 16px;border-top:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.2);
   display:flex;flex-direction:column;gap:9px}
-.stage[data-w="sm"] .c-grid{grid-template-columns:repeat(2,1fr)!important}
-.c-widthsw{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:12px;padding-top:10px;
-  border-top:1px dashed rgba(255,255,255,.1);font-size:10px;font-weight:800;letter-spacing:.5px;color:var(--muted)}
-.c-widthsw button{min-height:32px;padding:0 11px;border-radius:var(--radius-btn);cursor:pointer;font:inherit;
-  font-size:11px;font-weight:700;letter-spacing:0;background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.65)}
-.c-widthsw button:hover{color:#fff;border-color:rgba(255,255,255,.3)}
-.c-widthsw button.on{background:var(--glow-yellow-sm);border-color:var(--yellow);color:var(--yellow)}
-.c-wnow{margin-left:auto;font-size:10.5px;font-weight:700;letter-spacing:0;color:rgba(255,255,255,.5)}
+.c-actions{display:flex;gap:10px}
+.c-actions .sco-primary{flex:1.3}
+.c-actions .c-side{flex:1;display:flex;flex-direction:column;gap:8px;min-width:0}
+#v-c .c-tile{min-height:80px}
+.c-devtag{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:12px;padding-top:10px;
+  border-top:1px dashed rgba(255,255,255,.1);font-size:10.5px;font-weight:700;color:rgba(255,255,255,.5)}
+.c-devtag b{color:var(--yellow);font-weight:800}
+
+/* ── 27"+ (≥1400px): πιο πλατύ παράθυρο, ΜΕΓΑΛΥΤΕΡΑ πλακίδια & γράμματα,
+      ενέργειες δίπλα-δίπλα γιατί περισσεύει πλάτος ─────────────────────── */
+.stage[data-w="xl"] #v-c .box{max-width:1120px}
+.stage[data-w="xl"] #v-c .c-head{padding:20px 24px 12px}
+.stage[data-w="xl"] #v-c .c-body{padding:0 24px}
+.stage[data-w="xl"] #v-c .b-title{font-size:20px}
+.stage[data-w="xl"] #v-c .c-pill{min-height:50px;font-size:13.5px;padding:0 18px}
+.stage[data-w="xl"] #v-c .c-grid{gap:10px}
+.stage[data-w="xl"] #v-c .c-tile{min-height:98px;padding:13px 15px}
+.stage[data-w="xl"] #v-c .c-tile .nm{font-size:14.5px;padding-right:28px}
+.stage[data-w="xl"] #v-c .c-tile .ct{font-size:11px}
+.stage[data-w="xl"] #v-c .c-tile .tick{width:23px;height:23px;font-size:14px}
+.stage[data-w="xl"] #v-c .c-tile.ing{min-height:84px}
+.stage[data-w="xl"] #v-c .c-foot{padding:14px 24px 20px}
+.stage[data-w="xl"] #v-c .sco-primary{min-height:74px}
+.stage[data-w="xl"] #v-c .sco-sum{font-size:14px;padding:11px}
+
+/* ── Tablet (701–960px): 3 στήλες, ΨΗΛΟΤΕΡΑ πλακίδια για αφή,
+      ενέργειες ΚΑΘΕΤΑ (πλήρους πλάτους) ─────────────────────────────────── */
+.stage[data-w="md"] #v-c .box{max-width:none;width:96%}
+.stage[data-w="md"] #v-c .c-tile{min-height:94px}
+.stage[data-w="md"] #v-c .c-pill{min-height:48px}
+.stage[data-w="md"] #v-c .c-bulk{min-height:44px}
+.stage[data-w="md"] #v-c .c-actions{flex-direction:column}
+.stage[data-w="md"] #v-c .sco-primary{min-height:68px}
+
+/* ── Κινητό (≤700px): bottom sheet · 2 στήλες · καρτέλες σε οριζόντιο σκρολ ·
+      ενέργειες ΚΟΛΛΗΜΕΝΕΣ στον πάτο (το κύριο κουμπί πάντα ορατό) ───────── */
+.stage[data-w="sm"] #v-c .c-pills{flex-wrap:nowrap;overflow-x:auto;margin:0 -18px 10px;
+  padding:0 18px 4px;-webkit-overflow-scrolling:touch}
+.stage[data-w="sm"] #v-c .c-pill{flex:0 0 auto;min-height:46px}
+.stage[data-w="sm"] #v-c .c-tile{min-height:86px}
+.stage[data-w="sm"] #v-c .c-actions{flex-direction:column}
+.stage[data-w="sm"] #v-c .c-foot{position:sticky;bottom:0;
+  padding-bottom:calc(16px + env(safe-area-inset-bottom))}
+.stage[data-w="sm"] #v-c .c-bulk{min-height:44px}
 
 /* ══ Δ — ΤΑΜΠΛΟ ════════════════════════════════════════════════════════ */
 #v-d .box{width:100%;max-width:1080px}
@@ -432,12 +468,15 @@ const VARIANTS = [
          'Το «επ\' αόριστον» παραμένει <b>2 συνειδητά βήματα</b> (διακόπτης → checkbox επιβεβαίωσης που ξεκλειδώνει το κουμπί) και χάνει το κρυφό ξεδίπλωμα.',
          'Χωρίς δικαίωμα <code>canCloseProductIndef</code> το πλήκτρο 🔒 <b>απενεργοποιείται, δεν εξαφανίζεται</b> (RULES §10) — δοκίμασε τον διακόπτη «δικαίωμα» μέσα στην πρόταση.',
          '<b>Σκάλα:</b> ≥820px 3 πλήκτρα σε σειρά · ≤700px ο διακόπτης γίνεται 3 πλήρους πλάτους γραμμές.']},
-  {id:'c', tab:'Γ · Πλέγμα', h:'Γ — «Πλέγμα προϊόντων» (βλέπεις τα πάντα, πατάς με τον αντίχειρα)',
-   body:['Οι γραμμές γίνονται <b>πλακίδια ~166×74px</b>: στόχος αφής αντί για γραμμή 44px → πολύ πιο δύσκολο το λάθος πάτημα σε ώρα αιχμής.',
-         'Η γραμμή «🥬 ΩΣ ΥΛΙΚΟ» γίνεται φαρδύ πλακίδιο στην κορυφή με δικό της χρώμα — ξεχωρίζει ότι <b>δεν είναι πιάτο</b>.',
-         'Μαζικές επιλογές «Όλα / Κανένα» πάνω από το πλέγμα· τα «ήδη κλειστά» φοράνε σήμα αντί να χάνονται.',
-         '<b>Το πλάτος — δοκίμασε τον διακόπτη μέσα στην πρόταση:</b> <b>Σταθερό 720px</b> = ίδιο σε 27", desktop και tablet, αλλάζει <i>μόνο</i> στο κινητό. <b>Προσαρμοζόμενο</b> = το παράθυρο μεγαλώνει όσο χρειάζονται τα προϊόντα και όσο επιτρέπει η οθόνη.',
-         '<b>Μετρημένα</b> με το προσαρμοζόμενο (πραγματικές τιμές από αυτό εδώ το preview): <b>1 προϊόν</b> → 420px (κάτω όριο, να μη γίνει λωρίδα) · <b>5 πατάτες</b> ή <b>7 της οικογένειας κρέατος</b> → 3 στήλες / <b>550px</b> σε κάθε μεγάλη οθόνη · <b>16 πίτες</b> → <b>6 στήλες / 1072px</b> σε 27", <b>4 στήλες / 724px</b> σε desktop &amp; tablet, <b>2 στήλες</b> σε κινητό. Δηλαδή <b>μόνο η μεγάλη λίστα (16) ξεχωρίζει στα 27"</b> — στα υπόλοιπα το 27" και το desktop βγάζουν το ίδιο, by design.']},
+  {id:'c', tab:'Γ · Πλέγμα ✅', h:'Γ — «Πλέγμα προϊόντων» (ΚΛΕΙΔΩΜΕΝΟ) · σκάλα responsive ανά συσκευή',
+   body:['Οι γραμμές γίνονται <b>πλακίδια</b>: στόχος αφής ολόκληρη κάρτα αντί για γραμμή 44px → πολύ πιο δύσκολο το λάθος πάτημα σε ώρα αιχμής.',
+         'Η γραμμή «🥬 ΩΣ ΥΛΙΚΟ» γίνεται φαρδύ πλακίδιο στην κορυφή με δικό της χρώμα — ξεχωρίζει ότι <b>δεν είναι πιάτο</b>. Μαζικές επιλογές «Όλα / Κανένα»· τα «ήδη κλειστά» φοράνε σήμα αντί να χάνονται.',
+         '<b>Κάθε συσκευή αλλάζει ΤΡΙΑ πράγματα μαζί</b> — στήλες, μέγεθος πλακιδίου, διάταξη ενεργειών. Πάτα τα κουμπιά «ΟΘΟΝΗ» και δες το ταμπελάκι 📐 στον πάτο του παραθύρου:',
+         '<b>27" (≥1400):</b> ως 5 στήλες · παράθυρο ως 1120px · πλακίδιο <b>98px</b> με μεγαλύτερα γράμματα (14,5px) · κύριο κουμπί 74px · ενέργειες <b>δίπλα-δίπλα</b>.<br>'+
+         '<b>Desktop (961–1399):</b> ως 4 στήλες · ως 880px · πλακίδιο 80px · ενέργειες δίπλα-δίπλα.<br>'+
+         '<b>Tablet (701–960):</b> 3 στήλες · παράθυρο <b>96% της οθόνης</b> · πλακίδιο <b>94px</b> (αφή) · καρτέλες &amp; «Όλα/Κανένα» στα 44-48px · ενέργειες <b>κάθετα</b>.<br>'+
+         '<b>Κινητό (≤700):</b> 2 στήλες · <b>bottom sheet</b> πλήρους πλάτους · καρτέλες εμβέλειας σε <b>οριζόντιο σκρολ</b> · ενέργειες <b>κολλημένες στον πάτο</b> (το κύριο κουμπί δεν φεύγει ποτέ από την οθόνη) · safe-area για iPhone.',
+         'Το παράθυρο <b>δεν ξεπερνά ποτέ όσα προϊόντα υπάρχουν</b>: 1 προϊόν → στενό κουτί (κάτω όριο 560px στα 27", 470px σε desktop, να μη γίνει λωρίδα) · 16 της Πίτας → γεμάτο πλέγμα. <b>Ποτέ 1 στήλη</b> (θα ήταν η σημερινή λίστα).']},
   {id:'d', tab:'Δ · Ταμπλό', h:'Δ — «Ταμπλό»: βλέπεις ΤΙ ΘΑ ΣΥΜΒΕΙ πριν το κάνεις',
    body:['Πλάτος <b>1080px</b> (μόνο σε μεγάλη οθόνη· αλλιώς πέφτει στο Γ). Τρεις ζώνες: <b>ράγα εμβέλειας</b> · <b>πλέγμα</b> · <b>πίνακας συνέπειας</b>.',
          'Η δεξιά στήλη είναι το «out of the box»: δείχνει <b>ανά κανάλι</b> (Ταμείο · Delivery · e-food) την κατάσταση <b>πριν → μετά</b>, ζωντανά καθώς τσεκάρεις.',
@@ -456,9 +495,8 @@ let st = null;          // {scn, active, picked:Set, ingPicked, dur, indefOk, ca
 function scn(){ return SCN[S]; }
 function resetState(){
   const s = scn();
-  const keepAdaptive = st ? st.cAdaptive : true;
   st = { active:0, picked:new Set(), ingPicked:false, dur:'today',
-         indefOk:false, canIndef:true, moreOpen:false, cAdaptive:keepAdaptive };
+         indefOk:false, canIndef:true, moreOpen:false };
   selectScope(0, true);
 }
 function selectScope(i, silent){
@@ -656,26 +694,30 @@ function viewB(){
     '</div></div>';
 }
 
-/* Πόσες στήλες επιτρέπει η ΟΘΟΝΗ (ανώτατο) — η σκάλα responsive του Γ. */
-const C_MAXCOLS = {xl:6, lg:5, md:4, sm:2};
 /**
- * Στήλες & πλάτος παραθύρου για το «προσαρμοζόμενο» Γ.
- * Κανόνας: στοχεύουμε ≤4 σειρές, ποτέ κάτω από 3 στήλες (εκτός κινητού), ποτέ πάνω
- * από όσα επιτρέπει η οθόνη — και ποτέ πιο πλατύ από όσα προϊόντα υπάρχουν.
+ * Η ΣΚΑΛΑ ΤΟΥ Γ — μία γραμμή ανά συσκευή. Κάθε συσκευή αλλάζει ΤΡΙΑ πράγματα μαζί:
+ * στήλες · μέγεθος πλακιδίου (CSS) · διάταξη ενεργειών (CSS).
+ *   cap   = ανώτατες στήλες · tile = πλάτος πλακιδίου · min/max = όρια παραθύρου
+ *   fluid = το παράθυρο ακολουθεί την οθόνη (tablet/κινητό), όχι το περιεχόμενο
  */
+const C_DEVICE = {
+  xl: {label:'27" ≥1400px',      cap:5, tile:196, chrome:58, min:560, max:1120, fluid:false},
+  lg: {label:'Desktop 961–1399', cap:4, tile:176, chrome:46, min:470, max:880,  fluid:false},
+  md: {label:'Tablet 701–960',   cap:3, fluid:true},
+  sm: {label:'Κινητό ≤700',      cap:2, fluid:true}
+};
+/** Στήλες + πλάτος παραθύρου για την τρέχουσα συσκευή και το τρέχον πλήθος. */
 function cGeom(count){
-  if(!st.cAdaptive) return {cols:null, width:720};
-  // Κινητό: bottom sheet πλήρους πλάτους — 2 στήλες, το πλάτος δεν παίζει ρόλο.
-  if (W === 'sm') return {cols: Math.min(2, Math.max(1, count)), width: 720};
-  const max  = C_MAXCOLS[W] || 4;
-  const rowsT = W==='xl' ? 3 : 4;          // μεγάλη οθόνη → λιγότερες σειρές, πιο πλατύ
-  let cols = Math.min(max, Math.max(3, Math.ceil(count/rowsT)));
-  cols = Math.max(1, Math.min(cols, count));
-  // 🔴 Κάτω όριο 420px: με 1-2 προϊόντα το παράθυρο γινόταν 202px — σύνοψη και κουμπιά
-  // στριμώχνονταν σε λωρίδα. Το πλέγμα προσαρμόζεται, το ΠΑΡΑΘΥΡΟ δεν κατεβαίνει ποτέ
-  // κάτω από μέγεθος κανονικού διαλόγου.
-  const width = Math.max(420, cols*166 + (cols-1)*8 + 36);
-  return {cols, width};
+  const d = C_DEVICE[W] || C_DEVICE.lg;
+  const cols = Math.max(1, Math.min(d.cap, count || 1));
+  if (d.fluid) {
+    // Το ΠΑΡΑΘΥΡΟ μένει ρευστό (96% / sheet), αλλά το ΠΛΕΓΜΑ δεν τεντώνεται:
+    // 1 προϊόν σε tablet έβγαζε ένα πλακίδιο 758px φαρδύ.
+    const gmax = cols < d.cap ? (cols*230 + (cols-1)*8) : 0;
+    return {cols, width:null, gridMax:gmax, dev:d};
+  }
+  const raw = cols*d.tile + (cols-1)*8 + d.chrome;
+  return {cols, width: Math.max(d.min, Math.min(d.max, raw)), dev:d};
 }
 function viewC(){
   const s=scn(), n=nPicked();
@@ -693,7 +735,7 @@ function viewC(){
     return '<button class="c-tile'+(on?' on':'')+'" data-row="'+id+'"><span class="tick">✓</span>'+
       '<span class="nm">'+esc(nm(id))+'</span><span class="ct">'+esc(cat(id))+'</span>'+flag+'</button>';
   }).join('');
-  return '<div id="v-c"><div class="box" style="max-width:'+g.width+'px">'+
+  return '<div id="v-c"><div class="box"'+(g.width?' style="max-width:'+g.width+'px"':'')+'>'+
     '<div class="c-head"><div class="b-title">'+esc(s.title)+'</div>'+
       '<div class="b-sub" style="margin-bottom:10px">'+(s.closing?'Τι τελείωσε;':'Τι επανέρχεται;')+'</div>'+
       efLineHTML()+'</div>'+
@@ -701,19 +743,18 @@ function viewC(){
       '<div class="c-secrow"><span class="c-sech">ΤΙ ΘΑ ΑΛΛΑΞΕΙ</span><span class="grow"></span>'+
         '<button class="c-bulk" data-bulk="all">Όλα</button>'+
         '<button class="c-bulk" data-bulk="none">Κανένα</button></div>'+
-      '<div class="c-grid"'+(g.cols?' style="grid-template-columns:repeat('+g.cols+',1fr)"':'')+'>'+
+      '<div class="c-grid" style="grid-template-columns:repeat('+g.cols+',1fr)'+
+        (g.gridMax?';max-width:'+g.gridMax+'px':'')+'">'+
         ingTile+tiles+'</div></div>'+
     '<div class="c-foot">'+
       '<div class="sco-sum'+(n?'':' empty')+'">'+sumText()+'</div>'+
-      primaryHTML()+efActionHTML()+
+      '<div class="c-actions">'+primaryHTML()+
+        '<div class="c-side">'+(efActionHTML()||'')+indefZoneHTML()+'</div></div>'+
       '<button class="sco-cancel" data-act="cancel">Άκυρο</button>'+
-      indefZoneHTML()+
-      '<div class="c-widthsw">ΠΛΑΤΟΣ ΠΑΡΑΘΥΡΟΥ:'+
-        '<button class="'+(st.cAdaptive?'':'on')+'" data-act="cfixed">Σταθερό 720px</button>'+
-        '<button class="'+(st.cAdaptive?'on':'')+'" data-act="cadapt">Προσαρμοζόμενο</button>'+
-        '<span class="c-wnow">'+(st.cAdaptive
-          ? g.cols+(g.cols===1?' στήλη':' στήλες')+' · '+g.width+'px'
-          : '4 στήλες · 720px σε κάθε οθόνη')+'</span></div>'+
+      '<div class="c-devtag">📐 <b>'+g.dev.label+'</b> · '+g.cols+(g.cols===1?' στήλη':' στήλες')+
+        ' · παράθυρο '+(g.width? g.width+'px' : (W==='sm'?'πλήρες πλάτος (bottom sheet)':'96% της οθόνης'))+
+        ' · πλακίδιο '+(W==='xl'?'98px':(W==='md'?'94px':(W==='sm'?'86px':'80px')))+
+        ' · ενέργειες '+((W==='xl'||W==='lg')?'δίπλα-δίπλα':'κάθετα')+'</div>'+
     '</div></div></div>';
 }
 
@@ -764,7 +805,8 @@ function viewD(){
         '<div class="c-secrow"><span class="c-sech">ΤΙ ΘΑ ΑΛΛΑΞΕΙ</span><span class="grow"></span>'+
           '<button class="c-bulk" data-bulk="all">Όλα</button>'+
           '<button class="c-bulk" data-bulk="none">Κανένα</button></div>'+
-        '<div class="c-grid"'+(g.cols?' style="grid-template-columns:repeat('+g.cols+',1fr)"':'')+'>'+
+        '<div class="c-grid" style="grid-template-columns:repeat('+g.cols+',1fr)'+
+        (g.gridMax?';max-width:'+g.gridMax+'px':'')+'">'+
         ingTile+tiles+'</div></div>'+
       '<div class="d-right">'+
         '<p class="d-h">ΤΙ ΘΑ ΣΥΜΒΕΙ — ΑΝΑ ΚΑΝΑΛΙ</p>'+
@@ -845,8 +887,6 @@ document.addEventListener('click', e=>{
   switch(act){
     case 'more': st.moreOpen=!st.moreOpen; render(); break;
     case 'indefok': st.indefOk=!st.indefOk; render(); break;
-    case 'cfixed': st.cAdaptive=false; render(); break;
-    case 'cadapt': st.cAdaptive=true;  render(); break;
     case 'permsim': st.canIndef=!st.canIndef; if(!st.canIndef&&st.dur==='indef') st.dur='today'; render(); break;
     case 'cancel': toast('Άκυρο — τίποτα δεν άλλαξε'); resetState(); render(); break;
     case 'today':
