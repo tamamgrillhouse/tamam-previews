@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Εξάντληση — 4 ριζικές προτάσεις (χωρίς μικρό modal)</title>
+<title>Εξάντληση — σημερινό modal + 4 ριζικές προτάσεις (ΔΙΑΔΡΑΣΤΙΚΟ)</title>
 <style>
 :root{
   --black:#0e1330; --dark:#12183a; --card:#1c2554; --card2:#243068;
@@ -14,544 +14,880 @@
   --gy:rgba(245,200,66,.12); --gyr:rgba(245,200,66,.55);
 }
 *{box-sizing:border-box}
-body{margin:0;background:#080b1e;color:var(--white);
-  font-family:'Segoe UI',system-ui,-apple-system,sans-serif;padding:26px 16px 80px}
-h1{font-size:23px;margin:0 0 8px;line-height:1.3}
-.lead{color:var(--muted);font-size:13.5px;max-width:980px;line-height:1.7;margin:0 0 12px}
-.lead b{color:var(--yellow)}
-.callout{max-width:980px;background:rgba(38,194,129,.08);border:1px solid rgba(38,194,129,.35);
-  border-left:3px solid var(--green);border-radius:0 10px 10px 0;padding:12px 15px;font-size:12.5px;
-  color:#bdf0d8;line-height:1.7;margin:0 0 30px}
-.callout b{color:#fff}
+html,body{height:100%}
+body{margin:0;background:#080b1e;color:var(--white);overflow-x:hidden;
+  font-family:'Segoe UI',system-ui,-apple-system,sans-serif}
+button{font-family:inherit;cursor:pointer}
 
-.sec{max-width:1320px;margin:0 auto 52px}
-.sec-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;
-  border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:8px}
-.sec-num{font-size:11px;font-weight:900;letter-spacing:1px;color:#0e1330;background:var(--yellow);
-  padding:4px 9px;border-radius:var(--pill)}
-.sec-num.now{background:#3a4790;color:var(--white)}
-.sec-t{font-size:19px;font-weight:800;margin:0}
-.sec-why{color:var(--muted);font-size:13px;line-height:1.75;margin:10px 0 16px;max-width:980px}
-.sec-why b{color:var(--white)}
-.tagrow{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 14px}
-.tag{font-size:11px;font-weight:700;padding:4px 10px;border-radius:var(--pill);
-  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--muted)}
-.tag.win{background:rgba(38,194,129,.12);border-color:rgba(38,194,129,.45);color:#7ee9bd}
-.note{background:rgba(74,158,240,.07);border:1px solid rgba(74,158,240,.3);border-left:3px solid var(--blue);
-  border-radius:0 10px 10px 0;padding:12px 15px;font-size:12.5px;color:#cfe4fb;line-height:1.75;margin-top:16px}
-.note b{color:#fff}
-.capt{font-size:11px;font-weight:800;letter-spacing:.6px;color:var(--muted);margin:16px 0 7px;
-  text-transform:uppercase}
+/* ══ ΜΠΑΡΑ ΕΛΕΓΧΟΥ ══ */
+.ctrl{position:sticky;top:0;z-index:400;background:rgba(8,11,30,.96);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--border);padding:11px 14px}
+.ctrl h1{margin:0 0 3px;font-size:15px;font-weight:900;letter-spacing:.2px}
+.ctrl .sb{font-size:11.5px;color:var(--muted);margin-bottom:9px;line-height:1.5}
+.ctrl .sb b{color:var(--yellow)}
+.pbar{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.pb{min-height:40px;padding:0 13px;border-radius:10px;font-size:12.5px;font-weight:800;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.13);color:var(--white);
+  display:inline-flex;align-items:center;gap:7px}
+.pb:hover{border-color:var(--gyr)}
+.pb.now{background:rgba(58,71,144,.5);border-color:#5566bb}
+.pb .k{font-size:9.5px;font-weight:900;letter-spacing:.5px;padding:2px 6px;border-radius:var(--pill);
+  background:rgba(255,255,255,.12);color:var(--muted)}
+.pb.now .k{background:rgba(255,255,255,.16);color:#cdd6ff}
+.pb.rs{margin-left:auto;background:transparent;color:var(--muted);border-style:dashed}
+.stat{font-size:11.5px;font-weight:800;padding:6px 11px;border-radius:var(--pill);
+  background:rgba(239,83,80,.14);border:1px solid rgba(239,83,80,.4);color:#ffb0ae}
+.stat.zero{background:rgba(38,194,129,.12);border-color:rgba(38,194,129,.4);color:#7ee9bd}
 
-/* ══ ΚΕΛΥΦΟΣ ΤΑΜΕΙΟΥ (mock POS) ══ */
-.shell{display:flex;height:560px;border-radius:16px;overflow:hidden;border:1px solid var(--border);
-  background:var(--black);box-shadow:0 20px 60px rgba(0,0,0,.5)}
-.shell.tall{height:620px}
-.nav{width:74px;flex:0 0 74px;background:#090d24;border-right:1px solid var(--border);
+/* ══ MOCK ΤΑΜΕΙΟ ══ */
+.shell{display:flex;height:calc(100vh - 118px);min-height:520px}
+.nav{width:76px;flex:0 0 76px;background:#090d24;border-right:1px solid var(--border);
   display:flex;flex-direction:column;align-items:center;padding:12px 0;gap:5px}
-.nav .logo{width:40px;height:40px;border-radius:11px;background:linear-gradient(160deg,var(--yellow),var(--yellow2));
-  display:grid;place-items:center;color:#221a00;font-weight:900;font-size:15px;margin-bottom:9px}
-.nav .ni{width:52px;height:48px;border-radius:11px;display:flex;flex-direction:column;align-items:center;
-  justify-content:center;gap:2px;color:var(--muted);font-size:8.5px;font-weight:700}
-.nav .ni .e{font-size:19px;line-height:1}
-.nav .ni.on{background:var(--gy);color:var(--yellow)}
-.nav .ni.alarm{background:rgba(239,83,80,.16);color:#ff9d9a}
-.main{flex:1;min-width:0;display:flex;flex-direction:column}
-.topbar{height:50px;flex:0 0 50px;display:flex;align-items:center;gap:9px;padding:0 14px;
-  border-bottom:1px solid var(--border);background:var(--dark)}
-.chip{padding:5px 11px;border-radius:var(--pill);font-size:11.5px;font-weight:700;
-  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.11);color:var(--muted)}
-.chip.on{background:var(--gy);border-color:var(--gyr);color:var(--yellow)}
-.cats{display:flex;gap:5px;padding:9px 14px;border-bottom:1px solid var(--border);overflow:hidden}
-.ct{padding:7px 12px;border-radius:var(--rb);font-size:11.5px;font-weight:700;white-space:nowrap;
+.nav .logo{width:42px;height:42px;border-radius:11px;background:linear-gradient(160deg,var(--yellow),var(--yellow2));
+  display:grid;place-items:center;color:#221a00;font-weight:900;font-size:16px;margin-bottom:9px}
+.ni{width:56px;min-height:50px;border-radius:11px;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:2px;color:var(--muted);font-size:8.5px;font-weight:700;background:none;border:none}
+.ni .e{font-size:19px;line-height:1}
+.ni.on{background:var(--gy);color:var(--yellow)}
+.ni.alarm{background:rgba(239,83,80,.16);color:#ff9d9a}
+.main{flex:1;min-width:0;display:flex;flex-direction:column;background:var(--black)}
+.cats{display:flex;gap:5px;padding:10px 14px;border-bottom:1px solid var(--border);
+  overflow-x:auto;flex:0 0 auto}
+.ct{padding:8px 13px;border-radius:var(--rb);font-size:12px;font-weight:700;white-space:nowrap;
   background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--muted)}
 .ct.on{background:var(--gy);border-color:var(--yellow);color:var(--yellow)}
-.grid{flex:1;overflow:hidden;padding:12px 14px;display:grid;gap:9px;
-  grid-template-columns:repeat(auto-fill,minmax(130px,1fr));align-content:start}
+.grid{flex:1;overflow-y:auto;padding:13px 14px;display:grid;gap:9px;
+  grid-template-columns:repeat(auto-fill,minmax(132px,1fr));align-content:start}
 .pc{border-radius:11px;background:var(--card);border:1.5px solid rgba(255,255,255,.08);
-  padding:11px 9px 10px;text-align:center;min-height:92px;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:5px;position:relative;cursor:pointer}
+  padding:11px 8px 10px;text-align:center;min-height:94px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:5px;position:relative;user-select:none;
+  -webkit-user-select:none;-webkit-touch-callout:none}
 .pc .em{font-size:23px;line-height:1}
 .pc .nm{font-size:11.5px;font-weight:700;line-height:1.2;color:rgba(255,255,255,.86)}
 .pc .pr{font-size:10.5px;font-weight:800;color:var(--yellow)}
-.side{width:300px;flex:0 0 300px;background:var(--dark);border-left:1px solid var(--border);
-  display:flex;flex-direction:column}
-.side-h{padding:12px 14px;font-size:13px;font-weight:800;border-bottom:1px solid var(--border)}
-.side-b{flex:1;padding:12px 14px;color:var(--muted);font-size:12px;line-height:1.6}
+.pc.today{background:rgba(239,83,80,.13);border-color:var(--so-today)}
+.pc.today .nm{color:#ffb0ae;text-decoration:line-through}
+.pc.today .em{filter:grayscale(1);opacity:.55}
+.pc.today::after{content:'⏳';position:absolute;top:5px;right:6px;font-size:12px}
+.pc.indef{background:rgba(160,108,255,.13);border-color:var(--so-indef)}
+.pc.indef .nm{color:#d6bcff;text-decoration:line-through}
+.pc.indef .em{filter:grayscale(1);opacity:.55}
+.pc.indef::after{content:'🔒';position:absolute;top:5px;right:6px;font-size:12px}
+.pc.efood{border-color:rgba(255,106,61,.6)}
+.pc.efood::before{content:'🛵';position:absolute;top:5px;left:6px;font-size:11px}
+.pc.lp{transform:scale(.94);transition:transform .45s}
+.side{width:270px;flex:0 0 270px;background:var(--dark);border-left:1px solid var(--border);
+  display:flex;flex-direction:column;padding:14px}
+.side h3{margin:0 0 8px;font-size:12.5px;font-weight:800;color:var(--yellow)}
+.side p{margin:0 0 12px;font-size:11.5px;color:var(--muted);line-height:1.65}
+.side p b{color:var(--white)}
+.side .kb{display:inline-block;padding:2px 7px;border-radius:5px;background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.14);font-size:10.5px;font-weight:700;color:#fff}
 
-/* καταστάσεις κάρτας */
-.pc.out{background:rgba(239,83,80,.13);border-color:var(--so-today)}
-.pc.out .nm{color:#ffb0ae;text-decoration:line-through}
-.pc.out .em{filter:grayscale(1);opacity:.6}
-.pc.out::after{content:'⏳';position:absolute;top:5px;right:6px;font-size:12px}
-.pc.perm{background:rgba(160,108,255,.13);border-color:var(--so-indef)}
-.pc.perm .nm{color:#d6bcff;text-decoration:line-through}
-.pc.perm .em{filter:grayscale(1);opacity:.6}
-.pc.perm::after{content:'🔒';position:absolute;top:5px;right:6px;font-size:12px}
+/* ══ OVERLAY + ΠΑΡΑΘΥΡΑ ══ */
+.ov{position:fixed;inset:0;z-index:900;display:none;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.66);backdrop-filter:blur(3px);padding:18px}
+.ov.open{display:flex}
+.win{background:var(--dark);border:1px solid rgba(255,255,255,.18);border-radius:16px;
+  box-shadow:0 24px 70px rgba(0,0,0,.7);display:flex;flex-direction:column;overflow:hidden;
+  max-height:min(88vh,860px)}
+.win.sm{width:min(380px,94vw);padding:18px;overflow-y:auto}
+.win.lg{width:min(1200px,94vw);height:min(88vh,860px)}
+.wh{flex:0 0 auto;display:flex;align-items:center;gap:12px;padding:14px 18px;
+  border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,.04),transparent)}
+.wh h2{margin:0;font-size:16.5px;font-weight:900}
+.wh .wsub{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+.wx{margin-left:auto;width:38px;height:38px;flex:0 0 38px;border-radius:10px;background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.14);color:var(--muted);font-size:15px}
+.wx:hover{color:#fff;background:rgba(255,255,255,.12)}
+.co-hint{position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:2;
+  font-size:11px;font-weight:700;color:rgba(255,255,255,.5);background:rgba(0,0,0,.45);
+  padding:5px 12px;border-radius:var(--pill);border:1px solid rgba(255,255,255,.12);pointer-events:none}
 
-/* ══ Π1 — ΛΕΙΤΟΥΡΓΙΑ ΕΞΑΝΤΛΗΣΗΣ ══ */
-.modebar{display:flex;align-items:center;gap:12px;padding:11px 16px;
-  background:linear-gradient(90deg,rgba(239,83,80,.28),rgba(239,83,80,.12));
-  border-bottom:2px solid var(--so-today)}
-.modebar .md{font-size:13.5px;font-weight:900;letter-spacing:.4px;color:#ffd3d1;display:flex;align-items:center;gap:8px}
-.modebar .md .blip{width:9px;height:9px;border-radius:99px;background:var(--red);
-  box-shadow:0 0 0 4px rgba(239,83,80,.25)}
-.modebar .hint{font-size:11.5px;color:rgba(255,211,209,.8)}
-.modebar .x{margin-left:auto;min-height:34px;padding:0 13px;border-radius:var(--pill);font-size:11.5px;
-  font-weight:800;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.18);color:#fff}
-.mode-grid .pc{cursor:crosshair}
-.mode-grid .pc:not(.out):not(.perm){box-shadow:inset 0 0 0 1px rgba(239,83,80,.12)}
-.tray{flex:0 0 auto;border-top:2px solid var(--so-today);background:#160d1e;padding:11px 14px;
-  display:flex;align-items:center;gap:12px}
-.tray .cnt{width:46px;height:46px;flex:0 0 46px;border-radius:13px;display:grid;place-items:center;
+/* ══ ΣΗΜΕΡΙΝΟ MODAL ══ */
+.t{font-size:17px;font-weight:800;text-align:center;line-height:1.25}
+.sub{font-size:12px;color:var(--muted);text-align:center;margin:6px 0 12px}
+.efline{display:flex;align-items:center;gap:9px;padding:9px 11px;margin-bottom:12px;
+  background:var(--efood-dim);border:1px solid rgba(255,106,61,.35);border-left:3px solid var(--efood);
+  border-radius:var(--rc);font-size:12px}
+.efline b{color:#ffb59a}
+.tabs{display:flex;gap:6px;margin-bottom:10px}
+.tab{flex:1;min-width:0;min-height:44px;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:2px;padding:6px 4px;font-size:11.5px;font-weight:700;line-height:1.15;
+  text-align:center;color:rgba(255,255,255,.55);background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.09);border-radius:var(--rc)}
+.tab.on{color:var(--yellow);background:var(--gy);border-color:var(--yellow)}
+.tab .ico{font-size:16px;line-height:1}
+.tab .cnt{font-size:9.5px;font-weight:800;opacity:.85}
+.list{max-height:280px;overflow-y:auto;border:1px solid rgba(255,255,255,.07);
+  border-radius:var(--rc);background:rgba(0,0,0,.18);margin-bottom:8px}
+.grp{padding:6px 10px;font-size:10.5px;font-weight:800;letter-spacing:.5px;color:var(--muted);
+  background:#171d42;border-bottom:1px solid rgba(255,255,255,.05)}
+.li{display:flex;align-items:center;gap:9px;min-height:44px;padding:6px 10px;font-size:13px;
+  border-bottom:1px solid rgba(255,255,255,.04);width:100%;background:none;border-left:none;
+  border-right:none;border-top:none;text-align:left;color:inherit}
+.li:hover{background:rgba(255,255,255,.04)}
+.dot{width:16px;height:16px;flex:0 0 16px;border-radius:4px;position:relative;
+  border:1.5px solid rgba(255,255,255,.3)}
+.dot.on{background:var(--red);border-color:var(--red);box-shadow:0 0 8px rgba(224,90,90,.5)}
+.dot.on::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:11px;font-weight:900}
+.nm2{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:rgba(255,255,255,.55)}
+.dot.on~.nm2{color:var(--white)}
+.cat2{font-size:10px;color:var(--muted);background:rgba(255,255,255,.06);padding:2px 6px;
+  border-radius:4px;flex-shrink:0}
+.already{font-size:9.5px;font-weight:700;color:#ffcf9a;background:rgba(245,200,66,.14);
+  padding:1px 5px;border-radius:4px;flex-shrink:0}
+.sum{font-size:12.5px;font-weight:700;color:#ffcfcf;background:rgba(224,90,90,.12);
+  border:1px solid rgba(224,90,90,.25);border-radius:var(--rc);padding:8px 11px;margin-bottom:12px;text-align:center}
+.sum.empty{color:var(--muted);background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.08)}
+.primary{display:flex;align-items:center;justify-content:center;gap:11px;width:100%;min-height:64px;
+  border:none;border-radius:var(--rc);background:linear-gradient(180deg,var(--yellow),var(--yellow2));
+  color:#221a00;font-size:16px;font-weight:800;box-shadow:0 6px 18px rgba(245,196,0,.28)}
+.pico{font-size:22px;line-height:1}
+.ptxt{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left}
+.ptxt b{font-size:16px}.ptxt small{font-size:10.5px;font-weight:600;opacity:.72}
+.efbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:52px;
+  margin-top:9px;background:var(--efood-dim);border:1px solid rgba(255,106,61,.5);
+  border-radius:var(--rc);color:#ffb59a}
+.efbtn .tx b{display:block;font-size:13.5px}
+.efbtn .tx small{display:block;font-size:10.5px;opacity:.78}
+.cancel{width:100%;min-height:44px;margin-top:10px;background:none;border:none;font-weight:600;
+  color:var(--muted);font-size:13.5px;border-radius:var(--rc)}
+.more{width:100%;min-height:46px;margin-top:14px;background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.08);border-radius:var(--rc);display:flex;align-items:center;
+  justify-content:center;gap:8px;color:var(--muted);font-size:12px;font-weight:600}
+.panel{max-height:0;overflow:hidden;transition:max-height .28s ease}
+.panel.open{max-height:240px}
+.panel-in{margin-top:10px;padding:13px;background:rgba(224,90,90,.06);border:1px solid rgba(224,90,90,.24);
+  border-left:3px solid var(--red);border-radius:var(--rc)}
+.warn{font-size:11px;color:rgba(255,179,179,.9);line-height:1.45;margin:0 0 11px}
+.indefbtn{width:100%;min-height:46px;background:rgba(224,90,90,.14);border:1px solid rgba(224,90,90,.5);
+  border-radius:var(--rb);color:#ffb3b3;font-size:13px;font-weight:700}
+
+/* ══ ΚΟΙΝΑ ΜΕΓΑΛΩΝ ΠΑΡΑΘΥΡΩΝ ══ */
+.wbody{flex:1;min-height:0;display:flex;flex-direction:column}
+.wfoot{flex:0 0 auto;border-top:1px solid var(--border);background:#11172f;padding:11px 14px;
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.cnt{width:48px;height:48px;flex:0 0 48px;border-radius:13px;display:grid;place-items:center;
   background:var(--red);color:#fff;font-size:21px;font-weight:900}
-.tray .picked{flex:1;min-width:0;display:flex;gap:6px;flex-wrap:wrap;align-content:center;max-height:56px;overflow:hidden}
-.tk{display:inline-flex;align-items:center;gap:6px;padding:5px 8px 5px 10px;border-radius:var(--pill);
-  font-size:11.5px;font-weight:700;background:rgba(239,83,80,.2);border:1px solid rgba(239,83,80,.55);color:#ffd3d1}
-.tk .rm{width:17px;height:17px;border-radius:99px;background:rgba(255,255,255,.16);display:grid;
+.cnt.zero{background:rgba(255,255,255,.08);color:var(--muted)}
+.picked{flex:1;min-width:140px;display:flex;gap:6px;flex-wrap:wrap;align-content:center;
+  max-height:64px;overflow-y:auto}
+.tk{display:inline-flex;align-items:center;gap:6px;padding:6px 8px 6px 11px;border-radius:var(--pill);
+  font-size:11.5px;font-weight:700;background:rgba(239,83,80,.2);border:1px solid rgba(239,83,80,.55);
+  color:#ffd3d1;min-height:34px}
+.tk.ing{background:rgba(160,108,255,.2);border-color:rgba(160,108,255,.55);color:#e2cfff}
+.tk .rm{width:18px;height:18px;border-radius:99px;background:rgba(255,255,255,.18);display:grid;
   place-items:center;font-size:10px}
-.dur{display:flex;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.16);flex:0 0 auto}
-.dur button{min-height:46px;padding:0 14px;font-size:12px;font-weight:800;border:none;font-family:inherit;
+.empty-pick{color:var(--muted);font-size:12px;font-style:italic}
+.dur{display:flex;border-radius:11px;overflow:hidden;border:1px solid rgba(255,255,255,.16);flex:0 0 auto}
+.dur button{min-height:48px;padding:0 14px;font-size:12px;font-weight:800;border:none;
   background:rgba(255,255,255,.05);color:var(--muted);border-right:1px solid rgba(255,255,255,.12)}
 .dur button:last-child{border-right:none}
-.dur button.on.td{background:var(--so-today);color:#fff}
-.dur button.on.id{background:var(--so-indef);color:#1a0533}
-.apply{min-height:50px;padding:0 20px;border-radius:12px;border:none;font-family:inherit;font-size:14.5px;
-  font-weight:900;background:linear-gradient(180deg,var(--yellow),var(--yellow2));color:#221a00;
+.dur button.on[data-d="today"]{background:var(--so-today);color:#fff}
+.dur button.on[data-d="indef"]{background:var(--so-indef);color:#1a0533}
+.dur button.on[data-d="efood"]{background:var(--efood);color:#2a0d02}
+.apply{min-height:52px;padding:0 22px;border-radius:12px;border:none;font-size:14.5px;font-weight:900;
+  background:linear-gradient(180deg,var(--yellow),var(--yellow2));color:#221a00;
   box-shadow:0 6px 18px rgba(245,196,0,.3);flex:0 0 auto}
+.apply:disabled{background:rgba(255,255,255,.07);color:rgba(255,255,255,.32);box-shadow:none;cursor:not-allowed}
 
-/* ══ Π2 — ΠΙΝΑΚΑΣ ΑΠΟΘΕΜΑΤΟΣ ══ */
-.board{flex:1;display:flex;flex-direction:column;min-height:0;background:var(--black)}
-.bh{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border);
-  background:var(--dark)}
-.bh h3{margin:0;font-size:16px;font-weight:800}
-.bsearch{flex:1;max-width:340px;position:relative}
-.bsearch input{width:100%;height:40px;border-radius:10px;background:rgba(255,255,255,.05);
-  border:1.5px solid rgba(255,255,255,.12);color:var(--white);font-size:14px;padding:0 12px 0 36px;
+/* Π1 mode ribbon */
+.ribbon{flex:0 0 auto;display:flex;align-items:center;gap:11px;padding:10px 16px;
+  background:linear-gradient(90deg,rgba(239,83,80,.3),rgba(239,83,80,.1));
+  border-bottom:2px solid var(--so-today);font-size:12px;color:#ffd3d1}
+.ribbon .blip{width:9px;height:9px;border-radius:99px;background:var(--red);
+  box-shadow:0 0 0 4px rgba(239,83,80,.25);flex:0 0 auto}
+.ribbon b{font-weight:900;letter-spacing:.3px}
+
+/* Π2 πίνακας */
+.bh{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:11px 14px;
+  border-bottom:1px solid var(--border);flex-wrap:wrap}
+.bsearch{flex:1;min-width:180px;max-width:360px;position:relative}
+.bsearch input{width:100%;height:42px;border-radius:11px;background:rgba(255,255,255,.05);
+  border:1.5px solid rgba(255,255,255,.12);color:var(--white);font-size:15px;padding:0 12px 0 38px;
   font-family:inherit;outline:none}
-.bsearch .m{position:absolute;left:12px;top:11px;color:var(--muted);font-size:14px}
-.bfil{display:flex;gap:5px}
-.bf{min-height:36px;padding:0 12px;border-radius:var(--pill);font-size:11.5px;font-weight:800;
+.bsearch input:focus{border-color:var(--gyr)}
+.bsearch .m{position:absolute;left:13px;top:12px;color:var(--muted);font-size:14px}
+.bf{min-height:38px;padding:0 12px;border-radius:var(--pill);font-size:11.5px;font-weight:800;
   background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.11);color:var(--muted)}
 .bf.on{background:var(--yellow);border-color:var(--yellow);color:#221a00}
-.bf.red.on{background:var(--so-today);border-color:var(--so-today);color:#fff}
-.bcols{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);min-height:0}
+.bcols{flex:1;min-height:0;overflow:auto;display:grid;gap:1px;background:var(--border);
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
 .bcol{background:var(--black);display:flex;flex-direction:column;min-height:0}
-.bcol-h{padding:9px 11px;font-size:11px;font-weight:900;letter-spacing:.4px;color:var(--yellow);
-  background:#131a3d;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
-.bcol-h .k{font-size:10px;font-weight:800;padding:2px 6px;border-radius:var(--pill);
+.bcol-h{position:sticky;top:0;z-index:1;padding:9px 11px;font-size:11px;font-weight:900;
+  letter-spacing:.4px;color:var(--yellow);background:#131a3d;border-bottom:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center}
+.bcol-h .k{font-size:10px;font-weight:800;padding:2px 7px;border-radius:var(--pill);
   background:rgba(239,83,80,.2);color:#ffb0ae}
 .bcol-h .k.zero{background:rgba(38,194,129,.16);color:#7ee9bd}
-.bcol-b{flex:1;overflow-y:auto;padding:7px;display:flex;flex-direction:column;gap:4px}
-.br{display:flex;align-items:center;gap:8px;min-height:44px;padding:6px 9px;border-radius:9px;
-  background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);font-size:12.5px;cursor:pointer}
+.bcol-b{padding:7px;display:flex;flex-direction:column;gap:4px}
+.br{display:flex;align-items:center;gap:8px;min-height:46px;padding:6px 9px;border-radius:9px;
+  background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);font-size:12.5px;
+  width:100%;text-align:left;color:inherit}
 .br .bn{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.br .sw{width:38px;height:22px;flex:0 0 38px;border-radius:99px;background:rgba(38,194,129,.35);
-  position:relative;border:1px solid rgba(38,194,129,.6)}
-.br .sw::after{content:'';position:absolute;top:2px;right:2px;width:16px;height:16px;border-radius:99px;background:#7ee9bd}
-.br.off{background:rgba(239,83,80,.11);border-color:rgba(239,83,80,.4)}
-.br.off .bn{color:#ffb0ae;text-decoration:line-through}
-.br.off .sw{background:rgba(239,83,80,.3);border-color:rgba(239,83,80,.6)}
-.br.off .sw::after{right:auto;left:2px;background:#ff8a87}
-.br.perm{background:rgba(160,108,255,.11);border-color:rgba(160,108,255,.4)}
-.br.perm .bn{color:#d6bcff;text-decoration:line-through}
-.br.perm .sw{background:rgba(160,108,255,.3);border-color:rgba(160,108,255,.6)}
-.br.perm .sw::after{right:auto;left:2px;background:#c9a8ff}
-.bfoot{flex:0 0 auto;padding:10px 16px;border-top:1px solid var(--border);background:var(--dark);
-  display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted)}
-.bfoot b{color:#ff8a87}
+.sw{width:40px;height:23px;flex:0 0 40px;border-radius:99px;position:relative;
+  background:rgba(38,194,129,.32);border:1px solid rgba(38,194,129,.6);transition:.15s}
+.sw::after{content:'';position:absolute;top:2px;left:19px;width:17px;height:17px;border-radius:99px;
+  background:#7ee9bd;transition:.15s}
+.br.today{background:rgba(239,83,80,.11);border-color:rgba(239,83,80,.4)}
+.br.today .bn{color:#ffb0ae;text-decoration:line-through}
+.br.today .sw{background:rgba(239,83,80,.3);border-color:rgba(239,83,80,.6)}
+.br.today .sw::after{left:2px;background:#ff8a87}
+.br.indef{background:rgba(160,108,255,.11);border-color:rgba(160,108,255,.4)}
+.br.indef .bn{color:#d6bcff;text-decoration:line-through}
+.br.indef .sw{background:rgba(160,108,255,.3);border-color:rgba(160,108,255,.6)}
+.br.indef .sw::after{left:2px;background:#c9a8ff}
+.br.flash{animation:fl .9s ease}
+@keyframes fl{0%,100%{box-shadow:none}35%{box-shadow:0 0 0 2px var(--yellow)}}
 
-/* ══ Π3 — SPLIT ══ */
-.split{flex:1;display:grid;grid-template-columns:1fr 360px;min-height:0}
+/* Π3 split */
+.split{flex:1;min-height:0;display:grid;grid-template-columns:1fr 340px}
 .spl-l{min-width:0;display:flex;flex-direction:column;border-right:1px solid var(--border)}
 .spl-r{background:#150d1a;display:flex;flex-direction:column;min-height:0}
-.spl-rh{padding:13px 15px;border-bottom:1px solid rgba(239,83,80,.3);
+.spl-rh{flex:0 0 auto;padding:12px 14px;border-bottom:1px solid rgba(239,83,80,.3);
   background:linear-gradient(180deg,rgba(239,83,80,.18),transparent)}
-.spl-rh .ttl{font-size:14px;font-weight:900;color:#ffd3d1;display:flex;align-items:center;gap:8px}
-.spl-rh .sb{font-size:11px;color:rgba(255,211,209,.72);margin-top:4px;line-height:1.45}
-.spl-rb{flex:1;overflow-y:auto;padding:11px;display:flex;flex-direction:column;gap:6px}
-.oit{display:flex;align-items:center;gap:9px;min-height:48px;padding:7px 10px;border-radius:10px;
+.spl-rh .ttl{font-size:14px;font-weight:900;color:#ffd3d1}
+.spl-rh .sb2{font-size:11px;color:rgba(255,211,209,.72);margin-top:4px;line-height:1.45}
+.spl-rb{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:6px}
+.oit{display:flex;align-items:center;gap:9px;min-height:50px;padding:7px 10px;border-radius:10px;
   background:rgba(239,83,80,.14);border:1px solid rgba(239,83,80,.45)}
 .oit.ing{background:rgba(160,108,255,.13);border-color:rgba(160,108,255,.45)}
-.oit .ie{font-size:17px;flex:0 0 auto}
+.oit .ie{font-size:17px}
 .oit .it{flex:1;min-width:0;font-size:12.5px;font-weight:700;color:#ffd9d8}
 .oit.ing .it{color:#e2cfff}
 .oit .it small{display:block;font-weight:600;font-size:10px;color:rgba(255,255,255,.5);margin-top:2px}
-.oit .rmv{width:30px;height:30px;flex:0 0 30px;border-radius:8px;display:grid;place-items:center;
-  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);font-size:13px}
-.spl-empty{padding:34px 18px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.75;font-style:italic}
-.spl-rf{flex:0 0 auto;padding:12px;border-top:1px solid rgba(255,255,255,.1);display:flex;flex-direction:column;gap:8px}
-.big{width:100%;min-height:56px;border-radius:12px;border:none;font-family:inherit;font-size:15px;
-  font-weight:900;background:linear-gradient(180deg,var(--yellow),var(--yellow2));color:#221a00;
+.oit .rmv{width:32px;height:32px;flex:0 0 32px;border-radius:8px;display:grid;place-items:center;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);font-size:13px;color:#fff}
+.spl-empty{padding:32px 16px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.75;font-style:italic}
+.spl-rf{flex:0 0 auto;padding:11px;border-top:1px solid rgba(255,255,255,.1);
+  display:flex;flex-direction:column;gap:8px}
+.big{width:100%;min-height:56px;border-radius:12px;border:none;font-size:15px;font-weight:900;
+  background:linear-gradient(180deg,var(--yellow),var(--yellow2));color:#221a00;
   box-shadow:0 6px 18px rgba(245,196,0,.28)}
-.gsel{display:flex;gap:5px;padding:9px 14px;border-bottom:1px solid var(--border);flex-wrap:wrap}
-.gs{min-height:36px;padding:0 12px;border-radius:var(--pill);font-size:11.5px;font-weight:800;
+.big:disabled{background:rgba(255,255,255,.07);color:rgba(255,255,255,.32);box-shadow:none;cursor:not-allowed}
+.gsel{flex:0 0 auto;display:flex;gap:5px;padding:9px 14px;border-bottom:1px solid var(--border);flex-wrap:wrap;align-items:center}
+.gs{min-height:38px;padding:0 12px;border-radius:var(--pill);font-size:11.5px;font-weight:800;
   background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.11);color:var(--muted);
   display:inline-flex;align-items:center;gap:6px}
-.gs.on{background:var(--gy);border-color:var(--yellow);color:var(--yellow)}
+.gs.lbl{background:none;border:none;color:var(--muted);padding-left:0}
+.gs:not(.lbl):hover{border-color:var(--gyr);color:#fff}
 .gs .n{font-size:10px;opacity:.8}
 
-/* ══ Π4 — ΔΥΟ ΤΑΜΠΛΟ (προϊόντα | υλικά) ══ */
-.duo{flex:1;display:grid;grid-template-columns:1fr 1fr;min-height:0;gap:1px;background:var(--border)}
+/* Π4 duo */
+.duo{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
 .dp{background:var(--black);display:flex;flex-direction:column;min-height:0}
-.dp-h{padding:11px 14px;font-size:13px;font-weight:900;background:#131a3d;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:9px}
+.dp-h{flex:0 0 auto;padding:11px 14px;font-size:13px;font-weight:900;background:#131a3d;
+  border-bottom:1px solid var(--border);display:flex;align-items:center;gap:9px}
 .dp-h .cn{margin-left:auto;font-size:10.5px;font-weight:800;padding:3px 8px;border-radius:var(--pill);
   background:rgba(239,83,80,.2);color:#ffb0ae}
+.dp-h .cn.zero{background:rgba(38,194,129,.16);color:#7ee9bd}
 .dp-b{flex:1;overflow-y:auto;padding:11px}
-.igrid{display:flex;flex-wrap:wrap;gap:7px}
-.ig{min-height:46px;padding:10px 13px;border-radius:11px;font-size:13px;font-weight:600;
-  background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);color:var(--white);cursor:pointer}
-.ig.out{background:rgba(239,83,80,.14);border-color:var(--so-today);color:#ffb0ae;text-decoration:line-through}
-.ig.out::before{content:'⏳ ';text-decoration:none}
-.ig.perm{background:rgba(160,108,255,.14);border-color:var(--so-indef);color:#d6bcff;text-decoration:line-through}
-.ig.perm::before{content:'🔒 ';text-decoration:none}
+.igrid{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:15px}
+.ig{min-height:48px;padding:11px 14px;border-radius:11px;font-size:13px;font-weight:600;
+  background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);color:var(--white)}
+.ig:hover{border-color:var(--gyr)}
+.ig.today{background:rgba(239,83,80,.14);border-color:var(--so-today);color:#ffb0ae;text-decoration:line-through}
+.ig.today::before{content:'⏳ ';text-decoration:none}
+.ig.indef{background:rgba(160,108,255,.14);border-color:var(--so-indef);color:#d6bcff;text-decoration:line-through}
+.ig.indef::before{content:'🔒 ';text-decoration:none}
 .gtitle{font-size:11px;font-weight:800;letter-spacing:.4px;color:var(--yellow);margin:0 0 8px}
-.gtitle+.igrid{margin-bottom:16px}
+.ig.hit{animation:fl .9s ease}
+.pc.hit{animation:fl .9s ease}
 
-/* ══ responsive ladder demo ══ */
-.ladder{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
-.step{background:var(--dark);border:1px solid var(--border);border-radius:12px;padding:12px;font-size:11.5px}
-.step h4{margin:0 0 5px;font-size:12px;color:var(--yellow)}
-.step p{margin:0;color:var(--muted);line-height:1.6}
-.step .bp{font-size:10px;font-weight:800;color:#7ee9bd;letter-spacing:.4px;display:block;margin-bottom:5px}
-.mini-frames{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;margin-top:14px}
-.mf{border:1px solid var(--border);border-radius:10px;background:var(--black);overflow:hidden}
-.mf .cap{font-size:10px;font-weight:800;color:var(--muted);padding:5px 8px;background:var(--dark);
-  border-bottom:1px solid var(--border);letter-spacing:.3px}
-.mf .in{padding:7px;display:grid;gap:4px}
-.mf .cell{height:26px;border-radius:5px;background:var(--card);border:1px solid rgba(255,255,255,.07)}
-.mf .cell.r{background:rgba(239,83,80,.2);border-color:rgba(239,83,80,.5)}
-.mf .bar{height:22px;border-radius:5px;background:linear-gradient(90deg,var(--yellow),var(--yellow2))}
+/* ══ toast + confirm ══ */
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(20px);z-index:1200;
+  padding:12px 20px;border-radius:12px;font-size:14px;font-weight:800;opacity:0;pointer-events:none;
+  transition:.25s;box-shadow:0 8px 28px rgba(0,0,0,.6);text-align:center;max-width:90vw}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.cf{position:fixed;inset:0;z-index:1300;display:none;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.7);padding:18px}
+.cf.open{display:flex}
+.cf-box{width:min(380px,94vw);background:var(--dark);border:1px solid rgba(255,255,255,.2);
+  border-radius:14px;padding:20px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.7)}
+.cf-box p{margin:0 0 16px;font-size:14px;line-height:1.6}
+.cf-row{display:flex;gap:9px}
+.cf-row button{flex:1;min-height:48px;border-radius:10px;font-size:13.5px;font-weight:800;border:none}
+.cf-no{background:rgba(255,255,255,.07);color:var(--white)}
+.cf-yes{background:var(--red);color:#fff}
 
-.cmp{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:10px}
+/* ══ ΕΠΕΞΗΓΗΣΗ ══ */
+.explain{max-width:1200px;margin:0 auto;padding:30px 16px 70px}
+.ex{background:var(--dark);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.ex h3{margin:0 0 8px;font-size:15px;display:flex;align-items:center;gap:9px}
+.ex h3 .k{font-size:10px;font-weight:900;letter-spacing:.6px;padding:3px 8px;border-radius:var(--pill);
+  background:var(--yellow);color:#221a00}
+.ex h3 .k.now{background:#3a4790;color:#fff}
+.ex p{margin:0 0 9px;font-size:12.5px;color:var(--muted);line-height:1.75}
+.ex p b{color:var(--white)}
+.try{background:rgba(38,194,129,.08);border:1px solid rgba(38,194,129,.32);border-left:3px solid var(--green);
+  border-radius:0 9px 9px 0;padding:10px 13px;font-size:12px;color:#bdf0d8;line-height:1.7}
+.try b{color:#fff}
+.tagrow{display:flex;gap:6px;flex-wrap:wrap;margin:9px 0}
+.tag{font-size:11px;font-weight:700;padding:4px 10px;border-radius:var(--pill);
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--muted)}
+.tag.good{background:rgba(38,194,129,.12);border-color:rgba(38,194,129,.45);color:#7ee9bd}
+.tag.bad{background:rgba(239,83,80,.12);border-color:rgba(239,83,80,.4);color:#ffb0ae}
+.cmp{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px}
 .cmp th,.cmp td{border:1px solid var(--border);padding:9px 11px;text-align:left;vertical-align:top}
 .cmp th{background:rgba(255,255,255,.05);font-size:11.5px}
 .cmp td:first-child{font-weight:800;color:var(--yellow)}
 .ok{color:#5fe0ab;font-weight:700}.no{color:#ff8a87;font-weight:700}
 .tblwrap{overflow-x:auto}
-@media(max-width:1100px){
-  .bcols{grid-template-columns:repeat(2,1fr)}
-  .split{grid-template-columns:1fr}
-  .duo{grid-template-columns:1fr}
+
+@media(max-width:960px){
   .side{display:none}
-  .ladder{grid-template-columns:repeat(2,1fr)}
+  .split{grid-template-columns:1fr}
+  .spl-r{border-top:1px solid var(--border);max-height:42%}
+  .duo{grid-template-columns:1fr}
+  .win.lg{width:96vw;height:92vh;max-height:92vh}
 }
-@media(max-width:700px){.bcols{grid-template-columns:1fr}.ladder{grid-template-columns:1fr}}
+@media(max-width:700px){
+  .ov{padding:0;align-items:flex-end}
+  .win.lg,.win.sm{width:100vw;border-radius:18px 18px 0 0;height:94vh;max-height:94vh}
+  .shell{height:auto;min-height:0}
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .co-hint{display:none}
+}
 </style>
 </head>
 <body>
 
-<h1>Εξάντληση προϊόντων &amp; υλικών — 4 ριζικές προτάσεις</h1>
-<p class="lead">Καμία από τις 4 <b>δεν είναι κουτάκι 380px</b>. Όλες χρησιμοποιούν <b>ολόκληρη την οθόνη</b> και ανεβοκατεβαίνουν με σκαλοπάτια: 27΄΄ → 4 στήλες, tablet → 2, κινητό → 1. Ο στόχος που ζήτησες: <b>να βλέπεις εύκολα και να αφαιρείς γρήγορα</b> προϊόν ή υλικό — πολλά μαζί, όχι ένα-ένα μέσα σε παράθυρα.</p>
-<div class="callout"><b>Η κοινή ιδέα και στις 4:</b> σταματάει το «ένα προϊόν = ένα modal = μία απόφαση». Αντί γι' αυτό <b>μαζεύεις ό,τι τελείωσε</b> με απλά πατήματα πάνω σε μεγάλη επιφάνεια, το βλέπεις συγκεντρωμένο, και <b>πατάς μία φορά</b> για να κλείσουν όλα μαζί. Ο χρωματικός κώδικας μένει ο ίδιος: <b style="color:#ff8a87">κόκκινο = σήμερα</b> · <b style="color:#c9a8ff">μωβ = επ' αόριστον</b>.</p></div>
-
-<!-- ══════════ Π1 ══════════ -->
-<div class="sec">
-  <div class="sec-head"><span class="sec-num">Π1</span><h2 class="sec-t">«Λειτουργία Εξάντλησης» — πάνω στο ίδιο το μενού, χωρίς κανένα παράθυρο</h2></div>
-  <p class="sec-why">Η πιο ριζική: <b>δεν ανοίγει τίποτα</b>. Πατάς μία φορά το 🚫 στο πλαϊνό μενού και <b>όλη η οθόνη μπαίνει σε λειτουργία εξάντλησης</b> — κόκκινη κορδέλα πάνω, ο κατάλογος όπως τον ξέρεις, και κάθε πάτημα σε κάρτα την <b>σβήνει επιτόπου</b>. Αλλάζεις κατηγορία κανονικά, σβήνεις ό,τι τελείωσε από παντού, και κάτω μαζεύονται σε μια λωρίδα. Ένα πάτημα «Εφαρμογή» και τελείωσε. <b>Μηδέν παράθυρα, μηδέν λίστες κειμένου</b> — δουλεύεις πάνω στην οθόνη που ήδη ξέρεις απ' έξω.</p>
-  <div class="tagrow"><span class="tag win">10 προϊόντα σε 10 πατήματα</span><span class="tag win">καμία εκμάθηση — ίδιο μενού</span><span class="tag win">όλες οι κατηγορίες σε μία συνεδρία</span><span class="tag win">ακύρωση πριν εφαρμοστεί</span></div>
-  <div class="shell tall">
-    <div class="nav">
-      <div class="logo">T</div>
-      <div class="ni"><span class="e">🍔</span>Μενού</div>
-      <div class="ni"><span class="e">🪑</span>Τραπέζια</div>
-      <div class="ni"><span class="e">🛵</span>Delivery</div>
-      <div class="ni alarm"><span class="e">🚫</span>Εξάντληση</div>
-      <div class="ni"><span class="e">👥</span>Πελάτες</div>
-      <div class="ni"><span class="e">⚙</span>Ρυθμίσεις</div>
-    </div>
-    <div class="main">
-      <div class="modebar">
-        <span class="md"><span class="blip"></span>ΛΕΙΤΟΥΡΓΙΑ ΕΞΑΝΤΛΗΣΗΣ</span>
-        <span class="hint">Πάτα ό,τι τελείωσε — αλλάζεις κατηγορίες ελεύθερα. Τίποτα δεν κλείνει πριν πατήσεις «Εφαρμογή».</span>
-        <span class="x">✕ Έξοδος</span>
-      </div>
-      <div class="cats">
-        <span class="ct">Ορεκτικά</span><span class="ct">Αλοιφές</span><span class="ct">Τεμάχια</span>
-        <span class="ct on">Πίτα</span><span class="ct">Αραβική</span><span class="ct">Λαβάς</span>
-        <span class="ct">XXL</span><span class="ct">Μερίδες</span><span class="ct">Club</span><span class="ct">Box</span>
-      </div>
-      <div class="grid mode-grid">
-        <div class="pc out"><span class="em">🌯</span><span class="nm">Πίτα Κοτόπουλο</span><span class="pr">3,40 €</span></div>
-        <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Γύρος</span><span class="pr">3,40 €</span></div>
-        <div class="pc out"><span class="em">🌯</span><span class="nm">Πίτα Κεμπαπάκι</span><span class="pr">3,60 €</span></div>
-        <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Σουβλάκι</span><span class="pr">3,40 €</span></div>
-        <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Λουκάνικο</span><span class="pr">3,50 €</span></div>
-        <div class="pc perm"><span class="em">🌯</span><span class="nm">Πίτα Πανσέτα</span><span class="pr">3,80 €</span></div>
-        <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Σνίτσελ</span><span class="pr">3,60 €</span></div>
-        <div class="pc out"><span class="em">🥔</span><span class="nm">Πατατόπιτα</span><span class="pr">3,00 €</span></div>
-        <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Φιλέτο</span><span class="pr">3,90 €</span></div>
-        <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Ντόνερ</span><span class="pr">3,60 €</span></div>
-        <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Μπιφτέκι</span><span class="pr">3,60 €</span></div>
-        <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Falafel</span><span class="pr">3,40 €</span></div>
-      </div>
-      <div class="tray">
-        <span class="cnt">4</span>
-        <span class="picked">
-          <span class="tk">Πίτα Κοτόπουλο<span class="rm">✕</span></span>
-          <span class="tk">Πίτα Κεμπαπάκι<span class="rm">✕</span></span>
-          <span class="tk">Πατατόπιτα<span class="rm">✕</span></span>
-          <span class="tk">🥬 Ουγγαρέζα<span class="rm">✕</span></span>
-        </span>
-        <span class="dur"><button class="on td">⏳ Σήμερα</button><button class="id">🔒 Αόριστον</button><button>🛵 Μόνο e-food</button></span>
-        <button class="apply">Εφαρμογή →</button>
-      </div>
-    </div>
-  </div>
-  <div class="note"><b>Έξυπνη λειτουργία:</b> επειδή τίποτα δεν εκτελείται πριν την «Εφαρμογή», μπορείς να <b>αλλάξεις γνώμη ελεύθερα</b> — βγάζεις ένα από τη λωρίδα με ✕. Και η <b>διάρκεια επιλέγεται μία φορά για όλη τη σύναξη</b>: σβήνεις 8 προϊόντα, πατάς «Σήμερα», τέλος. Σήμερα αυτό είναι 8 παρατεταμένα πατήματα × 3 βήματα το καθένα.</div>
-  <div class="capt">Σκαλοπάτια οθόνης</div>
-  <div class="ladder">
-    <div class="step"><span class="bp">≥1400px · 27΄΄</span><h4>6 κάρτες ανά σειρά</h4><p>Η λωρίδα κάτω δείχνει και τα 12 μαζεμένα χωρίς σκρολ. Οι 3 διάρκειες πλήρεις με λεκτικό.</p></div>
-    <div class="step"><span class="bp">961–1399px</span><h4>5 κάρτες ανά σειρά</h4><p>Ίδια λωρίδα· η συμβουλή στην κορδέλα κόβεται σε σύντομη μορφή.</p></div>
-    <div class="step"><span class="bp">701–960px · tablet</span><h4>3–4 κάρτες</h4><p>Η λωρίδα γίνεται δίγραμμη: πάνω τα μαζεμένα, κάτω διάρκεια + Εφαρμογή.</p></div>
-    <div class="step"><span class="bp">≤700px · κινητό</span><h4>2 κάρτες</h4><p>Η λωρίδα κολλάει στο κάτω μέρος (safe-area) και δείχνει «4 επιλεγμένα ▲» — ανοίγει με πάτημα.</p></div>
+<!-- ══ ΜΠΑΡΑ ══ -->
+<div class="ctrl">
+  <h1>🧨 Εξάντληση — σημερινό modal + 4 ριζικές προτάσεις <span style="color:var(--green);font-size:11px">● ΔΙΑΔΡΑΣΤΙΚΟ</span></h1>
+  <div class="sb">Δούλεψέ το κανονικά: <b>κράτα πατημένη μια κάρτα</b> για να δεις το σημερινό modal, ή άνοιξε μια πρόταση. Ό,τι κλείνεις <b>αλλάζει πραγματικά</b> τον κατάλογο από πίσω. Όλα τα παράθυρα κλείνουν με <b>κλικ έξω</b>.</div>
+  <div class="pbar">
+    <button class="pb now" data-open="now"><span class="k">ΤΩΡΑ</span>Σημερινό modal</button>
+    <button class="pb" data-open="p1"><span class="k">Π1</span>Λειτουργία Εξάντλησης</button>
+    <button class="pb" data-open="p2"><span class="k">Π2</span>Πίνακας Αποθέματος</button>
+    <button class="pb" data-open="p3"><span class="k">Π3</span>Καλάθι Εξάντλησης</button>
+    <button class="pb" data-open="p4"><span class="k">Π4</span>Δύο Ταμπλό</button>
+    <span class="stat" id="stat">—</span>
+    <button class="pb rs" id="reset">↺ Επαναφορά όλων</button>
   </div>
 </div>
 
-<!-- ══════════ Π2 ══════════ -->
-<div class="sec">
-  <div class="sec-head"><span class="sec-num">Π2</span><h2 class="sec-t">«Πίνακας Αποθέματος» — όλο το μαγαζί σε μία οθόνη, με διακόπτες</h2></div>
-  <p class="sec-why">Πλήρης οθόνη, <b>στήλες ανά κατηγορία</b>, κάθε είδος μια γραμμή με <b>διακόπτη</b>. Πράσινος = πουλάμε, κόκκινος = τελείωσε, μωβ = μόνιμο. Βλέπεις <b>ολόκληρο τον κατάλογο ταυτόχρονα</b> και σβήνεις με ένα πάτημα ανά γραμμή — χωρίς να αλλάξεις οθόνη, χωρίς να ψάξεις. Η κεφαλίδα κάθε στήλης λέει <b>πόσα λείπουν από αυτή την κατηγορία</b>. Πάνω, μία αναζήτηση που φιλτράρει ταυτόχρονα προϊόντα ΚΑΙ υλικά.</p>
-  <div class="tagrow"><span class="tag win">όλος ο κατάλογος ταυτόχρονα</span><span class="tag win">1 πάτημα ανά είδος</span><span class="tag win">μετρητής ανά κατηγορία</span><span class="tag win">αναζήτηση σε όλα</span><span class="tag">θέλει μεγάλη οθόνη για να λάμψει</span></div>
-  <div class="shell tall">
-    <div class="nav">
-      <div class="logo">T</div>
-      <div class="ni"><span class="e">🍔</span>Μενού</div>
-      <div class="ni"><span class="e">🪑</span>Τραπέζια</div>
-      <div class="ni"><span class="e">🛵</span>Delivery</div>
-      <div class="ni on"><span class="e">🚫</span>Απόθεμα</div>
-      <div class="ni"><span class="e">👥</span>Πελάτες</div>
-      <div class="ni"><span class="e">⚙</span>Ρυθμίσεις</div>
-    </div>
-    <div class="board">
-      <div class="bh">
-        <h3>🚫 Πίνακας Αποθέματος</h3>
-        <div class="bsearch"><span class="m">🔍</span><input placeholder="Γράψε προϊόν ή υλικό…"></div>
-        <div class="bfil">
-          <span class="bf on">Όλα</span><span class="bf red">⏳ Κλειστά 7</span><span class="bf">🔒 Μόνιμα 2</span><span class="bf">🛵 Μόνο e-food 1</span>
-        </div>
-      </div>
-      <div class="bcols">
-        <div class="bcol">
-          <div class="bcol-h"><span>🌯 ΠΙΤΑ</span><span class="k">2</span></div>
-          <div class="bcol-b">
-            <div class="br off"><span class="bn">Πίτα Κοτόπουλο</span><span class="sw"></span></div>
-            <div class="br"><span class="bn">Πίτα Γύρος</span><span class="sw"></span></div>
-            <div class="br off"><span class="bn">Πίτα Κεμπαπάκι</span><span class="sw"></span></div>
-            <div class="br"><span class="bn">Πίτα Σουβλάκι</span><span class="sw"></span></div>
-            <div class="br"><span class="bn">Πίτα Λουκάνικο</span><span class="sw"></span></div>
-            <div class="br"><span class="bn">Πίτα Σνίτσελ</span><span class="sw"></span></div>
-            <div class="br"><span class="bn">Πίτα Φιλέτο</span><span class="sw"></span></div>
-          </div>
-        </div>
-        <div class="bcol">
-          <div class="bcol-h"><span>🍽 ΜΕΡΙΔΕΣ</span><span class="k">1</span></div>
-          <div class="bcol-b">
-            <div class="br"><span class="bn">Μερίδα Γύρος</span><span class="sw"></span></div>
-            <div class="br"><span class="bn">Μερίδα Κοτόπουλο</span><span class="sw"></span></div>
-            <div class="br perm"><span class="bn">Μερίδα Σνίτσελ</span><span class="sw"></span></div>
-            <div class="br"><span class="bn">Μερίδα Κεμπαπάκι</span><span class="sw"></span></div>
-            <div class="br"><span class="bn">Μερίδα Πανσέτα</span><span class="sw"></span></div>
-            <div class="br"><span class="bn">Μερίδα Λουκάνικο</span><span class="sw"></span></div>
-          </div>
-        </div>
-        <div class="bcol">
-          <div class="bcol-h"><span>🥫 ΣΑΛΤΣΕΣ &amp; ΥΛΙΚΑ</span><span class="k">3</span></div>
-          <div class="bcol-b">
-            <div class="br off"><span class="bn">Ουγγαρέζα</span><span class="sw"></span></div>
-            <div class="br"><span class="bn">Τζατζίκι</span><span class="sw"></span></div>
-            <div class="br"><span class="bn">Τυροκαυτερή</span><span class="sw"></span></div>
-            <div class="br off"><span class="bn">Πατάτες</span><span class="sw"></span></div>
-            <div class="br off"><span class="bn">Μπέικον</span><span class="sw"></span></div>
-            <div class="br"><span class="bn">Ντομάτα</span><span class="sw"></span></div>
-            <div class="br"><span class="bn">Κρεμμύδι</span><span class="sw"></span></div>
-          </div>
-        </div>
-        <div class="bcol">
-          <div class="bcol-h"><span>🥤 ΠΟΤΑ</span><span class="k zero">0</span></div>
-          <div class="bcol-b">
-            <div class="br"><span class="bn">Coca-Cola 330</span><span class="sw"></span></div>
-            <div class="br"><span class="bn">Fanta 330</span><span class="sw"></span></div>
-            <div class="br"><span class="bn">Sprite 330</span><span class="sw"></span></div>
-            <div class="br"><span class="bn">Νερό 500</span><span class="sw"></span></div>
-            <div class="br"><span class="bn">Amstel 500</span><span class="sw"></span></div>
-            <div class="br"><span class="bn">Heineken 330</span><span class="sw"></span></div>
-          </div>
-        </div>
-      </div>
-      <div class="bfoot">
-        <span>Λείπουν <b>7 σήμερα</b> · 2 επ' αόριστον · 1 μόνο στην e-food</span>
-        <span style="margin-left:auto">↺ Άνοιξέ τα ημερήσια</span>
-      </div>
-    </div>
+<!-- ══ MOCK ΤΑΜΕΙΟ ══ -->
+<div class="shell">
+  <div class="nav">
+    <div class="logo">T</div>
+    <button class="ni on"><span class="e">🍔</span>Μενού</button>
+    <button class="ni"><span class="e">🪑</span>Τραπέζια</button>
+    <button class="ni"><span class="e">🛵</span>Delivery</button>
+    <button class="ni alarm" data-open="p2"><span class="e">🚫</span>Απόθεμα</button>
+    <button class="ni"><span class="e">👥</span>Πελάτες</button>
+    <button class="ni"><span class="e">⚙</span>Ρυθμίσεις</button>
   </div>
-  <div class="note"><b>Έξυπνη λειτουργία:</b> ο διακόπτης <b>εκτελεί αμέσως</b> (καμία «Εφαρμογή») — αυτό ταιριάζει στη ρουτίνα «τσεκάρω το ψυγείο πριν ανοίξω». Το κλείσιμο ενός <b>υλικού</b> κάνει τα προϊόντα που παρασύρει να αναβοσβήσουν στη στήλη τους, ώστε να δεις <u>στην ίδια οθόνη</u> τι έπεσε μαζί — χωρίς να ανοίξει κανένα παράθυρο επιβεβαίωσης.</div>
-  <div class="capt">Σκαλοπάτια οθόνης</div>
-  <div class="mini-frames">
-    <div class="mf" style="width:250px"><div class="cap">≥1400px — 5 στήλες</div><div class="in" style="grid-template-columns:repeat(5,1fr)">
-      <div class="cell r"></div><div class="cell"></div><div class="cell"></div><div class="cell r"></div><div class="cell"></div>
-      <div class="cell"></div><div class="cell"></div><div class="cell r"></div><div class="cell"></div><div class="cell"></div></div></div>
-    <div class="mf" style="width:200px"><div class="cap">961–1399 — 4 στήλες</div><div class="in" style="grid-template-columns:repeat(4,1fr)">
-      <div class="cell r"></div><div class="cell"></div><div class="cell"></div><div class="cell r"></div>
-      <div class="cell"></div><div class="cell"></div><div class="cell r"></div><div class="cell"></div></div></div>
-    <div class="mf" style="width:140px"><div class="cap">701–960 — 2</div><div class="in" style="grid-template-columns:repeat(2,1fr)">
-      <div class="cell r"></div><div class="cell"></div><div class="cell"></div><div class="cell r"></div></div></div>
-    <div class="mf" style="width:92px"><div class="cap">≤700 — 1</div><div class="in">
-      <div class="cell r"></div><div class="cell"></div><div class="cell r"></div><div class="cell"></div></div></div>
+  <div class="main">
+    <div class="cats" id="shell-cats"></div>
+    <div class="grid" id="shell-grid"></div>
+  </div>
+  <div class="side">
+    <h3>👉 Τι να δοκιμάσεις</h3>
+    <p><b>1.</b> <span class="kb">Κράτα πατημένη</span> μια κάρτα (μισό δευτερόλεπτο) → ανοίγει το <b>σημερινό</b> modal, ακριβώς όπως στο ταμείο.</p>
+    <p><b>2.</b> Πάτα <b>Π1</b> πάνω-πάνω και σβήσε 5-6 προϊόντα με απλά πατήματα. Δες πόσο πιο γρήγορο είναι.</p>
+    <p><b>3.</b> Στο <b>Π4</b> κλείσε το υλικό <b>«Πατάτες»</b> και δες τα προϊόντα αριστερά να σβήνουν μόνα τους.</p>
+    <p><b>4.</b> Σε κάθε παράθυρο δοκίμασε <b>κλικ στο σκούρο φόντο</b> — αν έχεις μαζέψει επιλογές, θα σε ρωτήσει πριν τις πετάξει.</p>
+    <p style="color:#7ee9bd"><b>Ο κατάλογος από πίσω ενημερώνεται αληθινά</b> — έτσι βλέπεις το αποτέλεσμα κάθε πρότασης.</p>
   </div>
 </div>
 
-<!-- ══════════ Π3 ══════════ -->
-<div class="sec">
-  <div class="sec-head"><span class="sec-num">Π3</span><h2 class="sec-t">«Καλάθι Εξάντλησης» — μενού αριστερά, ό,τι τελείωσε δεξιά</h2></div>
-  <p class="sec-why">Το μοντέλο που ο ταμίας <b>ήδη ξέρει από την παραγγελία</b>: πατάς προϊόντα αριστερά, μπαίνουν στο «καλάθι» δεξιά, πατάς μία φορά στο τέλος. Μόνο που εδώ το καλάθι δεν είναι παραγγελία — είναι <b>τι λείπει</b>. Αφαιρείς με ✕ πάνω σε κάθε γραμμή. Πάνω από τον κατάλογο υπάρχουν <b>κουμπιά-συντομεύσεις</b> («όλο το κοτόπουλο», «όλη η πίτα»), οπότε το ομαδικό κλείσιμο γίνεται με ένα πάτημα αντί για έξι.</p>
-  <div class="tagrow"><span class="tag win">γνώριμο μοτίβο (καλάθι)</span><span class="tag win">προϊόντα &amp; υλικά μαζί</span><span class="tag win">ομαδικά με 1 πάτημα</span><span class="tag win">αναίρεση πριν το τέλος</span></div>
-  <div class="shell tall">
-    <div class="nav">
-      <div class="logo">T</div>
-      <div class="ni"><span class="e">🍔</span>Μενού</div>
-      <div class="ni"><span class="e">🪑</span>Τραπέζια</div>
-      <div class="ni on"><span class="e">🚫</span>Εξάντληση</div>
-      <div class="ni"><span class="e">👥</span>Πελάτες</div>
-      <div class="ni"><span class="e">⚙</span>Ρυθμίσεις</div>
-    </div>
-    <div class="split">
-      <div class="spl-l">
-        <div class="cats">
-          <span class="ct on">Πίτα</span><span class="ct">Αραβική</span><span class="ct">Λαβάς</span>
-          <span class="ct">Μερίδες</span><span class="ct">Box</span><span class="ct">🥬 Υλικά</span><span class="ct">🥤 Ποτά</span>
-        </div>
-        <div class="gsel">
-          <span class="gs">⚡ Συντομεύσεις:</span>
-          <span class="gs on">🥩 Όλο το κοτόπουλο <span class="n">6</span></span>
-          <span class="gs">🥖 Όλη η πίτα <span class="n">11</span></span>
-          <span class="gs">🥔 Ό,τι έχει πατάτα <span class="n">4</span></span>
-        </div>
-        <div class="grid">
-          <div class="pc out"><span class="em">🌯</span><span class="nm">Πίτα Κοτόπουλο</span><span class="pr">3,40 €</span></div>
-          <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Γύρος</span><span class="pr">3,40 €</span></div>
-          <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Κεμπαπάκι</span><span class="pr">3,60 €</span></div>
-          <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Σουβλάκι</span><span class="pr">3,40 €</span></div>
-          <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Λουκάνικο</span><span class="pr">3,50 €</span></div>
-          <div class="pc out"><span class="em">🥔</span><span class="nm">Πατατόπιτα</span><span class="pr">3,00 €</span></div>
-          <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Σνίτσελ</span><span class="pr">3,60 €</span></div>
-          <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Φιλέτο</span><span class="pr">3,90 €</span></div>
-          <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Ντόνερ</span><span class="pr">3,60 €</span></div>
-        </div>
-      </div>
-      <div class="spl-r">
-        <div class="spl-rh">
-          <div class="ttl">🚫 Τελείωσαν — 5</div>
-          <div class="sb">Πάτα ✕ για να βγάλεις κάτι από τη λίστα. Τίποτα δεν κλείνει πριν πατήσεις το κίτρινο κουμπί.</div>
-        </div>
-        <div class="spl-rb">
-          <div class="oit"><span class="ie">🌯</span><span class="it">Πίτα Κοτόπουλο<small>Πίτα · 3,40 €</small></span><span class="rmv">✕</span></div>
-          <div class="oit"><span class="ie">🫓</span><span class="it">Αραβική Κοτόπουλο<small>από «όλο το κοτόπουλο»</small></span><span class="rmv">✕</span></div>
-          <div class="oit"><span class="ie">🌮</span><span class="it">Λαβάς Κοτόπουλο<small>από «όλο το κοτόπουλο»</small></span><span class="rmv">✕</span></div>
-          <div class="oit"><span class="ie">🥔</span><span class="it">Πατατόπιτα<small>Πίτα · 3,00 €</small></span><span class="rmv">✕</span></div>
-          <div class="oit ing"><span class="ie">🥬</span><span class="it">Ουγγαρέζα<small>υλικό — κλείνει σε όλα τα προϊόντα</small></span><span class="rmv">✕</span></div>
-        </div>
-        <div class="spl-rf">
-          <span class="dur" style="width:100%"><button class="on td" style="flex:1">⏳ Σήμερα</button><button class="id" style="flex:1">🔒 Αόριστον</button></span>
-          <button class="big">🚫 Κλείσε τα 5 →</button>
-        </div>
-      </div>
-    </div>
+<!-- ══ OVERLAY ══ -->
+<div class="ov" id="ov"><div class="co-hint">κλικ έξω από το παράθυρο = κλείσιμο</div><div id="win-host"></div></div>
+
+<div class="cf" id="cf"><div class="cf-box">
+  <p id="cf-msg"></p>
+  <div class="cf-row"><button class="cf-no" id="cf-no">Όχι, μείνε</button><button class="cf-yes" id="cf-yes">Ναι, ακύρωσέ τα</button></div>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ══ ΕΠΕΞΗΓΗΣΗ ══ -->
+<div class="explain">
+  <div class="ex">
+    <h3><span class="k now">ΤΩΡΑ</span>Το σημερινό modal — 380px</h3>
+    <p>Ανοίγει με παρατεταμένο πάτημα. <b>Ένα προϊόν τη φορά</b>: διαλέγεις εμβέλεια (μόνο αυτό / όλο το κρέας / όλο το ψωμί), τσεκάρεις γραμμές, πατάς. Για 8 προϊόντα από διαφορετικές κατηγορίες = <b>8 φορές όλη η διαδικασία</b>, με το μενού κρυμμένο πίσω από το σκούρο φόντο κάθε φορά.</p>
+    <div class="tagrow"><span class="tag bad">1 προϊόν = 1 παράθυρο</span><span class="tag bad">380px στη μέση οθόνης 27΄΄</span><span class="tag">λίστα κειμένου</span><span class="tag good">ομαδικά (κρέας/ψωμί) ✔</span></div>
+    <div class="try"><b>Δοκίμασε:</b> κράτα πατημένο το «Πίτα Κοτόπουλο» → καρτέλα <b>🥩 Κοτόπουλο</b> → τσέκαρε γραμμές → «Εξαντλήθηκε σήμερα». Μετά κάν' το ξανά για ένα προϊόν άλλης κατηγορίας και μέτρα τα βήματα.</div>
   </div>
-  <div class="note"><b>Έξυπνη λειτουργία:</b> κάθε γραμμή στο καλάθι λέει <b>από πού μπήκε</b> — «από όλο το κοτόπουλο». Έτσι, όταν πατήσεις τη συντόμευση και δεις 6 γραμμές, ξέρεις ποιες ήρθαν ομαδικά και μπορείς να βγάλεις μόνο τη μία που ακόμα έχεις. Σήμερα το ομαδικό είναι «όλα ή τίποτα με checkboxes σε λίστα κειμένου».</div>
-  <div class="capt">Σκαλοπάτια οθόνης</div>
-  <div class="ladder">
-    <div class="step"><span class="bp">≥1400px</span><h4>Κατάλογος + καλάθι 420px</h4><p>6 κάρτες ανά σειρά, το καλάθι δείχνει 8 γραμμές χωρίς σκρολ.</p></div>
-    <div class="step"><span class="bp">961–1399px</span><h4>Καλάθι 360px</h4><p>4–5 κάρτες. Οι συντομεύσεις σε μία σειρά με σκρολ.</p></div>
-    <div class="step"><span class="bp">701–960px</span><h4>Καλάθι → κάτω λωρίδα</h4><p>Ο κατάλογος πιάνει όλο το πλάτος· το καλάθι γίνεται λωρίδα 2 σειρών στο κάτω μέρος.</p></div>
-    <div class="step"><span class="bp">≤700px</span><h4>Bottom sheet</h4><p>«🚫 5 τελείωσαν ▲» — ανεβαίνει με πάτημα, κατεβαίνει με σύρσιμο.</p></div>
+
+  <div class="ex">
+    <h3><span class="k">Π1</span>Λειτουργία Εξάντλησης — ο κατάλογος μέσα στο παράθυρο</h3>
+    <p>Το <b>ίδιο μενού που ξέρεις</b>, μέσα σε παράθυρο πλήρους πλάτους. Κάθε πάτημα σε κάρτα τη σβήνει· <b>αλλάζεις κατηγορίες ελεύθερα</b> και μαζεύεις από παντού. Κάτω βλέπεις τι μάζεψες, διαλέγεις διάρκεια <b>μία φορά για όλα</b>, «Εφαρμογή». Μηδέν εκμάθηση για νέο υπάλληλο — είναι η οθόνη που ήδη χρησιμοποιεί.</p>
+    <div class="tagrow"><span class="tag good">10 προϊόντα = 10 πατήματα</span><span class="tag good">όλες οι κατηγορίες σε μία συνεδρία</span><span class="tag good">αναίρεση πριν εφαρμοστεί</span><span class="tag good">διάρκεια μία φορά</span><span class="tag">χωρίς ομαδικά κρέας/ψωμί</span></div>
+    <div class="try"><b>Δοκίμασε:</b> άνοιξε το Π1, σβήσε 3 προϊόντα από «Πίτα», άλλαξε σε «Μερίδες», σβήσε 2 ακόμα, βγάλε ένα από τη λωρίδα με ✕, διάλεξε <b>🔒 Αόριστον</b> και πάτα Εφαρμογή. Δες τον κατάλογο πίσω.</div>
+  </div>
+
+  <div class="ex">
+    <h3><span class="k">Π2</span>Πίνακας Αποθέματος — όλα σε στήλες με διακόπτες</h3>
+    <p>Ολόκληρο το μαγαζί σε μία οθόνη: <b>στήλες ανά κατηγορία</b>, κάθε είδος μία γραμμή με διακόπτη. Πράσινο = πουλάμε, κόκκινο = τελείωσε. Κάθε στήλη λέει <b>πόσα λείπουν από αυτήν</b>. Η αναζήτηση φιλτράρει προϊόντα <u>και</u> υλικά μαζί. Ο διακόπτης <b>εκτελεί αμέσως</b> — ταιριάζει στη ρουτίνα «ελέγχω το ψυγείο πριν ανοίξω».</p>
+    <div class="tagrow"><span class="tag good">όλος ο κατάλογος ταυτόχρονα</span><span class="tag good">1 πάτημα ανά είδος</span><span class="tag good">αναζήτηση σε όλα</span><span class="tag good">μετρητής ανά στήλη</span><span class="tag bad">χωρίς αναίρεση (άμεσο)</span></div>
+    <div class="try"><b>Δοκίμασε:</b> γράψε «κοτ» στην αναζήτηση και κλείσε όλα τα κοτόπουλα με 4 πατήματα. Μετά πάτα το φίλτρο <b>⏳ Κλειστά</b> για να δεις μόνο ό,τι λείπει.</div>
+  </div>
+
+  <div class="ex">
+    <h3><span class="k">Π3</span>Καλάθι Εξάντλησης — μενού αριστερά, «τι τελείωσε» δεξιά</h3>
+    <p>Το μοτίβο που ο ταμίας <b>ήδη ξέρει από την παραγγελία</b>: πατάς αριστερά, μπαίνει δεξιά, πατάς μία φορά στο τέλος. Πάνω από τον κατάλογο υπάρχουν <b>συντομεύσεις</b> — «όλο το κοτόπουλο», «όλη η πίτα», «ό,τι έχει πατάτα» — που κάνουν το ομαδικό κλείσιμο <b>ένα πάτημα</b> αντί για έξι. Κάθε γραμμή στο καλάθι λέει <b>από πού μπήκε</b>.</p>
+    <div class="tagrow"><span class="tag good">γνώριμο μοτίβο</span><span class="tag good">ομαδικά με 1 πάτημα</span><span class="tag good">προϊόντα &amp; υλικά μαζί</span><span class="tag good">αναίρεση πριν το τέλος</span></div>
+    <div class="try"><b>Δοκίμασε:</b> πάτα τη συντόμευση <b>🥩 Όλο το κοτόπουλο</b> — μπαίνουν όλα μαζί στο καλάθι με ένδειξη προέλευσης. Βγάλε ένα με ✕ και πάτα «Κλείσε τα».</div>
+  </div>
+
+  <div class="ex">
+    <h3><span class="k">Π4</span>Δύο Ταμπλό — προϊόντα | υλικά, δίπλα-δίπλα</h3>
+    <p>Η οθόνη κόβεται στα δύο γιατί <b>αυτά ακριβώς είναι τα δύο πράγματα που κλείνουν</b>. Αριστερά κάρτες προϊόντων (τις αναγνωρίζεις, δεν τις διαβάζεις), δεξιά μεγάλα chips υλικών. Είναι η μοναδική πρόταση όπου βλέπεις <b>και τα δύο ταυτόχρονα</b> — που είναι ακριβώς η ερώτηση «τι δεν πουλάω τώρα;».</p>
+    <div class="tagrow"><span class="tag good">προϊόντα &amp; υλικά ταυτόχρονα</span><span class="tag good">μηδέν λίστα κειμένου</span><span class="tag good">τεράστιοι στόχοι αφής</span><span class="tag bad">χωρίς ομαδικά</span><span class="tag bad">χωρίς αναίρεση</span></div>
+    <div class="try"><b>Δοκίμασε:</b> κλείσε δεξιά το υλικό <b>«Πατάτες»</b> — δες τα προϊόντα αριστερά που το χρησιμοποιούν να <b>σβήνουν μόνα τους μπροστά σου</b>, χωρίς κανένα παράθυρο επιβεβαίωσης.</div>
+  </div>
+
+  <div class="ex">
+    <h3>Σύγκριση</h3>
+    <div class="tblwrap"><table class="cmp">
+      <tr><th>Κριτήριο</th><th>ΤΩΡΑ</th><th>Π1</th><th>Π2</th><th>Π3</th><th>Π4</th></tr>
+      <tr><td>Κλείσιμο 8 προϊόντων</td><td class="no">8 παράθυρα × 3 βήματα</td><td class="ok">8 + 1</td><td class="ok">8</td><td class="ok">8 + 1</td><td class="ok">8</td></tr>
+      <tr><td>Προϊόντα &amp; υλικά μαζί</td><td class="no">όχι</td><td class="ok">ναι</td><td class="ok">ναι</td><td class="ok">ναι</td><td class="ok">ναι, δίπλα-δίπλα</td></tr>
+      <tr><td>Αναίρεση πριν εκτελεστεί</td><td class="no">όχι</td><td class="ok">ναι</td><td class="no">όχι</td><td class="ok">ναι</td><td class="no">όχι</td></tr>
+      <tr><td>Ομαδικά (κρέας / ψωμί)</td><td class="ok">ναι</td><td class="no">όχι</td><td class="no">όχι</td><td class="ok">ναι, 1 πάτημα</td><td class="no">όχι</td></tr>
+      <tr><td>Κλικ έξω = κλείσιμο</td><td class="ok">ναι</td><td class="ok">ναι (+ ερώτηση)</td><td class="ok">ναι</td><td class="ok">ναι (+ ερώτηση)</td><td class="ok">ναι</td></tr>
+      <tr><td>Αξιοποίηση οθόνης 27΄΄</td><td class="no">380px</td><td class="ok">1200px</td><td class="ok">1200px</td><td class="ok">1200px</td><td class="ok">1200px</td></tr>
+      <tr><td>Εκμάθηση νέου υπαλλήλου</td><td>μέτρια</td><td class="ok">μηδενική</td><td class="ok">μηδενική</td><td class="ok">μηδενική</td><td class="ok">μηδενική</td></tr>
+      <tr><td>Κόστος υλοποίησης</td><td>—</td><td>μεσαίο</td><td class="no">μεγάλο</td><td class="no">μεγάλο</td><td class="ok">μικρό-μεσαίο</td></tr>
+    </table></div>
+    <p style="margin-top:12px"><b style="color:#fff">Πρότασή μου: Π1 + Π3 μαζί σε ένα παράθυρο.</b> Το Π1 δίνει την ταχύτητα (σβήνεις πάνω στον κατάλογο), το Π3 δίνει τα ομαδικά (η μόνη δυνατότητα που θα έχανες από το σημερινό modal) και την ορατή λίστα «τι μάζεψα». Πρακτικά είναι <b>το Π3 με τις συντομεύσεις</b>. Το Π4 μένει ως γρήγορη ματιά «τι δεν πουλάω τώρα» στη θέση της σημερινής λίστας «🚫 Εξαντλημένα».</p>
   </div>
 </div>
 
-<!-- ══════════ Π4 ══════════ -->
-<div class="sec">
-  <div class="sec-head"><span class="sec-num">Π4</span><h2 class="sec-t">«Δύο ταμπλό» — προϊόντα αριστερά, υλικά δεξιά, μεγάλα κουμπιά</h2></div>
-  <p class="sec-why">Η απλούστερη νοητικά: η οθόνη <b>κόβεται στα δύο</b> γιατί αυτά είναι τα δύο πράγματα που κλείνουν. Αριστερά <b>κάρτες προϊόντων</b> (τις αναγνωρίζεις, δεν τις διαβάζεις), δεξιά <b>μεγάλα chips υλικών</b> ομαδοποιημένα. Πατάς — σβήνει. Ξαναπατάς — γυρίζει. <b>Καμία λίστα κειμένου πουθενά</b>, μηδέν σκρολ σε μεγάλη οθόνη. Είναι επίσης η μοναδική πρόταση όπου <b>βλέπεις προϊόντα και υλικά ταυτόχρονα</b> — που είναι ακριβώς η ερώτηση «τι δεν πουλάω τώρα;».</p>
-  <div class="tagrow"><span class="tag win">προϊόντα &amp; υλικά μαζί</span><span class="tag win">μηδέν κείμενο-λίστα</span><span class="tag win">τεράστιοι στόχοι αφής</span><span class="tag win">άμεσο toggle</span><span class="tag">δεν κάνει ομαδικά (κρέας/ψωμί)</span></div>
-  <div class="shell tall">
-    <div class="nav">
-      <div class="logo">T</div>
-      <div class="ni"><span class="e">🍔</span>Μενού</div>
-      <div class="ni"><span class="e">🪑</span>Τραπέζια</div>
-      <div class="ni on"><span class="e">🚫</span>Εξάντληση</div>
-      <div class="ni"><span class="e">👥</span>Πελάτες</div>
-      <div class="ni"><span class="e">⚙</span>Ρυθμίσεις</div>
-    </div>
-    <div class="duo">
-      <div class="dp">
-        <div class="dp-h"><span>🍽 ΠΡΟΪΟΝΤΑ</span><span class="cn">3 κλειστά</span></div>
-        <div class="cats" style="border-top:none">
-          <span class="ct on">Πίτα</span><span class="ct">Μερίδες</span><span class="ct">Box</span><span class="ct">Ποτά</span>
-        </div>
-        <div class="dp-b">
-          <div class="grid" style="padding:0;overflow:visible;grid-template-columns:repeat(auto-fill,minmax(115px,1fr))">
-            <div class="pc out"><span class="em">🌯</span><span class="nm">Πίτα Κοτόπουλο</span></div>
-            <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Γύρος</span></div>
-            <div class="pc out"><span class="em">🌯</span><span class="nm">Πίτα Κεμπαπάκι</span></div>
-            <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Σουβλάκι</span></div>
-            <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Λουκάνικο</span></div>
-            <div class="pc perm"><span class="em">🌯</span><span class="nm">Πίτα Πανσέτα</span></div>
-            <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Σνίτσελ</span></div>
-            <div class="pc"><span class="em">🥔</span><span class="nm">Πατατόπιτα</span></div>
-            <div class="pc"><span class="em">🌯</span><span class="nm">Πίτα Φιλέτο</span></div>
-          </div>
-        </div>
-      </div>
-      <div class="dp">
-        <div class="dp-h"><span>🥬 ΥΛΙΚΑ</span><span class="cn">3 κλειστά</span></div>
-        <div class="dp-b">
-          <div class="gtitle">🥫 ΣΑΛΤΣΕΣ</div>
-          <div class="igrid">
-            <span class="ig">Μαγιονέζα</span><span class="ig">Τζατζίκι</span><span class="ig">Τυροκαυτερή</span>
-            <span class="ig out">Ουγγαρέζα</span><span class="ig">Μελιτζανοσαλάτα</span><span class="ig">Σως Ταμάμ</span>
-            <span class="ig">Σως BBQ</span><span class="ig">Σως Caesar's</span><span class="ig">Σως Γιαούρτι</span>
-          </div>
-          <div class="gtitle">🥗 ΛΑΧΑΝΙΚΑ</div>
-          <div class="igrid">
-            <span class="ig">Ντομάτα</span><span class="ig">Κρεμμύδι</span><span class="ig">Κέτσαπ</span>
-            <span class="ig">Λάχανο &amp; καρότο</span><span class="ig out">Πατάτες</span><span class="ig">Πράσινη Σαλάτα</span>
-          </div>
-          <div class="gtitle">🧀 EXTRAS</div>
-          <div class="igrid">
-            <span class="ig">Κασέρι</span><span class="ig">Παρμεζάνα</span><span class="ig out">Μπέικον</span>
-            <span class="ig perm">Καλαμπόκι</span><span class="ig">Κρουτόν</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="note"><b>Έξυπνη λειτουργία:</b> όταν κλείνεις <b>υλικό</b> δεξιά, τα προϊόντα που παρασύρει <b>σβήνουν μπροστά στα μάτια σου</b> αριστερά. Δεν χρειάζεται να στο πει κανένα παράθυρο — <b>το βλέπεις</b>. Και αντίστροφα: αν κλείσεις όλα τα προϊόντα μιας σάλτσας, το υλικό δεξιά παίρνει διακριτικό περίγραμμα «μήπως τελείωσε κι αυτό;».</div>
-  <div class="capt">Σκαλοπάτια οθόνης</div>
-  <div class="ladder">
-    <div class="step"><span class="bp">≥1400px</span><h4>50 / 50</h4><p>Προϊόντα 5 ανά σειρά, υλικά 4 chips ανά σειρά. Μηδέν σκρολ.</p></div>
-    <div class="step"><span class="bp">961–1399px</span><h4>55 / 45</h4><p>Προϊόντα 3–4, υλικά 3. Ελαφρύ σκρολ στα υλικά.</p></div>
-    <div class="step"><span class="bp">701–960px</span><h4>Καρτέλες</h4><p>Δύο μεγάλες καρτέλες πάνω: «🍽 Προϊόντα» / «🥬 Υλικά» — μία φαίνεται κάθε φορά.</p></div>
-    <div class="step"><span class="bp">≤700px</span><h4>Καρτέλες + 2 στήλες</h4><p>Ίδιο, με 2 κάρτες ανά σειρά και chips 50% πλάτος.</p></div>
-  </div>
-</div>
+<script>
+/* ═══════════ ΔΕΔΟΜΕΝΑ ═══════════ */
+const CATS=[{id:'pita',lb:'Πίτα'},{id:'aravi',lb:'Αραβική'},{id:'lavas',lb:'Λαβάς'},
+            {id:'merides',lb:'Μερίδες'},{id:'box',lb:'Box'},{id:'pota',lb:'Ποτά'}];
+const P=[
+ {id:'p1',nm:'Πίτα Κοτόπουλο',cat:'pita',em:'🌯',pr:'3,40',fam:'kot'},
+ {id:'p2',nm:'Πίτα Γύρος',cat:'pita',em:'🌯',pr:'3,40',fam:'gyr'},
+ {id:'p3',nm:'Πίτα Κεμπαπάκι',cat:'pita',em:'🌯',pr:'3,60',fam:'kemp'},
+ {id:'p4',nm:'Πίτα Σουβλάκι',cat:'pita',em:'🌯',pr:'3,40',fam:'souv'},
+ {id:'p5',nm:'Πίτα Λουκάνικο',cat:'pita',em:'🌯',pr:'3,50',fam:'louk'},
+ {id:'p6',nm:'Πίτα Πανσέτα',cat:'pita',em:'🌯',pr:'3,80',fam:'pans'},
+ {id:'p7',nm:'Πίτα Σνίτσελ',cat:'pita',em:'🌯',pr:'3,60',fam:'snits'},
+ {id:'p8',nm:'Πατατόπιτα',cat:'pita',em:'🥔',pr:'3,00',fam:'pat'},
+ {id:'p9',nm:'Πίτα Φιλέτο',cat:'pita',em:'🌯',pr:'3,90',fam:'filet'},
+ {id:'p10',nm:'Πίτα Ντόνερ',cat:'pita',em:'🌯',pr:'3,60',fam:'doner'},
+ {id:'p11',nm:'Πίτα Μπιφτέκι',cat:'pita',em:'🌯',pr:'3,60',fam:'bift'},
+ {id:'p12',nm:'Πίτα Falafel',cat:'pita',em:'🌯',pr:'3,40',fam:'fala'},
+ {id:'a1',nm:'Αραβική Κοτόπουλο',cat:'aravi',em:'🫓',pr:'4,00',fam:'kot'},
+ {id:'a2',nm:'Αραβική Γύρος',cat:'aravi',em:'🫓',pr:'4,00',fam:'gyr'},
+ {id:'a3',nm:'Αραβική Κεμπαπάκι',cat:'aravi',em:'🫓',pr:'4,20',fam:'kemp'},
+ {id:'a4',nm:'Αραβική Σουβλάκι',cat:'aravi',em:'🫓',pr:'4,00',fam:'souv'},
+ {id:'a5',nm:'Αραβική Σνίτσελ',cat:'aravi',em:'🫓',pr:'4,20',fam:'snits'},
+ {id:'a6',nm:'Αραβική Πατάτες',cat:'aravi',em:'🥔',pr:'3,50',fam:'pat'},
+ {id:'l1',nm:'Λαβάς Κοτόπουλο',cat:'lavas',em:'🌮',pr:'4,20',fam:'kot'},
+ {id:'l2',nm:'Λαβάς Γύρος',cat:'lavas',em:'🌮',pr:'4,20',fam:'gyr'},
+ {id:'l3',nm:'Λαβάς Κεμπαπάκι',cat:'lavas',em:'🌮',pr:'4,40',fam:'kemp'},
+ {id:'l4',nm:'Λαβάς Σουβλάκι',cat:'lavas',em:'🌮',pr:'4,20',fam:'souv'},
+ {id:'l5',nm:'Λαβάς Πατάτες',cat:'lavas',em:'🥔',pr:'3,70',fam:'pat'},
+ {id:'m1',nm:'Μερίδα Κοτόπουλο',cat:'merides',em:'🍽',pr:'9,50',fam:'kot'},
+ {id:'m2',nm:'Μερίδα Γύρος',cat:'merides',em:'🍽',pr:'9,50',fam:'gyr'},
+ {id:'m3',nm:'Μερίδα Κεμπαπάκι',cat:'merides',em:'🍽',pr:'9,80',fam:'kemp'},
+ {id:'m4',nm:'Μερίδα Σνίτσελ',cat:'merides',em:'🍽',pr:'9,80',fam:'snits'},
+ {id:'m5',nm:'Μερίδα Πανσέτα',cat:'merides',em:'🍽',pr:'10,50',fam:'pans'},
+ {id:'m6',nm:'Μερίδα Λουκάνικο',cat:'merides',em:'🍽',pr:'9,50',fam:'louk'},
+ {id:'b1',nm:'Box Γύρος',cat:'box',em:'🥡',pr:'7,50',fam:'gyr'},
+ {id:'b2',nm:'Box Κοτόπουλο',cat:'box',em:'🥡',pr:'7,50',fam:'kot'},
+ {id:'b3',nm:'Box Ντόνερ',cat:'box',em:'🥡',pr:'7,80',fam:'doner'},
+ {id:'d1',nm:'Coca-Cola 330',cat:'pota',em:'🥤',pr:'1,50',fam:null},
+ {id:'d2',nm:'Fanta 330',cat:'pota',em:'🥤',pr:'1,50',fam:null},
+ {id:'d3',nm:'Sprite 330',cat:'pota',em:'🥤',pr:'1,50',fam:null},
+ {id:'d4',nm:'Νερό 500',cat:'pota',em:'💧',pr:'0,50',fam:null},
+ {id:'d5',nm:'Amstel 500',cat:'pota',em:'🍺',pr:'2,50',fam:null},
+ {id:'d6',nm:'Heineken 330',cat:'pota',em:'🍺',pr:'2,50',fam:null}
+];
+const FAMLB={kot:'Κοτόπουλο',gyr:'Γύρος',kemp:'Κεμπαπάκι',souv:'Σουβλάκι',louk:'Λουκάνικο',
+  pans:'Πανσέτα',snits:'Σνίτσελ',filet:'Φιλέτο',doner:'Ντόνερ',bift:'Μπιφτέκι',fala:'Falafel',pat:'Πατάτες'};
+const BREADLB={pita:'Πίτα',aravi:'Αραβική',lavas:'Λαβάς'};
+const POTATO=P.filter(p=>p.fam==='pat').map(p=>p.id).concat(['m1','m2','m3','m4','m5','m6','b1','b2','b3']);
+const ING=[
+ {k:'Μαγιονέζα',g:'sauce'},{k:'Τζατζίκι',g:'sauce'},{k:'Τυροκαυτερή',g:'sauce'},
+ {k:'Ουγγαρέζα',g:'sauce'},{k:'Μελιτζανοσαλάτα',g:'sauce'},{k:'Σως Ταμάμ',g:'sauce'},
+ {k:'Σως BBQ',g:'sauce'},{k:"Σως Caesar's",g:'sauce'},{k:'Σως Μουστάρδας',g:'sauce'},
+ {k:'Σως Γιαούρτι',g:'sauce'},{k:'Σως Vegan',g:'sauce'},
+ {k:'Ντομάτα',g:'veg'},{k:'Κρεμμύδι',g:'veg'},{k:'Κέτσαπ',g:'veg'},{k:'Μουστάρδα',g:'veg'},
+ {k:'Λάχανο & καρότο',g:'veg'},{k:'Πράσινη Σαλάτα',g:'veg'},{k:'Πατάτες',g:'veg',links:POTATO},
+ {k:'Κασέρι',g:'extra'},{k:'Παρμεζάνα',g:'extra'},{k:'Μπέικον',g:'extra'},
+ {k:'Καλαμπόκι',g:'extra'},{k:'Κρουτόν',g:'extra'}
+];
+const GLB={sauce:'🥫 ΣΑΛΤΣΕΣ',veg:'🥗 ΛΑΧΑΝΙΚΑ',extra:'🧀 EXTRAS'};
 
-<!-- ══════════ ΣΥΓΚΡΙΣΗ ══════════ -->
-<div class="sec">
-  <div class="sec-head"><span class="sec-num">ΣΥΓΚΡΙΣΗ</span><h2 class="sec-t">Ποιο λύνει τι</h2></div>
-  <div class="tblwrap"><table class="cmp">
-    <tr><th>Κριτήριο</th><th>ΤΩΡΑ (modal)</th><th>Π1 · Λειτουργία</th><th>Π2 · Πίνακας</th><th>Π3 · Καλάθι</th><th>Π4 · Δύο ταμπλό</th></tr>
-    <tr><td>Κλείσιμο 8 προϊόντων</td><td class="no">8 modal × 3 βήματα</td><td class="ok">8 πατήματα + 1</td><td class="ok">8 πατήματα</td><td class="ok">8 + 1</td><td class="ok">8 πατήματα</td></tr>
-    <tr><td>Βλέπω προϊόντα &amp; υλικά μαζί</td><td class="no">όχι</td><td class="ok">ναι (καρτέλα υλικών)</td><td class="ok">ναι (στήλη)</td><td class="ok">ναι (καλάθι)</td><td class="ok">ναι, δίπλα-δίπλα</td></tr>
-    <tr><td>Αναίρεση πριν εκτελεστεί</td><td class="no">όχι</td><td class="ok">ναι</td><td class="no">όχι (άμεσο)</td><td class="ok">ναι</td><td class="no">όχι (άμεσο)</td></tr>
-    <tr><td>Ομαδικά (όλο το κρέας/ψωμί)</td><td class="ok">ναι</td><td>χειροκίνητα</td><td>χειροκίνητα</td><td class="ok">ναι, συντομεύσεις</td><td class="no">όχι</td></tr>
-    <tr><td>Εκμάθηση για νέο υπάλληλο</td><td>μέτρια</td><td class="ok">μηδενική (ίδιο μενού)</td><td class="ok">μηδενική (διακόπτες)</td><td class="ok">μηδενική (καλάθι)</td><td class="ok">μηδενική</td></tr>
-    <tr><td>Αξιοποίηση οθόνης 27΄΄</td><td class="no">380px στη μέση</td><td class="ok">πλήρης</td><td class="ok">πλήρης</td><td class="ok">πλήρης</td><td class="ok">πλήρης</td></tr>
-    <tr><td>Σε κινητό</td><td class="ok">ΟΚ</td><td class="ok">λωρίδα κάτω</td><td>πολύ σκρολ</td><td class="ok">bottom sheet</td><td class="ok">καρτέλες</td></tr>
-    <tr><td>Κόστος υλοποίησης</td><td>—</td><td>μεσαίο</td><td class="no">μεγάλο</td><td class="no">μεγάλο</td><td class="ok">μικρό-μεσαίο</td></tr>
-  </table></div>
-  <div class="note"><b>Η πρότασή μου: Π1 (Λειτουργία Εξάντλησης) ως κύρια, με Π4 ως «Πίνακα» στο flyout.</b> Το <b>Π1</b> είναι το πιο ριζικό και ταυτόχρονα το πιο εύκολο για τον υπάλληλο: δουλεύει πάνω στην <u>ίδια</u> οθόνη που ξέρει απ' έξω, δεν μαθαίνει τίποτα καινούριο, και κλείνει 10 πράγματα σε 10 πατήματα με δυνατότητα αναίρεσης. Το <b>Π4</b> καλύπτει τη δεύτερη ανάγκη — «δείξε μου τι δεν πουλάω τώρα» — και αντικαθιστά τη σημερινή λίστα «🚫 Εξαντλημένα». Μαζί καλύπτουν και τις δύο στιγμές: <b>την ώρα που κάτι τελειώνει</b> (Π1) και <b>την ώρα που ελέγχω</b> (Π4).</div>
-</div>
+/* ═══════════ ΚΑΤΑΣΤΑΣΗ ═══════════ */
+const INIT={p1:'today',p6:'indef','i:Ουγγαρέζα':'today','i:Καλαμπόκι':'indef'};
+let ST={};
+const EF=new Set(['p1','p3']);          // κλειστά στην e-food (στατικό, για την ένδειξη)
+let shellCat='pita', view=null, picks=new Set(), dur='today';
 
+const prod=id=>P.find(p=>p.id===id);
+const ingOf=k=>ING.find(i=>i.k===k);
+const st=key=>ST[key]||'ok';
+const isOut=key=>st(key)!=='ok';
+const catLb=c=>(CATS.find(x=>x.id===c)||{}).lb||'';
+function reset(){ST=Object.assign({},INIT);picks.clear();dur='today';renderShell();renderStat();}
+function counts(){let t=0,i=0;for(const k in ST){if(ST[k]==='today')t++;if(ST[k]==='indef')i++;}return{t,i};}
+
+function renderStat(){
+  const c=counts(),n=c.t+c.i,el=document.getElementById('stat');
+  el.className='stat'+(n?'':' zero');
+  el.textContent=n?('🚫 '+c.t+' σήμερα · '+c.i+' αόριστον'):'✅ όλα διαθέσιμα';
+}
+function toast(msg,color){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.style.background=color==='green'?'#12331f':'#3a1c1c';
+  t.style.color=color==='green'?'#9ff0c4':'#ffd0ce';
+  t.style.border='1px solid '+(color==='green'?'rgba(38,194,129,.5)':'rgba(239,83,80,.5)');
+  t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2400);
+}
+
+/* ═══════════ MOCK ΤΑΜΕΙΟ ═══════════ */
+function renderShell(){
+  document.getElementById('shell-cats').innerHTML=
+    CATS.map(c=>'<button class="ct'+(c.id===shellCat?' on':'')+'" data-scat="'+c.id+'">'+c.lb+'</button>').join('');
+  document.getElementById('shell-grid').innerHTML=
+    P.filter(p=>p.cat===shellCat).map(p=>card(p)).join('');
+}
+function card(p,extra){
+  const s=st(p.id);
+  return '<div class="pc '+(s==='ok'?'':s)+(EF.has(p.id)?' efood':'')+'" data-pid="'+p.id+'"'+(extra||'')+'>'+
+    '<span class="em">'+p.em+'</span><span class="nm">'+p.nm+'</span><span class="pr">'+p.pr+' €</span></div>';
+}
+document.getElementById('shell-cats').addEventListener('click',e=>{
+  const b=e.target.closest('[data-scat]');if(!b)return;shellCat=b.dataset.scat;renderShell();
+});
+
+/* long-press → σημερινό modal */
+(function(){
+  let tm=null,fired=false,sx=0,sy=0,el=null;
+  const grid=document.getElementById('shell-grid');
+  const cancel=()=>{if(tm){clearTimeout(tm);tm=null;}if(el){el.classList.remove('lp');el=null;}};
+  grid.addEventListener('pointerdown',e=>{
+    const c=e.target.closest('.pc');if(!c)return;
+    fired=false;sx=e.clientX;sy=e.clientY;el=c;c.classList.add('lp');
+    tm=setTimeout(()=>{fired=true;tm=null;c.classList.remove('lp');el=null;openWin('now',c.dataset.pid);},500);
+  },{passive:true});
+  grid.addEventListener('pointermove',e=>{if(tm&&(Math.abs(e.clientX-sx)>8||Math.abs(e.clientY-sy)>8))cancel();},{passive:true});
+  ['pointerup','pointercancel','pointerleave'].forEach(ev=>grid.addEventListener(ev,cancel));
+  grid.addEventListener('click',e=>{
+    if(fired){fired=false;return;}
+    if(e.target.closest('.pc'))toast('Κράτα το πατημένο μισό δευτερόλεπτο για την εξάντληση','green');
+  });
+})();
+
+/* ═══════════ ΠΑΡΑΘΥΡΑ ═══════════ */
+const ov=document.getElementById('ov'),host=document.getElementById('win-host');
+function openWin(kind,pid){
+  view=kind;picks.clear();dur='today';
+  if(kind==='now')renderNow(pid||'p1');
+  else if(kind==='p1')renderP1();
+  else if(kind==='p2')renderP2();
+  else if(kind==='p3')renderP3();
+  else renderP4();
+  ov.classList.add('open');
+}
+function closeWin(force){
+  if(!force&&picks.size&&(view==='p1'||view==='p3'||view==='now')){
+    askConfirm('Έχεις '+picks.size+' επιλογ'+(picks.size===1?'ή':'ές')+' που δεν εφαρμόστηκαν.\nΝα ακυρωθούν;',()=>closeWin(true));
+    return;
+  }
+  ov.classList.remove('open');host.innerHTML='';view=null;picks.clear();
+}
+ov.addEventListener('click',e=>{if(e.target===ov||e.target.classList.contains('co-hint'))closeWin();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&ov.classList.contains('open'))closeWin();});
+document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>openWin(b.dataset.open)));
+document.getElementById('reset').addEventListener('click',()=>{reset();toast('Όλα επανήλθαν σε διαθέσιμα','green');});
+
+/* confirm */
+let cfCb=null;
+function askConfirm(msg,cb){
+  cfCb=cb;document.getElementById('cf-msg').textContent=msg;document.getElementById('cf').classList.add('open');
+}
+document.getElementById('cf-no').addEventListener('click',()=>{document.getElementById('cf').classList.remove('open');cfCb=null;});
+document.getElementById('cf-yes').addEventListener('click',()=>{document.getElementById('cf').classList.remove('open');const c=cfCb;cfCb=null;if(c)c();});
+
+/* εφαρμογή */
+function applyPicks(list,d){
+  let n=0;
+  list.forEach(k=>{ if(d==='open'){if(isOut(k)){delete ST[k];n++;}} else if(st(k)!==d){ST[k]=d;n++;} });
+  renderShell();renderStat();
+  return n;
+}
+function cascadeFromIng(k,d){
+  const ing=ingOf(k);if(!ing||!ing.links)return[];
+  const hit=[];
+  ing.links.forEach(id=>{ if(d==='ok'){ if(ST[id]==='today'){delete ST[id];hit.push(id);} }
+                          else if(st(id)==='ok'){ST[id]=d;hit.push(id);} });
+  return hit;
+}
+
+/* ═══════════ ΤΩΡΑ ═══════════ */
+let nowScopes=[],nowActive=0,nowPid=null;
+function scopesFor(id){
+  const p=prod(id),out=[{key:'self',lb:'Μόνο αυτό',ic:'🍽',ids:[id]}];
+  if(p.fam){const f=P.filter(x=>x.fam===p.fam).map(x=>x.id);
+    if(f.length>1)out.push({key:'fam',lb:FAMLB[p.fam],ic:'🥩',ids:f});}
+  if(BREADLB[p.cat]){const b=P.filter(x=>x.cat===p.cat).map(x=>x.id);
+    out.push({key:'bread',lb:BREADLB[p.cat],ic:'🥖',ids:b});}
+  if(POTATO.includes(id))out.push({key:'pot',lb:'Πατάτες',ic:'🥔',ids:POTATO.slice()});
+  return out;
+}
+function renderNow(pid){
+  nowPid=pid;nowScopes=scopesFor(pid);nowActive=0;picks.clear();
+  nowScopes[0].ids.forEach(i=>picks.add(i));
+  host.innerHTML='<div class="win sm" id="w"></div>';paintNow();
+}
+function paintNow(){
+  const p=prod(nowPid),sc=nowScopes[nowActive];
+  let h='<div class="t">'+p.nm+'</div><div class="sub">Τι τελείωσε;</div>';
+  if(EF.has(nowPid))h+='<div class="efline"><span>🛵</span><span>Κλειστό στην <b>e-food</b> (σήμερα) — στο μαγαζί πωλείται κανονικά</span></div>';
+  if(nowScopes.length>1)h+='<div class="tabs">'+nowScopes.map((s,i)=>
+    '<button class="tab'+(i===nowActive?' on':'')+'" data-sc="'+i+'"><span class="ico">'+s.ic+'</span>'+s.lb+'</button>').join('')+'</div>';
+  h+='<div class="list">'+sc.ids.map(id=>{const q=prod(id);
+      return '<button class="li" data-row="'+id+'"><span class="dot'+(picks.has(id)?' on':'')+'"></span>'+
+      '<span class="nm2">'+q.nm+'</span><span class="cat2">'+catLb(q.cat)+'</span>'+
+      (isOut(id)?'<span class="already">ήδη κλειστό</span>':'')+'</button>';}).join('')+'</div>';
+  const n=picks.size;
+  h+='<div class="sum'+(n?'':' empty')+'">'+(n?('Θα κλείσ'+(n===1?'ει ':'ουν ')+n+' στοιχεί'+(n===1?'ο':'α')+'.'):'Δεν έχεις επιλέξει τίποτα.')+'</div>'+
+   '<button class="primary" data-now="today"><span class="pico">🚫</span><span class="ptxt"><b>Εξαντλήθηκε σήμερα</b><small>ανοίγει αύριο μόνο του</small></span></button>'+
+   '<button class="efbtn"><span>🛑</span><span class="tx"><b>Φρένο — μόνο στην e-food</b><small>στο μαγαζί πωλείται κανονικά</small></span></button>'+
+   '<button class="cancel" data-now="cancel">Άκυρο</button>'+
+   '<button class="more" id="mb"><span>⚙ Περισσότερες επιλογές</span><span id="chev">▼</span></button>'+
+   '<div class="panel" id="pn"><div class="panel-in"><p class="warn"><b>Προσοχή:</b> μένει εξαντλημένο <b>μέχρι να το ξανανοίξεις εσύ</b> — δεν επανέρχεται αύριο.</p>'+
+   '<button class="indefbtn" data-now="indef">🔒 Εξαντλήθηκε επ\' αόριστον</button></div></div>';
+  document.getElementById('w').innerHTML=h;
+}
+/* ═══════════ Π1 ═══════════ */
+let p1cat='pita';
+function renderP1(){
+  host.innerHTML='<div class="win lg" id="w"></div>';paintP1();
+}
+function paintP1(){
+  let h='<div class="wh"><div><h2>🚫 Λειτουργία Εξάντλησης</h2>'+
+    '<div class="wsub">Ο ίδιος κατάλογος που ξέρεις — πάτα ό,τι τελείωσε, από όποια κατηγορία θέλεις.</div></div>'+
+    '<button class="wx" data-x>✕</button></div>'+
+   '<div class="wbody">'+
+   '<div class="ribbon"><span class="blip"></span><b>ΜΑΖΕΨΕ ΚΑΙ ΕΦΑΡΜΟΣΕ</b><span>Τίποτα δεν κλείνει πριν πατήσεις «Εφαρμογή» — μπορείς να αλλάξεις γνώμη ελεύθερα.</span></div>'+
+   '<div class="cats">'+CATS.map(c=>'<button class="ct'+(c.id===p1cat?' on':'')+'" data-p1cat="'+c.id+'">'+c.lb+'</button>').join('')+
+   '<button class="ct'+(p1cat==='ing'?' on':'')+'" data-p1cat="ing">🥬 Υλικά</button></div>';
+  if(p1cat==='ing'){
+    h+='<div class="dp-b" style="flex:1;overflow-y:auto">';
+    ['sauce','veg','extra'].forEach(g=>{
+      h+='<div class="gtitle">'+GLB[g]+'</div><div class="igrid">'+
+        ING.filter(i=>i.g===g).map(i=>{const key='i:'+i.k,s=st(key),sel=picks.has(key);
+          return '<button class="ig '+(s==='ok'?'':s)+'" data-p1ing="'+i.k+'" style="'+(sel?'outline:3px solid var(--yellow);outline-offset:1px':'')+'">'+i.k+'</button>';}).join('')+'</div>';
+    });
+    h+='</div>';
+  }else{
+    h+='<div class="grid">'+P.filter(p=>p.cat===p1cat).map(p=>{
+      const sel=picks.has(p.id);
+      return card(p,sel?' style="outline:3px solid var(--yellow);outline-offset:1px"':'').replace('data-pid','data-p1pid');
+    }).join('')+'</div>';
+  }
+  h+='</div><div class="wfoot">'+
+   '<span class="cnt'+(picks.size?'':' zero')+'">'+picks.size+'</span>'+
+   '<span class="picked">'+(picks.size?[...picks].map(k=>{
+     const ing=k.startsWith('i:');const nm=ing?k.slice(2):prod(k).nm;
+     return '<span class="tk'+(ing?' ing':'')+'" data-unpick="'+k+'">'+(ing?'🥬 ':'')+nm+'<span class="rm">✕</span></span>';
+   }).join(''):'<span class="empty-pick">Πάτα κάρτες ή υλικά για να τα μαζέψεις εδώ…</span>')+'</span>'+
+   '<span class="dur">'+
+     '<button data-dur="today" class="'+(dur==='today'?'on':'')+'" data-d="today">⏳ Σήμερα</button>'+
+     '<button data-dur="indef" class="'+(dur==='indef'?'on':'')+'" data-d="indef">🔒 Αόριστον</button>'+
+     '<button data-dur="efood" class="'+(dur==='efood'?'on':'')+'" data-d="efood">🛵 Μόνο e-food</button></span>'+
+   '<button class="apply" data-apply1 '+(picks.size?'':'disabled')+'>Εφαρμογή →</button></div>';
+  document.getElementById('w').innerHTML=h;
+}
+/* ═══════════ Π2 ═══════════ */
+let p2q='',p2f='all';
+function renderP2(){host.innerHTML='<div class="win lg" id="w"></div>';paintP2();}
+function paintP2(){
+  const q=p2q.trim().toLowerCase();
+  const match=(nm,key)=>{
+    if(q&&nm.toLowerCase().indexOf(q)<0)return false;
+    if(p2f==='today')return st(key)==='today';
+    if(p2f==='indef')return st(key)==='indef';
+    if(p2f==='open')return st(key)==='ok';
+    return true;
+  };
+  const cols=CATS.map(c=>({lb:catLb(c.id),items:P.filter(p=>p.cat===c.id&&match(p.nm,p.id))
+      .map(p=>({key:p.id,nm:p.nm}))}));
+  ['sauce','veg','extra'].forEach(g=>cols.push({lb:GLB[g],
+     items:ING.filter(i=>i.g===g&&match(i.k,'i:'+i.k)).map(i=>({key:'i:'+i.k,nm:i.k}))}));
+  const c=counts();
+  let h='<div class="wh"><div><h2>🚫 Πίνακας Αποθέματος</h2>'+
+    '<div class="wsub">Όλο το μαγαζί σε μία οθόνη. Ο διακόπτης εκτελεί αμέσως.</div></div><button class="wx" data-x>✕</button></div>'+
+   '<div class="wbody"><div class="bh">'+
+   '<div class="bsearch"><span class="m">🔍</span><input id="p2s" placeholder="Γράψε προϊόν ή υλικό…" value="'+p2q.replace(/"/g,'&quot;')+'"></div>'+
+   '<button class="bf'+(p2f==='all'?' on':'')+'" data-p2f="all">Όλα</button>'+
+   '<button class="bf'+(p2f==='today'?' on':'')+'" data-p2f="today">⏳ Κλειστά '+c.t+'</button>'+
+   '<button class="bf'+(p2f==='indef'?' on':'')+'" data-p2f="indef">🔒 Μόνιμα '+c.i+'</button>'+
+   '<button class="bf'+(p2f==='open'?' on':'')+'" data-p2f="open">✅ Διαθέσιμα</button>'+
+   '</div><div class="bcols">';
+  cols.forEach(col=>{
+    if(!col.items.length)return;
+    const k=col.items.filter(x=>isOut(x.key)).length;
+    h+='<div class="bcol"><div class="bcol-h"><span>'+col.lb+'</span><span class="k'+(k?'':' zero')+'">'+k+'</span></div><div class="bcol-b">'+
+      col.items.map(x=>'<button class="br '+(st(x.key)==='ok'?'':st(x.key))+'" data-p2t="'+x.key+'">'+
+        '<span class="bn">'+x.nm+'</span><span class="sw"></span></button>').join('')+'</div></div>';
+  });
+  h+='</div></div><div class="wfoot"><span style="font-size:12.5px;color:var(--muted)">Λείπουν <b style="color:#ff8a87">'+c.t+' σήμερα</b> · '+c.i+' επ\' αόριστον</span>'+
+     '<button class="apply" style="margin-left:auto" data-reopen>↺ Άνοιξε τα ημερήσια</button></div>';
+  document.getElementById('w').innerHTML=h;
+  const s=document.getElementById('p2s');
+  if(s){s.addEventListener('input',()=>{p2q=s.value;const pos=s.selectionStart;paintP2();
+    const n=document.getElementById('p2s');n.focus();n.setSelectionRange(pos,pos);});}
+}
+/* ═══════════ Π3 ═══════════ */
+let p3cat='pita';
+const SHORTCUTS=[
+ {ic:'🥩',lb:'Όλο το κοτόπουλο',ids:P.filter(p=>p.fam==='kot').map(p=>p.id),src:'όλο το κοτόπουλο'},
+ {ic:'🥩',lb:'Όλος ο γύρος',ids:P.filter(p=>p.fam==='gyr').map(p=>p.id),src:'όλος ο γύρος'},
+ {ic:'🥖',lb:'Όλη η πίτα',ids:P.filter(p=>p.cat==='pita').map(p=>p.id),src:'όλη η πίτα'},
+ {ic:'🥔',lb:'Ό,τι έχει πατάτα',ids:POTATO.slice(),src:'ό,τι έχει πατάτα'}
+];
+let p3src={};
+function renderP3(){host.innerHTML='<div class="win lg" id="w"></div>';paintP3();}
+function paintP3(){
+  let h='<div class="wh"><div><h2>🚫 Καλάθι Εξάντλησης</h2>'+
+    '<div class="wsub">Πάτα αριστερά ό,τι τελείωσε — μπαίνει στο καλάθι δεξιά.</div></div><button class="wx" data-x>✕</button></div>'+
+   '<div class="wbody"><div class="split"><div class="spl-l">'+
+   '<div class="cats">'+CATS.map(c=>'<button class="ct'+(c.id===p3cat?' on':'')+'" data-p3cat="'+c.id+'">'+c.lb+'</button>').join('')+
+   '<button class="ct'+(p3cat==='ing'?' on':'')+'" data-p3cat="ing">🥬 Υλικά</button></div>'+
+   '<div class="gsel"><span class="gs lbl">⚡ Συντομεύσεις:</span>'+
+     SHORTCUTS.map((s,i)=>'<button class="gs" data-p3sc="'+i+'">'+s.ic+' '+s.lb+' <span class="n">'+s.ids.length+'</span></button>').join('')+'</div>';
+  if(p3cat==='ing'){
+    h+='<div class="dp-b" style="flex:1;overflow-y:auto">';
+    ['sauce','veg','extra'].forEach(g=>{h+='<div class="gtitle">'+GLB[g]+'</div><div class="igrid">'+
+      ING.filter(i=>i.g===g).map(i=>{const key='i:'+i.k,sel=picks.has(key);
+        return '<button class="ig '+(st(key)==='ok'?'':st(key))+'" data-p3ing="'+i.k+'" style="'+(sel?'outline:3px solid var(--yellow);outline-offset:1px':'')+'">'+i.k+'</button>';}).join('')+'</div>';});
+    h+='</div>';
+  }else{
+    h+='<div class="grid">'+P.filter(p=>p.cat===p3cat).map(p=>
+      card(p,picks.has(p.id)?' style="outline:3px solid var(--yellow);outline-offset:1px"':'').replace('data-pid','data-p3pid')).join('')+'</div>';
+  }
+  h+='</div><div class="spl-r"><div class="spl-rh"><div class="ttl">🚫 Τελείωσαν — '+picks.size+'</div>'+
+   '<div class="sb2">Πάτα ✕ για να βγάλεις κάτι. Τίποτα δεν κλείνει πριν πατήσεις το κίτρινο κουμπί.</div></div>'+
+   '<div class="spl-rb">'+(picks.size?[...picks].map(k=>{
+      const ing=k.startsWith('i:');const nm=ing?k.slice(2):prod(k).nm;
+      const sub=ing?'υλικό — κλείνει σε όλα τα προϊόντα':(p3src[k]?('από «'+p3src[k]+'»'):(catLb(prod(k).cat)+' · '+prod(k).pr+' €'));
+      return '<div class="oit'+(ing?' ing':'')+'"><span class="ie">'+(ing?'🥬':prod(k).em)+'</span>'+
+        '<span class="it">'+nm+'<small>'+sub+'</small></span><button class="rmv" data-unpick="'+k+'">✕</button></div>';
+    }).join(''):'<div class="spl-empty">Το καλάθι είναι άδειο.<br>Πάτα προϊόντα αριστερά ή χρησιμοποίησε μια συντόμευση.</div>')+'</div>'+
+   '<div class="spl-rf"><span class="dur" style="width:100%">'+
+     '<button style="flex:1" data-dur="today" class="'+(dur==='today'?'on':'')+'" data-d="today">⏳ Σήμερα</button>'+
+     '<button style="flex:1" data-dur="indef" class="'+(dur==='indef'?'on':'')+'" data-d="indef">🔒 Αόριστον</button></span>'+
+   '<button class="big" data-apply3 '+(picks.size?'':'disabled')+'>🚫 Κλείσε τα '+picks.size+' →</button></div>'+
+   '</div></div></div>';
+  document.getElementById('w').innerHTML=h;
+}
+/* ═══════════ Π4 ═══════════ */
+let p4cat='pita';
+function renderP4(){host.innerHTML='<div class="win lg" id="w"></div>';paintP4();}
+function paintP4(){
+  const pc=P.filter(p=>isOut(p.id)).length, ic=ING.filter(i=>isOut('i:'+i.k)).length;
+  let h='<div class="wh"><div><h2>🚫 Δύο Ταμπλό — Προϊόντα &amp; Υλικά</h2>'+
+    '<div class="wsub">Πάτα για να κλείσει, ξαναπάτα για να ανοίξει. Το κλείσιμο υλικού σβήνει τα προϊόντα του.</div></div>'+
+    '<button class="wx" data-x>✕</button></div><div class="wbody"><div class="duo">'+
+   '<div class="dp"><div class="dp-h"><span>🍽 ΠΡΟΪΟΝΤΑ</span><span class="cn'+(pc?'':' zero')+'">'+pc+' κλειστά</span></div>'+
+   '<div class="cats">'+CATS.map(c=>'<button class="ct'+(c.id===p4cat?' on':'')+'" data-p4cat="'+c.id+'">'+c.lb+'</button>').join('')+'</div>'+
+   '<div class="dp-b"><div class="grid" style="padding:0;overflow:visible;grid-template-columns:repeat(auto-fill,minmax(118px,1fr))">'+
+     P.filter(p=>p.cat===p4cat).map(p=>card(p).replace('data-pid','data-p4pid')).join('')+'</div></div></div>'+
+   '<div class="dp"><div class="dp-h"><span>🥬 ΥΛΙΚΑ</span><span class="cn'+(ic?'':' zero')+'">'+ic+' κλειστά</span></div><div class="dp-b">';
+  ['sauce','veg','extra'].forEach(g=>{h+='<div class="gtitle">'+GLB[g]+'</div><div class="igrid">'+
+    ING.filter(i=>i.g===g).map(i=>{const key='i:'+i.k;
+      return '<button class="ig '+(st(key)==='ok'?'':st(key))+'" data-p4ing="'+i.k+'">'+i.k+'</button>';}).join('')+'</div>';});
+  h+='</div></div></div></div>';
+  document.getElementById('w').innerHTML=h;
+}
+
+/* ═══════════ ΕΝΕΡΓΕΙΕΣ ═══════════ */
+host.addEventListener('click',e=>{
+  const t=e.target;
+  if(t.closest('[data-x]')){closeWin();return;}
+
+  /* — ΤΩΡΑ — */
+  const sc=t.closest('[data-sc]');
+  if(sc){nowActive=+sc.dataset.sc;picks.clear();nowScopes[nowActive].ids.forEach(i=>picks.add(i));paintNow();return;}
+  const row=t.closest('[data-row]');
+  if(row){const id=row.dataset.row;picks.has(id)?picks.delete(id):picks.add(id);paintNow();return;}
+  const nb=t.closest('[data-now]');
+  if(nb){const a=nb.dataset.now;
+    if(a==='cancel'){closeWin(true);return;}
+    const n=applyPicks([...picks],a);
+    closeWin(true);
+    toast(n?('🚫 '+n+' '+(n===1?'προϊόν έκλεισε':'προϊόντα έκλεισαν')+(a==='indef'?' επ\' αόριστον':' σήμερα')):'Δεν άλλαξε τίποτα');
+    return;}
+  if(t.closest('#mb')){document.getElementById('pn').classList.toggle('open');
+    document.getElementById('chev').textContent=document.getElementById('pn').classList.contains('open')?'▲':'▼';return;}
+
+  /* — κοινά — */
+  const un=t.closest('[data-unpick]');
+  if(un){picks.delete(un.dataset.unpick);delete p3src[un.dataset.unpick];view==='p1'?paintP1():paintP3();return;}
+  const du=t.closest('[data-dur]');
+  if(du){dur=du.dataset.dur;view==='p1'?paintP1():paintP3();return;}
+
+  /* — Π1 — */
+  const c1=t.closest('[data-p1cat]');if(c1){p1cat=c1.dataset.p1cat;paintP1();return;}
+  const k1=t.closest('[data-p1pid]');
+  if(k1){const id=k1.dataset.p1pid;picks.has(id)?picks.delete(id):picks.add(id);paintP1();return;}
+  const i1=t.closest('[data-p1ing]');
+  if(i1){const k='i:'+i1.dataset.p1ing;picks.has(k)?picks.delete(k):picks.add(k);paintP1();return;}
+  if(t.closest('[data-apply1]')){
+    const list=[...picks];let n=applyPicks(list,dur==='efood'?'today':dur);
+    list.filter(k=>k.startsWith('i:')).forEach(k=>{n+=cascadeFromIng(k.slice(2),dur==='efood'?'today':dur).length;});
+    renderShell();renderStat();closeWin(true);
+    toast('🚫 '+n+' στοιχεία έκλεισαν'+(dur==='indef'?' επ\' αόριστον':dur==='efood'?' μόνο στην e-food':' σήμερα'));
+    return;}
+
+  /* — Π2 — */
+  const f2=t.closest('[data-p2f]');if(f2){p2f=f2.dataset.p2f;paintP2();return;}
+  const t2=t.closest('[data-p2t]');
+  if(t2){const k=t2.dataset.p2t;
+    if(isOut(k)){delete ST[k];if(k.startsWith('i:'))cascadeFromIng(k.slice(2),'ok');}
+    else{ST[k]='today';if(k.startsWith('i:')){const hit=cascadeFromIng(k.slice(2),'today');
+      if(hit.length)toast('Έκλεισαν και '+hit.length+' προϊόντα που το χρησιμοποιούν','green');}}
+    renderShell();renderStat();paintP2();return;}
+  if(t.closest('[data-reopen]')){
+    let n=0;Object.keys(ST).forEach(k=>{if(ST[k]==='today'){delete ST[k];n++;}});
+    renderShell();renderStat();paintP2();toast('↺ '+n+' στοιχεία ξανά διαθέσιμα','green');return;}
+
+  /* — Π3 — */
+  const c3=t.closest('[data-p3cat]');if(c3){p3cat=c3.dataset.p3cat;paintP3();return;}
+  const k3=t.closest('[data-p3pid]');
+  if(k3){const id=k3.dataset.p3pid;if(picks.has(id)){picks.delete(id);delete p3src[id];}else picks.add(id);paintP3();return;}
+  const i3=t.closest('[data-p3ing]');
+  if(i3){const k='i:'+i3.dataset.p3ing;picks.has(k)?picks.delete(k):picks.add(k);paintP3();return;}
+  const s3=t.closest('[data-p3sc]');
+  if(s3){const s=SHORTCUTS[+s3.dataset.p3sc];s.ids.forEach(id=>{if(!picks.has(id)){picks.add(id);p3src[id]=s.src;}});paintP3();return;}
+  if(t.closest('[data-apply3]')){
+    const list=[...picks];let n=applyPicks(list,dur);
+    list.filter(k=>k.startsWith('i:')).forEach(k=>{n+=cascadeFromIng(k.slice(2),dur).length;});
+    renderShell();renderStat();closeWin(true);
+    toast('🚫 '+n+' στοιχεία έκλεισαν'+(dur==='indef'?' επ\' αόριστον':' σήμερα'));return;}
+
+  /* — Π4 — */
+  const c4=t.closest('[data-p4cat]');if(c4){p4cat=c4.dataset.p4cat;paintP4();return;}
+  const k4=t.closest('[data-p4pid]');
+  if(k4){const id=k4.dataset.p4pid;isOut(id)?delete ST[id]:ST[id]='today';renderShell();renderStat();paintP4();return;}
+  const i4=t.closest('[data-p4ing]');
+  if(i4){const nmk=i4.dataset.p4ing,key='i:'+nmk;
+    let hit=[];
+    if(isOut(key)){delete ST[key];hit=cascadeFromIng(nmk,'ok');}
+    else{ST[key]='today';hit=cascadeFromIng(nmk,'today');}
+    renderShell();renderStat();paintP4();
+    if(hit.length){
+      hit.forEach(id=>{const el=document.querySelector('[data-p4pid="'+id+'"]');if(el)el.classList.add('hit');});
+      toast((isOut(key)?'Έκλεισαν ':'Άνοιξαν ')+hit.length+' προϊόντα που το χρησιμοποιούν',isOut(key)?'':'green');
+    }
+    return;}
+});
+
+reset();
+</script>
 </body>
 </html>
