@@ -255,7 +255,7 @@ header.pv p{margin:0;color:var(--muted);font-size:12.5px;line-height:1.5;max-wid
   border-radius:var(--radius-card);background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.1);
   font:inherit;color:rgba(255,255,255,.6);display:flex;flex-direction:column;gap:3px;transition:.15s}
 .c-tile:hover{border-color:rgba(255,255,255,.3);color:#fff}
-.c-tile .nm{font-size:12.5px;font-weight:700;line-height:1.25}
+.c-tile .nm{font-size:12.5px;font-weight:700;line-height:1.25;padding-right:24px}
 .c-tile .ct{font-size:10px;color:var(--muted)}
 .c-tile .tick{position:absolute;top:8px;right:8px;width:19px;height:19px;border-radius:5px;
   border:1.5px solid rgba(255,255,255,.28);display:flex;align-items:center;justify-content:center;
@@ -270,9 +270,18 @@ header.pv p{margin:0;color:var(--muted);font-size:12.5px;line-height:1.5;max-wid
   flex-direction:row;align-items:center;gap:11px;min-height:64px}
 .c-tile.ing.on{background:rgba(239,83,80,.16);border-color:rgba(239,83,80,.65)}
 .c-tile.ing .ic{font-size:22px}
+.c-tile.ing .nm{padding-right:0}
 .c-foot{padding:12px 18px 16px;border-top:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.2);
   display:flex;flex-direction:column;gap:9px}
-.stage[data-w="sm"] .c-grid{grid-template-columns:repeat(2,1fr)}
+.stage[data-w="sm"] .c-grid{grid-template-columns:repeat(2,1fr)!important}
+.c-widthsw{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:12px;padding-top:10px;
+  border-top:1px dashed rgba(255,255,255,.1);font-size:10px;font-weight:800;letter-spacing:.5px;color:var(--muted)}
+.c-widthsw button{min-height:32px;padding:0 11px;border-radius:var(--radius-btn);cursor:pointer;font:inherit;
+  font-size:11px;font-weight:700;letter-spacing:0;background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.65)}
+.c-widthsw button:hover{color:#fff;border-color:rgba(255,255,255,.3)}
+.c-widthsw button.on{background:var(--glow-yellow-sm);border-color:var(--yellow);color:var(--yellow)}
+.c-wnow{margin-left:auto;font-size:10.5px;font-weight:700;letter-spacing:0;color:rgba(255,255,255,.5)}
 
 /* ══ Δ — ΤΑΜΠΛΟ ════════════════════════════════════════════════════════ */
 #v-d .box{width:100%;max-width:1080px}
@@ -424,11 +433,11 @@ const VARIANTS = [
          'Χωρίς δικαίωμα <code>canCloseProductIndef</code> το πλήκτρο 🔒 <b>απενεργοποιείται, δεν εξαφανίζεται</b> (RULES §10) — δοκίμασε τον διακόπτη «δικαίωμα» μέσα στην πρόταση.',
          '<b>Σκάλα:</b> ≥820px 3 πλήκτρα σε σειρά · ≤700px ο διακόπτης γίνεται 3 πλήρους πλάτους γραμμές.']},
   {id:'c', tab:'Γ · Πλέγμα', h:'Γ — «Πλέγμα προϊόντων» (βλέπεις τα πάντα, πατάς με τον αντίχειρα)',
-   body:['Πλάτος <b>720px</b>. Οι γραμμές γίνονται <b>πλακίδια 158px</b> σε πλέγμα: 16 προϊόντα σε μία ματιά αντί για λίστα που σκρολάρει.',
-         'Στόχος αφής <b>158×74px</b> αντί για γραμμή 44px → πολύ πιο δύσκολο το λάθος πάτημα σε ώρα αιχμής.',
+   body:['Οι γραμμές γίνονται <b>πλακίδια ~166×74px</b>: στόχος αφής αντί για γραμμή 44px → πολύ πιο δύσκολο το λάθος πάτημα σε ώρα αιχμής.',
          'Η γραμμή «🥬 ΩΣ ΥΛΙΚΟ» γίνεται φαρδύ πλακίδιο στην κορυφή με δικό της χρώμα — ξεχωρίζει ότι <b>δεν είναι πιάτο</b>.',
          'Μαζικές επιλογές «Όλα / Κανένα» πάνω από το πλέγμα· τα «ήδη κλειστά» φοράνε σήμα αντί να χάνονται.',
-         '<b>Σκάλα:</b> auto-fill — 4 στήλες σε 27", 3 σε desktop, 2 σε tablet/κινητό, ποτέ 1 (θα ήταν η σημερινή λίστα).']},
+         '<b>Το πλάτος — δοκίμασε τον διακόπτη μέσα στην πρόταση:</b> <b>Σταθερό 720px</b> = ίδιο σε 27", desktop και tablet, αλλάζει <i>μόνο</i> στο κινητό. <b>Προσαρμοζόμενο</b> = το παράθυρο μεγαλώνει όσο χρειάζονται τα προϊόντα και όσο επιτρέπει η οθόνη.',
+         '<b>Μετρημένα</b> με το προσαρμοζόμενο (πραγματικές τιμές από αυτό εδώ το preview): <b>1 προϊόν</b> → 420px (κάτω όριο, να μη γίνει λωρίδα) · <b>5 πατάτες</b> ή <b>7 της οικογένειας κρέατος</b> → 3 στήλες / <b>550px</b> σε κάθε μεγάλη οθόνη · <b>16 πίτες</b> → <b>6 στήλες / 1072px</b> σε 27", <b>4 στήλες / 724px</b> σε desktop &amp; tablet, <b>2 στήλες</b> σε κινητό. Δηλαδή <b>μόνο η μεγάλη λίστα (16) ξεχωρίζει στα 27"</b> — στα υπόλοιπα το 27" και το desktop βγάζουν το ίδιο, by design.']},
   {id:'d', tab:'Δ · Ταμπλό', h:'Δ — «Ταμπλό»: βλέπεις ΤΙ ΘΑ ΣΥΜΒΕΙ πριν το κάνεις',
    body:['Πλάτος <b>1080px</b> (μόνο σε μεγάλη οθόνη· αλλιώς πέφτει στο Γ). Τρεις ζώνες: <b>ράγα εμβέλειας</b> · <b>πλέγμα</b> · <b>πίνακας συνέπειας</b>.',
          'Η δεξιά στήλη είναι το «out of the box»: δείχνει <b>ανά κανάλι</b> (Ταμείο · Delivery · e-food) την κατάσταση <b>πριν → μετά</b>, ζωντανά καθώς τσεκάρεις.',
@@ -447,8 +456,9 @@ let st = null;          // {scn, active, picked:Set, ingPicked, dur, indefOk, ca
 function scn(){ return SCN[S]; }
 function resetState(){
   const s = scn();
+  const keepAdaptive = st ? st.cAdaptive : true;
   st = { active:0, picked:new Set(), ingPicked:false, dur:'today',
-         indefOk:false, canIndef:true, moreOpen:false };
+         indefOk:false, canIndef:true, moreOpen:false, cAdaptive:keepAdaptive };
   selectScope(0, true);
 }
 function selectScope(i, silent){
@@ -646,8 +656,30 @@ function viewB(){
     '</div></div>';
 }
 
+/* Πόσες στήλες επιτρέπει η ΟΘΟΝΗ (ανώτατο) — η σκάλα responsive του Γ. */
+const C_MAXCOLS = {xl:6, lg:5, md:4, sm:2};
+/**
+ * Στήλες & πλάτος παραθύρου για το «προσαρμοζόμενο» Γ.
+ * Κανόνας: στοχεύουμε ≤4 σειρές, ποτέ κάτω από 3 στήλες (εκτός κινητού), ποτέ πάνω
+ * από όσα επιτρέπει η οθόνη — και ποτέ πιο πλατύ από όσα προϊόντα υπάρχουν.
+ */
+function cGeom(count){
+  if(!st.cAdaptive) return {cols:null, width:720};
+  // Κινητό: bottom sheet πλήρους πλάτους — 2 στήλες, το πλάτος δεν παίζει ρόλο.
+  if (W === 'sm') return {cols: Math.min(2, Math.max(1, count)), width: 720};
+  const max  = C_MAXCOLS[W] || 4;
+  const rowsT = W==='xl' ? 3 : 4;          // μεγάλη οθόνη → λιγότερες σειρές, πιο πλατύ
+  let cols = Math.min(max, Math.max(3, Math.ceil(count/rowsT)));
+  cols = Math.max(1, Math.min(cols, count));
+  // 🔴 Κάτω όριο 420px: με 1-2 προϊόντα το παράθυρο γινόταν 202px — σύνοψη και κουμπιά
+  // στριμώχνονταν σε λωρίδα. Το πλέγμα προσαρμόζεται, το ΠΑΡΑΘΥΡΟ δεν κατεβαίνει ποτέ
+  // κάτω από μέγεθος κανονικού διαλόγου.
+  const width = Math.max(420, cols*166 + (cols-1)*8 + 36);
+  return {cols, width};
+}
 function viewC(){
   const s=scn(), n=nPicked();
+  const g = cGeom(rows().length);
   const pills = s.scopes.length>1 ? '<div class="c-pills">'+s.scopes.map((sc,i)=>
       '<button class="c-pill'+(i===st.active?' on':'')+'" data-scope="'+i+'">'+sc.icon+' '+esc(sc.label)+
       '<span class="n">'+sc.ids.length+'</span></button>').join('')+'</div>' : '';
@@ -661,7 +693,7 @@ function viewC(){
     return '<button class="c-tile'+(on?' on':'')+'" data-row="'+id+'"><span class="tick">✓</span>'+
       '<span class="nm">'+esc(nm(id))+'</span><span class="ct">'+esc(cat(id))+'</span>'+flag+'</button>';
   }).join('');
-  return '<div id="v-c"><div class="box">'+
+  return '<div id="v-c"><div class="box" style="max-width:'+g.width+'px">'+
     '<div class="c-head"><div class="b-title">'+esc(s.title)+'</div>'+
       '<div class="b-sub" style="margin-bottom:10px">'+(s.closing?'Τι τελείωσε;':'Τι επανέρχεται;')+'</div>'+
       efLineHTML()+'</div>'+
@@ -669,12 +701,19 @@ function viewC(){
       '<div class="c-secrow"><span class="c-sech">ΤΙ ΘΑ ΑΛΛΑΞΕΙ</span><span class="grow"></span>'+
         '<button class="c-bulk" data-bulk="all">Όλα</button>'+
         '<button class="c-bulk" data-bulk="none">Κανένα</button></div>'+
-      '<div class="c-grid">'+ingTile+tiles+'</div></div>'+
+      '<div class="c-grid"'+(g.cols?' style="grid-template-columns:repeat('+g.cols+',1fr)"':'')+'>'+
+        ingTile+tiles+'</div></div>'+
     '<div class="c-foot">'+
       '<div class="sco-sum'+(n?'':' empty')+'">'+sumText()+'</div>'+
       primaryHTML()+efActionHTML()+
       '<button class="sco-cancel" data-act="cancel">Άκυρο</button>'+
       indefZoneHTML()+
+      '<div class="c-widthsw">ΠΛΑΤΟΣ ΠΑΡΑΘΥΡΟΥ:'+
+        '<button class="'+(st.cAdaptive?'':'on')+'" data-act="cfixed">Σταθερό 720px</button>'+
+        '<button class="'+(st.cAdaptive?'on':'')+'" data-act="cadapt">Προσαρμοζόμενο</button>'+
+        '<span class="c-wnow">'+(st.cAdaptive
+          ? g.cols+(g.cols===1?' στήλη':' στήλες')+' · '+g.width+'px'
+          : '4 στήλες · 720px σε κάθε οθόνη')+'</span></div>'+
     '</div></div></div>';
 }
 
@@ -725,7 +764,8 @@ function viewD(){
         '<div class="c-secrow"><span class="c-sech">ΤΙ ΘΑ ΑΛΛΑΞΕΙ</span><span class="grow"></span>'+
           '<button class="c-bulk" data-bulk="all">Όλα</button>'+
           '<button class="c-bulk" data-bulk="none">Κανένα</button></div>'+
-        '<div class="c-grid">'+ingTile+tiles+'</div></div>'+
+        '<div class="c-grid"'+(g.cols?' style="grid-template-columns:repeat('+g.cols+',1fr)"':'')+'>'+
+        ingTile+tiles+'</div></div>'+
       '<div class="d-right">'+
         '<p class="d-h">ΤΙ ΘΑ ΣΥΜΒΕΙ — ΑΝΑ ΚΑΝΑΛΙ</p>'+
         '<div class="d-chan">'+
@@ -805,6 +845,8 @@ document.addEventListener('click', e=>{
   switch(act){
     case 'more': st.moreOpen=!st.moreOpen; render(); break;
     case 'indefok': st.indefOk=!st.indefOk; render(); break;
+    case 'cfixed': st.cAdaptive=false; render(); break;
+    case 'cadapt': st.cAdaptive=true;  render(); break;
     case 'permsim': st.canIndef=!st.canIndef; if(!st.canIndef&&st.dur==='indef') st.dur='today'; render(); break;
     case 'cancel': toast('Άκυρο — τίποτα δεν άλλαξε'); resetState(); render(); break;
     case 'today':
